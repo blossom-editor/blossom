@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.expand.tracker.core.TrackerProperties,\
+  com.blossom.expand.tracker.core.TrackerConfiguration,\
+  com.blossom.expand.tracker.core.adapter.spring.TrackerSpringConfiguration,\
+  com.blossom.expand.tracker.core.adapter.redis.TrackerRedisConfiguration,\
+  com.blossom.expand.tracker.core.adapter.mysql.TrackerMysqlConfiguration
+

@@ -1,0 +1,11 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.common.base.config.JacksonConfig,\
+  com.blossom.common.base.BaseProperties,\
+  com.blossom.common.base.BaseConfig,\
+  com.blossom.common.base.config.WebMvcConfig,\
+  com.blossom.common.base.exception.ExceptionAdviceByGlobal,\
+  com.blossom.common.base.exception.ExceptionAdviceByXz,\
+  com.blossom.common.base.util.spring.SpringUtil,\
+  com.blossom.common.base.log.DynamicLogRepositoryCaffeine
+
+

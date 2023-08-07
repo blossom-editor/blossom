@@ -1,0 +1,10 @@
+.el-menu {
+}
+
+:deep(.el-sub-menu__title) {
+  transition: background-color 0s;
+}
+
+:deep(.el-menu-item:hover) {
+  background-color: var(--el-color-primary-light-9);
+}

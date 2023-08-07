@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.expand.sentinel.mvc.config.SentinelInterceptorConfig
+

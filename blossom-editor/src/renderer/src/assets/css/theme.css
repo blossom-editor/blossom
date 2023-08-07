@@ -1,0 +1,293 @@
+:root {
+
+  /* 数字越大, 颜色越淡 */
+  --el-color-primary: #ad8cf2;
+  --el-color-primary-dark-2: rgba(173, 140, 242, 0.8);
+  --el-color-primary-light-1: rgba(173, 140, 242, 0.9);
+  --el-color-primary-light-2: rgba(173, 140, 242, 0.8);
+  --el-color-primary-light-3: rgba(173, 140, 242, 0.7);
+  --el-color-primary-light-4: rgba(173, 140, 242, 0.6);
+  --el-color-primary-light-5: rgba(173, 140, 242, 0.5);
+  --el-color-primary-light-6: rgba(173, 140, 242, 0.4);
+  --el-color-primary-light-7: rgba(173, 140, 242, 0.3);
+  --el-color-primary-light-8: rgba(173, 140, 242, 0.2);
+  --el-color-primary-light-9: rgba(173, 140, 242, 0.1);
+
+  --el-color-success: #67c23a;
+  --el-color-success-light-3: #95d475;
+  --el-color-success-light-5: #b3e19d;
+  --el-color-success-light-7: #d1edc4;
+  --el-color-success-light-8: #e1f3d8;
+  --el-color-success-light-9: #f0f9eb;
+  --el-color-success-dark-2: #529b2e;
+
+  --el-color-warning: #e6a23c;
+  --el-color-warning-light-3: #eebe77;
+  --el-color-warning-light-5: #f3d19e;
+  --el-color-warning-light-7: #f8e3c5;
+  --el-color-warning-light-8: #faecd8;
+  --el-color-warning-light-9: #fdf6ec;
+  --el-color-warning-dark-2: #b88230;
+
+  --el-color-danger: #e35959;
+  --el-color-danger-light-3: #f89898;
+  --el-color-danger-light-5: #fab6b6;
+  --el-color-danger-light-7: #fcd3d3;
+  --el-color-danger-light-8: #fde2e2;
+  --el-color-danger-light-9: #fef0f0;
+  --el-color-danger-dark-2: #c45656;
+
+  --el-color-error: #f56c6c;
+  --el-color-error-light-3: #f89898;
+  --el-color-error-light-5: #fab6b6;
+  --el-color-error-light-7: #fcd3d3;
+  --el-color-error-light-8: #fde2e2;
+  --el-color-error-light-9: #fef0f0;
+  --el-color-error-dark-2: #c45656;
+
+  --el-color-info: #a4a8b0;
+  --el-color-info-light-3: #b1b3b8;
+  --el-color-info-light-5: #c8c9cc;
+  --el-color-info-light-7: #dedfe0;
+  --el-color-info-light-8: #e9e9eb;
+  --el-color-info-light-9: #f4f4f5;
+
+  /* ======================================================= 文本颜色 =======================================================*/
+  /* --el-text-color-primary: #303133; */
+  --el-text-color-primary: #606266;
+  --el-text-color-regular: #606266;
+  --el-text-color-secondary: #909399;
+  --el-text-color-placeholder: #a8abb2;
+  --el-text-color-disabled: #c0c4cc;
+
+  /* ======================================================= 背景颜色 =======================================================*/
+  --el-bg-color: #f5f7fa;
+
+  /* ======================================================= 边框颜色 =======================================================*/
+
+  /* 菜单文本的颜色 */
+  --el-menu-text-color: #86888e;
+  --el-menu-active-color: var(--el-color-primary);
+
+  --el-font-size-base: 12px;
+
+  --el-menu-item-height: 40px;
+  --el-mask-color: rgba(255, 255, 255, 0.95);
+}
+
+html.dark {
+  /* 数字越大, 颜色越淡 */
+  --el-color-primary: #899911;
+  --el-color-primary-dark-2: rgba(165, 184, 20, 1);
+  --el-color-primary-light-1: rgba(165, 184, 20, 0.9);
+  --el-color-primary-light-2: rgba(165, 184, 20, 0.8);
+  --el-color-primary-light-3: rgba(165, 184, 20, 0.7);
+  --el-color-primary-light-5: rgba(165, 184, 20, 0.5);
+  --el-color-primary-light-6: rgba(165, 184, 20, 0.4);
+  --el-color-primary-light-7: rgba(165, 184, 20, 0.3);
+  --el-color-primary-light-8: rgba(165, 184, 20, 0.2);
+  --el-color-primary-light-9: rgba(165, 184, 20, 0.2);
+
+  --el-color-danger: rgb(215, 68, 68);
+  --el-color-danger-light-3: rgba(215, 68, 68, 0.7);
+  --el-color-danger-light-5: rgba(215, 68, 68, 0.5);
+  --el-color-danger-light-7: rgba(215, 68, 68, 0.3);
+  --el-color-danger-light-8: rgba(215, 68, 68, 0.2);
+  --el-color-danger-light-9: rgba(215, 68, 68, 0.1);
+  --el-color-danger-dark-2: #8111118a;
+
+  --el-color-info: #64666b;
+  /* ======================================================= 文本颜色 =======================================================*/
+  --el-text-color-primary: #909399;
+  --el-text-color-regular: #a8a8a8;
+  --el-text-color-secondary: #A3A6AD;
+  --el-text-color-placeholder: #8D9095;
+  --el-text-color-disabled: #6C6E72;
+
+  /* ======================================================= 背景颜色 =======================================================*/
+  --el-bg-color: #262727;
+
+  /* ======================================================= 边框颜色 =======================================================*/
+  --el-border-color: #424342;
+
+  /* 菜单文本的颜色 */
+  --el-menu-text-color: #86888e;
+  --el-menu-active-color: #ffffff;
+
+  /* ======================================================= 文本框样式 =======================================================*/
+  --el-input-bg-color: #000000;
+  --el-input-border-color: #373737;
+
+  /* 这招的颜色 */
+  --el-mask-color: rgb(18, 18, 18, 0.95);
+
+}
+
+/* ================================= 自定义颜色 ================================== */
+
+:root {
+  --xz-html-color: #ffffff;
+  /* 背景色 */
+  --xz-bg-color: #f1f1f1;
+
+  --xz-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
+
+  --xz-box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
+  --xz-box-shadow-dialog: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
+
+  /* ================================= switch 自定义颜色 ================================== */
+  --xz-switch-action-color: #ffffff;
+  --xz-switch-action-color-checked: #ffffff;
+  --xz-switch-text-color: #ffffff;
+  --xz-switch-text-color-checked: #ffffff;
+
+  /* ================================= iconbl 图标 ================================== */
+  --xz-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
+
+  --xz-subject-color1: #040EFF;
+}
+
+html.dark {
+  --xz-html-color: #1e1e1e;
+  --xz-bg-color: #333434;
+
+  --xz-text-shadow: 2px 3px 5px rgb(0, 0, 0);
+
+  --xz-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+  --xz-box-shadow-dialog: 3px 3px 10px 2px rgba(0, 0, 0, 1);
+
+  /* ================================= switch 自定义颜色 ================================== */
+  --xz-switch-action-color: rgb(58, 58, 58);
+  --xz-switch-action-color-checked: #ffffff;
+  --xz-switch-text-color: var(--el-color-primary);
+  --xz-switch-text-color-checked: #ffffff;
+
+  /* ================================= iconbl 图标 ================================== */
+  --xz-iconbl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
+}
+
+
+:root {
+  /*  */
+  --bl-editor-color: #707070;
+  --bl-editor-bg-color: #FFFFFF;
+
+  /* gutter */
+  --bl-editor-gutters-bg-color: #f5f5f5;
+  --bl-editor-gutters-border-color: #DDDDDD00;
+  --bl-editor-active-line-gutter-bg-color: #f7f3fe;
+
+  /* 各类关键字颜色 */
+  --bl-editor-cc-color: #219;
+  --bl-editor-cm-color: #b6b6b6;
+  --bl-editor-cb-color: #ce5d00;
+  --bl-editor-cd-color: #689757;
+  --bl-editor-ce-color: #47ade5;
+  --bl-editor-ci-color: #ba7300;
+  --bl-editor-cg-color: #9876aa;
+
+  --bl-editor-c5-color: #7843E9;
+  --bl-editor-c7-color: #7843E9;
+  --bl-editor-c7-bg-color: #00000000;
+  /* ============================================================= */
+
+  /* 预览的字体颜色 */
+  --bl-preview-color: #2b2b2b;
+  --bl-preview-bg-color: #FFFFFF;
+  --bl-preview-border-radius: 4px;
+
+  /* 目录 */
+  --bl-preview-toc-border-color: #e0e0e0;
+
+  /* 标题 */
+  --bl-preview-h1-bg-color: #eaeaea;
+  --bl-preview-h1-box-shadow: 3px 3px 5px 1px #a8a8a8;
+  --bl-preview-h1-text-shadow: 3px 3px 3px rgb(148, 148, 148);
+
+  /* 表格 */
+  --bl-preview-table-border-color: #939393;
+  --bl-preview-table-thead-bg-color: #2b2b2b;
+
+  /* 引用 */
+  --bl-preview-blockquote-color: #7d7d7d;
+  --bl-preview-blockquote-bg-color: #f0f0f0;
+  --bl-preview-blockquote-border-color: #bebebe;
+  --bl-preview-blockquote-bg-green: #edf8db;
+  --bl-preview-blockquote-border-green: #bed609;
+  --bl-preview-blockquote-bg-yellow: #faf0d5;
+  --bl-preview-blockquote-border-yellow: #efc75e;
+  --bl-preview-blockquote-bg-red: #fbe6e9;
+  --bl-preview-blockquote-border-red: #ff9090;
+  --bl-preview-blockquote-bg-blue: #dfeefd;
+  --bl-preview-blockquote-border-blue: #81bbf8;
+  --bl-preview-blockquote-bg-purple: #ece4fb;
+  --bl-preview-blockquote-border-purple: #ba9bf2;
+  --bl-preview-blockquote-bg-black: rgba(0, 0, 0, 0.7);
+  --bl-preview-blockquote-border-black: #000000;
+
+  /* 图片 */
+  --bl-preview-img-box-shadow: 2px 2px 10px 3px #c6c6c6;
+
+  /* 单行代码块 */
+  --bl-preview-code-bg-color: #eaeaea;
+  /* 多行代码块 */
+  --bl-preview-pre-bg-color: #2b2b2b;
+}
+
+html.dark {
+  --bl-editor-color: #acacac;
+  --bl-editor-bg-color: #1e1e1e;
+
+  --bl-editor-gutters-bg-color: #2d2d2d;
+  --bl-editor-gutters-border-color: #42434200;
+  --bl-editor-active-line-gutter-bg-color: #393d1c;
+
+  --bl-editor-cc-color: #7d8a17;
+  --bl-editor-cm-color: #606366;
+  --bl-editor-cb-color: #cc7832;
+  --bl-editor-cd-color: #689757;
+  --bl-editor-ce-color: #69864b;
+  --bl-editor-ci-color: #ffc66d;
+  --bl-editor-cg-color: #9876aa;
+
+  --bl-editor-c5-color: #7d8a17;
+  --bl-editor-c7-color: #7d8a17;
+  --bl-editor-c7-bg-color: #00000000;
+  /* ============================================================= */
+
+  --bl-preview-color: #cdcdcd;
+
+  --bl-preview-color: #9d9d9d;
+  --bl-preview-bg-color: #1e1e1e;
+  --bl-preview-border-radius: 4px;
+
+  --bl-preview-toc-border-color: #525252;
+
+  --bl-preview-h1-bg-color: #545454;
+  --bl-preview-h1-box-shadow: 3px 3px 5px 1px #000000;
+  --bl-preview-h1-text-shadow: 3px 3px 3px #000000;
+
+  --bl-preview-table-border-color: #525252;
+  --bl-preview-table-thead-bg-color: #454545;
+
+  --bl-preview-blockquote-color: #b9b9b9;
+  --bl-preview-blockquote-bg-color: #3a3a3a;
+  --bl-preview-blockquote-border-color: #6e6e6e;
+  --bl-preview-blockquote-bg-green: #385b00;
+  --bl-preview-blockquote-border-green: #7c8c00;
+  --bl-preview-blockquote-bg-yellow: #644900;
+  --bl-preview-blockquote-border-yellow: #956b00;
+  --bl-preview-blockquote-bg-red: #4f000c;
+  --bl-preview-blockquote-border-red: #9a0000;
+  --bl-preview-blockquote-bg-blue: #00366c;
+  --bl-preview-blockquote-border-blue: #004fa3;
+  --bl-preview-blockquote-bg-purple: #240065;
+  --bl-preview-blockquote-border-purple: #4600c8;
+  --bl-preview-blockquote-bg-black: #181818;
+  --bl-preview-blockquote-border-black: #000000;
+
+  --bl-preview-img-box-shadow: 2px 2px 10px 3px #000000;
+
+  --bl-preview-code-bg-color: #414141;
+  --bl-preview-pre-bg-color: #131313;
+}

@@ -1,0 +1,193 @@
+// 盒子基础设置
+@mixin box($w: 100%, $h: 100%, $minW: null, $maxW: null, $minH: null, $maxH: null, ) {
+  @if $w {
+    width: $w;
+  }
+
+  @if $h {
+    height: $h;
+  }
+
+  @if $minW {
+    min-width: $minW;
+  }
+
+  @if $maxW {
+    max-width: $maxW;
+  }
+
+  @if $minH {
+    min-height: $minH;
+  }
+
+  @if $maxH {
+    max-height: $maxH;
+  }
+}
+
+/**
+ * 字体基础属性
+ * fz : 字体大小
+ * fw : 字体粗细
+ */
+@mixin font($fz, $fw: null, $fm: null) {
+  font-size: $fz;
+
+  @if $fw {
+    font-weight: $fw;
+  }
+
+  @if $fm {
+    font-family: $fm;
+  }
+}
+
+/**
+ * 边框
+ */
+@mixin border($borderWidth, $borderColor, $radio: 0) {
+  border: $borderWidth solid;
+  border-radius: $radio;
+
+  @if $borderColor {
+    border-color: $borderColor;
+  }
+}
+
+/**
+ * flex布局属性
+ * dir   : 对齐方式
+ * main  : 主轴
+ * cross : 交叉轴
+ */
+@mixin flex($dir: row, $justifyContent: flex-start, $alignItem: stretch) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $justifyContent;
+  align-items: $alignItem;
+}
+
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+  position: absolute;
+
+  @if $top {
+    top: $top;
+  }
+
+  @if $right {
+    right: $right;
+  }
+
+  @if $bottom {
+    bottom: $bottom;
+  }
+
+  @if $left {
+    left: $left;
+  }
+}
+
+@mixin ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/**
+
+ */
+@mixin color-logo ($colorA, $colorB) {
+  color: transparent;
+  font-family: current, sans-serif;
+  margin-top: 14px;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg,
+      $colorA,
+      $colorB,
+      $colorA );
+  -webkit-background-clip: text;
+  animation: glow 10s linear infinite;
+  transition: 1.5s;
+  background-size: 300%;
+
+  @keyframes glow {
+    to {
+      background-position: -300%;
+    }
+  }
+}
+
+/*
+ 主题控制
+*/
+
+@mixin themeShadow ($light-color: 0 0 12px 0 #7c7c7c, $dark-color: 0 0 12px 0 #000000) {
+  box-shadow: $light-color;
+
+  [class="dark"] & {
+    box-shadow: $dark-color;
+  }
+}
+
+@mixin themeText ($light-color: 0 0 12px 0 #7c7c7c, $dark-color: 0 0 12px 0 #000000) {
+  text-shadow: $light-color;
+
+  [class="dark"] & {
+    text-shadow: $dark-color;
+  }
+}
+
+@mixin themeColor ($light-color: #ffffff, $dark-color: #000000) {
+  color: $light-color;
+
+  [class="dark"] & {
+    color: $dark-color;
+  }
+}
+
+@mixin themeBg ($light-color: #ffffff, $dark-color: #000000) {
+  background: $light-color;
+
+  [class="dark"] & {
+    background: $dark-color;
+  }
+}
+
+@mixin themeBorder ($w, $light-color: #ffffff, $dark-color: #000000, $location: 'around', $radius: '0', $style: solid) {
+  @if str_index($location, 'top') {
+    border-top: $w $style;
+  }
+
+  @if str_index($location, 'right') {
+    border-right: $w $style;
+  }
+
+  @if str_index($location, 'bottom') {
+    border-bottom: $w $style;
+  }
+
+  @if str_index($location, 'left') {
+    border-left: $w $style;
+  }
+
+  @if str_index($location, 'around') {
+    border: $w $style;
+  }
+
+  border-color: $light-color;
+
+  [class="dark"] & {
+    border-color: $dark-color;
+  }
+
+  border-radius: $radius;
+
+}
+
+@mixin themeBrightness($light-brightness: 100%, $dark-brightness: 80%) {
+  filter: brightness($light-brightness);
+
+  [class="dark"] & {
+    filter: brightness($dark-brightness);
+  }
+}

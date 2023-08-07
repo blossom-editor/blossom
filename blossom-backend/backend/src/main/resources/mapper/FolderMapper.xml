@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.folder.FolderMapper">
+
+    <!-- 查询全部文件夹 -->
+    <select id="listAll" resultType="com.blossom.backend.server.folder.pojo.FolderEntity">
+        select id,
+            pid,
+            `name`,
+            icon,
+            tags,
+            open_status,
+            sort,
+            cover,
+            color,
+            describes,
+            store_path,
+            subject_words,
+            subject_upd_time,
+            type,
+            cre_time
+          from blossom_folder
+        <where>
+            <if test="openStatus != null ">and open_status = #{openStatus}</if>
+            <if test="type != null ">and type = #{type}</if>
+            <if test="tags != null and tags != ''">and tags like concat('%',#{tags},'%')</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="recursiveToParent" resultType="com.blossom.backend.server.folder.pojo.FolderEntity">
+        with recursive to_top as (
+                select f1.id,f1.pid,f1.`name`,f1.icon,f1.tags,f1.open_status,f1.sort,f1.store_path,f1.type
+                  from blossom_folder f1
+                 where f1.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+             union all
+                select f2.id,f2.pid,f2.`name`,f2.icon,f2.tags,f2.open_status,f2.sort,f2.store_path,f2.type
+                  from blossom_folder f2
+            inner join to_top on to_top.pid = f2.id
+        )
+        select distinct * from to_top order by id
+    </select>
+
+    <select id="recursiveToChildren" resultType="com.blossom.backend.server.folder.pojo.FolderEntity">
+        with recursive to_bottom as (
+                select f1.id,f1.pid,f1.`name`,f1.icon,f1.tags,f1.open_status,f1.sort,f1.store_path,f1.type
+                  from blossom_folder f1
+                 where f1.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+             union all
+                select f2.id,f2.pid,f2.`name`,f2.icon,f2.tags,f2.open_status,f2.sort,f2.store_path,f2.type
+                  from blossom_folder f2
+            inner join to_bottom on to_bottom.id = f2.pid
+        )
+        select distinct * from to_bottom order by id
+    </select>
+
+    <!-- 根据ID修改 -->
+    <update id="updById">
+        update blossom_folder
+        <set>
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="cover != null">cover = #{cover},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="openStatus != null">open_status = #{openStatus},</if>
+            <if test="storePath != null">store_path = #{storePath},</if>
+            <if test="subjectWords != null">subject_words = #{subjectWords},</if>
+            <if test="subjectUpdTime != null">subject_upd_time = #{subjectUpdTime},</if>
+            <if test="describes != null">describes = #{describes},</if>
+            upd_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updByIds">
+        update blossom_folder
+        <set>
+            <if test="storePath != null">store_path = #{storePath},</if>
+            upd_time = now()
+        </set>
+        where id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </update>
+</mapper>

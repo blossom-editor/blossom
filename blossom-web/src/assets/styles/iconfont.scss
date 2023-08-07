@@ -1,0 +1,209 @@
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: 'iconfont';  /* Project id 1823192 */
+  src: url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.eot?t=1686157411988'); /* IE9 */
+  src: url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.eot?t=1686157411988#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.woff2?t=1686157411988') format('woff2'),
+       url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.woff?t=1686157411988') format('woff'),
+       url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.ttf?t=1686157411988') format('truetype'),
+       url('https://at.alicdn.com/t/c/font_1823192_gdhg6vgz0r9.svg?t=1686157411988#iconfont') format('svg');
+}
+
+.icon {
+  width: 2em; height: 2em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.iconfont {
+  font-family: "iconfont", serif !important;
+  font-size: 16px;
+  /*margin-right: 1px;*/
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.icon-userkey::before      {content: "\e631";}
+.icon-user3::before        {content: "\e634";}
+.icon-roles::before        {content: "\e637";}
+.icon-key1::before         {content: "\e649";}
+.icon-devil::before        {content: "\e6df";}
+.icon-setting::before      {content: "\e627";}
+.icon-home:before          {content: "\e867";}
+.icon-toggle-left:before   {content: "\e681";}
+.icon-toggle-right:before  {content: "\e682";}
+.icon-sql:before           {content: "\e63e";}
+.icon-b:before             {content: "\e6ec";}
+.icon-f:before             {content: "\e6eb";}
+.icon-node-4:before        {content: "\e865";}
+.icon-node-3:before        {content: "\e64d";}
+.icon-face-smile:before    {content: "\e6cd";}
+.icon-node-2:before        {content: "\e61e";}
+.icon-bug:before           {content: "\e61b";}
+.icon-nodata:before        {content: "\e630";}
+.icon-nodata1:before       {content: "\e618";}
+.icon-nodata1-mini:before  {content: "\e618";}
+.icon-depend:before        {content: "\e642";}
+.icon-monitor:before       {content: "\e62a";}
+.icon-thread:before        {content: "\e612";}
+.icon-memory:before        {content: "\e6ca";}
+.icon-flow:before          {content: "\e61f";}
+.icon-node:before          {content: "\e7c1";}
+.icon-monitor1:before      {content: "\e616";}
+.icon-server:before        {content: "\e6a4";}
+.icon-elasticsearch:before {content: "\e69b";}
+.icon-jvm:before           {content: "\e717";}
+.icon-heartbeat:before     {content: "\e68d";}
+.icon-user:before          {content: "\e653";}
+.icon-user-level:before    {content: "\e69c";}
+.icon-user-search:before   {content: "\e66d";}
+.icon-user-line:before     {content: "\e66b";}
+.icon-warn:before          {content: "\e622";}
+.icon-warn1:before         {content: "\e6b6";}
+.icon-refresh:before       {content: "\ec08";}
+.icon-download:before      {content: "\e646";}
+.icon-execute:before       {content: "\e61a";}
+.icon-route:before         {content: "\e689";}
+.icon-interface:before     {content: "\e652";}
+.icon-redis1:before        {content: "\e6a2";}
+.icon-redis2:before        {content: "\e63a";}
+.icon-chart-bar:before     {content: "\e628";}
+.icon-trace:before         {content: "\e68e";}
+.icon-bucket:before        {content: "\e73f";}
+.icon-article-menu:before  {content: "\e608";}
+.icon-operator:before      {content: "\e664";}
+.icon-wunai:before         {content: "\e600";}
+.icon-read2:before         {content: "\e665";}
+.icon-username:before      {content: "\e653";}
+.icon-secret:before        {content: "\e7c0";}
+.icon-glasses:before       {content: "\e8ab";} /*眼镜*/
+
+
+
+/*码云*/
+.icon-gitee:before     { content: "\e686"; }
+/*url*/
+.icon-url:before       { font-size: 17px; content: "\e6e8"; }
+/*markdown*/
+.icon-markdown1:before { font-size: 25px; content: "\e624"; }
+.icon-markdown2:before { font-size: 25px; content: "\e688"; }
+/*截图*/
+.icon-picture1:before  { font-size: 17px; content: "\e63c"; }
+.icon-picture2:before  { font-size: 25px; content: "\e69d"; }
+/*云端*/
+.icon-cloud1:before    { font-size: 14px; content: "\eaaf"; }
+.icon-cloud1-20:before { font-size: 20px; content: "\eaaf"; }
+.icon-cloud2:before    { font-size: 14px; content: "\ee77"; }
+.icon-cloud2-20:before { font-size: 20px; content: "\ee77"; }
+/*供应商*/
+.icon-gys:before       { font-size: 20px; content: "\e6ae"; }
+/*key*/
+.icon-key:before       { font-size: 20px; content: "\e6bc"; }
+/*区域*/
+.icon-endpoint:before  { font-size: 20px; content: "\e79f"; }
+/*施工*/
+.icon-construction1:before     { font-size: 20px; content: "\e66e"; }
+.icon-construction2:before     { font-size: 20px; content: "\e63d"; }
+.icon-construction2-60:before  { font-size: 60px; content: "\e63d";}
+/*无奈*/
+.icon-jujue:before     { font-size: 80px; content: "\e6af";}
+/*喜欢*/
+.icon-like:before      { font-size: 16px; content: "\ee78"; color: #e33d0e;}
+.icon-dontlike:before  { font-size: 16px; content: "\e63b"; color: #858585}
+/*复制*/
+.icon-copy:before      { font-size: 17px; content: "\e690"; }
+/*修改*/
+.icon-upd:before       { font-size: 17px; content: "\e601"; }
+.icon-upd1:before      { font-size: 17px; content: "\e604"; }
+.icon-upd2:before      { font-size: 17px; content: "\e62f"; }
+/* 修改 */
+.icon-default:before   { font-size: 17px; content: "\e76e"; }
+/* 文章 */
+.icon-article:before   { font-size: 80px; content: "\e608";}
+/** 编辑 */
+.icon-editor-menu:before { font-size: 18px; content: "\e6f7";padding-left: 3px;margin-right: 9px; }
+.icon-editor1:before     { font-size: 20px; content: "\e604";}
+.icon-editor2:before     { font-size: 15px; content: "\e62f";}
+/** 点击量 */
+.icon-hits1:before       { font-size: 15px; content: "\e659";}
+.icon-hits2:before       { font-size: 15px; content: "\e61c";}
+.icon-hits3:before       { font-size: 15px; content: "\e6a3";}
+.icon-hits4:before       { font-size: 15px; content: "\e60c";}
+.icon-hits5:before       { font-size: 13px; content: "\e660";}
+.icon-hits6:before       { font-size: 15px; content: "\e669";}
+/** 阅读量 */
+.icon-read1:before       { font-size: 15px; content: "\e60f";}
+/** 点赞 */
+.icon-applaud1:before   { font-size: 20px; content: "\e617";}
+.icon-applaud2:before   { font-size: 15px; content: "\e60d";}
+.icon-applaud3:before   { font-size: 13px; content: "\e69d";}
+/**文档*/
+.icon-doctask:before    { font-size: 90px; content: "\e605";}
+.icon-docadd:before     { font-size: 80px; content: "\e607";}
+.icon-docedit:before    { font-size: 90px; content: "\e60b";}
+
+.icon-none:before       { font-size: 20px; content: "\e610";}
+.icon-find:before       { font-size: 20px; content: "\e603";}
+
+/**撤销*/
+.icon-repeal:before     { font-size: 15px; content: "\e636";}
+/**下载*/
+.icon-download1:before  { font-size: 16px; content: "\e620";}
+/**二维码*/
+.icon-qrcode:before     { font-size: 15px; content: "\e683";}
+/**WEB*/
+.icon-web:before        { font-size: 15px; content: "\e680";}
+
+/**
+截图
+ */
+.icon-capture1:before  { font-size: 25px; content: "\e62e"; }
+.icon-capture14:before { font-size: 14px; content: "\e62e"; }
+.icon-capture2:before  { font-size: 25px; content: "\e6d9"; }
+
+/**
+用户
+ */
+.icon-login1:before    { font-size: 12px; content: "\e635"; }
+.icon-login2:before    { font-size: 20px; content: "\e6a9"; }
+.icon-password:before  { font-size: 20px; content: "\e679"; }
+
+/**
+APP图标
+ */
+.icon-tiaose:before   { font-size: 29px; content: "\e6f2"; }
+.icon-sheji1:before   { font-size: 20px; content: "\e685"; }
+.icon-sheji2:before   { font-size: 20px; content: "\e60d"; }
+.icon-element:before  { font-size: 20px; content: "\e605"; }
+.icon-txcloud:before  { font-size: 28px; content: "\e747"; }
+.icon-gamersky:before { font-size: 25px; content: "\e60c"; }
+.icon-qncloud:before  { font-size: 20px; content: "\e661"; }
+.icon-baidu:before    { font-size: 29px; content: "\e602"; }
+.icon-aliyun:before   { font-size: 20px; content: "\e6b0"; }
+.icon-bilibili:before { font-size: 25px; content: "\e617"; }
+.icon-github:before   { font-size: 20px; content: "\e67c"; }
+.icon-electron:before { font-size: 20px; content: "\eb86"; }
+
+.icon-yuque:before { font-size: 20px; content: "\e6"; }
+.icon-chandan:before { font-size: 20px; content: "\e7fa"; }
+.icon-m:before { font-size: 20px; content: "\e613"; }
+.icon-p:before { font-size: 20px; content: "\e657"; }
+
+.icon-wechat:before           {font-size: 16px; content: "\e621"; margin-left: 5px;margin-right: 5px;}
+.icon-wechat-mp-menu-1:before {font-size: 16px; content: "\e615"; margin-left: 5px;margin-right: 5px;}
+.icon-wechat-mp-menu-2:before {font-size: 16px; content: "\e668"; margin-left: 5px;margin-right: 5px;}
+.icon-wechat-mp-menu-3:before {font-size: 16px; content: "\e640"; margin-left: 5px;margin-right: 5px;}
+
+
+
+
+
+
+
+
+
+

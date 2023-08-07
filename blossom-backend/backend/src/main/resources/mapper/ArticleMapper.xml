@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.article.draft.ArticleMapper">
+
+    <!-- 查询全部文章 -->
+    <select id="listAll" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
+        select
+        id,
+        pid,
+        `name`,
+        icon,
+        tags,
+        sort,
+        color,
+        uv,likes,words,
+        describes,
+        star_status,
+        open_status,
+        open_version,
+        version,
+        cre_time,
+        upd_time
+        from blossom_article
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="pid != null">and pid = #{pid}</if>
+            <if test="pids != null and pids.size() != 0">and pid in
+            <foreach collection="pids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+            </if>
+            <if test="name != null and name != ''">and name like concat(#{name}, '%')</if>
+            <if test="tags != null and tags != ''">and tags like concat(#{tags}, '%')</if>
+            <if test="starStatus != null">and star_status = #{starStatus}</if>
+            <if test="openStatus != null">and open_status = #{openStatus}</if>
+            <if test="version != null">and version = #{version}</if>
+            <if test="creTime != null">and cre_time = #{creTime}</if>
+            <if test="updTime != null">and upd_time = #{updTime}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+
+    <!-- 根据ID修改 -->
+    <update id="updById">
+        update blossom_article
+        <set>
+            <if test="pid != null">pid = #{pid}, </if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="cover != null">cover = #{cover},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="openStatus != null">open_status = #{openStatus},</if>
+            <if test="starStatus != null">star_status = #{starStatus},</if>
+            <if test="describes != null">describes = #{describes},</if>
+            <if test="openVersion != null">open_version = #{openVersion},</if>
+            upd_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据ID修改 -->
+    <update id="updContentById">
+        update blossom_article
+        set markdown = #{markdown},
+            html     = #{html},
+            words    = #{words},
+            toc      = #{toc},
+            version  = version + 1
+        where id = #{id}
+          and user_id = #{userId}
+    </update>
+
+    <!-- ======================================== 统计 ========================================   -->
+
+    <select id="statCount" resultType="com.blossom.backend.server.article.draft.pojo.ArticleStatRes">
+        select count(*) as articleCount, sum(words) as articleWords
+          from blossom_article
+         where user_id = #{userId}
+            <if test="beginUpdTime != null and beginUpdTime != ''">
+                and upd_time >= #{beginUpdTime}
+            </if>
+            <if test="endUpdTime != null and endUpdTime != ''">
+                and #{endUpdTime} >= upd_time
+            </if>
+    </select>
+
+    <update id="sync">
+        update blossom_article
+           set open_version = version
+         where id = #{articleId} and open_status = 1
+    </update>
+
+    <update id="uvAndPv">
+        update blossom_article
+        set pv = pv + #{pv}
+            <if test="uv != 0 and uv > 0">
+                ,uv = uv + #{uv}
+            </if>
+        where id = #{articleId}
+    </update>
+</mapper>

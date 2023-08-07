@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.article.open.ArticleOpenMapper">
+
+    <!-- 公开文章 -->
+    <insert id="open">
+        insert
+          into blossom_article_open
+        select id,pid,words,version,now(),now(),toc,markdown,html,user_id
+          from blossom_article
+         where id = #{id};
+    </insert>
+
+    <!-- 取消公开 -->
+    <delete id="close">
+        delete from blossom_article_open where id = #{id}
+    </delete>
+
+    <!-- 同步公开 -->
+    <update id="sync">
+        update blossom_article_open o
+            inner join blossom_article a on o.id = a.id and a.id = #{id}
+        set o.words = a.words,
+            o.open_version = a.version,
+            o.toc = a.toc,
+            o.markdown = a.markdown,
+            o.html = a.html,
+            o.sync_time = now()
+    </update>
+</mapper>

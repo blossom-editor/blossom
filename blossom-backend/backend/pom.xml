@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>blossom-backend</artifactId>
+        <groupId>com.blossom</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>backend</artifactId>
+
+    <properties>
+        <java-jwt.version>4.3.0</java-jwt.version> <!-- JWT -->
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>common-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>common-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>common-db</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>common-iaas</artifactId>
+        </dependency>
+
+        <!-- 简易链路追踪 -->
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>expand-tracker-core</artifactId>
+        </dependency>
+
+        <!-- Sentinel MVC 接口自动拦截 -->
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>expand-sentinel-springmvc</artifactId>
+        </dependency>
+
+        <!-- Sentinel 指标查询拓展接口 -->
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>expand-sentinel-metric</artifactId>
+        </dependency>
+
+        <!-- JWT -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
+
+        <!-- 图片处理 -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.20</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>backend-blossom</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <!-- 解决加载tools.jar的问题 -->
+                        <includeSystemScope>true</includeSystemScope>
+                        <finalName>${project.build.finalName}</finalName>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <target>${maven.compiler.target}</target>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--配置运行main函数-->
+                    <mainClass>com.blossom.backend.APP</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

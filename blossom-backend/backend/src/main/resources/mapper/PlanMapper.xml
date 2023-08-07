@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.plan.PlanMapper">
+
+    <!-- 全部计划 -->
+    <select id="listAll" resultType="com.blossom.backend.server.plan.pojo.PlanEntity">
+        select
+               id,
+               group_id,
+               type,
+               title,
+               content,
+               plan_month,
+               plan_date,
+               plan_start_time,
+               plan_end_time,
+               color,
+               position,
+               img,
+               cre_time
+          from blossom_plan
+        <where>
+            <if test="groupId != null">and group_id = #{groupId}</if>
+            <if test="type != null">and type = #{type}</if>
+            <if test="planMonth != null and planMonth != ''">and plan_month like concat(#{planMonth}, '%')</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+        <if test="type == 1">
+            order by plan_date
+        </if>
+        <if test="type == 2">
+            order by plan_start_time
+        </if>
+    </select>
+
+
+    <insert id="insertList">
+        insert into blossom_plan
+        values
+        <foreach collection="plans" item="plan" separator="," close=";">
+            (
+            null,
+            #{plan.groupId},
+            #{plan.type},
+            #{plan.title},
+            #{plan.content},
+            #{plan.planMonth},
+            #{plan.planDate},
+            #{plan.planStartTime},
+            #{plan.planEndTime},
+            #{plan.color},
+            #{plan.position},
+            #{plan.img},
+            now(),
+            #{plan.userId}
+            )
+        </foreach>
+    </insert>
+        
+    <!-- 根据ID修改 -->
+    <update id="updById">
+        update blossom_plan
+        <set>
+            <if test="groupId != null">group_id = #{groupId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="planMonth != null">plan_month = #{planMonth},</if>
+            <if test="planDate != null">plan_date = #{planDate},</if>
+            <if test="planTime != null">plan_time = #{planTime},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="img != null">img = #{img},</if>
+            upd_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="del">
+        delete from blossom_plan
+        where
+         <if test="id != null">
+             id = #{id}
+         </if>
+         <if test="groupId != null">
+             group_id = #{groupId}
+         </if>
+    </delete>
+
+</mapper>

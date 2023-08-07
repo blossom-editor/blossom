@@ -1,0 +1,102 @@
+:root {
+
+  /* 数字越大, 颜色越淡 */
+  --el-color-primary: #c1992f;
+  --el-color-primary-dark-2: rgba(250, 195, 56, 0.8);
+  --el-color-primary-light-1: rgba(193, 153, 47, 0.9);
+  --el-color-primary-light-2: rgba(193, 153, 47, 0.8);
+  --el-color-primary-light-3: rgba(193, 153, 47, 0.7);
+  --el-color-primary-light-5: rgba(193, 153, 47, 0.5);
+  --el-color-primary-light-6: rgba(193, 153, 47, 0.4);
+  --el-color-primary-light-7: rgba(193, 153, 47, 0.3);
+  --el-color-primary-light-8: rgba(193, 153, 47, 0.2);
+  --el-color-primary-light-9: rgba(232, 219, 190, 0.505);
+
+  /* 文本颜色 */
+  /* --el-text-color-primary: #303133; */
+  --el-text-color-primary: #606266;
+  --el-text-color-regular: #606266;
+  --el-text-color-secondary: #909399;
+  --el-text-color-placeholder: #a8abb2;
+  --el-text-color-disabled: #c0c4cc;
+
+  --el-menu-item-height: 40px;
+}
+
+/* ================================= 自定义颜色 ================================== */
+
+:root {
+  --xz-html-color: #ffffff;
+}
+
+html.dark {
+  --xz-html-color: #1e1e1e;
+
+}
+
+:root {
+  /*  */
+  --bl-editor-color: #707070;
+  --bl-editor-bg-color: #FFFFFF;
+
+  /* gutter */
+  --bl-editor-gutters-bg-color: #f5f5f5;
+  --bl-editor-gutters-border-color: #DDDDDD00;
+  --bl-editor-active-line-gutter-bg-color: #f7f3fe;
+
+  /* 各类关键字颜色 */
+  --bl-editor-cc-color: #219;
+  --bl-editor-cm-color: #b6b6b6;
+  --bl-editor-cb-color: #ce5d00;
+  --bl-editor-cd-color: #689757;
+  --bl-editor-ce-color: #47ade5;
+  --bl-editor-ci-color: #ba7300;
+  --bl-editor-cg-color: #9876aa;
+
+  --bl-editor-c5-color: #7843E9;
+  --bl-editor-c7-color: #7843E9;
+  --bl-editor-c7-bg-color: #00000000;
+  /* ============================================================= */
+
+  /* 预览的字体颜色 */
+  --bl-preview-color: #2b2b2b;
+  --bl-preview-bg-color: #FFFFFF;
+  --bl-preview-border-radius: 4px;
+
+  /* 目录 */
+  --bl-preview-toc-border-color: #e0e0e0;
+
+  /* 标题 */
+  --bl-preview-h1-bg-color: #eaeaea;
+  --bl-preview-h1-box-shadow: 3px 3px 5px 1px #a8a8a8;
+  --bl-preview-h1-text-shadow: 3px 3px 3px rgb(148, 148, 148);
+
+  /* 表格 */
+  --bl-preview-table-border-color: #939393;
+  --bl-preview-table-thead-bg-color: #2b2b2b;
+
+  /* 引用 */
+  --bl-preview-blockquote-color: #7d7d7d;
+  --bl-preview-blockquote-bg-color: #f0f0f0;
+  --bl-preview-blockquote-border-color: #bebebe;
+  --bl-preview-blockquote-bg-green: #edf8db;
+  --bl-preview-blockquote-border-green: #bed609;
+  --bl-preview-blockquote-bg-yellow: #faf0d5;
+  --bl-preview-blockquote-border-yellow: #efc75e;
+  --bl-preview-blockquote-bg-red: #fbe6e9;
+  --bl-preview-blockquote-border-red: #ff9090;
+  --bl-preview-blockquote-bg-blue: #dfeefd;
+  --bl-preview-blockquote-border-blue: #81bbf8;
+  --bl-preview-blockquote-bg-purple: #ece4fb;
+  --bl-preview-blockquote-border-purple: #ba9bf2;
+  --bl-preview-blockquote-bg-black: rgba(0, 0, 0, 0.7);
+  --bl-preview-blockquote-border-black: #000000;
+
+  /* 图片 */
+  --bl-preview-img-box-shadow: 2px 2px 10px 3px #c6c6c6;
+
+  /* 单行代码块 */
+  --bl-preview-code-bg-color: #eaeaea;
+  /* 多行代码块 */
+  --bl-preview-pre-bg-color: #2b2b2b;
+}

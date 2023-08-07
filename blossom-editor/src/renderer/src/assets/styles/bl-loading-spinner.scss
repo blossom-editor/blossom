@@ -1,0 +1,27 @@
+.bl-loading-spinner {
+  @include flex(column, flex-end);
+  height: 100px;
+  top: calc(50% - 50px);
+
+  &::before {
+    background-image: url('@renderer/assets/imgs/blossom_logo_grey.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    height: 100%;
+    width: 100%;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(5px);
+  }
+
+  .circular {
+    display: none;
+  }
+
+  .el-loading-text {
+    @include font(15px, 300);
+  }
+}

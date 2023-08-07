@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.article.reference.ArticleReferenceMapper">
+
+    <!-- 批量新增 -->
+    <insert id="insertList">
+        insert into blossom_article_reference (
+            source_id,
+            source_name,
+            target_Id,
+            target_name,
+            target_url,
+            type,
+            user_id
+        ) values
+        <foreach collection="references" item="ref" separator="," close=";">
+            (
+            #{ref.sourceId},
+            #{ref.sourceName},
+            #{ref.targetId},
+            #{ref.targetName},
+            #{ref.targetUrl},
+            #{ref.type},
+            #{ref.userId}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,11 @@
+.el-message {
+  @include themeShadow(3px 3px 10px 1px rgb(191, 191, 191), 3px 3px 10px 1px #000);
+  padding: 10px 10px !important;
+  border: 3px;
+}
+
+.el-message--success {
+  --el-message-bg-color: var(--xz-bg-color) !important;
+  border: 0 !important;
+  // border: 2px solid rgb(51, 217, 0) !important;
+}

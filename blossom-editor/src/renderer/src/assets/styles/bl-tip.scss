@@ -1,0 +1,61 @@
+.bl-tip {
+  display: inline-block;
+  position: relative;
+
+  &:before,
+  &:after {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    z-index: 1000;
+    transition: 0.1s ease;
+  }
+
+  &:before {
+    content: '';
+    border: 6px solid transparent;
+  }
+
+  &:after {
+    @include themeShadow(4px 4px 5px #00000080, 5px 5px 5px #000000);
+    content: attr(data-tip);
+    color: #fff;
+    background-color: var(--el-color-primary);
+    text-shadow: 3px 3px 5px #00000080;
+    padding: 5px;
+    white-space: nowrap;
+    border-radius: 4px;
+  }
+
+  &:hover:before,
+  &:hover:after {
+    opacity: 1;
+    /*鼠标放上时透明度为完全显示*/
+    visibility: visible;
+    z-index: 1000;
+  }
+
+  /*bottom*/
+  &-bottom:before {
+    top: 100%;
+    left: 25%;
+    margin-left: 10px;
+    margin-top: -9px;
+    border-bottom-color: var(--el-color-primary);
+  }
+
+  &-bottom:after {
+    top: 100%;
+    left: 20%;
+    margin-left: -10px;
+    margin-top: 3px;
+  }
+
+  &-bottom:hover:before {
+    margin-top: -3px;
+  }
+
+  &-bottom:hover:after {
+    margin-top: 9px;
+  }
+}

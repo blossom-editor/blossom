@@ -1,0 +1,179 @@
+// 块的目录, 用在新窗口中
+.bl-preview-toc-block {
+  @include box(400px, 100%);
+  color: #5E5E5E;
+  border-right: 3px solid var(--bl-preview-toc-border-color);
+
+  .toc-title {
+    @include box(100%, 50px);
+    @include font(30px, 700);
+    border-top: 3px solid var(--bl-preview-toc-border-color);
+    margin-top: 10px;
+    padding: 10px 0;
+  }
+
+  .toc-subtitle {
+    @include box(100%, 20px);
+    @include font(12px);
+    color: #ABABAB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    white-space: pre;
+  }
+
+  .toc-content {
+    @include box(100%, calc(100% - 20px - 20px));
+    @include font(14px);
+
+    .toc-1 {
+      border-top: 2px solid var(--bl-preview-toc-border-color);
+    }
+  }
+}
+
+
+@media screen and (max-height: 800px) {
+  .bl-preview-toc-absolute {
+    max-height: 500px !important;
+    background-color: red;
+
+    .toc-content {
+      max-height: calc(500px - 150px - 60px - 20px) !important;
+    }
+  }
+}
+
+// 浮动的目录, 用在编辑器中
+.bl-preview-toc-absolute {
+  @include font(12px);
+  @include themeShadow(2px 4px 7px 2px rgba(49, 49, 49, 0.3), 2px 4px 7px 2px rgb(28, 28, 28));
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  background-color: #4D4D4DBD;
+  border-radius: 10px;
+  z-index: 1000;
+  max-height: 700px;
+  overflow: hidden;
+
+  .toc-title {
+    @include box(100%, 20px);
+    @include font(15px, 700);
+    @include themeColor(#FFFFFF, #ffffff);
+  }
+
+  .toc-content {
+    @include themeColor(#e2e2e2, #BCBCBC);
+    width: 100%;
+    max-height: calc(700px - 150px - 60px - 20px);
+    transition: 0.3s;
+
+    .toc-1 {
+      @include themeBorder(2px, #a3a3a3, #a3a3a3, 'top');
+    }
+  }
+}
+
+.bl-preview-toc-block,
+.bl-preview-toc-absolute {
+  padding: 10px;
+  transition: 0.3s;
+
+  .toc-content {
+    overflow-y: scroll;
+    padding-top: 10px;
+
+    .toc-1,
+    .toc-2,
+    .toc-3,
+    .toc-4,
+    .toc-5,
+    .toc-6 {
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      white-space: pre;
+
+      &:hover {
+        font-weight: bold;
+      }
+    }
+
+    .toc-1 {
+      margin-top: 5px;
+      padding-top: 5px;
+
+      &:first-child {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+    }
+
+    .toc-2 {
+      &::before {
+        content: '  ';
+      }
+
+    }
+
+    .toc-3 {
+      &::before {
+        content: '    ';
+      }
+    }
+
+    .toc-4 {
+      &::before {
+        content: '      ';
+      }
+    }
+
+    .toc-5 {
+      &::before {
+        content: '        ';
+      }
+    }
+
+    .toc-6 {
+      &::before {
+        content: '          ';
+      }
+    }
+  }
+
+  .img-title {
+    @extend .toc-title;
+    @include themeBorder(2px, #a3a3a3, #a3a3a3, 'top');
+    margin-top: 20px;
+    height: 40px;
+    padding-top: 10px;
+  }
+
+  .img-content {
+    @include box(100%, auto);
+    @include flex(row, flex-start, flex-start);
+    max-height: 150px;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+
+    .elimg {
+      @include flex(row, center, center);
+      @include box(50px, 50px);
+      border-radius: 4px;
+      object-fit: cover;
+      background-color: aliceblue;
+      margin: 3px;
+      filter: brightness(90%);
+      transition: 0.3s;
+      color: #a7a7a7;
+
+      &:hover {
+        filter: brightness(100%);
+      }
+    }
+  }
+}

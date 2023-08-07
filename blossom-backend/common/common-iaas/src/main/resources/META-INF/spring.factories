@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.common.iaas.IaasProperties,\
+  com.blossom.common.iaas.IaasConfiguration
+

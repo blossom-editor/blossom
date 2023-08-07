@@ -1,0 +1,223 @@
+@font-face {
+  font-family: "iconwt"; /* Project id 1919115 */
+  src: url('iconfont.woff2?t=1689156734710') format('woff2'),
+       url('iconfont.woff?t=1689156734710') format('woff'),
+       url('iconfont.ttf?t=1689156734710') format('truetype');
+}
+
+.iconwt {
+  font-family: "iconwt" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wt-yintian1:before {
+  content: "\e758";
+}
+
+.wt-qingtian:before {
+  content: "\e606";
+}
+
+.wt-baoxue:before {
+  content: "\e607";
+}
+
+.wt-dafeng1:before {
+  content: "\e608";
+}
+
+.wt-bingbao:before {
+  content: "\e609";
+}
+
+.wt-baoyu1:before {
+  content: "\e60a";
+}
+
+.wt-daxue:before {
+  content: "\e60b";
+}
+
+.wt-fuchen:before {
+  content: "\e60c";
+}
+
+.wt-leizhenyu:before {
+  content: "\e60d";
+}
+
+.wt-duoyun1:before {
+  content: "\e60e";
+}
+
+.wt-qingduwumai:before {
+  content: "\e60f";
+}
+
+.wt-shachen:before {
+  content: "\e610";
+}
+
+.wt-wanduoyun:before {
+  content: "\e611";
+}
+
+.wt-wanqingtian:before {
+  content: "\e612";
+}
+
+.wt-wu:before {
+  content: "\e613";
+}
+
+.wt-dayu:before {
+  content: "\e614";
+}
+
+.wt-xiaoxue:before {
+  content: "\e615";
+}
+
+.wt-xiaoyu1:before {
+  content: "\e616";
+}
+
+.wt-yintian:before {
+  content: "\e617";
+}
+
+.wt-zhongyu1:before {
+  content: "\e618";
+}
+
+.wt-zhongduwumai:before {
+  content: "\e619";
+}
+
+.wt-zhongxue:before {
+  content: "\e61a";
+}
+
+.wt-zhongduwumai1:before {
+  content: "\e61b";
+}
+
+.wt-yujiaxue:before {
+  content: "\e61c";
+}
+
+.wt-baoyu:before {
+  content: "\e6c6";
+}
+
+.wt-dalei:before {
+  content: "\e6c7";
+}
+
+.wt-dafeng:before {
+  content: "\e6c8";
+}
+
+.wt-caihong:before {
+  content: "\e6c9";
+}
+
+.wt-feng:before {
+  content: "\e6ca";
+}
+
+.wt-leijiayu:before {
+  content: "\e6cb";
+}
+
+.wt-gongshui:before {
+  content: "\e6cc";
+}
+
+.wt-duoyun:before {
+  content: "\e6cd";
+}
+
+.wt-longjuanfeng:before {
+  content: "\e6ce";
+}
+
+.wt-diwen:before {
+  content: "\e6cf";
+}
+
+.wt-gaowen:before {
+  content: "\e6d0";
+}
+
+.wt-rila:before {
+  content: "\e6d1";
+}
+
+.wt-qingduoyun:before {
+  content: "\e6d2";
+}
+
+.wt-qing:before {
+  content: "\e6d3";
+}
+
+.wt-qingjiafeng:before {
+  content: "\e6d4";
+}
+
+.wt-rishi:before {
+  content: "\e6d5";
+}
+
+.wt-richu:before {
+  content: "\e6d6";
+}
+
+.wt-xiaoyu:before {
+  content: "\e6d7";
+}
+
+.wt-yu:before {
+  content: "\e6d8";
+}
+
+.wt-yejianduoyun:before {
+  content: "\e6d9";
+}
+
+.wt-shuilao:before {
+  content: "\e6da";
+}
+
+.wt-du:before {
+  content: "\e6db";
+}
+
+.wt-zhongyu:before {
+  content: "\e6dc";
+}
+
+.wt-xue:before {
+  content: "\e6dd";
+}
+
+.wt-avalanche:before {
+  content: "\e6de";
+}
+
+.wt-earthquake:before {
+  content: "\e6df";
+}
+
+.wt-eruption:before {
+  content: "\e6e0";
+}
+
+.wt-yueliang:before {
+  content: "\e6e1";
+}
+

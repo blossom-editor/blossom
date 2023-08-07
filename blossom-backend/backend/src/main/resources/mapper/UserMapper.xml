@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.base.user.UserMapper">
+
+    <!-- 根据ID修改 -->
+    <update id="updById">
+        update base_user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="location != null">location = #{location},</if>
+            upd_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updPwd">
+        update base_user set password = #{password},upd_time = now() where id = #{userId}
+    </update>
+</mapper>

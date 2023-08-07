@@ -1,0 +1,108 @@
+{
+  "groups": [
+    {
+      "name": "project.tracker",
+      "type": "com.blossom.expand.tracker.core.TrackerProperties",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties"
+    },
+    {
+      "name": "project.tracker.collector",
+      "type": "com.blossom.expand.tracker.core.TrackerProperties$Collector",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties"
+    },
+    {
+      "name": "project.tracker.repository",
+      "type": "com.blossom.expand.tracker.core.TrackerProperties$Repository",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties"
+    },
+    {
+      "name": "project.tracker.repository.disk",
+      "type": "com.blossom.expand.tracker.core.TrackerProperties$Disk",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Repository"
+    },
+    {
+      "name": "tracker.redis",
+      "type": "com.blossom.expand.tracker.core.adapter.redis.TrackerRedisProperties",
+      "sourceType": "com.blossom.expand.tracker.core.adapter.redis.TrackerRedisProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "project.tracker.collector.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启本地收集, 需要开启收集",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Collector",
+      "defaultValue": false
+    },
+    {
+      "name": "project.tracker.collector.ignore-trackers",
+      "type": "java.util.List<com.blossomexpand.tracker.core.TrackerProperties$IgnoreTracker>",
+      "description": "忽略的追踪",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Collector"
+    },
+    {
+      "name": "project.tracker.collector.max-cache",
+      "type": "java.lang.Integer",
+      "description": "收集器本地缓存最大大小, 默认5000 <p>本地缓存超过该配置后, 将舍弃新的收集信息, 这是用于在远程服务无法连接时, 或本地磁盘无法写入时, 防止本地内存过大",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Collector",
+      "defaultValue": 5000
+    },
+    {
+      "name": "project.tracker.collector.rate",
+      "type": "java.lang.Integer",
+      "description": "采样率, 0 - 1000 之间的整数, 为 1000 则全部收集, 为 0 则不收集. 默认采样率为1\/1000 <p>每个 span 会取 traceId 进行 hash, hash % 1000 后与该值比较, 小于该值则进行采集。 <p>服务集群需要有相同的采样率, 否则数据将出现不完整的情况， <h3>注意：<\/h3> <ol>  <li>该配置仅在大量数据情况下保证整体采样率近似于该值, 并不能保证每 1000 个请求就有 rate 数的请求被采集<\/li>  <li>出于性能考虑, 采样率过高时 tracker 选择丢弃 span 信息来保证系统稳定运行.<\/li> <\/ol>",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Collector",
+      "defaultValue": 1
+    },
+    {
+      "name": "project.tracker.repository.disk.log-dir",
+      "type": "java.lang.String",
+      "description": "记录的路径",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Disk",
+      "defaultValue": "\/tracker\/"
+    },
+    {
+      "name": "project.tracker.repository.disk.single-file-size",
+      "type": "java.lang.Long",
+      "description": "单个文件大小, byte <p>10MB: 83886080 <p>20MB: 167772160 <p>30MB: 251658240",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Disk",
+      "defaultValue": 251658240
+    },
+    {
+      "name": "project.tracker.repository.disk.total-file-count",
+      "type": "java.lang.Integer",
+      "description": "保留的文件总数",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Disk",
+      "defaultValue": 30
+    },
+    {
+      "name": "project.tracker.repository.disk.use-pid",
+      "type": "java.lang.Boolean",
+      "description": "追踪文件名增加 pid, 为了在本地启动多个项目时进行区分",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Disk",
+      "defaultValue": false
+    },
+    {
+      "name": "project.tracker.repository.type",
+      "type": "java.lang.String",
+      "description": "收集方式, 在对象注入时会进行判断 {@link TrackerConfiguration#trackerRepository(TrackerProperties)} <p>1. disk: 将 span 信息保存在磁盘中, 目前仅支持该种方式, 但不允许开启.",
+      "sourceType": "com.blossom.expand.tracker.core.TrackerProperties$Repository",
+      "defaultValue": "disk"
+    },
+    {
+      "name": "tracker.redis.detail-to-record",
+      "type": "java.lang.Boolean",
+      "description": "redis 请求详情保存至 Tracker.Record 中",
+      "sourceType": "com.blossom.expand.tracker.core.adapter.redis.TrackerRedisProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "tracker.redis.enabled",
+      "type": "java.lang.Boolean",
+      "description": "开启 redis 追踪",
+      "sourceType": "com.blossom.expand.tracker.core.adapter.redis.TrackerRedisProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

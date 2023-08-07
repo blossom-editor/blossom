@@ -1,0 +1,60 @@
+{
+  "groups": [
+    {
+      "name": "project.base",
+      "type": "com.blossom.common.base.BaseProperties",
+      "sourceType": "com.blossom.common.base.BaseProperties"
+    },
+    {
+      "name": "project.base.ex",
+      "type": "com.blossom.common.base.BaseProperties$Ex",
+      "sourceType": "com.blossom.common.base.BaseProperties"
+    },
+    {
+      "name": "project.base.log",
+      "type": "com.blossom.common.base.BaseProperties$Log",
+      "sourceType": "com.blossom.common.base.BaseProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "project.base.ex.format",
+      "type": "com.blossom.common.base.enums.ExFormat",
+      "description": "{@link AbstractExceptionAdvice} 中是否将异常信息进行格式化打印; <p>如果是 line, 则异常堆栈信息按照一行记录在日志中; <p>如果是 project, 则异常堆栈信息按照格式化方式记录在日志中",
+      "sourceType": "com.blossom.common.base.BaseProperties$Ex"
+    },
+    {
+      "name": "project.base.ex.stack-trace",
+      "type": "com.blossom.common.base.enums.ExStackTrace",
+      "description": "{@link AbstractExceptionAdvice} 中记录异常堆栈信息的内容; <p>如果是 all ，则记录全部堆栈信息; <p>如果是 project, 堆栈信息只包含项目包下的类;",
+      "sourceType": "com.blossom.common.base.BaseProperties$Ex"
+    },
+    {
+      "name": "project.base.log.duration",
+      "type": "java.lang.Long",
+      "description": "日志级别的缓存时间, 单位毫秒, 超过该时间将会重置为 INFO, 用来防止日志过大。 <p>仅针对通过动态日志配置的日志路径, 如果日志级别已在配置文件中配置, 则会 被覆盖并在超时后重置为 INFO, 但项目重启后会重置为",
+      "sourceType": "com.blossom.common.base.BaseProperties$Log"
+    },
+    {
+      "name": "project.base.log.dynamic-repo",
+      "type": "java.lang.String",
+      "description": "动态日志存储方式 <p>caffeine: caffeine, 该配置仅针对本地缓存, 并不会在集群间同步日志级 别配置。如果项目以集群方式部署, 则使用 caffeine 只会修改接收请求的服务器 的日志级别。 <p>redis: redis,",
+      "sourceType": "com.blossom.common.base.BaseProperties$Log",
+      "defaultValue": "caffeine"
+    },
+    {
+      "name": "project.base.log.restore-duration",
+      "type": "java.lang.Long",
+      "description": "每 restoreDuration 秒, 会重新刷新日志级别。如果日志级别设置的时间已超时, 则会重置为 INFO",
+      "sourceType": "com.blossom.common.base.BaseProperties$Log"
+    },
+    {
+      "name": "project.base.version",
+      "type": "java.lang.String",
+      "description": "系统版本, 可以使用 @project.version@ 获取 pom 中版本",
+      "sourceType": "com.blossom.common.base.BaseProperties",
+      "defaultValue": "xyz"
+    }
+  ],
+  "hints": []
+}

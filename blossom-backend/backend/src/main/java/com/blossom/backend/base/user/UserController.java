@@ -1,0 +1,96 @@
+package com.blossom.backend.base.user;
+
+import com.blossom.backend.base.param.ParamEnum;
+import com.blossom.backend.base.param.ParamService;
+import com.blossom.backend.base.sys.SysService;
+import com.blossom.backend.base.user.pojo.*;
+import com.blossom.backend.config.BlConstants;
+import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
+import com.blossom.backend.server.article.stat.ArticleStatService;
+import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.common.base.exception.XzException400;
+import com.blossom.common.base.pojo.R;
+import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * 用户 [User]
+ *
+ * @author xzzz
+ */
+@RestController
+@RequestMapping("/user")
+@AllArgsConstructor
+public class UserController {
+    private final UserService userService;
+    private final ArticleStatService articleService;
+    private final SysService sysService;
+    private final ParamService paramService;
+
+    /**
+     * 查询 blossom 用户
+     *
+     * @return 用户信息
+     * @apiNote blossom 当前只支持一个用户登录, 数据并为做区分. 当登录状态调用该接口时, 会返回服务器相关配置信息.
+     */
+    @GetMapping("/info")
+    public R<BlossomUserRes> user() {
+        BlossomUserRes user = userService.selectById(AuthContext.getUserId()).to(BlossomUserRes.class);
+        user.setOsRes(sysService.getOsConfig());
+        Map<String, String> paramMap = paramService.selectMap(true, ParamEnum.values());
+        user.setParams(paramMap);
+        return R.ok(user);
+    }
+
+    @AuthIgnore
+    @GetMapping("/info/open")
+    public R<BlossomUserRes> userOpen(@RequestHeader(BlConstants.REQ_HEADER_USERID) Long userId) {
+        if (userId == null) {
+            return R.ok(new BlossomUserRes());
+        }
+        BlossomUserRes user = userService.selectById(userId).to(BlossomUserRes.class);
+        ArticleStatRes stat = articleService.statCount(null, null, userId);
+        user.setArticleWords(stat.getArticleWords());
+        user.setArticleCount(stat.getArticleCount());
+        return R.ok(user);
+    }
+
+    /**
+     * 修改用户
+     */
+    @PostMapping("/upd")
+    public R<?> update(@Validated @RequestBody UserUpdReq req) {
+        UserEntity user = req.to(UserEntity.class);
+        user.setId(AuthContext.getUserId());
+        userService.updById(user);
+        return R.ok();
+    }
+
+    /**
+     * 修改密码
+     */
+    @PostMapping("/upd/pwd")
+    public R<?> updatePassword(@Validated @RequestBody UserUpdPwdReq req) {
+        req.setUserId(AuthContext.getUserId());
+        userService.updPassword(req);
+        return R.ok();
+    }
+
+    /**
+     * 新增用户
+     */
+    @PostMapping("/add")
+    public R<?> add(@Validated @RequestBody UserAddReq req) {
+        UserEntity curUser = userService.getById(AuthContext.getUserId());
+        if (curUser == null || !UserTypeEnum.ADMIN.getType().equals(curUser.getType())) {
+            throw new XzException400("您没有权限添加用户");
+        }
+        userService.insert(req);
+        return R.ok();
+    }
+}

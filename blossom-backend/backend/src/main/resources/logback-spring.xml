@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="false">
+    <!-- 自定义配置 -->
+    <define name="ip" class="com.blossom.common.base.log.LogIpConfig"/>
+    <define name="hostName" class="com.blossom.common.base.log.HostNameConfig"/>
+    <conversionRule conversionWord="xzcolor" converterClass="com.blossom.common.base.log.CustomLogbackColor"/>
+    <!-- Spring 配置 -->
+    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue=""/>
+    <!-- 配置 -->
+    <property name="log.path" value="logs"/>
+    <property name="LOG_PATTERN"
+              value="%xzcolor(%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level[%-10.10thread] [%-32.32X{traceId}]%-40.40logger{40} %-4line: %msg%xEx%n)"/>
+    <property name="LOG_PATTERN_CONSOLE"
+              value="%xzcolor(%d{HH:mm:ss.SSS} %-5level[%-10.10thread] [%-2.2X{traceId}.%-2.2X{spanId}] %-30.30logger{30} %-3line: %msg%n)"/>
+
+    <!-- ===============================================================================================================
+     日志写入设置
+     ================================================================================================================-->
+    <!-- 控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+    滚动日志: ${log.path}/info.log
+    文件大小: 50MB
+    保留天数: 10
+    记录级别: trace, debug, trace, warn, error
+    压缩日志:
+        logs/yyyy-MM/info.yyyy-MM-dd.0.log.gz
+        logs/yyyy-MM/info.yyyy-MM-dd.1.log.gz
+        ...
+    -->
+    <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/info.log</file>
+        <!-- 按照大小和时间滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM, aux}/info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+    滚动日志: ${log.path}/error.log
+    文件大小: 50MB
+    保留天数: 10
+    记录级别: error
+    压缩日志:
+        logs/yyyy-MM/error.yyyy-MM-dd.0.log.gz
+        logs/yyyy-MM/error.yyyy-MM-dd.1.log.gz
+        ...
+    -->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- 该日志文件中允许写入的日志级别 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <appender name="slowsql" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/slowsql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/slowsql.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- 该日志文件中允许写入的日志级别 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <!-- Level: FATAL 0  ERROR 3  WARN 4  INFO 6  DEBUG 7 -->
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="info"/>
+        <appender-ref ref="error"/>
+    </root>
+
+
+    <!--打印 SlowSQLInterceptor 类下的 info 级别以上日志，并使用 slowsql 配置生成日志文件 -->
+    <logger name="com.blossom.common.db.interceptor.SlowSQLInterceptor" level="INFO" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="slowsql"/>
+    </logger>
+</configuration>

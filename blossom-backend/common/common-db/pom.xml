@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>common</artifactId>
+        <groupId>com.blossom</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>common-db</artifactId>
+
+    <properties>
+        <!-- 数据库连接 -->
+        <mysql.version>8.0.21</mysql.version>
+        <!-- 分页插件 -->
+        <pagehelper.version>5.3.2</pagehelper.version>
+        <pagehelper-springboot.version>1.4.6</pagehelper-springboot.version>
+        <!-- mybatis -->
+        <mybatis.version>3.5.9</mybatis.version>
+        <mybatis.springboot.version>2.2.2</mybatis.springboot.version>
+        <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.blossom</groupId>
+            <artifactId>common-base</artifactId>
+        </dependency>
+
+        <!-- ============================== mybatis ================================== -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+
+        <!-- ============================== MyBatis ================================== -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.springboot.version}</version>
+        </dependency>
+
+        <!-- ============================== mybatis.plus ============================= -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.plus.version}</version>
+        </dependency>
+
+        <!-- ============================== mysql drive ============================== -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+        <!-- ============================== pageHelper =============================== -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper-springboot.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>/administrative/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+</project>

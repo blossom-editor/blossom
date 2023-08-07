@@ -1,0 +1,293 @@
+.index-picture-root {
+  @include box(100%, 100%);
+  @include flex(row, flex-start, center);
+
+  // 文档
+  .doc-container {
+    @include box(250px, 100%);
+    @include flex(column, flex-start, center);
+    font-weight: 200;
+    transition: 0.1s;
+    left: 0;
+    top: 0;
+
+    .doc-workbench {
+      @include box(100%, 90px);
+      border-bottom: 1px solid var(--el-border-color);
+    }
+
+    .doc-trees {
+      @include box(100%, calc(100% - 90px - 239px));
+      font-weight: 200;
+      border: 0;
+      overflow-y: scroll;
+      padding-top: 5px;
+      padding-left: 10px;
+      padding-right: 6px;
+      // 基础的 padding
+      --el-menu-base-level-padding: 25px;
+      // 每级别的的缩进
+      --el-menu-level-padding: 10px;
+      // ------------------- sub-item 的样式
+      // sub-item 菜单的高度
+      --el-menu-sub-item-height: 25px;
+
+      // ------------------- item 的样式
+      // 菜单每个 item 的高度
+      --el-menu-item-height: 25px;
+      // item 的 字体大小
+      --el-menu-item-font-size: 13px;
+
+      :deep(.el-menu) {
+        transition: 0.1s !important;
+      }
+
+      :deep(.el-sub-menu) {
+        .el-sub-menu__title {
+          height: auto;
+          min-height: 25px;
+          padding-right: 0;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+
+          .el-sub-menu__icon-arrow {
+            right: calc(215px - var(--el-menu-level) * 10px);
+          }
+        }
+      }
+
+      :deep(.el-menu-item) {
+        --el-menu-hover-bg-color: #ffffff00 !important;
+        height: auto;
+        min-height: 25px;
+        padding-right: 0;
+        border-radius: 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        transition: 0.1s;
+      }
+
+      :deep(.el-menu-item.is-active) {
+        @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
+        background: linear-gradient(90deg, var(--xz-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--xz-html-color) 100%);
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      :deep(.el-badge__content) {
+        top: 7px;
+        transform: translateY(-50%) translateX(100%) scale(0.8);
+      }
+
+    }
+
+    .doc-upload {
+      @include box(100%, 239px);
+      border-top: 1px solid var(--el-border-color);
+    }
+
+  }
+
+
+
+  // 编辑器内容
+  .picture-container {
+    @include box(calc(100% - 250px), 100%);
+    position: relative;
+    border-left: 1px solid var(--el-border-color);
+    background-color: #FFFFFF00;
+
+    .star {
+      @include box(40px, 100%);
+      color: rgb(206, 175, 0);
+      padding: 0 5px;
+
+      .iconbl {
+        padding: 5px;
+        font-size: 30px;
+        text-shadow: var(--xz-iconbl-text-shadow);
+        transition: 0.3s;
+        cursor: pointer;
+      }
+    }
+
+    .bl-star-line {
+      &:hover {
+        color: rgb(255, 217, 0) !important;
+      }
+    }
+
+    .bl-star-fill {
+      color: rgb(237, 204, 11);
+
+      &:hover {
+        color: rgb(255, 217, 0) !important;
+      }
+    }
+
+    // 图片列表的控制按钮
+    .picutre-workbench {
+      @include flex(row, space-between, center);
+      @include box(calc(100% - 20px), 50px);
+      @include themeShadow(0 3px 10px 1px #d3d3d3, 0 3px 10px 1px #000);
+      margin: 5px 10px 10px 10px;
+      padding: 5px;
+      border-radius: 5px;
+
+      .workbench-group {
+        height: 100%;
+        @include flex(row, flex-start, center);
+      }
+
+      :deep(.el-upload) {
+        width: 150px;
+        // @include box(150px, 100%);
+        --el-upload-dragger-padding-horizontal: 20px;
+        --el-upload-dragger-padding-vertical: 3px;
+        --el-fill-color-blank: var(--el-color-primary-light-9);
+        --el-border-color: var(--el-color-primary-light-3);
+        color: var(--el-color-primary-light-5);
+
+        .el-upload-dragger {
+          padding: 8px;
+        }
+
+        :hover {
+          color: var(--el-color-primary);
+        }
+      }
+
+
+      .radio,
+      .statistic {
+        @include themeColor(#a7a7a7, #6d6d6d);
+        margin-left: 15px;
+
+        &>div {
+          font-size: 11px;
+          text-align: center;
+        }
+      }
+
+      .statistic {
+        @include themeBg(#f3f3f3, #2b2b2b);
+        height: 100%;
+        border-radius: 5px;
+        padding: 2px 0;
+
+        div {
+          padding: 0 10px;
+
+          &:first-child {
+            font-size: 14px;
+            @include themeBorder(1px, #cdcdcd, #6d6d6d, 'bottom');
+          }
+
+          &:last-child {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    .picture-card-container {
+      @include box(100%, calc(100% - 50px));
+      @include flex(row, flex-start, flex-start);
+      align-content: flex-start;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+      overflow-y: scroll;
+
+
+      .picture-card {
+        @include themeShadow(3px 3px 10px 1px #d3d3d3, 3px 3px 10px 1px #000);
+        @include flex(column, flex-start, center);
+        position: relative;
+        border-radius: 5px;
+        transition: 0.3s;
+        overflow: hidden;
+
+        &:hover {
+          @include themeShadow(3px 3px 10px 1px #b0b0b0, 3px 3px 10px 1px #000);
+
+          .picuter-card-workbench {
+            opacity: 1;
+
+          }
+        }
+
+        img {
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .img-error {
+          @include flex(row, center, center);
+          color: var(--el-color-primary-light-7);
+          height: 100%;
+        }
+
+        // 图片卡片的控制按钮
+        .picuter-card-workbench {
+          @include flex(row, space-around, flex-start);
+          @include box(100%, 50px);
+          position: absolute;
+          color: #ffffff;
+          background-color: var(--el-color-primary-light-3);
+          bottom: 0;
+          opacity: 0;
+          transition: 0.3s;
+
+          .item {
+            @include box(25%, 100%);
+            @include flex(row, center, center);
+            cursor: pointer;
+            transition: 0.3s;
+
+            &:hover {
+              background-color: var(--el-color-primary);
+              width: 30%;
+              // @include themeColor(#904aff, rgb(255, 242, 0));
+              // background-color: var(--el-color-primary);
+            }
+          }
+
+        }
+      }
+
+      .picutre-card-large {
+        @include box(250px, 300px);
+        margin: 20px;
+
+        .picuter-card-workbench {
+          @include box(100%, 50px);
+
+          .iconbl {
+            font-size: 27px;
+          }
+        }
+
+        .iconbl {
+          font-size: 27px;
+        }
+      }
+
+      .picutre-card-mini {
+        @include box(130px, 180px);
+        margin: 10px;
+
+        .picuter-card-workbench {
+          @include box(100%, 30px);
+        }
+      }
+
+      .picuter-card-next {
+        @include box(100%, 50px);
+        text-align: center;
+      }
+    }
+
+  }
+}

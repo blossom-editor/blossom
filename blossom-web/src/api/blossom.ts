@@ -1,0 +1,68 @@
+import { defaultRequest as rq } from "./request";
+import type { R } from "./request";
+
+/**
+ * 用户信息
+ * @param params 
+ * @returns 
+ */
+export const userinfoApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/user/info/open", { params });
+}
+
+/**
+ * 文档树状列表
+ * @param params 
+ * @returns 
+ */
+export const docTreeApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/doc/trees/open", { params });
+}
+
+/**
+ * 专题列表
+ * @param params 
+ * @returns 
+ */
+export const subjectsApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/folder/subjects/open", { params });
+}
+
+// --------------------------------------------------< 文章 >--------------------------------------------------
+
+/**
+ * 文章热力图
+ * @param params 
+ * @returns 
+ */
+export const articleHeatmapApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/stat/heatmap/open", { params });
+}
+
+/**
+ * 字数折线图
+ * @param params 
+ * @returns 
+ */
+export const articleWordLineApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/stat/line/open", { params });
+}
+
+/**
+ * 文章详情
+ * @param params 
+ * @returns 
+ */
+export const articleInfoOpenApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/open/info", { params });
+}
+
+// --------------------------------------------------< 三方接口 >--------------------------------------------------
+/**
+ * gitee 动态热力图
+ * @param params 
+ * @returns 
+ */
+export const giteeHeatmapApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/gitee/heatmap/open", { params });
+}

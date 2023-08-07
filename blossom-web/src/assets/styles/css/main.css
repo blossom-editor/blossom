@@ -1,0 +1,48 @@
+* {
+  font-family: 'Consolas', 'Monaco', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: var(--xz-html-color);
+}
+
+body {
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+/** ================================== 滚动条 ================================== */
+/* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸 */
+::-webkit-scrollbar {
+  /* 滚动条宽度 */
+  width: 5px;
+  /* 滚动条高度 */
+  height: 5px;
+  /* 滚动条里槽的背景色 */
+  /* background-color: #eeeeee; */
+}
+
+::-webkit-scrollbar:hover {
+  /* width: 8px; */
+  /* height: 8px; */
+}
+
+/* 定义滑块 内阴影+圆角 */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #c7c7c7;
+}
+
+/* 解决滚动条右下角出现白色方块 */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

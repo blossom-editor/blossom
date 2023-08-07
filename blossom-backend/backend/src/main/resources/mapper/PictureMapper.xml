@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.picture.PictureMapper">
+
+    <!-- 查询图片, 获取图片引用信息 -->
+    <select id="listAll" resultType="com.blossom.backend.server.picture.pojo.PictureEntity">
+        select p.id,
+               p.pid,
+               p.`name`,
+               p.path_name,
+               p.url,
+               p.star_status,
+               p.size,
+               p.cre_time,
+               group_concat(distinct pa.source_name) as article_names
+          from blossom_picture p
+     left join blossom_article_reference pa on p.url = pa.target_url
+        <where>
+            <if test="id != null">and p.id = #{id}</if>
+            <if test="pid != null">and p.pid = #{pid}</if>
+            <if test="name != null and name != ''">and name like concat('%',#{name}, '%')</if>
+            <if test="pathName != null and pathName != ''">and p.path_name like concat('%',#{pathName}, '%')</if>
+            <if test="url != null and url != ''">and p.url like concat('%',#{url}, '%')</if>
+            <if test="starStatus != null">and p.star_status = #{starStatus}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+        group by p.url order by p.id desc
+    </select>
+
+    <select id="listDistinctPid" resultType="java.lang.Long">
+        select distinct pid from blossom_picture where user_id = #{userId}
+    </select>
+
+    <update id="updById">
+        update blossom_picture
+        <set>
+            <if test="starStatus != null">star_status = #{starStatus}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="stat" resultType="com.blossom.backend.server.picture.pojo.PictureStatRes">
+        select count(*) as picture_count,
+               sum(size) as picture_size
+          from blossom_picture
+         where user_id = #{userId}
+            <if test="pid != null">and pid = #{pid}</if>
+    </select>
+</mapper>

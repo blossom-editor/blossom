@@ -1,0 +1,76 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xzzz-blossom?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+    username: root
+    password: jasmine888
+    hikari:
+      max-lifetime: 120000
+
+logging:
+  level:
+    com.blossom: info
+    com.blossom.expand.tracker: info
+    com.blossom.admin.base.test: trace
+    org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn
+    com.baomidou.dynamic.datasource.DynamicRoutingDataSource: warn
+    com.zaxxer.hikari.HikariDataSource: warn
+    org.apache.coyote.http11.Http11NioProtocol: warn
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ project ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+project:
+  # 基础信息
+  base:
+    version: @project.version@
+    # 异常日志配置
+    ex:
+      stack-trace: project
+      format: format
+    # 动态日志级别配置
+    log:
+      duration: 600000 # 动态日志级别 6 分钟后失效
+      restore-duration: 30000 # 30 秒判断一次是否失效
+  db:
+    slow-interval: 200 # 慢SQL
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Auth ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  auth: # 授权
+    enabled: true # 开启授权
+    # 请求日志: com.blossom.backend.base.auth.enums.LogTypeEnum
+    log-type: simple
+    # 授权 token 的方式, 注意, 如果使用 redis, 需要引入 redis 包, 否则会提示错误
+    # com.blossom.backend.base.auth.enums.AuthTypeEnum
+    type: jwt
+    default-password: 123456 # 默认密码
+    password-encoder: bcrypt # 加密方式
+    clients: # 客户端
+      - client-id: blossom
+        grant-type: 'password'
+        expire: 21600 # 客户端授权时间 6 小时
+        multi-place-login: true # 客户端是否允许多地登录
+    white-list: # 白名单
+      - /sentinel/**
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Cache/Redis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  cache: # 缓存
+    names-config: # 缓存键超时时间配置
+      - name: test_cache1
+        seconds: 10
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Tracker ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # 一个简易的链路追踪功能, 会在日志中输出 traceId
+  tracker:
+    collector:
+      enabled: false # 关闭收集器
+      max-cache: 5000
+      rate: 100
+    repository:
+      type: disk1 # 关闭存储
+      disk:
+        use-pid: true
+        log-dir: /logs/tracker
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫  IAAS   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  iaas:
+    os-type: blossom
+    blos:
+      # 请以 /pic 结尾, 如果你在 nginx 中配置有代理, 注意别忘了添加你的代理路径
+      domain: "https://www.wangyunf.com/bl/pic/"
+      # 请以 / 开头, / 结尾, 简短的路径在文章中有更好的显示效果, 过长一定程度会使文章内容混乱
+      default-path: "/home/bl/img/"

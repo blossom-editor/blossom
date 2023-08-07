@@ -1,0 +1,74 @@
+html,
+body {
+  background-color: var(--xz-html-color);
+  overflow: hidden;
+}
+
+* {
+  font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+img {
+  pointer-events: none;
+}
+
+/*
+ 用于 iconfont symbol 方式 icon 的基础样式 
+ {@link @renderer/assets/iconfont/blossom}
+ {@link @renderer/assets/iconfont/tech}
+*/
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+/** ================================== 滚动条 ================================== */
+/* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸 */
+::-webkit-scrollbar {
+  /* 滚动条宽度 */
+  width: 7px;
+  /* 滚动条高度 */
+  height: 7px;
+  /* 滚动条里槽的背景色 */
+  /* background-color: var(--el-color-info-light-9); */
+  /* background-color: #eeeeee; */
+}
+
+::-webkit-scrollbar:hover {
+  width: 7px;
+  height: 7px;
+}
+
+/* 定义滑块 内阴影+圆角 */
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  /* 滑块的背景色 */
+  /* background-color: #cdcdcd; */
+  background-color: var(--el-color-primary-light-7);
+  transition: 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ababab;
+}
+
+/* 解决滚动条右下角出现白色方块 */
+::-webkit-scrollbar-corner {
+  background: transparent;
+  /* background-color: var(--el-color-info-light-9); */
+  ;
+}
+
+
+::selection {
+  background: var(--el-color-primary-light-7) !important;
+}
+
+/* ::selection {
+  background: #d3d3d3;
+  color: #292929;
+} */

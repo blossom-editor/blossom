@@ -1,0 +1,8 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.common.cache.CommonCacheProperties,\
+  com.blossom.common.cache.caffeine.CaffeineCacheConfig,\
+  com.blossom.common.cache.redis.RedisProperties,\
+  com.blossom.common.cache.redis.RedisCacheConfig,\
+  com.blossom.common.cache.redis.RedisConfiguration,\
+  com.blossom.common.cache.redis.DynamicLogRepositoryRedis
+

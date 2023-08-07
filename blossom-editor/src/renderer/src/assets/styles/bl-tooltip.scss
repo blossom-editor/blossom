@@ -1,0 +1,45 @@
+// placement = top
+.el-popper.is-blossomt {
+  @extend .is-blossomb;
+}
+
+.el-popper.is-blossomt .el-popper__arrow::before {
+  @include themeBg(linear-gradient(0deg, #9fa5e4, #87abcf), linear-gradient(90deg, #899911, #a38c51));
+  right: 0;
+}
+
+// placement = bottom
+.el-popper.is-blossomb {
+  @include themeBg(linear-gradient(90deg, #ad8cf2, #7fbeff), linear-gradient(90deg, #899911, #B98B17));
+  @include themeText(2px 4px 5px rgba(107, 104, 104, 1), 2px 4px 5px rgb(62, 62, 62));
+  @include themeShadow(2px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px rgb(0, 0, 0));
+  color: #fff;
+  font-weight: bold;
+  padding: 6px 12px;
+}
+
+.el-popper.is-blossomb .el-popper__arrow::before {
+  @include themeBg(linear-gradient(90deg, #9fa5e4, #87abcf), linear-gradient(90deg, #899911, #a38c51));
+  right: 0;
+}
+
+// placement = right
+
+.el-popper.is-blossomr {
+  @extend .is-blossomb;
+}
+
+.el-popper.is-blossomr .el-popper__arrow::before {
+  @include themeBg(linear-gradient(0deg, #ad8cf2, #ad8cf2), linear-gradient(90deg, #899911, #899911));
+  right: 0;
+}
+
+
+.el-popper.is-light {
+  color: var(--el-text-color-primary);
+  box-shadow: 3px 3px 10px 1px #848484;
+
+  .keyboard {
+    margin-top: 5px;
+  }
+}

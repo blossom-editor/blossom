@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.blossom.common.db.DBProperties,\
+  com.blossom.common.db.exception.ExceptionAdviceByDB,\
+  com.blossom.common.db.interceptor.SlowSQLInterceptor,\
+  com.blossom.common.db.aspect.PageAspect
+
+

@@ -1,0 +1,65 @@
+server:
+  port: 9999
+
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: blossom-backend
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    format:
+      # mvc 接收参数时对日期进行格式化
+      date-time: yyyy-MM-dd HH:mm:ss
+      date: yyyy-MM-dd
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ mybatis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    # 驼峰命名转换
+    map-underscore-to-camel-case: true
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      # 主键类型
+      # AUTO        : 数据库ID自增, 该类型请确保数据库设置了 ID自增 否则无效
+      # INPUT       : 用户输入ID, 该类型可以通过自己注册自动填充插件进行填充
+      # ASSIGN_ID   : 分配ID (主键类型为 number 或 string）, 默认实现雪花算法, 只有当插入对象ID 为空，才自动填充
+      # ASSIGN_UUID : 全局唯一ID UUID
+      id-type: input
+      # 字段策略
+      # IGNORED     : 忽略判断
+      # NOT_NULL    : 非 NULL 判断
+      # NOT_EMPTY   : 非空判断 (只对字符串类型字段,其他类型字段依然为非 NULL判断)
+      insert-strategy: not_empty
+      update-strategy: not_null
+      where-strategy: not_null
+      logic-delete-field: 'delTime'
+      logic-not-delete-value: 0
+
+# pageHelper 分页配置
+pagehelper:
+  # 默认为 false，为 true 时，如果 pageSize=0 或者 RowBounds.limit = 0 就会查询出全部的结果
+  page-size-zero: true
+  # 分页合理化参数，默认值为 false。当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countsql
