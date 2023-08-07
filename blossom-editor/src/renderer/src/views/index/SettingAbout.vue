@@ -50,7 +50,7 @@
         <div>
           <img :src="dever.avatar">
         </div>
-        <bl-col justify-content="flex-start" align-items="flex-start">
+        <bl-col just="flex-start" align="flex-start">
           <div class="name">
             {{ dever.name }}
           </div>

@@ -30,4 +30,4 @@ Blossom 是一个**云端存储的笔记软件**，你可以搭建自己的服�
 6. **网站收藏**：常用网站快捷访问，或者说是一个书签功能。
 7. 笔记总字数折线图，笔记编辑数量热力图，服务器请求量折线图展示。
 
-更多内容，可前往[源码仓库](https://gitee.com/blossom-projects/blossom)或[文档](https://www.wangyunf.com/blossomdoc)查看。
+更多内容，可前往[源码仓库](https://github.com/blossom-editor/blossom)或[文档](https://www.wangyunf.com/blossomdoc)查看。

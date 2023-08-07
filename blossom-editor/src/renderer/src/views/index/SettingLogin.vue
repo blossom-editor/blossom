@@ -1,18 +1,18 @@
 <template>
   <div class="login-root">
-    <bl-row style="margin-bottom: 10px;" justify-content="center">
+    <bl-row style="margin-bottom: 10px;" just="center">
       <img v-if="userinfo.avatar != ''" class="avatar-img" :src="userinfo.avatar" />
       <img v-else class="avatar-img" src="@renderer/assets/imgs/default_user_avatar.jpg">
     </bl-row>
     <div style="width: 100%;text-align: center;">
-      <bl-row justify-content="center">
+      <bl-row just="center">
         <div class="input-wrapper" style="width: 500px;">
           <input type="text" class="form__input" placeholder="https://..." v-model="formLogin.serverUrl"
             @input="handleServerUrl">
           <div class="iconbl bl-a-servercloud-line"></div>
         </div>
       </bl-row>
-      <bl-row justify-content="center">
+      <bl-row just="center">
         <div class="input-wrapper" style="width:235px;margin-right:30px;">
           <input type="text" class="form__input" placeholder="username" v-model="formLogin.username"
             @input="handleServerUsername">

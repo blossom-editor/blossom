@@ -11,10 +11,10 @@
         文章引用网络
       </bl-row>
       <bl-row>
-        <bl-col class="symbol" justify-content="center">
+        <bl-col class="symbol" just="center">
           <div class="inner"></div> 内部文章
         </bl-col>
-        <bl-col class="symbol" justify-content="center">
+        <bl-col class="symbol" just="center">
           <div class="outside"></div> 外网文章
         </bl-col>
       </bl-row>
@@ -106,7 +106,6 @@ const renderChart = () => {
         } else {
           url = `<div>地址: <a target="_blank" href="${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}">${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}</a></div>`
         }
-        // console.log(params);
         return `<div class="chart-graph-article-ref-tooltip">
           <div class="title">${params.data.name}</div>
           <div class="content">
@@ -145,6 +144,7 @@ const renderChart = () => {
         },
         // autoCurveness: true,
         lineStyle: {
+          // 直线或曲线
           curveness: 0.1
         },
         // 箭头的开始, 结束图形

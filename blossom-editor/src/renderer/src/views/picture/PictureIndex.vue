@@ -137,7 +137,7 @@
                   <bl-row>图片大小: {{ formatFileSize(pic.size) }}</bl-row>
                   <bl-row style="word-wrap: break-word;">上传时间: {{ pic.creTime }}</bl-row>
                   <bl-row style="word-wrap: break-word;">图片路径: {{ pic.pathName }}</bl-row>
-                  <bl-row v-if="!isEmpty(pic.articleNames)" alignItems="flex-start">引用文章:
+                  <bl-row v-if="!isEmpty(pic.articleNames)" align="flex-start">引用文章:
                     <div>
                       <div v-for="aname in articleNamesToArray(pic.articleNames)" style="margin-left: -13px;">
                         《{{ aname }}》

@@ -37,9 +37,9 @@
         </el-form-item>
 
         <bl-row height="150px">
-          <bl-col align-items="flex-start">
+          <bl-col align="flex-start">
             <div style="font-size: 12px;">预览</div>
-            <bl-col class="daily" align-items="flex-start">
+            <bl-col class="daily" align="flex-start">
               <bl-row class="time">{{ dailyForm.planStartTime + ' ~ ' + dailyForm.planEndTime }}</bl-row>
               <bl-row height="calc(100% - 20px)">
                 <div class="content">
@@ -52,7 +52,7 @@
             </bl-col>
           </bl-col>
 
-          <bl-col align-items="flex-start">
+          <bl-col align="flex-start">
             <div style="font-size: 12px;">内置图片</div>
             <bl-row class="img-container">
               <div v-for="img in imgs" style="" @click="dailyForm.img = img.substring(img.lastIndexOf('/') + 1)">

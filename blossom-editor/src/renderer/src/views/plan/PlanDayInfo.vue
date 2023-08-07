@@ -62,7 +62,7 @@
             <span class="iconbl bl-a-colorpalette-line" style="font-size: 13px;padding-left: 5px;"></span>
           </bl-row>
           <bl-row class="color-container">
-            <bl-row width="50px" height="25px" justify-content="center" v-for="color in colors"
+            <bl-row width="50px" height="25px" just="center" v-for="color in colors"
               :class="['color', color, dayForm.color == color ? 'selected' : '']" @click="clickColor(color)">
               <span>{{ color }}</span>
             </bl-row>

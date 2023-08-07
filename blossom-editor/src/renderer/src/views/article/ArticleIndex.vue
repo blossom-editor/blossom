@@ -77,7 +77,7 @@
       </el-menu>
 
       <div class="doc-temp-textarea">
-        <bl-row justifyContent="space-between" height="28px" class="doc-temp-textarea-workbench">
+        <bl-row just="space-between" height="28px" class="doc-temp-textarea-workbench">
           <bl-row style="font-size: 10px;">
             <img src="@renderer/assets/imgs/note/cd.png" style="width: 15px;margin-right: 5px;">
             临时内容(可从便签快速设置)

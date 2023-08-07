@@ -52,9 +52,7 @@ const isDark = useDark();
   }
 
   .flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex(row, center, center);
     text-align: center;
   }
 

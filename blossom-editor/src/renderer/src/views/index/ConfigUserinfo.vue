@@ -44,13 +44,13 @@
       </el-input>
     </el-form-item>
     <el-form-item>
-      <bl-row justify-content="space-between" align-items="flex-start">
+      <bl-row just="space-between" align="flex-start">
         <el-image :src="userinfoForm.avatar" style="height: 100px;border-radius: 4px;" fit="contain">
           <template #error>
             <div></div>
           </template>
         </el-image>
-        <bl-col justify-content="flex-end">
+        <bl-col just="flex-end">
           <el-button size="default" type="primary" @click="save(UserinfoFormRef)">保存</el-button>
         </bl-col>
       </bl-row>

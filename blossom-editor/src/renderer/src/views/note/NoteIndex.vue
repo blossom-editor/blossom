@@ -5,7 +5,7 @@
         <bl-col>
           <img src="@renderer/assets/imgs/note/note.png" class="note-logo">
         </bl-col>
-        <bl-col alignItems="flex-start" class=""
+        <bl-col align="flex-start" class=""
           style="padding: 10px;font-size: 13px;letter-spacing:1px;color: var(--el-text-color-placeholder);">
           <ol>
             <li>便签只支持文本格式。</li>

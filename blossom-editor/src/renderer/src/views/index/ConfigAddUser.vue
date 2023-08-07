@@ -26,7 +26,7 @@
       </bl-row>
     </el-form-item>
     <el-form-item>
-      <bl-row justify-content="flex-end" align-items="flex-start">
+      <bl-row just="flex-end" align="flex-start">
         <el-button size="default" type="primary" @click="save(AddUserFormRef)">保存</el-button>
       </bl-row>
     </el-form-item>

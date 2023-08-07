@@ -1,11 +1,11 @@
 <template>
   <div class="plan-daily-root">
     <bl-col class="daily-container">
-      <bl-row justify-content="flex-end" class="title">日常安排</bl-row>
-      <bl-col :class="['daily ', daily.current ? 'current' : '']" v-for="daily in dailys" align-items="flex-start">
+      <bl-row just="flex-end" class="title">日常安排</bl-row>
+      <bl-col :class="['daily ', daily.current ? 'current' : '']" v-for="daily in dailys" align="flex-start">
         <bl-row height="20px" class="time" style="">{{ daily.planStartTime + ' ~ ' + daily.planEndTime }}</bl-row>
         <bl-row height="calc(100% - 20px)">
-          <bl-col align-items="flex-start" width="135px" class="content">
+          <bl-col align="flex-start" width="135px" class="content">
             <span>
               {{ daily.content }}
             </span>
@@ -18,7 +18,7 @@
         </bl-row>
       </bl-col>
 
-      <bl-col class="add-daily" justify-content="center" @click="handleShowPlanAddDialog">
+      <bl-col class="add-daily" just="center" @click="handleShowPlanAddDialog">
         <span class="iconbl bl-a-pageadd-line"></span>
       </bl-col>
     </bl-col>

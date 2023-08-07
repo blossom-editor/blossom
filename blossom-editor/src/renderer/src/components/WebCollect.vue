@@ -1,7 +1,7 @@
 <template>
   <div class="web-collect-root">
     <div class="save-form" :style="saveFormStyle">
-      <bl-row height="50px" justifyContent="space-between" class="save-form-title">
+      <bl-row height="50px" just="space-between" class="save-form-title">
         <div>{{ webForm.operator }}</div>
         <div class="iconbl bl-a-closeline-line" @click="closeForm"></div>
       </bl-row>
@@ -46,13 +46,13 @@
           <div class="web-name">{{ webForm.name }}</div>
         </div>
       </bl-row>
-      <bl-row justifyContent="space-between" style="margin-bottom: 10px;padding: 0 20px;">
+      <bl-row just="space-between" style="margin-bottom: 10px;padding: 0 20px;">
         <el-button type="danger" @click="delWeb" :disabled="!(webForm.id > 0)">删除</el-button>
         <el-button type="primary" @click="saveWeb">保存</el-button>
       </bl-row>
     </div>
 
-    <bl-row justifyContent="flex-end" class="web-collect-title">
+    <bl-row just="flex-end" class="web-collect-title">
       <span class="title-remind" style="">右键点击卡片修改</span>
       <span class="iconbl bl-add-line" style="font-size: 20px;margin-right: 10px;cursor: pointer;"
         @click="showForm()"></span>
@@ -61,7 +61,7 @@
       Quick Access
     </bl-row>
     <div v-for="(collect, index) in data" @click="closeForm">
-      <bl-row justifyContent="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
+      <bl-row just="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
         {{ collect.title }}
       </bl-row>
       <div class="web-collect-content">

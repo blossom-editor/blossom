@@ -23,14 +23,14 @@
       </svg>
 
       <!-- 字数 -->
-      <bl-row class="infos" justifyContent="space-between">
+      <bl-row class="infos" just="space-between">
         <div>
           <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}
         </div>
       </bl-row>
 
       <!-- 日期 -->
-      <bl-row class="infos" justifyContent="space-between">
+      <bl-row class="infos" just="space-between">
         <div>
           <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}
         </div>

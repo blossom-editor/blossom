@@ -5,7 +5,7 @@
         Good {{ now }}.
       </bl-row>
       <!--  -->
-      <bl-row alignItems="flex-end" height="250px">
+      <bl-row align="flex-end" height="250px">
         <div class="image-container">
           <div class="now-time">
             <DateLine></DateLine>

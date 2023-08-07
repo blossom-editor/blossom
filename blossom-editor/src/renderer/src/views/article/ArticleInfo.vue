@@ -42,7 +42,7 @@
         <!-- 按钮 -->
         <div class="stat-buttons">
 
-          <bl-row justify-content="space-around">
+          <bl-row just="space-around">
             <el-tooltip content="公开访问 ↑" effect="blossomt" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-cloudupload-line', curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
             </el-tooltip>

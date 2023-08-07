@@ -1,6 +1,6 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-row justify-content="flex-end" align-items="flex-end">
+    <bl-row just="flex-end" align="flex-end">
       <div v-show="curFolder !== undefined"
         style="font-size:12px;text-align: right;color: var(--el-text-color-placeholder);">
         <span>《{{ curFolder?.name }}》</span>
@@ -10,7 +10,7 @@
     </bl-row>
 
     <!--  -->
-    <bl-row justify-content="flex-end" align-items="flex-end">
+    <bl-row just="flex-end" align="flex-end">
       <el-tooltip content="刷新列表" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
       </el-tooltip>

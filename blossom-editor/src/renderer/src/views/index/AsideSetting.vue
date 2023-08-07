@@ -36,7 +36,7 @@
           </span>
         </span>
       </bl-row>
-      <bl-row justify-content="space-between" style="border-top: 1px solid var(--el-border-color);">
+      <bl-row just="space-between" style="border-top: 1px solid var(--el-border-color);">
         <el-radio-group v-model="copyType">
           <el-radio-button label="http">HT</el-radio-button>
           <el-radio-button label="markdown">MD</el-radio-button>

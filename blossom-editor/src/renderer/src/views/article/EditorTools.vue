@@ -53,7 +53,7 @@
           <bl-row>
             <div class="info-title">编辑器工具栏</div>
           </bl-row>
-          <bl-row align-items="flex-start">
+          <bl-row align="flex-start">
             <bl-col width="190px">
               <bl-row>
                 <div class="iconbl bl-a-texteditorsave-line"></div>
@@ -177,7 +177,7 @@
           <bl-row>
             <div class="info-title">编辑器快捷键</div>
           </bl-row>
-          <bl-row align-items="flex-start">
+          <bl-row align="flex-start">
             <bl-col width="190px">
               <bl-row>
                 <div class="iconbl bl-a-icon_jiandaojianqie"></div>

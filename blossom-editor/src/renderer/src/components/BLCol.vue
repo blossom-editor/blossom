@@ -1,7 +1,7 @@
 <template>
   <div class="bl-col-root" :style="{
-    justifyContent: props.justifyContent,
-    alignItems: props.alignItems,
+    justifyContent: props.just,
+    alignItems: props.align,
     width: props.width,
     height: props.height,
   }">
@@ -14,14 +14,14 @@ const props = defineProps({
   /**
    * justify-content
    */
-  justifyContent: {
+  just: {
     type: String,
     default: 'flex-start'
   },
   /**
    * align-items
    */
-  alignItems: {
+  align: {
     type: String,
     default: 'center'
   },

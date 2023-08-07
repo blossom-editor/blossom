@@ -1,6 +1,6 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-row justify-content="flex-end" align-items="flex-end">
+    <bl-row just="flex-end" align="flex-end">
       <div v-show="curDoc !== undefined"
         style="font-size:12px;text-align: right;color: var(--el-text-color-placeholder);">
         <span>《{{ curDoc?.name }}》</span>
@@ -8,7 +8,7 @@
         <span style="font-size: 9px;padding-right: 5px;">{{ curDoc?.id }}</span>
       </div>
     </bl-row>
-    <bl-row justify-content="flex-end" align-items="flex-end">
+    <bl-row just="flex-end" align="flex-end">
       <el-tooltip content="显示排序" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
         <div>
           <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
