@@ -9,7 +9,7 @@
     </div>
     <div class="bl-preview">
       <p class="paragraph">
-        Blossom 是一个<span class="blod">云端存储的笔记软件</span>，你可以搭建自己的服务器来保存你的所有笔记，图片，个人计划安排，并在任意设备之间实时同步。
+        Blossom 是一个支持<span class="blod">私有部署</span>的云端存储双链笔记软件，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于MIT协议完全开源。
       </p>
       <p class="paragraph" style="margin-bottom: 0;"><span class="blod">Blossom 具有以下优势:</span></p>
       <ol>
@@ -20,7 +20,6 @@
         <li><strong>自带截图功能</strong><span class="blod">(仅windows)</span>，你不再需要使用其他截图工具截图后保存在本地再上传到文章了。</li>
         <li><strong>文章与图片都在你的服务器存储</strong>，不需要再使用任何三方图床，不需要购买任何对象存储。</li>
         <li><strong>没有任何私有协议</strong>，基于 Markdown 语法，采用约定格式拓展样式。迁移到其他软件可以正常显示。</li>
-        <li>所有<strong>文章和图片一键打包下载</strong>，你可以一键导出迁移笔记。</li>
         <li><strong>多账号权限</strong>，可以和你的朋友一起使用。</li>
         <li>你甚至可以只把 Blossom <strong>当做个人图床</strong>，并使用你自己的域名。</li>
       </ol>
@@ -38,7 +37,8 @@
       </ol>
 
       <p class="paragraph">
-        更多内容，可前往<a>源码仓库</a>或<a>文档</a>查看。
+        更多内容，可前往<a :href="CONFIG.SYS.GITHUB_REPO" target="_blank">源码仓库</a>、<a :href="CONFIG.SYS.DOC"
+          target="_blank">查看文档</a>、或联系作者<span style="font-size: 13px;">({{ CONFIG.SYS.CONTACT }})</span>。
       </p>
     </div>
 
@@ -77,8 +77,7 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
-import { computed, onMounted, ref, watch } from 'vue'
+import CONFIG from '@renderer/assets/constants/system'
 
 const references = [
   { name: '基础icon(作者:宗伟)', url: 'https://www.iconfont.cn/collections/detail?cid=35578' },
