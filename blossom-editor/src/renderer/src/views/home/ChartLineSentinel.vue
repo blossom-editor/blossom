@@ -1,5 +1,5 @@
 <template>
-  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量信息, 请稍后..." :style="{
+  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量统计, 请稍后..." :style="{
     'height': fixedBox.height,
     'width': fixedBox.width
   }"></div>
@@ -18,7 +18,7 @@ import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 echarts.use([TitleComponent, TooltipComponent, LegendComponent, GridComponent, LineChart, CanvasRenderer, UniversalTransition])
 
-const isDark = useDark();
+const isDark = useDark()
 
 watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
   renderChart()
@@ -28,7 +28,7 @@ watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
  * inject
  * 用于多层嵌套中使用流量, 下列相关信息使用
  * ============================================================ */
-const fixedBox: any = inject('chartLineResourceFixedBox', { height: '100%', width: '100%' });
+const fixedBox: any = inject('chartLineResourceFixedBox', { height: '100%', width: '100%' })
 
 /* ============================================================
  * props
@@ -42,9 +42,9 @@ const props = defineProps({
 })
 
 // -------------------- ref
-const rqLoading = ref<boolean>(true);
-const ChartLineMetricRef = ref<any>(null);
-let chartLineMetric: any;
+const rqLoading = ref<boolean>(true)
+const ChartLineMetricRef = ref<any>(null)
+let chartLineMetric: any
 let chartData = {
   title: '',
   subTitle: '',
@@ -69,18 +69,18 @@ const getChartLineMetric = () => {
     customIntervalUnit: 'MINUTES'
   }
   metricLineApi(params).then(resp => {
-    chartData.title = resp.data.title;
-    chartData.subTitle = resp.data.subTitle;
-    chartData.x = [];
-    chartData.success = [];
-    chartData.avgRt = [];
-    chartData.x = resp.data.x;
-    chartData.success = resp.data.s;
-    chartData.avgRt = resp.data.avgRt;
+    chartData.title = resp.data.title
+    chartData.subTitle = resp.data.subTitle
+    chartData.x = []
+    chartData.success = []
+    chartData.avgRt = []
+    chartData.x = resp.data.x
+    chartData.success = resp.data.s
+    chartData.avgRt = resp.data.avgRt
     renderChart(() => {
       setTimeout(() => {
-        rqLoading.value = false;
-      }, 150);
+        rqLoading.value = false
+      }, 150)
     });
   })
 }
@@ -191,26 +191,26 @@ const renderChart = (callback?: any) => {
         }
       }
     ]
-  });
+  })
   if (callback !== undefined) {
-    callback();
+    callback()
   }
 }
 
 onMounted(() => {
-  chartLineMetric = echarts.init(ChartLineMetricRef.value);
+  chartLineMetric = echarts.init(ChartLineMetricRef.value)
   reload()
-  windowResize();
+  windowResize()
 })
 
 const reload = () => {
   nextTick(() => {
-    getChartLineMetric();
+    getChartLineMetric()
   })
 }
 
 const windowResize = () => {
-  chartLineMetric.resize();
+  chartLineMetric.resize()
 }
 
 defineExpose({

@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import router from "@renderer/router";
+import router from "@renderer/router"
 import { ref, onActivated } from "vue"
 import { subjectsApi } from "@renderer/api/blossom"
 import { isEmpty } from 'lodash'
@@ -60,7 +60,7 @@ const getSubjects = () => {
     subjects.value = resp.data
     if (!isEmpty(resp.data)) {
       maxWords = resp.data.sort((a: any, b: any) => {
-        return b.subjectWords - a.subjectWords;
+        return b.subjectWords - a.subjectWords
       }).slice(0, 1)[0].subjectWords
     }
   })
@@ -69,7 +69,7 @@ const getSubjects = () => {
 const toToc = (articleId: number) => {
   if (isNull(articleId)) {
     Notify.info('该专题无目录, 请先在专题下添加一篇含有 [TOC] 标签的文章', '提示')
-    return;
+    return
   }
   router.push({ path: '/articleIndex', query: { articleId: articleId } })
 }

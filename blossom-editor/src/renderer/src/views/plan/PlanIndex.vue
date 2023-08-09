@@ -7,7 +7,7 @@
       <template #date-cell="{ data }">
         <div class="date-title">
           <span>{{ data.day.split('-').slice(2).join('-') }}</span>
-          <span class="iconbl bl-a-addline-line" @click="handleShowPlanAddDialog"></span>
+          <span class="iconbl bl-a-addline-line" @click="handleShowPlanAddDialog(data.day)"></span>
         </div>
         <div class="plan-group">
           <div v-for="plan, index in planDays[data.day + ' 00:00:00']" :key="plan.id">
@@ -51,13 +51,12 @@
     --el-dialog-border-radius:10px;
     --el-dialog-box-shadow:var(--xz-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="false"
     :close-on-click-modal="true" draggable>
-    <PlanDayInfo @saved="savedCallback"></PlanDayInfo>
+    <PlanDayInfo ref="PlanDayInfoRef" @saved="savedCallback"></PlanDayInfo>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
-import { onActivated, onMounted, ref, watch } from 'vue'
+import { nextTick, onActivated, onMounted, ref, watch } from 'vue'
 import { planListDayApi, planDelApi } from '@renderer/api/plan'
 import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@renderer/assets/utils/util'
 import { isNull } from '@renderer/assets/utils/obj'
@@ -71,12 +70,13 @@ onActivated(() => {
   getPlanAll(getDateTimeFormat().substring(0, 7))
 })
 
+const PlanDayInfoRef = ref()
 // 当前选择的日期
 const selectDay = ref()
 // 计划列表
 const planDays = ref({})
 // 上次点击选择的月份, 不同月份时才查询接口
-let lastMonth: string = '';
+let lastMonth: string = ''
 
 watch(() => selectDay.value, (data) => {
   getPlanAll(timestampToDatetime(data).substring(0, 7))
@@ -95,8 +95,12 @@ const getPlanAll = (month: string, force: boolean = false) => {
 //#region ----------------------------------------< 新增删除 >-------------------------------------
 const isShowPlanAddDialog = ref(false)
 
-const handleShowPlanAddDialog = () => {
+const handleShowPlanAddDialog = (ymd: string) => {
   isShowPlanAddDialog.value = true
+  nextTick(() => {
+    PlanDayInfoRef.value.setPlanDate(ymd)
+  })
+
 }
 
 const savedCallback = () => {
@@ -371,6 +375,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
       width: 100%;
       text-align: left;
       padding: 0 10px 10px;
+      white-space: pre-wrap;
     }
   }
 }

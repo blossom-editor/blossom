@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-line-log-root">
+  <div class="chart-line-log-root" v-loading="rqLoading" element-loading-text="正在查询字数统计, 请稍后...">
     <div style="width: 100%;height: 100%;" ref="ChartLineLogRef" />
   </div>
 </template>
@@ -30,17 +30,21 @@ onMounted(() => {
 watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
   renderChart()
 })
-// -------------------- data
+
 const ChartLineLogRef = ref<any>(null)
+const rqLoading = ref<boolean>(true)
 let chartLineLog: any;
 let chartData: any = { statDates: [], statValues: [] };
 
 const getWords = () => {
+  rqLoading.value = true
   articleWordLineApi().then((resp) => {
     chartData = resp.data
     renderChart(
-      setTimeout(() => { }, 300)
-    );
+      setTimeout(() => {
+        rqLoading.value = false
+      }, 300)
+    )
   })
 }
 
@@ -48,10 +52,6 @@ const renderChart = (callback?: any) => {
   let dark: boolean = isDark.value
   chartLineLog.setOption({
     grid: { top: 30, left: 60, right: 20, bottom: 35 },
-    // title: {
-    //   ...echartTheme.title(),
-    //   ...{ top: 0, left: 0, text: 'Article Words' }
-    // },
     legend: {
       ...echartTheme.legend(),
       ...{ top: 15, left: 65 }

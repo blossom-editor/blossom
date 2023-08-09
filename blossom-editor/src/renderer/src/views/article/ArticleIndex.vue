@@ -3,7 +3,7 @@
 
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand" v-loading="docTreeLoading"
-      :default-active="docTreeDefaultActive" element-loading-text="加载文件夹">
+      :default-active="docTreeDefaultActive" element-loading-text="One moment please...">
       <!-- 文件夹操作 -->
       <div class="doc-workbench">
         <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></ArticleTreeWorkbench>
@@ -118,6 +118,7 @@
       <div class="editor-status">
         <EditorStatus :render-interval="renderInterval"></EditorStatus>
       </div>
+
       <!-- the toc -->
       <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']">
         <div class="toc-title">目录 <span style="font-size: 10px;">(Alt+2 可隐藏)</span></div>
@@ -142,6 +143,7 @@
           </div>
         </div>
       </div>
+      
     </div>
 
     <Teleport to=" body">
@@ -627,11 +629,6 @@ const getEditor = (): EditorView => {
 const setDoc = (md: string): void => {
   getEditor().setState(createEditorState(md))
   parse()
-  // let changeByRange = {
-  //   changes: [{ from: 0, to: getEditor().state.doc.length, insert: md }],
-  //   range: EditorSelection.range(0, 0)
-  // }
-  // getEditor().dispatch(getEditor().state.changeByRange((_range: SelectionRange) => changeByRange))
 }
 
 const addListenerScroll = () => {
@@ -827,7 +824,6 @@ const renderer = {
         type: 10
       })
     }
-    // 自定义样式
     let width = 'auto';
     let style = ''
     let tags: string[] = text.split('$$')
@@ -910,8 +906,10 @@ const articleLink = ref<ArticleReference[]>([])
  */
 const toScroll = (level: number, content: string) => {
   let id = level + '-' + content
-  let elm = document.getElementById(id)
-  elm?.scrollIntoView(true)
+  let elm: HTMLElement = document.getElementById(id) as HTMLElement
+  (elm.parentNode as Element).scrollTop = elm.offsetTop
+  // let elm = document.getElementById(id)
+  // elm?.scrollIntoView(true)
 }
 // 清空当前目录内容
 const clearTocAndImg = () => {

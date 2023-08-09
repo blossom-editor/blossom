@@ -196,6 +196,7 @@ const notes = ref<any>([
         line-height: 20.8px;
         padding: 0 5px;
         z-index: 3;
+        white-space: pre-line;
         word-wrap: break-word;
         overflow: auto;
         overflow-y: overlay;

@@ -182,10 +182,10 @@
 
       <div class="info-footer">
         <div>
-          <el-button type="danger" size="default" plain>
+          <!-- <el-button type="danger" size="default" plain>
             <span class="iconbl bl-a-fileprohibit-line" />
             删除
-          </el-button>
+          </el-button> -->
         </div>
         <div>
           <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc">

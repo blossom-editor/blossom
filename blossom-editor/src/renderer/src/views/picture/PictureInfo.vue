@@ -77,12 +77,12 @@
       </div>
 
       <div class="info-footer">
-        <div>
+        <!-- <div>
           <el-button type="danger" size="default" plain>
             <span class="iconbl bl-a-fileprohibit-line" />
             删除
           </el-button>
-        </div>
+        </div> -->
         <div>
           <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc">
             <span class="iconbl bl-a-filechoose-line" />

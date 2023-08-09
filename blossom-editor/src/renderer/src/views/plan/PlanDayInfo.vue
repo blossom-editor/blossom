@@ -53,7 +53,7 @@
         </el-form-item>
 
         <el-form-item label="计划内容">
-          <el-input type="textarea" :rows="3" v-model="dayForm.content" placeholder="计划内容" />
+          <el-input type="textarea" :rows="5" v-model="dayForm.content" placeholder="计划内容" />
         </el-form-item>
 
         <bl-col>
@@ -150,6 +150,14 @@ const saveDay = async (formEl: FormInstance | undefined) => {
 }
 
 const emits = defineEmits(['saved'])
+
+const setPlanDate = (ymd: string) => {
+  dayForm.value.planDate = ymd + ' 00:00:00'
+}
+
+defineExpose({
+  setPlanDate
+})
 </script>
 
 <style scoped lang="scss">

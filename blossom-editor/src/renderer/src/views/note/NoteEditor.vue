@@ -17,10 +17,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { noteAddApi } from '@renderer/api/note';
+import { noteAddApi } from '@renderer/api/note'
 import { getDateZh } from '@renderer/assets/utils/util'
-import { isBlank } from '@renderer/assets/utils/obj';
-import Notify from '@renderer/components/Notify';
+import { isBlank } from '@renderer/assets/utils/obj'
+import Notify from '@renderer/components/Notify'
 
 const props = defineProps({
   send: {
@@ -39,6 +39,8 @@ const saveNote = () => {
     Notify.info('不能保存空的便签')
     return
   }
+  console.log(noteContent.value)
+
   noteAddApi({ content: noteContent.value }).then(_resp => {
     emits('saved')
     noteContent.value = ''
@@ -50,8 +52,8 @@ const saveNote = () => {
 
 const sendStart = ref<boolean>(false)
 const sendAnimation = () => {
-  sendStart.value = true;
-  setTimeout(() => { sendStart.value = false }, (1000));
+  sendStart.value = true
+  setTimeout(() => { sendStart.value = false }, (1000))
 }
 
 const emits = defineEmits(['saved'])
