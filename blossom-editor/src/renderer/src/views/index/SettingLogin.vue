@@ -26,8 +26,6 @@
       <button class="custom-btn btn-logout" style="margin-right: 30px;" @click="logout"><span>Logout</span></button>
       <button :class="['custom-btn btn-login', logingIn ? 'loging-in' : '']" @click="login"><span>Login</span></button>
       <div :class="[loginStatClass]" style="margin-top: 20px;">{{ loginResult }}</div>
-      <!-- <div>https://www.wangyunf.com/bl</div>
-      <div>http://localhost:9999</div> -->
     </div>
   </div>
 </template>

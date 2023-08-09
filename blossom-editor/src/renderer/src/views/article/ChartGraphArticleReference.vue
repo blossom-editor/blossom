@@ -121,7 +121,7 @@ const renderChart = () => {
         layout: 'force',
         top: 100, bottom: 100,
         force: {
-          repulsion: 150, // 节点之间的斥力因子。
+          repulsion: 300, // 节点之间的斥力因子。
           friction: 0.1 // 这个参数能减缓节点的移动速度。取值范围 0 到 1。
         },
         draggable: false,
@@ -129,7 +129,7 @@ const renderChart = () => {
         animation: false,
         animationThreshold: 1000,
         animationDuration: 1000,
-        zoom: 1,
+        zoom: 0.5,
         roam: true,
         label: {
           show: true,

@@ -5,7 +5,6 @@
         <div class="tab-content">
           <div class="title">
             服务器配置信息
-            <el-button @click="openDevTools">打开控制台</el-button>
           </div>
           <el-input type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
         </div>
@@ -48,7 +47,6 @@ import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { formatJson } from '@renderer/assets/utils/util'
-import { openDevTools } from '@renderer/assets/utils/electron'
 import ConfigUserinfo from '@renderer/views/index/ConfigUserinfo.vue'
 import ConfigUpdPwd from '@renderer/views/index/ConfigUpdPwd.vue'
 import ConfigAddUser from '@renderer/views/index/ConfigAddUser.vue'
