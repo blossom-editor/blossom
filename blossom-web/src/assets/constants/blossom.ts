@@ -31,19 +31,9 @@ const blossom: any = {
    */
   LINKS: [
     {
-      NAME: 'Blossom 博客',
-      URL: 'https://www.wangyunf.com/blossom',
+      NAME: 'Blossom 文档',
+      URL: 'https://www.wangyunf.com/blossom-doc',
       LOGO: 'blossom_logo.png'
-    },
-    {
-      NAME: 'GuardCat 服务监控',
-      URL: 'https://www.wangyunf.com/guardcat',
-      LOGO: 'guardcat_logo.jpg'
-    },
-    {
-      NAME: 'Danci/e 编程单词速查',
-      URL: 'https://www.wangyunf.com/danci',
-      LOGO: 'danci_logo.png'
     }
   ]
 }
