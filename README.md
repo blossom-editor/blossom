@@ -6,9 +6,8 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 
 当前版本: `1.0.0`
 
-- [文档](https://www.wangyunf.com/blossom-doc)
-- [试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)
-- [更新日志](https://www.wangyunf.com/blossom-doc/doc/logUpdate)
+- 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)，我们提供了一个试用账号帮你体验该应用。
+- 阅读[文档](https://www.wangyunf.com/blossom-doc)来查看更多使用细节。
 
 ---
 
