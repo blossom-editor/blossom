@@ -40,7 +40,7 @@ public class PictureUtil {
         try {
             Thumbnails.of(file)
                     // 图片大小（长宽）压缩比例 从0-1，1表示原图
-                    .scale(0.9)
+                    .scale(0.8)
                     // 图片质量压缩比例 从0-1，越接近1质量越好
                     .outputQuality(0.8)
                     .toFile(toFile);
@@ -51,8 +51,8 @@ public class PictureUtil {
 
     public static void main(String[] args) {
         compress(
-                "C:\\Users\\Administrator\\Desktop\\home_ld.jpg",
-                "C:\\Users\\Administrator\\Desktop\\home_ldc.jpg"
+                "C:\\Users\\Administrator\\Desktop\\pic_s_light.jpg",
+                "C:\\Users\\Administrator\\Desktop\\pic_s_light1.jpg"
         );
     }
 }

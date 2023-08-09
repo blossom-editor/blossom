@@ -36,7 +36,7 @@ CREATE TABLE `base_sys_param`  (
 -- ----------------------------
 -- Records of base_sys_param
 -- ----------------------------
-INSERT INTO `base_sys_param` VALUES (1, 'WEB_ARTICLE_URL', 'https://www.domain.com/blossom/#/articles?articleId=', 'WEB端文章地址,用于PC端直接调往WEB端阅读文章', 1, '2023-04-04 08:20:57', '2023-08-06 22:19:07');
+INSERT INTO `base_sys_param` VALUES (1, 'WEB_ARTICLE_URL', 'https://www.domain.com/blossom/#/articles?articleId=', '博客端文章地址,用于PC端直接调往WEB端阅读文章', 1, '2023-04-04 08:20:57', '2023-08-06 22:19:07');
 INSERT INTO `base_sys_param` VALUES (3, 'ARTICLE_LOG_EXP_DAYS', '30', '文章修改记录保存天数, 超过该天数将被删除', 1, '2023-08-02 17:46:58', '2023-08-02 18:03:43');
 INSERT INTO `base_sys_param` VALUES (11, 'HEFENG_KEY', 'ABC', '和风天气的KEY', 1, '2023-07-31 19:28:54', '2023-08-06 22:19:11');
 INSERT INTO `base_sys_param` VALUES (21, 'GITEE_ACCESS_TOKEN', 'ABC', '[过时配置]GITEE API 的访问 token', 1, '2023-07-31 20:12:05', '2023-08-06 22:20:12');

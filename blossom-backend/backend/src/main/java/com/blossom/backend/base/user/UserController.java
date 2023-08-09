@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -33,10 +32,7 @@ public class UserController {
     private final ParamService paramService;
 
     /**
-     * 查询 blossom 用户
-     *
-     * @return 用户信息
-     * @apiNote blossom 当前只支持一个用户登录, 数据并为做区分. 当登录状态调用该接口时, 会返回服务器相关配置信息.
+     * 用户信息
      */
     @GetMapping("/info")
     public R<BlossomUserRes> user() {
@@ -47,6 +43,9 @@ public class UserController {
         return R.ok(user);
     }
 
+    /**
+     * 用户信息 [OP]
+     */
     @AuthIgnore
     @GetMapping("/info/open")
     public R<BlossomUserRes> userOpen(@RequestHeader(BlConstants.REQ_HEADER_USERID) Long userId) {
