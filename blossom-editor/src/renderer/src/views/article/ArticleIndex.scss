@@ -147,6 +147,15 @@
         border-right: 1px solid var(--el-border-color);
         z-index: 2;
 
+
+        :deep(.cm-line) {
+          caret-color: var(--bl-editor-caret-color) !important;
+        }
+
+        :deep(.cm-cursor) {
+          border-color: var(--bl-editor-caret-color) !important;
+        }
+
         :deep(.cm-focused) {
           outline: none;
         }

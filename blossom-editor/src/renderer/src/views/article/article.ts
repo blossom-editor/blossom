@@ -17,7 +17,8 @@ export const TempTextareaKey = 'editor_temp_textarea_value'
 //#region ----------------------------------------< codemirror >--------------------------------------
 
 /**
- * codemirror 配置
+ * codemirror 样式配置
+ * https://codemirror.net/examples/styling/#themes
  */
 export const codemirrorTheme: any = {
   "&": {
@@ -45,10 +46,12 @@ export const codemirrorTheme: any = {
     wordWrap: "break-word",
     width: "calc(100% - 55px)",
     overflow: 'auto',
-    padding: '0'
+    padding: '0',
+    caretColor: "#707070"
   },
   ".cm-line": {
     // color: '#707070'
+    // caretColor: 'var(--bl-editor-caret-color) !important',
     wordWrap: 'break-word',
     wordBreak: 'break-all',
     padding: '0'
@@ -57,7 +60,7 @@ export const codemirrorTheme: any = {
     backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)',
   },
   ".cm-selectionMatch": {
-    backgroundColor: '#fa8072'
+    backgroundColor: 'var(--bl-editor-selection-match-bg-color)'
   },
   ".ͼ1.cm-focused": {
     outline: 'none'

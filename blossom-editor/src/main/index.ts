@@ -200,9 +200,9 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
  * 打开开发者工具
  * @param win 窗口
  */
-const openDevToos = (_win: BrowserWindow) => {
+const openDevToos = (win: BrowserWindow) => {
   if (is.dev) {
-    // win.webContents.openDevTools({ mode: 'right' })
+    win.webContents.openDevTools()
   } else {
     // win.webContents.openDevTools({ mode: 'right' })
   }

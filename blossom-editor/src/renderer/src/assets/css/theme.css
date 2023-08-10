@@ -179,7 +179,6 @@ html.dark {
   /*  */
   --bl-editor-color: #707070;
   --bl-editor-bg-color: #FFFFFF;
-  --bl-caret-color: #707070;
 
   /* gutter */
   --bl-editor-gutters-bg-color: #f5f5f5;
@@ -189,6 +188,10 @@ html.dark {
 
   /* 选中内容 */
   --bl-editor-selection-bg-color: #adc5f4a0;
+  --bl-editor-selection-match-bg-color: #89991154;
+
+  /* 光标颜色 */
+  --bl-editor-caret-color: #000000;
 
   /* 各类关键字颜色 */
   --bl-editor-cc-color: #219;
@@ -258,6 +261,9 @@ html.dark {
   --bl-editor-active-line-gutter-bg-color: #4747477a;
 
   --bl-editor-selection-bg-color: #203c74a0;
+  --bl-editor-selection-match-bg-color: #89991171;
+
+  --bl-editor-caret-color: #afafaf;
 
   --bl-editor-cc-color: #606366;
   --bl-editor-cm-color: #606366;

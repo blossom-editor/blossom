@@ -143,7 +143,7 @@
           </div>
         </div>
       </div>
-      
+
     </div>
 
     <Teleport to=" body">
@@ -580,7 +580,7 @@ const createEditorState = (doc?: string): EditorState => {
   return EditorState.create({
     doc: doc,
     extensions: [
-      basicSetup, cmmd({ codeLanguages: languages }), EditorView.theme(codemirrorTheme),
+      basicSetup, cmmd({ codeLanguages: languages }), EditorView.theme({ ...codemirrorTheme, ...{ dark: true } }),
       keymap.of([
         { key: 'Tab', run: insertTab, },
         { key: 'Shift-Tab', run: indentLess },

@@ -62,7 +62,7 @@ const getArticleRefList = (onlyInner: boolean) => {
         node.itemStyle = { color: isDark.value ? '#614E8A' : '#ad8cf2' }
       }
       if (node.artType == 21) {
-        node.itemStyle = { color: isDark.value ? '#937100' : '#fdc81a' }
+        node.itemStyle = { color: isDark.value ? '#624B00' : '#fdc81a' }
       }
       node.symbolSize = getCount(node.name, resp.data.links)
       return node
@@ -120,10 +120,6 @@ const renderChart = () => {
         type: 'graph',
         layout: 'force',
         top: 100, bottom: 100,
-        force: {
-          repulsion: 300, // 节点之间的斥力因子。
-          friction: 0.1 // 这个参数能减缓节点的移动速度。取值范围 0 到 1。
-        },
         draggable: false,
         symbolSize: 15,
         animation: false,
@@ -134,26 +130,37 @@ const renderChart = () => {
         label: {
           show: true,
           fontSize: 10,
-          color: isDark.value ? '#DCDCDC' : '#000000',
+          color: isDark.value ? '#858585' : '#000000',
           formatter: '{b}'
         },
         labelLayout: {
           hideOverlap: true
         },
-        itemStyle: {
-        },
+        // itemStyle: {
+        //   shadowColor: '#000000',
+        //   shadowBlur: 10,
+        //   shadowOffsetX: 2,
+        //   shadowOffsetY: 3
+        // },
         // autoCurveness: true,
         lineStyle: {
+          color: isDark.value ? '#0E0E0E' : '#B3B3B3',
           // 直线或曲线
-          curveness: 0.1
+          // curveness: 0.1
+        },
+        force: {
+          repulsion: 500, // 节点之间的斥力因子。
+          friction: 0.1 // 这个参数能减缓节点的移动速度。取值范围 0 到 1。
         },
         // 箭头的开始, 结束图形
         edgeSymbol: ['circle', 'arrow'],
         // 箭头的开始, 结束图形大小
-        edgeSymbolSize: [0, 10],
+        edgeSymbolSize: [0, 5],
         edgeLabel: { fontSize: 10 },
         emphasis: {
+          // 聚焦关系图中的邻接点和边的图形。
           focus: 'adjacency',
+          blurScope: 'series',
           lineStyle: {
             width: 5
           }
@@ -226,7 +233,7 @@ onUnmounted(() => {
     .desc {
       @include font(12px, 300);
       color: var(--bl-text-color-light);
-      border: 1px dashed #AAAAAA;
+      border: 1px dashed var(--bl-text-color-light);
       border-radius: 5px;
       padding: 10px;
 
