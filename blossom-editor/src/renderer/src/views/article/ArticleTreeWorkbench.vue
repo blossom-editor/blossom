@@ -1,8 +1,7 @@
 <template>
   <div class="doc-workbench-root">
     <bl-row just="flex-end" align="flex-end">
-      <div v-show="curDoc !== undefined"
-        style="font-size:12px;text-align: right;color: var(--el-text-color-placeholder);">
+      <div v-show="curDoc !== undefined" style="font-size:12px;text-align: right;color: var(--bl-text-color-light);">
         <span>《{{ curDoc?.name }}》</span>
         <br />
         <span style="font-size: 9px;padding-right: 5px;">{{ curDoc?.id }}</span>
@@ -140,7 +139,7 @@ const emits = defineEmits(['refreshDocTree', 'show-sort'])
 
   .iconbl {
     text-shadow: var(--xz-iconbl-text-shadow);
-    color: var(--el-text-color-secondary);
+    color: var(--bl-text-color-light);
     font-size: 25px;
     padding: 3px;
     cursor: pointer;

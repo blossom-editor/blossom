@@ -32,7 +32,7 @@ const blossom: any = {
   LINKS: [
     {
       NAME: 'Blossom 文档',
-      URL: 'https://www.wangyunf.com/blossom-doc',
+      URL: 'https://www.wangyunf.com/blossom-doc/index',
       LOGO: 'blossom_logo.png'
     }
   ]

@@ -31,7 +31,8 @@ export const codemirrorTheme: any = {
     fontSize: '12px'
   },
   ".cm-activeLineGutter": {
-    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)'
+    backgroundColor: 'var(--bl-editor-gutters-bg-color)',
+    color: 'var(--el-color-primary)'
   },
   ".cm-lineNumbers": {
     width: '40px'
@@ -50,15 +51,19 @@ export const codemirrorTheme: any = {
     // color: '#707070'
     wordWrap: 'break-word',
     wordBreak: 'break-all',
+    padding: '0'
   },
   ".cm-activeLine": {
-    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)'
+    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)',
   },
   ".cm-selectionMatch": {
     backgroundColor: '#fa8072'
   },
   ".ͼ1.cm-focused": {
     outline: 'none'
+  },
+  ".ͼ2 .cm-activeLine": {
+    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)',
   },
   ".ͼ5": {
     color: 'var(--bl-editor-c5-color)',

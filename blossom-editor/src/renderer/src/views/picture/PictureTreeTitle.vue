@@ -15,7 +15,8 @@
 
     <!-- 右键菜单, 添加到 body 下 -->
     <Teleport to="body">
-      <div v-if="rMenu.show" class="right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
+      <div v-if="rMenu.show" class="doc-tree-right-menu"
+        :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
         <div class="doc-name">{{ props.trees.n }}</div>
         <div class="menu-content">
           <div :class="['menu-item', props.trees.i < 0 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
@@ -214,74 +215,5 @@ $icon-size: 17px;
 .star-line {
   left: -10px;
   background: rgb(237, 204, 11);
-}
-</style>
-
-<style lang="scss">
-.right-menu {
-  @include box(170px, auto);
-  @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px rgb(0, 0, 0));
-  position: fixed;
-  background: var(--xz-html-color);
-  z-index: 2002;
-  border-radius: 5px;
-  font-size: 12px;
-
-  .doc-name {
-    font-size: 13px;
-    padding: 5px 10px;
-    color: var(--el-color-primary);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .menu-content {
-    margin: 0;
-    // padding: 5px;
-    color: var(--el-text-color-regular);
-    border-top: 1px solid var(--el-border-color);
-    padding: 5px 0;
-
-    .menu-item-divider {
-      height: 1px;
-      border-bottom: 1px solid var(--el-border-color);
-      margin-bottom: 5px;
-    }
-
-    .menu-item {
-      @include flex(row, flex-start, center);
-      line-height: 0.9;
-      padding: 5px 5px 5px 10px;
-      margin: 0 5px 5px 5px;
-      // margin-bottom: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      // transition: 0.3s;
-
-      .iconbl {
-        margin-right: 5px;
-      }
-
-      &:hover {
-        background: var(--el-color-primary-light-8);
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    .disabled {
-      cursor: not-allowed;
-      pointer-events: none;
-      color: var(--el-color-info-light-5);
-
-      &:hover {
-        color: var(--el-color-info-light-5);
-      }
-    }
-  }
-
 }
 </style>

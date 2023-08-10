@@ -174,7 +174,7 @@ const refreshWeatherTask = () => {
   .location {
     @include font(12px, 300);
     @include absolute(30px, 10px, '', '');
-    color: var(--el-text-color-disabled);
+    color: var(--bl-text-color-light);
   }
 
   .weather-mask {

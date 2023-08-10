@@ -1,7 +1,6 @@
 .index-article-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, center);
-  ;
 
   // 文档
   .doc-container {
@@ -159,13 +158,9 @@
           outline: none;
         }
 
-        :deep(.cm-selectionLayer) {
-          z-index: 9999 !important;
-        }
-
+        // 选中内容的颜色
         :deep(.cm-selectionBackground) {
-          background: var(--el-color-primary-light-6);
-          z-index: 9999;
+          background: var(--bl-editor-selection-bg-color);
         }
       }
 

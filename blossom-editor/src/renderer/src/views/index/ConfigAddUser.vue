@@ -21,7 +21,7 @@
         <el-radio-button label="2">普通用户</el-radio-button>
         <el-radio-button label="3">只读用户</el-radio-button>
       </el-radio-group>
-      <bl-row style="color: var(--el-text-color-disabled);">
+      <bl-row style="color: var(--bl-text-color-light);">
         {{ typeDesc }}
       </bl-row>
     </el-form-item>

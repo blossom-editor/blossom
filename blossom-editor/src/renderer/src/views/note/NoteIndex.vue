@@ -6,7 +6,7 @@
           <img src="@renderer/assets/imgs/note/note.png" class="note-logo">
         </bl-col>
         <bl-col align="flex-start" class=""
-          style="padding: 10px;font-size: 13px;letter-spacing:1px;color: var(--el-text-color-placeholder);">
+          style="padding: 10px;font-size: 13px;letter-spacing:1px;color: var(--bl-text-color-light);">
           <ol>
             <li>便签只支持文本格式。</li>
             <li style="margin-top: 5px;">使用 Ctrl+Enter 保存便签。</li>

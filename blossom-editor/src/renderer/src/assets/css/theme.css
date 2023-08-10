@@ -58,7 +58,6 @@
   --el-text-color-regular: #606266;
   --el-text-color-secondary: #909399;
   --el-text-color-placeholder: #a8abb2;
-  --el-text-color-disabled: #c0c4cc;
 
   /* ======================================================= 背景颜色 =======================================================*/
   --el-bg-color: #f5f7fa;
@@ -101,8 +100,7 @@ html.dark {
   --el-text-color-primary: #909399;
   --el-text-color-regular: #a8a8a8;
   --el-text-color-secondary: #A3A6AD;
-  --el-text-color-placeholder: #8D9095;
-  --el-text-color-disabled: #6C6E72;
+  --el-text-color-placeholder: #535353;
 
   /* ======================================================= 背景颜色 =======================================================*/
   --el-bg-color: #262727;
@@ -118,7 +116,7 @@ html.dark {
   --el-input-bg-color: #000000;
   --el-input-border-color: #373737;
 
-  /* 这招的颜色 */
+  /* 遮罩的颜色 */
   --el-mask-color: rgb(18, 18, 18, 0.95);
 
 }
@@ -129,6 +127,8 @@ html.dark {
   --xz-html-color: #ffffff;
   /* 背景色 */
   --xz-bg-color: #f1f1f1;
+  --bl-text-color-light: #b7b7b7;
+
 
   --xz-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
 
@@ -150,6 +150,7 @@ html.dark {
 html.dark {
   --xz-html-color: #1e1e1e;
   --xz-bg-color: #333434;
+  --bl-text-color-light: #535353;
 
   --xz-text-shadow: 2px 3px 5px rgb(0, 0, 0);
 
@@ -171,11 +172,16 @@ html.dark {
   /*  */
   --bl-editor-color: #707070;
   --bl-editor-bg-color: #FFFFFF;
+  --bl-caret-color: #707070;
 
   /* gutter */
   --bl-editor-gutters-bg-color: #f5f5f5;
   --bl-editor-gutters-border-color: #DDDDDD00;
-  --bl-editor-active-line-gutter-bg-color: #f7f3fe;
+  --bl-editor-active-line-gutter-bg-color: #d6d6d67f;
+  --bl-editor-active-line-gutter-color: #000000;
+
+  /* 选中内容 */
+  --bl-editor-selection-bg-color: #adc5f4a0;
 
   /* 各类关键字颜色 */
   --bl-editor-cc-color: #219;
@@ -189,6 +195,8 @@ html.dark {
   --bl-editor-c5-color: #7843E9;
   --bl-editor-c7-color: #7843E9;
   --bl-editor-c7-bg-color: #00000000;
+
+
   /* ============================================================= */
 
   /* 预览的字体颜色 */
@@ -240,9 +248,11 @@ html.dark {
 
   --bl-editor-gutters-bg-color: #2d2d2d;
   --bl-editor-gutters-border-color: #42434200;
-  --bl-editor-active-line-gutter-bg-color: #393d1c;
+  --bl-editor-active-line-gutter-bg-color: #4747477a;
 
-  --bl-editor-cc-color: #7d8a17;
+  --bl-editor-selection-bg-color: #203c74a0;
+
+  --bl-editor-cc-color: #606366;
   --bl-editor-cm-color: #606366;
   --bl-editor-cb-color: #cc7832;
   --bl-editor-cd-color: #689757;
@@ -250,8 +260,8 @@ html.dark {
   --bl-editor-ci-color: #ffc66d;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: #7d8a17;
-  --bl-editor-c7-color: #7d8a17;
+  --bl-editor-c5-color: #6b7711;
+  --bl-editor-c7-color: #6b7711;
   --bl-editor-c7-bg-color: #00000000;
   /* ============================================================= */
 

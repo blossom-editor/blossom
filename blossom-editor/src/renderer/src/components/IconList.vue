@@ -164,7 +164,7 @@ const iconDesc = computed(() => {
 .icon-list-root {
   @include box(100%, 100%);
   padding: 20px;
-  color: var(--el-text-color-secondary);
+  color: var(--bl-text-color-light);
 
   .icon-desc {
     @include box(100%, 150px);
@@ -196,15 +196,15 @@ const iconDesc = computed(() => {
 
         &:hover {
           @include themeBg(#f1f1f1, #000);
-          transform: translateY(-5px);
           @include themeShadow(0 3px 5px 0 rgb(190, 190, 190), 0 3px 5px 0 rgba(0, 0, 0, 1));
+          transform: translateY(-5px);
           z-index: 2;
         }
 
         .icon-name {
           @include flex(column, center, center);
           @include box(100%, 42px);
-          @include themeColor(#A5A5A5, #929292);
+          color: var(--bl-text-color-light);
           text-align: center;
           font-size: 11px;
           overflow: hidden;

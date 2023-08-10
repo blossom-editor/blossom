@@ -147,7 +147,7 @@
     </div>
 
     <Teleport to=" body">
-      <div v-show="editorRightMenu.show" class="right-menu"
+      <div v-show="editorRightMenu.show" class="editor-right-menu"
         :style="{ left: editorRightMenu.clientX + 'px', top: editorRightMenu.clientY + 'px' }">
         <div class="menu-content">
           <div class="menu-item" @click="rightMenuCopy">

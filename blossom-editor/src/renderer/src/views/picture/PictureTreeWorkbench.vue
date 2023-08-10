@@ -1,8 +1,7 @@
 <template>
   <div class="doc-workbench-root">
     <bl-row just="flex-end" align="flex-end">
-      <div v-show="curFolder !== undefined"
-        style="font-size:12px;text-align: right;color: var(--el-text-color-placeholder);">
+      <div v-show="curFolder !== undefined" style="font-size:12px;text-align: right;color: var(--bl-text-color-light);">
         <span>《{{ curFolder?.name }}》</span>
         <br />
         <span style="font-size: 9px;padding-right: 5px;">{{ curFolder?.id }}</span>

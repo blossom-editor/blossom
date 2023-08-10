@@ -91,7 +91,7 @@ const userinfoJson = computed(() => {
     .desc {
       @include font(12px, 300);
       margin-bottom: 30px;
-      color: var(--el-text-color-disabled);
+      color: var(--bl-text-color-light);
     }
   }
 

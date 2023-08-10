@@ -75,7 +75,7 @@ defineExpose({ reload })
 
   .placeholder {
     padding: 20px 0 0 20px;
-    color: var(--el-text-color-disabled);
+    color: var(--bl-text-color-light);
   }
 
   .star-item {

@@ -125,8 +125,8 @@ const handleServerUsername = () => {
 
   .avatar-img {
     height: 150px;
-    @include themeShadow(2px 4px 7px 2px rgba(49, 49, 49, 0.3), 2px 4px 7px 2px #000000);
-    @include themeBorder(2px, var(--el-text-color-placeholder), var(--el-color-primary-light-5));
+    @include themeShadow(2px 4px 7px 2px rgba(134, 134, 134, 0.3), 2px 4px 7px 2px #000000);
+    @include themeBorder(2px, #a8abb2, #707070);
     border-radius: 10px;
     margin-bottom: 20px;
   }

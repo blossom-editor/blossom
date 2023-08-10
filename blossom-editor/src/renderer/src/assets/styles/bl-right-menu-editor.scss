@@ -1,0 +1,56 @@
+/*
+文档菜单右键菜单样式
+*/
+.editor-right-menu {
+  @include box(170px, auto);
+  @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
+  position: fixed;
+  background: var(--xz-html-color);
+  z-index: 2002;
+  border-radius: 5px;
+  font-size: 12px;
+
+  .menu-content {
+    margin: 0;
+    color: var(--el-text-color-regular);
+    padding: 5px 0;
+
+    .menu-item-divider {
+      height: 1px;
+      border-bottom: 1px solid var(--el-border-color);
+      margin-bottom: 5px;
+    }
+
+    .menu-item {
+      @include flex(row, flex-start, center);
+      line-height: 0.9;
+      padding: 5px 5px 5px 10px;
+      margin: 0 5px 5px 5px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      .iconbl {
+        margin-right: 5px;
+      }
+
+      &:hover {
+        background: var(--el-color-primary-light-8);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      color: var(--el-color-info-light-5);
+
+      &:hover {
+        color: var(--el-color-info-light-5);
+      }
+    }
+  }
+
+}

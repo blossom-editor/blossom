@@ -283,17 +283,18 @@ const emits = defineEmits([
 .editor-tools-root {
   @include box(calc(100% - 20px), 35px);
   @include flex(row, flex-start, center);
-  @include themeShadow(0 3px 5px 1px #d3d3d3, 0 3px 5px 1px #000);
+  @include themeShadow(0 3px 5px 1px #d3d3d3, 0 3px 5px 1px rgb(20, 20, 20));
+  @include themeBg(#ad8cf280, #323232);
   margin: 5px 10px 10px 10px;
   padding: 0 5px;
   border-radius: 5px;
-  background-color: var(--el-color-primary-light-5);
   overflow-x: overlay;
 
   &>div {
+    @include themeColor(#5B5B5B, #0D0D0D);
+    @include themeBorder(1px, #A7A7A7, #1C1C1C);
     margin: 0 5px;
     padding: 3px;
-    border: 1px solid var(--el-color-primary-light-5);
     border-radius: 3px;
     transition: 0.3s;
     cursor: pointer;
@@ -305,7 +306,7 @@ const emits = defineEmits([
 
   .divider {
     @include box(2px, 60%);
-    background-color: var(--el-color-primary-light-1);
+    @include themeBg(#ad8cf280, #1C1C1C);
     padding: 0;
     border: 0;
   }
