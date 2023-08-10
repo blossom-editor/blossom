@@ -13,7 +13,6 @@
   --el-color-primary-light-9: rgba(232, 219, 190, 0.505);
 
   /* 文本颜色 */
-  /* --el-text-color-primary: #303133; */
   --el-text-color-primary: #606266;
   --el-text-color-regular: #606266;
   --el-text-color-secondary: #909399;
@@ -26,12 +25,11 @@
 /* ================================= 自定义颜色 ================================== */
 
 :root {
-  --xz-html-color: #ffffff;
+  --bl-html-color: #ffffff;
 }
 
 html.dark {
-  --xz-html-color: #1e1e1e;
-
+  --bl-html-color: #1e1e1e;
 }
 
 :root {

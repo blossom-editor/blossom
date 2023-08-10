@@ -100,7 +100,7 @@ $height-menu: calc(100% - #{$height-upload} - #{$height-user} - #{$height-settin
 
   .item-logo {
     @include box(100%, $height-logo);
-    background-color: var(--xz-html-color);
+    background-color: var(--bl-html-color);
   }
 
   .aside-item-container {
@@ -111,14 +111,14 @@ $height-menu: calc(100% - #{$height-upload} - #{$height-user} - #{$height-settin
     .aside-item {
       width: 100%;
       overflow: hidden;
-      background-color: var(--xz-bg-color);
+      background-color: var(--bl-bg-color);
     }
 
     .item-menu-container {
       @include box(100%, $height-menu);
       @include flex(column, flex-start, center);
+      @include themeColor(#909399, #A3A6AD);
       padding-top: 5px;
-      color: var(--el-text-color-secondary);
       border-top-right-radius: 10px;
 
       .is-active {

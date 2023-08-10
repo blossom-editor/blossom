@@ -218,14 +218,14 @@ onUnmounted(() => {
 
     .title {
       color: var(--el-color-primary);
-      text-shadow: var(--xz-text-shadow);
+      text-shadow: var(--bl-text-shadow);
       font-weight: bold;
       height: 40px;
     }
 
     .desc {
       @include font(12px, 300);
-      color: var(--el-text-color-secondary);
+      color: var(--bl-text-color-light);
       border: 1px dashed #AAAAAA;
       border-radius: 5px;
       padding: 10px;
@@ -273,7 +273,7 @@ onUnmounted(() => {
   max-width: 400px;
   word-break: break-all;
   white-space: normal;
-  background-color: var(--xz-html-color);
+  background-color: var(--bl-html-color);
   border-radius: 4px;
   border: 1px solid var(--el-color-primary-light-5);
 

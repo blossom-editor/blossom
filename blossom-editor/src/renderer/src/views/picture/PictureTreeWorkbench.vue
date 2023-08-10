@@ -22,7 +22,7 @@
   <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 65px;
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--xz-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
+    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
     :close-on-click-modal="false" draggable>
     <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
   </el-dialog>
@@ -67,35 +67,5 @@ const emits = defineEmits(['refreshDocTree'])
 </script>
 
 <style scoped lang="scss">
-.doc-workbench-root {
-  @include box(100%, 100%);
-  @include flex(column, flex-end, flex-end);
-
-  .iconbl {
-    color: var(--el-text-color-secondary);
-    text-shadow: var(--xz-iconbl-text-shadow);
-    font-size: 25px;
-    padding: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-
-    &:hover {
-      color: var(--el-color-primary);
-    }
-  }
-
-  // 刷新图标
-  .bl-a-cloudrefresh-line,
-  .bl-a-fileadd-line {
-    &:active {
-      color: #ffffff;
-    }
-  }
-
-  .bl-a-fileadd-line {
-    font-size: 35px;
-    color: var(--el-color-primary);
-    padding-bottom: 2px;
-  }
-}
+@import '../doc/TreeWorkbench.scss';
 </style>

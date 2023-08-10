@@ -156,7 +156,7 @@ onMounted(() => {
     @include themeColor(#BDBDBD, #a3a6ad);
     flex-wrap: wrap-reverse;
     align-content: flex-end;
-    text-shadow: var(--xz-text-shadow);
+    text-shadow: var(--bl-text-shadow);
     padding: 5px 10px;
 
     .title-remind {
@@ -177,7 +177,7 @@ onMounted(() => {
   .web-collect-group {
     @include themeColor(#BDBDBD, #a3a6ad);
     @include font(14px);
-    text-shadow: var(--xz-text-shadow);
+    text-shadow: var(--bl-text-shadow);
     padding: 10px 20px;
   }
 

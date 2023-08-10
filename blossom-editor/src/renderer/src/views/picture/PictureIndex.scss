@@ -71,7 +71,7 @@
 
       :deep(.el-menu-item.is-active) {
         @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
-        background: linear-gradient(90deg, var(--xz-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--xz-html-color) 100%);
+        background: linear-gradient(90deg, var(--bl-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--bl-html-color) 100%);
         color: #ffffff;
         font-weight: 700;
       }
@@ -107,7 +107,7 @@
       .iconbl {
         padding: 5px;
         font-size: 30px;
-        text-shadow: var(--xz-iconbl-text-shadow);
+        text-shadow: var(--bl-iconbl-text-shadow);
         transition: 0.3s;
         cursor: pointer;
       }

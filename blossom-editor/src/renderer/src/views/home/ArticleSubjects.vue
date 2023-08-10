@@ -4,7 +4,7 @@
       无专题内容
     </div>
     <div class="subject-item" v-for="subject in  subjects " :key="subject.name"
-      :style="{ '--xz-subject-color1': subject.color }" @click="toToc(subject.tocId)">
+      :style="{ '--bl-subject-color1': subject.color }" @click="toToc(subject.tocId)">
 
       <!-- 进度条 -->
       <div class="progress"
@@ -97,8 +97,8 @@ const toToc = (articleId: number) => {
     @include flex(column, flex-start, flex-start);
     @include box($width-item, 90px, $width-item, $width-item);
     @include themeShadow(3px 3px 5px 1px rgba(88, 88, 88, 0.3), 3px 3px 5px 1px rgba(0, 0, 0, 1));
-    @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--xz-subject-color1) 100%),
-      linear-gradient(155deg, var(--xz-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--xz-subject-color1) 100%));
+    @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--bl-subject-color1) 100%),
+      linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%));
     border-radius: 5px;
     margin: 15px;
     transition: 0.3s;

@@ -37,8 +37,8 @@ import CONFIG from '@renderer/assets/constants/system'
 .setting-index-root {
   @include box(100%, 100%);
   background-image: linear-gradient(135deg,
-      var(--xz-html-color),
-      var(--xz-html-color),
+      var(--bl-html-color),
+      var(--bl-html-color),
       var(--el-color-primary-light-5));
   padding: 50px;
   z-index: 2;

@@ -46,7 +46,7 @@
   <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 65px;
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--xz-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
+    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
     :close-on-click-modal="false" draggable>
     <ArticleInfo ref="ArticleInfoRef" @saved="savedCallback"></ArticleInfo>
   </el-dialog>
@@ -132,89 +132,5 @@ const emits = defineEmits(['refreshDocTree', 'show-sort'])
 </script>
 
 <style scoped lang="scss">
-.doc-workbench-root {
-  @include box(100%, 100%);
-  @include flex(column, flex-end, flex-end);
-  border-bottom: 1px solid var(--el-border-color);
-
-  .iconbl {
-    text-shadow: var(--xz-iconbl-text-shadow);
-    color: var(--bl-text-color-light);
-    font-size: 25px;
-    padding: 3px;
-    cursor: pointer;
-    transition: 0.3s;
-
-    &:hover {
-      color: var(--el-color-primary);
-    }
-  }
-
-  .bl-a-leftdirection-line {
-    padding-bottom: 5px;
-    padding-right: 0px;
-  }
-
-  // 公开图标
-  .bl-cloud-fill {
-    color: #7AC20C;
-    @include themeText(0px 5px 5px #79C20CA4, 2px 3px 5px rgba(183, 183, 183, 0.8));
-  }
-
-  .bl-cloud-fill,
-  .bl-cloud-line {
-    &:hover {
-      color: #7AC20C;
-      @include themeText(5px 5px 5px #79C20CA4, 2px 3px 5px rgba(183, 183, 183, 0.8));
-    }
-  }
-
-  // 专题图标
-  .bl-a-lowerrightpage-fill {
-    color: salmon;
-    @include themeText(0px 5px 5px rgba(250, 128, 114, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-  }
-
-  // 专题图标
-  .bl-a-lowerrightpage-fill,
-  .bl-a-lowerrightpage-line {
-    &:hover {
-      color: salmon;
-      @include themeText(5px 5px 5px rgba(250, 128, 114, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-    }
-  }
-
-  //  star 图标
-  .bl-star-fill {
-    color: rgb(237, 204, 11);
-    @include themeText(0px 5px 5px rgba(237, 204, 11, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-  }
-
-  .bl-star-line,
-  .bl-star-fill {
-    font-size: 23px;
-    padding-bottom: 5px;
-
-    &:hover {
-      color: rgb(237, 204, 11);
-      @include themeText(5px 5px 5px rgba(237, 203, 11, 0.756), 2px 3px 5px rgba(183, 183, 183, 0.8));
-    }
-  }
-
-  // 刷新图标
-  .bl-a-cloudrefresh-line,
-  .bl-a-fileadd-line {
-    &:active {
-      color: #ffffff;
-    }
-  }
-
-  .bl-a-fileadd-line {}
-
-  .bl-correlation-line {
-    color: var(--el-color-primary);
-    font-size: 40px;
-    padding-bottom: 0px;
-  }
-}
+@import '../doc/TreeWorkbench.scss';
 </style>

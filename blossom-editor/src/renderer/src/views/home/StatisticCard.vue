@@ -57,7 +57,7 @@ onActivated(() => {
   @include box(200px, 95px);
   @include flex(row, flex-start, center);
   @include themeColor(#727272, #929292);
-  text-shadow: var(--xz-text-shadow);
+  text-shadow: var(--bl-text-shadow);
   border: 3px solid var(--el-color-primary-light-7);
   padding: 10px 0;
   margin-top: 20px;
@@ -67,7 +67,7 @@ onActivated(() => {
   transition: 0.3s;
 
   &:hover {
-    box-shadow: var(--xz-box-shadow-dialog);
+    box-shadow: var(--bl-box-shadow-dialog);
 
     .icon-shadow {
       @include font(150px, 500);

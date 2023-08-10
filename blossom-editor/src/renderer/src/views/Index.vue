@@ -58,7 +58,7 @@ $zindex-header: 2001;
       @include box(180px, 35px);
       @include flex(row, center, center);
       @include themeShadow(0 0 7px 2px rgba(49, 49, 49, 0.3), 0 0 7px 2px rgb(0, 0, 0));
-      background-color: var(--xz-html-color);
+      background-color: var(--bl-html-color);
       position: absolute;
       bottom: 0;
       left: 20px;

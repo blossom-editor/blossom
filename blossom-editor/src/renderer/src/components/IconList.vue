@@ -179,7 +179,7 @@ const iconDesc = computed(() => {
       @include flex(row, flex-start, flex-start);
       align-content: flex-start;
       flex-wrap: wrap;
-      background-color: var(--xz-html-color);
+      background-color: var(--bl-html-color);
       overflow: scroll;
       overflow-y: overlay;
 

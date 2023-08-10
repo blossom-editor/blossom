@@ -271,7 +271,7 @@ const printscreenUpload = () => {
         .img-placeholder {
           @include box(100%, 100%);
           @include flex(column, center, center);
-          color: var(--el-text-color-secondary);
+          color: var(--bl-text-color-light);
 
           div {
             margin-top: 5px;

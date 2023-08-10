@@ -52,17 +52,16 @@
   --el-color-info-light-8: #e9e9eb;
   --el-color-info-light-9: #f4f4f5;
 
-  /* ======================================================= 文本颜色 =======================================================*/
-  /* --el-text-color-primary: #303133; */
+  /* ================================= 文本颜色 =================================*/
   --el-text-color-primary: #606266;
   --el-text-color-regular: #606266;
   --el-text-color-secondary: #909399;
-  --el-text-color-placeholder: #a8abb2;
+  --el-text-color-placeholder: #cbcbcb;
 
-  /* ======================================================= 背景颜色 =======================================================*/
+  /* ================================= 背景颜色 =================================*/
   --el-bg-color: #f5f7fa;
 
-  /* ======================================================= 边框颜色 =======================================================*/
+  /* ================================= 边框颜色 =================================*/
 
   /* 菜单文本的颜色 */
   --el-menu-text-color: #86888e;
@@ -96,75 +95,83 @@ html.dark {
   --el-color-danger-dark-2: #8111118a;
 
   --el-color-info: #64666b;
-  /* ======================================================= 文本颜色 =======================================================*/
+  /* ================================= 文本颜色 =================================*/
   --el-text-color-primary: #909399;
   --el-text-color-regular: #a8a8a8;
   --el-text-color-secondary: #A3A6AD;
   --el-text-color-placeholder: #535353;
 
-  /* ======================================================= 背景颜色 =======================================================*/
+  /* ================================= 背景颜色 =================================*/
   --el-bg-color: #262727;
 
-  /* ======================================================= 边框颜色 =======================================================*/
+  /* ================================= 边框颜色 =================================*/
   --el-border-color: #424342;
 
   /* 菜单文本的颜色 */
   --el-menu-text-color: #86888e;
   --el-menu-active-color: #ffffff;
 
-  /* ======================================================= 文本框样式 =======================================================*/
+  /* ================================= 文本框样式 =================================*/
   --el-input-bg-color: #000000;
   --el-input-border-color: #373737;
 
   /* 遮罩的颜色 */
   --el-mask-color: rgb(18, 18, 18, 0.95);
-
 }
 
 /* ================================= 自定义颜色 ================================== */
 
 :root {
-  --xz-html-color: #ffffff;
-  /* 背景色 */
-  --xz-bg-color: #f1f1f1;
+  /* html color */
+  --bl-html-color: #ffffff;
+  /* background color */
+  --bl-bg-color: #f1f1f1;
+  /* ================================= text styles =================================*/
+  /* primary color */
+  --bl-text-color: #606266;
+  /* lighter than primary color */
   --bl-text-color-light: #b7b7b7;
+  /* text shadow */
+  --bl-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
 
+  --bl-box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
+  --bl-box-shadow-dialog: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
 
-  --xz-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
+  /* ================================= switch custom colors ================================== */
+  --bl-switch-action-color: #ffffff;
+  --bl-switch-action-color-checked: #ffffff;
+  --bl-switch-text-color: #ffffff;
+  --bl-switch-text-color-checked: #ffffff;
 
-  --xz-box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
-  --xz-box-shadow-dialog: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
+  /* ================================= iconbl ================================== */
+  --bl-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
 
-  /* ================================= switch 自定义颜色 ================================== */
-  --xz-switch-action-color: #ffffff;
-  --xz-switch-action-color-checked: #ffffff;
-  --xz-switch-text-color: #ffffff;
-  --xz-switch-text-color-checked: #ffffff;
-
-  /* ================================= iconbl 图标 ================================== */
-  --xz-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
-
-  --xz-subject-color1: #040EFF;
+  --bl-subject-color1: #040EFF;
 }
 
 html.dark {
-  --xz-html-color: #1e1e1e;
-  --xz-bg-color: #333434;
+  /* html color */
+  --bl-html-color: #1e1e1e;
+  /* background color */
+  --bl-bg-color: #333434;
+  /* ================================= text styles =================================*/
+  /* primary color */
+  --bl-text-color: #a8a8a8;
+  /* lighter than primary color */
   --bl-text-color-light: #535353;
+  /* text shadow */
+  --bl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
 
-  --xz-text-shadow: 2px 3px 5px rgb(0, 0, 0);
-
-  --xz-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
-  --xz-box-shadow-dialog: 3px 3px 10px 2px rgba(0, 0, 0, 1);
-
-  /* ================================= switch 自定义颜色 ================================== */
-  --xz-switch-action-color: rgb(58, 58, 58);
-  --xz-switch-action-color-checked: #ffffff;
-  --xz-switch-text-color: var(--el-color-primary);
-  --xz-switch-text-color-checked: #ffffff;
-
-  /* ================================= iconbl 图标 ================================== */
-  --xz-iconbl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
+  /*  */
+  --bl-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+  --bl-box-shadow-dialog: 3px 3px 10px 2px rgba(0, 0, 0, 1);
+  /* ================================= switch custom colors ================================== */
+  --bl-switch-action-color: rgb(58, 58, 58);
+  --bl-switch-action-color-checked: #ffffff;
+  --bl-switch-text-color: var(--el-color-primary);
+  --bl-switch-text-color-checked: #ffffff;
+  /* ================================= iconbl ================================== */
+  --bl-iconbl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
 }
 
 
@@ -197,7 +204,7 @@ html.dark {
   --bl-editor-c7-bg-color: #00000000;
 
 
-  /* ============================================================= */
+  /* ======================================= */
 
   /* 预览的字体颜色 */
   --bl-preview-color: #2b2b2b;
@@ -263,7 +270,7 @@ html.dark {
   --bl-editor-c5-color: #6b7711;
   --bl-editor-c7-color: #6b7711;
   --bl-editor-c7-bg-color: #00000000;
-  /* ============================================================= */
+  /* ======================================= */
 
   --bl-preview-color: #cdcdcd;
 

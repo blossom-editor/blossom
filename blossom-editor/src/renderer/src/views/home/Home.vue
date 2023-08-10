@@ -165,8 +165,8 @@ let now: string = nowWhen()
   @include box(100%, 100%);
   @include flex(row, space-between, center);
   background-image: linear-gradient(to bottom right,
-      var(--xz-html-color),
-      var(--xz-html-color),
+      var(--bl-html-color),
+      var(--bl-html-color),
       var(--el-color-primary-light-7));
 
   .container-name {
@@ -175,7 +175,7 @@ let now: string = nowWhen()
     height: 60px;
     min-height: 60px;
     align-items: end !important;
-    text-shadow: var(--xz-text-shadow);
+    text-shadow: var(--bl-text-shadow);
   }
 
   .container-sub-name {
@@ -183,7 +183,7 @@ let now: string = nowWhen()
     min-height: 20px;
     @include font(13px, 300);
     @include themeColor(#ABABAB, #7E7E7E);
-    text-shadow: var(--xz-text-shadow);
+    text-shadow: var(--bl-text-shadow);
   }
 
   .container-refresh {
@@ -193,7 +193,7 @@ let now: string = nowWhen()
 
     &:hover {
       animation: rotation 4s linear infinite;
-      text-shadow: var(--xz-text-shadow);
+      text-shadow: var(--bl-text-shadow);
     }
   }
 
@@ -227,7 +227,7 @@ let now: string = nowWhen()
       .user-name {
         @include font(25px, 700);
         @include themeColor(#5C5C5C, var(--el-color-primary));
-        text-shadow: var(--xz-text-shadow);
+        text-shadow: var(--bl-text-shadow);
         height: 30px;
       }
 
@@ -240,13 +240,13 @@ let now: string = nowWhen()
       height: $height-greetings;
       @include font(50px, 700);
       @include themeColor(#5C5C5C, var(--el-color-primary));
-      text-shadow: var(--xz-text-shadow);
+      text-shadow: var(--bl-text-shadow);
     }
 
     .now-time {
       height: 20px;
       @include themeColor(#5C5C5C, var(--el-color-primary));
-      text-shadow: var(--xz-text-shadow);
+      text-shadow: var(--bl-text-shadow);
       font-size: 12px;
     }
 
@@ -271,7 +271,7 @@ let now: string = nowWhen()
     position: relative;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    box-shadow: var(--xz-box-shadow);
+    box-shadow: var(--bl-box-shadow);
     overflow: hidden;
     z-index: 2;
   }

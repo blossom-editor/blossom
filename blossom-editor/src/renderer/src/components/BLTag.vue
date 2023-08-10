@@ -28,7 +28,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: 'var(--xz-html-color)'
+    default: 'var(--bl-html-color)'
   },
   /**
    * font-size

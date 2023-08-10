@@ -70,7 +70,7 @@
 
       :deep(.el-menu-item.is-active) {
         @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
-        background: linear-gradient(90deg, var(--xz-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--xz-html-color) 100%);
+        background: linear-gradient(90deg, var(--bl-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--bl-html-color) 100%);
         color: #ffffff;
         font-weight: 700;
       }
@@ -80,13 +80,6 @@
         transform: translateY(-50%) translateX(100%) scale(0.8);
       }
 
-    }
-
-    .doc-placeholder {
-      @include flex(row, center, center);
-      @include box(100%, calc(100% - 90px));
-      color: var(--el-text-color-placeholder);
-      font-size: 12px;
     }
 
     .doc-temp-textarea {
@@ -186,23 +179,6 @@
 
     .bl-preview-toc-absolute.is-expand-close {
       @include box(150px, 40px);
-    }
-  }
-
-  .editor-search-input {
-    @include box(300px, 60px);
-    position: absolute;
-    left: 40%;
-    top: 100px;
-    padding: 10px;
-    color: var(--el-text-color-placeholder);
-    background: var(--xz-bg-color);
-    border-radius: 10px;
-    box-shadow: 3px 3px 10px 1px #B7B7B7;
-
-    &>div {
-      @include flex(row);
-      font-size: 12px;
     }
   }
 

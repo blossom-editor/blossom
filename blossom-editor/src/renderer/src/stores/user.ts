@@ -68,8 +68,8 @@ export const useUserStore = defineStore('userStore', {
      */
     loginByPassword(username: string, password: string) {
       /*
-       * 客户端ID, 见服务器配置 xzzz.auth.clients.clientid
-       * 登录模式, 见服务器配置 xzzz.auth.clients.grantType
+       * 客户端ID, 见服务器配置 project.auth.clients.clientid
+       * 登录模式, 见服务器配置 project.auth.clients.grantType
        */
       loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
         .then((resp: any) => {

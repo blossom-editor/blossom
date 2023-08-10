@@ -5,7 +5,7 @@
   @include box(170px, auto);
   @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
   position: fixed;
-  background: var(--xz-html-color);
+  background: var(--bl-html-color);
   z-index: 2002;
   border-radius: 5px;
   font-size: 12px;
@@ -21,7 +21,7 @@
 
   .menu-content {
     margin: 0;
-    color: var(--el-text-color-regular);
+    color: var(--bl-text-color);
     border-top: 1px solid var(--el-border-color);
     padding: 5px 0;
 

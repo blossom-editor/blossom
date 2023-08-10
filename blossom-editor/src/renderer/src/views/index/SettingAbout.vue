@@ -151,7 +151,7 @@ const developer = [
     flex-wrap: wrap;
 
     .item {
-      background-color: var(--xz-bg-color);
+      background-color: var(--bl-bg-color);
       margin: 0 15px 15px 0;
       padding: 10px;
       border-radius: 10px;
