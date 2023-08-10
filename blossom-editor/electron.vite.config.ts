@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   main: {
@@ -10,7 +11,13 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      visualizer({
+        emitFile: false,
+        filename: "stats.html",
+      })
+    ],
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src')
@@ -27,19 +34,20 @@ export default defineConfig({
         }
       }
     },
-    build: {
-      // 警告大小, 单位kb
-      // chunkSizeWarningLimit: 1000,
-      rollupOptions: {
-        output: {
-          //@ts-ignore
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0].toString();
-            }
-          }
-        }
-      }
-    }
+    // electorn 应用不需要拆分文件打包
+    // build: {
+    //   // 警告大小, 单位kb
+    //   // chunkSizeWarningLimit: 1000,
+    //   rollupOptions: {
+    //     output: {
+    //       //@ts-ignore
+    //       manualChunks(id) {
+    //         if (id.includes('node_modules')) {
+    //           return id.toString().split('node_modules/')[1].split('/')[0].toString();
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 })
