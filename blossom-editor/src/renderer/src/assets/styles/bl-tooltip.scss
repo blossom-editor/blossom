@@ -36,7 +36,7 @@
 
 
 .el-popper.is-light {
-  box-shadow: 3px 3px 10px 1px #848484;
+  @include themeShadow(3px 3px 10px 1px #848484, 3px 3px 10px 1px #000000);
 
   .keyboard {
     margin-top: 5px;

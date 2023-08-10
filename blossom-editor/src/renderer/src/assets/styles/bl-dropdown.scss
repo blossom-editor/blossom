@@ -1,0 +1,7 @@
+.el-dropdown {
+  .el-tooltip__trigger {
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
