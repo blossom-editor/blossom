@@ -15,6 +15,13 @@ export const windowClose = () => { window.electronAPI.windowClose() }
 export const setUserinfo = (userinfo: any) => { window.electronAPI.setUserinfo(userinfo) }
 
 /**
+ * 打开文章窗口
+ * @param articleName
+ * @param articleId
+ */
+export const openNewArticleWindow = (articleName: string, articleId: number) => { window.electronAPI.openNewArticleWindow({ name: articleName, id: articleId }) }
+
+/**
  * 打开新图标窗口
  */
 export const openNewIconWindow = () => { window.electronAPI.openNewIconWindow() }

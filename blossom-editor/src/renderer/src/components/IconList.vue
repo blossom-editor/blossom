@@ -39,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
 import { computed, onMounted, ref, shallowRef } from 'vue'
 import blossomIcons from '@renderer/assets/iconfont/blossom/iconfont.json'
 import weblogIcons from '@renderer/assets/iconfont/weblogo/iconfont.json'

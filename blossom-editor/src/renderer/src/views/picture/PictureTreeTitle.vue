@@ -132,9 +132,8 @@ const closeMenuShow = () => {
   document.body.removeEventListener('contextmenu', closeMenuShow)
 }
 
-const handleClickRight = (event: Event) => {
+const handleClickRight = (event: MouseEvent) => {
   // console.log('右键点击', props.trees.n);
-  //@ts-ignore
   rMenu.value = { show: true, clientX: event.clientX, clientY: event.clientY }
   setTimeout(() => {
     document.body.addEventListener('click', closeMenuShow)

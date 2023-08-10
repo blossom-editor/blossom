@@ -22,7 +22,6 @@ export class Request {
      * 请求拦截
      */
     this.instance.interceptors.request.use(
-      //@ts-ignore
       (config: AxiosRequestConfig) => {
         return {
           ...config,

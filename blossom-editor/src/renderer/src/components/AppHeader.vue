@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
 import { ref } from 'vue'
 import { useDark } from '@vueuse/core'
 import { openDevTools, windowMin, windowMax, windowHide } from '@renderer/assets/utils/electron'

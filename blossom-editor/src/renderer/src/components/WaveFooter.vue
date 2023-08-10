@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
 import { useDark } from '@vueuse/core'
 const isDark = useDark();
 

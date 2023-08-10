@@ -12,8 +12,7 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
-import { ref, inject } from 'vue'
+import { inject } from 'vue'
 import { uploadFileApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'

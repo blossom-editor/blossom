@@ -43,7 +43,7 @@
             <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
           </div> -->
           <div class="menu-item-divider"></div>
-          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click.native="openNewArticleWindow">
+          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="openArticleWindow">
             <span class="iconbl bl-a-computerend-line"></span>新窗口打开
           </div>
           <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="articleDownload">
@@ -79,7 +79,7 @@ import type { PropType } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 
 import { articleDownloadApi, articleSyncApi } from '@renderer/api/blossom'
-import { openExtenal, writeText } from '@renderer/assets/utils/electron'
+import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import ArticleInfo from '@renderer/views/article/ArticleInfo.vue'
 import Notify from '@renderer/components/Notify'
@@ -160,7 +160,6 @@ const handleClickRight = (event: MouseEvent) => {
   if (document.body.clientHeight - event.clientY < menuHeight) {
     y = event.clientY - 275
   }
-  //@ts-ignore
   rMenu.value = { show: true, clientX: event.clientX, clientY: y }
   setTimeout(() => {
     document.body.addEventListener('click', closeMenuShow)
@@ -171,13 +170,12 @@ const handleClickRight = (event: MouseEvent) => {
 /**
  * 打开新页面
  */
-const openNewArticleWindow = () => {
+const openArticleWindow = () => {
   // 文件夹无法使用新页面打开
   if (props.trees.ty === 1) {
     return
   }
-  //@ts-ignore
-  window.electronAPI.openNewArticleWindow({ name: props.trees.n, id: props.trees.i });
+  openNewArticleWindow(props.trees.n, props.trees.i);
 }
 
 /**

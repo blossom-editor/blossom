@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
+
 import { onActivated, onMounted, ref } from 'vue'
 import { planListDailyApi, planDelApi } from '@renderer/api/plan'
 import { isNull } from '@renderer/assets/utils/obj'

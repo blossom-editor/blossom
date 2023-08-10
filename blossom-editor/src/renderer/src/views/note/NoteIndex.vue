@@ -43,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-//@ts-ignore
 import { onActivated, onMounted, ref } from 'vue'
 import { noteAllApi, noteDelApi, noteTopApi } from '@renderer/api/note'
 import NoteEditor from '@renderer/views/note/NoteEditor.vue'
