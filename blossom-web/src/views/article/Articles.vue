@@ -717,7 +717,10 @@ const toScroll = (level: number, content: string) => {
             color: #4eade5
           }
 
-          .hljs-attr,
+          .hljs-attr {
+            color: #cc7832;
+          }
+
           .hljs-link,
           .hljs-literal,
           .hljs-number,

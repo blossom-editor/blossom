@@ -5,7 +5,8 @@ import { EditorSelection, SelectionRange } from "@codemirror/state"
 // marked
 import { marked } from 'marked'
 import { markedHighlight } from "marked-highlight"
-import hljs from 'highlight.js';
+import hljs from 'highlight.js'
+
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
