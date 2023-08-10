@@ -9,8 +9,8 @@ import '@renderer/assets/iconfont/weblogo/iconfont.js'
 import pinia from './stores/storeConfig';
 import router from '@renderer/router/index'
 import '@renderer/router/routeInit'
-import ElementPlus from 'element-plus'
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+// import ElementPlus from 'element-plus'
+// import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -28,7 +28,7 @@ import '@renderer/views/article/article'
 const app = createApp(App)
 app.use(pinia)
 app.use(router)
-app.use(ElementPlus, { locale: zhCn, size: 'small', })
+// app.use(ElementPlus, { locale: zhCn, size: 'small', })
 app
   .component('bl-tag', BLTag)
   .component('bl-row', BLRow)

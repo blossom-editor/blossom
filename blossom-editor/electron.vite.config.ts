@@ -3,6 +3,11 @@ import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer'
 
+// 为 Element Plus 按需引入样式。
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()]
@@ -16,6 +21,13 @@ export default defineConfig({
       visualizer({
         emitFile: false,
         filename: "stats.html",
+      }),
+      // ElementPlus 按需引入的插件
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
       })
     ],
     resolve: {
