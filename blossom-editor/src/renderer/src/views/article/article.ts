@@ -2,13 +2,7 @@
 import { EditorView } from "codemirror"
 import { EditorSelection, SelectionRange } from "@codemirror/state"
 
-// marked
-import { marked } from 'marked'
-import { markedHighlight } from "marked-highlight"
-import hljs from 'highlight.js'
 
-// import 'highlight.js/styles/atom-one-light.css';
-// import 'highlight.js/styles/base16/darcula.css';
 
 /**
  * 
@@ -295,38 +289,4 @@ export const commandBlockImg = (editor: EditorView) => {
 export const commandBlockLink = (editor: EditorView) => {
   insertBlockCommand(editor, `\n[]()\n`)
 }
-//#endregion
-
-//#region ----------------------------------------< marked >--------------------------------------
-marked.use({
-  async: true,
-  pedantic: false,
-  gfm: true,
-  mangle: false,
-  headerIds: false
-})
-
-// 高亮拓展
-marked.use(markedHighlight({
-  langPrefix: 'hljs language-',
-  highlight(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'shell';
-    return hljs.highlight(code, { language }).value;
-  }
-}))
-
-/*
-1. tokenizer
-2. walkTokens
-3. renderer
-*/
-// Override function
-// const walkTokens = (token) => {
-//   if (token.type === 'heading') {
-//     token.depth += 1;
-//   }
-// };
-
-// marked.use({ walkTokens });
-
 //#endregion

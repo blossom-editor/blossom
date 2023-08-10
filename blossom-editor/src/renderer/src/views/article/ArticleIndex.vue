@@ -224,7 +224,7 @@ import { markdown as cmmd } from '@codemirror/lang-markdown'
 import { languages } from "@codemirror/language-data"
 
 // marked
-import { marked } from 'marked'
+import marked, { renderBlockquote, renderCode, renderHeading, renderImage, renderTable } from './markedjs'
 
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
@@ -655,24 +655,21 @@ let isDebounce: boolean = false
  * 自定义解析
  */
 const renderer = {
-  /**
-   * 标题解析为 TOC 集合, 增加锚点跳转
-   * @param text  标题内容
-   * @param level 标题级别
-   */
   heading(text: any, level: number) {
     const realLevel = level
     if (parseTocAndReferences) {
-      articleToc.value.push({
-        level: realLevel,
-        clazz: 'toc-' + realLevel,
-        index: articleToc.value.length,
-        content: text
-      })
+      articleToc.value.push({ level: realLevel, clazz: 'toc-' + realLevel, index: articleToc.value.length, content: text })
     }
-    return `<h${realLevel} id="${realLevel}-${text}">
-              ${text}
-            </h${realLevel}>`;
+    return renderHeading(text, level)
+  },
+  table(header: string, body: string) { return renderTable(header, body) },
+  blockquote(quote: string) { return renderBlockquote(quote) },
+  code(code: string, language: string | undefined, _isEscaped: boolean) { return renderCode(code, language, _isEscaped) },
+  image(href: string | null, _title: string | null, text: string) {
+    if (parseTocAndReferences) {
+      articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
+    }
+    return renderImage(href, _title, text)
   },
   /**
    * a 标签
@@ -682,12 +679,7 @@ const renderer = {
    */
   link(href: string | null, title: string | null, text: string) {
     let aTag: string
-    let linkReference: ArticleReference = {
-      targetId: 0,
-      targetName: text,
-      targetUrl: href as string,
-      type: 21
-    }
+    let linkReference: ArticleReference = { targetId: 0, targetName: text, targetUrl: href as string, type: 21 }
     // 没有标题, 普通链接
     if (isBlank(title)) {
       aTag = `<a target="_blank" href=${href} target="_blank">${text}</a>`
@@ -718,133 +710,6 @@ const renderer = {
       articleLink.value.push(linkReference)
     }
     return aTag
-  },
-  /**
-   * 表格 header/body
-   */
-  table(header: string, body: string) {
-    let arr = header.match(/(?<=\$\$).*?(?=\$\$)/)
-    let isContainer: boolean = arr != null && arr[0] === 'container'
-    if (isContainer) {
-      return `<table class="bl-table-container"><thead>${header}</thead><tbody>${body}</tbody></table>`
-    }
-    return `<table><thead>${header}</thead><tbody>${body}</tbody></table>`
-  },
-  /**
-   * 引用拓展, 为引用指定颜色
-   * @param quote 引用内部文字的内容
-   */
-  blockquote(quote: string) {
-    let finalQuote = quote
-    let clazz = 'bl-blockquote-'
-    let colors = ['green', 'yellow', 'red', 'blue', 'purple', 'black']
-    for (let i = 0; i < colors.length; i++) {
-      let color = colors[i]
-      let target = '<p>$$' + color + '$$'
-      if (quote.startsWith(target)) {
-        clazz = 'bl-blockquote-' + color
-        finalQuote = quote.replaceAll(target, '<p>')
-        break
-      }
-    }
-    return `<blockquote class="${clazz}">${finalQuote}</blockquote>`
-  },
-  /**
-   * 自定义代码块内容解析:
-   * 1. bilibili
-   * 格式为: ```bilibili$$bvid$$w100$$h100
-   * 
-   * 官方使用文档: https://player.bilibili.com/
-   * 
-   * @param code      解析后的 HTML 代码
-   * @param language  语言
-   * @param isEscaped 
-   */
-  code(code: string, language: string | undefined, _isEscaped: boolean) {
-    if (language == undefined) {
-      language = 'text'
-    }
-
-    if (language.startsWith('bilibili')) {
-      let bvid = ''
-      let width = '100%'
-      let height = '300px'
-      let tags: string[] = language.split('$$')
-      if (tags.length > 1) {
-        if (tags.length >= 2) {
-          bvid = tags[1]
-        }
-        if (tags.length >= 3) {
-          for (let i = 2; i < tags.length; i++) {
-            let tag = tags[i]
-            if (tag.startsWith('w')) {
-              width = tags[i].substring(1)
-              if (!width.endsWith('%')) {
-                width += 'px'
-              }
-            }
-            if (tag.startsWith('h')) {
-              height = tags[i].substring(1)
-              if (!height.endsWith('%')) {
-                width += 'px'
-              }
-            }
-          }
-        }
-      }
-
-      if (isBlank(bvid)) {
-        return `<div style="width:100%;padding:40px;background-color:#000000;color:#ffffff;">未获取到BVID，请检查你的配置</div>`
-      }
-
-      return `<iframe width="${width}" height="${height}" style="margin: 10px 0"
-      scrolling="no" border="0" frameborder="no" framespacing="0"
-      src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
-    }
-    return `<pre><code class="hljs language-${language}">${code}</code></pre>`
-  },
-  /**
-   * 拓展图片设置
-   * ![照片A$$shadow$$w100]()
-   * 上面格式解析为
-   *  - 图片名称为 照片A
-   *  - 图片包含阴影
-   *  - 图片宽度为100px
-   * 
-   * @param href   图片路径
-   * @param _title null
-   * @param text   图片的名称
-   */
-  image(href: string | null, _title: string | null, text: string) {
-    if (parseTocAndReferences) {
-      articleImg.value.push({
-        targetId: 0,
-        targetName: text,
-        targetUrl: href as string,
-        type: 10
-      })
-    }
-    let width = 'auto';
-    let style = ''
-    let tags: string[] = text.split('$$')
-    if (tags.length > 1) {
-      for (let i = 0; i < tags.length; i++) {
-        let tag = tags[i]
-        if (tag === 'shadow') {
-          style += 'box-shadow: var(--bl-preview-img-box-shadow);'
-        }
-        if (tag.startsWith('w')) {
-          width = tags[i].substring(1)
-          if (!width.endsWith('%')) {
-            width += 'px'
-            style += `min-width:${width};max-width:${width};`
-          }
-        }
-      }
-    }
-    return `<p>
-      <img width="${width}" style="${style}" src="${href}" alt="${text}">
-      </p>`
   }
 };
 
