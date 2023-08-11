@@ -96,7 +96,46 @@ export const cwTheme: any = {
 }
 
 export class CmWrapper {
-
+  // codemirror 的原生方法
+  /**
+   * 获取指定范围的内容
+   * @param editor 
+   * @param from 开始位置
+   * @param to 结束位置
+   * @returns 范围内的内容
+   */
+  static sliceDoc = (editor: EditorView, from?: number, to?: number): string => {
+    return editor.state.sliceDoc(from, to)
+  }
+  /**
+   * 在指定位置(istFrom -> istTo)插入 content, 或将内容替换为 content, 随后选中 (selectFrom -> selectTo)
+   * istFrom 与 istTo 相同即为插入，不同即为替换
+   * 如果要将光标移动到某处, selectFrom 与 selectTo 相同即可
+   * 
+   * @param istFrom 插入的开始位置
+   * @param istTo 插入的结束位置
+   * @param content 插入的内容
+   * @param selectFrom 
+   * @param selectTo 
+   */
+  static insert = (editor: EditorView, istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => {
+    let changeByRange = {
+      /* 创建变更的内容, 可以是个数组, 说明同时修改多个部分 */
+      changes: [
+        { from: istFrom, to: istTo, insert: content }
+      ],
+      /* 修改之后光标移动到的位置 */
+      range: EditorSelection.range(selectFrom, selectTo)
+    }
+    editor.dispatch(
+      /**
+       * @param _range 当前选中的位置
+       */
+      editor.state.changeByRange((_range: SelectionRange) => {
+        return changeByRange
+      })
+    )
+  }
   /**
    * 行内格式的替换命令, 用于前后缀相同的格式, 如 `**` / `~~` 等
    * 
@@ -105,15 +144,15 @@ export class CmWrapper {
    * @param target 添加的前后缀字符, 如加粗是 **, 行内代码块是 `
    */
   static replaceInlineCommand = (editor: EditorView, range: SelectionRange, target: string): any => {
-    let targetLength = target.length
+    let len = target.length
 
-    const prefixFrom: number = range.from - targetLength
+    const prefixFrom: number = range.from - len
     const prefixTo: number = range.from
-    const prefix = editor.state.sliceDoc(prefixFrom, prefixTo)
+    const prefix = this.sliceDoc(editor, prefixFrom, prefixTo)
 
     const suffixFrom: number = range.to
-    const suffixTo: number = range.to + targetLength
-    const suffix = editor.state.sliceDoc(suffixFrom, suffixTo)
+    const suffixTo: number = range.to + len
+    const suffix = this.sliceDoc(editor, suffixFrom, suffixTo)
     // 判断是取消还是添加, 如果被选中的文本前后已经是 target 字符, 则删除前后字符
     if (prefix == target && suffix == target) {
       return {
@@ -121,7 +160,7 @@ export class CmWrapper {
           { from: prefixFrom, to: prefixTo, insert: "" },
           { from: suffixFrom, to: suffixTo, insert: "" }
         ],
-        range: EditorSelection.range(prefixFrom, suffixFrom - targetLength)
+        range: EditorSelection.range(prefixFrom, suffixFrom - len)
       }
     } else {
       return {
@@ -129,7 +168,7 @@ export class CmWrapper {
           { from: range.from, insert: target },
           { from: range.to, insert: target }
         ],
-        range: EditorSelection.range(range.from + targetLength, range.to + targetLength)
+        range: EditorSelection.range(range.from + len, range.to + len)
       }
     }
   }
@@ -143,16 +182,16 @@ export class CmWrapper {
    * @returns 
    */
   static replaceDifInlineCommand = (editor: EditorView, range: SelectionRange, prefixTarget: string, suffixTarget: string): any => {
-    let prefixLength = prefixTarget.length
-    let suffixLength = suffixTarget.length
+    let prefixLen = prefixTarget.length
+    let suffixLen = suffixTarget.length
 
-    const prefixFrom: number = range.from - prefixLength
+    const prefixFrom: number = range.from - prefixLen
     const prefixTo: number = range.from
-    const prefix = editor.state.sliceDoc(prefixFrom, prefixTo)
+    const prefix = this.sliceDoc(editor, prefixFrom, prefixTo)
 
     const suffixFrom: number = range.to
-    const suffixTo: number = range.to + suffixLength
-    const suffix = editor.state.sliceDoc(suffixFrom, suffixTo)
+    const suffixTo: number = range.to + suffixLen
+    const suffix = this.sliceDoc(editor, suffixFrom, suffixTo)
 
     console.log(prefix, suffix);
 
@@ -164,7 +203,7 @@ export class CmWrapper {
           { from: prefixFrom, to: prefixTo, insert: "" },
           { from: suffixFrom, to: suffixTo, insert: "" }
         ],
-        range: EditorSelection.range(prefixFrom, range.to - prefixLength)
+        range: EditorSelection.range(prefixFrom, range.to - prefixLen)
       }
     } else {
       return {
@@ -172,7 +211,7 @@ export class CmWrapper {
           { from: range.from, insert: prefixTarget },
           { from: range.to, insert: suffixTarget }
         ],
-        range: EditorSelection.range(range.from + prefixLength, range.to + prefixLength)
+        range: EditorSelection.range(range.from + prefixLen, range.to + prefixLen)
       }
     }
   }
@@ -327,13 +366,29 @@ export class CmWrapper {
             continue;
           }
           if (i != 0) {
-            text += '\n';
+            text += '\n'
           }
-          text += rangeText;
+          text += rangeText
         }
       }
     }
     return text
+  }
+  /**
+   * 获取文档内容
+   * @param editor 
+   * @returns 内容
+   */
+  static getDocString = (editor: EditorView): string => {
+    return editor.state.doc.toString()
+  }
+  /**
+   * 获取文档长度
+   * @param editor 
+   * @returns 长度
+   */
+  static getDocLength = (editor: EditorView): number => {
+    return editor.state.doc.length
   }
 }
 

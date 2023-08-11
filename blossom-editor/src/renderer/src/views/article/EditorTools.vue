@@ -54,7 +54,7 @@
             <div class="info-title">编辑器工具栏</div>
           </bl-row>
           <bl-row align="flex-start">
-            <bl-col width="190px">
+            <bl-col width="230px">
               <bl-row>
                 <div class="iconbl bl-a-texteditorsave-line"></div>
                 <div class="label">保存内容</div>
@@ -79,6 +79,11 @@
                 <div class="iconbl bl-expansion-line"></div>
                 <div class="label">全屏编辑</div>
                 <div class="keyboard">Alt + 4</div>
+              </bl-row>
+              <bl-row>
+                <div class="iconbl bl-transcript-fill"></div>
+                <div class="label">格式化</div>
+                <div class="keyboard">Shift + Alt + F</div>
               </bl-row>
             </bl-col>
             <bl-col width="230px">

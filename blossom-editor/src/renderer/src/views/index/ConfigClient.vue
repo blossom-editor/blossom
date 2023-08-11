@@ -6,6 +6,9 @@
           <div class="iconbl bl-a-texteditorhighlightcolor-line" style="font-size: 20px;"></div>
         </template>
       </el-input>
+      <div style="color: var(--bl-text-color-light);">
+        中英文等宽字体在 Markdown 表格中会有更好的样式表现，如：Sarasa Fixed CL
+      </div>
     </el-form-item>
   </el-form>
 </template>

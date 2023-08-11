@@ -1,8 +1,7 @@
+import { isBlank } from '@renderer/assets/utils/obj'
 import { marked } from 'marked'
 import { markedHighlight } from "marked-highlight"
 import hljs from 'highlight.js'
-import { isBlank } from '@renderer/assets/utils/obj'
-import { ArticleReference } from './article'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 

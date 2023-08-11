@@ -45,7 +45,6 @@ const toScroll = (level: number, content: string) => {
   (elm.parentNode as Element).scrollTop = elm.offsetTop
 }
 
-
 const initPreview = (articleId: string) => {
   articleInfoApi({ id: articleId, showToc: true, showMarkdown: false, showHtml: true }).then(resp => {
     article.value = resp.data

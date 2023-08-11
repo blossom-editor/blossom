@@ -94,7 +94,6 @@
     <div class="editor-container" :style="{ width: docEditorStyle.editor }" v-loading="editorLoading"
       element-loading-spinner="1" element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
-        <!-- prettier-ignore -->
         <EditorTools @save="saveCurArticleContent()" @preview-full-screen="alt_3()" @editor-full-screen="alt_4()"
           @bold="CmWrapper.commandInlineBold(getEditor())" @italic="CmWrapper.commandInlineItalic(getEditor())"
           @strike="CmWrapper.commandInlineStrike(getEditor())" @sub="CmWrapper.commandInlineSub(getEditor())"
@@ -174,9 +173,6 @@
           <div class="menu-item" @click="openExtenal('https://www.emojiall.com/zh-hans')">
             <span style="margin-right: 4px;padding: 2px 0;">😉</span>Emoji网站
           </div>
-          <div class="menu-item" @click="openExtenal('https://www.xuhuhu.com/markdown-formatter.html')">
-            <span class="iconbl bl-transcript-fill"></span>在线格式化工具
-          </div>
         </div>
       </div>
     </Teleport>
@@ -224,6 +220,8 @@ import marked, { renderBlockquote, renderCode, renderHeading, renderImage, rende
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
 import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
+import * as prettier from "prettier/standalone"
+import pluginMarkdown from "prettier/plugins/markdown"
 
 onMounted(() => {
   initEditor()
@@ -580,6 +578,8 @@ const createEditorState = (doc?: string): EditorState => {
         { key: 'Ctrl-Alt-b', run(view: EditorView) { CmWrapper.commandInlineSub(view); return true } },
         { key: 'Ctrl-Alt-e', run(view: EditorView) { CmWrapper.commandBlockPre(view); return true } },
         { key: 'Ctrl-Alt-s', run(view: EditorView) { CmWrapper.commandBlockSeparator(view); return true } },
+        { key: 'Shift-Alt-f', run(_view: EditorView) { formatMarkdown(); return true } },
+        // 
       ]),
       EditorView.updateListener.of((viewUpd: ViewUpdate) => {
         if (viewUpd.docChanged) debounce(parse, 300)
@@ -599,10 +599,8 @@ const getEditor = (): EditorView => {
   if (editor.value === undefined) {
     throw new Error("editor:EditorView 未初始化")
   }
-  editor.value.setState
   return editor.value
 }
-
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
  * @param md markdown
@@ -610,6 +608,14 @@ const getEditor = (): EditorView => {
 const setDoc = (md: string): void => {
   getEditor().setState(createEditorState(md))
   parse()
+}
+/**
+ * 格式化内容
+ */
+const formatMarkdown = async () => {
+  let formatContent = await prettier.format(CmWrapper.getDocString(getEditor()), { semi: false, parser: "markdown", plugins: [pluginMarkdown] })
+  let maxLen = CmWrapper.getDocLength(getEditor())
+  CmWrapper.insert(getEditor(), 0, maxLen, formatContent, 0, 0);
 }
 
 //#endregion
@@ -692,7 +698,7 @@ const parse = () => {
   renderInterval.value = Date.now()
   articleIsChange = true
   isDebounce = true
-  let mdContent = getEditor().state.doc.toString();
+  let mdContent = CmWrapper.getDocString(getEditor())
   clearTocAndImg()
   parseTocAndReferences = true
   //@ts-ignore
@@ -925,4 +931,4 @@ const removeListenerShortcutMap = () => {
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;
 }
-</style>./codemirror6
+</style>
