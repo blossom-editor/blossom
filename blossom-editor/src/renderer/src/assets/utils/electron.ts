@@ -67,6 +67,12 @@ export const readImageToJPEG = (): string => { return window.electronAPI.readIma
 export const writeText = (text: string): void => { window.electronAPI.writeText(text, 'clipboard') }
 
 /**
+ * 从剪切板读取文本
+ * @returns text 文本内容
+ */
+export const readText = (): string => { return window.electronAPI.readText() }
+
+/**
  * 下载
  * @param url 文件路径
  */

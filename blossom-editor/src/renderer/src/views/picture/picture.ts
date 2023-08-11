@@ -1,6 +1,28 @@
 import type { UploadProps } from 'element-plus'
 import Notify from '@renderer/components/Notify'
 
+/**
+ * Picture Object
+ */
+export interface Picture {
+  creTime: string,
+  id: string | number,
+  name: string,
+  pathName: string,
+  pid: string | number,
+  size: number,
+  sourceName: string,
+  starStatus: number,
+  url: string,
+  articleNames: string,
+  delTime: number
+}
+
+/**
+ * 
+ * @param rawFile 
+ * @returns 
+ */
 export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.size / 1024 / 1024 > 10) {
     Notify.error('文件大小不能超过 10MB!', '上传失败')
@@ -9,6 +31,11 @@ export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   return true
 }
 
+/**
+ * 
+ * @param resp 
+ * @param _file 
+ */
 export const onUploadSeccess: UploadProps['onSuccess'] = (resp, _file?) => {
   handleUploadSeccess(resp)
 }
@@ -28,10 +55,20 @@ export const handleUploadSeccess = (resp: any): boolean => {
   }
 }
 
+/**
+ * 
+ * @param error 
+ * @param _file 
+ * @param _files 
+ */
 export const onError: UploadProps['onError'] = (error, _file, _files) => {
   handleUploadError(error)
 }
 
+/**
+ * 
+ * @param error 
+ */
 export const handleUploadError = (error: Error) => {
   if (error.message != undefined) {
     try {

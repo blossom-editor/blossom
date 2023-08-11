@@ -186,6 +186,7 @@ import { formatFileSize } from '@renderer/assets/utils/util'
 import { writeText, download } from '@renderer/assets/utils/electron'
 
 // component
+import { Picture } from './picture'
 import PictureTitle from '@renderer/views/picture/PictureTreeTitle.vue'
 import Workbench from "@renderer/views/picture/PictureTreeWorkbench.vue"
 import PictureUpload from "./PictureUpload.vue"
