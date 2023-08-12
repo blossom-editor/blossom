@@ -2,7 +2,7 @@
   <div class="index-picture-root">
 
     <!-- folder menu -->
-    <div class="doc-container" v-loading="docTreeLoading" element-loading-text="加载文件夹">
+    <div class="doc-container" v-loading="docTreeLoading" element-loading-text="正在读取文档...">
       <!-- 文件夹操作 -->
       <div class="doc-workbench">
         <Workbench @refresh-doc-tree="getDocTree"></Workbench>
@@ -66,7 +66,6 @@
                     </div>
                   </el-sub-menu>
                 </div>
-
               </el-sub-menu>
             </div>
           </el-sub-menu>
