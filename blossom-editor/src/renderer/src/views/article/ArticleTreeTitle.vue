@@ -147,7 +147,6 @@ onBeforeUnmount(() => {
 })
 
 const closeMenuShow = () => {
-  // console.log('由监听关闭菜单', props.trees.n);
   rMenu.value.show = false
   document.body.removeEventListener('click', closeMenuShow)
   document.body.removeEventListener('contextmenu', closeMenuShow)
@@ -168,13 +167,11 @@ const handleClickRight = (event: MouseEvent) => {
 }
 
 /**
- * 打开新页面
+ * 打开新页面, 文件夹(props.trees.ty == 1)无法使用新页面打开
  */
 const openArticleWindow = () => {
-  // 文件夹无法使用新页面打开
-  if (props.trees.ty === 1) {
+  if (props.trees.ty === 1)
     return
-  }
   openNewArticleWindow(props.trees.n, props.trees.i);
 }
 
@@ -259,7 +256,7 @@ $icon-size: 17px;
 
 .menu-icon {
   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  margin-right: 5px;
+  margin-right: 9px;
 }
 
 .doc-title {

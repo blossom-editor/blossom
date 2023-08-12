@@ -1,5 +1,14 @@
-import { EditorView } from "codemirror"
+import { EditorState } from "@codemirror/state"
+import { EditorView, basicSetup } from "codemirror"
+import { ViewUpdate, keymap, BlockInfo } from "@codemirror/view"
+import { insertTab, indentLess } from "@codemirror/commands"
+import { markdown as cmmd } from '@codemirror/lang-markdown'
+import { languages } from "@codemirror/language-data"
 import { EditorSelection, SelectionRange } from "@codemirror/state"
+
+import * as prettier from "prettier/standalone"
+import pluginMarkdown from "prettier/plugins/markdown"
+
 import { isBlank } from "@renderer/assets/utils/obj"
 
 /**
@@ -95,8 +104,82 @@ export const cwTheme: any = {
   }
 }
 
+/**
+ * Codemirror 封装
+ */
 export class CmWrapper {
-  // codemirror 的原生方法
+
+  /**
+   * editor
+   */
+  private _editor: EditorView
+
+  constructor(editor: EditorView) {
+    this._editor = editor
+  }
+
+  /**
+   * 创建 EditorState
+   * 
+   * @param updateCallback 编辑器内容变动时的回调
+   * @param saveCallback 保存内容时的回调
+   * @param doc 初始化的内容
+   * @returns 
+   */
+  static newState = (updateCallback: any, saveCallback: any, doc?: string): EditorState => {
+    return EditorState.create({
+      doc: doc,
+      extensions: [
+        basicSetup,
+        cmmd({ codeLanguages: languages }),
+        EditorView.theme(cwTheme),
+        keymap.of([
+          { key: 'Tab', run: insertTab, },
+          { key: 'Shift-Tab', run: indentLess },
+          { key: 'Ctrl-s', run(_view: EditorView) { saveCallback(); return true } },
+          { key: 'Alt-b', run(view: EditorView) { CmWrapper.commandBold(view); return true } },
+          { key: 'Alt-i', run(view: EditorView) { CmWrapper.commandItalic(view); return true } },
+          { key: 'Alt-s', run(view: EditorView) { CmWrapper.commandStrike(view); return true } },
+          { key: 'Alt-t', run(view: EditorView) { CmWrapper.commandTable(view); return true } },
+          { key: 'Alt-e', run(view: EditorView) { CmWrapper.commandCode(view); return true } },
+          { key: 'Alt-m', run(view: EditorView) { CmWrapper.commandImg(view); return true } },
+          { key: 'Alt-k', run(view: EditorView) { CmWrapper.commandLink(view); return true } },
+          { key: 'Ctrl-Alt-c', run(view: EditorView) { CmWrapper.commandCheckBox(view); return true } },
+          { key: 'Ctrl-Alt-p', run(view: EditorView) { CmWrapper.commandSup(view); return true } },
+          { key: 'Ctrl-Alt-b', run(view: EditorView) { CmWrapper.commandSub(view); return true } },
+          { key: 'Ctrl-Alt-e', run(view: EditorView) { CmWrapper.commandPre(view); return true } },
+          { key: 'Ctrl-Alt-s', run(view: EditorView) { CmWrapper.commandSeparator(view); return true } },
+          { key: 'Shift-Alt-f', run(view: EditorView) { CmWrapper.commandFormatMarkdown(view); return true } },
+        ]),
+        EditorView.updateListener.of((viewUpd: ViewUpdate) => {
+          if (viewUpd.docChanged) {
+            updateCallback()
+          }
+        })
+      ]
+    })
+  }
+  /**
+   * 
+   * @param state 
+   * @param parent 
+   * @returns 
+   */
+  static newEditor = (state: EditorState, parent: Element | DocumentFragment): EditorView => {
+    return new EditorView({
+      state: state,
+      parent: parent
+    })
+  }
+  /**
+   * 设置变成
+   * @param state 
+   */
+  setState = (state: EditorState) => {
+    this._editor.setState(state)
+  }
+
+  //#region ============================================================ codemirror 方法封装 ============================================================
   /**
    * 获取指定范围的内容
    * @param editor 
@@ -106,6 +189,55 @@ export class CmWrapper {
    */
   static sliceDoc = (editor: EditorView, from?: number, to?: number): string => {
     return editor.state.sliceDoc(from, to)
+  }
+  /**
+   * 获取文档内容
+   * @param editor 
+   * @returns 内容
+   */
+  static getDocString = (editor: EditorView): string => {
+    return editor.state.doc.toString()
+  }
+  /**
+   * 获取文档长度
+   * @param editor 
+   * @returns 长度
+   */
+  static getDocLength = (editor: EditorView): number => {
+    return editor.state.doc.length
+  }
+  /**
+   * 获取当前选中内容, 并返回选中的文本内容, 可以选中多个不同的段落, 多个段落之间会以 \n 换行
+   * @param editor 
+   * @returns 文本内容, 多个选中之间会换行
+   */
+  static getSelectionRangesText = (editor: EditorView): string => {
+    let ranges = editor.state.selection.ranges
+    let text = ''
+    if (ranges.length > 0) {
+      for (let i = 0; i < ranges.length; i++) {
+        let range = ranges[i]
+        if (range != undefined) {
+          let rangeText = editor.state.sliceDoc(range.from, range.to)
+          if (isBlank(rangeText)) {
+            continue;
+          }
+          if (i != 0) {
+            text += '\n'
+          }
+          text += rangeText
+        }
+      }
+    }
+    return text
+  }
+  /**
+   * 获取选中的内容
+   * @param editor 
+   * @returns 存在多个选中所以返回数组
+   */
+  static getSlelctionRangesArr = (editor: EditorView): readonly SelectionRange[] => {
+    return editor.state.selection.ranges
   }
   /**
    * 在指定位置(istFrom -> istTo)插入 content, 或将内容替换为 content, 随后选中 (selectFrom -> selectTo)
@@ -136,6 +268,14 @@ export class CmWrapper {
       })
     )
   }
+  sliceDoc = (from?: number, to?: number): string => { return this._editor.state.sliceDoc(from, to) }
+  getDocString = (): string => { return CmWrapper.getDocString(this._editor) }
+  getSelectionRangesText = (): string => { return CmWrapper.getSelectionRangesText(this._editor) }
+  getSlelctionRangesArr = (): readonly SelectionRange[] => { return CmWrapper.getSlelctionRangesArr(this._editor) }
+  getDocumentTop = (): number => { return this._editor.documentTop }
+  getElementAtHeight = (height: number): BlockInfo => { return this._editor.elementAtHeight(height) }
+  //#endregion
+  //#region ============================================================ 自定义命令 ============================================================
   /**
    * 行内格式的替换命令, 用于前后缀相同的格式, 如 `**` / `~~` 等
    * 
@@ -223,173 +363,79 @@ export class CmWrapper {
   static insertBlockCommand = (editor: EditorView, content: string) => {
     editor.dispatch(editor.state.replaceSelection(content))
   }
-  /**
-   * 选中内容加粗
-   */
-  static commandInlineBold = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '**')))
+  /** 选中内容加粗 */
+  private static commandBold = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '**'))) }
+  /** 选中内容斜体 */
+  private static commandItalic = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '*'))) }
+  /** 选中内容增加删除线 */
+  private static commandStrike = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '~~'))) }
+  /** 选择内容设置为行内代码块 */
+  private static commandCode = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '`'))) }
+  /** 选择内容设置为上标 */
+  private static commandSup = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sup>', '</sup>'))) }
+  /** 选择内容设置为下标 */
+  private static commandSub = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sub>', '</sub>'))) }
+  /** 在当前位置增加表格 */
+  private static commandTable = (editor: EditorView) => { this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`) }
+  /** 在当前位置增加多行代码块 */
+  private static commandPre = (editor: EditorView) => { this.insertBlockCommand(editor, `\n\`\`\`java\n\n\`\`\`\n`) }
+  /** 在当前位置增加单选框 */
+  private static commandCheckBox = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- [ ] \n`) }
+  /** 在当前位置增加分割线 */
+  private static commandSeparator = (editor: EditorView) => { this.insertBlockCommand(editor, `\n---\n`) }
+  /** 在当前位置增加引用 */
+  private static commandQuote = (editor: EditorView) => { this.insertBlockCommand(editor, `\n>\n>\n`) }
+  /** 在当前位置增加引用 black */
+  private static commandQuoteBlack = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$black$$\n> ⚫\n`) }
+  /** 在当前位置增加引用 green */
+  private static commandQuoteGreen = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$green$$\n> 🟢\n`) }
+  /** 在当前位置增加引用 yellow */
+  private static commandQuoteYellow = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$yellow$$\n> 🟡\n`) }
+  /** 在当前位置增加引用 red */
+  private static commandQuoteRed = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$red$$\n> 🔴\n`) }
+  /** 在当前位置增加引用 blue */
+  private static commandQuoteBlue = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$blue$$\n> 🔵\n`) }
+  /** 在当前位置增加引用 */
+  private static commandQuotePurple = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$purple$$\n> 🟣\n`) }
+  /** 在当前位置增加无序列表 */
+  private static commandUnordered = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- \n`) }
+  /** 在当前位置增加有序列表 */
+  private static commandOrdered = (editor: EditorView) => { this.insertBlockCommand(editor, `\n1. \n`) }
+  /** 在当前位置增加图片 */
+  private static commandImg = (editor: EditorView) => { this.insertBlockCommand(editor, `\n![]()\n`) }
+  /** 在当前位置增加链接 */
+  private static commandLink = (editor: EditorView) => { this.insertBlockCommand(editor, `\n[]()\n`) }
+  /** 格式化内容, 使用 prettier */
+  private static commandFormatMarkdown = async (editor: EditorView) => {
+    let formatContent = await prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: "markdown", plugins: [pluginMarkdown] })
+    let maxLen = CmWrapper.getDocLength(editor)
+    CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0);
   }
-  /**
-   * 选中内容斜体
-   */
-  static commandInlineItalic = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '*')))
-  }
-  /**
-   * 选中内容增加删除线
-   */
-  static commandInlineStrike = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '~~')))
-  }
-  /**
-   * 选择内容设置为行内代码块
-   */
-  static commandInlineCode = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '`')))
-  }
-  /**
-   * 选择内容设置为上标
-   */
-  static commandInlineSup = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sup>', '</sup>')))
-  }
-  /**
-   * 选择内容设置为下标
-   */
-  static commandInlineSub = (editor: EditorView) => {
-    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sub>', '</sub>')))
-  }
-  /**
-   * 在当前位置增加表格
-   */
-  static commandBlockTable = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
-  }
-  /**
-   * 在当前位置增加多行代码块
-   */
-  static commandBlockPre = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n\`\`\`java\n\n\`\`\`\n`)
-  }
-  /**
-   * 在当前位置增加单选框
-   */
-  static commandBlockCheckBox = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n- [ ] \n`)
-  }
-  /**
-   * 在当前位置增加分割线 
-   */
-  static commandBlockSeparator = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n---\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquote = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n>\n>\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquoteBlack = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$black$$\n> ⚫\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquoteGreen = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$green$$\n> 🟢\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquoteYellow = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$yellow$$\n> 🟡\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquoteRed = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$red$$\n> 🔴\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquoteBlue = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$blue$$\n> 🔵\n`)
-  }
-  /**
-   * 在当前位置增加引用
-   */
-  static commandBlockquotePurple = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> $$purple$$\n> 🟣\n`)
-  }
-  /**
-   * 在当前位置增加无序列表
-   */
-  static commandBlockUnordered = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n- \n`)
-  }
-  /**
-   * 在当前位置增加有序列表
-   */
-  static commandBlockOrdered = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n1. \n`)
-  }
-  /**
-   * 在当前位置增加图片
-   */
-  static commandBlockImg = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n![]()\n`)
-  }
-  /**
-   * 在当前位置增加链接
-   */
-  static commandBlockLink = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n[]()\n`)
-  }
-  /**
-   * 获取当前选中内容, 并返回选中的文本内容, 可以选中多个不同的段落, 多个段落之间会以 \n 换行
-   * @param editor 
-   * @returns 文本内容, 多个选中之间会换行
-   */
-  static getSelectionRangesText = (editor: EditorView): string => {
-    let ranges = editor.state.selection.ranges;
-    let text = ''
-    if (ranges.length > 0) {
-      for (let i = 0; i < ranges.length; i++) {
-        let range = ranges[i]
-        if (range != undefined) {
-          let rangeText = editor.state.sliceDoc(range.from, range.to)
-          if (isBlank(rangeText)) {
-            continue;
-          }
-          if (i != 0) {
-            text += '\n'
-          }
-          text += rangeText
-        }
-      }
-    }
-    return text
-  }
-  /**
-   * 获取文档内容
-   * @param editor 
-   * @returns 内容
-   */
-  static getDocString = (editor: EditorView): string => {
-    return editor.state.doc.toString()
-  }
-  /**
-   * 获取文档长度
-   * @param editor 
-   * @returns 长度
-   */
-  static getDocLength = (editor: EditorView): number => {
-    return editor.state.doc.length
-  }
+  // 实例调用
+  insertBlockCommand = (content: string) => { CmWrapper.insertBlockCommand(this._editor, content) }
+  commandBold = () => { CmWrapper.commandBold(this._editor) }
+  commandItalic = () => { CmWrapper.commandItalic(this._editor) }
+  commandStrike = () => { CmWrapper.commandStrike(this._editor) }
+  commandCode = () => { CmWrapper.commandCode(this._editor) }
+  commandSup = () => { CmWrapper.commandSup(this._editor) }
+  commandSub = () => { CmWrapper.commandSub(this._editor) }
+  commandTable = () => { CmWrapper.commandTable(this._editor) }
+  commandPre = () => { CmWrapper.commandPre(this._editor) }
+  commandCheckBox = () => { CmWrapper.commandCheckBox(this._editor) }
+  commandSeparator = () => { CmWrapper.commandSeparator(this._editor) }
+  commandQuote = () => { CmWrapper.commandQuote(this._editor) }
+  commandQuoteBlack = () => { CmWrapper.commandQuoteBlack(this._editor) }
+  commandQuoteGreen = () => { CmWrapper.commandQuoteGreen(this._editor) }
+  commandQuoteYellow = () => { CmWrapper.commandQuoteYellow(this._editor) }
+  commandQuoteRed = () => { CmWrapper.commandQuoteRed(this._editor) }
+  commandQuoteBlue = () => { CmWrapper.commandQuoteBlue(this._editor) }
+  commandQuotePurple = () => { CmWrapper.commandQuotePurple(this._editor) }
+  commandUnordered = () => { CmWrapper.commandUnordered(this._editor) }
+  commandOrdered = () => { CmWrapper.commandOrdered(this._editor) }
+  commandImg = () => { CmWrapper.commandImg(this._editor) }
+  commandLink = () => { CmWrapper.commandLink(this._editor) }
+  commandFormatMarkdown = async () => { CmWrapper.commandFormatMarkdown(this._editor) }
+  //#endregion
 }
 
 // export default CmWrapper

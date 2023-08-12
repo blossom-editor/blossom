@@ -3,7 +3,7 @@
 
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand" v-loading="docTreeLoading"
-      :default-active="docTreeDefaultActive" element-loading-text="One moment please...">
+      :default-active="docTreeDefaultActive" element-loading-text="正在读取文档...">
       <!-- 文件夹操作 -->
       <div class="doc-workbench">
         <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></ArticleTreeWorkbench>
@@ -95,21 +95,14 @@
       element-loading-spinner="1" element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
         <EditorTools @save="saveCurArticleContent()" @preview-full-screen="alt_3()" @editor-full-screen="alt_4()"
-          @bold="CmWrapper.commandInlineBold(getEditor())" @italic="CmWrapper.commandInlineItalic(getEditor())"
-          @strike="CmWrapper.commandInlineStrike(getEditor())" @sub="CmWrapper.commandInlineSub(getEditor())"
-          @sup="CmWrapper.commandInlineSup(getEditor())" @separator="CmWrapper.commandBlockSeparator(getEditor())"
-          @blockquote="CmWrapper.commandBlockquote(getEditor())"
-          @blockquote-block="CmWrapper.commandBlockquoteBlack(getEditor())"
-          @blockquote-green="CmWrapper.commandBlockquoteGreen(getEditor())"
-          @blockquote-yellow="CmWrapper.commandBlockquoteYellow(getEditor())"
-          @blockquote-red="CmWrapper.commandBlockquoteRed(getEditor())"
-          @blockquote-blue="CmWrapper.commandBlockquoteBlue(getEditor())"
-          @blockquote-purple="CmWrapper.commandBlockquotePurple(getEditor())"
-          @code="CmWrapper.commandInlineCode(getEditor())" @pre="CmWrapper.commandBlockPre(getEditor())"
-          @checkbox="CmWrapper.commandBlockCheckBox(getEditor())"
-          @unordered="CmWrapper.commandBlockUnordered(getEditor())" @ordered="CmWrapper.commandBlockOrdered(getEditor())"
-          @table="CmWrapper.commandBlockTable(getEditor())" @image="CmWrapper.commandBlockImg(getEditor())"
-          @link="CmWrapper.commandBlockLink(getEditor())">
+          @bold="cmw.commandBold()" @italic="cmw.commandItalic()" @strike="cmw.commandStrike()" @sub="cmw.commandSub()"
+          @sup="cmw.commandSup()" @separator="cmw.commandSeparator()" @blockquote="cmw.commandQuote()"
+          @blockquote-block="cmw.commandQuoteBlack()" @blockquote-green="cmw.commandQuoteGreen()"
+          @blockquote-yellow="cmw.commandQuoteYellow()" @blockquote-red="cmw.commandQuoteRed()"
+          @blockquote-blue="cmw.commandQuoteBlue()" @blockquote-purple="cmw.commandQuotePurple()"
+          @code="cmw.commandCode()" @pre="cmw.commandPre()" @checkbox="cmw.commandCheckBox()"
+          @unordered="cmw.commandUnordered()" @ordered="cmw.commandOrdered()" @table="cmw.commandTable()"
+          @image="cmw.commandImg()" @link="cmw.commandLink()">
         </EditorTools>
       </div>
       <div class="editor-preview" @click.right="handleEditorClickRight" :style="{ fontFamily: editorConfig.fontFamily }">
@@ -181,7 +174,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, shallowRef } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated } from "vue"
 import { ArrowDownBold, ArrowRightBold, Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
@@ -208,20 +201,12 @@ import EditorTools from './EditorTools.vue'
 import EditorStatus from "./EditorStatus.vue"
 import Notify from '@renderer/components/Notify'
 // codemirror
-import { CmWrapper, cwTheme } from './codemirror'
-import { EditorState } from "@codemirror/state"
-import { EditorView, basicSetup } from "codemirror"
-import { ViewUpdate, keymap, BlockInfo } from "@codemirror/view"
-import { insertTab, indentLess } from "@codemirror/commands"
-import { markdown as cmmd } from '@codemirror/lang-markdown'
-import { languages } from "@codemirror/language-data"
+import { CmWrapper } from './codemirror'
 // marked
 import marked, { renderBlockquote, renderCode, renderHeading, renderImage, renderTable } from './markedjs'
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
 import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
-import * as prettier from "prettier/standalone"
-import pluginMarkdown from "prettier/plugins/markdown"
 
 onMounted(() => {
   initEditor()
@@ -439,7 +424,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   let data = {
     id: curArticle.value!.id,
     name: curArticle.value!.name,
-    markdown: getEditor().state.doc.toString(),
+    markdown: cmw.getDocString(),
     html: getArticleHtml(),
     toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
@@ -461,7 +446,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
  * 如果 authSaveMs 时间没有保存, 则自动保存.
  */
 const initAutoSaveInterval = () => {
-  console.log('开启自动保存');
+  console.log('开启自动保存')
   autoSaveInterval = setInterval(() => {
     let current = new Date().valueOf()
     if ((current - lastSaveTime) > authSaveMs) {
@@ -473,7 +458,7 @@ const initAutoSaveInterval = () => {
  * 销毁自动保存定时器
  */
 const distoryAutoSaveInterval = () => {
-  console.log('关闭自动保存');
+  console.log('关闭自动保存')
   clearInterval(autoSaveInterval)
 }
 /**
@@ -521,7 +506,7 @@ const curIsArticle = (): boolean => {
  */
 const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
   if (resp.code === '20000') {
-    CmWrapper.insertBlockCommand(getEditor(), `\n![${file.name}](${resp.data})\n`)
+    cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
   } else {
     Notify.error(resp.msg, '上传失败')
   }
@@ -535,7 +520,7 @@ const getDocInfoFromTrees = (articleId: number, trees: DocTree[]): DocTree | und
   let target: DocTree | undefined
   for (let i = 0; i < trees.length; i++) {
     let tree = trees[i]
-    // console.log(articleId, tree.i, tree.i == articleId);
+    // console.log(articleId, tree.i, tree.i == articleId)
     if (tree.i == articleId) {
       target = tree
     } else if (!isEmpty(tree.children)) {
@@ -551,71 +536,22 @@ const getDocInfoFromTrees = (articleId: number, trees: DocTree[]): DocTree | und
 //#endregion
 
 //#region ----------------------------------------< codemirror/editor >----------------------------
-// editor dom
-const EditorRef = ref()
-const editorLoading = ref(false)
-const editor = shallowRef<EditorView>()
-const createEditorState = (doc?: string): EditorState => {
-  return EditorState.create({
-    doc: doc,
-    extensions: [
-      basicSetup,
-      cmmd({ codeLanguages: languages }),
-      EditorView.theme(cwTheme),
-      keymap.of([
-        { key: 'Tab', run: insertTab, },
-        { key: 'Shift-Tab', run: indentLess },
-        { key: 'Ctrl-s', run(_view: EditorView) { saveCurArticleContent(); return true } },
-        { key: 'Alt-b', run(view: EditorView) { CmWrapper.commandInlineBold(view); return true } },
-        { key: 'Alt-i', run(view: EditorView) { CmWrapper.commandInlineItalic(view); return true } },
-        { key: 'Alt-s', run(view: EditorView) { CmWrapper.commandInlineStrike(view); return true } },
-        { key: 'Alt-t', run(view: EditorView) { CmWrapper.commandBlockTable(view); return true } },
-        { key: 'Alt-e', run(view: EditorView) { CmWrapper.commandInlineCode(view); return true } },
-        { key: 'Alt-m', run(view: EditorView) { CmWrapper.commandBlockImg(view); return true } },
-        { key: 'Alt-k', run(view: EditorView) { CmWrapper.commandBlockLink(view); return true } },
-        { key: 'Ctrl-Alt-c', run(view: EditorView) { CmWrapper.commandBlockCheckBox(view); return true } },
-        { key: 'Ctrl-Alt-p', run(view: EditorView) { CmWrapper.commandInlineSup(view); return true } },
-        { key: 'Ctrl-Alt-b', run(view: EditorView) { CmWrapper.commandInlineSub(view); return true } },
-        { key: 'Ctrl-Alt-e', run(view: EditorView) { CmWrapper.commandBlockPre(view); return true } },
-        { key: 'Ctrl-Alt-s', run(view: EditorView) { CmWrapper.commandBlockSeparator(view); return true } },
-        { key: 'Shift-Alt-f', run(_view: EditorView) { formatMarkdown(); return true } },
-        // 
-      ]),
-      EditorView.updateListener.of((viewUpd: ViewUpdate) => {
-        if (viewUpd.docChanged) debounce(parse, 300)
-      })
-    ]
-  })
-}
-/** 初始化编辑器 */
-const initEditor = (doc?: string) => {
-  editor.value = new EditorView({
-    state: createEditorState(doc),
-    parent: EditorRef.value
-  })
-}
-/** 获取编辑器 */
-const getEditor = (): EditorView => {
-  if (editor.value === undefined) {
-    throw new Error("editor:EditorView 未初始化")
-  }
-  return editor.value
+const EditorRef = ref()           // editor dom
+const editorLoading = ref(false)  // eidtor loading
+let cmw: CmWrapper                // codemirror editor wrapper
+/** 
+ * 初始化编辑器 
+ */
+const initEditor = (_doc?: string) => {
+  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent), EditorRef.value))
 }
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
  * @param md markdown
  */
 const setDoc = (md: string): void => {
-  getEditor().setState(createEditorState(md))
+  cmw.setState(CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent, md))
   parse()
-}
-/**
- * 格式化内容
- */
-const formatMarkdown = async () => {
-  let formatContent = await prettier.format(CmWrapper.getDocString(getEditor()), { semi: false, parser: "markdown", plugins: [pluginMarkdown] })
-  let maxLen = CmWrapper.getDocLength(getEditor())
-  CmWrapper.insert(getEditor(), 0, maxLen, formatContent, 0, 0);
 }
 
 //#endregion
@@ -687,7 +623,7 @@ const renderer = {
     }
     return aTag
   }
-};
+}
 
 marked.use({ renderer })
 
@@ -698,11 +634,10 @@ const parse = () => {
   renderInterval.value = Date.now()
   articleIsChange = true
   isDebounce = true
-  let mdContent = CmWrapper.getDocString(getEditor())
+  let mdContent = cmw.getDocString()
   clearTocAndImg()
   parseTocAndReferences = true
-  //@ts-ignore
-  marked.parse(mdContent).then((content: string) => {
+  marked.parse(mdContent, { async: true }).then((content: string) => {
     articleHtml.value = content
     renderInterval.value = Date.now() - renderInterval.value
   })
@@ -718,13 +653,13 @@ const getArticleHtml = (): string => {
 /**
  * 防抖, 防止频繁渲染造成的卡顿
  */
-let debounceTimeout: NodeJS.Timeout | undefined;
+let debounceTimeout: NodeJS.Timeout | undefined
 function debounce(fn: () => void, time = 500) {
   if (debounceTimeout != undefined) {
-    clearTimeout(debounceTimeout);
+    clearTimeout(debounceTimeout)
   }
   if (isDebounce) {
-    debounceTimeout = setTimeout(fn, time);
+    debounceTimeout = setTimeout(fn, time)
   } else {
     fn()
   }
@@ -768,11 +703,11 @@ const removeListenerScroll = () => {
   EditorRef.value?.removeEventListener('scroll', sycnScroll)
 }
 
-const marginTop = 48.66666793823242;
+const marginTop = 48.66666793823242
 const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table, iframe'
 const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
   if (EditorRef.value == undefined) {
-    return;
+    return
   }
   // console.log(EditorRef.value?.scrollHeight,
   // EditorRef.value?.clientHeight,
@@ -788,17 +723,14 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
   } else {
     parseTocAndReferences = false
     // 文档头部, 距离整个浏览器的距离
-    const top = getEditor().documentTop
-
+    const top = cmw.getDocumentTop()
     // 获取可见位置最顶部的内容
-    const topBlock: BlockInfo = getEditor().elementAtHeight(Math.abs(top) + marginTop)
-
+    const topBlock = cmw.getElementAtHeight(Math.abs(top) + marginTop)
     // 从0开始获取全部不可见的内容的 markdown 原文档
-    const invisibleMarkdown: string = getEditor().state.sliceDoc(0, topBlock.from)
+    const invisibleMarkdown: string = cmw.sliceDoc(0, topBlock.from)
 
     // 将不可见的内容全部转换为 html
-    // @ts-ignore
-    marked.parse(invisibleMarkdown).then((html: string) => {
+    marked.parse(invisibleMarkdown, { async: true }).then((html: string) => {
       const invisibleHtml = html
       // 将不可见的的 html 转换为 dom 对象, 是一个从 <html> 标签开始的 dom 对象
       const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')
@@ -832,54 +764,44 @@ const closeEditorRightMenu = () => {
   editorRightMenu.value.show = false
 }
 
-const handleEditorClickRight = (event: Event) => {
+const handleEditorClickRight = (event: MouseEvent) => {
   editorRightMenu.value = { show: false, clientX: 0, clientY: 0 }
-  //@ts-ignore
   editorRightMenu.value = { show: true, clientX: event.clientX, clientY: event.clientY }
   setTimeout(() => {
     document.body.addEventListener('click', closeEditorRightMenu)
-  }, 100);
+  }, 100)
 }
 
-/**
- * 复制当前选中内容
- */
-const rightMenuCopy = () => { writeText(CmWrapper.getSelectionRangesText(getEditor())) }
-
-/**
- * 右键黏贴功能
- */
-const rightMenuPaste = () => {
-  CmWrapper.insertBlockCommand(getEditor(), readText())
-}
+/** 复制当前选中内容 */
+const rightMenuCopy = () => { writeText(cmw.getSelectionRangesText()) }
+/** 右键黏贴功能 */
+const rightMenuPaste = () => { cmw.insertBlockCommand(readText()) }
 
 /**
  * 右键格式化表格功能
  */
 const formatTable = () => {
-  let ranges = getEditor().state.selection.ranges;
+  let ranges = cmw.getSlelctionRangesArr()
   if (ranges.length < 1) {
     Notify.error('未选中内容')
-    return;
+    return
   }
   if (ranges.length > 1) {
     Notify.error('选中内容过多')
-    return;
+    return
   }
-
-  let text = getEditor().state.sliceDoc(ranges[0].from, ranges[0].to)
+  let text = cmw.sliceDoc(ranges[0].from, ranges[0].to)
   if (isBlank(text)) {
     return
   }
-  let newText = formartMarkdownTable(text)
-  CmWrapper.insertBlockCommand(getEditor(), newText)
+  cmw.insertBlockCommand(formartMarkdownTable(text))
 }
 //#endregion
 
 //#region ----------------------------------------< 快捷键注册 >-------------------------------------
 const shortcutRegistrant: ShortcutRegistrant = new ShortcutRegistrant().setDebug(false)
-const alt_1: shortcutFunc = (): void => { docsExpand.value = !docsExpand.value; }
-const alt_2: shortcutFunc = (): void => { tocsExpand.value = !tocsExpand.value; }
+const alt_1: shortcutFunc = (): void => { docsExpand.value = !docsExpand.value }
+const alt_2: shortcutFunc = (): void => { tocsExpand.value = !tocsExpand.value }
 const alt_3: shortcutFunc = (): void => {
   previewFullScreen.value = !previewFullScreen.value
   if (previewFullScreen.value) {
