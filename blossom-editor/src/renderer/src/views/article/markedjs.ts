@@ -1,11 +1,13 @@
 import { isBlank } from '@renderer/assets/utils/obj'
+import { escape2Html } from '@renderer/assets/utils/util'
 import { marked } from 'marked'
 import { markedHighlight } from "marked-highlight"
 import hljs from 'highlight.js'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
-//#region ----------------------------------------< marked >--------------------------------------
 marked.use({
   async: true,
   pedantic: false,
@@ -23,6 +25,21 @@ marked.use(markedHighlight({
   }
 }))
 
+//#region ----------------------------------------< tokenizer >--------------------------------------
+export const tokenizerCodespan = (src: string): any => {
+  const match = src.match(/^\$+([^\$\n]+?)\$+/);
+  if (match) {
+    let result = {
+      type: 'codespan',
+      raw: match[0],
+      text: match[0]
+    }
+    return result
+  }
+  return false;
+}
+
+//#region ----------------------------------------< renderer >--------------------------------------
 
 /**
  * 标题解析为 TOC 集合, 增加锚点跳转
@@ -70,9 +87,10 @@ export const renderBlockquote = (quote: string) => {
 /**
  * 自定义代码块内容解析:
  * 1. bilibili
- * 格式为: ```bilibili$$bvid$$w100$$h100
+ *    格式为: ```bilibili$$bvid$$w100$$h100
+ *    官方使用文档: https://player.bilibili.com/
  * 
- * 官方使用文档: https://player.bilibili.com/
+ * 2. katex
  * 
  * @param code      解析后的 HTML 代码
  * @param language  语言
@@ -81,6 +99,24 @@ export const renderBlockquote = (quote: string) => {
 export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
   if (language == undefined) {
     language = 'text'
+  }
+
+  if (language === 'katex') {
+    let escape = escape2Html(code)
+    try {
+      return katex.renderToString(escape, {
+        throwOnError: true,
+        displayMode: true,
+        output: 'html'
+      });
+    } catch (error) {
+      console.error(error);
+      return `<div class='bl-preview-analysis-fail-block'>
+          Katex 语法解析失败!<br/>
+          ${error}<br/><br/>
+          你可以尝试前往 Katex 官网来校验你的公式, 或者查看相关文档: <a href='https://katex.org/#demo' target='_blank'>https://katex.org/#demo</a>
+          </div>`
+    }
   }
 
   if (language.startsWith('bilibili')) {
@@ -119,7 +155,26 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       scrolling="no" border="0" frameborder="no" framespacing="0"
       src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
   }
+
   return `<pre><code class="hljs language-${language}">${code}</code></pre>`
+}
+
+export const renderCodespan = (src: string) => {
+  let arr = src.match(/^\$+([^\$\n]+?)\$+/);
+  if (arr != null && arr.length > 0) {
+    try {
+      return katex.renderToString(arr[1], {
+        throwOnError: true,
+        output: 'html'
+      });
+    } catch (error) {
+      console.error(error);
+      return `<div class='bl-preview-analysis-fail-inline'>
+          Katex 语法解析失败! 你可以尝试前往<a href='https://katex.org/#demo' target='_blank'> Katex 官网</a> 来校验你的公式。
+          </div>`
+    }
+  }
+  return `<code>${src}</code>`
 }
 
 /**
@@ -157,5 +212,7 @@ export const renderImage = (href: string | null, _title: string | null, text: st
       <img width="${width}" style="${style}" src="${href}" alt="${text}">
       </p>`
 }
+
+//#endregion
 
 export default marked

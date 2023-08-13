@@ -172,8 +172,12 @@
         font-size: 14px;
         word-wrap: break-word;
         padding: 10px 20px 0 20px;
-      }
 
+        :deep(.katex) {
+          font-size: 1.1em;
+          font-family: 'KaTeX_Size1';
+        }
+      }
     }
 
     .editor-status {

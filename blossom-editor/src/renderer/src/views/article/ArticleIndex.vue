@@ -203,7 +203,8 @@ import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
 // marked
-import marked, { renderBlockquote, renderCode, renderHeading, renderImage, renderTable } from './markedjs'
+import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan } from './markedjs'
+
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
 import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
@@ -564,9 +565,13 @@ let parseTocAndReferences: boolean = true // 解析 markdown 时, 是否将图�
 let isDebounce: boolean = false           // 是否在渲染时设置防抖, 切换文档时不用防抖渲染
 
 /**
- * 自定义解析
+ * 自定义渲染
  */
 const renderer = {
+  table(header: string, body: string) { return renderTable(header, body) },
+  blockquote(quote: string) { return renderBlockquote(quote) },
+  code(code: string, language: string | undefined, _isEscaped: boolean) { return renderCode(code, language, _isEscaped) },
+  codespan(src: string) { return renderCodespan(src) },
   heading(text: any, level: number) {
     const realLevel = level
     if (parseTocAndReferences) {
@@ -574,9 +579,6 @@ const renderer = {
     }
     return renderHeading(text, level)
   },
-  table(header: string, body: string) { return renderTable(header, body) },
-  blockquote(quote: string) { return renderBlockquote(quote) },
-  code(code: string, language: string | undefined, _isEscaped: boolean) { return renderCode(code, language, _isEscaped) },
   image(href: string | null, _title: string | null, text: string) {
     if (parseTocAndReferences) {
       articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
@@ -625,7 +627,17 @@ const renderer = {
   }
 }
 
-marked.use({ renderer })
+/**
+ * 自定义解析
+ */
+const tokenizer = {
+  codespan(src: string): any { return tokenizerCodespan(src) }
+}
+
+marked.use({
+  tokenizer: tokenizer,
+  renderer: renderer
+})
 
 /**
  * 解析 markdown 为 html, 并将 html 赋值给 articleHtml

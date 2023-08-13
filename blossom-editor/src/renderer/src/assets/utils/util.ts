@@ -209,7 +209,20 @@ export const randomBoolean = (): boolean => {
   return Math.random() >= 0.5
 }
 
-randomBoolean()
+/**
+ * html 反转义
+ * @param str 
+ * @returns 
+ */
+export const escape2Html = (str) => {
+  //1.首先动态创建一个容器标签元素，如DIV
+  let temp = document.createElement("div");
+  //2.然后将要转换的字符串设置为这个元素的innerHTML(ie，火狐，google都支持)
+  temp.innerHTML = str;
+  //3.最后返回这个元素的innerText或者textContent，即得到经过HTML解码的字符串了。
+  let output = temp.innerText || temp.textContent;
+  return output;
+}
 
 export const getSolar = (): string => {
   let today = new Date();
