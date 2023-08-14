@@ -13,6 +13,7 @@
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.7",
+    "katex": "^0.16.8",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"

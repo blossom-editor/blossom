@@ -110,7 +110,8 @@ import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, docTreeApi } from '@/api/blossom'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
-import IndexHeader from "../index/IndexHeader.vue";
+import IndexHeader from "../index/IndexHeader.vue"
+import 'katex/dist/katex.min.css'
 
 onActivated(() => {
   getRouteQueryParams();
