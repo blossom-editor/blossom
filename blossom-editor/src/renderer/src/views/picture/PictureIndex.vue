@@ -175,7 +175,7 @@
  -->
 <script setup lang="ts">
 // vue
-import { ref, provide, onMounted, computed } from "vue"
+import { ref, provide, computed, onActivated } from "vue"
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold, CopyDocument } from '@element-plus/icons-vue'
 import { docTreeApi, picturePageApi, pictureStarApi, pictureDelApi, pictureStatApi } from '@renderer/api/blossom'
@@ -191,7 +191,7 @@ import Workbench from "@renderer/views/picture/PictureTreeWorkbench.vue"
 import PictureUpload from "./PictureUpload.vue"
 import { isBlank, isNotBlank, isNotNull, isNull } from "@renderer/assets/utils/obj"
 
-onMounted(() => {
+onActivated(() => {
   getDocTree()
 })
 
