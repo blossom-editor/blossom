@@ -191,7 +191,8 @@ import { beforeUpload, onError } from '@renderer/views/picture/picture'
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isEmpty } from 'lodash'
-import { isBlank, isNotNull, isNull } from '@renderer/assets/utils/obj'
+import { isBlank, isNotBlank, isNotNull, isNull } from '@renderer/assets/utils/obj'
+import { escape2Html } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/formatTable'
 // component
@@ -203,6 +204,8 @@ import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
 // marked
+import mermaid from 'mermaid'
+import { Marked } from 'marked'
 import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan } from './markedjs'
 
 // 快捷键注册
@@ -213,6 +216,28 @@ onMounted(() => {
   initEditor()
   addListenerScroll()
   initAutoSaveInterval()
+  mermaid.initialize({
+    theme: 'base',
+    startOnLoad: false,
+    securityLevel: 'loose',
+    'themeVariables': {
+      'fontFamily': 'inherit',
+      // 主要配色
+      'primaryColor': '#cfbef1',
+      'primaryTextColor': '#606266',
+      'primaryBorderColor': '#8143FF',
+      // 第二颜色
+      'secondaryColor': '#efc75e',
+      'secondaryTextColor': '#606266',
+      // 第三颜色
+      'tertiaryColor': '#C4DFFF',
+      'tertiaryTextColor': '#606266',
+      // 连线的颜色
+      'lineColor': '#A0A0A0',
+    }
+  });
+  mermaid.parseError = (_err, _hash) => {
+  }
 })
 onBeforeUnmount(() => {
   removeListenerShortcutMap()
@@ -447,7 +472,6 @@ const saveCurArticleContent = async (auto: boolean = false) => {
  * 如果 authSaveMs 时间没有保存, 则自动保存.
  */
 const initAutoSaveInterval = () => {
-  console.log('开启自动保存')
   autoSaveInterval = setInterval(() => {
     let current = new Date().valueOf()
     if ((current - lastSaveTime) > authSaveMs) {
@@ -459,7 +483,6 @@ const initAutoSaveInterval = () => {
  * 销毁自动保存定时器
  */
 const distoryAutoSaveInterval = () => {
-  console.log('关闭自动保存')
   clearInterval(autoSaveInterval)
 }
 /**
@@ -521,7 +544,6 @@ const getDocInfoFromTrees = (articleId: number, trees: DocTree[]): DocTree | und
   let target: DocTree | undefined
   for (let i = 0; i < trees.length; i++) {
     let tree = trees[i]
-    // console.log(articleId, tree.i, tree.i == articleId)
     if (tree.i == articleId) {
       target = tree
     } else if (!isEmpty(tree.children)) {
@@ -563,14 +585,21 @@ const PreviewRef = ref()                  // 显式 html 的 dom
 const articleHtml = ref<string>('')       // 解析后的 html 内容
 let parseTocAndReferences: boolean = true // 解析 markdown 时, 是否将图片和标题解析成列表对象
 let isDebounce: boolean = false           // 是否在渲染时设置防抖, 切换文档时不用防抖渲染
-
+const simpleMarked = new Marked({ mangle: false, headerIds: false })
 /**
  * 自定义渲染
  */
 const renderer = {
   table(header: string, body: string) { return renderTable(header, body) },
   blockquote(quote: string) { return renderBlockquote(quote) },
-  code(code: string, language: string | undefined, _isEscaped: boolean) { return renderCode(code, language, _isEscaped) },
+  code(code: string, language: string | undefined, _isEscaped: boolean) {
+    if (language === 'mermaid' && isNotBlank(code)) {
+      let id = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
+      renderMermaid(code, id)
+      return `<p id="${id}">${id}</p>`
+    }
+    return renderCode(code, language, _isEscaped)
+  },
   codespan(src: string) { return renderCodespan(src) },
   heading(text: any, level: number) {
     const realLevel = level
@@ -598,7 +627,7 @@ const renderer = {
     if (isBlank(title)) {
       aTag = `<a target="_blank" href=${href} target="_blank">${text}</a>`
     } else {
-      let arr = title!.match(/(?<=\$\$).*?(?=\$\$)/)
+      let arr = title!.match(/(?<=\#\#).*?(?=\#\#)/)
       let isInnerArticle: boolean = arr != null && arr.length > 0 && !isBlank(arr[0])
       if (isInnerArticle) {
         let articleId = Number(arr![0])
@@ -625,6 +654,33 @@ const renderer = {
     }
     return aTag
   }
+}
+
+
+const renderMermaid = async (code: string, eleid: string) => {
+  let escape = escape2Html(code) as string
+
+  mermaid.parse(escape).then(syntax => {
+    let canSyntax: boolean | void = syntax
+    if (canSyntax) {
+      mermaid.render(eleid + '-svg', escape).then((resp) => {
+        const { svg } = resp
+        let element = document.getElementById(eleid)
+        element!.innerHTML = svg
+        articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
+      })
+    }
+  }).catch(error => {
+    console.error('mermaid 格式校验失败:错误信息如下:\n', error);
+    let html = `<div class='bl-preview-analysis-fail-block'>
+          <div style="color:red">Mermaid 语法解析失败!</div><br/>
+          ${error}<br/><br/>
+          你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
+          </div>`
+    let element = document.getElementById(eleid)
+    element!.innerHTML = html
+    articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${html}<`)
+  })
 }
 
 /**
@@ -716,7 +772,7 @@ const removeListenerScroll = () => {
 }
 
 const marginTop = 48.66666793823242
-const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table, iframe'
+const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table, ul,ol,iframe'
 const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
   if (EditorRef.value == undefined) {
     return
@@ -742,7 +798,7 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
     const invisibleMarkdown: string = cmw.sliceDoc(0, topBlock.from)
 
     // 将不可见的内容全部转换为 html
-    marked.parse(invisibleMarkdown, { async: true }).then((html: string) => {
+    simpleMarked.parse(invisibleMarkdown, { async: true }).then((html: string) => {
       const invisibleHtml = html
       // 将不可见的的 html 转换为 dom 对象, 是一个从 <html> 标签开始的 dom 对象
       const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')

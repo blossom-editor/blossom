@@ -8,6 +8,15 @@ import 'katex/dist/katex.min.css'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
+/**
+ * 标记标识
+ */
+export const grammar = '##'
+/** 匹配一个 $ 符, 来自于 markedjs 的官方例子 */
+export const singleDollar = /^\$+([^\$\n]+?)\$+/
+export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
+export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
+
 marked.use({
   async: true,
   pedantic: false,
@@ -20,14 +29,14 @@ marked.use({
 marked.use(markedHighlight({
   langPrefix: 'hljs language-',
   highlight(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'shell';
-    return hljs.highlight(code, { language }).value;
+    const language = hljs.getLanguage(lang) ? lang : 'shell'
+    return hljs.highlight(code, { language }).value
   }
 }))
 
 //#region ----------------------------------------< tokenizer >--------------------------------------
 export const tokenizerCodespan = (src: string): any => {
-  const match = src.match(/^\$+([^\$\n]+?)\$+/);
+  const match = src.match(singleDollar)
   if (match) {
     let result = {
       type: 'codespan',
@@ -48,7 +57,7 @@ export const tokenizerCodespan = (src: string): any => {
  */
 export const renderHeading = (text: any, level: number) => {
   const realLevel = level
-  return `<h${realLevel} id="${realLevel}-${text}">${text}</h${realLevel}>`;
+  return `<h${realLevel} id="${realLevel}-${text}">${text}</h${realLevel}>`
 }
 
 
@@ -56,7 +65,7 @@ export const renderHeading = (text: any, level: number) => {
  * 表格 header/body
  */
 export const renderTable = (header: string, body: string) => {
-  let arr = header.match(/(?<=\$\$).*?(?=\$\$)/)
+  let arr = header.match(doubleWell)
   let isContainer: boolean = arr != null && arr[0] === 'container'
   if (isContainer) {
     return `<table class="bl-table-container"><thead>${header}</thead><tbody>${body}</tbody></table>`
@@ -74,7 +83,7 @@ export const renderBlockquote = (quote: string) => {
   let colors = ['green', 'yellow', 'red', 'blue', 'purple', 'black']
   for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
-    let target = '<p>$$' + color + '$$'
+    let target = `<p>${grammar}${color}${grammar}`
     if (quote.startsWith(target)) {
       clazz = 'bl-blockquote-' + color
       finalQuote = quote.replaceAll(target, '<p>')
@@ -87,7 +96,7 @@ export const renderBlockquote = (quote: string) => {
 /**
  * 自定义代码块内容解析:
  * 1. bilibili
- *    格式为: ```bilibili$$bvid$$w100$$h100
+ *    格式为: ```bilibili${grammar}bvid${grammar}w100${grammar}h100
  *    官方使用文档: https://player.bilibili.com/
  * 
  * 2. katex
@@ -123,7 +132,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     let bvid = ''
     let width = '100%'
     let height = '300px'
-    let tags: string[] = language.split('$$')
+    let tags: string[] = language.split(grammar)
     if (tags.length > 1) {
       if (tags.length >= 2) {
         bvid = tags[1]
@@ -160,7 +169,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
 }
 
 export const renderCodespan = (src: string) => {
-  let arr = src.match(/^\$+([^\$\n]+?)\$+/);
+  let arr = src.match(singleDollar);
   if (arr != null && arr.length > 0) {
     try {
       return katex.renderToString(arr[1], {
@@ -179,7 +188,7 @@ export const renderCodespan = (src: string) => {
 
 /**
    * 拓展图片设置
-   * ![照片A$$shadow$$w100]()
+   * ![照片A${grammar}shadow${grammar}w100]()
    * 上面格式解析为
    *  - 图片名称为 照片A
    *  - 图片包含阴影
@@ -192,7 +201,7 @@ export const renderCodespan = (src: string) => {
 export const renderImage = (href: string | null, _title: string | null, text: string) => {
   let width = 'auto';
   let style = ''
-  let tags: string[] = text.split('$$')
+  let tags: string[] = text.split(grammar)
   if (tags.length > 1) {
     for (let i = 0; i < tags.length; i++) {
       let tag = tags[i]
