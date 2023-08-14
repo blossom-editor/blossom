@@ -386,17 +386,17 @@ export class CmWrapper {
   /** 在当前位置增加引用 */
   private static commandQuote = (editor: EditorView) => { this.insertBlockCommand(editor, `\n>\n>\n`) }
   /** 在当前位置增加引用 black */
-  private static commandQuoteBlack = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$black$$\n> ⚫\n`) }
+  private static commandQuoteBlack = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##black##\n> ⚫\n`) }
   /** 在当前位置增加引用 green */
-  private static commandQuoteGreen = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$green$$\n> 🟢\n`) }
+  private static commandQuoteGreen = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##green##\n> 🟢\n`) }
   /** 在当前位置增加引用 yellow */
-  private static commandQuoteYellow = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$yellow$$\n> 🟡\n`) }
+  private static commandQuoteYellow = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##yellow##\n> 🟡\n`) }
   /** 在当前位置增加引用 red */
-  private static commandQuoteRed = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$red$$\n> 🔴\n`) }
+  private static commandQuoteRed = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##red##\n> 🔴\n`) }
   /** 在当前位置增加引用 blue */
-  private static commandQuoteBlue = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$blue$$\n> 🔵\n`) }
+  private static commandQuoteBlue = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##blue##\n> 🔵\n`) }
   /** 在当前位置增加引用 */
-  private static commandQuotePurple = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> $$purple$$\n> 🟣\n`) }
+  private static commandQuotePurple = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##purple##\n> 🟣\n`) }
   /** 在当前位置增加无序列表 */
   private static commandUnordered = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- \n`) }
   /** 在当前位置增加有序列表 */

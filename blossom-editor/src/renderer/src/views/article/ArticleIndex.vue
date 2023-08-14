@@ -163,6 +163,12 @@
           <div class="menu-item" @click="formatTable">
             <span class="iconbl bl-transcript-line"></span>格式化选中表格
           </div>
+          <div class="menu-item" @click="openExtenal('https://katex.org/#demo')">
+            <span class="iconbl bl-a-texteditorsuperscript-line"></span>Katex 在线校验
+          </div>
+          <div class="menu-item" @click="openExtenal('https://mermaid.live/edit')">
+            <span class="iconbl bl-a-statisticalviewpiechart3-line"></span>Mermaid 在线校验
+          </div>
           <div class="menu-item" @click="openExtenal('https://www.emojiall.com/zh-hans')">
             <span style="margin-right: 4px;padding: 2px 0;">😉</span>Emoji网站
           </div>
@@ -191,8 +197,7 @@ import { beforeUpload, onError } from '@renderer/views/picture/picture'
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isEmpty } from 'lodash'
-import { isBlank, isNotBlank, isNotNull, isNull } from '@renderer/assets/utils/obj'
-import { escape2Html } from '@renderer/assets/utils/util'
+import { isBlank, isNotNull, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/formatTable'
 // component
@@ -204,40 +209,18 @@ import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
 // marked
-import mermaid from 'mermaid'
 import { Marked } from 'marked'
-import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan } from './markedjs'
+import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './markedjs'
 
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
 import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
 
+
 onMounted(() => {
   initEditor()
   addListenerScroll()
   initAutoSaveInterval()
-  mermaid.initialize({
-    theme: 'base',
-    startOnLoad: false,
-    securityLevel: 'loose',
-    'themeVariables': {
-      'fontFamily': 'inherit',
-      // 主要配色
-      'primaryColor': '#cfbef1',
-      'primaryTextColor': '#606266',
-      'primaryBorderColor': '#8143FF',
-      // 第二颜色
-      'secondaryColor': '#efc75e',
-      'secondaryTextColor': '#606266',
-      // 第三颜色
-      'tertiaryColor': '#C4DFFF',
-      'tertiaryTextColor': '#606266',
-      // 连线的颜色
-      'lineColor': '#A0A0A0',
-    }
-  });
-  mermaid.parseError = (_err, _hash) => {
-  }
 })
 onBeforeUnmount(() => {
   removeListenerShortcutMap()
@@ -429,6 +412,7 @@ const clickCurDoc = async (tree: DocTree) => {
 
 /**
  * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
+ * 
  * @param auto 是否为自动保存, 如果是自动保存, 则不弹出保存成功的提示框, 避免在非用户主动操作下弹框
  */
 const saveCurArticleContent = async (auto: boolean = false) => {
@@ -451,7 +435,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     id: curArticle.value!.id,
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
-    html: getArticleHtml(),
+    html: articleHtml.value,
     toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
@@ -535,26 +519,6 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
     Notify.error(resp.msg, '上传失败')
   }
 }
-/**
- * 递归从文档树状列表中获取指定ID的文章信息
- * @param articleId 文档DI, 通常是文章ID, 也兼容文件夹ID的获取
- * @param trees 文档树状列表
- */
-const getDocInfoFromTrees = (articleId: number, trees: DocTree[]): DocTree | undefined => {
-  let target: DocTree | undefined
-  for (let i = 0; i < trees.length; i++) {
-    let tree = trees[i]
-    if (tree.i == articleId) {
-      target = tree
-    } else if (!isEmpty(tree.children)) {
-      target = getDocInfoFromTrees(articleId, tree.children!)
-    }
-    if (target != undefined) {
-      break
-    }
-  }
-  return target
-}
 
 //#endregion
 
@@ -592,95 +556,35 @@ const simpleMarked = new Marked({ mangle: false, headerIds: false })
 const renderer = {
   table(header: string, body: string) { return renderTable(header, body) },
   blockquote(quote: string) { return renderBlockquote(quote) },
-  code(code: string, language: string | undefined, _isEscaped: boolean) {
-    if (language === 'mermaid' && isNotBlank(code)) {
-      let id = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
-      renderMermaid(code, id)
-      return `<p id="${id}">${id}</p>`
-    }
-    return renderCode(code, language, _isEscaped)
-  },
   codespan(src: string) { return renderCodespan(src) },
+  /** 代码块 */
+  code(code: string, language: string | undefined, _isEscaped: boolean) {
+    return renderCode(code, language, _isEscaped, (eleid: string, svg: string) => {
+      articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
+    })
+  },
+  /** 标题 */
   heading(text: any, level: number) {
-    const realLevel = level
     if (parseTocAndReferences) {
-      articleToc.value.push({ level: realLevel, clazz: 'toc-' + realLevel, index: articleToc.value.length, content: text })
+      articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
     }
     return renderHeading(text, level)
   },
+  /** 图片 */
   image(href: string | null, _title: string | null, text: string) {
     if (parseTocAndReferences) {
       articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
     }
     return renderImage(href, _title, text)
   },
-  /**
-   * a 标签
-   * @param href  链接地址
-   * @param title 链接标题 <a title="title">, 语法拓展内容在title中
-   * @param text  链接的名称
-   */
+  /** 链接 */
   link(href: string | null, title: string | null, text: string) {
-    let aTag: string
-    let linkReference: ArticleReference = { targetId: 0, targetName: text, targetUrl: href as string, type: 21 }
-    // 没有标题, 普通链接
-    if (isBlank(title)) {
-      aTag = `<a target="_blank" href=${href} target="_blank">${text}</a>`
-    } else {
-      let arr = title!.match(/(?<=\#\#).*?(?=\#\#)/)
-      let isInnerArticle: boolean = arr != null && arr.length > 0 && !isBlank(arr[0])
-      if (isInnerArticle) {
-        let articleId = Number(arr![0])
-        // 如果ID不是数字
-        if (isNaN(articleId)) {
-          aTag = `<a target="_blank" href=${href} title=${title}>${text}</a>`
-        }
-
-        let article = getDocInfoFromTrees(articleId, docTreeData.value)
-        if (article != undefined) {
-          linkReference.targetId = article.i
-          linkReference.targetName = article.n
-          linkReference.type = 11
-        }
-
-        aTag = `<a target="_blank" href=${href} class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》">${text}</a>`
-      } else {
-        aTag = `<a target="_blank" href=${href} title=${title} >${text}</a>`
-      }
-    }
-
+    let { link, ref } = renderLink(href, title, text, docTreeData.value)
     if (parseTocAndReferences) {
-      articleLink.value.push(linkReference)
+      articleLink.value.push(ref)
     }
-    return aTag
+    return link
   }
-}
-
-
-const renderMermaid = async (code: string, eleid: string) => {
-  let escape = escape2Html(code) as string
-
-  mermaid.parse(escape).then(syntax => {
-    let canSyntax: boolean | void = syntax
-    if (canSyntax) {
-      mermaid.render(eleid + '-svg', escape).then((resp) => {
-        const { svg } = resp
-        let element = document.getElementById(eleid)
-        element!.innerHTML = svg
-        articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
-      })
-    }
-  }).catch(error => {
-    console.error('mermaid 格式校验失败:错误信息如下:\n', error);
-    let html = `<div class='bl-preview-analysis-fail-block'>
-          <div style="color:red">Mermaid 语法解析失败!</div><br/>
-          ${error}<br/><br/>
-          你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
-          </div>`
-    let element = document.getElementById(eleid)
-    element!.innerHTML = html
-    articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${html}<`)
-  })
 }
 
 /**
@@ -709,13 +613,6 @@ const parse = () => {
     articleHtml.value = content
     renderInterval.value = Date.now() - renderInterval.value
   })
-}
-
-/**
- * 获取文章的 html 格式内容
- */
-const getArticleHtml = (): string => {
-  return articleHtml.value
 }
 
 /**

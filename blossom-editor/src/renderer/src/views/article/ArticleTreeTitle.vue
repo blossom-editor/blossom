@@ -9,14 +9,16 @@
       {{ props.trees.n }}
     </div>
     <!-- 如果专题是公开的, 则单独显示公开标签 -->
-    <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
+    <bl-tag v-if="props.trees.o === 1 && isFolder" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
     <div v-for="tag in tags">
       <bl-tag v-if="tag.content" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
       <bl-tag v-else :bg-color="tag.bgColor" :icon="tag.icon" />
     </div>
-    <div v-if="isOpen && !isSubjectDoc" class="open-line"></div>
+    <div v-for="line, index in tagLins" :key="line" :class="[line]" :style="{ left: (-1 * (index + 1) * 5) + 'px' }">
+    </div>
+    <!-- <div v-if="isOpen && !isFolder" class="open-line"></div>
     <div v-if="isStar" class="star-line"></div>
-    <div v-if="isSync" class="sync-line"></div>
+    <div v-if="isSync" class="sync-line"></div> -->
 
     <!-- 右键菜单, 添加到 body 下 -->
     <Teleport to="body">
@@ -83,6 +85,7 @@ import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/u
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import ArticleInfo from '@renderer/views/article/ArticleInfo.vue'
 import Notify from '@renderer/components/Notify'
+import { grammar } from './markedjs'
 
 const userStore = useUserStore();
 
@@ -96,6 +99,7 @@ const props = defineProps({
   }
 })
 
+//@ts-ignore
 const isSubjectDoc = computed(() => {
   return props.trees.t?.includes('subject')
 })
@@ -104,12 +108,8 @@ const isOpen = computed(() => {
   return props.trees.o === 1;
 })
 
-const isStar = computed(() => {
-  return props.trees.star === 1;
-})
-
-const isSync = computed(() => {
-  return props.trees.vd === 1;
+const isFolder = computed(() => {
+  return props.trees.ty === 1 || props.trees.ty === 2;
 })
 
 /**
@@ -127,6 +127,20 @@ const tags = computed(() => {
     }
   });
   return icons;
+})
+
+const tagLins = computed(() => {
+  let lines: string[] = []
+  if (props.trees.star === 1) {
+    lines.push('star-line')
+  }
+  if (props.trees.o === 1 && props.trees.ty === 3) {
+    lines.push('open-line')
+  }
+  if (props.trees.vd === 1) {
+    lines.push('sync-line')
+  }
+  return lines
 })
 
 /**
@@ -185,7 +199,7 @@ const createUrl = (type: 'open' | 'copy' | 'link') => {
   } else if (type == 'copy') {
     writeText(url)
   } else if (type == 'link') {
-    url = `[${props.trees.n}](${userStore.userinfo.params.WEB_ARTICLE_URL + props.trees.i} "$$${props.trees.i}$$")`
+    url = `[${props.trees.n}](${userStore.userinfo.params.WEB_ARTICLE_URL + props.trees.i} "${grammar}${props.trees.i}${grammar}")`
     writeText(url)
   }
 }
@@ -263,8 +277,8 @@ $icon-size: 17px;
   @include flex(row, flex-start, center);
   align-content: flex-start;
   flex-wrap: wrap;
-  max-width: calc(100% - 10px);
-  min-width: calc(100% - 10px);
+  max-width: calc(100% - 15px);
+  min-width: calc(100% - 15px);
   padding-bottom: 1px;
   position: relative;
 
@@ -289,11 +303,12 @@ $icon-size: 17px;
     @include themeText(2px 2px 2px #D8D8D8, 2px 2px 2px #0A0A0A);
     @include ellipsis();
     color: var(--el-color-primary);
-    min-width: 145px;
-    max-width: 145px;
+    min-width: 180px;
+    max-width: 180px;
   }
 }
 
+// 在左侧显示
 .open-line,
 .star-line,
 .sync-line {
@@ -301,22 +316,18 @@ $icon-size: 17px;
   width: 2px;
   height: 60%;
   top: 20%;
-  border-radius: 20px;
-  font-size: 10px;
+  border-radius: 10px;
 }
 
 .star-line {
-  left: -5px;
   background: rgb(237, 204, 11);
 }
 
 .open-line {
-  left: -10px;
   background: #79C20C71;
 }
 
 .sync-line {
-  left: -15px;
   background: #E8122479;
 }
 </style>

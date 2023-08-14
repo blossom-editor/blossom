@@ -363,6 +363,10 @@
   padding: 30px;
   background-color: #000000;
   color: #ffffff;
+
+  .fail-title {
+    color: red;
+  }
 }
 
 .bl-preview-analysis-fail-inline {

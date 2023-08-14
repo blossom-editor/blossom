@@ -5,14 +5,15 @@ const blossom: any = {
   SYS: {
     NAME: 'Blossom',
     FULL_NAME: 'BLOSSOM-EDITOR',
-    VERSION: 'v1.0.0',
-    DATETIME: '2023-08-10',
+    VERSION: 'v1.1.0',
+    DATETIME: '2023-08-15',
 
     // 
     DOC: 'https://www.wangyunf.com/blossom-doc/index',
     CONTACT: 'QQ: 491548320 / Email: kuamax888@qq.com',
     GITHUB_REPO: 'https://github.com/blossom-editor/blossom',
-    GITHUB_RELEASE: 'https://github.com/blossom-editor/blossom/releases'
+    GITHUB_RELEASE: 'https://github.com/blossom-editor/blossom/releases',
+    GITEE_REPO: 'https://gitee.com/blossom-editor/blossom'
   },
 }
 

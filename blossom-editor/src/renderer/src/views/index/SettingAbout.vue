@@ -3,10 +3,18 @@
     <div class="project-name">
       Blossom
     </div>
-    <div class="project-link">
-      <a href='https://gitee.com/blossom-projects/blossom/stargazers'><img
-          src='https://gitee.com/blossom-projects/blossom/badge/star.svg?theme=white' alt='star' /></a>
-    </div>
+    <bl-row just="center" style="margin-top: 10px;">
+      <div @click="toView(CONFIG.SYS.GITHUB_REPO)">
+        <svg style="width: 25px;height: 25px;" aria-hidden="true">
+          <use xlink:href="#wl-github2"></use>
+        </svg>
+      </div>
+      <div @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px;">
+        <svg style="width: 25px;height: 25px;" aria-hidden="true">
+          <use xlink:href="#wl-gitee"></use>
+        </svg>
+      </div>
+    </bl-row>
     <div class="bl-preview">
       <p class="paragraph">
         Blossom 是一个支持<span class="blod">私有部署</span>的云端存储双链笔记软件，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于MIT协议完全开源。
@@ -78,6 +86,7 @@
 
 <script setup lang="ts">
 import CONFIG from '@renderer/assets/constants/system'
+import { toView } from '@renderer/assets/utils/util';
 
 const references = [
   { name: '基础icon(作者:宗伟)', url: 'https://www.iconfont.cn/collections/detail?cid=35578' },

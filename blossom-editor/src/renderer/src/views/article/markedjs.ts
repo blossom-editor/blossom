@@ -1,12 +1,38 @@
-import { isBlank } from '@renderer/assets/utils/obj'
+import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html } from '@renderer/assets/utils/util'
 import { marked } from 'marked'
 import { markedHighlight } from "marked-highlight"
 import hljs from 'highlight.js'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
+import mermaid from 'mermaid'
+import { ArticleReference, getDocInfoFromTrees } from './article'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
+
+
+mermaid.initialize({
+  theme: 'base',
+  startOnLoad: false,
+  securityLevel: 'loose',
+  'themeVariables': {
+    'fontFamily': 'inherit',
+    // 主要配色
+    'primaryColor': '#cfbef1',
+    'primaryTextColor': '#606266',
+    'primaryBorderColor': '#8143FF',
+    // 第二颜色
+    'secondaryColor': '#efc75e',
+    'secondaryTextColor': '#606266',
+    // 第三颜色
+    'tertiaryColor': '#C4DFFF',
+    'tertiaryTextColor': '#606266',
+    // 连线的颜色
+    'lineColor': '#A0A0A0',
+  }
+});
+mermaid.parseError = (_err, _hash) => {
+}
 
 /**
  * 标记标识
@@ -99,15 +125,46 @@ export const renderBlockquote = (quote: string) => {
  *    格式为: ```bilibili${grammar}bvid${grammar}w100${grammar}h100
  *    官方使用文档: https://player.bilibili.com/
  * 
- * 2. katex
+ * 2. katex 
+ * 3. mermaid
  * 
  * @param code      解析后的 HTML 代码
  * @param language  语言
  * @param isEscaped 
  */
-export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
+export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean, mermaidCallback?: (eleid: string, svg: string) => void) => {
   if (language == undefined) {
     language = 'text'
+  }
+  if (language === 'mermaid' && isNotBlank(code)) {
+    let eleid = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
+    let escape = escape2Html(code) as string
+    mermaid.parse(escape).then(syntax => {
+      let canSyntax: boolean | void = syntax
+      if (canSyntax) {
+        mermaid.render(eleid + '-svg', escape).then((resp) => {
+          const { svg } = resp
+          let element = document.getElementById(eleid)
+          element!.innerHTML = svg
+          if (mermaidCallback != undefined) {
+            mermaidCallback(eleid, svg)
+          }
+        })
+      }
+    }).catch(error => {
+      console.error('mermaid 格式校验失败:错误信息如下:\n', error);
+      let html = `<div class='bl-preview-analysis-fail-block'>
+          <div class="fail-title">Mermaid 语法解析失败!</div><br/>
+          ${error}<br/><br/>
+          你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
+          </div>`
+      let element = document.getElementById(eleid)
+      element!.innerHTML = html
+      if (mermaidCallback != undefined) {
+        mermaidCallback(eleid, html)
+      }
+    })
+    return `<p id="${eleid}">${eleid}</p>`
   }
 
   if (language === 'katex') {
@@ -121,7 +178,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     } catch (error) {
       console.error(error);
       return `<div class='bl-preview-analysis-fail-block'>
-          Katex 语法解析失败!<br/>
+          <div class="fail-title">Katex 语法解析失败!</div><br/>
           ${error}<br/><br/>
           你可以尝试前往 Katex 官网来校验你的公式, 或者查看相关文档: <a href='https://katex.org/#demo' target='_blank'>https://katex.org/#demo</a>
           </div>`
@@ -157,7 +214,9 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
 
     if (isBlank(bvid)) {
-      return `<div style="width:100%;padding:40px;background-color:#000000;color:#ffffff;">未获取到BVID，请检查你的配置</div>`
+      return `<div class='bl-preview-analysis-fail-block'>
+      <span style="color:#00aeec">bilibili</span> 视频解析失败, 未获取到 <span style="color:#00aeec">BVID</span>，请检查你的配置
+      </div>`
     }
 
     return `<iframe width="${width}" height="${height}" style="margin: 10px 0"
@@ -220,6 +279,48 @@ export const renderImage = (href: string | null, _title: string | null, text: st
   return `<p>
       <img width="${width}" style="${style}" src="${href}" alt="${text}">
       </p>`
+}
+
+/**
+ * 解析链接, 拓展双链功能
+ * 
+ * @param href 链接地址
+ * @param title 链接标题 <a title="title">, 语法拓展内容在title中
+ * @param text 链接的文字
+ * @param docTrees 文档树状对象, 用于获取双链笔记的内容详情
+ * @returns {
+ *  link: link 标签
+ *  ref: 双链内容
+ * }
+ */
+export const renderLink = (href: string | null, title: string | null, text: string, docTrees: DocTree[]) => {
+  let link: string
+  let ref: ArticleReference = { targetId: 0, targetName: text, targetUrl: href as string, type: 21 }
+  if (isBlank(title)) {
+    link = `<a target="_blank" href=${href} target="_blank">${text}</a>`
+  } else {
+    let arr = title!.match(/(?<=\#\#).*?(?=\#\#)/)
+    let isInnerArticle: boolean = arr != null && arr.length > 0 && !isBlank(arr[0])
+    if (isInnerArticle) {
+      let articleId = Number(arr![0])
+      // 如果ID不是数字
+      if (isNaN(articleId)) {
+        link = `<a target="_blank" href=${href} title=${title}>${text}</a>`
+      }
+
+      let article = getDocInfoFromTrees(articleId, docTrees)
+      if (article != undefined) {
+        ref.targetId = article.i
+        ref.targetName = article.n
+        ref.type = 11
+      }
+
+      link = `<a target="_blank" href=${href} class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》">${text}</a>`
+    } else {
+      link = `<a target="_blank" href=${href} title=${title} >${text}</a>`
+    }
+  }
+  return { link: link, ref: ref }
 }
 
 //#endregion

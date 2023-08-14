@@ -19,12 +19,7 @@
       @include box(100%, calc(100% - 90px));
       font-weight: 200;
       border: 0;
-      overflow-y: scroll;
-      // overflow: scroll;
-      // overflow-y: overlay;
-      padding-top: 5px;
-      padding-left: 10px;
-      padding-right: 6px;
+      overflow-y: overlay;
       // 基础的 padding
       --el-menu-base-level-padding: 25px;
       // 每级别的的缩进
@@ -53,7 +48,10 @@
           text-overflow: ellipsis;
 
           .el-sub-menu__icon-arrow {
-            right: calc(215px - var(--el-menu-level) * 10px);
+            right: calc(230px - var(--el-menu-level) * 10px);
+            font-size: 12px;
+            width: 0.8em;
+            height: 0.8em;
           }
         }
       }

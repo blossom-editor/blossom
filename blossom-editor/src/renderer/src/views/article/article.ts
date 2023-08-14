@@ -1,3 +1,5 @@
+
+import { isEmpty } from 'lodash'
 export const TempTextareaKey = 'editor_temp_textarea_value'
 
 /**
@@ -50,4 +52,27 @@ export interface ArticleReference {
    * 21 : public article
    */
   type: 10 | 11 | 21
+}
+
+
+/**
+ * 递归从文档树状列表中获取指定ID的文章信息
+ * 
+ * @param articleId 文档DI, 通常是文章ID, 也兼容文件夹ID的获取
+ * @param trees 文档树状列表
+ */
+export const getDocInfoFromTrees = (articleId: number, trees: DocTree[]): DocTree | undefined => {
+  let target: DocTree | undefined
+  for (let i = 0; i < trees.length; i++) {
+    let tree = trees[i]
+    if (tree.i == articleId) {
+      target = tree
+    } else if (!isEmpty(tree.children)) {
+      target = getDocInfoFromTrees(articleId, tree.children!)
+    }
+    if (target != undefined) {
+      break
+    }
+  }
+  return target
 }

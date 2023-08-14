@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24342467",
+      "name": "statistical view pie chart 2-line",
+      "font_class": "a-statisticalviewpiechart2-line",
+      "unicode": "ea2e",
+      "unicode_decimal": 59950
+    },
+    {
+      "icon_id": "24342473",
+      "name": "statistical view pie chart 3-line",
+      "font_class": "a-statisticalviewpiechart3-line",
+      "unicode": "ea2f",
+      "unicode_decimal": 59951
+    },
+    {
+      "icon_id": "12579295",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "e72a",
+      "unicode_decimal": 59178
+    },
+    {
+      "icon_id": "24341107",
+      "name": "archive catalogue-line",
+      "font_class": "a-archivecatalogue-line",
+      "unicode": "e9d6",
+      "unicode_decimal": 59862
+    },
+    {
+      "icon_id": "24341930",
+      "name": "label list-line",
+      "font_class": "a-labellist-line",
+      "unicode": "ea2d",
+      "unicode_decimal": 59949
+    },
+    {
       "icon_id": "4735972",
       "name": "暂无数据",
       "font_class": "zanwushuju",
