@@ -1,10 +1,18 @@
-# Blossom 笔记软件
+<p align="center">
+<img src="./doc/imgs/icon.png" height="200">
+</p>
+<p align="center" style="font-size: 30px;font-weight:500;">
+Blossom 1.1.0
+</p>
+<p align="center">
+<a href="https://www.wangyunf.com/blossom-doc/doc/tryuse">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index">📃 文档</a> | <a href="https://github.com/blossom-editor/blossom/releases">📥 下载</a> 
+</p>
+
+---
 
 Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于MIT协议完全开源。
 
 ![](./doc/imgs/home_ld.jpg "Blossom 首页")
-
-当前版本: `1.1.0`
 
 - 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)，我们提供了一个试用账号帮你体验该应用。
 - 阅读[文档](https://www.wangyunf.com/blossom-doc/index)来查看更多使用细节。
@@ -29,3 +37,34 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 6. **计划安排**：阶段性的长期计划，或者日历中的短期计划安排。
 7. **网站收藏**：常用网站快捷访问，或者说是一个书签功能。
 8. 笔记总字数折线图，笔记编辑数量热力图，服务器请求量折线图等多种统计。
+
+# 更多 Blossom 图片
+
+!["编辑器"](./doc/imgs/editor_intro.jpg)
+<p align="center">编辑器</p>
+
+---
+
+!["双链笔记"](./doc/imgs/editor_graph.jpg)
+<p align="center">双链笔记</p>
+
+---
+
+!["照片墙"](./doc/imgs/pic_s_light.jpg)
+<p align="center">照片墙</p>
+
+---
+
+!["便签管理"](./doc/imgs/note_s_light.jpg)
+<p align="center">便签管理</p>
+
+---
+
+!["日历计划"](./doc/imgs/plan_s_light.jpg)
+<p align="center">日历计划</p>
+
+---
+
+!["博客"](./doc/imgs/blog_home.jpg)
+<p align="center">博客</p>
+
