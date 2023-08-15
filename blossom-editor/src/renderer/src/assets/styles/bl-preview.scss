@@ -29,16 +29,15 @@
 
   // 列表
   h1 {
-    // padding: 10px;
     margin-top: 70px;
     padding: 10px 0;
     border-bottom: 3px solid var(--bl-preview-h1-bg-color);
-    // border-radius: var(--bl-preview-border-radius);
-    // background-color: var(--bl-preview-h1-bg-color);
-    // box-shadow: var(--bl-preview-h1-box-shadow);
-    // text-shadow: var(--bl-preview-h1-text-shadow);
     text-align: left;
     position: relative;
+  }
+
+  h1:first-child {
+    margin-top: 0px;
   }
 
   h2 {
