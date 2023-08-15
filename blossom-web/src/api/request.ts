@@ -22,7 +22,7 @@ export class Request {
      * 请求拦截
      */
     this.instance.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+      (config: AxiosRequestConfig): any => {
         return {
           ...config,
           headers: {
