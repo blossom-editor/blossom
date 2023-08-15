@@ -154,6 +154,7 @@ const handlClick = () => {
 
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
+const rMenuHeight = 275
 
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', closeMenuShow)
@@ -168,10 +169,9 @@ const closeMenuShow = () => {
 
 const handleClickRight = (event: MouseEvent) => {
   // TODO 固定的菜单高度, 每次增加右键菜单项时需要修改该值
-  let menuHeight = 275
   let y = event.clientY
-  if (document.body.clientHeight - event.clientY < menuHeight) {
-    y = event.clientY - 275
+  if (document.body.clientHeight - event.clientY < rMenuHeight) {
+    y = event.clientY - rMenuHeight
   }
   rMenu.value = { show: true, clientX: event.clientX, clientY: y }
   setTimeout(() => {

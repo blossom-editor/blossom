@@ -105,9 +105,10 @@
           @image="cmw.commandImg()" @link="cmw.commandLink()">
         </EditorTools>
       </div>
-      <div class="editor-preview" @click.right="handleEditorClickRight" :style="{ fontFamily: editorConfig.fontFamily }">
+      <div class="editor-preview" :style="{ fontFamily: editorConfig.fontFamily }">
         <div class="gutter-holder" :style="editorPreviewStyle.gutter"></div>
-        <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"></div>
+        <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"
+          @click.right="handleEditorClickRight"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" :style="editorPreviewStyle.preview" v-html="articleHtml">
         </div>
       </div>
@@ -719,6 +720,7 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
 
 //#region ----------------------------------------< 编辑器右键 >----------------------------------------
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
+const rightMenuHeight = 215
 
 const removeListenerRightMenu = () => {
   document.body.removeEventListener('click', closeEditorRightMenu)
@@ -730,8 +732,14 @@ const closeEditorRightMenu = () => {
 }
 
 const handleEditorClickRight = (event: MouseEvent) => {
+  // 
   editorRightMenu.value = { show: false, clientX: 0, clientY: 0 }
-  editorRightMenu.value = { show: true, clientX: event.clientX, clientY: event.clientY }
+  //   
+  let y = event.clientY
+  if (document.body.clientHeight - event.clientY < rightMenuHeight) {
+    y = event.clientY - rightMenuHeight
+  }
+  editorRightMenu.value = { show: true, clientX: event.clientX, clientY: y }
   setTimeout(() => {
     document.body.addEventListener('click', closeEditorRightMenu)
   }, 100)
