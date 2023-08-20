@@ -98,37 +98,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-client</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>transport</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.elasticsearch.plugin</groupId>
-                <artifactId>transport-netty4-client</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
@@ -155,22 +124,10 @@
                 <artifactId>common-db</artifactId>
                 <version>${revision}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.blossom</groupId>
-                <artifactId>common-elasticsearch</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
+            
             <dependency>
                 <groupId>com.blossom</groupId>
                 <artifactId>common-iaas</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.blossom</groupId>
-                <artifactId>common-wechat</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -190,24 +147,6 @@
             <dependency>
                 <groupId>com.blossom</groupId>
                 <artifactId>expand-tracker-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.blossom</groupId>
-                <artifactId>service-base</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.blossom</groupId>
-                <artifactId>service-biz</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.blossom</groupId>
-                <artifactId>service-flow</artifactId>
                 <version>${revision}</version>
             </dependency>
 
