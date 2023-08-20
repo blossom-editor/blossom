@@ -16,9 +16,6 @@
     </div>
     <div v-for="line, index in tagLins" :key="line" :class="[line]" :style="{ left: (-1 * (index + 1) * 5) + 'px' }">
     </div>
-    <!-- <div v-if="isOpen && !isFolder" class="open-line"></div>
-    <div v-if="isStar" class="star-line"></div>
-    <div v-if="isSync" class="sync-line"></div> -->
 
     <!-- 右键菜单, 添加到 body 下 -->
     <Teleport to="body">
