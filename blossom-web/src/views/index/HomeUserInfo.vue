@@ -116,7 +116,6 @@ onMounted(() => {
         @include font(13px, 500);
         height: 20px;
         color: #7a7a7a;
-        font-family: monospace, sans-serif;
         letter-spacing: 1px;
       }
     }

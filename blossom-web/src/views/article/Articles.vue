@@ -19,7 +19,7 @@
     <div class="main">
       <div class="menu" :style="menuStyle">
         <el-menu v-if="docTreeData != undefined && docTreeData.length > 0" class="doc-trees"
-          :default-active="docTreeDefaultActive">
+          :default-active="docTreeDefaultActive" :default-openeds="defaultOpeneds" :unique-opened="true">
 
           <!-- ================================================ L1 ================================================ -->
           <div v-for="L1 in docTreeData" :key="L1.i">
@@ -81,8 +81,8 @@
       </div>
 
       <div class="article">
-        <div class="bl-preview" v-html="article?.html"></div>
-        <!-- <div v-else class="bl-preview-placeholder">请选择一篇文章查看</div> -->
+        <div class="bl-preview" v-html="article?.html">
+        </div>
       </div>
 
       <div class="toc-container" :style="tocStyle">
@@ -158,9 +158,11 @@ const article = ref<DocInfo>({
   starStatus: 0,
   openStatus: 0,
   type: 3,
-  html: '<h4 style="color:#AAAAAA">请在左侧选择一篇文章</h4>'
+  html: `<div style="color:#E3E3E3;width:100%;height:300px;display:flex;justify-content: center;
+    align-items: center;font-size:25px;">请在左侧菜单中选择一篇文章</div>`
 })
 const tocList = ref<any>([])
+const defaultOpeneds = ref<string[]>([])
 
 /**
  * 获取文档树状列表
@@ -170,8 +172,12 @@ const tocList = ref<any>([])
 const getDocTree = () => {
   docTreeLoading.value = true;
   docTreeData.value = []
+  defaultOpeneds.value = []
   docTreeApi({ onlyOpen: true }).then(resp => {
     docTreeData.value = resp.data
+    docTreeData.value.forEach((l1: DocTree) => {
+      defaultOpeneds.value.push(l1.i.toString())
+    })
   }).finally(() => {
     docTreeLoading.value = false
   })
@@ -520,7 +526,8 @@ const onresize = () => {
       .bl-preview {
         $borderRadius: 4px;
         color: #4b4b4b;
-        font-size: 14px;
+        font-size: 0.8rem;
+        // font-size: 14px;
         line-height: 1.4;
 
         ::-webkit-scrollbar {
@@ -540,7 +547,6 @@ const onresize = () => {
         }
 
         :deep(a.inner-link) {
-          // text-decoration: underline;
           border-bottom: 2px dashed var(--el-color-primary);
           box-sizing: border-box;
           padding: 0 4px;
@@ -554,14 +560,10 @@ const onresize = () => {
 
         // 列表
         :deep(h1) {
-          // background-color: #eaeaea;
           padding: 10px 0;
           margin-top: 70px;
           border-bottom: 2px solid #bebebe;
-          // // border-radius: $borderRadius;
-          // box-shadow: 3px 3px 10px 3px #e5e5e5;
           text-align: left;
-          // text-shadow: 3px 3px 3px rgb(148, 148, 148);
           position: relative;
         }
 
@@ -592,21 +594,25 @@ const onresize = () => {
 
         // 有序列表
         :deep(ol) {
-          padding-left: 30px;
+          padding-left: 20px;
         }
 
         // 无序列表
         :deep(ul) {
-          padding-left: 20px;
+          padding-left: 15px;
 
           ul {
-            padding-left: 20px;
+            padding-left: 15px;
           }
         }
 
         // checkbox
         :deep(ul:has(input)) {
           padding-left: 0px;
+
+          input {
+            margin: 0;
+          }
 
           ul {
             padding-left: 15px;
@@ -738,7 +744,8 @@ const onresize = () => {
           padding: 0px 4px;
           border-radius: 3px;
           margin: 0 3px;
-          font-size: 13px;
+          word-wrap: break-word;
+          word-break: break-all;
         }
 
 
@@ -749,7 +756,6 @@ const onresize = () => {
           overflow: auto;
           border-radius: $borderRadius;
           box-shadow: 2px 2px 5px rgb(76, 76, 76);
-          font-size: 13px;
           max-height: 1100px;
 
 
@@ -758,7 +764,6 @@ const onresize = () => {
             padding: 0;
             border-radius: 0;
             margin: 0;
-            font-size: 13px;
           }
 
           pre code.hljs {
@@ -892,6 +897,7 @@ const onresize = () => {
 
     .main {
       @include box(100%, calc(100% - 60px - 50px));
+      padding: 0;
 
       .menu {
         height: calc(100% - 20px) !important;
@@ -906,7 +912,7 @@ const onresize = () => {
       }
 
       .article {
-        padding: 0 10px;
+        padding: 0 20px;
         overflow-x: hidden;
 
         .bl-preview {

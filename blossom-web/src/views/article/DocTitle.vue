@@ -41,7 +41,7 @@ const tags = computed(() => {
   let icons: any = []
   props.trees.t?.forEach(tag => {
     if (tag === 'subject') {
-      icons.unshift({ content: '专题', bgColor: '#ABABAB', icon: 'bl-a-lowerrightpage-line' })
+      icons.unshift({ content: '专题', bgColor: '#C0C0C0', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
       icons.push({ content: 'TOC', bgColor: '#c1992f' })
     } else {
@@ -80,6 +80,14 @@ $icon-size: 17px;
   min-width: calc(100% - 10px);
   padding-bottom: 1px;
   position: relative;
+
+  .doc-name {
+    // @include flex(row, flex-start, center);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
 }
 
 // 专题样式, 包括边框和文字样式

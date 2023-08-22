@@ -84,7 +84,7 @@ const getImg = (img: string) => {
     .menu-dropdown {
       @include box(100%, 100%);
       padding: 5px;
-      margin-top: 3px;
+      margin-top: 1px;
       color: #ABABAB;
       border: 0;
       background-color: rgba(0, 0, 0, 0);
