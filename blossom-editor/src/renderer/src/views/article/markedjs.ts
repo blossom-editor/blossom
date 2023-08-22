@@ -271,7 +271,6 @@ export const renderImage = (href: string | null, _title: string | null, text: st
         width = tags[i].substring(1)
         if (!width.endsWith('%')) {
           width += 'px'
-          style += `min-width:${width};max-width:${width};`
         }
       }
     }

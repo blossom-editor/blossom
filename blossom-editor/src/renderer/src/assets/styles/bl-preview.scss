@@ -63,21 +63,25 @@
 
   // 有序列表
   ol {
-    padding-left: 30px;
+    padding-left: 20px;
   }
 
   // 无序列表
   ul {
-    padding-left: 20px;
+    padding-left: 15px;
 
     ul {
-      padding-left: 20px;
+      padding-left: 15px;
     }
   }
 
   // checkbox
   ul:has(input) {
     padding-left: 0px;
+
+    input {
+      margin: 0;
+    }
 
     ul {
       padding-left: 15px;

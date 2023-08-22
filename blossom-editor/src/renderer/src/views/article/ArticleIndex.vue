@@ -10,7 +10,7 @@
       </div>
       <!-- 文件夹 -->
       <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :style="tempTextareaStyle.docTree"
-        :default-active="curActiveDoc?.id">
+        :default-active="curActiveDoc?.id" :unique-opened="true">
 
         <!-- ================================================ L1 ================================================ -->
         <div v-for="L1 in docTreeData" :key="L1.i">
