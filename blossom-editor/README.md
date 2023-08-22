@@ -4,7 +4,7 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 
 ![](../doc/imgs/home_ld.jpg "Blossom 首页")
 
-当前版本: `1.1.0`
+当前版本: `1.1.1`
 
 - [文档](https://www.wangyunf.com/blossom-doc)
 - [试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)
