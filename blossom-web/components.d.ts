@@ -9,6 +9,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BLCol: typeof import('./src/components/BLCol.vue')['default']
+    BLRow: typeof import('./src/components/BLRow.vue')['default']
     BLTag: typeof import('./src/components/BLTag.vue')['default']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']

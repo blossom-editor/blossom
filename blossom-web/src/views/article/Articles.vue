@@ -3,22 +3,33 @@
     <div class="header">
       <IndexHeader :bg="true"></IndexHeader>
     </div>
+
+    <div class="mask" :style="maskStyle" @click="closeAll"></div>
+
+    <div class="headmenu">
+      <bl-row @click="handleMenu(!menuShow)">
+        <div class="iconbl  bl-model-line"></div>
+        <div style="font-size: 0.8rem;">菜单</div>
+      </bl-row>
+      <bl-row just="flex-end" @click="handleToc(!tocShow)">
+        <div style="font-size: 0.8rem;">目录</div>
+        <div class="iconbl bl-list-ordered"></div>
+      </bl-row>
+    </div>
     <div class="main">
-      <div class="menu">
+      <div class="menu" :style="menuStyle">
         <el-menu v-if="docTreeData != undefined && docTreeData.length > 0" class="doc-trees"
           :default-active="docTreeDefaultActive">
 
           <!-- ================================================ L1 ================================================ -->
           <div v-for="L1 in docTreeData" :key="L1.i">
 
-            <!-- L1无下级 -->
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
                 <DocTitle :trees="L1" @click-doc="clickCurDoc" />
               </template>
             </el-menu-item>
 
-            <!-- L1有下级 -->
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
               <template #title>
                 <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px;font-weight: bold;" />
@@ -26,14 +37,12 @@
 
               <!-- ================================================ L2 ================================================ -->
               <div v-for="L2 in L1.children" :key="L2.i">
-                <!-- 级别1无下级 -->
                 <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
                   <template #title>
                     <DocTitle :trees="L2" @click-doc="clickCurDoc" />
                   </template>
                 </el-menu-item>
 
-                <!-- 级别1有下级 -->
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
                   <template #title>
                     <DocTitle :trees="L2" @click-doc="clickCurDoc" />
@@ -41,14 +50,12 @@
 
                   <!-- ================================================ L3 ================================================ -->
                   <div v-for="L3 in L2.children" :key="L3.i">
-                    <!-- 级别2无下级 -->
                     <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
                       <template #title>
                         <DocTitle :trees="L3" @click-doc="clickCurDoc" />
                       </template>
                     </el-menu-item>
 
-                    <!-- 级别2有下级 -->
                     <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold"
                       :index="L3.i">
                       <template #title>
@@ -57,7 +64,6 @@
 
                       <!-- ================================================ L4 ================================================ -->
                       <div v-for="L4 in L3.children" :key="L4.i">
-                        <!-- 级别3无下级 -->
                         <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
                           <template #title>
                             <DocTitle :trees="L4" @click-doc="clickCurDoc" />
@@ -79,7 +85,7 @@
         <!-- <div v-else class="bl-preview-placeholder">请选择一篇文章查看</div> -->
       </div>
 
-      <div class="toc">
+      <div class="toc-container" :style="tocStyle">
         <div class="viewer-toc">
           <div class="toc-subtitle" style="font-size: 15px;">《{{ article?.name }}》</div>
           <div class="toc-subtitle">
@@ -105,7 +111,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onActivated } from "vue";
+import { ref, onActivated, onUnmounted } from "vue";
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, docTreeApi } from '@/api/blossom'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
@@ -115,6 +121,12 @@ import 'katex/dist/katex.min.css'
 
 onActivated(() => {
   getRouteQueryParams();
+  window.addEventListener('resize', onresize)
+  initStyle()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', onresize)
 })
 
 /**
@@ -132,7 +144,6 @@ const getRouteQueryParams = () => {
 
 const route = useRoute();
 // 文档菜单的加载动画
-const previewLoading = ref(false)
 const docTreeLoading = ref(true)
 // 文档菜单
 const docTreeDefaultActive = ref('')
@@ -196,41 +207,120 @@ const toScroll = (level: number, content: string) => {
   let elm = document.getElementById(id)
   elm?.scrollIntoView(true)
 }
+
+
+//#region 样式
+const maskStyle = ref({ display: 'none' })
+const menuShow = ref(false)
+const menuStyle = ref({ display: 'none', opacity: 0 })
+const tocShow = ref(false)
+const tocStyle = ref({ display: 'none', opacity: 0 })
+
+const handleMenu = (show: boolean) => {
+  menuShow.value = show
+  if (show) {
+    maskStyle.value = { display: 'block' }
+    menuStyle.value = { display: 'block', opacity: 0 }
+    setTimeout(() => { menuStyle.value = { display: 'block', opacity: 1 } }, 1)
+  }
+  if (!show) {
+    menuStyle.value = { display: 'block', opacity: 0 }
+    setTimeout(() => { menuStyle.value = { display: 'none', opacity: 0 } }, 300)
+  }
+}
+
+const handleToc = (show: boolean) => {
+  tocShow.value = show
+  if (show) {
+    maskStyle.value = { display: 'block' }
+    tocStyle.value = { display: 'block', opacity: 0 }
+    setTimeout(() => { tocStyle.value = { display: 'block', opacity: 1 } }, 1)
+  }
+  if (!show) {
+    tocStyle.value = { display: 'block', opacity: 0 }
+    setTimeout(() => { tocStyle.value = { display: 'none', opacity: 0 } }, 300)
+  }
+}
+
+const initStyle = () => {
+  let width = document.body.clientWidth
+  if (width > 1100) {
+    menuStyle.value = { display: 'block', opacity: 1 }
+  }
+  if (width > 1100) {
+    maskStyle.value = { display: 'none' }
+    tocStyle.value = { display: 'block', opacity: 1 }
+  }
+}
+
+const closeAll = () => {
+  handleMenu(false)
+  handleToc(false)
+  maskStyle.value = { display: 'none' }
+}
+
+const onresize = () => {
+  let width = document.body.clientWidth
+  if (width < 1100) {
+    menuShow.value = false
+    menuStyle.value = { display: 'none', opacity: 0 }
+  }
+  if (width > 1100) {
+    maskStyle.value = { display: 'none' }
+    menuStyle.value = { display: 'block', opacity: 1 }
+  }
+
+  if (width < 1100) {
+    tocShow.value = false
+    tocStyle.value = { display: 'none', opacity: 0 }
+  }
+  if (width > 1100) {
+    maskStyle.value = { display: 'none' }
+    tocStyle.value = { display: 'block', opacity: 1 }
+  }
+
+}
+
+//#endregion
 </script>
 
 <style scoped lang="scss">
 .articles-root {
-  @include box(100%, 100%);
+  @include box(100vw, 100%);
   @include flex(column, flex-start, center);
   box-sizing: border-box;
   background: #ffffff;
-
-  // 屏幕宽度在 1100 以内时使用以下样式
-  @media screen and (max-width: 1100px) {
-    .toc {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      max-height: 400px;
-      background-color: #4D4D4DE2;
-      border-radius: 10px;
-      border: 0;
-    }
-
-    .viewer-toc {
-      color: #fff !important;
-    }
-  }
+  position: relative;
 
   .header {
-    @include box(100%, 60px);
+    @include box(100vw, 60px);
+  }
+
+  .mask {
+    position: absolute;
+    @include box(100%, 100%);
+    left: 0;
+    top: 0;
+    z-index: 9998;
+    background-color: #00000067;
+  }
+
+  .headmenu {
+    display: none;
+    color: #BFBFBF;
+
+    .iconbl {
+      font-size: 20px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
   }
 
   .main {
     @include box(100%, calc(100% - 60px));
     @include flex(row, center, center);
     padding: 10px;
-    position: relative;
+    overflow: hidden;
 
     .menu {
       @include box(240px, 100%, 240px, 240px);
@@ -244,7 +334,7 @@ const toScroll = (level: number, content: string) => {
         padding-right: 0;
         border: 0;
         overflow-y: scroll;
-        padding-right: 6px;
+        // padding-right: 6px;
         // 基础的 padding
         --el-menu-base-level-padding: 25px;
         // 每级别的的缩进
@@ -276,8 +366,10 @@ const toScroll = (level: number, content: string) => {
             border-radius: 5px;
 
             .el-sub-menu__icon-arrow {
-              right: calc(215px - var(--el-menu-level) * 10px);
+              right: calc(220px - var(--el-menu-level) * 10px);
               font-size: 12px;
+              width: 0.8em;
+              height: 0.8em;
             }
           }
         }
@@ -313,7 +405,7 @@ const toScroll = (level: number, content: string) => {
       }
     }
 
-    .toc {
+    .toc-container {
       @include box(270px, 100%, 270px, 270px);
       border-left: 1px solid #EEEEEE;
       overflow: auto;
@@ -348,10 +440,8 @@ const toScroll = (level: number, content: string) => {
         }
 
         .toc-content {
-          // @include box(100%, calc(100% - 20px - 20px));
-          widows: 100%;
           @include font(14px);
-          // border-top: 3px solid #BCBCBC;
+          width: 100%;
           overflow-y: auto;
           margin-top: 10px;
           padding-top: 10px;
@@ -374,6 +464,7 @@ const toScroll = (level: number, content: string) => {
           }
 
           .toc-1 {
+            font-size: 1.1rem;
             border-top: 2px solid #eeeeee;
             margin-top: 5px;
             padding-top: 5px;
@@ -387,32 +478,32 @@ const toScroll = (level: number, content: string) => {
 
           .toc-2 {
             &::before {
-              content: '  ';
+              content: ' ';
             }
 
           }
 
           .toc-3 {
             &::before {
-              content: '    ';
+              content: '  ';
             }
           }
 
           .toc-4 {
             &::before {
-              content: '      ';
+              content: '  ';
             }
           }
 
           .toc-5 {
             &::before {
-              content: '        ';
+              content: '   ';
             }
           }
 
           .toc-6 {
             &::before {
-              content: '          ';
+              content: '    ';
             }
           }
         }
@@ -423,9 +514,8 @@ const toScroll = (level: number, content: string) => {
       height: 100%;
       width: 1260px;
       max-width: 1260px;
-      overflow-y: scroll;
-      padding: 0 30px;
-
+      overflow-y: overlay;
+      padding: 0 20px;
 
       .bl-preview {
         $borderRadius: 4px;
@@ -791,6 +881,53 @@ const toScroll = (level: number, content: string) => {
     }
   }
 
+
+  // 屏幕宽度在 1100 以内时使用以下样式
+  @media screen and (max-width: 1100px) {
+    .headmenu {
+      @include box(100vw, 50px);
+      @include flex(row, space-between, center);
+      border-bottom: 1px solid #E2E2E2;
+    }
+
+    .main {
+      @include box(100%, calc(100% - 60px - 50px));
+
+      .menu {
+        height: calc(100% - 20px) !important;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        padding-top: 10px;
+        z-index: 9999;
+        overflow: hidden;
+      }
+
+      .article {
+        padding: 0 10px;
+        overflow-x: hidden;
+
+        .bl-preview {
+          pre {
+            margin: -10px !important;
+          }
+        }
+      }
+    }
+
+    .toc-container {
+      height: calc(100% - 20px) !important;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      border: 0;
+      z-index: 9999;
+    }
+  }
 
 }
 </style>

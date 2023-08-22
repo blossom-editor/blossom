@@ -37,9 +37,9 @@ onMounted(() => {
   @include box(100%, 100%);
   @include flex(row, center, center);
   box-shadow: 0 0 10px #24272c;
-  // background-image: linear-gradient(to bottom right, #3e464e, #0c0c11);
   background-image: linear-gradient(to bottom right, #3e464e, #212121);
   position: relative;
+  overflow: hidden;
 
   .home-header {
     @include box(100%, 60px);
@@ -68,6 +68,20 @@ onMounted(() => {
 
       .home-main-right-subject {
         @include box(100%, 60%);
+      }
+    }
+  }
+
+
+  @media screen and (max-width: 1100px) {
+    .home-main {
+
+      .home-main-userinfo {
+        width: 100%;
+      }
+
+      .home-main-right {
+        display: none;
       }
     }
   }

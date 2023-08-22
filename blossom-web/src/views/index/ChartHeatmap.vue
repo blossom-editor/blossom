@@ -1,37 +1,26 @@
 <template>
   <!-- 图表 -->
   <div class="yq-user-info-heatmap" ref="ChartHeatmapRef" />
-
   <!-- 图表数据切换 -->
   <div class="heatmap-type-choice-btns">
     <div class="heatmap-type-content">{{ type }}</div>
-
-    <!-- 笔记热力图 -->
-    <!-- <div class="heatmap-type-choice-btn" @click="getBlossomHeatmap">
-      <img src="@/assets/imgs/blossom/blossom_fill.png" style="height: 21px;">
-    </div> -->
-
-    <!-- 码云热力图 -->
-    <!-- <div class="heatmap-type-choice-btn" @click="getGiteeUpdateHeatmap">
-      <img src="@/assets/imgs/common/gitee.png" style="height: 21px;">
-    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue"
-import { articleHeatmapApi, giteeHeatmapApi } from '@/api/blossom';
+import { ref, onMounted } from "vue"
+import { articleHeatmapApi } from '@/api/blossom'
 // echarts
-import * as echarts from 'echarts/core';
-import { TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, LegendComponent } from 'echarts/components';
-import { HeatmapChart } from 'echarts/charts';
-import { CanvasRenderer } from 'echarts/renderers';
-import { ScatterChart, EffectScatterChart } from 'echarts/charts';
-import { UniversalTransition } from 'echarts/features';
-echarts.use([TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, HeatmapChart, CanvasRenderer, LegendComponent, ScatterChart, EffectScatterChart, UniversalTransition]);
+import * as echarts from 'echarts/core'
+import { TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, LegendComponent } from 'echarts/components'
+import { HeatmapChart } from 'echarts/charts'
+import { CanvasRenderer } from 'echarts/renderers'
+import { ScatterChart, EffectScatterChart } from 'echarts/charts'
+import { UniversalTransition } from 'echarts/features'
+echarts.use([TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, HeatmapChart, CanvasRenderer, LegendComponent, ScatterChart, EffectScatterChart, UniversalTransition])
 
 const ChartHeatmapRef = ref()
-const type = ref('笔记指数')
+const type = ref('文章编辑记录')
 let chartHeatmap: any
 let chartData: any = []
 let maxUpdateNum = 0
@@ -39,7 +28,6 @@ let dateBegin = ''
 let dateEnd = ''
 
 let articleHeatmap = { init: false, chartData: [], maxUpdateNum: 0, dateBegin: '', dateEnd: '' }
-let giteeHeapmap = { init: false, chartData: [], maxUpdateNum: 0, dateBegin: '', dateEnd: '' }
 
 const getBlossomHeatmap = () => {
   let handle = () => {
@@ -47,7 +35,7 @@ const getBlossomHeatmap = () => {
     dateBegin = articleHeatmap.dateBegin
     dateEnd = articleHeatmap.dateEnd
     chartData = articleHeatmap.chartData
-    type.value = '笔记指数'
+    type.value = '文章编辑记录'
     renderChart()
   }
 
@@ -58,30 +46,6 @@ const getBlossomHeatmap = () => {
       articleHeatmap.dateBegin = res.data.dateBegin
       articleHeatmap.dateEnd = res.data.dateEnd
       articleHeatmap.chartData = res.data.data
-      handle()
-    })
-  } else {
-    handle()
-  }
-}
-
-const getGiteeUpdateHeatmap = () => {
-  let handle = () => {
-    maxUpdateNum = giteeHeapmap.maxUpdateNum
-    dateBegin = giteeHeapmap.dateBegin
-    dateEnd = giteeHeapmap.dateEnd
-    chartData = giteeHeapmap.chartData
-    type.value = 'Gitee指数'
-    renderChart()
-  }
-
-  if (!giteeHeapmap.init) {
-    giteeHeatmapApi().then(res => {
-      giteeHeapmap.init = true
-      giteeHeapmap.maxUpdateNum = res.data.maxUpdateNum
-      giteeHeapmap.dateBegin = res.data.dateBegin
-      giteeHeapmap.dateEnd = res.data.dateEnd
-      giteeHeapmap.chartData = res.data.data
       handle()
     })
   } else {
@@ -110,18 +74,18 @@ const renderChart = (callback?: any) => {
         color: '#7a7a7a'
       },
       formatter: (params: any) => {
-        let date = params.data[0];
-        let num = params.data[1];
-        if (type.value === '笔记指数') {
+        let date = params.data[0]
+        let num = params.data[1]
+        if (type.value === '文章编辑记录') {
           return "<div style='text-align: left'>" +
             date + ' 日 <br/>' +
             '编辑 [ ' + num + ' ] 篇文章' +
-            "</div>";
+            "</div>"
         } else {
           return "<div style='text-align: left'>" +
             date + ' 日 <br/>' +
             '提交 [ ' + num + ' ] 次代码' +
-            "</div>";
+            "</div>"
         }
       },
     },
@@ -168,9 +132,9 @@ const renderChart = (callback?: any) => {
         data: chartData === undefined ? 0 : chartData,
         symbolSize: (val: any) => {
           if (val[1] === 0) {
-            return 0;
+            return 0
           } else {
-            return 10;
+            return 10
           }
         }
       },
@@ -179,7 +143,7 @@ const renderChart = (callback?: any) => {
         coordinateSystem: 'calendar',
         // 排序后选最多的5个
         data: chartData === undefined ? 0 : chartData.sort((a: any, b: any) => {
-          return b[1] - a[1];
+          return b[1] - a[1]
         }).slice(0, 5),
         // 何时显示特效
         showEffectOn: 'render',

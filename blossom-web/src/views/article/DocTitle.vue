@@ -41,7 +41,7 @@ const tags = computed(() => {
   let icons: any = []
   props.trees.t?.forEach(tag => {
     if (tag === 'subject') {
-      icons.unshift({ content: '专题', bgColor: '#8E8E8E', icon: 'bl-a-lowerrightpage-line' })
+      icons.unshift({ content: '专题', bgColor: '#ABABAB', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
       icons.push({ content: 'TOC', bgColor: '#c1992f' })
     } else {
@@ -88,7 +88,7 @@ $icon-size: 17px;
   padding: 2px 5px;
   margin: 5px 0 10px 0;
   border-radius: 4px;
-  box-shadow: 3px 3px 8px #A2A2A2;
+  box-shadow: 1px 1px 5px #A2A2A2;
   background: linear-gradient(135deg, #ffffff, #F0F0F0, #CACACA);
 
   .doc-name {

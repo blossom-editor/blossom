@@ -116,7 +116,7 @@ onMounted(() => {
         @include font(13px, 500);
         height: 20px;
         color: #7a7a7a;
-        font-family: ubuntumono, sans-serif;
+        font-family: monospace, sans-serif;
         letter-spacing: 1px;
       }
     }
@@ -124,8 +124,8 @@ onMounted(() => {
 
   .userinfo-content {
     height: 60%;
-    //@include box($info-width, 60%);
     padding-top: 5px;
+    text-align: center;
 
     // 操作按钮
     .userinfo-content-btns {

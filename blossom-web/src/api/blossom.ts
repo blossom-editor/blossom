@@ -56,13 +56,3 @@ export const articleWordLineApi = (params?: object): Promise<R<any>> => {
 export const articleInfoOpenApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/open/info", { params });
 }
-
-// --------------------------------------------------< 三方接口 >--------------------------------------------------
-/**
- * gitee 动态热力图
- * @param params 
- * @returns 
- */
-export const giteeHeatmapApi = (params?: object): Promise<R<any>> => {
-  return rq.get<R<any>>("/gitee/heatmap/open", { params });
-}

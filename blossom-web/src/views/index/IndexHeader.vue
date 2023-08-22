@@ -114,7 +114,7 @@ const getImg = (img: string) => {
       top: 50px;
       padding: 5px 0 10px 0;
       border-radius: 5px;
-      box-shadow: 5px 8px 16px 0px rgba(0, 0, 0, 1);
+      box-shadow: 5px 5px 10px 0px rgb(25, 25, 25);
       background-color: #353b40;
       transition: 0.3s;
       z-index: 1;
