@@ -2,8 +2,12 @@ package com.blossom.backend.server.article.open;
 
 
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.param.ParamEnum;
+import com.blossom.backend.base.param.ParamService;
+import com.blossom.backend.base.param.pojo.ParamEntity;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleInfoRes;
@@ -12,20 +16,20 @@ import com.blossom.backend.server.article.open.pojo.ArticleOpenReq;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenRes;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenSyncReq;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
-import com.blossom.backend.server.article.view.ArticleViewService;
-import com.blossom.backend.server.article.view.pojo.ArticleViewEntity;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.util.ServletUtil;
 import lombok.AllArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * 公开文章 [Article]
@@ -39,13 +43,14 @@ public class ArticleOpenController {
 
     private final ArticleService articleService;
     private final ArticleOpenService openService;
+    private final ParamService paramService;
 
 
     /**
      * 查询公开文章, 只返回 html 内容
      *
      * @param id 文章ID
-     * @return
+     * @return 文章信息
      */
     @AuthIgnore
     @GetMapping("/info")
@@ -93,5 +98,27 @@ public class ArticleOpenController {
         openService.sync(req.getId());
         ArticleOpenEntity openEntity = openService.selectById(req.getId(), false, false, false);
         return R.ok(openEntity.to(ArticleOpenRes.class));
+    }
+
+    /**
+     * 生成公开文章二维码
+     *
+     * @param id 文章ID
+     */
+    @GetMapping("/qrcode")
+    public void qrcode(@RequestParam("id") Long id, HttpServletResponse response) {
+        ParamEntity param = paramService.getValue(ParamEnum.WEB_ARTICLE_URL);
+        XzException404.throwBy(ObjUtil.isNull(param), "未配置文章公网访问链接，无法生成二维码，请在服务端配置参数 [BaseParam.WEB_ARTICLE_URL]");
+        final String url = param.getParamValue() + id;
+        BufferedImage bfi = QrCodeUtil.generate(url, new QrConfig(200, 200));
+        response.setContentType("image/png");
+        response.setHeader("Access-Control-Expose-Headers", "Article-Url");
+        response.addHeader("Article-Url", url);
+        try {
+            ImageIO.write(bfi, "png", response.getOutputStream());
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

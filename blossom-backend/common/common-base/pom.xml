@@ -70,6 +70,13 @@
             <version>${hutool.version}</version>
         </dependency>
 
+        <!-- ========== 二维码 ========== -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+
         <!-- ============================== OkHttp =============================== -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -89,6 +96,7 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
+
 
     </dependencies>
 
