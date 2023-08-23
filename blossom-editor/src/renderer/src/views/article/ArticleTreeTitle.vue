@@ -41,21 +41,25 @@
           <!-- <div class="menu-item" @click="handleShowDocInfoDialog('add', props.trees.i)">
             <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
           </div> -->
+          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="createUrl('link')">
+            <span class="iconbl bl-correlation-line"></span>复制引用
+          </div>
           <div class="menu-item-divider"></div>
           <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="openArticleWindow">
             <span class="iconbl bl-a-computerend-line"></span>新窗口打开
           </div>
-          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="articleDownload">
-            <span class="iconbl bl-a-computerend-line"></span>下载文章
-          </div>
           <div :class="['menu-item', props.trees.ty === 1 || !isOpen ? 'disabled' : '']" @click="createUrl('open')">
             <span class="iconbl bl-planet-line"></span>浏览器打开
           </div>
-          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="createUrl('copy')">
+          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="articleDownload">
+            <span class="iconbl bl-a-clouddownload-line"></span>下载文章
+          </div>
+          <div :class="['menu-item', props.trees.ty === 1 || !isOpen ? 'disabled' : '']" @click="createUrl('copy')">
             <span class="iconbl bl-a-linkspread-line"></span>复制链接
           </div>
-          <div :class="['menu-item', props.trees.ty === 1 ? 'disabled' : '']" @click="createUrl('link')">
-            <span class="iconbl bl-correlation-line"></span>复制引用
+          <div :class="['menu-item', props.trees.ty === 1 || !isOpen ? 'disabled' : '']"
+            @click="handleArticleQrCodeDialog()">
+            <span class="iconbl bl-a-qrcode1-line"></span>查看二维码
           </div>
         </div>
       </div>
@@ -70,6 +74,15 @@
     :close-on-click-modal="false" draggable>
     <ArticleInfo ref="ArticleInfoRef"></ArticleInfo>
   </el-dialog>
+
+  <!-- 详情的弹框 -->
+  <el-dialog v-model="isShowQrCodeDialog" width="335" top="100px" style="
+    --el-dialog-padding-primary:0;
+    --el-dialog-border-radius:10px;
+    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
+    :close-on-click-modal="false" draggable>
+    <ArticleQrCode ref="ArticleQrCodeRef"></ArticleQrCode>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -77,12 +90,13 @@ import { ref, computed, onBeforeUnmount, nextTick } from 'vue'
 import type { PropType } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 
+import { grammar } from './markedjs'
 import { articleDownloadApi, articleSyncApi } from '@renderer/api/blossom'
 import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import ArticleInfo from '@renderer/views/article/ArticleInfo.vue'
+import ArticleQrCode from './ArticleQrCode.vue'
 import Notify from '@renderer/components/Notify'
-import { grammar } from './markedjs'
 
 const userStore = useUserStore();
 
@@ -226,13 +240,22 @@ const sync = () => {
     Notify.success('同步成功')
   })
 }
+
+const isShowQrCodeDialog = ref<boolean>(false);
+const ArticleQrCodeRef = ref()
+
+const handleArticleQrCodeDialog = () => {
+  isShowQrCodeDialog.value = true
+  nextTick(() => {
+    ArticleQrCodeRef.value.getArticleQrCode(props.trees.n, props.trees.i)
+  })
+}
 //#endregion 右键菜单
 
 //#region ----------------------------------------< 新增修改详情弹框 >--------------------------------------
 
 const ArticleInfoRef = ref()
-const isShowDocInfoDialog = ref<boolean>(false);
-
+const isShowDocInfoDialog = ref<boolean>(false)
 /**
  * 显示弹框
  * @param dialogType 弹框的类型, 新增, 修改

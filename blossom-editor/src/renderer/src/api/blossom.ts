@@ -67,6 +67,15 @@ export const folderOpenApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/open", data);
 }
 
+/**
+ * 查看专题文章
+ * @param params 
+ * @returns 
+ */
+export const subjectsApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/folder/subjects", { params });
+}
+
 //#endregion
 
 //#region ====================================================< article >===================================================
@@ -125,29 +134,27 @@ export const articleUpdApi = (data?: object): Promise<R<any>> => {
  * }
  * @returns 
  */
-export const  articleUpdContentApi = (data?: object): Promise<R<any>> => {
+export const articleUpdContentApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/article/upd/content", data);
 }
 
+/**
+ * star 或取消 star
+ * @param data 
+ * @returns 
+ */
 export const articleStarApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/article/star", data);
 }
 
-export const articleOpenApi = (data?: object): Promise<R<any>> => {
-  return rq.post<R<any>>("/article/open", data);
-}
-
-export const articleSyncApi = (data?: object): Promise<R<any>> => {
-  return rq.post<R<any>>("/article/open/sync", data);
-}
-
+/**
+ * 下载文章 markdown
+ * @param params 
+ * @returns 
+ */
 export const articleDownloadApi = (params?: object): Promise<any> => {
   let config = { params: params, responseType: 'blob' }
   return rq.get("/article/download", config);
-}
-
-export const subjectsApi = (params?: object): Promise<R<any>> => {
-  return rq.get<R<any>>("/folder/subjects", { params });
 }
 
 export const articleWordsApi = (params?: object): Promise<R<any>> => {
@@ -162,10 +169,23 @@ export const articleHeatmapApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/stat/heatmap", { params });
 }
 
-
 export const articleRefListApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/ref/list", { params });
 }
+
+export const articleOpenApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>("/article/open", data);
+}
+
+export const articleSyncApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>("/article/open/sync", data);
+}
+
+export const articleQrCodeApi = (params?: object): Promise<any> => {
+  let config = { params: params, responseType: 'blob' }
+  return rq.get("/article/open/qrcode", config);
+}
+
 
 //#endregion
 
