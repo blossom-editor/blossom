@@ -3,7 +3,6 @@ package com.blossom.backend.server.folder;
 import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.config.BlConstants;
-import com.blossom.backend.server.article.stat.pojo.ArticleLineRes;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;

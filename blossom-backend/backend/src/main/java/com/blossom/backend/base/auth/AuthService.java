@@ -11,7 +11,6 @@ import com.blossom.backend.base.auth.repo.TokenRepository;
 import com.blossom.backend.base.auth.token.TokenEncoder;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
-import com.blossom.common.base.enums.YesNo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

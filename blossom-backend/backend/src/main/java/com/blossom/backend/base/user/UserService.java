@@ -3,17 +3,14 @@ package com.blossom.backend.base.user;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.security.PasswordEncoder;
 import com.blossom.backend.base.user.pojo.UserAddReq;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.base.user.pojo.UserUpdPwdReq;
 import com.blossom.common.base.exception.XzException400;
-import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.util.security.SaltUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

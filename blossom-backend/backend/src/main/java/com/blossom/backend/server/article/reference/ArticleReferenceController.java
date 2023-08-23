@@ -1,7 +1,6 @@
 package com.blossom.backend.server.article.reference;
 
 import com.blossom.backend.base.auth.AuthContext;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

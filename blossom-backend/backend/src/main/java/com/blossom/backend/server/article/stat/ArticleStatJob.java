@@ -1,7 +1,6 @@
 package com.blossom.backend.server.article.stat;
 
 import cn.hutool.core.collection.CollUtil;
-import com.blossom.backend.base.user.UserController;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;

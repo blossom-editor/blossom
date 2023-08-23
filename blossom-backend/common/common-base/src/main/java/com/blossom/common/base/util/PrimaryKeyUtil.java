@@ -4,9 +4,7 @@ package com.blossom.common.base.util;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Date;
 
 /**
  * 主键工具类

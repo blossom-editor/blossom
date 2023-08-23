@@ -16,7 +16,7 @@ public class Test {
             .initialCapacity(100)
             .expireAfterWrite(10, TimeUnit.SECONDS)
             .removalListener((String key, String value, RemovalCause cause) -> System.out.println(key + " 被删除"))
-            .build();;
+            .build();
     private static final ScheduledExecutorService clearUpScheduled = Executors.newScheduledThreadPool(1);
 
     public Test() {

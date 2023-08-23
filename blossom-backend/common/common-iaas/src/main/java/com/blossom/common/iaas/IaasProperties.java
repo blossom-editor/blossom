@@ -2,7 +2,6 @@ package com.blossom.common.iaas;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +13,6 @@ import javax.annotation.PostConstruct;
  *
  * @author xzzz
  */
-@Slf4j
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "project.iaas")

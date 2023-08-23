@@ -1,7 +1,6 @@
 package com.blossom.backend.server.article.stat;
 
 import com.blossom.backend.base.auth.AuthContext;
-import com.blossom.backend.base.user.pojo.BlossomUserRes;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
 import com.blossom.backend.server.article.stat.pojo.ArticleHeatmapRes;
