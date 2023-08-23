@@ -555,31 +555,31 @@ const simpleMarked = new Marked({ mangle: false, headerIds: false })
  * 自定义渲染
  */
 const renderer = {
-  table(header: string, body: string) { return renderTable(header, body) },
-  blockquote(quote: string) { return renderBlockquote(quote) },
-  codespan(src: string) { return renderCodespan(src) },
+  table(header: string, body: string): string { return renderTable(header, body) },
+  blockquote(quote: string): string { return renderBlockquote(quote) },
+  codespan(src: string): string { return renderCodespan(src) },
   /** 代码块 */
-  code(code: string, language: string | undefined, _isEscaped: boolean) {
+  code(code: string, language: string | undefined, _isEscaped: boolean): string {
     return renderCode(code, language, _isEscaped, (eleid: string, svg: string) => {
       articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
     })
   },
   /** 标题 */
-  heading(text: any, level: number) {
+  heading(text: any, level: number): string {
     if (parseTocAndReferences) {
       articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
     }
     return renderHeading(text, level)
   },
   /** 图片 */
-  image(href: string | null, _title: string | null, text: string) {
+  image(href: string | null, _title: string | null, text: string): string {
     if (parseTocAndReferences) {
       articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
     }
     return renderImage(href, _title, text)
   },
   /** 链接 */
-  link(href: string | null, title: string | null, text: string) {
+  link(href: string | null, title: string | null, text: string): string {
     let { link, ref } = renderLink(href, title, text, docTreeData.value)
     if (parseTocAndReferences) {
       articleLink.value.push(ref)
@@ -595,10 +595,8 @@ const tokenizer = {
   codespan(src: string): any { return tokenizerCodespan(src) }
 }
 
-marked.use({
-  tokenizer: tokenizer,
-  renderer: renderer
-})
+//@ts-ignore
+marked.use({ tokenizer: tokenizer, renderer: renderer })
 
 /**
  * 解析 markdown 为 html, 并将 html 赋值给 articleHtml
@@ -696,7 +694,8 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
     const invisibleMarkdown: string = cmw.sliceDoc(0, topBlock.from)
 
     // 将不可见的内容全部转换为 html
-    simpleMarked.parse(invisibleMarkdown, { async: true }).then((html: string) => {
+    //@ts-ignore
+    simpleMarked!.parse(invisibleMarkdown, { async: true }).then((html: string) => {
       const invisibleHtml = html
       // 将不可见的的 html 转换为 dom 对象, 是一个从 <html> 标签开始的 dom 对象
       const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')
