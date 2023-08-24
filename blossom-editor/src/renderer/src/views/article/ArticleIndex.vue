@@ -210,8 +210,7 @@ import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
 // marked
-import { Marked } from 'marked'
-import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './markedjs'
+import marked, { simpleMarked, renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './markedjs'
 
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
@@ -548,9 +547,7 @@ const setDoc = (md: string): void => {
 const renderInterval = ref<number>(0)     // 解析用时
 const PreviewRef = ref()                  // 显式 html 的 dom
 const articleHtml = ref<string>('')       // 解析后的 html 内容
-let parseTocAndReferences: boolean = true // 解析 markdown 时, 是否将图片和标题解析成列表对象
 let isDebounce: boolean = false           // 是否在渲染时设置防抖, 切换文档时不用防抖渲染
-const simpleMarked = new Marked({ mangle: false, headerIds: false })
 /**
  * 自定义渲染
  */
@@ -558,32 +555,22 @@ const renderer = {
   table(header: string, body: string): string { return renderTable(header, body) },
   blockquote(quote: string): string { return renderBlockquote(quote) },
   codespan(src: string): string { return renderCodespan(src) },
-  /** 代码块 */
   code(code: string, language: string | undefined, _isEscaped: boolean): string {
     return renderCode(code, language, _isEscaped, (eleid: string, svg: string) => {
       articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
     })
   },
-  /** 标题 */
   heading(text: any, level: number): string {
-    if (parseTocAndReferences) {
-      articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
-    }
+    articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
     return renderHeading(text, level)
   },
-  /** 图片 */
   image(href: string | null, _title: string | null, text: string): string {
-    if (parseTocAndReferences) {
-      articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
-    }
+    articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
     return renderImage(href, _title, text)
   },
-  /** 链接 */
   link(href: string | null, title: string | null, text: string): string {
     let { link, ref } = renderLink(href, title, text, docTreeData.value)
-    if (parseTocAndReferences) {
-      articleLink.value.push(ref)
-    }
+    articleLink.value.push(ref)
     return link
   }
 }
@@ -607,7 +594,6 @@ const parse = () => {
   isDebounce = true
   let mdContent = cmw.getDocString()
   clearTocAndImg()
-  parseTocAndReferences = true
   marked.parse(mdContent, { async: true }).then((content: string) => {
     articleHtml.value = content
     renderInterval.value = Date.now() - renderInterval.value
@@ -667,8 +653,8 @@ const removeListenerScroll = () => {
   EditorRef.value?.removeEventListener('scroll', sycnScroll)
 }
 
-const marginTop = 48.66666793823242
-const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table, ul,ol,iframe'
+const marginTop = 75
+const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe'
 const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
   if (EditorRef.value == undefined) {
     return
@@ -684,14 +670,17 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
   // 如果在尾部附近
   else if (EditorRef.value?.clientHeight + EditorRef.value?.scrollTop > EditorRef.value?.scrollHeight - 20) {
     PreviewRef.value.scrollTop = PreviewRef.value.scrollHeight
-  } else {
-    parseTocAndReferences = false
+  }
+  // 其他
+  else {
     // 文档头部, 距离整个浏览器的距离
     const top = cmw.getDocumentTop()
+
     // 获取可见位置最顶部的内容
     const topBlock = cmw.getElementAtHeight(Math.abs(top) + marginTop)
     // 从0开始获取全部不可见的内容的 markdown 原文档
     const invisibleMarkdown: string = cmw.sliceDoc(0, topBlock.from)
+
 
     // 将不可见的内容全部转换为 html
     //@ts-ignore
@@ -701,7 +690,6 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
       const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')
       // body 下的内容才是由 markdown 转换而来的, 不可见内容转换的 dom 集合
       const editorDoms = invisibleDomAll.body.querySelectorAll(matchHtmlTags)
-
       // 预览页面的 dom 集合
       const previewDoms = PreviewRef.value.querySelectorAll(matchHtmlTags)
       let targetIndex = editorDoms.length

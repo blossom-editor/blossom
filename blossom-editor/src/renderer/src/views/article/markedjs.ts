@@ -1,6 +1,6 @@
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html } from '@renderer/assets/utils/util'
-import { marked } from 'marked'
+import { marked, Marked } from 'marked'
 import { markedHighlight } from "marked-highlight"
 import hljs from 'highlight.js'
 import katex from 'katex'
@@ -60,6 +60,8 @@ marked.use(markedHighlight({
   }
 }))
 
+//
+
 //#region ----------------------------------------< tokenizer >--------------------------------------
 export const tokenizerCodespan = (src: string): any => {
   const match = src.match(singleDollar)
@@ -74,7 +76,10 @@ export const tokenizerCodespan = (src: string): any => {
   return false;
 }
 
+//#endregion
+
 //#region ----------------------------------------< renderer >--------------------------------------
+
 
 /**
  * 标题解析为 TOC 集合, 增加锚点跳转
@@ -131,6 +136,7 @@ export const renderBlockquote = (quote: string) => {
  * @param code      解析后的 HTML 代码
  * @param language  语言
  * @param isEscaped 
+ * @param mermaidCallback 替换 html 结果中的 mermaid 内容
  */
 export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean, mermaidCallback?: (eleid: string, svg: string) => void) => {
   if (language == undefined) {
@@ -143,10 +149,10 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       let canSyntax: boolean | void = syntax
       if (canSyntax) {
         mermaid.render(eleid + '-svg', escape).then((resp) => {
-          const { svg } = resp
-          let element = document.getElementById(eleid)
-          element!.innerHTML = svg
           if (mermaidCallback != undefined) {
+            const { svg } = resp
+            let element = document.getElementById(eleid)
+            element!.innerHTML = svg
             mermaidCallback(eleid, svg)
           }
         })
@@ -158,9 +164,9 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
           ${error}<br/><br/>
           你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
           </div>`
-      let element = document.getElementById(eleid)
-      element!.innerHTML = html
       if (mermaidCallback != undefined) {
+        let element = document.getElementById(eleid)
+        element!.innerHTML = html
         mermaidCallback(eleid, html)
       }
     })
@@ -275,9 +281,7 @@ export const renderImage = (href: string | null, _title: string | null, text: st
       }
     }
   }
-  return `<p>
-      <img width="${width}" style="${style}" src="${href}" alt="${text}">
-      </p>`
+  return `<img width="${width}" style="${style}" src="${href}" alt="${text}">`
 }
 
 /**
@@ -323,5 +327,8 @@ export const renderLink = (href: string | null, title: string | null, text: stri
 }
 
 //#endregion
+
+
+export const simpleMarked = new Marked({ mangle: false, headerIds: false })
 
 export default marked
