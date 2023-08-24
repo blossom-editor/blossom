@@ -55,14 +55,34 @@ let chartGraph: any
 let nodes: any = [{}]
 let links: any = [{}]
 
+
+let inside = { itemStyle: {}, label: {} }
+let outside = { itemStyle: {}, label: {} }
+const changeStyle = () => {
+  inside = {
+    itemStyle: { color: isDark.value ? '#614E8A' : '#ad8cf2' },
+    label: {
+      color: isDark.value ? '#BABABA' : '#000000',
+      textBorderColor: isDark.value ? '#000000' : '#ffffff',
+      textBorderWidth: 2
+    }
+  }
+  outside = {
+    itemStyle: { color: isDark.value ? '#624B00' : '#FDC81A87' },
+    label: { color: isDark.value ? '#808080' : '#B5B5B5', }
+  }
+}
+
 const getArticleRefList = (onlyInner: boolean) => {
+  changeStyle()
   articleRefListApi({ onlyInner: onlyInner }).then(resp => {
     nodes = resp.data.nodes.map((node: any) => {
       if (node.artType == 11) {
-        node.itemStyle = { color: isDark.value ? '#614E8A' : '#ad8cf2' }
-      }
-      if (node.artType == 21) {
-        node.itemStyle = { color: isDark.value ? '#624B00' : '#fdc81a' }
+        node.itemStyle = inside.itemStyle
+        node.label = inside.label
+      } else if (node.artType == 21) {
+        node.itemStyle = outside.itemStyle
+        node.label = outside.label
       }
       node.symbolSize = getCount(node.name, resp.data.links)
       return node
@@ -73,7 +93,7 @@ const getArticleRefList = (onlyInner: boolean) => {
 }
 const ascending = 1
 const getCount = (name: string, links: any[]): number => {
-  let count: number = 15
+  let count: number = 20
   for (let i = 0; i < links.length; i++) {
     let link = links[i]
     if (link.source == name) {
@@ -122,19 +142,25 @@ const renderChart = () => {
         top: 100, bottom: 100,
         draggable: false,
         symbolSize: 15,
-        animation: false,
+        animation: true,
         animationThreshold: 1000,
-        animationDuration: 1000,
+        animationDuration: 1,
         zoom: 0.5,
         roam: true,
         label: {
           show: true,
-          fontSize: 10,
-          color: isDark.value ? '#858585' : '#000000',
-          formatter: '{b}'
+          fontSize: 12,
+          formatter: (param: any) => {
+            let len = param.name.length
+            if (len < 20) {
+              return param.name
+            }
+            return (param.name as string).substring(0, 15) + '...'
+          }
         },
         labelLayout: {
-          hideOverlap: true
+          // 标签重叠时进行遮盖
+          hideOverlap: true,
         },
         // itemStyle: {
         //   shadowColor: '#000000',
@@ -144,29 +170,43 @@ const renderChart = () => {
         // },
         // autoCurveness: true,
         lineStyle: {
-          color: isDark.value ? '#0E0E0E' : '#B3B3B3',
+          color: isDark.value ? '#000000' : '#B3B3B3',
           // 直线或曲线
           // curveness: 0.1
         },
         force: {
+          layoutAnimation: true,
           repulsion: 500, // 节点之间的斥力因子。
-          friction: 0.1 // 这个参数能减缓节点的移动速度。取值范围 0 到 1。
+          // 这个参数能减缓节点的移动速度. 取值范围 0 到 1, 越大越快, 值越大时, 节点之间会更加内聚, 否则会混在一起
+          friction: 0.2,
+          // 节点受到的向中心的引力因子. 该值越大, 所有节点越往中心点靠拢.
+          gravity: 0.05
         },
         // 箭头的开始, 结束图形
         edgeSymbol: ['circle', 'arrow'],
         // 箭头的开始, 结束图形大小
         edgeSymbolSize: [0, 5],
-        edgeLabel: { fontSize: 10 },
+        // edgeLabel: {
+        //   show: false,
+        // fontSize: 10,
+        // width: 30,
+        // overflow: 'truncate'
+        // },
         emphasis: {
           // 聚焦关系图中的邻接点和边的图形。
           focus: 'adjacency',
-          blurScope: 'series',
+          // blurScope: 'series',
           lineStyle: {
             width: 5
-          }
+          },
+          // label: { show: true },
+          // edgeLabel: { show: false },
         },
         blur: {
-          label: { show: false }, edgeLabel: { show: false },
+          itemStyle: { opacity: 0.1 },
+          lineStyle: { opacity: 0.1 },
+          label: { show: false },
+          edgeLabel: { show: false },
         },
         data: nodes,
         links: links,
