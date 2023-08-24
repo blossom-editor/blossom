@@ -4,6 +4,7 @@
 .bl-preview {
   color: var(--bl-preview-color);
   background-color: var(--bl-preview-bg-color);
+  line-height: 20px;
 
   a {
     color: var(--el-color-primary);
@@ -105,7 +106,8 @@
     border-spacing: 0;
     margin: 10px 0;
     max-width: 100%;
-    table-layout: fixed;
+    // fixed|auto
+    table-layout: auto;
     width: 100%;
 
     thead {
@@ -214,7 +216,6 @@
     padding: 0px 4px;
     border-radius: 3px;
     margin: 0 5px;
-    font-size: 13px;
   }
 
   // 代码块
