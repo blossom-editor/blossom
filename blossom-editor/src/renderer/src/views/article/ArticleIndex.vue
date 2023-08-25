@@ -118,8 +118,8 @@
       </div>
 
       <!-- the toc -->
-      <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']">
-        <div class="toc-title">目录 <span style="font-size: 10px;">(Alt+2 可隐藏)</span></div>
+      <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
+        <div class="toc-title" ref="TocTitleRef">目录 <span style="font-size: 10px;">(Alt+2 可隐藏)</span></div>
         <div class="toc-content" v-show="(tocsExpand)">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
             {{ toc.content }}
@@ -206,6 +206,7 @@ import ArticleTreeTitle from '@renderer/views/article/ArticleTreeTitle.vue'
 import ArticleTreeWorkbench from "@renderer/views/article/ArticleTreeWorkbench.vue"
 import EditorTools from './EditorTools.vue'
 import EditorStatus from "./EditorStatus.vue"
+import { useDraggable } from '@renderer/components/Draggable'
 import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
@@ -215,7 +216,6 @@ import marked, { simpleMarked, renderBlockquote, renderCode, renderCodespan, ren
 // 快捷键注册
 import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
 import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
-
 
 onMounted(() => {
   initEditor()
@@ -621,7 +621,8 @@ function debounce(fn: () => void, time = 500) {
 const articleToc = ref<any[]>([])
 const articleImg = ref<ArticleReference[]>([])  // 文章对图片引用
 const articleLink = ref<ArticleReference[]>([]) // 文章对链接的引用
-
+const TocRef = ref()
+const TocTitleRef = ref()
 /**
  * 跳转至指定ID位置,ID为 标题级别-标题内容
  * @param level 标题级别
@@ -631,8 +632,6 @@ const toScroll = (level: number, content: string) => {
   let id = level + '-' + content
   let elm: HTMLElement = document.getElementById(id) as HTMLElement
   (elm.parentNode as Element).scrollTop = elm.offsetTop
-  // let elm = document.getElementById(id)
-  // elm?.scrollIntoView(true)
 }
 // 清空当前目录内容
 const clearTocAndImg = () => {
@@ -640,6 +639,8 @@ const clearTocAndImg = () => {
   articleImg.value = []
   articleLink.value = []
 }
+
+useDraggable(TocRef, TocTitleRef)
 
 //#endregion
 
@@ -805,6 +806,8 @@ const removeListenerShortcutMap = () => {
 
 //#endregion
 
+
+
 </script>
 
 <style scoped lang="scss">
@@ -813,4 +816,4 @@ const removeListenerShortcutMap = () => {
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;
 }
-</style>
+</style>../../components/draggable@renderer/components/Draggable

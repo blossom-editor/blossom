@@ -49,25 +49,26 @@
   @include font(12px);
   @include themeShadow(2px 4px 7px 2px rgba(49, 49, 49, 0.3), 2px 4px 7px 2px rgb(28, 28, 28));
   position: absolute;
-  top: 50px;
+  top: 10px;
   right: 50px;
   background-color: #4D4D4DBD;
   border-radius: 10px;
-  z-index: 1000;
+  z-index: 9999;
   max-height: 700px;
   overflow: hidden;
+  user-select: none;
 
   .toc-title {
     @include box(100%, 20px);
     @include font(15px, 700);
     @include themeColor(#FFFFFF, #ffffff);
+    cursor: move;
   }
 
   .toc-content {
     @include themeColor(#e2e2e2, #BCBCBC);
     width: 100%;
     max-height: calc(700px - 150px - 60px - 20px);
-    transition: 0.3s;
 
     .toc-1 {
       @include themeBorder(2px, #a3a3a3, #a3a3a3, 'top');
@@ -78,7 +79,7 @@
 .bl-preview-toc-block,
 .bl-preview-toc-absolute {
   padding: 10px;
-  transition: 0.3s;
+  transition: width 0.2s, height 0.2s;
 
   .toc-content {
     overflow-y: scroll;
@@ -168,7 +169,6 @@
       background-color: aliceblue;
       margin: 3px;
       filter: brightness(90%);
-      transition: 0.3s;
       color: #a7a7a7;
 
       &:hover {
