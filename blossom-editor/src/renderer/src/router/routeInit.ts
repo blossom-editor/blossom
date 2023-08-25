@@ -12,7 +12,7 @@ import SettingIndex from '@renderer/views/index/SettingIndex.vue'
 
 // 新窗口页面
 import ArticleViewWindow from '@renderer/views/article/ArticleViewWindow.vue'
-import ArticleReference from '@renderer/views/article/ChartGraphArticleReference.vue'
+import ArticleReference from '@renderer/views/article/ArticleReferenceChartGraph.vue'
 
 router.addRoute({
   path: '/', redirect: '/settingIndex'

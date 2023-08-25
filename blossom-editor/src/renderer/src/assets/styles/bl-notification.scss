@@ -1,5 +1,6 @@
 .el-notification {
   word-wrap: break-word;
   word-break: break-all;
-  // border-radius: 0px !important;
+  border-radius: 2px !important;
+  border: 2px solid var(--el-color-primary-light-5) !important;
 }
