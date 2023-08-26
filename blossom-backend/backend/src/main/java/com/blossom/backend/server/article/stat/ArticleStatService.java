@@ -64,7 +64,7 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
         res.setDateEnd(end);
 
         if (CollUtil.isNotEmpty(stats)) {
-            res.setMaxStatValues(stats.stream().mapToInt(ArticleStatEntity::getStatValue).max().getAsInt());
+            res.setMaxStatValues(stats.stream().mapToInt(ArticleStatEntity::getStatValue).max().orElse(0));
             for (ArticleStatEntity stat : stats) {
                 Object[] data = new Object[]{
                         DateUtils.format(stat.getStatDate(), DateUtils.PATTERN_YYYYMMDD),
@@ -123,8 +123,6 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
         if (value == null) {
             value = 0;
         }
-        log.info("{}:{}:{}", type, date, value);
-
         LambdaQueryWrapper<ArticleStatEntity> existWhere = new LambdaQueryWrapper<>();
         existWhere
                 .eq(ArticleStatEntity::getUserId, userId)
