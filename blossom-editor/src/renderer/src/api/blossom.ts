@@ -31,10 +31,10 @@ export const uploadFileApi = (data?: object): Promise<R<any>> => {
  * 
  * @param params {
  *  onlyFolder:  [Folder] 只查询文件夹, 包含文章文件夹和图片文件夹
- *  onlyPicture: [Picture + Article]只查询图片文件夹, 以及含有图片的文章文件夹
- *  onlyOpen:    [Article]只查询公开的文章文件夹
- *  onlySubject: [Article]只查询专题文件夹
- *  onlyStar:    [Article]问查询有 star 文章的文件夹
+ *  onlyPicture: [Picture + Article] 只查询图片文件夹, 以及含有图片的文章文件夹
+ *  onlyOpen:    [Article] 只查询公开的文章文件夹
+ *  onlySubject: [Article] 只查询专题文件夹
+ *  onlyStar:    [Article] 问查询有 star 文章的文件夹
  * }
  * @returns 
  */

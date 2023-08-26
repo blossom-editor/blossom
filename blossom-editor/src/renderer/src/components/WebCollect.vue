@@ -196,7 +196,10 @@ onMounted(() => {
     border-radius: 10px;
     cursor: pointer;
 
-
+    img,
+    svg {
+      @include themeFilter(drop-shadow(0 0 3px rgb(151, 151, 151)), drop-shadow(0 0 3px #000000));
+    }
 
     &:hover {
       transform: translateY(-5px);

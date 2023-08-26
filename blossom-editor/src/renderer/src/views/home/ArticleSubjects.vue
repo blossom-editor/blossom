@@ -4,11 +4,11 @@
       无专题内容
     </div>
     <div class="subject-item" v-for="subject in  subjects " :key="subject.name"
-      :style="{ '--bl-subject-color1': subject.color }" @click="toToc(subject.tocId)">
+      :style="{ '--bl-subject-color1': subject.color + '70' }" @click="toToc(subject.tocId)">
 
       <!-- 进度条 -->
       <div class="progress"
-        :style="{ 'background': subject.color + '50', width: subject.subjectWords / maxWords * 100 + '%' }"></div>
+        :style="{ 'background': subject.color + '40', width: subject.subjectWords / maxWords * 100 + '%' }"></div>
 
       <!-- 名称 -->
       <div class="seal">
@@ -160,6 +160,7 @@ const toToc = (articleId: number) => {
     .subject-icon {
       @include box(55px, 55px);
       @include absolute('', 2px, 8px, '');
+      @include themeFilter(drop-shadow(0 0 3px rgb(62, 62, 62)), drop-shadow(0 0 3px #000000));
     }
 
     .infos {
