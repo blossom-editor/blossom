@@ -12,9 +12,23 @@ import * as echarts from 'echarts/core'
 import { TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, LegendComponent } from 'echarts/components'
 import { HeatmapChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
-import { ScatterChart, EffectScatterChart } from 'echarts/charts'
+import {
+  ScatterChart,
+  // EffectScatterChart
+} from 'echarts/charts'
 import { UniversalTransition } from 'echarts/features'
-echarts.use([TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, HeatmapChart, CanvasRenderer, LegendComponent, ScatterChart, EffectScatterChart, UniversalTransition])
+echarts.use([
+  TitleComponent,
+  CalendarComponent,
+  TooltipComponent,
+  VisualMapComponent,
+  HeatmapChart,
+  CanvasRenderer,
+  LegendComponent,
+  ScatterChart,
+  // EffectScatterChart,
+  UniversalTransition
+])
 
 const isDark = useDark()
 
@@ -143,43 +157,49 @@ const renderChart = (callback?: any) => {
       {
         // scatter | heatmap
         type: 'scatter',
+        symbol: 'roundRect',
         coordinateSystem: 'calendar',
         animation: true,
         animationDuration: 200,
         animationDurationUpdate: 100,
         itemStyle: {
           color: dark ? '#89991180' : '#AC8CF2C3',
+          shadowColor: dark ? '#00000064' : '#9B9B9B46',
+          shadowOffsetX: 2,
+          shadowOffsetY: 2,
+          shadowBlur: 3
         },
         data: chartData === undefined ? 0 : chartData,
-        symbolSize: (val: any) => {
-          if (val[1] === 0) {
-            return 0
-          } else {
-            return 13
-          }
-        }
+        symbolSize: 20,
+        // symbolSize: (val: any) => {
+        //   if (val[1] === 0) {
+        //     return 0
+        //   } else {
+        //     return 13
+        //   }
+        // }
       },
-      {
-        type: 'effectScatter',
-        coordinateSystem: 'calendar',
-        // 排序后选最多的5个
-        data: chartData === undefined ? 0 : chartData.sort((a: any, b: any) => {
-          return b[1] - a[1]
-        }).slice(0, 10).map(item => {
-          return item
-        }),
-        // 何时显示特效
-        showEffectOn: 'render',
-        symbolSize: 15,
-        // 涟漪特效的配置
-        rippleEffect: {
-          number: 3,
-          period: 10,
-          scale: 2.5,
-          brushType: 'stroke'
-        },
-        zlevel: 1
-      }
+      // {
+      //   type: 'effectScatter',
+      //   coordinateSystem: 'calendar',
+      //   // 排序后选最多的5个
+      //   data: chartData === undefined ? 0 : chartData.sort((a: any, b: any) => {
+      //     return b[1] - a[1]
+      //   }).slice(0, 10).map(item => {
+      //     return item
+      //   }),
+      //   // 何时显示特效
+      //   showEffectOn: 'render',
+      //   symbolSize: 15,
+      //   // 涟漪特效的配置
+      //   rippleEffect: {
+      //     number: 3,
+      //     period: 10,
+      //     scale: 2.5,
+      //     brushType: 'stroke'
+      //   },
+      //   zlevel: 1
+      // }
     ]
   })
   if (callback !== undefined) {

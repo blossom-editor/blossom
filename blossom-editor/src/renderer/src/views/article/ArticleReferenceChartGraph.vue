@@ -10,10 +10,10 @@
       <bl-row style="margin-top: 10px;">
         <el-checkbox v-model="showOutsideName" border @change="getArticleRefList(false)">显示外网文章名称</el-checkbox>
       </bl-row>
-      <bl-row class="title">
+      <bl-row class="title" just="center">
         文章引用网络
       </bl-row>
-      <bl-row>
+      <bl-row just="center">
         <bl-col class="symbol" just="center">
           <div class="inside"></div> 内部文章<br /><span>({{ stat.inside }}篇)</span>
         </bl-col>
@@ -277,7 +277,9 @@ onUnmounted(() => {
 
   .setting {
     @include absolute(0, '', '', 20px);
+    border: 1px solid var(--el-border-color);
     padding: 10px;
+    border-radius: 10px;
 
     .title {
       color: var(--el-color-primary);
