@@ -14,6 +14,8 @@ public class SortUtil {
      */
     public static Comparator<Integer> intSort = Integer::compareTo;
 
+    public static Comparator<Long> longSort = Long::compareTo;
+
     public static Comparator<Date> dateSort = Date::compareTo;
 
     /**
