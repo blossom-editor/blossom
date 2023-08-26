@@ -17,6 +17,11 @@ import java.util.List;
 public interface ArticleMapper extends BaseMapper<ArticleEntity> {
 
     /**
+     * 批量查询文章正文
+     */
+    List<ArticleEntity> listAllContent(@Param("ids") List<Long> ids);
+
+    /**
      * 查询全部
      */
     List<ArticleEntity> listAll(ArticleEntity entity);

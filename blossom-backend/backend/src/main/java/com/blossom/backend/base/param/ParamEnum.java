@@ -28,6 +28,15 @@ public enum ParamEnum {
      * GITEE key
      */
     GITEE_ACCESS_TOKEN(true),
+
+    /**
+     * 备份路径
+     */
+    BACKUP_PATH(false),
+    /**
+     * 备份过期天数
+     */
+    BACKUP_EXP_DAYS(false),
     ;
 
     /**

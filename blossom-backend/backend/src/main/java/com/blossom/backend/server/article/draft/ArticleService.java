@@ -36,6 +36,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     private final ArticleViewService viewService;
     private final ArticleLogService logService;
 
+    public List<ArticleEntity> listAllContent(List<Long> ids) {
+        List<ArticleEntity> articles =  baseMapper.listAllContent(ids);
+        if (CollUtil.isEmpty(articles)) {
+            return new ArrayList<>();
+        }
+        return articles;
+    }
+
     /**
      * 查询列表
      */

@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blossom.backend.server.article.draft.ArticleMapper">
 
+    <select id="listAllContent" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
+        select id,version,upd_time,markdown from blossom_article
+         where id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </select>
+
     <!-- 查询全部文章 -->
     <select id="listAll" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
         select
@@ -99,4 +104,5 @@
             </if>
         where id = #{articleId}
     </update>
+
 </mapper>
