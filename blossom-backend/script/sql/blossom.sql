@@ -40,6 +40,8 @@ INSERT INTO `base_sys_param` VALUES (1, 'WEB_ARTICLE_URL', 'https://www.domain.c
 INSERT INTO `base_sys_param` VALUES (3, 'ARTICLE_LOG_EXP_DAYS', '30', '文章修改记录保存天数, 超过该天数将被删除', 1, '2023-08-02 17:46:58', '2023-08-02 18:03:43');
 INSERT INTO `base_sys_param` VALUES (11, 'HEFENG_KEY', 'ABC', '和风天气的KEY', 1, '2023-07-31 19:28:54', '2023-08-06 22:19:11');
 INSERT INTO `base_sys_param` VALUES (21, 'GITEE_ACCESS_TOKEN', 'ABC', '[过时配置]GITEE API 的访问 token', 1, '2023-07-31 20:12:05', '2023-08-06 22:20:12');
+INSERT INTO `base_sys_param` VALUES (31, 'BACKUP_PATH', '/home/bl/backup/', '备份路径, 参考格式: /home/bl/backup/', 1, '2023-08-26 16:59:11', '2023-08-26 19:32:38');
+INSERT INTO `base_sys_param` VALUES (32, 'BACKUP_EXP_DAYS', '7', '备份过期天数', 1, '2023-08-26 19:21:43', '2023-08-26 19:21:43');
 
 -- ----------------------------
 -- Table structure for base_user
