@@ -5,7 +5,7 @@ const blossom: any = {
   SYS: {
     NAME: 'Blossom',
     FULL_NAME: 'BLOSSOM-EDITOR',
-    VERSION: 'v1.1.1',
+    VERSION: 'v1.2.0',
     DATETIME: '2023-08-15',
 
     // 
