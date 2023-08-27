@@ -655,7 +655,7 @@ const removeListenerScroll = () => {
 }
 
 const marginTop = 75
-const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe'
+const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe,span'
 const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
   if (EditorRef.value == undefined) {
     return
