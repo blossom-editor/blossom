@@ -17,7 +17,7 @@
         发布:{{ curDoc?.openTime }}
       </div>
     </bl-row>
-    <bl-row width="80px">
+    <bl-row width="100px">
       渲染用时: {{ props.renderInterval }}ms
     </bl-row>
   </div>
@@ -54,7 +54,6 @@ const curDoc = inject<DocInfo | undefined>(provideKeyCurArticleInfo)
   @include font(10px, 500);
   color: var(--bl-editor-color);
   background-color: var(--bl-editor-gutters-bg-color);
-  padding: 0 5px;
 
   .status-item-container {
     overflow-x: overlay;

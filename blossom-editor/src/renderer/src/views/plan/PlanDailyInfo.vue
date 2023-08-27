@@ -27,7 +27,7 @@
         </el-form-item>
 
         <el-form-item label="图片">
-          <el-input v-model="dailyForm.img" placeholder="可自定义图片地址或选择内置图片">
+          <el-input v-model="dailyForm.img" placeholder="可自定义图片地址或选择内置图片" @input="useOutsideImg">
             <template #prefix>
               <el-icon size="15">
                 <Picture />
@@ -46,7 +46,7 @@
                   {{ dailyForm.content }}
                 </div>
                 <div width="70px">
-                  <img :src="imgPreview">
+                  <img :src="dailyForm.imgPreview">
                 </div>
               </bl-row>
             </bl-col>
@@ -55,7 +55,7 @@
           <bl-col align="flex-start">
             <div style="font-size: 12px;">内置图片</div>
             <bl-row class="img-container">
-              <div v-for="img in imgs" style="" @click="dailyForm.img = img.substring(img.lastIndexOf('/') + 1)">
+              <div v-for="img in imgs" style="" @click="useInnerImg(img)">
                 <img :src="img">
               </div>
             </bl-row>
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Picture } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { planAddDailyApi } from '@renderer/api/plan'
@@ -83,20 +83,21 @@ const getImg = (img: string) => {
   return new URL(`../../assets/imgs/plan/${img}`, import.meta.url).href
 }
 
-const imgPreview = computed(() => {
-  if (dailyForm.value.img.startsWith('http')) {
-    return dailyForm.value.img
-  }
-  return getImg(dailyForm.value.img)
-})
+// const imgPreview = computed(() => {
+//   if (dailyForm.value.img.startsWith('http')) {
+//     return dailyForm.value.img
+//   }
+//   return getImg(dailyForm.value.img)
+// })
 
-interface DailyForm { content: string, planStartTime: string, planEndTime: string, img: string }
+interface DailyForm { content: string, planStartTime: string, planEndTime: string, img: string, imgPreview: string }
 const DailyFormRef = ref<FormInstance>()
 const dailyForm = ref<DailyForm>({
   content: '',
   planStartTime: '',
   planEndTime: '',
-  img: 'base-awesome.png'
+  img: 'base-awesome.png',
+  imgPreview: getImg('base-awesome.png')
 })
 
 const dailyFormRule = reactive<FormRules<DailyForm>>({
@@ -143,6 +144,17 @@ const imgs = [
   getImg('love.png'),
   getImg('sleep.png')
 ]
+
+const useInnerImg = (img: string) => {
+  dailyForm.value.img = img.substring(img.lastIndexOf('/') + 1)
+  dailyForm.value.imgPreview = img
+}
+
+const useOutsideImg = (img: string) => {
+  console.log(img);
+  
+  dailyForm.value.imgPreview = img
+}
 
 const emits = defineEmits(['saved'])
 </script>
