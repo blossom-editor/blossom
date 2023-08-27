@@ -330,5 +330,11 @@ export const renderLink = (href: string | null, title: string | null, text: stri
 
 
 export const simpleMarked = new Marked({ mangle: false, headerIds: false })
-
+simpleMarked.use(markedHighlight({
+  langPrefix: 'hljs language-',
+  highlight(code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'shell'
+    return hljs.highlight(code, { language }).value
+  }
+}))
 export default marked
