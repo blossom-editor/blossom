@@ -6,6 +6,7 @@ import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
+import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import lombok.AllArgsConstructor;
@@ -95,5 +96,11 @@ public class FolderController {
     public R<Long> open(@Validated @RequestBody FolderOpenCloseReq req) {
         FolderEntity folder = req.to(FolderEntity.class);
         return R.ok(baseService.update(folder));
+    }
+
+    @PostMapping("/del")
+    public R<?> del(@Validated @RequestBody DelReq req) {
+        baseService.delete(req.getId());
+        return R.ok();
     }
 }

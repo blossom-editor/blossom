@@ -37,7 +37,13 @@ public class DocUtil {
         List<DocTreeRes> rootLevel =
                 allList.stream()
                         .filter(p -> p.getP().equals(ROOT_FOLDER_ID))
-                        .sorted(Comparator.comparing(DocTreeRes::getS))
+//                        .sorted(Comparator.comparing(DocTreeRes::getS))
+                        .sorted((d1, d2) -> {
+                            if (d2.getTy().equals(d1.getTy())) {
+                                return d1.getS() - d2.getS();
+                            }
+                            return d2.getTy() - d1.getTy();
+                        })
                         .collect(Collectors.toList());
         rootLevel.parallelStream().forEach(item -> setChild(item, allList));
         return rootLevel;

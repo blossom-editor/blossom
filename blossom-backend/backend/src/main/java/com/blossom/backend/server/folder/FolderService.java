@@ -12,13 +12,16 @@ import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.backend.server.folder.pojo.FolderQueryReq;
 import com.blossom.backend.server.folder.pojo.FolderSubjectRes;
+import com.blossom.backend.server.picture.PictureService;
+import com.blossom.backend.server.picture.pojo.PictureEntity;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
+import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.DateUtils;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,10 +36,19 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
+    private ArticleService articleService;
+    private PictureService pictureService;
 
-    private final ArticleService articleService;
+    @Autowired
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    @Autowired
+    public void setPictureService(PictureService pictureService) {
+        this.pictureService = pictureService;
+    }
 
     /**
      * 专题列表
@@ -143,13 +155,13 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
 
     /**
      * 新增文件夹
-     * <p><p>==================================================
+     * <p>======================================================
      * <h2>StorePath 存储路径</h2>
      * <p>1. 文件夹的 storePath 不允许为 "null". 默认值为 "/"
      * <p>2. 新增文件夹时, 如果传入的 storePath 等于 "null" 或 "/" 时, 会使用父级文件夹的 storePath,
      * 如果父级没有显式配置存储路径, 则本文件夹使用 "/".
      * <p>3. 由于文件夹在常规操作下是逐层创建的, 所以只会寻找父级, 而不会递归向上直到顶级.
-     * <p><p>==================================================
+     * <p>======================================================
      * <h2>Type 文件夹类型</h2>
      * <p>1. 文件夹类型: 1:文章文件夹; 2:图片文件夹 {@link com.blossom.backend.server.FolderTypeEnum}
      * <p>2. 文件夹类型一经创建, 无法修改.
@@ -172,13 +184,11 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
 
     /**
      * 修改文件夹
+     * <p>======================================================
      * <h2>StorePath 存储路径</h2>
      * <p>1. 文件夹的 storePath 不允许为 "null". 默认值为 "/"
-     * <p>2. 修改文件夹时, 如果传入的 storePath 不为空, 会同时修改所有子文件夹的路径, 但如果子文件夹路径指定了其他路径, 则跳过该子文件夹.
-     * <pre>{@code
-     * 仅保留与自己路径相同的子文件夹
-     * children.stream().filter(child -> child.getStorePath().equals(oldFolder.getStorePath()))
-     * }</pre>
+     * <p>2. 修改文件夹时, 如果传入的 storePath 不为空, 会同时修改所有子文件夹的路径, 但如果子文件夹路径指定了其他路径, 则跳过该子文件夹. 如下:
+     * <pre>{@code children.stream().filter(child -> child.getStorePath().equals(oldFolder.getStorePath())) }</pre>
      */
     @Transactional(rollbackFor = Exception.class)
     public Long update(FolderEntity folder) {
@@ -231,4 +241,36 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         }
         return storePath;
     }
+
+    /**
+     * 删除文件夹
+     * <p>1. 文件夹下有子文件夹时, 无法删除</p>
+     * <p>2. 文件夹下有文章时, 无法删除</p>
+     *
+     * @param folderId 文件夹ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long folderId) {
+        // 文件夹下有文件夹, 无法删除
+        if (recursiveToChildrenTree(CollUtil.newArrayList(folderId)).stream().anyMatch(d -> !d.getI().equals(folderId))) {
+            throw new XzException500("文件夹下有子文件夹, 无法删除, 请先删除子文件夹");
+        }
+
+        // 文件夹下有文章, 无法删除
+        ArticleQueryReq articleReq = new ArticleQueryReq();
+        articleReq.setPids(CollUtil.newArrayList(folderId));
+        if (CollUtil.isNotEmpty(articleService.listTree(articleReq))) {
+            throw new XzException500("文件夹下有文章, 无法删除, 请先删除下属文章");
+        }
+
+        // 文件夹下有图片, 无法删除
+        PictureEntity picReq = new PictureEntity();
+        picReq.setPid(folderId);
+        if (CollUtil.isNotEmpty(pictureService.listAll(picReq))) {
+            throw new XzException500("文件夹下有图片, 无法删除, 请先删除下属图片");
+        }
+
+        baseMapper.deleteById(folderId);
+    }
+
 }

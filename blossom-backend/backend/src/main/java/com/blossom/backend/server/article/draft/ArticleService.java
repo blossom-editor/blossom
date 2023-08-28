@@ -1,20 +1,24 @@
 package com.blossom.backend.server.article.draft;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.TagEnum;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
 import com.blossom.backend.server.article.log.ArticleLogService;
+import com.blossom.backend.server.article.open.ArticleOpenMapper;
 import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.article.view.ArticleViewService;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
+import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +33,40 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
+    private ArticleReferenceService referenceService;
+    private ArticleViewService viewService;
+    private ArticleLogService logService;
+    private ArticleOpenMapper openMapper;
 
-    private final ArticleReferenceService referenceService;
-    private final ArticleViewService viewService;
-    private final ArticleLogService logService;
+    @Autowired
+    public void setReferenceService(ArticleReferenceService referenceService) {
+        this.referenceService = referenceService;
+    }
 
+    @Autowired
+    public void setViewService(ArticleViewService viewService) {
+        this.viewService = viewService;
+    }
+
+    @Autowired
+    public void setLogService(ArticleLogService logService) {
+        this.logService = logService;
+    }
+
+    @Autowired
+    public void setOpenMapper(ArticleOpenMapper openMapper) {
+        this.openMapper = openMapper;
+    }
+
+    /**
+     * 获取指定ID的正文内容
+     *
+     * @param ids ID集合
+     * @return 内容
+     */
     public List<ArticleEntity> listAllContent(List<Long> ids) {
-        List<ArticleEntity> articles =  baseMapper.listAllContent(ids);
+        List<ArticleEntity> articles = baseMapper.listAllContent(ids);
         if (CollUtil.isEmpty(articles)) {
             return new ArrayList<>();
         }
@@ -46,6 +75,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
 
     /**
      * 查询列表
+     * <p>避免在查询主要信息时返回正文信息造成的性能影响, 该接口不返回文章正文 toc/markdown/html</p>
+     * <p>如需查询正文, 请使用{@link ArticleService#selectById} 或 {@link ArticleService#listAllContent}</p>
      */
     public List<ArticleEntity> listAll(ArticleQueryReq req) {
         List<ArticleEntity> articles = baseMapper.listAll(req.to(ArticleEntity.class));
@@ -71,6 +102,11 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
 
     /**
      * 根据ID查询
+     *
+     * @param id           文章ID
+     * @param showToc      是否返回目录 json 内容
+     * @param showMarkdown 是否返回 markdown 正文
+     * @param showHtml     是否返回 html 正文
      */
     public ArticleEntity selectById(Long id, boolean showToc, boolean showMarkdown, boolean showHtml) {
         QueryWrapper<ArticleEntity> where = new QueryWrapper<>();
@@ -100,7 +136,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     }
 
     /**
-     * 修改, 该接口只能修改文章的基本信息, 正文及版本修改请使用 {@link ArticleService#updateContentById(ArticleEntity)}
+     * 修改
+     * <p>该接口只能修改文章的基本信息, 正文及版本修改请使用 {@link ArticleService#updateContentById(ArticleEntity)}
      */
     @Transactional(rollbackFor = Exception.class)
     public Long update(ArticleEntity req) {
@@ -110,7 +147,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     }
 
     /**
-     * 修改文章内容, 并统计字数
+     * 修改文章正文内容, 并更新字数字数
      *
      * @return 返回文章字数
      */
@@ -130,15 +167,38 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     }
 
     /**
-     * 同步版本号, 将文章的 version 同步到 openVersion, 只有 open_status 为 1 才会修改成功
+     * 删除文章
+     * <p>1. 删除文章</p>
+     * <p>2. 删除公开文章</p>
+     *
+     * @param id 文章ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long id) {
+        ArticleEntity article = selectById(id, false, true, true);;
+        XzException404.throwBy(ObjUtil.isNull(article), "文章不存在");
+        XzException400.throwBy(StrUtil.isNotBlank(article.getMarkdown()), "文章内容不为空, 请清空内容后再删除.");
+        // 删除文章
+        baseMapper.deleteById(id);
+        // 删除公开文章
+        openMapper.delById(id);
+        // 删除引用
+        referenceService.delete(id);
+        // 删除访问记录
+        viewService.delete(id);
+    }
+
+    /**
+     * 同步版本号
+     * <p>将文章的 version 同步到 openVersion, 只有 open_status 为 1 才会修改成功
      */
     public void sync(Long id) {
         baseMapper.sync(id);
     }
 
     /**
-     * 递增UV和PV数据
-     * PV 接口每调用一次都会递增, UV数据每个IP每天只会递增一次
+     * 递增 UV 和 PV 数据
+     * <p>PV 接口每调用一次都会递增, UV数据每个IP每天只会递增一次
      *
      * @param ip        ip
      * @param userAgent userAgent

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -33,9 +32,7 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
      */
     @Transactional(rollbackFor = Exception.class)
     public void bind(Long userId, Long sourceId, String sourceName, List<ArticleReferenceReq> references) {
-        LambdaQueryWrapper<ArticleReferenceEntity> where = new LambdaQueryWrapper<>();
-        where.eq(ArticleReferenceEntity::getSourceId, sourceId);
-        baseMapper.delete(where);
+        delete(sourceId);
 
         // 没有图片, 则不保存
         if (CollUtil.isEmpty(references)) {
@@ -48,6 +45,17 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
             ref.setSourceName(sourceName);
         }
         baseMapper.insertList(refs);
+    }
+
+    /**
+     * 删除引用
+     *
+     * @param articleId 文章ID
+     */
+    public void delete(Long articleId) {
+        LambdaQueryWrapper<ArticleReferenceEntity> where = new LambdaQueryWrapper<>();
+        where.eq(ArticleReferenceEntity::getSourceId, articleId);
+        baseMapper.delete(where);
     }
 
     /**

@@ -20,11 +20,11 @@ public interface ArticleOpenMapper extends BaseMapper<ArticleOpenEntity> {
     void open(Long id);
 
     /**
-     * 关闭公开
+     * 删除公开文章
      *
      * @param id 关闭公开文章的ID
      */
-    void close(Long id);
+    void delById(Long id);
 
     /**
      * 同步公开

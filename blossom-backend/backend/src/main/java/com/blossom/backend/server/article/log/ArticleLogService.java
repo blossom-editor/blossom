@@ -1,5 +1,6 @@
 package com.blossom.backend.server.article.log;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.param.ParamEnum;
@@ -35,11 +36,10 @@ public class ArticleLogService extends ServiceImpl<ArticleLogMapper, ArticleLogE
         ArticleLogEntity log = new ArticleLogEntity();
         log.setArticleId(articleId);
         log.setVersion(version);
-        log.setMarkdown(markdown);
+        log.setMarkdown(StrUtil.isBlank(markdown) ? "无内容" : markdown);
         log.setCreTime(DateUtils.date());
         baseMapper.insert(log);
     }
-
 
     /**
      * 每天凌晨5点执行

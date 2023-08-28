@@ -11,6 +11,7 @@ import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
+import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.util.DateUtils;
 import lombok.AllArgsConstructor;
@@ -128,6 +129,15 @@ public class ArticleController {
         res.setWords(words);
         res.setUpdTime(DateUtils.date());
         return R.ok(res);
+    }
+
+    /**
+     * 删除文章
+     */
+    @PostMapping("/del")
+    public R<?> delete(@Validated @RequestBody DelReq req) {
+        baseService.delete(req.getId());
+        return R.ok();
     }
 
     /**

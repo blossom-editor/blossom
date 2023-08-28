@@ -12,7 +12,7 @@
     </insert>
 
     <!-- 取消公开 -->
-    <delete id="close">
+    <delete id="delById">
         delete from blossom_article_open where id = #{id}
     </delete>
 

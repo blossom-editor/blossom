@@ -1,5 +1,6 @@
 package com.blossom.backend.server.utils;
 
+import com.blossom.backend.server.FolderTypeEnum;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -28,7 +29,7 @@ public class PictureUtil {
         defaultFolder.setO(0);
         defaultFolder.setT(new ArrayList<>());
         defaultFolder.setIcon("");
-        defaultFolder.setTy(1);
+        defaultFolder.setTy(FolderTypeEnum.PICTURE.getType());
         defaultFolder.setStar(0);
         return defaultFolder;
     }
@@ -40,7 +41,7 @@ public class PictureUtil {
         try {
             Thumbnails.of(file)
                     // 图片大小（长宽）压缩比例 从0-1，1表示原图
-                    .scale(0.8)
+                    .scale(0.5)
                     // 图片质量压缩比例 从0-1，越接近1质量越好
                     .outputQuality(0.8)
                     .toFile(toFile);
@@ -51,8 +52,8 @@ public class PictureUtil {
 
     public static void main(String[] args) {
         compress(
-                "C:\\Users\\Administrator\\Desktop\\pic_s_light.jpg",
-                "C:\\Users\\Administrator\\Desktop\\pic_s_light1.jpg"
+                "C:\\Users\\Administrator\\Desktop\\{964B32FD-1790-48bc-A6E4-486C3614F929}.png",
+                "C:\\Users\\Administrator\\Desktop\\{964B32FD-1790-48bc-A6E4-486C3614F929}.png"
         );
     }
 }

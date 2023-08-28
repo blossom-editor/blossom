@@ -6,10 +6,9 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageInfo;
+import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
-import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.picture.pojo.PictureEntity;
 import com.blossom.backend.server.picture.pojo.PicturePageReq;
 import com.blossom.backend.server.picture.pojo.PictureStatRes;
@@ -19,8 +18,9 @@ import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.util.PrimaryKeyUtil;
 import com.blossom.common.db.aspect.Pages;
 import com.blossom.common.iaas.OSManager;
-import lombok.AllArgsConstructor;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,11 +35,25 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
-    private final FolderService folderService;
-    private final ArticleReferenceService articleReferenceService;
-    private final OSManager osManager;
+    private FolderService folderService;
+    private ArticleReferenceService articleReferenceService;
+    private OSManager osManager;
+
+    @Autowired
+    public void setFolderService(FolderService folderService) {
+        this.folderService = folderService;
+    }
+
+    @Autowired
+    public void setArticleReferenceService(ArticleReferenceService articleReferenceService) {
+        this.articleReferenceService = articleReferenceService;
+    }
+
+    @Autowired
+    public void setOsManager(OSManager osManager) {
+        this.osManager = osManager;
+    }
 
     /**
      * 分页列表

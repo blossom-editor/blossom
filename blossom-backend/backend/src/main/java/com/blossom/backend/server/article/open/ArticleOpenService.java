@@ -11,8 +11,8 @@ import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenReq;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +25,14 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class ArticleOpenService extends ServiceImpl<ArticleOpenMapper, ArticleOpenEntity> {
 
-    private final ArticleService articleService;
+    private ArticleService articleService;
+
+    @Autowired
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     /**
      * 根据ID查询
@@ -71,13 +75,12 @@ public class ArticleOpenService extends ServiceImpl<ArticleOpenMapper, ArticleOp
         else if (YesNo.NO.getValue().equals(req.getOpenStatus())) {
             entity.setOpenVersion(0);
             XzException400.throwBy(article.getOpenStatus().equals(YesNo.NO.getValue()), "文章[" + req.getId() + "]未公开, 无法取消公开访问");
-            baseMapper.close(req.getId());
+            baseMapper.delById(req.getId());
         }
 
         articleService.update(entity);
         return req.getId();
     }
-
 
     /**
      * 同步公开访问的文章正文等信息
@@ -89,5 +92,4 @@ public class ArticleOpenService extends ServiceImpl<ArticleOpenMapper, ArticleOp
         baseMapper.sync(id);
         articleService.sync(id);
     }
-
 }

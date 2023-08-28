@@ -1,6 +1,7 @@
 package com.blossom.backend.server.article.view;
 
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.view.pojo.ArticleViewEntity;
 import com.blossom.common.base.util.DateUtils;
@@ -26,6 +27,7 @@ public class ArticleViewService extends ServiceImpl<ArticleViewMapper, ArticleVi
      *
      * @return true: 今日第一次访问; false:今日已访问
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean uv(String ip, String userAgent, Long articleId) {
         Date now = DateUtil.date();
         if (baseMapper.checkUv(DateUtils.toYMD(now), ip, articleId) > 0) {
@@ -42,12 +44,26 @@ public class ArticleViewService extends ServiceImpl<ArticleViewMapper, ArticleVi
         return true;
     }
 
-
     /**
      * 新增
      */
     @Transactional(rollbackFor = Exception.class)
     public void like(ArticleViewEntity req) {
         baseMapper.insert(req);
+    }
+
+    /**
+     * 清空文章的放问记录
+     *
+     * @param articleId 文章ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long articleId) {
+        if (articleId == null) {
+            return;
+        }
+        LambdaQueryWrapper<ArticleViewEntity> where = new LambdaQueryWrapper<ArticleViewEntity>()
+                .eq(ArticleViewEntity::getArticleId, articleId);
+        baseMapper.delete(where);
     }
 }
