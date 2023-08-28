@@ -317,7 +317,9 @@ const emits = defineEmits([
   }
 }
 </style>
-
+<!-- 
+快捷键说明为弹出框 需要设置全局的样式
+-->
 <style lang=scss>
 .editor-tools-content {
   @include flex(column, flex-start, flex-start);

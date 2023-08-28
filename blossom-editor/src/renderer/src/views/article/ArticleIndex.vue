@@ -2,79 +2,11 @@
   <div class="index-article-root">
 
     <!-- folder menu -->
-    <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand" v-loading="docTreeLoading"
-      :default-active="docTreeDefaultActive" element-loading-text="正在读取文档...">
-      <!-- 文件夹操作 -->
-      <div class="doc-workbench">
-        <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></ArticleTreeWorkbench>
+    <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
+
+      <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree">
+        <ArticleTreeDocs @click-doc="clickCurDoc" ref="ArticleTreeDocsRef"></ArticleTreeDocs>
       </div>
-      <!-- 文件夹 -->
-      <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :style="tempTextareaStyle.docTree"
-        :default-active="curActiveDoc?.id" :unique-opened="true">
-
-        <!-- ================================================ L1 ================================================ -->
-        <div v-for="L1 in docTreeData" :key="L1.i">
-
-          <!-- L1无下级 -->
-          <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
-            <template #title>
-              <ArticleTreeTitle :size="15" :trees="L1" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-            </template>
-          </el-menu-item>
-
-          <!-- L1有下级 -->
-          <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
-            <template #title>
-              <ArticleTreeTitle :size="15" :trees="L1" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-            </template>
-
-            <!-- ================================================ L2 ================================================ -->
-            <div v-for="L2 in L1.children" :key="L2.i">
-              <!-- L2无下级 -->
-              <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
-                <template #title>
-                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-                </template>
-              </el-menu-item>
-
-              <!-- L2有下级 -->
-              <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
-                <template #title>
-                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-                </template>
-
-                <!-- ================================================ L3 ================================================ -->
-                <div v-for="L3 in L2.children" :key="L3.i">
-                  <!-- L3无下级 -->
-                  <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
-                    <template #title>
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-                    </template>
-                  </el-menu-item>
-
-                  <!-- L3有下级 -->
-                  <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
-                    <template #title>
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-                    </template>
-
-                    <!-- ================================================ L4 ================================================ -->
-                    <div v-for="L4 in L3.children" :key="L4.i">
-                      <!-- L4 不允许有下级, 只允许4级 -->
-                      <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
-                        <template #title>
-                          <ArticleTreeTitle :trees="L4" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
-                        </template>
-                      </el-menu-item>
-                    </div>
-                  </el-sub-menu>
-                </div>
-
-              </el-sub-menu>
-            </div>
-          </el-sub-menu>
-        </div>
-      </el-menu>
 
       <div class="doc-temp-textarea">
         <bl-row just="space-between" height="28px" class="doc-temp-textarea-workbench">
@@ -112,12 +44,13 @@
         <div class="preview-marked bl-preview" ref="PreviewRef" :style="editorPreviewStyle.preview" v-html="articleHtml">
         </div>
       </div>
-      <!-- editor status -->
+
+      <!-- status -->
       <div class="editor-status">
         <EditorStatus :render-interval="renderInterval"></EditorStatus>
       </div>
 
-      <!-- the toc -->
+      <!-- toc -->
       <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
         <div class="toc-title" ref="TocTitleRef">目录 <span style="font-size: 10px;">(Alt+2 可隐藏)</span></div>
         <div class="toc-content" v-show="(tocsExpand)">
@@ -144,7 +77,7 @@
 
     </div>
 
-    <Teleport to=" body">
+    <Teleport to="body">
       <div v-show="editorRightMenu.show" class="editor-right-menu"
         :style="{ left: editorRightMenu.clientX + 'px', top: editorRightMenu.clientY + 'px' }">
         <div class="menu-content">
@@ -182,31 +115,28 @@
 <script setup lang="ts">
 // vue
 import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated } from "vue"
-import { ArrowDownBold, ArrowRightBold, Picture } from '@element-plus/icons-vue'
+import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
-import { useRoute } from 'vue-router'
 import { storeToRefs } from "pinia"
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
-import { docTreeApi, articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@renderer/api/blossom'
+import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@renderer/api/blossom'
 // ts
-import { treeToInfo, provideKeyDocTree, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
+import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle, EditorPreviewStyle } from '@renderer/views/article/article'
 import { beforeUpload, onError } from '@renderer/views/picture/picture'
 // utils
 import { Local } from "@renderer/assets/utils/storage"
-import { isEmpty } from 'lodash'
-import { isBlank, isNotNull, isNull } from '@renderer/assets/utils/obj'
+import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/formatTable'
 // component
-import ArticleTreeTitle from '@renderer/views/article/ArticleTreeTitle.vue'
-import ArticleTreeWorkbench from "@renderer/views/article/ArticleTreeWorkbench.vue"
+import { useDraggable } from '@renderer/components/Draggable'
+import ArticleTreeDocs from "./ArticleTreeDocs.vue"
 import EditorTools from './EditorTools.vue'
 import EditorStatus from "./EditorStatus.vue"
-import { useDraggable } from '@renderer/components/Draggable'
 import Notify from '@renderer/components/Notify'
 // codemirror
 import { CmWrapper } from './codemirror'
@@ -224,13 +154,12 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   removeListenerShortcutMap()
-  removeListenerRightMenu()
+  removeListenerEditorRightMenu()
   removeListenerScroll()
   distoryAutoSaveInterval()
 })
 onActivated(() => {
   enterView()
-  getRouteQueryParams()
   addListererShortcutMap()
 })
 onDeactivated(() => {
@@ -291,12 +220,12 @@ const tempTextareaExpand = ref(true)
 const tempTextareaStyle = computed<any>(() => {
   if (tempTextareaExpand.value) {
     return {
-      docTree: { height: 'calc(100% - 90px - 178px)' },
+      docTree: { height: 'calc(100% - 178px)' },
       tempTextarea: { height: '150px', padding: '10px' }
     }
   }
   return {
-    docTree: { height: 'calc(100% - 90px - 28px)' },
+    docTree: { height: 'calc(100% - 28px)' },
     tempTextarea: { height: '0', padding: '' }
   }
 })
@@ -313,7 +242,6 @@ const tempInput = (value: string) => {
  */
 const enterView = () => {
   autoSave()
-  getDocTree(false, false, false)
   initTempTextarea()
 }
 /**
@@ -322,25 +250,10 @@ const enterView = () => {
 const exitView = () => {
   autoSave()
 }
-const route = useRoute()
-/**
- * 获取路由参数
- */
-const getRouteQueryParams = () => {
-  let articleId = route.query.articleId
-  if (isNotNull(articleId)) {
-    docTreeDefaultActive.value = articleId as string
-    let treeParam: any = { ty: 3, i: articleId }
-    clickCurDoc(treeParam)
-  }
-}
 //#endregion
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
-const docTreeLoading = ref(true)        // 文档菜单的加载动画
-const showSort = ref(false)             // 是否显示文档排序
-const docTreeDefaultActive = ref('')    // 文档的默认选中项, 用于外部跳转后选中菜单
-const docTreeData = ref<DocTree[]>([])  // 文档菜单
+const ArticleTreeDocsRef = ref()
 const curDoc = ref<DocInfo>()           // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 const curArticle = ref<DocInfo>()       // 当前选中的文章, 用于在编辑器中展示
 const curActiveDoc = ref<DocInfo>()     // 当前激活的文档的 index, 防止在刷新列表时重置选中, 导致需要再次从文档菜单中逐个点击
@@ -350,25 +263,8 @@ let lastSaveTime: number = new Date().valueOf()// 上次保存时间
 let autoSaveInterval: NodeJS.Timer
 const authSaveMs = 5 * 60 * 1000
 
-// 注入的相关信息
-provide(provideKeyDocTree, docTreeData)
 provide(provideKeyDocInfo, curDoc)
 provide(provideKeyCurArticleInfo, curArticle)
-
-/**
- * 获取文档树状列表
- * 1. 初始化是全否调用
- * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
- */
-const getDocTree = (isOnlyOpen: boolean, isOnlySubject: boolean, isOnlyStar: boolean) => {
-  docTreeLoading.value = true
-  docTreeApi({ onlyPicture: false, onlyOpen: isOnlyOpen, onlySubject: isOnlySubject, onlyStar: isOnlyStar }).then(resp => {
-    docTreeData.value = resp.data
-    concatSort(docTreeData.value)
-  }).finally(() => {
-    docTreeLoading.value = false
-  })
-}
 
 /**
  * 点击 doc title 的回调, 用于选中某个文档
@@ -476,29 +372,6 @@ const autoSave = () => {
   saveCurArticleContent(true)
 }
 /**
- * 在名称中显式排序
- * @param trees 
- */
-const concatSort = (trees: DocTree[]) => {
-  for (let i = 0; i < trees.length; i++) {
-    if (!isEmpty(trees[i].children)) {
-      concatSort(trees[i].children as DocTree[])
-    }
-    if (showSort.value) {
-      trees[i].n = trees[i].s + '〉' + trees[i].n
-    } else {
-      trees[i].n = trees[i].n.substring(trees[i].n.indexOf('〉') + 1)
-    }
-  }
-}
-/**
- * 是否显示
- */
-const handleShowSort = () => {
-  showSort.value = !showSort.value
-  concatSort(docTreeData.value)
-}
-/**
  * 判断当前选中的是否是文章
  */
 const curIsArticle = (): boolean => {
@@ -569,7 +442,7 @@ const renderer = {
     return renderImage(href, _title, text)
   },
   link(href: string | null, title: string | null, text: string): string {
-    let { link, ref } = renderLink(href, title, text, docTreeData.value)
+    let { link, ref } = renderLink(href, title, text, ArticleTreeDocsRef.value.getDocTreeData())
     articleLink.value.push(ref)
     return link
   }
@@ -710,19 +583,9 @@ const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, 
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rightMenuHeight = 215
 
-const removeListenerRightMenu = () => {
-  document.body.removeEventListener('click', closeEditorRightMenu)
-}
-
-const closeEditorRightMenu = () => {
-  removeListenerRightMenu()
-  editorRightMenu.value.show = false
-}
 
 const handleEditorClickRight = (event: MouseEvent) => {
-  // 
   editorRightMenu.value = { show: false, clientX: 0, clientY: 0 }
-  //   
   let y = event.clientY
   if (document.body.clientHeight - event.clientY < rightMenuHeight) {
     y = event.clientY - rightMenuHeight
@@ -732,6 +595,16 @@ const handleEditorClickRight = (event: MouseEvent) => {
     document.body.addEventListener('click', closeEditorRightMenu)
   }, 100)
 }
+
+const closeEditorRightMenu = () => {
+  removeListenerEditorRightMenu()
+  editorRightMenu.value.show = false
+}
+
+const removeListenerEditorRightMenu = () => {
+  document.body.removeEventListener('click', closeEditorRightMenu)
+}
+
 
 /** 复制当前选中内容 */
 const rightMenuCopy = () => { writeText(cmw.getSelectionRangesText()) }
@@ -806,9 +679,6 @@ const removeListenerShortcutMap = () => {
 
 //#endregion
 
-//#region ----------------------------------------< 渲染标题 >-------------------------------------
-
-//#endregion
 </script>
 
 <style scoped lang="scss">

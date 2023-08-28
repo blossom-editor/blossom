@@ -4,84 +4,12 @@
 
   // 文档
   .doc-container {
-    height: 100%;
     @include flex(column, flex-start, center);
+    height: 100%;
     font-weight: 200;
     transition: 0.1s;
     left: 0;
     top: 0;
-
-    .doc-workbench {
-      @include box(100%, 90px);
-    }
-
-    .doc-trees {
-      @include box(100%, calc(100% - 90px));
-      font-weight: 200;
-      border: 0;
-      // overflow-y: overlay;
-      overflow-y: scroll;
-      // 基础的 padding
-      --el-menu-base-level-padding: 25px;
-      // 每级别的的缩进
-      --el-menu-level-padding: 10px;
-      // ------------------- sub-item 的样式
-      // sub-item 菜单的高度
-      --el-menu-sub-item-height: 25px;
-
-      // ------------------- item 的样式
-      // 菜单每个 item 的高度
-      --el-menu-item-height: 25px;
-      // item 的 字体大小
-      --el-menu-item-font-size: 13px;
-
-      :deep(.el-menu) {
-        transition: 0.1s !important;
-      }
-
-      :deep(.el-sub-menu) {
-        .el-sub-menu__title {
-          height: auto;
-          min-height: 25px;
-          padding-right: 0;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-
-          .el-sub-menu__icon-arrow {
-            right: calc(230px - var(--el-menu-level) * 10px);
-            font-size: 12px;
-            width: 0.8em;
-            height: 0.8em;
-          }
-        }
-      }
-
-      :deep(.el-menu-item) {
-        --el-menu-hover-bg-color: #ffffff00 !important;
-        height: auto;
-        min-height: 25px;
-        padding-right: 0;
-        border-radius: 5px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        transition: 0.1s;
-      }
-
-      :deep(.el-menu-item.is-active) {
-        @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
-        background: linear-gradient(90deg, var(--bl-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--bl-html-color) 100%);
-        color: #ffffff;
-        font-weight: 700;
-      }
-
-      :deep(.el-badge__content) {
-        top: 7px;
-        transform: translateY(-50%) translateX(100%) scale(0.8);
-      }
-
-    }
 
     .doc-temp-textarea {
       width: 100%;
