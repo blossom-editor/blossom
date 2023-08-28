@@ -77,12 +77,6 @@
       </div>
 
       <div class="info-footer">
-        <!-- <div>
-          <el-button type="danger" size="default" plain>
-            <span class="iconbl bl-a-fileprohibit-line" />
-            删除
-          </el-button>
-        </div> -->
         <div>
           <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc">
             <span class="iconbl bl-a-filechoose-line" />
@@ -104,7 +98,7 @@ import { useUserStore } from '@renderer/stores/user'
 import { folderInfoApi, folderAddApi, folderUpdApi } from '@renderer/api/blossom'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { openExtenal } from '@renderer/assets/utils/electron'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
 const userStore = useUserStore()
@@ -445,4 +439,4 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 }
 </style>
 
-<style></style>../doc
+<style></style>../doc@renderer/common/notify@renderer/scripts/notify

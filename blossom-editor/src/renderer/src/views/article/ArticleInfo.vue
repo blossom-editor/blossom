@@ -205,7 +205,7 @@ import {
 } from '@renderer/api/blossom'
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
 const userStore = useUserStore()
@@ -667,4 +667,4 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 }
 </style>
 
-<style></style>
+<style></style>@renderer/common/notify@renderer/scripts/notify

@@ -20,7 +20,7 @@ import { ref } from 'vue'
 import { noteAddApi } from '@renderer/api/note'
 import { getDateZh } from '@renderer/assets/utils/util'
 import { isBlank } from '@renderer/assets/utils/obj'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 const props = defineProps({
   send: {
@@ -164,4 +164,4 @@ const emits = defineEmits(['saved'])
   }
 
 }
-</style>
+</style>@renderer/common/notify@renderer/scripts/notify

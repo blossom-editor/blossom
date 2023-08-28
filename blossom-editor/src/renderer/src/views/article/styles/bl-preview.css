@@ -10,7 +10,6 @@
 
 .bl-preview * {
   user-select: text;
-  -webkit-user-drag: none;
 }
 
 .bl-preview a {
@@ -28,7 +27,6 @@
 .bl-preview img {
   border-radius: var(--bl-preview-border-radius);
   max-width: 100%;
-
   /* [class="dark"] & {
     filter: brightness(80%);
   } */

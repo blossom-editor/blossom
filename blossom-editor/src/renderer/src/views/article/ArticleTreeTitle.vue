@@ -81,6 +81,7 @@ $icon-size: 17px;
   position: relative;
 
   .doc-name {
+    @include font(14px, 300);
     @include flex(row, flex-start, center);
     @include themeBrightness(100%, 80%);
     @include ellipsis();
@@ -98,7 +99,6 @@ $icon-size: 17px;
 
 
   .doc-name {
-    @include font(13px, 300);
     @include themeText(2px 2px 2px #D8D8D8, 2px 2px 2px #0A0A0A);
     @include ellipsis();
     color: var(--el-color-primary);

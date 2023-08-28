@@ -1,6 +1,8 @@
-
-
-
+/**
+ * 格式化 markdown 表格
+ * @param str 表格字符串
+ * @returns 
+ */
 export const formartMarkdownTable = (str: string) => {
   var table = splitStringToTable(str),
     alignments: string[],

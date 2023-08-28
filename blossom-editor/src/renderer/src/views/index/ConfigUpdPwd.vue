@@ -34,7 +34,7 @@
 import { ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { userUpdPwdApi } from '@renderer/api/auth'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 interface UpdPwdForm { password: string, newPassword: string, confirmPassword: string }
 const UpdPwdFormRef = ref<FormInstance>()
@@ -59,4 +59,4 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-</script>
+</script>@renderer/common/notify@renderer/scripts/notify

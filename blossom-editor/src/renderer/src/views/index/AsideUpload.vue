@@ -16,7 +16,7 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import { uploadFileApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
-import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/picture'
+import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/scripts/picture'
 
 //#region ----------------------------------------< panin store >--------------------------------------
 const userStore = useUserStore()

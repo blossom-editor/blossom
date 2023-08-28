@@ -46,7 +46,7 @@ import { ref, onActivated } from "vue"
 import { subjectsApi } from "@renderer/api/blossom"
 import { isEmpty } from 'lodash'
 import { isNull } from "@renderer/assets/utils/obj"
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 onActivated(() => {
   getSubjects()
@@ -185,4 +185,4 @@ const toToc = (articleId: number) => {
 
 
 }
-</style>
+</style>@renderer/common/notify@renderer/scripts/notify

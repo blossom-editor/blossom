@@ -114,7 +114,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent } from "vue"
 import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
@@ -123,32 +123,35 @@ import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
 import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@renderer/api/blossom'
-// ts
-import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
-import { TempTextareaKey, ArticleReference, DocEditorStyle, EditorPreviewStyle } from '@renderer/views/article/article'
-import { beforeUpload, onError } from '@renderer/views/picture/picture'
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
-import { formartMarkdownTable } from '@renderer/assets/utils/formatTable'
+import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
-import { useDraggable } from '@renderer/components/Draggable'
-import ArticleTreeDocs from "./ArticleTreeDocs.vue"
 import EditorTools from './EditorTools.vue'
 import EditorStatus from "./EditorStatus.vue"
-import Notify from '@renderer/components/Notify'
+// ts
+import Notify from '@renderer/scripts/notify'
+import { useDraggable } from '@renderer/scripts/draggable'
+import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
+import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
+import { beforeUpload, onError } from '@renderer/views/picture/scripts/picture'
+import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
+import { TempTextareaKey, ArticleReference, DocEditorStyle, EditorPreviewStyle } from './scripts/article'
 // codemirror
-import { CmWrapper } from './codemirror'
+import { CmWrapper } from './scripts/codemirror'
 // marked
-import marked, { simpleMarked, renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './markedjs'
+import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './scripts/markedjs'
+import { EPScroll } from './scripts/editor-preview-scroll'
 
-// 快捷键注册
-import type { shortcutFunc } from '@renderer/assets/utils/ShortcutRegister'
-import ShortcutRegistrant from '@renderer/assets/utils/ShortcutRegister'
+const ArticleTreeDocs = defineAsyncComponent(() =>
+  import('./ArticleTreeDocs.vue')
+)
 
 onMounted(() => {
   initEditor()
+  initScroll()
   addListenerScroll()
   initAutoSaveInterval()
 })
@@ -518,65 +521,22 @@ useDraggable(TocRef, TocTitleRef)
 //#endregion
 
 //#region ----------------------------------------< 双屏滚动  >----------------------------------------
+let scrollWrapper: EPScroll
+const initScroll = () => {
+  scrollWrapper = new EPScroll(EditorRef.value, PreviewRef.value, cmw)
+}
+
+const scroll = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
+  scrollWrapper.sycnScroll(event, source, lineno, colno, error)
+}
 
 const addListenerScroll = () => {
-  EditorRef.value?.addEventListener('scroll', sycnScroll)
+  EditorRef.value?.addEventListener('scroll', scroll)
 }
 
 const removeListenerScroll = () => {
-  EditorRef.value?.removeEventListener('scroll', sycnScroll)
+  EditorRef.value?.removeEventListener('scroll', scroll)
 }
-
-const marginTop = 75
-const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe, span'
-const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
-  if (EditorRef.value == undefined) {
-    return
-  }
-  // console.log(EditorRef.value?.scrollHeight,
-  // EditorRef.value?.clientHeight,
-  // EditorRef.value?.scrollTop)
-
-  // 如果在头部附近
-  if (EditorRef.value?.scrollTop < 20) {
-    PreviewRef.value.firstChild.scrollIntoView()
-  }
-  // 如果在尾部附近
-  else if (EditorRef.value?.clientHeight + EditorRef.value?.scrollTop > EditorRef.value?.scrollHeight - 20) {
-    PreviewRef.value.scrollTop = PreviewRef.value.scrollHeight
-  }
-  // 其他
-  else {
-    // 文档头部, 距离整个浏览器的距离
-    const top = cmw.getDocumentTop()
-
-    // 获取可见位置最顶部的内容
-    const topBlock = cmw.getElementAtHeight(Math.abs(top) + marginTop)
-    // 从0开始获取全部不可见的内容的 markdown 原文档
-    const invisibleMarkdown: string = cmw.sliceDoc(0, topBlock.from)
-
-
-    // 将不可见的内容全部转换为 html
-    //@ts-ignore
-    simpleMarked!.parse(invisibleMarkdown, { async: true }).then((html: string) => {
-      const invisibleHtml = html
-      // 将不可见的的 html 转换为 dom 对象, 是一个从 <html> 标签开始的 dom 对象
-      const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')
-      // body 下的内容才是由 markdown 转换而来的, 不可见内容转换的 dom 集合
-      const editorDoms = invisibleDomAll.body.querySelectorAll(matchHtmlTags)
-      // 预览页面的 dom 集合
-      const previewDoms = PreviewRef.value.querySelectorAll(matchHtmlTags)
-      let targetIndex = editorDoms.length
-      // 预览页面的 dom 数小于 markdown 转换的 dom 数, 处理数组边界
-      if (targetIndex > previewDoms.length) {
-        targetIndex = previewDoms.length
-      }
-      const tagetDom = previewDoms[targetIndex]
-      tagetDom.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
-    })
-  }
-}
-
 //#endregion
 
 //#region ----------------------------------------< 编辑器右键 >----------------------------------------
@@ -682,8 +642,8 @@ const removeListenerShortcutMap = () => {
 </script>
 
 <style scoped lang="scss">
-@import './style/article-index.scss';
-@import './style/bl-preview-toc.scss';
+@import './styles/article-index.scss';
+@import './styles/bl-preview-toc.scss';
 
 .bl-preview {
   h1 {

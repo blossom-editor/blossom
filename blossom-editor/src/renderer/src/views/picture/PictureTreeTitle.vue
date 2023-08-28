@@ -1,5 +1,5 @@
 <template>
-  <div class="doc-title" @click="handlClick" @click.right="handleClickRight" :style="{ fontSize: size + 'px' }">
+  <div class="doc-title">
     <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
       <use :xlink:href="'#' + props.trees.icon"></use>
     </svg>
@@ -10,89 +10,23 @@
       <bl-tag v-if="tag.content" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
       <bl-tag v-else :bg-color="tag.bgColor" :icon="tag.icon" />
     </div>
-    <div v-if="isOpen && !isSubjectDoc" class="open-line"></div>
-    <div v-if="isStar" class="star-line"></div>
-
-    <!-- 右键菜单, 添加到 body 下 -->
-    <Teleport to="body">
-      <div v-if="rMenu.show" class="doc-tree-right-menu"
-        :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
-        <div class="doc-name">{{ props.trees.n }}</div>
-        <div class="menu-content">
-          <div :class="['menu-item', props.trees.i < 0 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
-            <span class="iconbl bl-a-fileedit-line"></span>编辑文档
-          </div>
-          <div :class="['menu-item', !isPictureFolder ? 'disabled' : '']"
-            @click="handleShowDocInfoDialog('add', props.trees.p)">
-            <span class="iconbl bl-a-fileadd-line"></span>新增<strong>同级</strong>文档
-          </div>
-          <!-- 只有文件夹才有子文档 -->
-          <div :class="['menu-item', !isPictureFolder ? 'disabled' : '']"
-            @click="handleShowDocInfoDialog('add', props.trees.i)">
-            <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文档
-          </div>
-          <div :class="['menu-item', props.trees.i < 0 ? 'disabled' : '']" @click="delDoc()">
-            <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
-          </div>
-        </div>
-      </div>
-    </Teleport>
+    <div v-if="props.trees.o === 1 && !isSubjectDoc" class="open-line"></div>
+    <div v-if="props.trees.star === 1" class="star-line"></div>
   </div>
-
-  <!-- 详情的弹框 -->
-  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 65px;
-    --el-dialog-padding-primary:0;
-    --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
-    :close-on-click-modal="false" draggable>
-    <PictureInfo ref="PictureInfoRef"></PictureInfo>
-  </el-dialog>
 </template>
-
-<!-- 
-文档树状列表的标题封装
-┌──────┬──────────┐
-|      |          |
-├──────┼──────────┤
-| this |          |
-|title |          |
-|      |          |
-└──────┴──────────┘
- -->
 <script setup lang="ts">
-import { ref, computed, onBeforeUnmount, nextTick } from 'vue'
+import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
-import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
-import Notify from '@renderer/components/Notify'
-import { ElMessageBox } from 'element-plus'
-import { folderDelApi } from '@renderer/api/blossom'
-
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
 const props = defineProps({
-  trees: { type: Object as PropType<DocTree>, default: {} },
-  size: {
-    type: Number,
-    default: 14
-  }
+  trees: { type: Object as PropType<DocTree>, default: {} }
 })
 
 const isSubjectDoc = computed(() => {
   return props.trees.t?.includes('subject')
-})
-
-const isOpen = computed(() => {
-  return props.trees.o === 1;
-})
-
-const isStar = computed(() => {
-  return props.trees.star === 1;
-})
-
-const isPictureFolder = computed(() => {
-  return props.trees.ty === 2;
 })
 
 /**
@@ -109,92 +43,9 @@ const tags = computed(() => {
       icons.push({ content: tag })
     }
   });
-  return icons;
+  return icons
 })
 
-/**
- * 点击文档菜单标题后的回调
- */
-const handlClick = () => {
-  emits('clickDoc', props.trees)
-}
-
-//#endregion
-
-
-//#region ----------------------------------------< 右键菜单 >--------------------------------------
-const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-
-onBeforeUnmount(() => {
-  document.body.removeEventListener('click', closeMenuShow)
-  document.body.removeEventListener('contextmenu', closeMenuShow)
-})
-
-const closeMenuShow = () => {
-  // console.log('由监听关闭菜单', props.trees.n);
-  rMenu.value.show = false
-  document.body.removeEventListener('click', closeMenuShow)
-  document.body.removeEventListener('contextmenu', closeMenuShow)
-}
-
-const handleClickRight = (event: MouseEvent) => {
-  // console.log('右键点击', props.trees.n);
-  rMenu.value = { show: true, clientX: event.clientX, clientY: event.clientY }
-  setTimeout(() => {
-    document.body.addEventListener('click', closeMenuShow)
-    document.body.addEventListener('contextmenu', closeMenuShow)
-  }, 100);
-}
-
-/**
- * 删除文档
- */
-const delDoc = () => {
-  ElMessageBox.confirm(
-    `是否确定删除文件夹: <span style="color:#C02B2B;text-decoration: underline;">${props.trees.n}</span>？删除后将不可恢复！`, {
-    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true, dangerouslyUseHTMLString: true,
-  }
-  ).then(() => {
-    folderDelApi({ id: props.trees.i }).then(_resp => {
-      Notify.success(`删除文件夹成功`)
-      emits('refreshDocTree')
-    })
-  })
-}
-//#endregion 右键菜单
-
-//#region ----------------------------------------< 新增修改详情弹框 >--------------------------------------
-
-const PictureInfoRef = ref()
-const isShowDocInfoDialog = ref<boolean>(false);
-
-/**
- * 显示弹框
- * @param dialogType 弹框的类型, 新增, 修改
- * @param pid 父级ID, 新增同级或子集文档时使用
- */
-const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
-  if (props.trees.i < 0) {
-    Notify.info('当前文档为系统默认文档, 无法操作', '操作无效')
-    return
-  }
-
-  if (dialogType === 'upd' && (props.trees == undefined || props.trees?.i == undefined)) {
-    Notify.info('请先选则要修改的文件夹或文档')
-    return
-  }
-  isShowDocInfoDialog.value = true
-  if (dialogType === 'add') {
-    nextTick(() => { PictureInfoRef.value.reload(dialogType, undefined, pid) })
-  }
-  if (dialogType === 'upd') {
-    nextTick(() => {
-      PictureInfoRef.value.reload(dialogType, props.trees.i)
-    })
-  }
-}
-//#endregion
-const emits = defineEmits(['clickDoc', 'refreshDocTree'])
 </script>
 
 <style scoped lang="scss">

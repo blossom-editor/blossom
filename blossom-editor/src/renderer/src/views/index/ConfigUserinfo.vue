@@ -65,7 +65,7 @@ import { storeToRefs } from 'pinia'
 import { userUpdApi } from '@renderer/api/auth'
 import { useUserStore } from '@renderer/stores/user'
 import { openExtenal } from '@renderer/assets/utils/electron'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
 const { userinfo } = storeToRefs(userStore)
@@ -98,4 +98,4 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-</script>
+</script>@renderer/common/notify@renderer/scripts/notify

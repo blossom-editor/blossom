@@ -46,7 +46,7 @@
 import { onActivated, onMounted, ref } from 'vue'
 import { noteAllApi, noteDelApi, noteTopApi } from '@renderer/api/note'
 import NoteEditor from '@renderer/views/note/NoteEditor.vue'
-import { TempTextareaKey } from '@renderer/views/article/article'
+import { TempTextareaKey } from '@renderer/views/article/scripts/article'
 import { Local } from '@renderer/assets/utils/storage'
 
 onMounted(() => {

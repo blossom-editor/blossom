@@ -1,13 +1,13 @@
 // index.ts
 import axios from "axios"
-import pinia from "@renderer/stores/storeConfig"
+import pinia from "@renderer/stores/store-config"
 import { toLogin } from "@renderer/router"
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 import { Local } from "@renderer/assets/utils/storage"
 import { isNotNull } from "@renderer/assets/utils/obj"
 import { storeKey as authKey, useUserStore } from '@renderer/stores/user'
 import { storeKey as serverUrlKey } from '@renderer/stores/server'
-import Notify from "@renderer/components/Notify"
+import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore(pinia)
 

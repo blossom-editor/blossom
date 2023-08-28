@@ -17,7 +17,7 @@ import { uploadFileApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { provideKeyDocInfo } from '@renderer/views/doc/doc'
-import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/picture'
+import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/scripts/picture'
 
 // 当前菜单中选择的文档
 const curFolder = inject(provideKeyDocInfo)

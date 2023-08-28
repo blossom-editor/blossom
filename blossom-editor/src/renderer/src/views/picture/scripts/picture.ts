@@ -1,5 +1,5 @@
 import type { UploadProps } from 'element-plus'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 /**
  * Picture Object

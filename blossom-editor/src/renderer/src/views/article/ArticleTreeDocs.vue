@@ -5,9 +5,8 @@
   </div>
 
   <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档...">
-    <!-- 文件夹 -->
-    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true">
 
+    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeDefaultActive">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
 
@@ -15,7 +14,7 @@
         <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
           <template #title>
             <div class="menu-item-wrapper" @click="clickCurDoc(L1)" @click.right="handleClickRight(L1, $event)">
-              <ArticleTreeTitle :trees="L1" @refreshDocTree="getDocTree" />
+              <ArticleTreeTitle :trees="L1" />
             </div>
           </template>
         </el-menu-item>
@@ -24,7 +23,7 @@
         <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
           <template #title>
             <div class="menu-item-wrapper" @click.right="handleClickRight(L1, $event)">
-              <ArticleTreeTitle :trees="L1" @refreshDocTree="getDocTree" />
+              <ArticleTreeTitle :trees="L1" />
             </div>
           </template>
 
@@ -34,7 +33,7 @@
             <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
               <template #title>
                 <div class="menu-item-wrapper" @click="clickCurDoc(L2)" @click.right="handleClickRight(L2, $event)">
-                  <ArticleTreeTitle :trees="L2" @refreshDocTree="getDocTree" />
+                  <ArticleTreeTitle :trees="L2" />
                 </div>
               </template>
             </el-menu-item>
@@ -43,7 +42,7 @@
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
               <template #title>
                 <div class="menu-item-wrapper" @click.right="handleClickRight(L2, $event)">
-                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
+                  <ArticleTreeTitle :trees="L2" />
                 </div>
               </template>
 
@@ -53,7 +52,7 @@
                 <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
                   <template #title>
                     <div class="menu-item-wrapper" @click="clickCurDoc(L3)" @click.right="handleClickRight(L3, $event)">
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
+                      <ArticleTreeTitle :trees="L3" />
                     </div>
                   </template>
                 </el-menu-item>
@@ -62,7 +61,7 @@
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                   <template #title>
                     <div class="menu-item-wrapper" @click.right="handleClickRight(L3, $event)">
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
+                      <ArticleTreeTitle :trees="L3" />
                     </div>
                   </template>
 
@@ -73,7 +72,7 @@
                       <template #title>
                         <div class="menu-item-wrapper" @click="clickCurDoc(L4)" style="width: 100%;"
                           @click.right="handleClickRight(L4, $event)">
-                          <ArticleTreeTitle :trees="L4" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
+                          <ArticleTreeTitle :trees="L4" />
                         </div>
                       </template>
                     </el-menu-item>
@@ -156,17 +155,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@renderer/stores/user'
-import { ref, onActivated, provide, onBeforeUnmount, nextTick } from "vue"
+import { ref, onActivated, provide, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { ElMessageBox } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { docTreeApi } from '@renderer/api/blossom'
 import { isNotNull } from "@renderer/assets/utils/obj"
 import { isEmpty } from 'lodash'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
-import { grammar } from './markedjs'
+import { grammar } from './scripts/markedjs'
 import { folderDelApi, articleDownloadApi, articleSyncApi, articleDelApi } from '@renderer/api/blossom'
 import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 // components
 import ArticleTreeTitle from './ArticleTreeTitle.vue'
@@ -177,8 +176,13 @@ import ArticleInfo from './ArticleInfo.vue'
 const userStore = useUserStore();
 const route = useRoute()
 
-onActivated(() => {
+onMounted(() => {
   getDocTree(false, false, false)
+  getRouteQueryParams()
+})
+
+onActivated(() => {
+  // getDocTree(false, false, false)
   getRouteQueryParams()
 })
 
@@ -289,6 +293,8 @@ const closeTreeDocsMenuShow = () => {
 const removeListenerTreeDocsRightMenu = () => {
   document.body.removeEventListener('click', closeTreeDocsMenuShow)
 }
+
+//#endregion
 
 /**
  * 打开新页面, 文件夹(curDoc.value.ty == 1)无法使用新页面打开
@@ -417,5 +423,5 @@ defineExpose({ getDocTreeData })
 </script>
 
 <style scoped lang="scss">
-@import './style/article-tree-docs.scss';
+@import '../doc/tree-docs.scss';
 </style>

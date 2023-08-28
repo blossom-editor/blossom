@@ -1,4 +1,4 @@
-import './style/bl-preview.css'
+import '../styles/bl-preview.css'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html } from '@renderer/assets/utils/util'
 import { marked, Marked } from 'marked'

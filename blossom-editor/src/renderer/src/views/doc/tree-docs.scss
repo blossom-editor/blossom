@@ -4,6 +4,7 @@
 
 .doc-trees-container {
   @include box(100%, calc(100% - 90px));
+  padding-top: 8px;
 
   .menu-item-wrapper {
     width: 100%;
@@ -28,6 +29,13 @@
     --el-menu-item-height: 25px;
     // item 的 字体大小
     --el-menu-item-font-size: 13px;
+
+    .menu-divider {
+      width: 100%;
+      height: 15px;
+      border-bottom: 1px solid var(--el-border-color);
+      margin-bottom: 15px;
+    }
 
     :deep(.el-menu) {
       transition: 0.1s !important;

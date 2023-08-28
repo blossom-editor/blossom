@@ -37,7 +37,7 @@
 import { computed, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { userAddApi } from '@renderer/api/auth'
-import Notify from '@renderer/components/Notify'
+import Notify from '@renderer/scripts/notify'
 
 interface AddUserForm { username: string, password: string, type: number }
 const AddUserFormRef = ref<FormInstance>()
@@ -72,4 +72,4 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-</script>
+</script>@renderer/common/notify@renderer/scripts/notify
