@@ -5,6 +5,12 @@
   color: var(--bl-preview-color);
   background-color: var(--bl-preview-bg-color);
   line-height: 20px;
+  
+
+  * {
+    user-select: text;
+    -webkit-user-drag: none;
+  }
 
   a {
     color: var(--el-color-primary);

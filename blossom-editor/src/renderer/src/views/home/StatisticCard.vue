@@ -51,7 +51,7 @@ onActivated(() => {
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .statistic-article-root,
 .statistic-picture-root {
   @include box(200px, 95px);

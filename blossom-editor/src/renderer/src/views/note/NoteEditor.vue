@@ -59,7 +59,7 @@ const sendAnimation = () => {
 const emits = defineEmits(['saved'])
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .note-editor-root {
   @include box(100%, 100%);
   @include themeBrightness(100%, 80%);

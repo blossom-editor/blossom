@@ -10,6 +10,11 @@
 
     <!--  -->
     <bl-row just="flex-end" align="flex-end">
+      <el-tooltip content="显示排序" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
+        <div>
+          <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
+        </div>
+      </el-tooltip>
       <el-tooltip content="刷新列表" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
       </el-tooltip>
@@ -62,7 +67,7 @@ const savedCallback = () => {
 }
 //#endregion
 
-const emits = defineEmits(['refreshDocTree'])
+const emits = defineEmits(['refreshDocTree', 'show-sort'])
 
 </script>
 

@@ -233,6 +233,12 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
   return `<pre><code class="hljs language-${language}">${code}</code></pre>`
 }
 
+/**
+ * 单行代码块的解析拓展
+ * 1. katex `$内部写表达式$`
+ * @param src 
+ * @returns 
+ */
 export const renderCodespan = (src: string) => {
   let arr = src.match(singleDollar);
   if (arr != null && arr.length > 0) {
@@ -311,6 +317,7 @@ export const renderLink = (href: string | null, title: string | null, text: stri
         link = `<a target="_blank" href=${href} title=${title}>${text}</a>`
       }
 
+      // 从文章列表中获取文章, 如果找到则认为是内部引用, 否则即使是内部引用格式, 也认为是个外部文章.
       let article = getDocInfoFromTrees(articleId, docTrees)
       if (article != undefined) {
         ref.targetId = article.i

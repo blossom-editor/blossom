@@ -122,15 +122,9 @@ const saveWeb = () => {
   })
 }
 const delWeb = () => {
-  ElMessageBox.confirm(
-    `删除后将不可恢复, 是否确定删除[${webForm.value.name}]?`,
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'info',
-      draggable: true,
-    }
-  ).then(() => {
+  ElMessageBox.confirm(`删除后将不可恢复, 是否确定删除[${webForm.value.name}]?`, {
+    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true,
+  }).then(() => {
     webDelApi(webForm.value).then(_resp => {
       getWebAll()
       closeForm()
