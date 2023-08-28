@@ -62,8 +62,8 @@ declare interface DocInfo {
   syncTime?: string,
 }
 
-/** 文档类型: 1:文章文件夹|2:图片文件夹|3:文章; */
-declare type DocType = 1 | 2 | 3;
+/** 文档类型: 1:文章文件夹|2:图片文件夹|3:文章|11:分隔文档; */
+declare type DocType = 1 | 2 | 3 | 11;
 
 /** 文档弹框类型: 增|删|查 */
 declare type DocDialogType = 'add' | 'upd' | 'info'

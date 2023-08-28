@@ -18,14 +18,14 @@
           <!-- L1无下级 -->
           <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
             <template #title>
-              <ArticleTreeTitle :trees="L1" @click-doc="clickCurDoc" :size="15" />
+              <ArticleTreeTitle :size="15" :trees="L1" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
             </template>
           </el-menu-item>
 
           <!-- L1有下级 -->
           <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
             <template #title>
-              <ArticleTreeTitle :trees="L1" @click-doc="clickCurDoc" :size="15" />
+              <ArticleTreeTitle :size="15" :trees="L1" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
             </template>
 
             <!-- ================================================ L2 ================================================ -->
@@ -33,14 +33,14 @@
               <!-- L2无下级 -->
               <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
                 <template #title>
-                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" />
+                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
                 </template>
               </el-menu-item>
 
               <!-- L2有下级 -->
               <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
                 <template #title>
-                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" />
+                  <ArticleTreeTitle :trees="L2" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
                 </template>
 
                 <!-- ================================================ L3 ================================================ -->
@@ -48,14 +48,14 @@
                   <!-- L3无下级 -->
                   <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
                     <template #title>
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" />
+                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
                     </template>
                   </el-menu-item>
 
                   <!-- L3有下级 -->
                   <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                     <template #title>
-                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" />
+                      <ArticleTreeTitle :trees="L3" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
                     </template>
 
                     <!-- ================================================ L4 ================================================ -->
@@ -63,7 +63,7 @@
                       <!-- L4 不允许有下级, 只允许4级 -->
                       <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
                         <template #title>
-                          <ArticleTreeTitle :trees="L4" @click-doc="clickCurDoc" />
+                          <ArticleTreeTitle :trees="L4" @click-doc="clickCurDoc" @refreshDocTree="getDocTree" />
                         </template>
                       </el-menu-item>
                     </div>
@@ -338,7 +338,7 @@ const getRouteQueryParams = () => {
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
 const docTreeLoading = ref(true)        // 文档菜单的加载动画
-const showSort = ref(false)             // 是否显示文章排序
+const showSort = ref(false)             // 是否显示文档排序
 const docTreeDefaultActive = ref('')    // 文档的默认选中项, 用于外部跳转后选中菜单
 const docTreeData = ref<DocTree[]>([])  // 文档菜单
 const curDoc = ref<DocInfo>()           // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
@@ -655,7 +655,7 @@ const removeListenerScroll = () => {
 }
 
 const marginTop = 75
-const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe,span'
+const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe, span'
 const sycnScroll = (_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any => {
   if (EditorRef.value == undefined) {
     return

@@ -63,6 +63,10 @@ export const folderUpdApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/upd", data);
 }
 
+export const folderDelApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>("/folder/del", data);
+}
+
 export const folderOpenApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/open", data);
 }
@@ -136,6 +140,15 @@ export const articleUpdApi = (data?: object): Promise<R<any>> => {
  */
 export const articleUpdContentApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/article/upd/content", data);
+}
+
+/**
+ * 删除文章
+ * @param data {id:文章ID}
+ * @returns 
+ */
+export const articleDelApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>("/article/del", data);
 }
 
 /**

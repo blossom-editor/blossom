@@ -31,6 +31,9 @@
             @click="handleShowDocInfoDialog('add', props.trees.i)">
             <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文档
           </div>
+          <div :class="['menu-item', props.trees.i < 0 ? 'disabled' : '']" @click="delDoc()">
+            <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
+          </div>
         </div>
       </div>
     </Teleport>
@@ -62,6 +65,8 @@ import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 import Notify from '@renderer/components/Notify'
+import { ElMessageBox } from 'element-plus'
+import { folderDelApi } from '@renderer/api/blossom'
 
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
@@ -141,6 +146,21 @@ const handleClickRight = (event: MouseEvent) => {
   }, 100);
 }
 
+/**
+ * 删除文档
+ */
+const delDoc = () => {
+  ElMessageBox.confirm(
+    `是否确定删除文件夹: <span style="color:#C02B2B;text-decoration: underline;">${props.trees.n}</span>？删除后将不可恢复！`, {
+    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true, dangerouslyUseHTMLString: true,
+  }
+  ).then(() => {
+    folderDelApi({ id: props.trees.i }).then(_resp => {
+      Notify.success(`删除文件夹成功`)
+      emits('refreshDocTree')
+    })
+  })
+}
 //#endregion 右键菜单
 
 //#region ----------------------------------------< 新增修改详情弹框 >--------------------------------------
@@ -174,7 +194,7 @@ const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
   }
 }
 //#endregion
-const emits = defineEmits(['clickDoc'])
+const emits = defineEmits(['clickDoc', 'refreshDocTree'])
 </script>
 
 <style scoped lang="scss">

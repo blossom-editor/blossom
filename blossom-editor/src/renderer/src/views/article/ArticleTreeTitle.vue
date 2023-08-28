@@ -26,7 +26,7 @@
           <div class="menu-item" @click="handleShowDocInfoDialog('upd')">
             <span class="iconbl bl-a-fileedit-line"></span>编辑文档
           </div>
-          <div class="menu-item" @click="sync()">
+          <div class="menu-item" @click="syncDoc()">
             <span class="iconbl bl-a-cloudrefresh-line"></span>同步文档
           </div>
           <div class="menu-item" @click="handleShowDocInfoDialog('add', props.trees.p)">
@@ -36,6 +36,9 @@
           <div :class="['menu-item', props.trees.ty === 3 ? 'disabled' : '']"
             @click="handleShowDocInfoDialog('add', props.trees.i)">
             <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文档
+          </div>
+          <div class="menu-item" @click="delDoc()">
+            <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
           </div>
           <!-- 只有文件夹才有子文档 -->
           <!-- <div class="menu-item" @click="handleShowDocInfoDialog('add', props.trees.i)">
@@ -75,7 +78,7 @@
     <ArticleInfo ref="ArticleInfoRef"></ArticleInfo>
   </el-dialog>
 
-  <!-- 详情的弹框 -->
+  <!-- 二维码的弹框 -->
   <el-dialog v-model="isShowQrCodeDialog" width="335" top="100px" style="
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
@@ -91,12 +94,13 @@ import type { PropType } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 
 import { grammar } from './markedjs'
-import { articleDownloadApi, articleSyncApi } from '@renderer/api/blossom'
+import { folderDelApi, articleDownloadApi, articleSyncApi, articleDelApi } from '@renderer/api/blossom'
 import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import ArticleInfo from '@renderer/views/article/ArticleInfo.vue'
 import ArticleQrCode from './ArticleQrCode.vue'
 import Notify from '@renderer/components/Notify'
+import { ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore();
 
@@ -165,7 +169,7 @@ const handlClick = () => {
 
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-const rMenuHeight = 275
+const rMenuHeight = 363
 
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', closeMenuShow)
@@ -235,9 +239,37 @@ const articleDownload = () => {
   })
 }
 
-const sync = () => {
+/**
+ * 同步文档
+ */
+const syncDoc = () => {
   articleSyncApi({ id: props.trees.i }).then((_resp) => {
     Notify.success('同步成功')
+    invokeRefreshDocTree()
+  })
+}
+
+/**
+ * 删除文档
+ */
+const delDoc = () => {
+  let type = props.trees.ty === 3 ? '文章' : '文件夹'
+  ElMessageBox.confirm(
+    `是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${props.trees.n}</span>？删除后将不可恢复！`, {
+    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true, dangerouslyUseHTMLString: true,
+  }
+  ).then(() => {
+    if (props.trees.ty === 3) {
+      articleDelApi({ id: props.trees.i }).then(_resp => {
+        Notify.success(`删除文章成功`)
+        invokeRefreshDocTree()
+      })
+    } else {
+      folderDelApi({ id: props.trees.i }).then(_resp => {
+        Notify.success(`删除文件夹成功`)
+        invokeRefreshDocTree()
+      })
+    }
   })
 }
 
@@ -282,7 +314,11 @@ const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
 }
 //#endregion
 
-const emits = defineEmits(['clickDoc'])
+const invokeRefreshDocTree = () => {
+  emits('refreshDocTree')
+}
+
+const emits = defineEmits(['clickDoc', 'refreshDocTree'])
 </script>
 
 <style scoped lang="scss">
@@ -317,6 +353,7 @@ $icon-size: 17px;
   margin: 5px 0 10px 0;
   border-radius: 7px;
   position: relative;
+
 
   .doc-name {
     @include font(13px, 300);
