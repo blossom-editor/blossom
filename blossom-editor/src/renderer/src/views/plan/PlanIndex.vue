@@ -150,7 +150,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .plan-index-root {
   @include box(100%, 100%);
   @include flex(row, center, center);
@@ -172,22 +172,24 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
       height: 0;
     }
 
-    .el-calendar__header {
+    :deep(.el-calendar__header) {
       @include box(100%, 50px);
       @include font(13px, 300);
       color: #8A8A8A;
       border: 0;
     }
 
-    .el-calendar__body {
+    :deep(.el-calendar__body) {
       @include box(100%, calc(100% - 50px));
       padding: 0;
 
       .el-calendar-table {
         @include box(100%, 100%);
+        border: 0;
 
         thead {
           @include box(100%, 45px);
+          background-color: var(--bl-html-color);
 
           th {
             border-bottom: var(--el-calendar-border);
@@ -233,6 +235,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
               border-left: 0;
               border-top: 0;
               overflow: scroll;
+              padding: 0;
 
               .el-calendar-day {
                 min-height: 100%;
