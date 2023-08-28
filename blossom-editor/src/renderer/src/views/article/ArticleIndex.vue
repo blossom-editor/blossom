@@ -806,14 +806,22 @@ const removeListenerShortcutMap = () => {
 
 //#endregion
 
+//#region ----------------------------------------< 渲染标题 >-------------------------------------
 
-
+//#endregion
 </script>
 
 <style scoped lang="scss">
-@import './ArticleIndex.scss';
+@import './style/article-index.scss';
+@import './style/bl-preview-toc.scss';
+
+.bl-preview {
+  h1 {
+    font-size: 30px;
+  }
+}
 
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;
 }
-</style>../../components/draggable@renderer/components/Draggable
+</style>

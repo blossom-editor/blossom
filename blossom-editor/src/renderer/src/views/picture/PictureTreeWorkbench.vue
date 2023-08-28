@@ -72,5 +72,5 @@ const emits = defineEmits(['refreshDocTree', 'show-sort'])
 </script>
 
 <style scoped lang="scss">
-@import '../doc/TreeWorkbench.scss';
+@import '../doc/tree-workbench.scss';
 </style>

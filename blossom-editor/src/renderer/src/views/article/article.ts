@@ -1,5 +1,9 @@
 
 import { isEmpty } from 'lodash'
+
+/**
+ * 临时内容的 localStorage key
+ */
 export const TempTextareaKey = 'editor_temp_textarea_value'
 
 /**
@@ -45,7 +49,7 @@ export interface ArticleReference {
    */
   targetUrl: string,
   /**
-   * reference type
+   * 文章的引用类型
    * 
    * 10 : picture
    * 11 : inner article

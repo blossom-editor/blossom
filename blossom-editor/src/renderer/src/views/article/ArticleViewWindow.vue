@@ -57,6 +57,8 @@ onMounted(() => {
 })
 </script>
 <style scoped lang=scss>
+@import './style/bl-preview-toc.scss';
+
 .article-view-window-root {
   @include box(100%, 100%);
   @include flex(row, center, center);
