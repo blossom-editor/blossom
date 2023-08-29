@@ -7,7 +7,7 @@
     @include flex(column, flex-start, center);
     height: 100%;
     font-weight: 200;
-    transition: 0.1s;
+    // transition: 0.1s;
     left: 0;
     top: 0;
 
@@ -53,14 +53,13 @@
 
     .editor-preview {
       @include box(100%, $heightEP);
-      @include flex(row, center, center);
+      @include flex(row, flex-start, center);
       border-top: 1px solid var(--el-border-color);
       position: relative;
       font-family: inherit;
 
       :deep(*) {
         font-family: inherit;
-        // font-family: 'Sarasa Fixed CL', sans-serif;
       }
 
       .gutter-holder {
@@ -77,9 +76,7 @@
       .editor-codemirror {
         @include box(50%, 100%);
         overflow: auto;
-        border-right: 1px solid var(--el-border-color);
         z-index: 2;
-
 
         :deep(.cm-line) {
           caret-color: var(--bl-editor-caret-color) !important;
@@ -99,12 +96,29 @@
         }
       }
 
+      .resize-divider {
+        // width: 2px;
+        height: 100%;
+        // background-color: var(--el-border-color);
+        border-left: 2px solid var(--el-border-color);
+        cursor: ew-resize;
+        z-index: 3;
+
+        &:hover {
+          // width: 10px;
+          // background-color: var(--bl-editor-gutters-bg-color);
+          border-left: 2px dashed var(--el-color-primary);
+          // border-right: 5px solid var(--el-border-color);
+        }
+      }
+
       .preview-marked {
         @include box(50%, 100%);
         overflow: scroll;
         font-size: 14px;
         word-wrap: break-word;
         padding: 10px 20px 0 20px;
+        z-index: 3;
 
         :deep(.katex) {
           font-size: 1.1em;

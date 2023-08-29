@@ -5,7 +5,7 @@ const marginTop = 75
 const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, pre, blockquote, hr, table, tr, iframe, span'
 
 /**
- * 双屏滚动
+ * 双屏滚动封装
  */
 export class EPScroll {
 

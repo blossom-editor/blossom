@@ -41,6 +41,7 @@
         <div class="gutter-holder" :style="editorPreviewStyle.gutter"></div>
         <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"
           @click.right="handleEditorClickRight"></div>
+        <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" :style="editorPreviewStyle.preview" v-html="articleHtml">
         </div>
       </div>
@@ -139,6 +140,7 @@ import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
 import { beforeUpload, onError } from '@renderer/views/picture/scripts/picture'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle, EditorPreviewStyle } from './scripts/article'
+import { useResize } from "./scripts/editor-preview-resize"
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
 // marked
@@ -400,6 +402,7 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
 
 //#region ----------------------------------------< codemirror/editor >----------------------------
 const EditorRef = ref()           // editor dom
+const ResizeDividerRef = ref()    // editor&preview resize dom
 const editorLoading = ref(false)  // eidtor loading
 let cmw: CmWrapper                // codemirror editor wrapper
 /** 
@@ -491,6 +494,7 @@ function debounce(fn: () => void, time = 500) {
   }
 }
 
+useResize(EditorRef, PreviewRef, ResizeDividerRef)
 //#endregion
 
 //#region ----------------------------------------< TOC >------------------------------------------
