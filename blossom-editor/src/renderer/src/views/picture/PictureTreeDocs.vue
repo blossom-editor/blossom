@@ -210,7 +210,7 @@ const handleShowSort = () => {
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-const rMenuHeight = 363 // 固定的菜单高度, 每次增加右键菜单项时需要修改该值
+const rMenuHeight = 151 // 固定的菜单高度, 每次增加右键菜单项时需要修改该值
 
 /**
  * 显示有检查菜单
