@@ -199,6 +199,8 @@ export const articleQrCodeApi = (params?: object): Promise<any> => {
   return rq.get("/article/open/qrcode", config);
 }
 
+export const articleImportApiUrl = '/article/import'
+
 
 //#endregion
 
