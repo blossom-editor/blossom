@@ -130,5 +130,3 @@ $height-title: 50px;
 
 }
 </style>
-
-<style></style>../doc
