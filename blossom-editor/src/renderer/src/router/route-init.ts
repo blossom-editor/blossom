@@ -13,6 +13,7 @@ import SettingIndex from '@renderer/views/index/SettingIndex.vue'
 // 新窗口页面
 import ArticleViewWindow from '@renderer/views/article/ArticleViewWindow.vue'
 import ArticleReference from '@renderer/views/article/ArticleReferenceChartGraph.vue'
+import ArticleHistory from '@renderer/views/article/ArticleHistory.vue'
 
 router.addRoute({
   path: '/', redirect: '/settingIndex'
@@ -38,3 +39,4 @@ router.addRoute(
 router.addRoute({ path: '/articleViewWindow', name: 'articleViewWindow', component: ArticleViewWindow, meta: { keepAlive: true } })
 router.addRoute({ path: '/iconListIndexWindow', name: 'IconListIndexWindow', component: IconListIndex, meta: { keepAlive: true } })
 router.addRoute({ path: '/articleReferenceWindow', name: 'ArticleReferenceWindow', component: ArticleReference, meta: { keepAlive: true } })
+router.addRoute({ path: '/articleHistory', name: 'ArticleHistory', component: ArticleHistory, meta: { keepAlive: true } })

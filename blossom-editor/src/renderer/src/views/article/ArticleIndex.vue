@@ -37,6 +37,8 @@
           @image="cmw.commandImg()" @link="cmw.commandLink()">
         </EditorTools>
       </div>
+
+      <!-- 编辑器与预览 -->
       <div class="editor-preview" :style="{ fontFamily: editorConfig.fontFamily }">
         <div class="gutter-holder" :style="editorPreviewStyle.gutter"></div>
         <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"

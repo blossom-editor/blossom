@@ -201,6 +201,18 @@ export const articleQrCodeApi = (params?: object): Promise<any> => {
 
 export const articleImportApiUrl = '/article/import'
 
+/**
+ * 文章历史记录
+ * @param params { articleId: articleId }
+ * @returns 
+ */
+export const articleLogsApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/log", { params });
+}
+
+export const articleLogContentApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/log/content", { params });
+}
 
 //#endregion
 

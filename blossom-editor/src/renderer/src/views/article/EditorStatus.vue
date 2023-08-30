@@ -18,7 +18,7 @@
       </div>
     </bl-row>
     <bl-row just="flex-end" width="240px" height="100%" class="status-item-container">
-      <div>
+      <div @click="openArticleLogWindow">
         <span class="iconbl bl-a-filehistory-line"></span>
         编辑记录
       </div>
@@ -47,7 +47,7 @@
 import { inject, toRaw } from 'vue'
 import type { Ref } from 'vue'
 import { provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
-import { openNewArticleReferenceWindow } from "@renderer/assets/utils/electron"
+import { openNewArticleReferenceWindow, openNewArticleLogWindow } from "@renderer/assets/utils/electron"
 
 const props = defineProps({
   renderInterval: {
@@ -64,6 +64,11 @@ const openArticleReferenceWindow = () => {
   }
 }
 
+const openArticleLogWindow = () => {
+  if (curDoc && curDoc.value) {
+    openNewArticleLogWindow(toRaw(curDoc.value))
+  }
+}
 </script>
 
 <style scoped lang="scss">

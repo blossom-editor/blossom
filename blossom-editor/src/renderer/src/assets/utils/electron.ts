@@ -30,9 +30,12 @@ export const openNewIconWindow = () => { window.electronAPI.openNewIconWindow() 
  * 打开文章引用窗口
  * @param article 指定文章的引用
  */
-export const openNewArticleReferenceWindow = (article?: any) => {
-  window.electronAPI.openNewArticleReferenceWindow(article)
-}
+export const openNewArticleReferenceWindow = (article?: any) => { window.electronAPI.openNewArticleReferenceWindow(article) }
+
+/**
+ * 打开文章编辑历史记录
+ */
+export const openNewArticleLogWindow = (article: any) => { window.electronAPI.openNewArticleLogWindow(article) }
 
 /**
  * 使用默认浏览器打开链接

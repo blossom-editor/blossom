@@ -270,10 +270,12 @@ export class CmWrapper {
   }
   sliceDoc = (from?: number, to?: number): string => { return this._editor.state.sliceDoc(from, to) }
   getDocString = (): string => { return CmWrapper.getDocString(this._editor) }
+  getDocLength = (): number => { return CmWrapper.getDocLength(this._editor) }
   getSelectionRangesText = (): string => { return CmWrapper.getSelectionRangesText(this._editor) }
   getSlelctionRangesArr = (): readonly SelectionRange[] => { return CmWrapper.getSlelctionRangesArr(this._editor) }
   getDocumentTop = (): number => { return this._editor.documentTop }
   getElementAtHeight = (height: number): BlockInfo => { return this._editor.elementAtHeight(height) }
+  insert = (istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => { CmWrapper.insert(this._editor, istFrom, istTo, content, selectFrom, selectTo) }
   //#endregion
   //#region ============================================================ 自定义命令 ============================================================
   /**

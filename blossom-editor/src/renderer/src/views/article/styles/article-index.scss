@@ -57,9 +57,11 @@
       border-top: 1px solid var(--el-border-color);
       position: relative;
       font-family: inherit;
+      font-size: inherit;
 
       :deep(*) {
         font-family: inherit;
+        font-size: inherit;
       }
 
       .gutter-holder {
@@ -115,7 +117,7 @@
       .preview-marked {
         @include box(50%, 100%);
         overflow: scroll;
-        font-size: 14px;
+        // font-size: 14px;
         word-wrap: break-word;
         padding: 10px 20px 0 20px;
         z-index: 3;

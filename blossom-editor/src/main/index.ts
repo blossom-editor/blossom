@@ -160,7 +160,7 @@ const initTray = () => {
  * 新的窗口
  * =========================================================================================================================
  */
-type WindowType = 'article' | 'wlIcon' | 'articleReference'
+type WindowType = 'article' | 'wlIcon' | 'articleReference' | 'articleLog'
 const newWindowMaps = new Map<string, BrowserWindow | undefined>();
 
 /**
@@ -210,6 +210,16 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
       newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id);
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow?articleId=' + id })
+    }
+  }
+  /**
+   * 文章编辑记录
+   */
+  else if (windowType === 'articleLog') {
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleHistory?articleId=' + id);
+    } else {
+      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleHistory?articleId=' + id })
     }
   }
   // 开发环境自动打开控制台
@@ -373,6 +383,12 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
       id = article.id
     }
     createNewWindow('articleReference', name, id)
+  })
+  /**
+   * 文章编辑记录
+   */
+  ipcMain.on('open-new-article-log-window', (_: IpcMainEvent, article: any): void => {
+    createNewWindow('articleLog', article.name + '编辑记录', article.id)
   })
   /**
    * 下载, 最终会调用 

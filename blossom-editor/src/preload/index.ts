@@ -66,6 +66,12 @@ const rednerToIpc = {
    */
   openNewArticleReferenceWindow: (article?: any): void => { ipcRenderer.send('open-new-article-referece-window', article) },
   /**
+   * 新窗口查看文章编辑历史记录
+   * @param article 文章信息
+   * @returns 
+   */
+  openNewArticleLogWindow: (article: any): void => { ipcRenderer.send('open-new-article-log-window', article) },
+  /**
    * 剪贴板, 读取文本
    * @returns 剪切板的文本
    */
