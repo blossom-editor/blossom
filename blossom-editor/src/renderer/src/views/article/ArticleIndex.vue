@@ -39,7 +39,7 @@
       </div>
 
       <!-- 编辑器与预览 -->
-      <div class="editor-preview" :style="{ fontFamily: editorConfig.fontFamily }">
+      <div class="editor-preview" :style="editorStyle">
         <div class="gutter-holder" :style="editorPreviewStyle.gutter"></div>
         <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"
           @click.right="handleEditorClickRight"></div>
@@ -181,7 +181,7 @@ onDeactivated(() => {
 const userStore = useUserStore()
 const serverStore = useServerStore()
 const configStore = useConfigStore()
-const { editorConfig } = storeToRefs(configStore)
+const { editorStyle } = storeToRefs(configStore)
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
@@ -627,7 +627,8 @@ const keyup = (evnet: KeyboardEvent) => { shortcutRegistrant.keyup(evnet) }
 const addListererShortcutMap = () => {
   // Alt + 1: 隐藏菜单
   // Alt + 2: 隐藏目录
-  // Alt + v: 隐藏编辑器
+  // Alt + 3: 隐藏编辑
+  // Alt + 4: 隐藏预览
   let altAnd: Map<string, shortcutFunc> = new Map()
   altAnd.set("Digit1", alt_1)
   altAnd.set("Digit2", alt_2)
@@ -659,9 +660,7 @@ const removeListenerShortcutMap = () => {
 @import './styles/article-backtop.scss';
 
 .bl-preview {
-  h1 {
-    font-size: 30px;
-  }
+
 }
 
 :deep(.el-loading-spinner) {

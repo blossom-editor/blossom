@@ -5,11 +5,12 @@
   color: var(--bl-preview-color);
   background-color: var(--bl-preview-bg-color);
   line-height: 20px;
-
 }
 
 .bl-preview * {
   user-select: text;
+  font-size: inherit;
+  font-family: inherit;
 }
 
 .bl-preview a {
@@ -39,6 +40,7 @@
   border-bottom: 3px solid var(--bl-preview-h1-bg-color);
   text-align: left;
   position: relative;
+  font-size: 30px !important;
 }
 
 h1:first-child {
@@ -46,20 +48,20 @@ h1:first-child {
 }
 
 h2 {
-  font-size: 25px;
+  font-size: 25px !important;
 }
 
 h3 {
-  font-size: 22px;
+  font-size: 22px !important;
 }
 
 h4 {
-  font-size: 19px;
+  font-size: 19px !important;
 }
 
 h5,
 h6 {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 
 li::marker {
@@ -69,6 +71,8 @@ li::marker {
 /* 有序列表 */
 ol {
   padding-left: 20px;
+  font-size: inherit;
+  font-family: inherit;
 }
 
 /* 无序列表 */
@@ -124,7 +128,7 @@ table thead {
 table thead tr {}
 
 table thead tr th {
-  font-size: 16px;
+  font-size: 16px !important;
   padding: 10px;
   border-right: 1px solid var(--bl-preview-table-border-color);
 }
@@ -185,6 +189,8 @@ blockquote {
 }
 
 blockquote blockquote {
+  border: 1px solid var(--bl-preview-blockquote-border-color);
+  ;
   /* // border: 1px solid #dedede;
     // border-left: 3px solid #bebebe; */
 }

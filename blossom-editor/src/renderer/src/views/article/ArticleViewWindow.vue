@@ -22,16 +22,22 @@
       </div>
     </div>
 
-    <div class="preview bl-preview" v-html="article?.html"></div>
+    <div class="preview bl-preview" :style="editorStyle" v-html="article?.html"></div>
     <el-backtop target=".preview" :right="50" :bottom="50">
       <div class="iconbl bl-send-line backtop"></div>
     </el-backtop>
   </div>
 </template>
 <script setup lang="ts">
+import { storeToRefs } from "pinia"
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { articleInfoApi } from '@renderer/api/blossom'
+import { useConfigStore } from '@renderer/stores/config'
+
+
+const configStore = useConfigStore()
+const { editorStyle } = storeToRefs(configStore)
 
 const route = useRoute();
 const article = ref<DocInfo>()
@@ -71,8 +77,20 @@ onMounted(() => {
     @include box(100%, 100%);
     font-size: 15px;
     padding: 30px;
-    overflow-y: scroll;
+    overflow-y: overlay;
     line-height: 23px;
+
+    :deep(*) {
+      font-size: inherit;
+      font-family: inherit;
+    }
+
+    :deep(.katex > *) {
+      font-size: 1.2em !important;
+      font-family: 'KaTeX_Size1', sans-serif !important;
+      // font-size: 1.3em !important;
+      // font-family: 'KaTeX_Math', sans-serif !important;
+    }
   }
 
 }

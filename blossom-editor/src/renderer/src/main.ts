@@ -16,6 +16,7 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@renderer/assets/css/main.css' // html 全局样式
 import '@renderer/assets/css/theme.css' // 修改框架等的全局样式
+import '@renderer/views/article/styles/bl-preview.css'
 
 // BL Components
 import BLTag from '@renderer/components/BLTag.vue'

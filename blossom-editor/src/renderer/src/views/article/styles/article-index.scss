@@ -7,7 +7,6 @@
     @include flex(column, flex-start, center);
     height: 100%;
     font-weight: 200;
-    // transition: 0.1s;
     left: 0;
     top: 0;
 
@@ -59,11 +58,6 @@
       font-family: inherit;
       font-size: inherit;
 
-      :deep(*) {
-        font-family: inherit;
-        font-size: inherit;
-      }
-
       .gutter-holder {
         height: 100%;
         width: 50px;
@@ -79,6 +73,13 @@
         @include box(50%, 100%);
         overflow: auto;
         z-index: 2;
+        font-family: inherit;
+        font-size: inherit;
+
+        :deep(*) {
+          font-family: inherit;
+          font-size: inherit;
+        }
 
         :deep(.cm-line) {
           caret-color: var(--bl-editor-caret-color) !important;
@@ -99,32 +100,30 @@
       }
 
       .resize-divider {
-        // width: 2px;
         height: 100%;
-        // background-color: var(--el-border-color);
         border-left: 2px solid var(--el-border-color);
         cursor: ew-resize;
         z-index: 3;
 
         &:hover {
-          // width: 10px;
-          // background-color: var(--bl-editor-gutters-bg-color);
           border-left: 2px dashed var(--el-color-primary);
-          // border-right: 5px solid var(--el-border-color);
         }
       }
 
       .preview-marked {
         @include box(50%, 100%);
         overflow: scroll;
-        // font-size: 14px;
         word-wrap: break-word;
         padding: 10px 20px 0 20px;
         z-index: 3;
+        font-family: inherit;
+        font-size: inherit;
 
-        :deep(.katex) {
-          font-size: 1.1em;
-          font-family: 'KaTeX_Size1';
+        :deep(.katex > *) {
+          font-size: 1.2em !important;
+          font-family: 'KaTeX_Size1', sans-serif !important;
+          // font-size: 1.3em !important;
+          // font-family: 'KaTeX_Math', sans-serif !important;
         }
       }
     }

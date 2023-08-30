@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div class="main" :style="{ fontFamily: editorConfig.fontFamily }">
+    <div class="main" :style="editorStyle">
       <div class="cur-log">当前为 [{{ historyDt }}] 的记录信息</div>
       <div class="history-editor-codemirror" ref="HistoryEditorRef"></div>
     </div>
@@ -38,10 +38,11 @@ import { ref, onMounted } from 'vue'
 
 import { articleLogsApi, articleLogContentApi, articleInfoApi } from '@renderer/api/blossom'
 import { CmWrapper } from './scripts/codemirror'
-
 import { useConfigStore } from '@renderer/stores/config'
+
+
 const configStore = useConfigStore()
-const { editorConfig } = storeToRefs(configStore)
+const { editorStyle } = storeToRefs(configStore)
 const route = useRoute()
 
 const article = ref<DocInfo>()
@@ -138,10 +139,11 @@ onMounted(() => {
       border-top: 1px solid var(--el-border-color);
       border-right: 1px solid var(--el-border-color);
       border-bottom: 1px solid var(--el-border-color);
-      font-size: 14px;
+      font-size: inherit;
       font-family: inherit;
 
       :deep(*) {
+        font-size: inherit;
         font-family: inherit;
       }
 
