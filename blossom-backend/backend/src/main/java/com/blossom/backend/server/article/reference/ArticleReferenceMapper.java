@@ -23,4 +23,13 @@ public interface ArticleReferenceMapper extends BaseMapper<ArticleReferenceEntit
      * @param pictureUrls 图片列表
      */
     void insertList(@Param("references") List<ArticleReferenceEntity> references);
+
+    /**
+     * 查询引用关系
+     *
+     * @param inner     是否内部
+     * @param userId    用户ID
+     * @param articleId 文章ID
+     */
+    List<ArticleReferenceEntity> listAll(@Param("inner") Boolean inner, @Param("userId") Long userId, @Param("articleId") Long articleId);
 }

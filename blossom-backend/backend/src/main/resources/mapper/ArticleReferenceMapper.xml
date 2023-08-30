@@ -25,4 +25,26 @@
             )
         </foreach>
     </insert>
+
+    <select id="listAll" resultType="com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity">
+        select id,
+               source_id,
+               source_name,
+               target_Id,
+               target_name,
+               target_url,
+               type,
+               user_id
+          from blossom_article_reference
+         where user_id = #{userId}
+          <if test="inner == true">
+              and type = 11
+          </if>
+          <if test="inner == false">
+              and type in (11,21)
+          </if>
+          <if test="articleId != null">
+              and (source_id = #{articleId} or target_id = #{articleId})
+          </if>
+    </select>
 </mapper>

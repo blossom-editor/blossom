@@ -34,6 +34,12 @@ public class PictureUtil {
         return defaultFolder;
     }
 
+    /**
+     * 压缩图片
+     *
+     * @param path 图片路径
+     * @param to   压缩后文件保存路径
+     */
     public static void compress(String path, String to) {
         File file = new File(path);
         File toFile = new File(to);

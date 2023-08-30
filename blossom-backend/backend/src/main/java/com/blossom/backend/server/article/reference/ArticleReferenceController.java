@@ -28,11 +28,14 @@ public class ArticleReferenceController {
      * @param onlyInner 是否只查询内部文章之间的引用
      */
     @GetMapping("/list")
-    public R<Map<String, Object>> listAll(@RequestParam("onlyInner") Boolean onlyInner) {
+    public R<Map<String, Object>> listAll(
+            @RequestParam("onlyInner") Boolean onlyInner,
+            @RequestParam(value = "articleId", required = false) Long articleId
+    ) {
         if (onlyInner == null) {
             onlyInner = true;
         }
-        return R.ok(baseService.listAll(onlyInner, AuthContext.getUserId()));
+        return R.ok(baseService.listAll(onlyInner, AuthContext.getUserId(), articleId));
     }
 
 }

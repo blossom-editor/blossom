@@ -74,18 +74,25 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
      *
      * @param onlyInner 是否只查询内部文章之间的引用
      * @param userId    用户ID
+     * @param articleId 文章ID, 只查询和某个文章相关的引用
      */
-    public Map<String, Object> listAll(boolean onlyInner, Long userId) {
+    public Map<String, Object> listAll(boolean onlyInner, Long userId, Long articleId) {
         Map<String, Object> result = new HashMap<>();
-        LambdaQueryWrapper<ArticleReferenceEntity> where = new LambdaQueryWrapper<>();
-        where.eq(ArticleReferenceEntity::getUserId, userId);
-        if (onlyInner) {
-            where.in(ArticleReferenceEntity::getType, 11);
-        } else {
-            where.in(ArticleReferenceEntity::getType, 11, 21);
-        }
+//        LambdaQueryWrapper<ArticleReferenceEntity> where = new LambdaQueryWrapper<>();
+//        where.eq(ArticleReferenceEntity::getUserId, userId);
+//        if (onlyInner) {
+//            where.in(ArticleReferenceEntity::getType, 11);
+//        } else {
+//            where.in(ArticleReferenceEntity::getType, 11, 21);
+//        }
+//        if (articleId != null) {
+//            LambdaQueryWrapper<ArticleReferenceEntity> articleIdOr = new LambdaQueryWrapper<>();
+//            articleIdOr.eq(ArticleReferenceEntity::getSourceId, articleId);
+//            articleIdOr.eq(ArticleReferenceEntity::getTargetId, articleId);
+//            where.or(articleIdOr);
+//        }
 
-        List<ArticleReferenceEntity> all = baseMapper.selectList(where);
+        List<ArticleReferenceEntity> all = baseMapper.listAll(onlyInner, userId, articleId);
         if (CollUtil.isEmpty(all)) {
             return result;
         }

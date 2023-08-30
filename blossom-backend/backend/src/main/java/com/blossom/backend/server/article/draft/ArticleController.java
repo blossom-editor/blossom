@@ -1,5 +1,6 @@
 package com.blossom.backend.server.article.draft;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
@@ -8,15 +9,20 @@ import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.doc.DocTypeEnum;
+import com.blossom.backend.server.folder.FolderService;
+import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
+import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.util.DateUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -29,6 +35,7 @@ import java.util.List;
  *
  * @author xzzz
  */
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/article")
@@ -36,6 +43,7 @@ public class ArticleController {
 
     private final ArticleService baseService;
     private final ArticleOpenService openService;
+    private final FolderService folderService;
 
     /**
      * 查询列表
@@ -177,5 +185,32 @@ public class ArticleController {
                 i = bis.read(buffer);
             }
         }
+    }
+
+    /**
+     * 文章导入
+     *
+     * @param file 文件
+     * @param pid  上级菜单
+     */
+    @PostMapping("import")
+    public R<?> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "pid") Long pid) {
+        try {
+            String suffix = FileUtil.getSuffix(file.getOriginalFilename());
+            if (!"txt".equals(suffix) && !"md".equals(suffix)) {
+                throw new XzException404("不支持的文件类型: [" + suffix + "]");
+            }
+            FolderEntity folder = folderService.selectById(pid);
+            XzException404.throwBy(ObjUtil.isNull(folder), "上级文件夹不存在");
+            String content = new String(file.getBytes(), StandardCharsets.UTF_8);
+            ArticleEntity article = new ArticleEntity();
+            article.setMarkdown(content);
+            article.setPid(pid);
+            article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
+            baseService.insert(article);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return R.ok();
     }
 }
