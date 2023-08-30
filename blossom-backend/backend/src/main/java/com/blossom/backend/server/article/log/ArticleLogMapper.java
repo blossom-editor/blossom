@@ -3,6 +3,9 @@ package com.blossom.backend.server.article.log;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.blossom.backend.server.article.log.pojo.ArticleLogEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -11,4 +14,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleLogMapper extends BaseMapper<ArticleLogEntity> {
 
+    /**
+     * 查询文章记录
+     *
+     * @param articleId 文章ID
+     */
+    List<ArticleLogEntity> listAll(@Param("articleId") Long articleId);
 }

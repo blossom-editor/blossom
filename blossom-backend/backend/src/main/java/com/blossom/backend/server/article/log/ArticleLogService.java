@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文章记录
@@ -26,6 +27,14 @@ import java.util.Date;
 public class ArticleLogService extends ServiceImpl<ArticleLogMapper, ArticleLogEntity> {
 
     private final ParamService paramService;
+
+    public List<ArticleLogEntity> listAll(Long articleId) {
+        return baseMapper.listAll(articleId);
+    }
+
+    public String content(Long id) {
+        return baseMapper.selectById(id).getMarkdown();
+    }
 
     /**
      * 新增记录
