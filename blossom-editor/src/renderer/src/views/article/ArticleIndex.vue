@@ -416,7 +416,10 @@ const initEditor = (_doc?: string) => {
  * @param md markdown
  */
 const setDoc = (md: string): void => {
-  cmw.setState(CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent, md))
+  cmw.setState(CmWrapper.newState(() => {
+    articleIsChange = true
+    debounce(parse, 300)
+  }, saveCurArticleContent, md))
   parse()
 }
 
@@ -468,14 +471,13 @@ marked.use({ tokenizer: tokenizer, renderer: renderer })
  * 解析 markdown 为 html, 并将 html 赋值给 articleHtml
  */
 const parse = () => {
-  renderInterval.value = Date.now()
-  articleIsChange = true
+  const begin = Date.now()
   isDebounce = true
   let mdContent = cmw.getDocString()
   clearTocAndImg()
   marked.parse(mdContent, { async: true }).then((content: string) => {
     articleHtml.value = content
-    renderInterval.value = Date.now() - renderInterval.value
+    renderInterval.value = Date.now() - begin
   })
 }
 
@@ -647,7 +649,9 @@ const removeListenerShortcutMap = () => {
 
 <style scoped lang="scss">
 @import './styles/article-index.scss';
+@import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
+
 
 .bl-preview {
   h1 {
