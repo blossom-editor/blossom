@@ -23,6 +23,9 @@
     </div>
 
     <div class="preview bl-preview" v-html="article?.html"></div>
+    <el-backtop target=".preview" :right="50" :bottom="50">
+      <div class="iconbl bl-send-line backtop"></div>
+    </el-backtop>
   </div>
 </template>
 <script setup lang="ts">
@@ -58,6 +61,7 @@ onMounted(() => {
 </script>
 <style scoped lang=scss>
 @import './styles/bl-preview-toc.scss';
+@import './styles/article-backtop.scss';
 
 .article-view-window-root {
   @include box(100%, 100%);
@@ -68,6 +72,7 @@ onMounted(() => {
     font-size: 15px;
     padding: 30px;
     overflow-y: scroll;
+    line-height: 23px;
   }
 
 }

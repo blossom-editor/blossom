@@ -44,6 +44,9 @@
         <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" :style="editorPreviewStyle.preview" v-html="articleHtml">
         </div>
+        <el-backtop target=".editor-codemirror" :right="50" :bottom="50">
+          <div class="iconbl bl-send-line backtop"></div>
+        </el-backtop>
       </div>
 
       <!-- status -->
@@ -651,7 +654,7 @@ const removeListenerShortcutMap = () => {
 @import './styles/article-index.scss';
 @import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
-
+@import './styles/article-backtop.scss';
 
 .bl-preview {
   h1 {

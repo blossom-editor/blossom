@@ -12,6 +12,7 @@ declare module 'vue' {
     BLRow: typeof import('./src/components/BLRow.vue')['default']
     BLTag: typeof import('./src/components/BLTag.vue')['default']
     DateLine: typeof import('./src/components/DateLine.vue')['default']
+    ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElBadge: typeof import('element-plus/es')['ElBadge']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']

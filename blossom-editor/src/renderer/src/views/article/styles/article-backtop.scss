@@ -1,0 +1,16 @@
+.backtop {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bl-html-color);
+  box-shadow: -2px 2px 5px 1px var(--el-color-primary-light-5);
+  text-align: center;
+  line-height: 40px;
+  border-radius: 8px;
+  color: var(--el-color-primary);
+  font-size: 25px;
+  transform: rotate(-90deg);
+
+  &:hover {
+    box-shadow: -2px 2px 5px var(--el-color-primary);
+  }
+}
