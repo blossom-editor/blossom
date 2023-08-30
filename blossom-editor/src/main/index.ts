@@ -162,6 +162,14 @@ const initTray = () => {
  */
 type WindowType = 'article' | 'wlIcon' | 'articleReference'
 const newWindowMaps = new Map<string, BrowserWindow | undefined>();
+
+/**
+ * 创建新窗口
+ * @param windowType 窗口类型
+ * @param title      窗口标题, 窗口类型_窗口标题会保存在 newWindowMaps 中保存唯一
+ * @param id         id
+ * @returns 
+ */
 function createNewWindow(windowType: WindowType, title: string, id?: number) {
   console.log('打开新窗口, 窗口标题:', title);
   let newWindow: BrowserWindow | undefined = newWindowMaps.get(windowType + '_' + title);
@@ -199,9 +207,9 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
    */
   else if (windowType === 'articleReference') {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow');
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id);
     } else {
-      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow' })
+      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow?articleId=' + id })
     }
   }
   // 开发环境自动打开控制台
@@ -357,8 +365,14 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
   /**
    * 文章引用网络
    */
-  ipcMain.on('open-new-article-referece-window', (_: IpcMainEvent): void => {
-    createNewWindow('articleReference', '文章引用网络')
+  ipcMain.on('open-new-article-referece-window', (_: IpcMainEvent, article?: any): void => {
+    let name = '文章引用网络'
+    let id: number | undefined
+    if (article) {
+      name = article.name + '引用网络'
+      id = article.id
+    }
+    createNewWindow('articleReference', name, id)
   })
   /**
    * 下载, 最终会调用 
@@ -383,6 +397,9 @@ export const initOnWindow = (window: BrowserWindow) => {
     interceptorATag(event, url)
   })
 
+  /**
+   * 打开链接, 如果打开链接于服务器域名相同, 则在新窗口中打开
+   */
   window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
     let url = (details.url as string)
     if (url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {

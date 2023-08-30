@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted } from "vue"
 import { useDark } from '@vueuse/core'
 import { articleRefListApi } from "@renderer/api/blossom"
@@ -46,15 +47,18 @@ import * as echarts from 'echarts/core'
 import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components'
 import { GraphChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
+import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 echarts.use([TitleComponent, TooltipComponent, LegendComponent, GraphChart, CanvasRenderer])
 
 const isDark = useDark()
 
+const route = useRoute();
 const userStore = useUserStore()
 
 // -------------------- data
 const showOutsideName = ref(false)
 const ChartGraphRef = ref<any>(null)
+let articleId = ''
 let chartGraph: any
 let nodes: any = [{}]
 let links: any = [{}]
@@ -67,6 +71,7 @@ let stat = ref({
 let inside = { itemStyle: {}, label: {} }
 let outside = { itemStyle: {}, label: {} }
 const changeStyle = () => {
+  // 节点数量统计
   stat.value = { inside: 0, outside: 0 }
   inside = {
     itemStyle: {
@@ -88,9 +93,20 @@ const changeStyle = () => {
   }
 }
 
+/**
+ * 获取文章内容
+ * @param onlyInner 
+ * @param articleId 
+ */
 const getArticleRefList = (onlyInner: boolean) => {
   changeStyle()
-  articleRefListApi({ onlyInner: onlyInner }).then(resp => {
+  let param: any
+  if (isNotNull(articleId) && isNotBlank(articleId)) {
+    param = { onlyInner: onlyInner, articleId: articleId }
+  } else {
+    param = { onlyInner: onlyInner }
+  }
+  articleRefListApi(param).then(resp => {
     nodes = resp.data.nodes.map((node: any) => {
       if (node.artType == 11) {
         node.itemStyle = inside.itemStyle
@@ -101,15 +117,22 @@ const getArticleRefList = (onlyInner: boolean) => {
         node.label = outside.label
         stat.value.outside += 1
       }
-      node.symbolSize = getCount(node.name, resp.data.links)
+      node.symbolSize = getLinkCount(node.name, resp.data.links)
       return node
     })
     links = resp.data.links
     renderChart()
   })
 }
+
+// 节点被链接数量的累计基数, 越大则节点 symbolSize 越大
 const ascending = 1
-const getCount = (name: string, links: any[]): number => {
+/**
+ * 统计节点被被链接的数量, 用于计算 symbolSize
+ * @param name  节点名称
+ * @param links 全部节点关系
+ */
+const getLinkCount = (name: string, links: any[]): number => {
   let count: number = 20
   for (let i = 0; i < links.length; i++) {
     let link = links[i]
@@ -259,6 +282,7 @@ const windowResize = () => {
 onMounted(() => {
   init()
   windowResize()
+  articleId = route.query.articleId as string
   getArticleRefList(true)
   window.addEventListener("resize", windowResize)
 })

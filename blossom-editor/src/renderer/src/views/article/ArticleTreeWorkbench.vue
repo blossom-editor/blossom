@@ -56,7 +56,7 @@
 import { ref, nextTick, inject } from "vue"
 import { provideKeyDocInfo } from '@renderer/views/doc/doc'
 import ArticleInfo from '@renderer/views/article/ArticleInfo.vue'
-import { openNewArticleReferenceWindow } from "@renderer/assets/utils/electron";
+import { openNewArticleReferenceWindow } from "@renderer/assets/utils/electron"
 
 const props = defineProps({
   showOpen: {

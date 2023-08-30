@@ -16,8 +16,8 @@ export const setUserinfo = (userinfo: any) => { window.electronAPI.setUserinfo(u
 
 /**
  * 打开文章窗口
- * @param articleName
- * @param articleId
+ * @param articleName 文章名称
+ * @param articleId 文章ID
  */
 export const openNewArticleWindow = (articleName: string, articleId: number) => { window.electronAPI.openNewArticleWindow({ name: articleName, id: articleId }) }
 
@@ -28,8 +28,11 @@ export const openNewIconWindow = () => { window.electronAPI.openNewIconWindow() 
 
 /**
  * 打开文章引用窗口
+ * @param article 指定文章的引用
  */
-export const openNewArticleReferenceWindow = () => { window.electronAPI.openNewArticleReferenceWindow() }
+export const openNewArticleReferenceWindow = (article?: any) => {
+  window.electronAPI.openNewArticleReferenceWindow(article)
+}
 
 /**
  * 使用默认浏览器打开链接

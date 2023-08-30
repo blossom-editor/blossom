@@ -1,6 +1,6 @@
 <template>
   <div class="editor-status-root">
-    <bl-row width="calc(100% - 80px)" height="100%" class="status-item-container">
+    <bl-row width="calc(100% - 240px)" height="100%" class="status-item-container">
       <div>
         《{{ curDoc?.name }}》
       </div>
@@ -17,8 +17,18 @@
         发布:{{ curDoc?.openTime }}
       </div>
     </bl-row>
-    <bl-row width="100px">
-      渲染用时: {{ props.renderInterval }}ms
+    <bl-row just="flex-end" width="240px" height="100%" class="status-item-container">
+      <div>
+        <span class="iconbl bl-a-filehistory-line"></span>
+        编辑记录
+      </div>
+      <div @click="openArticleReferenceWindow">
+        <span class="iconbl bl-correlation-line"></span>
+        引用网络
+      </div>
+      <bl-col width="100px" just="center">
+        渲染用时: {{ props.renderInterval }}ms
+      </bl-col>
     </bl-row>
   </div>
 </template>
@@ -34,8 +44,10 @@
 └──────┴──────────┘
  -->
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, toRaw } from 'vue'
+import type { Ref } from 'vue'
 import { provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
+import { openNewArticleReferenceWindow } from "@renderer/assets/utils/electron"
 
 const props = defineProps({
   renderInterval: {
@@ -44,7 +56,14 @@ const props = defineProps({
   }
 })
 
-const curDoc = inject<DocInfo | undefined>(provideKeyCurArticleInfo)
+const curDoc = inject<Ref<DocInfo | undefined>>(provideKeyCurArticleInfo)
+
+const openArticleReferenceWindow = () => {
+  if (curDoc && curDoc.value) {
+    openNewArticleReferenceWindow(toRaw(curDoc.value))
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -63,6 +82,10 @@ const curDoc = inject<DocInfo | undefined>(provideKeyCurArticleInfo)
       height: 100%;
       padding: 0 5px;
       cursor: pointer;
+
+      .iconbl {
+        padding-right: 4px;
+      }
 
       &:hover {
         background-color: var(--bl-editor-bg-color);

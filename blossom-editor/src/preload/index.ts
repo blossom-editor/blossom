@@ -61,9 +61,10 @@ const rednerToIpc = {
   openNewIconWindow: (): void => ipcRenderer.send('open-new-icon-window'),
   /**
    * 新窗口查看文章引用
+   * @param article 查看指定文章的引用关系
    * @returns 
    */
-  openNewArticleReferenceWindow: (): void => ipcRenderer.send('open-new-article-referece-window'),
+  openNewArticleReferenceWindow: (article?: any): void => { ipcRenderer.send('open-new-article-referece-window', article) },
   /**
    * 剪贴板, 读取文本
    * @returns 剪切板的文本
