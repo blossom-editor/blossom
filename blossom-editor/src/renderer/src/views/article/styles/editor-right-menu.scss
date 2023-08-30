@@ -1,28 +1,18 @@
 /*
 文档菜单右键菜单样式
 */
-.doc-tree-right-menu {
+.editor-right-menu {
   @include box(170px, auto);
   @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
+  @include themeBg(#f9f9f9, #333434);
   position: fixed;
-  background: var(--bl-html-color);
   z-index: 2002;
   border-radius: 5px;
   font-size: 12px;
 
-  .doc-name {
-    font-size: 13px;
-    padding: 5px 10px;
-    color: var(--el-color-primary);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   .menu-content {
     margin: 0;
     color: var(--bl-text-color);
-    border-top: 1px solid var(--el-border-color);
     padding: 5px 0;
 
     .menu-item-divider {

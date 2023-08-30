@@ -26,7 +26,7 @@
         <!-- L1有下级 -->
         <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
           <template #title>
-            <div class="menu-item-wrapper" @click.right="handleClickRight(L1, $event)">
+            <div class="menu-item-wrapper" @click="clickCurDoc(L1)" @click.right="handleClickRight(L1, $event)">
               <PictureTitle :trees="L1" />
             </div>
           </template>
@@ -45,7 +45,7 @@
             <!-- L2有下级 -->
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
               <template #title>
-                <div class="menu-item-wrapper" @click.right="handleClickRight(L2, $event)">
+                <div class="menu-item-wrapper" @click="clickCurDoc(L2)" @click.right="handleClickRight(L2, $event)">
                   <PictureTitle :trees="L2" />
                 </div>
               </template>
@@ -64,7 +64,7 @@
                 <!-- L3有下级 -->
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                   <template #title>
-                    <div class="menu-item-wrapper" @click.right="handleClickRight(L3, $event)">
+                    <div class="menu-item-wrapper" @click="clickCurDoc(L3)" @click.right="handleClickRight(L3, $event)">
                       <PictureTitle :trees="L3" />
                     </div>
                   </template>
@@ -305,4 +305,5 @@ const emits = defineEmits(['clickDoc'])
 
 <style scoped lang="scss">
 @import '../doc/tree-docs.scss';
+@import '../doc/tree-docs-right-menu.scss';
 </style>

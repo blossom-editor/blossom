@@ -88,44 +88,47 @@
 
   <!-- 右键菜单, 添加到 body 下 -->
   <Teleport to="body">
-    <div v-if="rMenu.show" class="doc-tree-right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
+    <div v-show="rMenu.show" class="doc-tree-right-menu"
+      :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }" ref="ArticleDocTreeRightMenuRef">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
-        <div class="menu-item" @click="handleShowDocInfoDialog('upd')">
+        <div @click="handleShowDocInfoDialog('upd')">
           <span class="iconbl bl-a-fileedit-line"></span>编辑文档
         </div>
-        <div class="menu-item" @click="syncDoc()">
+        <div @click="syncDoc()">
           <span class="iconbl bl-a-cloudrefresh-line"></span>同步文档
         </div>
-        <div class="menu-item" @click="handleShowDocInfoDialog('add', curDoc.p)">
-          <span class="iconbl bl-a-fileadd-line"></span>新增<strong>同级</strong>文档
+        <div @click="handleShowDocInfoDialog('add', curDoc.p)">
+          <span class="iconbl bl-a-fileadd-line"></span>新增同级文档
         </div>
-        <div :class="['menu-item', curDoc?.ty === 3 ? 'disabled' : '']" @click="handleShowDocInfoDialog('add', curDoc.i)">
-          <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文档
+        <div v-if="curDoc.ty != 3" @click="handleShowDocInfoDialog('add', curDoc.i)">
+          <span class="iconbl bl-a-fileadd-fill"></span>新增子级文档
         </div>
-        <div class="menu-item" @click="delDoc()">
+        <div @click="delDoc()">
           <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
         </div>
-        <div :class="['menu-item', curDoc.ty === 1 ? 'disabled' : '']" @click="createUrl('link')">
+        <div v-if="curDoc.ty === 3" @click="createUrl('link')">
           <span class="iconbl bl-correlation-line"></span>复制引用
         </div>
+        <div v-if="curDoc.ty != 3" @click="handleShowArticleImportDialog()">
+          <span class="iconbl bl-a-cloudupload-line"></span>导入文章
+        </div>
 
-        <div class="menu-item-divider"></div>
+        <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
 
-        <div :class="['menu-item', curDoc.ty === 1 ? 'disabled' : '']" @click="openArticleWindow">
+        <div v-if="curDoc.ty === 3" @click="openArticleWindow">
           <span class="iconbl bl-a-computerend-line"></span>新窗口打开
         </div>
-        <div :class="['menu-item', curDoc.ty === 1 || curDoc.o != 1 ? 'disabled' : '']" @click="createUrl('open')">
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')">
           <span class="iconbl bl-planet-line"></span>浏览器打开
         </div>
-        <div :class="['menu-item', curDoc.ty === 1 ? 'disabled' : '']" @click="articleDownload">
+        <div v-if="curDoc.ty === 3" @click="articleDownload">
           <span class="iconbl bl-a-clouddownload-line"></span>下载文章
         </div>
-        <div :class="['menu-item', curDoc.ty === 1 || curDoc.o != 1 ? 'disabled' : '']" @click="createUrl('copy')">
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('copy')">
           <span class="iconbl bl-a-linkspread-line"></span>复制链接
         </div>
-        <div :class="['menu-item', curDoc.ty === 1 || curDoc.o != 1 ? 'disabled' : '']"
-          @click="handleArticleQrCodeDialog()">
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog()">
           <span class="iconbl bl-a-qrcode1-line"></span>查看二维码
         </div>
       </div>
@@ -133,7 +136,7 @@
   </Teleport>
 
 
-  <!-- 详情的弹框 -->
+  <!-- 详情 -->
   <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 65px;
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
@@ -142,13 +145,22 @@
     <ArticleInfo ref="ArticleInfoRef"></ArticleInfo>
   </el-dialog>
 
-  <!-- 二维码的弹框 -->
+  <!-- 二维码 -->
   <el-dialog v-model="isShowQrCodeDialog" width="335" top="100px" style="
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
     --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
     :close-on-click-modal="false" draggable>
     <ArticleQrCode ref="ArticleQrCodeRef"></ArticleQrCode>
+  </el-dialog>
+
+  <!-- 导入 -->
+  <el-dialog v-model="isShowArticleImportDialog" width="335" top="80px" style="
+    --el-dialog-padding-primary:0;
+    --el-dialog-border-radius:10px;
+    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
+    :close-on-click-modal="false" draggable>
+    <ArticleImport ref="ArticleImportRef" :doc="curDoc"></ArticleImport>
   </el-dialog>
 </template>
 
@@ -172,8 +184,9 @@ import ArticleTreeTitle from './ArticleTreeTitle.vue'
 import ArticleTreeWorkbench from "./ArticleTreeWorkbench.vue"
 import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
+import ArticleImport from './ArticleImport.vue'
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 const route = useRoute()
 
 onMounted(() => {
@@ -182,7 +195,6 @@ onMounted(() => {
 })
 
 onActivated(() => {
-  // getDocTree(false, false, false)
   getRouteQueryParams()
 })
 
@@ -262,7 +274,7 @@ const handleShowSort = () => {
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-const rMenuHeight = 363 // 固定的菜单高度, 每次增加右键菜单项时需要修改该值
+const ArticleDocTreeRightMenuRef = ref()
 
 /**
  * 显示有检查菜单
@@ -274,15 +286,19 @@ const handleClickRight = (doc: DocTree, event: MouseEvent) => {
     return
   }
   curDoc.value = doc
-  rMenu.value = { show: false, clientX: 0, clientY: 0 }
-  let y = event.clientY
-  if (document.body.clientHeight - event.clientY < rMenuHeight) {
-    y = event.clientY - rMenuHeight
-  }
-  rMenu.value = { show: true, clientX: event.clientX, clientY: y }
-  setTimeout(() => {
-    document.body.addEventListener('click', closeTreeDocsMenuShow)
-  }, 100)
+  rMenu.value.show = false
+  rMenu.value.show = true
+  nextTick(() => {
+    let domHeight = ArticleDocTreeRightMenuRef.value.offsetHeight
+    let y = event.clientY
+    if (document.body.clientHeight - event.clientY < domHeight) {
+      y = event.clientY - domHeight
+    }
+    rMenu.value = { show: true, clientX: event.clientX, clientY: y }
+    setTimeout(() => {
+      document.body.addEventListener('click', closeTreeDocsMenuShow)
+    }, 100)
+  })
 }
 
 const closeTreeDocsMenuShow = () => {
@@ -410,6 +426,13 @@ const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
     })
   }
 }
+
+const ArticleImportRef = ref()
+const isShowArticleImportDialog = ref<boolean>(false)
+
+const handleShowArticleImportDialog = () => {
+  isShowArticleImportDialog.value = true
+}
 //#endregion
 
 const clickCurDoc = (tree: DocTree) => {
@@ -424,4 +447,5 @@ defineExpose({ getDocTreeData })
 
 <style scoped lang="scss">
 @import '../doc/tree-docs.scss';
+@import '../doc/tree-docs-right-menu.scss';
 </style>

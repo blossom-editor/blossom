@@ -69,6 +69,6 @@ declare type DocType = 1 | 2 | 3 | 11;
 declare type DocDialogType = 'add' | 'upd' | 'info'
 
 /** 右键菜单对象的显示位置 */
-declare type RightMenu = { show: boolean, clientX: number, clientY: number }
+declare type RightMenu = { show: boolean, clientX?: number, clientY?: number }
 
 

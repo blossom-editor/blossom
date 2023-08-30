@@ -1,6 +1,6 @@
 @import '../fonts/config.scss';
 
-@import './mixin-fuc.scss';
+@import './utils.scss';
 @import './common.scss';
 
 // bl 样式
@@ -11,8 +11,6 @@
 @import './bl-loading-spinner.scss';
 @import './bl-message.scss';
 @import './bl-notification.scss';
-@import './bl-right-menu-doctree.scss';
-@import './bl-right-menu-editor.scss';
 @import './bl-tip.scss';
 @import './bl-tooltip.scss';
 
