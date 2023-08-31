@@ -3,11 +3,37 @@
   @include flex(column, flex-end, flex-end);
   border-bottom: 1px solid var(--el-border-color);
 
+  .workbench-page {
+    @include themeColor(#909399, #535353);
+    padding: 5px;
+
+    .up {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
+
+    .down {
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+    }
+
+    .el-icon {
+      @include box(15px, 15px);
+      @include themeBg(#f1f1f1, #333434);
+      @include themeShadow(0 0 3px #aeaeae, 0 0 3px rgb(0, 0, 0));
+      cursor: pointer;
+
+      &:hover {
+        @include themeBg(#eaeaea, #000);
+      }
+    }
+  }
+
   .iconbl {
     @include themeColor(#909399, #535353);
     text-shadow: var(--bl-iconbl-text-shadow);
     font-size: 25px;
-    padding: 3px;
+    padding: 3px 2px;
     transition: 0.3s;
     cursor: pointer;
 
