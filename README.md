@@ -69,3 +69,8 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 !["博客"](./doc/imgs/blog_home.jpg)
 <p align="center">博客</p>
 
+<p align="center">
+<img src="./doc/imgs/blog_home_m.png" height="700">
+<img src="./doc/imgs/home_article_m.png" height="700" style="margin-left: 30px">
+</p>
+<p align="center">博客移动端</p>
