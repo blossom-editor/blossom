@@ -37,7 +37,7 @@ import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { paramRefreshApi } from '@renderer/api/blossom'
-import { formatJson, getDateTimeFormat } from '@renderer/assets/utils/util'
+import { formatJson, getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
@@ -47,10 +47,10 @@ const serverExpire = computed(() => {
   let now = getDateTimeFormat()
   let params = userinfo.value.params
   return {
-    machine: diff(now, params.SERVER_MACHINE_EXPIRE),
-    database: diff(now, params.SERVER_DATABASE_EXPIRE),
-    domain: diff(now, params.SERVER_DOMAIN_EXPIRE),
-    https: diff(now, params.SERVER_HTTPS_EXPIRE),
+    machine: betweenDay(now, params.SERVER_MACHINE_EXPIRE),
+    database: betweenDay(now, params.SERVER_DATABASE_EXPIRE),
+    domain: betweenDay(now, params.SERVER_DOMAIN_EXPIRE),
+    https: betweenDay(now, params.SERVER_HTTPS_EXPIRE),
   }
 })
 
@@ -60,15 +60,6 @@ const refreshParam = () => {
   })
 }
 
-function diff(time1, time2) {
-  let totalDays, diffDate
-  var day1 = Date.parse(time1)
-  var day2 = Date.parse(time2)
-  // 将两个日期都转换为毫秒格式，然后做差
-  diffDate = Math.abs(day1 - day2) // 取相差毫秒数的绝对值
-  totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整 
-  return totalDays    // 相差的天数
-}
 
 const userinfoJson = computed(() => {
   return formatJson(userinfo.value)

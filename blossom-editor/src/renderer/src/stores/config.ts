@@ -15,15 +15,18 @@ export interface EditorStyle {
 }
 
 /**
+ * 快捷键配置
+ */
+export interface KeymapConfig {
+
+}
+
+/**
  * Blossom 设置
  */
 export interface BlConfig {
-
   editorStyle: EditorStyle,
-  // 快捷键
-  keymapConfig: {
-
-  }
+  keymapConfig: KeymapConfig
 }
 
 export const useConfigStore = defineStore('configStore', {
@@ -34,22 +37,12 @@ export const useConfigStore = defineStore('configStore', {
       fontSize: '14px'
     },
     // 快捷键
-    keymapConfig: {
-
-    }
+    keymapConfig: {}
   }),
   actions: {
     setEditorStyle(editorStyle: EditorStyle) {
       this.editorStyle = editorStyle
       Local.set(editorStyleKey, this.editorStyle)
     }
-    // setEditorFontFamily(fontFamily: string) {
-    //   this.editorStyle.fontFamily = fontFamily
-    //   Local.set(editorStyleKey, this.editorStyle)
-    // },
-    // setEditorFontSize(fontSize: string) {
-    //   this.editorStyle.fontSize = fontSize
-    //   Local.set(editorStyleKey, this.editorStyle)
-    // }
   }
 });

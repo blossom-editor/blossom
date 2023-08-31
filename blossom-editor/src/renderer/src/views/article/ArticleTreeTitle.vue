@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
-
+  <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
     <div class="doc-name">
       <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
@@ -119,7 +117,7 @@ $icon-size: 17px;
 }
 
 .star-line {
-  background: rgb(237, 204, 11);
+  @include themeBg(rgb(237, 204, 11), rgba(228, 195, 5, 0.724));
 }
 
 .open-line {

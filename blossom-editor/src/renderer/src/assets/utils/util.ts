@@ -124,6 +124,28 @@ export const timestampToDatetime = (timestamp: number | string | Date): string =
   return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s + '.' + SSS;
 }
 
+
+/**
+ * 两个日期相差的条数
+ * 
+ * @param date1 yyyy-MM-dd
+ * @param date2 yyyy-MM-dd
+ * @returns 相差的天数
+ */
+export const betweenDay = (date1: string, date2: string): number => {
+  let diffDay: number, diffMs: number
+  var d1 = Date.parse(date1)
+  var d2 = Date.parse(date2)
+  // 将两个日期都转换为毫秒格式，取相差毫秒数的绝对值
+  diffMs = Math.abs(d1 - d2)
+  // 向下取整 
+  diffDay = Math.floor(diffMs / (1000 * 3600 * 24))
+  return diffDay
+}
+
+console.log(betweenDay('2020-01-01 12:00:00', '2022-01-01 21:00:00'));
+
+
 const formatNum = (num: number) => {
   if (num < 10) {
     return '0' + num

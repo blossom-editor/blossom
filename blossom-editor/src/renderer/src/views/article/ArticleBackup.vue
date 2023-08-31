@@ -14,7 +14,7 @@
         <el-button @click="backupNow">
           <span class="iconbl bl-archive-line" style="margin-right: 7px;"></span>立即备份
         </el-button>
-        <div class="backup-tip">当前仅支持下载最大 10MB 的文件, 如果备份文件查过 10MB, 请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。</div>
+        <div class="backup-tip">当前仅支持下载最大 10MB 的文件, 如果备份文件超过 10MB, 请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。</div>
       </div>
       <div class="bak-container">
         <div v-for="bak in backupList" :key="bak.filename" class="bak-item">
