@@ -31,7 +31,6 @@ export class Notify {
   }
 
   public static error = (message: string, title?: string) => {
-    console.log('err');
     ElNotification.error({
       message: message,
       title: title ? title : '(๑T^T๑) ',
