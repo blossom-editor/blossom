@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 系统参数信息业务接口
@@ -61,7 +63,7 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
         for (ParamEnum name : names) {
             ParamEntity param = BeanUtil.toObj(CACHE.get(name.name()), ParamEntity.class);
             if (masking && name.getMasking()) {
-                param.setParamValue(StrUtil.hide(param.getParamValue(), 0, Math.min(param.getParamValue().length(), 20)));
+                param.setParamValue(StrUtil.hide(param.getParamValue(), 0, Math.min(param.getParamValue().length(), name.getMaskingLength())));
             }
             result.put(name.name(), param.getParamValue());
         }

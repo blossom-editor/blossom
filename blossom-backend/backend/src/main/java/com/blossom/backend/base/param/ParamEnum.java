@@ -12,31 +12,57 @@ public enum ParamEnum {
     /**
      * 文章的 web 端访问路径
      */
-    WEB_ARTICLE_URL(false),
+    WEB_ARTICLE_URL(false,0),
 
     /**
      * 文章日志过期天数
      */
-    ARTICLE_LOG_EXP_DAYS(false),
+    ARTICLE_LOG_EXP_DAYS(false,0),
 
     /**
      * 和风天气KEY
      */
-    HEFENG_KEY(true),
+    HEFENG_KEY(true,20),
 
     /**
      * GITEE key
      */
-    GITEE_ACCESS_TOKEN(true),
+    GITEE_ACCESS_TOKEN(true,20),
 
     /**
      * 备份路径
      */
-    BACKUP_PATH(false),
+    BACKUP_PATH(false,0),
+
     /**
      * 备份过期天数
      */
-    BACKUP_EXP_DAYS(false),
+    BACKUP_EXP_DAYS(false,0),
+
+    /**
+     * 服务器JWT加密字符串
+     */
+    SERVER_JWT_SECRET(true,9999),
+
+    /**
+     * 过期时间 - 服务器
+     */
+    SERVER_MACHINE_EXPIRE(false,0),
+
+    /**
+     * 过期时间 - 域名
+     */
+    SERVER_DOMAIN_EXPIRE(false,0),
+
+    /**
+     * 过期时间 - HTTPS 证书
+     */
+    SERVER_HTTPS_EXPIRE(false,0),
+
+    /**
+     * 过期时间 - 数据库
+     */
+    SERVER_DATABASE_EXPIRE(false,0),
     ;
 
     /**
@@ -45,7 +71,14 @@ public enum ParamEnum {
     @Getter
     private final Boolean masking;
 
-    ParamEnum(Boolean masking) {
+    /**
+     * 脱敏长度
+     */
+    @Getter
+    private final Integer maskingLength;
+
+    ParamEnum(Boolean masking, Integer maskingLength) {
         this.masking = masking;
+        this.maskingLength = maskingLength;
     }
 }
