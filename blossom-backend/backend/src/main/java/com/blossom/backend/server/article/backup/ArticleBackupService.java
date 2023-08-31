@@ -2,6 +2,7 @@ package com.blossom.backend.server.article.backup;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
@@ -51,7 +52,7 @@ public class ArticleBackupService {
     @Qualifier("taskExecutor")
     private Executor executor;
 
-    private static final String ERROR_MSG = String.format("[文章备份] 备份失败, 未配置备份路径 [%s]", ParamEnum.BACKUP_PATH.name());
+    public static final String ERROR_MSG = String.format("[文章备份] 备份失败, 未配置备份路径 [%s]", ParamEnum.BACKUP_PATH.name());
     private static final String SEPARATOR = "_";
 
     /**
@@ -201,6 +202,10 @@ public class ArticleBackupService {
                 String logStr = String.format("[文章备份] 备份文件: %s 已过期, 即将删除", backupFile.getFilename());
                 backLog.add(logStr);
                 log.info(logStr);
+                if (backupFile.getFile() != null) {
+                    backupFile.getFile().delete();
+                }
+
             }
         }
     }
@@ -263,7 +268,7 @@ public class ArticleBackupService {
         private String userId;
         private String date;
         private String time;
-
+        private Date datetime;
         private String filename;
         private String path;
 
@@ -311,6 +316,7 @@ public class ArticleBackupService {
             this.userId = tags[1];
             this.date = tags[2];
             this.time = tags[3];
+            this.datetime = DateUtil.parse(this.date + this.time);
         }
 
         /**
@@ -321,4 +327,5 @@ public class ArticleBackupService {
         }
 
     }
+
 }

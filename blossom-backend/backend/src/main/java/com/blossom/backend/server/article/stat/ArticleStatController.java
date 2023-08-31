@@ -24,7 +24,7 @@ public class ArticleStatController {
     private final ArticleStatService statService;
 
     /**
-     * 文章每日编辑热力图
+     * 文章每日编辑热力图 [OP]
      *
      * @param offsetMonth 向前查询的月数, 填写负数, 默认为 -2
      */
@@ -39,13 +39,18 @@ public class ArticleStatController {
         return R.ok(statService.statArticleCountByDay(offsetMonth, userId));
     }
 
+    /**
+     * 文章每日编辑热力图
+     *
+     * @param offsetMonth 向前查询的月数, 填写负数, 默认为 -2
+     */
     @GetMapping("/heatmap")
     public R<ArticleHeatmapRes> heatmap(@RequestParam(value = "offsetMonth", required = false) Integer offsetMonth) {
         return R.ok(statService.statArticleCountByDay(offsetMonth, AuthContext.getUserId()));
     }
 
     /**
-     * 当前文章数和文章字数
+     * 当前文章数和文章字数 [OP]
      */
     @AuthIgnore
     @GetMapping("/words/open")
@@ -56,6 +61,9 @@ public class ArticleStatController {
         return R.ok(statService.statCount(null, null, userId));
     }
 
+    /**
+     * 当前文章数和文章字数
+     */
     @GetMapping("/words")
     public R<ArticleStatRes> word() {
         return R.ok(statService.statCount(null, null, AuthContext.getUserId()));
