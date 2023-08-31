@@ -195,6 +195,7 @@ onMounted(() => {
 })
 
 onActivated(() => {
+  getDocTree(false, false, false)
   getRouteQueryParams()
 })
 

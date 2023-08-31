@@ -152,7 +152,6 @@ provide(provideKeyDocTree, docTreeData)
  */
 const getDocTree = () => {
   docTreeLoading.value = true;
-  docTreeData.value = []
   docTreeApi({ onlyPicture: true }).then(resp => {
     const docTree: DocTree[] = resp.data
     // 两种类型的交界位置

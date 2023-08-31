@@ -60,7 +60,7 @@ const download = (file: BackupFile) => {
     return;
   }
 
-  articleBackupDownloadApi({ filename: file.filename }).then(resp => {
+  articleBackupDownloadApi({ filename: file.filename + '.zip' }).then(resp => {
     let filename: string = resp.headers.get('content-disposition')
     let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
     let matches = filenameRegex.exec(filename);
