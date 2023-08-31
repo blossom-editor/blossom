@@ -111,7 +111,7 @@
           <span class="iconbl bl-correlation-line"></span>复制引用
         </div>
         <div v-if="curDoc.ty != 3" @click="handleShowArticleImportDialog()">
-          <span class="iconbl bl-a-cloudupload-line"></span>导入文章
+          <span class="iconbl bl-file-upload-line"></span>导入文章
         </div>
 
         <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
@@ -123,13 +123,13 @@
           <span class="iconbl bl-planet-line"></span>浏览器打开
         </div>
         <div v-if="curDoc.ty === 3" @click="articleDownload">
-          <span class="iconbl bl-a-clouddownload-line"></span>下载文章
+          <span class="iconbl bl-file-download-line"></span>下载文章
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('copy')">
           <span class="iconbl bl-a-linkspread-line"></span>复制链接
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog()">
-          <span class="iconbl bl-a-qrcode1-line"></span>查看二维码
+          <span class="iconbl bl-qr-code-line"></span>查看二维码
         </div>
       </div>
     </div>

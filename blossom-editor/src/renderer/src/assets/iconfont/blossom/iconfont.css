@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconbl"; /* Project id 4118609 */
-  src: url('iconfont.woff2?t=1692016473245') format('woff2'),
-       url('iconfont.woff?t=1692016473245') format('woff'),
-       url('iconfont.ttf?t=1692016473245') format('truetype');
+  src: url('iconfont.woff2?t=1693459081469') format('woff2'),
+       url('iconfont.woff?t=1693459081469') format('woff'),
+       url('iconfont.ttf?t=1693459081469') format('truetype');
 }
 
 .iconbl {
@@ -11,6 +11,42 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.bl-archive-line:before {
+  content: "\e60f";
+}
+
+.bl-file-zip-line:before {
+  content: "\e66a";
+}
+
+.bl-file-download-line:before {
+  content: "\e65e";
+}
+
+.bl-file-upload-line:before {
+  content: "\e666";
+}
+
+.bl-folder-download-line:before {
+  content: "\e66b";
+}
+
+.bl-download--line:before {
+  content: "\e701";
+}
+
+.bl-more-line:before {
+  content: "\e708";
+}
+
+.bl-qr-code-line:before {
+  content: "\e719";
+}
+
+.bl-upload--line:before {
+  content: "\e72e";
 }
 
 .bl-a-statisticalviewpiechart2-line:before {

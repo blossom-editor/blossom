@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10931549",
+      "name": "archive-line",
+      "font_class": "archive-line",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "10932166",
+      "name": "file-zip-line",
+      "font_class": "file-zip-line",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "10932080",
+      "name": "file-download-line",
+      "font_class": "file-download-line",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "10932140",
+      "name": "file-upload-line",
+      "font_class": "file-upload-line",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "10932159",
+      "name": "folder-download-line",
+      "font_class": "folder-download-line",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "10933019",
+      "name": "download-2-line",
+      "font_class": "download--line",
+      "unicode": "e701",
+      "unicode_decimal": 59137
+    },
+    {
+      "icon_id": "10933052",
+      "name": "more-line",
+      "font_class": "more-line",
+      "unicode": "e708",
+      "unicode_decimal": 59144
+    },
+    {
+      "icon_id": "10933128",
+      "name": "qr-code-line",
+      "font_class": "qr-code-line",
+      "unicode": "e719",
+      "unicode_decimal": 59161
+    },
+    {
+      "icon_id": "10933204",
+      "name": "upload-2-line",
+      "font_class": "upload--line",
+      "unicode": "e72e",
+      "unicode_decimal": 59182
+    },
+    {
       "icon_id": "24342467",
       "name": "statistical view pie chart 2-line",
       "font_class": "a-statisticalviewpiechart2-line",

@@ -209,6 +209,7 @@ const iconDesc = computed(() => {
           overflow: hidden;
           white-space: normal;
           word-wrap: break-word;
+          user-select: text;
         }
       }
     }
