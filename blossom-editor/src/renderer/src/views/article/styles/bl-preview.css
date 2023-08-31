@@ -43,71 +43,71 @@
   font-size: 30px !important;
 }
 
-h1:first-child {
+.bl-preview h1:first-child {
   margin-top: 0px;
 }
 
-h2 {
+.bl-preview h2 {
   font-size: 25px !important;
 }
 
-h3 {
+.bl-preview h3 {
   font-size: 22px !important;
 }
 
-h4 {
+.bl-preview h4 {
   font-size: 19px !important;
 }
 
-h5,
+.bl-preview h5,
 h6 {
   font-size: 16px !important;
 }
 
-li::marker {
+.bl-preview li::marker {
   color: #989898;
 }
 
 /* 有序列表 */
-ol {
+.bl-preview ol {
   padding-left: 20px;
   font-size: inherit;
   font-family: inherit;
 }
 
 /* 无序列表 */
-ul {
+.bl-preview ul {
   padding-left: 15px;
 
 }
 
-ul ul {
+.bl-preview ul ul {
   padding-left: 15px;
 }
 
 /* checkbox */
-ul:has(input) {
+.bl-preview ul:has(input) {
   padding-left: 0px;
 }
 
-ul:has(input) input {
+.bl-preview ul:has(input) input {
   margin: 0;
 }
 
-ul:has(input) ul {
+.bl-preview ul:has(input) ul {
   padding-left: 15px;
 }
 
-ul:has(input) li::marker {
+.bl-preview ul:has(input) li::marker {
   content: none;
 }
 
-hr {
+.bl-preview hr {
   border-color: var(--el-color-primary-light-7);
 }
 
 /* 表格 */
-table {
+.bl-preview table {
   border: 1px solid var(--bl-preview-table-border-color);
   box-sizing: border-box;
   padding: 0;
@@ -120,28 +120,28 @@ table {
 
 }
 
-table thead {
+.bl-preview table thead {
   background-color: var(--bl-preview-table-thead-bg-color);
   color: #d4d4d4;
 }
 
-table thead tr {}
+.bl-preview table thead tr {}
 
-table thead tr th {
+.bl-preview table thead tr th {
   font-size: 16px !important;
   padding: 10px;
   border-right: 1px solid var(--bl-preview-table-border-color);
 }
 
-table thead tr th:last-child {
+.bl-preview table thead tr th:last-child {
   border: 0;
 }
 
-table tbody {}
+.bl-preview table tbody {}
 
-table tbody tr {}
+.bl-preview table tbody tr {}
 
-table tbody tr td {
+.bl-preview table tbody tr td {
   padding: 5px;
   border-right: 1px solid var(--bl-preview-table-border-color);
   border-bottom: 1px solid var(--bl-preview-table-border-color);
@@ -150,13 +150,13 @@ table tbody tr td {
   /* max-width: 200px; */
 }
 
-table tbody tr td:last-child {
+.bl-preview table tbody tr td:last-child {
   border-right: 0;
 }
 
-table tbody tr:last-child {}
+.bl-preview table tbody tr:last-child {}
 
-table tbody tr:last-child td {
+.bl-preview table tbody tr:last-child td {
   border-bottom: 0;
 }
 
@@ -179,7 +179,7 @@ table container
 }
 
 /* 引用 */
-blockquote {
+.bl-preview blockquote {
   padding: 1px 10px;
   margin: 10px 0;
   color: var(--bl-preview-blockquote-color);
@@ -188,9 +188,8 @@ blockquote {
   background-color: var(--bl-preview-blockquote-bg-color);
 }
 
-blockquote blockquote {
+.bl-preview blockquote blockquote {
   border: 1px solid var(--bl-preview-blockquote-border-color);
-  ;
   /* // border: 1px solid #dedede;
     // border-left: 3px solid #bebebe; */
 }
@@ -226,7 +225,7 @@ blockquote blockquote {
 }
 
 /* 单行代码块 */
-code {
+.bl-preview code {
   background-color: var(--bl-preview-code-bg-color);
   padding: 0px 4px;
   border-radius: 3px;
@@ -234,7 +233,7 @@ code {
 }
 
 /* 代码块 */
-pre {
+.bl-preview pre {
   padding: 10px 10px 10px 10px;
   background-color: var(--bl-preview-pre-bg-color);
   overflow: scroll;
@@ -243,7 +242,7 @@ pre {
   font-size: 13px;
 }
 
-pre code {
+.bl-preview pre code {
   background-color: inherit;
   padding: 0;
   border-radius: 0;

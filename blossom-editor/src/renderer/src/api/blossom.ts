@@ -55,18 +55,38 @@ export const folderInfoApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/folder/info", { params });
 }
 
+/**
+ * 新增文件夹
+ * @param data 
+ * @returns 
+ */
 export const folderAddApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/add", data);
 }
 
+/**
+ * 修改文件夹
+ * @param data 
+ * @returns 
+ */
 export const folderUpdApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/upd", data);
 }
 
+/**
+ * 删除文件夹
+ * @param data 
+ * @returns 
+ */
 export const folderDelApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/del", data);
 }
 
+/**
+ * 公开文件夹
+ * @param data 
+ * @returns 
+ */
 export const folderOpenApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/folder/open", data);
 }
@@ -170,35 +190,73 @@ export const articleDownloadApi = (params?: object): Promise<any> => {
   return rq.get("/article/download", config);
 }
 
+/**
+ * 文章数和文章字数统计
+ * @param params 
+ * @returns 
+ */
 export const articleWordsApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/stat/words", { params });
 }
 
+/**
+ * 文章字数折线图
+ * @param params 
+ * @returns 
+ */
 export const articleWordLineApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/stat/line", { params });
 }
 
+/**
+ * 文章编辑热力图
+ * @param params 
+ * @returns 
+ */
 export const articleHeatmapApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/stat/heatmap", { params });
 }
 
+/**
+ * 文章引用关系
+ * @param params 
+ * @returns 
+ */
 export const articleRefListApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/ref/list", { params });
 }
 
+/**
+ * 文章公开或取消公开
+ * @param data 
+ * @returns 
+ */
 export const articleOpenApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/article/open", data);
 }
 
+/**
+ * 文章同步
+ * @param data 
+ * @returns 
+ */
 export const articleSyncApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/article/open/sync", data);
 }
 
+/**
+ * 生成文章的二维码
+ * @param params 
+ * @returns 
+ */
 export const articleQrCodeApi = (params?: object): Promise<any> => {
   let config = { params: params, responseType: 'blob' }
   return rq.get("/article/open/qrcode", config);
 }
 
+/**
+ * 文章导入
+ */
 export const articleImportApiUrl = '/article/import'
 
 /**
@@ -210,9 +268,44 @@ export const articleLogsApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/log", { params });
 }
 
+/**
+ * 历史记录的 markdown 的正文信息
+ * @param params 
+ * @returns 
+ */
 export const articleLogContentApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>("/article/log/content", { params });
 }
+
+/**
+ * 文章全量备份
+ * @param params 
+ * @returns 
+ */
+export const articleBackupApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/article/backup", { params });
+}
+
+/**
+ * 备份列表
+ * @param params 
+ * @returns 
+ */
+export interface BackupFile { date: string, time: string, filename: string, fileLength: number }
+export const articleBackupListApi = (): Promise<R<BackupFile[]>> => {
+  return rq.get<BackupFile[]>("/article/backup/list");
+}
+
+/**
+ * 下载备份文件
+ * @param params 
+ * @returns 
+ */
+export const articleBackupDownloadApi = (params?: object): Promise<any> => {
+  let config = { params: params, responseType: 'blob' }
+  return rq.get("/article/backup/download", config);
+}
+
 
 //#endregion
 
