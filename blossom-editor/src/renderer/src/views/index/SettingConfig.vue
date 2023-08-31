@@ -3,10 +3,9 @@
     <el-tabs tab-position="left" type="card" style="height: 100%" class="config-tabs">
       <el-tab-pane label="服务器配置">
         <div class="tab-content">
-          <div class="title">
-            服务器配置信息
-          </div>
-          <el-input type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
+          <div class="title">服务器配置信</div>
+          <div class="desc">Blossom 服务器配置</div>
+          <ConfigServer></ConfigServer>
         </div>
       </el-tab-pane>
       <el-tab-pane label="客户端配置" :lazy="true">
@@ -43,22 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useUserStore } from '@renderer/stores/user'
-import { formatJson } from '@renderer/assets/utils/util'
-import ConfigUserinfo from '@renderer/views/index/ConfigUserinfo.vue'
-import ConfigUpdPwd from '@renderer/views/index/ConfigUpdPwd.vue'
-import ConfigAddUser from '@renderer/views/index/ConfigAddUser.vue'
-import ConfigClient from '@renderer/views/index/ConfigClient.vue'
-
-const userStore = useUserStore()
-const { userinfo } = storeToRefs(userStore)
-
-const userinfoJson = computed(() => {
-  return formatJson(userinfo.value)
-})
-
+import ConfigUserinfo from './SettingConfigUserinfo.vue'
+import ConfigUpdPwd from './SettingConfigUpdPwd.vue'
+import ConfigAddUser from './SettingConfigAddUser.vue'
+import ConfigClient from './SettingConfigClient.vue'
+import ConfigServer from './SettingConfigServer.vue'
 </script>
 
 <style scoped lang="scss">

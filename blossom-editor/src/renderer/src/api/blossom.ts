@@ -8,8 +8,8 @@ import type { R } from "./request";
  * @param data 文件 form
  * @returns 
  */
-export const osconfigApi = (params?: object): Promise<R<any>> => {
-  return rq.get<R<any>>("/sys/osconfig", { params });
+export const paramRefreshApi = (): Promise<R<any>> => {
+  return rq.post<R<any>>("/sys/param/refresh", {});
 }
 
 /**
@@ -22,6 +22,8 @@ export const uploadFileApi = (data?: object): Promise<R<any>> => {
   let config: object = { contentType: 'multipart/form-data;', }
   return rq.post<R<any>>(uploadFileApiUrl, data, config);
 }
+
+
 
 //#endregion
 

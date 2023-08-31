@@ -164,17 +164,17 @@ h6 {
 table container
 */
 
-.bl-table-container {
+.bl-preview .bl-table-container {
   border: 0;
 }
 
-.bl-table-container thead {
+.bl-preview .bl-table-container thead {
   display: none;
 }
 
-.bl-table-container tbody {}
+.bl-preview .bl-table-container tbody {}
 
-.bl-table-container tbody td {
+.bl-preview .bl-table-container tbody td {
   border: 0;
 }
 
@@ -194,32 +194,32 @@ table container
     // border-left: 3px solid #bebebe; */
 }
 
-.bl-blockquote-green {
+.bl-preview .bl-blockquote-green {
   background-color: var(--bl-preview-blockquote-bg-green);
   border-left: 3px solid var(--bl-preview-blockquote-border-green);
 }
 
-.bl-blockquote-yellow {
+.bl-preview .bl-blockquote-yellow {
   background-color: var(--bl-preview-blockquote-bg-yellow);
   border-left: 3px solid var(--bl-preview-blockquote-border-yellow);
 }
 
-.bl-blockquote-red {
+.bl-preview .bl-blockquote-red {
   background-color: var(--bl-preview-blockquote-bg-red);
   border-left: 3px solid var(--bl-preview-blockquote-border-red);
 }
 
-.bl-blockquote-blue {
+.bl-preview .bl-blockquote-blue {
   background-color: var(--bl-preview-blockquote-bg-blue);
   border-left: 3px solid var(--bl-preview-blockquote-border-blue);
 }
 
-.bl-blockquote-purple {
+.bl-preview .bl-blockquote-purple {
   background-color: var(--bl-preview-blockquote-bg-purple);
   border-left: 3px solid var(--bl-preview-blockquote-border-purple);
 }
 
-.bl-blockquote-black {
+.bl-preview .bl-blockquote-black {
   background-color: var(--bl-preview-blockquote-bg-black);
   border-left: 3px solid var(--bl-preview-blockquote-border-black);
 }
@@ -250,12 +250,12 @@ table container
   font-size: 13px;
 }
 
-pre pre code.hljs {
+.bl-preview pre pre code.hljs {
   display: block;
   overflow-x: auto;
 }
 
-pre code.hljs {
+.bl-preview pre code.hljs {
   text-shadow: none;
 }
 

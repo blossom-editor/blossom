@@ -48,7 +48,14 @@ const initUserinfo = () => {
       defaultPath: ""
     },
     params: {
-      'WEB_ARTICLE_URL': ''
+      'WEB_ARTICLE_URL': '',
+      'BACKUP_PATH': '',
+      'BACKUP_EXP_DAYS': '',
+      'ARTICLE_LOG_EXP_DAYS': '',
+      'SERVER_MACHINE_EXPIRE': '',
+      'SERVER_DATABASE_EXPIRE': '',
+      'SERVER_HTTPS_EXPIRE': '',
+      'SERVER_DOMAIN_EXPIRE': '',
     }
   }
   Local.set(userinfoKey, userinfo)
