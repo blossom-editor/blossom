@@ -409,14 +409,14 @@ export const initOnWindow = (window: BrowserWindow) => {
   /**
    * 拦截页面链接
    */
-  window.webContents.on('will-navigate', (event: any, url: any) => {
+  window.webContents.on('will-navigate', (event: Event, url: string) => {
     interceptorATag(event, url)
   })
 
   /**
    * 打开链接, 如果打开链接于服务器域名相同, 则在新窗口中打开
    */
-  window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
+  window.webContents.setWindowOpenHandler((details: HandlerDetails) => {
     let url = (details.url as string)
     if (url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
       let articleId: string = url.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
@@ -424,6 +424,7 @@ export const initOnWindow = (window: BrowserWindow) => {
     } else {
       shell.openExternal(url)
     }
+    return { action: "deny" }
   })
 
 }
@@ -434,15 +435,12 @@ export const initOnWindow = (window: BrowserWindow) => {
  * @param e 
  * @param url 
  */
-const interceptorATag = (e: any, url: any): boolean => {
+const interceptorATag = (e: Event, url: string): boolean => {
   e.preventDefault()
   console.log(`[${new Date()}] electron 执行 <a/> 标签拦截器`);
-  let innerUrl = (url as string)
+  let innerUrl = url
   if (innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
-    console.log(blossomUserinfo.params.WEB_ARTICLE_URL);
-    console.log(innerUrl);
     let articleId: string = innerUrl.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
-    console.log(articleId);
     createNewWindow('article', articleId, Number(articleId))
   }
   else if (!is.dev) {
