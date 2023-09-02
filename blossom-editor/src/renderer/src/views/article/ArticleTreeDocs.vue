@@ -4,7 +4,8 @@
     <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></ArticleTreeWorkbench>
   </div>
 
-  <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档...">
+  <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档..."
+    :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
 
     <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeDefaultActive">
       <!-- ================================================ L1 ================================================ -->
@@ -167,6 +168,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@renderer/stores/user'
+import { useConfigStore } from '@renderer/stores/config'
 import { ref, onActivated, provide, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { ElMessageBox } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
@@ -187,6 +189,7 @@ import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
 
 const userStore = useUserStore()
+const configStore = useConfigStore()
 const route = useRoute()
 
 onMounted(() => {

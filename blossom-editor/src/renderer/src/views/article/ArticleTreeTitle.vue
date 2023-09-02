@@ -79,7 +79,8 @@ $icon-size: 17px;
   position: relative;
 
   .doc-name {
-    @include font(14px, 300);
+    font-size: inherit;
+    font-weight: 300;
     @include flex(row, flex-start, center);
     @include themeBrightness(100%, 80%);
     @include ellipsis();

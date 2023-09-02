@@ -6,6 +6,10 @@
   @include box(100%, calc(100% - 90px));
   padding-top: 8px;
 
+  * {
+    font-size: inherit;
+  }
+
   .menu-item-wrapper {
     width: 100%;
   }
@@ -28,7 +32,8 @@
     // 菜单每个 item 的高度
     --el-menu-item-height: 25px;
     // item 的 字体大小
-    --el-menu-item-font-size: 13px;
+    // --el-menu-item-font-size: inherit;
+    // --el-font-size-base: inherit;
 
     .menu-divider {
       width: 100%;
@@ -49,6 +54,7 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-size: inherit;
 
         .el-sub-menu__icon-arrow {
           right: calc(230px - var(--el-menu-level) * 10px);
