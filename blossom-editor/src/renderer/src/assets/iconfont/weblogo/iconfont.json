@@ -6,6 +6,27 @@
   "description": "各个网站的LOGO",
   "glyphs": [
     {
+      "icon_id": "24346804",
+      "name": "codemirror",
+      "font_class": "codemirror",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "11155712",
+      "name": "typescript",
+      "font_class": "typescript",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "2865197",
+      "name": "abcd",
+      "font_class": "danci",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "5379879",
       "name": "emoji",
       "font_class": "emoji",

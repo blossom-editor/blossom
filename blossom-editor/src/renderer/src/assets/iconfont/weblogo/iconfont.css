@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconwl"; /* Project id 4163717 */
-  src: url('iconfont.woff2?t=1690277133920') format('woff2'),
-       url('iconfont.woff?t=1690277133920') format('woff'),
-       url('iconfont.ttf?t=1690277133920') format('truetype');
+  src: url('iconfont.woff2?t=1693666689836') format('woff2'),
+       url('iconfont.woff?t=1693666689836') format('woff'),
+       url('iconfont.ttf?t=1693666689836') format('truetype');
 }
 
 .iconwl {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.wl-codemirror:before {
+  content: "\e656";
+}
+
+.wl-typescript:before {
+  content: "\e620";
+}
+
+.wl-danci:before {
+  content: "\e60f";
 }
 
 .wl-emoji:before {
