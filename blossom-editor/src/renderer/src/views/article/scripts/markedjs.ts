@@ -73,7 +73,7 @@ export const tokenizerCodespan = (src: string): any => {
     }
     return result
   }
-  return false;
+  return false
 }
 
 //#endregion
@@ -143,8 +143,8 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     language = 'text'
   }
   if (language === 'mermaid' && isNotBlank(code)) {
-    let eleid = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
-    let escape = escape2Html(code) as string
+    const eleid = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
+    const escape = escape2Html(code) as string
     mermaid.parse(escape).then(syntax => {
       let canSyntax: boolean | void = syntax
       if (canSyntax) {
@@ -158,7 +158,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
         })
       }
     }).catch(error => {
-      console.error('mermaid 格式校验失败:错误信息如下:\n', error);
+      console.error('mermaid 格式校验失败:错误信息如下:\n', error)
       let html = `<div class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Mermaid 语法解析失败!</div><br/>
           ${error}<br/><br/>
@@ -174,15 +174,14 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
   }
 
   if (language === 'katex') {
-    let escape = escape2Html(code)
     try {
-      return katex.renderToString(escape, {
+      return katex.renderToString(escape2Html(code), {
         throwOnError: true,
         displayMode: true,
         output: 'html'
-      });
+      })
     } catch (error) {
-      console.error(error);
+      console.error(error)
       return `<div class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Katex 语法解析失败!</div><br/>
           ${error}<br/><br/>
@@ -240,15 +239,15 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
  * @returns 
  */
 export const renderCodespan = (src: string) => {
-  let arr = src.match(singleDollar);
+  let arr = src.match(singleDollar)
   if (arr != null && arr.length > 0) {
     try {
       return katex.renderToString(arr[1], {
         throwOnError: true,
         output: 'html'
-      });
+      })
     } catch (error) {
-      console.error(error);
+      console.error(error)
       return `<div class='bl-preview-analysis-fail-inline'>
           Katex 语法解析失败! 你可以尝试前往<a href='https://katex.org/#demo' target='_blank'> Katex 官网</a> 来校验你的公式。
           </div>`
@@ -270,7 +269,7 @@ export const renderCodespan = (src: string) => {
    * @param text   图片的名称
    */
 export const renderImage = (href: string | null, _title: string | null, text: string) => {
-  let width = 'auto';
+  let width = 'auto'
   let style = ''
   let tags: string[] = text.split(grammar)
   if (tags.length > 1) {
@@ -335,8 +334,8 @@ export const renderLink = (href: string | null, title: string | null, text: stri
 
 //#endregion
 
-
-export const simpleMarked = new Marked({ mangle: false, headerIds: false })
+//#region ----------------------------------------< simpleMarked >--------------------------------------
+const simpleMarked = new Marked({ mangle: false, headerIds: false })
 simpleMarked.use(markedHighlight({
   langPrefix: 'hljs language-',
   highlight(code, lang) {
@@ -344,4 +343,36 @@ simpleMarked.use(markedHighlight({
     return hljs.highlight(code, { language }).value
   }
 }))
+
+const simpleRenderer = {
+  code(code: string, language: string | undefined, _isEscaped: boolean): string {
+    if (language === 'katex') {
+      try {
+        return katex.renderToString(escape2Html(code), {
+          throwOnError: true,
+          displayMode: true,
+          output: 'html'
+        })
+      } catch (error) {
+        return `<div></div>`
+      }
+    }
+    return `<pre><code class="hljs language-${language}">${code}</code></pre>`
+  },
+  codespan(src: string): string { return renderCodespan(src) },
+}
+
+const tokenizer = {
+  codespan(src: string): any { return tokenizerCodespan(src) }
+}
+
+//@ts-ignore
+simpleMarked.use({ tokenizer: tokenizer, renderer: simpleRenderer })
+
+//#endregion
+
 export default marked
+
+export {
+  simpleMarked
+}
