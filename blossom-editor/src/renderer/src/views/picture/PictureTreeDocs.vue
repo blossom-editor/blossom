@@ -4,7 +4,8 @@
     <Workbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></Workbench>
   </div>
 
-  <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档...">
+  <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档..." 
+      :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
     <!-- 文件夹 -->
     <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true">
 
@@ -123,6 +124,7 @@
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from '@renderer/stores/config'
 import { ref, provide, onActivated, nextTick } from "vue"
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import Workbench from "./PictureTreeWorkbench.vue"
@@ -133,6 +135,8 @@ import PictureTitle from './PictureTreeTitle.vue'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 import Notify from "@renderer/scripts/notify"
 import { ElMessageBox } from "element-plus"
+
+const configStore = useConfigStore()
 
 onActivated(() => {
   getDocTree()
