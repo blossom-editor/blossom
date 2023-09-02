@@ -23,7 +23,6 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Bean
     public UserTypeInterceptor myInterceptor() {
-        log.info("123123213");
         return new UserTypeInterceptor();
     }
 }
