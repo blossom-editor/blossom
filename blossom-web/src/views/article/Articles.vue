@@ -459,10 +459,10 @@ const onresize = () => {
           .toc-5,
           .toc-6 {
             cursor: pointer;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            white-space: pre;
+            // overflow: hidden;
+            // white-space: nowrap;
+            // text-overflow: ellipsis;
+            // white-space: pre;
 
             &:hover {
               font-weight: bold;
@@ -470,7 +470,7 @@ const onresize = () => {
           }
 
           .toc-1 {
-            font-size: 1.1rem;
+            font-size: 1.1em;
             border-top: 2px solid #eeeeee;
             margin-top: 5px;
             padding-top: 5px;
@@ -526,9 +526,17 @@ const onresize = () => {
       .bl-preview {
         $borderRadius: 4px;
         color: #4b4b4b;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         // font-size: 14px;
-        line-height: 1.4;
+        line-height: 1.6;
+
+
+        :deep(.katex > *) {
+          font-size: 1.2em !important;
+          // font-family: 'KaTeX_Size1', sans-serif !important;
+          // font-size: 1.3em !important;
+          // font-family: 'KaTeX_Math', sans-serif !important;
+        }
 
         ::-webkit-scrollbar {
           /* 滚动条里槽的背景色 */
@@ -916,6 +924,8 @@ const onresize = () => {
         overflow-x: hidden;
 
         .bl-preview {
+          font-size: 0.8rem;
+
           pre {
             margin: -10px !important;
           }

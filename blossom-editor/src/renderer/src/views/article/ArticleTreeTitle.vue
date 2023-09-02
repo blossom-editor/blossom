@@ -66,7 +66,7 @@ $icon-size: 17px;
 
 .menu-icon {
   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  margin-right: 9px;
+  // margin-right: 9px;
 }
 
 .doc-title {
@@ -81,7 +81,7 @@ $icon-size: 17px;
   .doc-name {
     font-size: inherit;
     font-weight: 300;
-    @include flex(row, flex-start, center);
+    // @include flex(row, flex-start, center);
     @include themeBrightness(100%, 80%);
     @include ellipsis();
   }
@@ -90,7 +90,8 @@ $icon-size: 17px;
 // 专题样式, 包括边框和文字样式
 .subject-title {
   @include themeShadow(2px 2px 10px 1px #fad7d7, 1px 2px 10px 1px #0A0A0A);
-  @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff), linear-gradient(135deg, #594A23, #453D28, #33302B));
+  @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff),
+    linear-gradient(135deg, #594A23, #453D28, #33302B));
   padding: 2px 5px;
   margin: 5px 0 10px 0;
   border-radius: 7px;

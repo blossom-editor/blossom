@@ -1,9 +1,12 @@
 <template>
   <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']" @click="handlClick">
-    <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
-      <use :xlink:href="'#' + props.trees.icon"></use>
-    </svg>
-    <span class="doc-name">{{ props.trees.n }}</span>
+
+    <span class="doc-name">
+      <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
+        <use :xlink:href="'#' + props.trees.icon"></use>
+      </svg>
+      {{ props.trees.n }}
+    </span>
     <!-- 如果专题是公开的, 则单独显示公开标签 -->
     <div v-for="tag in tags">
       <BLTag v-if="tag.content" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</BLTag>
@@ -69,7 +72,7 @@ $icon-size: 17px;
 
 .menu-icon {
   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  margin-right: 5px;
+  // margin-right: 5px;
 }
 
 .doc-title {
