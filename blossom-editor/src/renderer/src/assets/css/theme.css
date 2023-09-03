@@ -245,6 +245,7 @@ html.dark {
 
   /* 图片 */
   --bl-preview-img-box-shadow: 2px 2px 10px 3px #c6c6c6;
+  --bl-preview-img-filter: brightness(100%);
 
   /* 单行代码块 */
   --bl-preview-code-bg-color: #eaeaea;
@@ -311,6 +312,7 @@ html.dark {
   --bl-preview-blockquote-border-black: #000000;
 
   --bl-preview-img-box-shadow: 2px 2px 10px 3px #000000;
+  --bl-preview-img-filter: brightness(80%);
 
   --bl-preview-code-bg-color: #414141;
   --bl-preview-pre-bg-color: #131313;
