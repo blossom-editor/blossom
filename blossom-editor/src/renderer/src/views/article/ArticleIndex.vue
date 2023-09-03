@@ -128,7 +128,7 @@ import { storeToRefs } from "pinia"
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
-import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@renderer/api/blossom'
+import { articleInfoApi, articleUpdContentApi, uploadFileApi, uploadFileApiUrl } from '@renderer/api/blossom'
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
@@ -410,11 +410,39 @@ const EditorRef = ref()           // editor dom
 const ResizeDividerRef = ref()    // editor&preview resize dom
 const editorLoading = ref(false)  // eidtor loading
 let cmw: CmWrapper                // codemirror editor wrapper
+
+/**
+ * 拖拽上传的回调
+ * @param event 
+ */
+const uploadFileCallback = async (event: DragEvent) => {
+  if (!curIsArticle()) {
+    return
+  }
+
+  let data: DataTransfer | null = event.dataTransfer
+  if (data && data.files.length && data.files.length > 0) {
+    for (const file of data.files) {
+      const form = new FormData()
+      form.append('file', file);
+      form.append('name', file.name);
+      form.append('pid', curArticle.value!.pid.toString())
+      uploadFileApi(form).then(resp => {
+        cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
+      })
+    }
+  }
+}
+
 /** 
  * 初始化编辑器 
  */
 const initEditor = (_doc?: string) => {
-  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent), EditorRef.value))
+  cmw = new CmWrapper(CmWrapper.newEditor(
+    // 创建 state
+    CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent, uploadFileCallback),
+    EditorRef.value)
+  )
 }
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
@@ -424,7 +452,7 @@ const setDoc = (md: string): void => {
   cmw.setState(CmWrapper.newState(() => {
     articleIsChange = true
     debounce(parse, 300)
-  }, saveCurArticleContent, md))
+  }, saveCurArticleContent, uploadFileCallback, md))
   parse()
 }
 
@@ -659,9 +687,7 @@ const removeListenerShortcutMap = () => {
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
 
-.bl-preview {
-
-}
+.bl-preview {}
 
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;

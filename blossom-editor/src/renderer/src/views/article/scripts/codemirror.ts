@@ -11,6 +11,7 @@ import pluginMarkdown from "prettier/plugins/markdown"
 
 import { isBlank } from "@renderer/assets/utils/obj"
 
+
 /**
  * codemirror 样式配置
  * https://codemirror.net/examples/styling/#themes
@@ -104,6 +105,22 @@ export const cwTheme: any = {
   }
 }
 
+const zhCNPhrases = {
+  "Go to line": "前往行",
+  "go": "前往",
+  "Find": "查找内容",
+  "Replace": "替换内容",
+  "next": "下一个",
+  "previous": "上一个",
+  "all": "全部",
+  "match case": "区分大小写",
+  "by word": "全字匹配",
+  "replace": "替换",
+  "replace all": "替换全部",
+  "close": "schließen",
+  "regexp": "使用正则表达式"
+}
+
 /**
  * Codemirror 封装
  */
@@ -119,6 +136,13 @@ export class CmWrapper {
   }
 
   /**
+   * 获取编辑器，不建议直接使用该对象，而是对使用到的方法进行封装
+   */
+  get eidtor(): EditorView {
+    return this._editor
+  }
+
+  /**
    * 创建 EditorState
    * 
    * @param updateCallback 编辑器内容变动时的回调
@@ -126,10 +150,12 @@ export class CmWrapper {
    * @param doc 初始化的内容
    * @returns 
    */
-  static newState = (updateCallback: any, saveCallback: any, doc?: string): EditorState => {
+  static newState = (updateCallback: any, saveCallback: any, uploadFileCallback: any, doc?: string): EditorState => {
+
     return EditorState.create({
       doc: doc,
       extensions: [
+        EditorState.phrases.of(zhCNPhrases),
         basicSetup,
         cmmd({ codeLanguages: languages }),
         EditorView.theme(cwTheme),
@@ -154,6 +180,26 @@ export class CmWrapper {
         EditorView.updateListener.of((viewUpd: ViewUpdate) => {
           if (viewUpd.docChanged) {
             updateCallback()
+          }
+        }),
+        EditorView.domEventHandlers({
+          drop(a: DragEvent) {
+            uploadFileCallback(a)
+            return
+            // let data: DataTransfer | null = a.dataTransfer
+            // if (data?.files.length && data?.files.length > 0 && window.FileReader) {
+            //   // uploadPicture(data?.files)
+            //   this._editor.state.doc.toString()
+            //   console.log("🚀 ~ file: codemirror.ts:192 ~ CmWrapper ~ drop ~ this._editor.state.doc.toString():", this._editor.state.doc.toString())
+            //   // let file: File = data?.files[0]
+            //   // let reader = new FileReader();
+
+            //   // reader.addEventListener('load', () => {
+            //   //   console.log(reader.result);
+            //   // })
+
+            //   // reader.readAsDataURL(file);
+            // }
           }
         })
       ]
