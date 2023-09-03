@@ -483,34 +483,23 @@ const onresize = () => {
           }
 
           .toc-2 {
-            &::before {
-              content: ' ';
-            }
-
+            padding-left: 10px;
           }
 
           .toc-3 {
-            &::before {
-              content: '  ';
-            }
+            padding-left: 20px;
           }
 
           .toc-4 {
-            &::before {
-              content: '  ';
-            }
+            padding-left: 30px;
           }
 
           .toc-5 {
-            &::before {
-              content: '   ';
-            }
+            padding-left: 40px;
           }
 
           .toc-6 {
-            &::before {
-              content: '    ';
-            }
+            padding-left: 50px;
           }
         }
       }
