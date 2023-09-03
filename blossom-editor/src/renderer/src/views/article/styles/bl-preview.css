@@ -28,9 +28,7 @@
 .bl-preview img {
   border-radius: var(--bl-preview-border-radius);
   max-width: 100%;
-  /* [class="dark"] & {
-    filter: brightness(80%);
-  } */
+  filter: var(--bl-preview-img-filter);
 }
 
 /* // 列表 */

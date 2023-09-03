@@ -138,7 +138,7 @@
 
 
   <!-- 详情 -->
-  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 65px;
+  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 320px;
     --el-dialog-padding-primary:0;
     --el-dialog-border-radius:10px;
     --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
