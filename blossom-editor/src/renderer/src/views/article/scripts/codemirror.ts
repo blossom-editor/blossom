@@ -321,6 +321,7 @@ export class CmWrapper {
   getSlelctionRangesArr = (): readonly SelectionRange[] => { return CmWrapper.getSlelctionRangesArr(this._editor) }
   getDocumentTop = (): number => { return this._editor.documentTop }
   getElementAtHeight = (height: number): BlockInfo => { return this._editor.elementAtHeight(height) }
+  getLineBlockAtHeight = (height: number): BlockInfo => { return this._editor.lineBlockAtHeight(height) }
   insert = (istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => { CmWrapper.insert(this._editor, istFrom, istTo, content, selectFrom, selectTo) }
   //#endregion
   //#region ============================================================ 自定义命令 ============================================================

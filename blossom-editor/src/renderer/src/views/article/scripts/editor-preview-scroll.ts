@@ -43,12 +43,10 @@ export class EPScroll {
 
       // 文档头部, 距离整个浏览器的距离
       const top = this._cmw.getDocumentTop()
-
       // 获取可见位置最顶部的内容
-      const topBlock = this._cmw.getElementAtHeight(Math.abs(top) + marginTop)
+      const topBlock = this._cmw.getLineBlockAtHeight(Math.abs(top) + marginTop)
       // 从0开始获取全部不可见的内容的 markdown 原文档
       const invisibleMarkdown: string = this._cmw.sliceDoc(0, topBlock.from)
-
 
       // 将不可见的内容全部转换为 html
       //@ts-ignore
@@ -59,13 +57,13 @@ export class EPScroll {
         // body 下的内容才是由 markdown 转换而来的, 不可见内容转换的 dom 集合
         const editorDoms = invisibleDomAll.body.querySelectorAll(matchHtmlTags)
         // 预览页面的 dom 集合
-        const previewDoms = this._preview.querySelectorAll(matchHtmlTags)
-        let targetIndex = editorDoms.length
+        const previewDoms: NodeListOf<Element> = this._preview.querySelectorAll(matchHtmlTags)
+        let targetIndex: number = editorDoms.length
         // 预览页面的 dom 数小于 markdown 转换的 dom 数, 处理数组边界
         if (targetIndex > previewDoms.length) {
           targetIndex = previewDoms.length
         }
-        const tagetDom = previewDoms[targetIndex]
+        const tagetDom: Element = previewDoms[targetIndex]
         tagetDom.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
       })
     }
