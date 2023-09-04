@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4766472",
+      "name": "file-pdf",
+      "font_class": "file-pdf",
+      "unicode": "e7b8",
+      "unicode_decimal": 59320
+    },
+    {
+      "icon_id": "4766474",
+      "name": "file-markdown",
+      "font_class": "file-markdown",
+      "unicode": "e7b9",
+      "unicode_decimal": 59321
+    },
+    {
+      "icon_id": "4936958",
+      "name": "HTML5",
+      "font_class": "HTML",
+      "unicode": "e87d",
+      "unicode_decimal": 59517
+    },
+    {
       "icon_id": "10931549",
       "name": "archive-line",
       "font_class": "archive-line",
@@ -46,13 +67,6 @@
       "font_class": "download--line",
       "unicode": "e701",
       "unicode_decimal": 59137
-    },
-    {
-      "icon_id": "10933052",
-      "name": "more-line",
-      "font_class": "more-line",
-      "unicode": "e708",
-      "unicode_decimal": 59144
     },
     {
       "icon_id": "10933128",
@@ -102,34 +116,6 @@
       "font_class": "a-labellist-line",
       "unicode": "ea2d",
       "unicode_decimal": 59949
-    },
-    {
-      "icon_id": "4735972",
-      "name": "暂无数据",
-      "font_class": "zanwushuju",
-      "unicode": "e618",
-      "unicode_decimal": 58904
-    },
-    {
-      "icon_id": "9874495",
-      "name": "KHCFDC_横向柱状图",
-      "font_class": "hengxiangzhuzhuangtu",
-      "unicode": "e6d0",
-      "unicode_decimal": 59088
-    },
-    {
-      "icon_id": "10451698",
-      "name": "水平多系列柱状图",
-      "font_class": "shuipingduoxiliezhuzhuangtu",
-      "unicode": "e628",
-      "unicode_decimal": 58920
-    },
-    {
-      "icon_id": "12824105",
-      "name": "施工",
-      "font_class": "construction",
-      "unicode": "e63d",
-      "unicode_decimal": 58941
     },
     {
       "icon_id": "24341448",

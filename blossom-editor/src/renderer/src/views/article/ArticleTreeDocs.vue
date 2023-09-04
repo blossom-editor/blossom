@@ -14,7 +14,7 @@
         <!-- L1无下级 -->
         <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
           <template #title>
-            <div class="menu-item-wrapper" @click="clickCurDoc(L1)" @click.right="handleClickRight(L1, $event)">
+            <div class="menu-item-wrapper" @click="clickCurDoc(L1)" @click.right="handleClickRightMenu(L1, $event)">
               <ArticleTreeTitle :trees="L1" />
             </div>
           </template>
@@ -23,7 +23,7 @@
         <!-- L1有下级 -->
         <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
           <template #title>
-            <div class="menu-item-wrapper" @click.right="handleClickRight(L1, $event)">
+            <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L1, $event)">
               <ArticleTreeTitle :trees="L1" />
             </div>
           </template>
@@ -33,7 +33,7 @@
             <!-- L2无下级 -->
             <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
               <template #title>
-                <div class="menu-item-wrapper" @click="clickCurDoc(L2)" @click.right="handleClickRight(L2, $event)">
+                <div class="menu-item-wrapper" @click="clickCurDoc(L2)" @click.right="handleClickRightMenu(L2, $event)">
                   <ArticleTreeTitle :trees="L2" />
                 </div>
               </template>
@@ -42,7 +42,7 @@
             <!-- L2有下级 -->
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
               <template #title>
-                <div class="menu-item-wrapper" @click.right="handleClickRight(L2, $event)">
+                <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L2, $event)">
                   <ArticleTreeTitle :trees="L2" />
                 </div>
               </template>
@@ -52,7 +52,8 @@
                 <!-- L3无下级 -->
                 <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
                   <template #title>
-                    <div class="menu-item-wrapper" @click="clickCurDoc(L3)" @click.right="handleClickRight(L3, $event)">
+                    <div class="menu-item-wrapper" @click="clickCurDoc(L3)"
+                      @click.right="handleClickRightMenu(L3, $event)">
                       <ArticleTreeTitle :trees="L3" />
                     </div>
                   </template>
@@ -61,7 +62,7 @@
                 <!-- L3有下级 -->
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                   <template #title>
-                    <div class="menu-item-wrapper" @click.right="handleClickRight(L3, $event)">
+                    <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L3, $event)">
                       <ArticleTreeTitle :trees="L3" />
                     </div>
                   </template>
@@ -72,7 +73,7 @@
                     <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
                       <template #title>
                         <div class="menu-item-wrapper" @click="clickCurDoc(L4)" style="width: 100%;"
-                          @click.right="handleClickRight(L4, $event)">
+                          @click.right="handleClickRightMenu(L4, $event)">
                           <ArticleTreeTitle :trees="L4" />
                         </div>
                       </template>
@@ -120,11 +121,24 @@
         <div v-if="curDoc.ty === 3" @click="openArticleWindow">
           <span class="iconbl bl-a-computerend-line"></span>新窗口打开
         </div>
+
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')">
           <span class="iconbl bl-planet-line"></span>浏览器打开
         </div>
-        <div v-if="curDoc.ty === 3" @click="articleDownload">
-          <span class="iconbl bl-file-download-line"></span>下载文章
+
+        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 3)">
+          <span class="iconbl bl-file-download-line"></span>导出文章
+          <div class="menu-content-level2" :style="rMenuLevel2">
+            <div @click="articleDownload">
+              <span class="iconbl bl-file-markdown"></span>导出为 Markdown
+            </div>
+            <div>
+              <span class="iconbl bl-HTML"></span>导出为 Html
+            </div>
+            <div>
+              <span class="iconbl bl-file-pdf"></span>导出为 PDF
+            </div>
+          </div>
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('copy')">
           <span class="iconbl bl-a-linkspread-line"></span>复制链接
@@ -278,6 +292,7 @@ const handleShowSort = () => {
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
+const rMenuLevel2 = ref<RightMenuLevel2>({ top: '0px' })
 const ArticleDocTreeRightMenuRef = ref()
 
 /**
@@ -285,7 +300,7 @@ const ArticleDocTreeRightMenuRef = ref()
  * @param doc 文档
  * @param event 事件
  */
-const handleClickRight = (doc: DocTree, event: MouseEvent) => {
+const handleClickRightMenu = (doc: DocTree, event: MouseEvent) => {
   if (!doc) {
     return
   }
@@ -314,6 +329,14 @@ const removeListenerTreeDocsRightMenu = () => {
   document.body.removeEventListener('click', closeTreeDocsMenuShow)
 }
 
+const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 1) => {
+  const domHeight = 25 * childMenuCount + 10
+  if (document.body.clientHeight - event.clientY <= domHeight) {
+    rMenuLevel2.value.top = (domHeight * -1 + 20) + 'px'
+  } else {
+    rMenuLevel2.value.top = '0px'
+  }
+}
 //#endregion
 
 /**

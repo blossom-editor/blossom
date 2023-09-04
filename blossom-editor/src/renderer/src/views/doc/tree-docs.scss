@@ -18,8 +18,8 @@
     @include box(100%, 100%);
     font-weight: 200;
     border: 0;
-    overflow-y: overlay;
-    // overflow-y: scroll;
+    // overflow-y: overlay;
+    overflow-y: scroll;
     // 基础的 padding
     --el-menu-base-level-padding: 25px;
     // 每级别的的缩进

@@ -34,6 +34,7 @@
       margin: 0 5px 5px 5px;
       border-radius: 5px;
       cursor: pointer;
+      position: relative;
 
       .iconbl {
         margin-right: 5px;
@@ -41,10 +42,40 @@
 
       &:hover {
         background: var(--el-color-primary-light-8);
+
+        .menu-content-level2 {
+          display: block;
+          position: absolute;
+          left: 160px;
+          // top: 0;
+        }
       }
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      // 二级菜单
+      .menu-content-level2 {
+        @extend .doc-tree-right-menu;
+        padding: 5px 0;
+        display: none;
+
+        &:hover {
+          display: block;
+        }
+
+        &>div {
+          @extend .menu-item;
+          // @include flex(row, flex-start, center);
+          // line-height: 0.9;
+          // padding: 5px 5px 5px 10px;
+          // margin: 0 5px 5px 5px;
+
+          // &:hover {
+          //   background: var(--el-color-primary-light-8);
+          // }
+        }
       }
     }
 
@@ -65,5 +96,4 @@
       }
     }
   }
-
 }
