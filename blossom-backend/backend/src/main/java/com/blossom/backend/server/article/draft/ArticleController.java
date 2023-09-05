@@ -5,12 +5,14 @@ import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
+import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
@@ -44,6 +46,7 @@ public class ArticleController {
     private final ArticleService baseService;
     private final ArticleOpenService openService;
     private final FolderService folderService;
+    private final UserService userService;
 
     /**
      * 查询列表
@@ -168,11 +171,43 @@ public class ArticleController {
     public void download(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
         ArticleEntity article = baseService.selectById(id, false, true, false);
         if (StrUtil.isBlank(article.getMarkdown())) {
-            throw new IllegalArgumentException("文章内容为空,无法下载");
+            throw new IllegalArgumentException("文章内容为空,无法导出");
         }
         try (InputStream is = new ByteArrayInputStream(article.getMarkdown().getBytes(StandardCharsets.UTF_8)); BufferedInputStream bis = new BufferedInputStream(is)) {
             OutputStream os = response.getOutputStream();
             String filename = URLEncodeUtil.encode(article.getName() + ".md");
+            // 设置强制下载不打开
+            response.setContentType("application/force-download");
+            // 将请求头暴露给前端
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
+            byte[] buffer = new byte[1024];
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        }
+    }
+
+
+    /**
+     * 下载文章
+     *
+     * @param id       文章ID
+     * @param response 文章流
+     */
+    @GetMapping("/download/html")
+    public void downloadHtml(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
+        ArticleEntity article = baseService.selectById(id, false, false, true);
+        if (StrUtil.isBlank(article.getHtml())) {
+            throw new IllegalArgumentException("文章内容为空,无法导出");
+        }
+        String reportHtml = ArticleUtil.exportHtml(article, userService.selectById(AuthContext.getUserId()));
+        try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));
+             BufferedInputStream bis = new BufferedInputStream(is)) {
+            OutputStream os = response.getOutputStream();
+            String filename = URLEncodeUtil.encode(article.getName() + ".html");
             // 设置强制下载不打开
             response.setContentType("application/force-download");
             // 将请求头暴露给前端
