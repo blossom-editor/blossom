@@ -52,7 +52,7 @@ const HistoryEditorRef = ref()
 let cmw: CmWrapper
 
 const initEditor = (_doc?: string) => {
-  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(() => { }, () => { }), HistoryEditorRef.value))
+  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(() => { }, () => { }, () => { }), HistoryEditorRef.value))
 }
 
 const getLogs = (articleId: string | number) => {
