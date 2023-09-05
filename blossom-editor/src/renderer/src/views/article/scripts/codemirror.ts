@@ -22,6 +22,26 @@ export const cwTheme: any = {
     backgroundColor: "var(--bl-editor-bg-color)",
     fontSize: '14px'
   },
+  ".cm-panels": {
+    backgroundColor: 'var(--bl-editor-gutters-bg-color)',
+    color: 'var(--el-color-primary)'
+  },
+  ".cm-panels-bottom": {
+    borderColor: 'var(--el-border-color)',
+  },
+  ".cm-textfield": {
+    backgroundColor: "var(--bl-editor-bg-color)",
+    border: "1px solid var(--el-border-color)",
+    outline: "none"
+  },
+  ".cm-button": {
+    backgroundImage: "none",
+    backgroundColor: "var(--bl-editor-bg-color)",
+    border: "1px solid var(--el-border-color)",
+  },
+  ".cm-button::active": {
+    backgroundColor: "var(--bl-text-bg-color)",
+  },
   ".cm-gutters": {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     borderColor: 'var(--bl-editor-gutters-border-color)',
