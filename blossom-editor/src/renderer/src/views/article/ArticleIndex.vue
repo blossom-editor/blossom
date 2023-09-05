@@ -120,7 +120,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated } from "vue"
 import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
@@ -136,7 +136,8 @@ import { openExtenal, writeText, readText } from '@renderer/assets/utils/electro
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
 import EditorTools from './EditorTools.vue'
-import EditorStatus from "./EditorStatus.vue"
+import EditorStatus from './EditorStatus.vue'
+import ArticleTreeDocs from './ArticleTreeDocs.vue'
 // ts
 import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
@@ -152,9 +153,9 @@ import { CmWrapper } from './scripts/codemirror'
 import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './scripts/markedjs'
 import { EPScroll } from './scripts/editor-preview-scroll'
 
-const ArticleTreeDocs = defineAsyncComponent(() =>
-  import('./ArticleTreeDocs.vue')
-)
+// const ArticleTreeDocs = defineAsyncComponent(() =>
+//   import('./ArticleTreeDocs.vue')
+// )
 
 onMounted(() => {
   initEditor()
@@ -424,8 +425,8 @@ const uploadFileCallback = async (event: DragEvent) => {
   if (data && data.files.length && data.files.length > 0) {
     for (const file of data.files) {
       const form = new FormData()
-      form.append('file', file);
-      form.append('name', file.name);
+      form.append('file', file)
+      form.append('name', file.name)
       form.append('pid', curArticle.value!.pid.toString())
       uploadFileApi(form).then(resp => {
         cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)

@@ -22,8 +22,8 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 .app {
   @include box(100%, 100%);
   overflow: hidden;
-  box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
-  border: 1px solid rgb(31, 31, 31);
+  // box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
+  // border: 1px solid rgb(31, 31, 31);
 
   .app-header {
     @include box(100%, 30px);

@@ -156,18 +156,19 @@ CREATE TABLE `blossom_article_open`  (
 -- ----------------------------
 -- Table structure for blossom_article_reference
 -- ----------------------------
-DROP TABLE IF EXISTS `blossom_article_reference`;
-CREATE TABLE `blossom_article_reference`  (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `source_id` bigint NOT NULL COMMENT '文章ID',
-  `source_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '文章名称',
-  `target_Id` bigint NOT NULL COMMENT '引用文章ID',
-  `target_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '引用名称',
-  `target_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '图片链接',
-  `type` tinyint NOT NULL COMMENT '引用类型: 10:图片; 11:文章; 21:外部文章',
-  `user_id` bigint NOT NULL DEFAULT 1 COMMENT '用户ID',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9148 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+CREATE TABLE `blossom_article_reference` (
+`id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+`source_id` bigint NOT NULL COMMENT '文章ID',
+`source_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '文章名称',
+`target_Id` bigint NOT NULL COMMENT '引用文章ID',
+`target_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '引用名称',
+`target_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '图片链接',
+`type` tinyint NOT NULL COMMENT '引用类型: 10:图片; 11:文章; 21:外部文章',
+`user_id` bigint NOT NULL DEFAULT '1' COMMENT '用户ID',
+PRIMARY KEY (`id`) USING BTREE,
+KEY `idx_article_ref_sourceid` (`source_id`) USING BTREE COMMENT 'source id',
+KEY `idx_article_ref_targetid` (`target_Id`) USING BTREE COMMENT 'target id'
+) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of blossom_article_reference
