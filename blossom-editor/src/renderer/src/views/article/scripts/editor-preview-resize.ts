@@ -18,6 +18,9 @@ export const useResize = (
     // editor 距离应用左侧的距离
     const targetLeft = targetRect.left
 
+    resizeDividerRef.value!.style.borderLeft = '2px dashed var(--el-color-primary)'
+    document.body.style.cursor = 'ew-resize'
+
     const onMousemove = (e: MouseEvent) => {
       const x = Math.max(0, e.clientX - targetLeft)
       editorRef.value!.style.width = `${x}px`
@@ -25,6 +28,8 @@ export const useResize = (
     }
 
     const onMouseup = () => {
+      document.body.style.cursor = 'auto'
+      resizeDividerRef.value!.style.borderLeft = '2px solid var(--el-border-color)'
       document.removeEventListener('mousemove', onMousemove)
       document.removeEventListener('mouseup', onMouseup)
     }

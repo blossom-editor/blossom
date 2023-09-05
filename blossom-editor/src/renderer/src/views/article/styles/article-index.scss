@@ -103,11 +103,11 @@
         height: 100%;
         border-left: 2px solid var(--el-border-color);
         margin-left: 1px;
-        cursor: ew-resize;
         z-index: 3;
+        cursor: ew-resize;
 
         &:hover {
-          border-left: 2px dashed var(--el-color-primary);
+          border-left: 2px dashed var(--el-color-primary) !important;
         }
       }
 
