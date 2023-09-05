@@ -60,7 +60,8 @@ img {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #ababab;
+  /* background-color: #ababab; */
+  background-color: var(--el-color-primary-light-5);
 }
 
 /* 解决滚动条右下角出现白色方块 */

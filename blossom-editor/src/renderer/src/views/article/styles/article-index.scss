@@ -102,6 +102,7 @@
       .resize-divider {
         height: 100%;
         border-left: 2px solid var(--el-border-color);
+        margin-left: 1px;
         cursor: ew-resize;
         z-index: 3;
 
@@ -143,8 +144,4 @@
     }
   }
 
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 3px;
-  }
 }

@@ -89,4 +89,9 @@
       transform: translateY(-50%) translateX(100%) scale(0.8);
     }
   }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 3px;
+  }
 }
