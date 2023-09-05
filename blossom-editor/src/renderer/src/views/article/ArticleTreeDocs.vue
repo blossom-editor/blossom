@@ -132,11 +132,8 @@
             <div @click="articleDownload">
               <span class="iconbl bl-file-markdown"></span>导出为 Markdown
             </div>
-            <div>
+            <div @click="articleDownloadHtml">
               <span class="iconbl bl-HTML"></span>导出为 Html
-            </div>
-            <div>
-              <span class="iconbl bl-file-pdf"></span>导出为 PDF
             </div>
           </div>
         </div>
@@ -186,7 +183,7 @@ import { useConfigStore } from '@renderer/stores/config'
 import { ref, onActivated, provide, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { ElMessageBox } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { docTreeApi } from '@renderer/api/blossom'
+import { articleDownloadHtmlApi, docTreeApi } from '@renderer/api/blossom'
 import { isNotNull } from "@renderer/assets/utils/obj"
 import { isEmpty } from 'lodash'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
@@ -259,7 +256,7 @@ const getDocTree = (isOnlyOpen: boolean, isOnlySubject: boolean, isOnlyStar: boo
 
 /**
  * 在名称中显式排序
- * @param trees 
+ * @param trees
  */
 const concatSort = (trees: DocTree[]) => {
   for (let i = 0; i < trees.length; i++) {
@@ -368,6 +365,27 @@ const createUrl = (type: 'open' | 'copy' | 'link') => {
  */
 const articleDownload = () => {
   articleDownloadApi({ id: curDoc.value.i }).then(resp => {
+    let filename: string = resp.headers.get('content-disposition')
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+    let matches = filenameRegex.exec(filename);
+    if (matches != null && matches[1]) {
+      filename = decodeURI(matches[1].replace(/['"]/g, ''));
+    }
+    let a = document.createElement('a')
+    let blob = new Blob([resp.data], { type: "text/plain" })
+    let objectUrl = URL.createObjectURL(blob)
+    a.setAttribute("href", objectUrl)
+    a.setAttribute("download", filename)
+    a.click()
+  })
+}
+
+
+/**
+ * 下载文章
+ */
+const articleDownloadHtml = () => {
+  articleDownloadHtmlApi({ id: curDoc.value.i }).then(resp => {
     let filename: string = resp.headers.get('content-disposition')
     let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
     let matches = filenameRegex.exec(filename);

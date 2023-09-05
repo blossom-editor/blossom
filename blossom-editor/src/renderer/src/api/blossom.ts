@@ -192,6 +192,17 @@ export const articleDownloadApi = (params?: object): Promise<any> => {
   return rq.get("/article/download", config);
 }
 
+
+/**
+ * 下载文章 html
+ * @param params 
+ * @returns 
+ */
+export const articleDownloadHtmlApi = (params?: object): Promise<any> => {
+  let config = { params: params, responseType: 'blob' }
+  return rq.get("/article/download/html", config);
+}
+
 /**
  * 文章数和文章字数统计
  * @param params 
