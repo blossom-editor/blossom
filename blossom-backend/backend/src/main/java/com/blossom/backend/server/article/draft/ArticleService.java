@@ -63,10 +63,11 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * 获取指定ID的正文内容
      *
      * @param ids ID集合
+     * @param contentType 正文类型 MARKDOWN/HTML
      * @return 内容
      */
-    public List<ArticleEntity> listAllContent(List<Long> ids) {
-        List<ArticleEntity> articles = baseMapper.listAllContent(ids);
+    public List<ArticleEntity> listAllContent(List<Long> ids, String contentType) {
+        List<ArticleEntity> articles = baseMapper.listAllContent(ids, contentType.toUpperCase());
         if (CollUtil.isEmpty(articles)) {
             return new ArrayList<>();
         }

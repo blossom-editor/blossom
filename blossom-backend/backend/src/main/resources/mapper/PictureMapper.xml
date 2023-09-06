@@ -23,9 +23,14 @@
             <if test="url != null and url != ''">and p.url like concat('%',#{url}, '%')</if>
             <if test="starStatus != null">and p.star_status = #{starStatus}</if>
             <if test="userId != null">and user_id = #{userId}</if>
+            <if test="urls != null and urls.size() != 0">and url in
+                <foreach collection="urls" item="item" open="(" close=")" separator=",">#{item}</foreach>
+            </if>
         </where>
         group by p.url order by p.id desc
     </select>
+
+
 
     <select id="listDistinctPid" resultType="java.lang.Long">
         select distinct pid from blossom_picture where user_id = #{userId}

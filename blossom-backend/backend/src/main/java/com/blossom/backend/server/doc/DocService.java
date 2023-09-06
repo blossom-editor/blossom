@@ -67,7 +67,6 @@ public class DocService {
          * 只查询有图片的文件夹, 包含有图片的文章文件夹
          * =============================================================================================== */
         else if (req.getOnlyPicture()) {
-
             // 1. 默认的图片文件夹
             all.addAll(CollUtil.newArrayList(PictureUtil.getDefaultFolder(req.getUserId())));
 
@@ -122,6 +121,20 @@ public class DocService {
         else if (req.getOnlyStar()) {
             ArticleQueryReq articleWhere = req.to(ArticleQueryReq.class);
             articleWhere.setStarStatus(YesNo.YES.getValue());
+            List<DocTreeRes> articles = articleService.listTree(articleWhere);
+            all.addAll(articles);
+            if (CollUtil.isNotEmpty(articles)) {
+                List<Long> pidList = articles.stream().map(DocTreeRes::getP).collect(Collectors.toList());
+                List<DocTreeRes> folders = folderService.recursiveToParentTree(pidList);
+                all.addAll(folders);
+            }
+        }
+        /* ===============================================================================================
+         * 只查询指定文章
+         * =============================================================================================== */
+        else if (req.getArticleId() != null && req.getArticleId() > 0) {
+            ArticleQueryReq articleWhere = req.to(ArticleQueryReq.class);
+            articleWhere.setId(req.getArticleId());
             List<DocTreeRes> articles = articleService.listTree(articleWhere);
             all.addAll(articles);
             if (CollUtil.isNotEmpty(articles)) {

@@ -14,6 +14,7 @@ import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
+import com.blossom.backend.server.utils.DownloadUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
@@ -27,7 +28,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -173,26 +177,16 @@ public class ArticleController {
         if (StrUtil.isBlank(article.getMarkdown())) {
             throw new IllegalArgumentException("文章内容为空,无法导出");
         }
-        try (InputStream is = new ByteArrayInputStream(article.getMarkdown().getBytes(StandardCharsets.UTF_8)); BufferedInputStream bis = new BufferedInputStream(is)) {
-            OutputStream os = response.getOutputStream();
+        try (InputStream is = new ByteArrayInputStream(article.getMarkdown().getBytes(StandardCharsets.UTF_8));
+             BufferedInputStream bis = new BufferedInputStream(is)) {
             String filename = URLEncodeUtil.encode(article.getName() + ".md");
-            // 设置强制下载不打开
-            response.setContentType("application/force-download");
-            // 将请求头暴露给前端
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-            byte[] buffer = new byte[1024];
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
-            }
+
+            DownloadUtil.forceDownload(response, bis, filename);
         }
     }
 
-
     /**
-     * 下载文章
+     * 下载文章 Html
      *
      * @param id       文章ID
      * @param response 文章流
@@ -203,24 +197,14 @@ public class ArticleController {
         if (StrUtil.isBlank(article.getHtml())) {
             throw new IllegalArgumentException("文章内容为空,无法导出");
         }
-        String reportHtml = ArticleUtil.exportHtml(article, userService.selectById(AuthContext.getUserId()));
+        String reportHtml = ArticleUtil.toHtml(article, userService.selectById(AuthContext.getUserId()));
         try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));
              BufferedInputStream bis = new BufferedInputStream(is)) {
-            OutputStream os = response.getOutputStream();
             String filename = URLEncodeUtil.encode(article.getName() + ".html");
-            // 设置强制下载不打开
-            response.setContentType("application/force-download");
-            // 将请求头暴露给前端
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-            byte[] buffer = new byte[1024];
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
-            }
+            DownloadUtil.forceDownload(response, bis, filename);
         }
     }
+
 
     /**
      * 文章导入

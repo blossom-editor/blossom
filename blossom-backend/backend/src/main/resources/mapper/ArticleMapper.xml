@@ -3,7 +3,12 @@
 <mapper namespace="com.blossom.backend.server.article.draft.ArticleMapper">
 
     <select id="listAllContent" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
-        select id,version,upd_time,markdown from blossom_article
+        select id,
+               version,
+               upd_time,
+               <if test="contentType == 'MARKDOWN'">markdown</if>
+               <if test="contentType == 'HTML'">html</if>
+          from blossom_article
          where id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </select>
 

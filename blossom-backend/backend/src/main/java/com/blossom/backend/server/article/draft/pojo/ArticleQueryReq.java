@@ -17,7 +17,10 @@ import java.util.List;
 public class ArticleQueryReq extends PageReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 文章ID
+     */
+    private Long id;
     /**
      * 上级ID集合
      */

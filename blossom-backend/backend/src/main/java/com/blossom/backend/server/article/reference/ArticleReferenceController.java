@@ -35,7 +35,7 @@ public class ArticleReferenceController {
         if (onlyInner == null) {
             onlyInner = true;
         }
-        return R.ok(baseService.listAll(onlyInner, AuthContext.getUserId(), articleId));
+        return R.ok(baseService.listGraph(onlyInner, AuthContext.getUserId(), articleId));
     }
 
 }

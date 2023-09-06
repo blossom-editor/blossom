@@ -10,15 +10,24 @@ import cn.hutool.core.util.ZipUtil;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamEntity;
+import com.blossom.backend.base.user.UserService;
+import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
+import com.blossom.backend.server.article.reference.ArticleReferenceService;
+import com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity;
 import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.doc.pojo.DocTreeReq;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
+import com.blossom.backend.server.picture.PictureService;
+import com.blossom.backend.server.picture.pojo.PictureEntity;
+import com.blossom.backend.server.utils.ArticleUtil;
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.SortUtil;
+import com.blossom.common.iaas.IaasProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +55,19 @@ public class ArticleBackupService {
     private ArticleService articleService;
 
     @Autowired
+    private ArticleReferenceService referenceService;
+
+    @Autowired
     private ParamService paramService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PictureService pictureService;
+
+    @Autowired
+    private IaasProperties iaasProperties;
 
     @Autowired
     @Qualifier("taskExecutor")
@@ -90,30 +111,38 @@ public class ArticleBackupService {
     }
 
     /**
-     * 备份某个用户的文章
+     * 备份文章的入口
      *
-     * @param userId 用户ID
+     * @param userId    用户ID
+     * @param type      备份文章的类型: MARKDOWN/HTML
+     * @param toLocal   是否将图片替换成本地路径, 如果为 YES, 则会替换路径, 并将图片一并放入压缩包
+     * @param articleId 文章ID, 指定导出的文章
      * @return 备份编号
      */
-    public BackupFile backup(Long userId) {
-        final BackupFile backupFile = new BackupFile(userId);
+    public BackupFile backup(Long userId, final BackupTypeEnum type, final YesNo toLocal, Long articleId) {
+        final BackupFile backupFile = new BackupFile(userId, type, toLocal);
         final ParamEntity param = paramService.getValue(ParamEnum.BACKUP_PATH);
         XzException500.throwBy(ObjUtil.isNull(param), ERROR_MSG);
+        // 备份文件的地址
         final String rootPath = param.getParamValue();
         XzException500.throwBy(StrUtil.isBlank(rootPath), ERROR_MSG);
         backupFile.setPath(rootPath);
+
+        // 用户信息
+        UserEntity user = userService.selectById(userId);
 
         final File backLogFile = new File(backupFile.getRootPath() + "/" + "log.txt");
         final List<String> backLogs = new ArrayList<>();
         log.info("[文章备份] 开始备份, 本次备份文件名称 [{}], 用户ID [{}]", backupFile.getFilename(), userId);
         backLogs.add("[文章备份] Blossom 备份日志");
         backLogs.add("[文章备份] 开始备份");
-        backLogs.add("[文章备份] 备份用户: " + userId);
+        backLogs.add("[文章备份] 备份用户: " + user.getNickName() + "(" + userId + ")");
         backLogs.add("[文章备份] 备份日期: " + DateUtils.now());
         expire(rootPath, backLogs);
+
         executor.execute(() -> {
             final long start = System.currentTimeMillis();
-            List<DocTreeRes> articles = getArticles(userId);
+            List<DocTreeRes> articles = getArticles(userId, articleId);
             if (CollUtil.isEmpty(articles)) {
                 FileUtil.writeLines(backLogs, backLogFile, StandardCharsets.UTF_8);
                 ZipUtil.zip(backupFile.getRootPath());
@@ -125,7 +154,7 @@ public class ArticleBackupService {
             backLogs.add(logCount);
 
             List<Long> ids = articles.stream().map(DocTreeRes::getI).collect(Collectors.toList());
-            List<ArticleEntity> allContents = articleService.listAllContent(ids);
+            List<ArticleEntity> allContents = articleService.listAllContent(ids, type.name());
             Map<Long, ArticleEntity> markdowns = allContents.stream().collect(Collectors.toMap(ArticleEntity::getId, art -> art));
 
             int index = 1;
@@ -135,24 +164,30 @@ public class ArticleBackupService {
             int idLen = String.valueOf(allContents.stream()
                     .map(ArticleEntity::getId).max(SortUtil.longSort).orElse((1L))).length();
 
-            backLogs.add("============================== ↓↓ 文本文章列表 ↓↓ ==============================");
-            backLogs.add("排序 [ID] [版本] [时间] 文章路径");
-            backLogs.add("-----------------------------------------------------------------------------");
+            backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 文章列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            backLogs.add("┃ 排序 [ID] [版本] [时间] 文章路径");
+            backLogs.add("┠────────────────────────────────────────────────────────────────────────────");
             for (DocTreeRes article : articles) {
-                File file = new File(backupFile.getRootPath() + "/" + clearPath(article.getN()) + ".md");
+                // 创建文章 file
+                File file = new File(backupFile.getRootPath() + "/" + clearPath(article.getN()) + getArticleSuffix(type));
+                // 导出的文章正文
                 ArticleEntity articleDetail = markdowns.get(article.getI());
                 if (articleDetail == null) {
                     continue;
                 }
+                // 查正文不查名称, 名称从树状列表中获取
+                articleDetail.setName(article.getN());
+
                 // 文章 markdown 内容
-                String content = StrUtil.isBlank(articleDetail.getMarkdown()) ? "" : articleDetail.getMarkdown();
+                String content = getContentByType(articleDetail, type, user);
+                content = formatContent(content, toLocal, article.getI(), article.getN());
                 String id = String.valueOf(articleDetail.getId());
                 String version = String.valueOf(articleDetail.getVersion());
 
                 FileUtil.writeBytes(content.getBytes(StandardCharsets.UTF_8), file);
 
                 // 排序 [id] [version] [时间] 路径
-                String backArticleLog = String.format("%s [%s] [%s] [%s] %s",
+                String backArticleLog = String.format("┃ %s [%s] [%s] [%s] %s",
                         StrUtil.fillBefore(String.valueOf(index), ' ', indexLen),
                         StrUtil.fillBefore(String.valueOf(id), ' ', idLen),
                         StrUtil.fillBefore(String.valueOf(version), ' ', versionLen),
@@ -163,7 +198,41 @@ public class ArticleBackupService {
                 backLogs.add(backArticleLog);
                 index++;
             }
-            backLogs.add("============================== ↑↑ 文本文章列表 ↑↑ ==============================");
+            backLogs.add("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↑↑ 文章列表 ↑↑ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            if (toLocal == YesNo.YES) {
+                backLogs.add("");
+                if (articleId != null) {
+                    List<ArticleReferenceEntity> refs = referenceService.listPics(articleId);
+                    PictureEntity where = new PictureEntity();
+                    where.setUrls(refs.stream().map(ArticleReferenceEntity::getTargetUrl).collect(Collectors.toList()));
+                    List<PictureEntity> pics = pictureService.listAll(where);
+                    backLogs.add("[图片备份] 图片个数: " + pics.size());
+                    backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 图片列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    for (PictureEntity pic : pics) {
+                        backLogs.add("┃ " + pic.getPathName());
+                        FileUtil.copy(
+                                pic.getPathName(),
+                                backupFile.getRootPath() + "/" + pic.getPathName(),
+                                true);
+                    }
+                }
+                // 备份全部图片
+                else {
+                    List<File> files = FileUtil.loopFiles(FileUtil.newFile(iaasProperties.getBlos().getDefaultPath() + "/U" + userId), null);
+                    backLogs.add("[图片备份] 图片个数: " + files.size());
+                    backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 图片列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    for (File file : files) {
+                        backLogs.add(file.getPath());
+                    }
+                    FileUtil.copy(
+                            iaasProperties.getBlos().getDefaultPath() + "/U" + userId,
+                            backupFile.getRootPath() + "/" + iaasProperties.getBlos().getDefaultPath(),
+                            true);
+
+                }
+                backLogs.add("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↑↑ 图片列表 ↑↑ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+            }
 
             String logEnd = String.format("[文章备份] 备份结束, 本次备份用时:%s", System.currentTimeMillis() - start + " ms");
             log.info(logEnd);
@@ -205,7 +274,6 @@ public class ArticleBackupService {
                 if (backupFile.getFile() != null) {
                     backupFile.getFile().delete();
                 }
-
             }
         }
     }
@@ -222,15 +290,29 @@ public class ArticleBackupService {
         }
     }
 
-    private List<DocTreeRes> getArticles(Long userId) {
+    /**
+     * 获取所有文章
+     *
+     * @param userId 用户ID
+     * @return 文章列表, 虽然是 DocTreeRes 对象, 但不是树状结构
+     */
+    private List<DocTreeRes> getArticles(Long userId, Long articleId) {
         DocTreeReq req = new DocTreeReq();
         req.setUserId(userId);
+        req.setArticleId(articleId);
         List<DocTreeRes> docs = docService.listTree(req);
         List<DocTreeRes> articles = new ArrayList<>();
         findArticle("", docs, articles);
         return articles;
     }
 
+    /**
+     * 递归拼接文章的名称, 文章的名称会被拼接成文章的所有上级文件夹 + 文章名称
+     *
+     * @param prefix   上级文件夹名称
+     * @param docs     文章树状列表
+     * @param articles 拼接结果列表, 虽然是 DocTreeRes 对象, 但不是树状结构
+     */
     private void findArticle(String prefix, List<DocTreeRes> docs, List<DocTreeRes> articles) {
         if (CollUtil.isEmpty(docs)) {
             return;
@@ -244,6 +326,89 @@ public class ArticleBackupService {
                 articles.add(doc);
             }
         }
+    }
+
+    /**
+     * 根据类型判断是获取 markdown 内容还是 html 内容
+     *
+     * @param article 文章
+     * @param type    类型
+     * @return 对应的内容
+     */
+    private String getContentByType(ArticleEntity article, BackupTypeEnum type, UserEntity user) {
+        if (type == BackupTypeEnum.MARKDOWN) {
+            return StrUtil.isBlank(article.getMarkdown()) ? "文章无内容" : article.getMarkdown();
+        } else if (type == BackupTypeEnum.HTML) {
+            ArticleEntity export = new ArticleEntity();
+            export.setName(article.getName().substring(article.getName().lastIndexOf("/")));
+            export.setHtml(article.getHtml());
+            return ArticleUtil.toHtml(article, user);
+        }
+        return "";
+    }
+
+    /**
+     * 格式化文章正文，主要将图片路径替换为本地路径
+     *
+     * @param content     文章正文
+     * @param toLocal     是否映射为本地路径
+     * @param articleId   文章ID
+     * @param articleName 文章名称，包含递归后的所有上级菜单名称，用于计算文章向上级文件夹查找的次数
+     * @return 返回替换后的正文内容
+     */
+    private String formatContent(String content, YesNo toLocal, Long articleId, String articleName) {
+        if (toLocal == YesNo.NO) {
+            return content;
+        }
+
+        List<ArticleReferenceEntity> refs = referenceService.listPics(articleId);
+        final String domain = iaasProperties.getBlos().getDomain();
+
+        // 计算字符出现的次数
+        int separatorCount = countChar(articleName, '/');
+
+        StringBuilder parent = new StringBuilder();
+
+        // 起始不为0, 需要排除掉备份目录
+        for (int i = 1; i < separatorCount; i++) {
+            parent.append("../");
+        }
+
+        // 将 domain 替换成本地映射
+        for (ArticleReferenceEntity ref : refs) {
+            if (!ref.getTargetUrl().startsWith(domain)) {
+                continue;
+            }
+            String localPath = parent.substring(0, parent.length() > 0 ? parent.length() - 1 : 0) + ref.getTargetUrl().replace(domain, "");
+            content = content.replaceAll(ref.getTargetUrl(), localPath);
+            System.out.println(localPath);
+        }
+        return content;
+
+    }
+
+    private static int countChar(String str, char target) {
+        int times = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == target) {
+                times++;
+            }
+        }
+        return times;
+    }
+
+    /**
+     * 获取文章的后缀名
+     *
+     * @param type 类型
+     */
+    private String getArticleSuffix(BackupTypeEnum type) {
+        if (type == BackupTypeEnum.MARKDOWN) {
+            return ".md";
+        } else if (type == BackupTypeEnum.HTML) {
+            return ".html";
+        }
+        return ".txt";
     }
 
     private static String clearPath(String path) {
@@ -265,10 +430,15 @@ public class ArticleBackupService {
      */
     @Data
     public static class BackupFile {
+        // 1
         private String userId;
+        // 2
         private String date;
+        // 3
         private String time;
+        // 2 + 3
         private Date datetime;
+        // all
         private String filename;
         private String path;
 
@@ -298,13 +468,30 @@ public class ArticleBackupService {
          *
          * @param userId 用户ID
          */
-        public BackupFile(Long userId) {
-            String filename = String.format("B_%s_%s", userId, DateUtils.toYMDHMS_SSS(System.currentTimeMillis()));
+        public BackupFile(Long userId, BackupTypeEnum type, YesNo toLocal) {
+            String filename = String.format("%s_%s_%s", buildFilePrefix(type, toLocal), userId, DateUtils.toYMDHMS_SSS(System.currentTimeMillis()));
             filename = filename.replaceAll(" ", SEPARATOR)
                     .replaceAll("-", "")
                     .replaceAll(":", "")
                     .replaceAll("\\.", SEPARATOR);
             build(filename);
+        }
+
+        private static String buildFilePrefix(BackupTypeEnum type, YesNo toLocal) {
+            String prefix = "B";
+            if (type == BackupTypeEnum.MARKDOWN) {
+                prefix += "M";
+            } else if (type == BackupTypeEnum.HTML) {
+                prefix += "H";
+            }
+
+            if (toLocal == YesNo.YES) {
+                prefix += "L";
+            } else if (toLocal == YesNo.NO) {
+                prefix += "N";
+            }
+
+            return prefix;
         }
 
         private void build(String filename) {

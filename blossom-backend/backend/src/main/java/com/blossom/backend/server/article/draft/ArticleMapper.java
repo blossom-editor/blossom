@@ -18,8 +18,10 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
 
     /**
      * 批量查询文章正文
+     * @param ids 文章ID
+     * @param contentType 正文类型 MARKDOWN/HTML
      */
-    List<ArticleEntity> listAllContent(@Param("ids") List<Long> ids);
+    List<ArticleEntity> listAllContent(@Param("ids") List<Long> ids, @Param("contentType") String contentType);
 
     /**
      * 查询全部

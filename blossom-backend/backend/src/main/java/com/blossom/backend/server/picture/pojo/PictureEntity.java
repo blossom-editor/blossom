@@ -91,5 +91,10 @@ public class PictureEntity extends AbstractPOJO implements Serializable {
     @TableField(exist = false)
     private String articleNames;
 
+    /**
+     * 通过访问路径查询批量查询
+     */
+    @TableField(exist = false)
+    private List<String> urls;
     //endregion
 }

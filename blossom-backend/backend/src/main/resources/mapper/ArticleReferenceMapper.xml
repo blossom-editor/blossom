@@ -26,7 +26,17 @@
         </foreach>
     </insert>
 
-    <select id="listAll" resultType="com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity">
+    <select id="listPic" resultType="com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity">
+        select id,
+               source_id,
+               target_name,
+               target_url
+          from blossom_article_reference
+         where source_id = #{articleId}
+           and type = 10
+    </select>
+
+    <select id="listGraph" resultType="com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity">
         select id,
                source_id,
                source_name,
@@ -47,4 +57,5 @@
               and (source_id = #{articleId} or target_id = #{articleId})
           </if>
     </select>
+
 </mapper>

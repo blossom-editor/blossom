@@ -33,6 +33,10 @@ public class DocTreeReq extends AbstractPOJO {
      */
     private Boolean onlyStar;
     /**
+     * [Article]文章ID, 指查询指定文章
+     */
+    private Long articleId;
+    /**
      * 用户ID
      */
     private Long userId;

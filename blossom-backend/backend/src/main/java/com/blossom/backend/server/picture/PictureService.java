@@ -72,9 +72,7 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
 
     /**
      * 查询所有的 pid, 并去重, 相当于获取所有有图片的文件夹.
-     * <pre>{@code
-     * select distinct pid from blossom_picture
-     * }</pre>
+     * <pre>{@code select distinct pid from blossom_picture }</pre>
      *
      * @return 如果无结果则返回空集合
      */

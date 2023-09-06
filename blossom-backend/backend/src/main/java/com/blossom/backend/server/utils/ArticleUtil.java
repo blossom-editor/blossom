@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -121,23 +120,32 @@ public class ArticleUtil {
 
     private static final String suffix = "</div></div></body></html>";
 
+    private static String htmlTag;
 
-    public static String exportHtml(ArticleEntity article, UserEntity user) {
+    static {
         Resource resource = new ClassPathResource("exportTemplate.html");
         try (InputStream is = resource.getInputStream()) {
             byte[] bytes = new byte[is.available()];
             is.read(bytes);
-            String str = new String(bytes);
-            return str +
-                    prefix.replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
-                    .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName()) +
-                    article.getHtml() + suffix;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            htmlTag = new String(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+    }
+
+    /**
+     * 将文章转换为 html 格式
+     *
+     * @param article 文章
+     * @param user    用户, 用户获取作者
+     * @return html 内容
+     */
+    public static String toHtml(ArticleEntity article, UserEntity user) {
+        return htmlTag + prefix
+                // 替换作者, 文章名称
+                .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
+                .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName()) +
+                article.getHtml() + suffix;
     }
 
 

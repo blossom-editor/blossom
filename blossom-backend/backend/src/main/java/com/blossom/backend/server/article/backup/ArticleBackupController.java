@@ -7,6 +7,8 @@ import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamEntity;
+import com.blossom.backend.server.utils.DownloadUtil;
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.pojo.R;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,10 +42,30 @@ public class ArticleBackupController {
 
     /**
      * 执行备份
+     *
+     * @param type    导出类型 MARKDOWN/HTML
+     * @param toLocal 是否导出为本地图片映射 YES/NO
      */
     @GetMapping
-    public R<ArticleBackupService.BackupFile> backup() {
-        return R.ok(backupService.backup(AuthContext.getUserId()));
+    public R<ArticleBackupService.BackupFile> backup(
+            @RequestParam("type") String type,
+            @RequestParam("toLocal") String toLocal,
+            @RequestParam(value = "articleId", required = false) Long articleId) {
+        BackupTypeEnum typeEnum;
+        if (StrUtil.isBlank(type)) {
+            typeEnum = BackupTypeEnum.MARKDOWN;
+        } else {
+            typeEnum = BackupTypeEnum.valueOf(type.toUpperCase());
+        }
+
+        YesNo toLocalEnum;
+        if (StrUtil.isBlank(toLocal)) {
+            toLocalEnum = YesNo.NO;
+        } else {
+            toLocalEnum = YesNo.valueOf(toLocal.toUpperCase());
+        }
+
+        return R.ok(backupService.backup(AuthContext.getUserId(), typeEnum, toLocalEnum, articleId));
     }
 
     /**
@@ -71,20 +96,11 @@ public class ArticleBackupController {
 
         try (InputStream is = FileUtil.getInputStream(file);
              BufferedInputStream bis = new BufferedInputStream(is)) {
-            OutputStream os = response.getOutputStream();
-            // 设置强制下载不打开
-            response.setContentType("application/force-download");
-            // 将请求头暴露给前端
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-            byte[] buffer = new byte[1024];
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
-            }
+            DownloadUtil.forceDownload(response, bis, filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }

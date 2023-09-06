@@ -2,6 +2,7 @@ package com.blossom.backend.server.article.backup;
 
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
+import com.blossom.common.base.enums.YesNo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +25,7 @@ public class ArticleBackupJob {
     public void backup() {
         List<UserEntity> users = userService.listAll();
         for (UserEntity user : users) {
-            backupService.backup(user.getId());
+            backupService.backup(user.getId(), BackupTypeEnum.MARKDOWN, YesNo.NO,null);
         }
     }
 }
