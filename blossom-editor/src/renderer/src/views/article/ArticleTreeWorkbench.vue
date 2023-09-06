@@ -183,7 +183,7 @@ const handleShowBackupDialog = () => {
 //#endregion
 
 const emits = defineEmits(['refreshDocTree', 'show-sort'])
-
+defineExpose({ handleShowBackupDialog })
 </script>
 
 <style scoped lang="scss">

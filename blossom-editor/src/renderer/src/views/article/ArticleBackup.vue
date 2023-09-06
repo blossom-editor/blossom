@@ -11,17 +11,48 @@
         <el-button @click="getBackupList">
           <span class="iconbl bl-refresh-line" style="margin-right: 7px;"></span>刷新
         </el-button>
-        <el-button @click="backupNow">
-          <span class="iconbl bl-archive-line" style="margin-right: 7px;"></span>立即备份
-        </el-button>
-        <div class="backup-tip">当前仅支持下载最大 10MB 的文件, 如果备份文件超过 10MB, 请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。</div>
+        <el-tooltip content="将文章以 Markdown 格式进行备份" :hide-after="0">
+          <el-button @click="backupNow('MARKDOWN', 'NO')">
+            <span class="iconbl bl-file-markdown" style="margin-right: 7px;"></span>备份 Markdown
+          </el-button>
+        </el-tooltip>
+        <el-tooltip content="将文章以 Markdown 格式进行备份，同时备份所有图片" :hide-after="0">
+          <el-button @click="backupNow('MARKDOWN', 'YES')">
+            <span class="iconbl bl-file-markdown" style="margin-right: 7px;"></span>备份本地 Markdown
+          </el-button>
+        </el-tooltip>
+
+        <el-tooltip content="将文章以 Html 格式进行备份" :hide-after="0">
+          <el-button @click="backupNow('HTML', 'NO')">
+            <span class="iconbl bl-HTML" style="margin-right: 7px;"></span>备份 Html
+          </el-button>
+        </el-tooltip>
+
+        <el-tooltip content="将文章以 Html 格式进行备份，同时备份所有图片" :hide-after="0">
+          <el-button @click="backupNow('HTML', 'YES')">
+            <span class="iconbl bl-HTML" style="margin-right: 7px;"></span>备份本地 Html
+          </el-button>
+        </el-tooltip>
+        <div class="backup-tip">
+          服务器将于每日早上 7 点备份 Markdown 数据。
+        </div>
+        <div class="backup-tip">
+          当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。
+        </div>
       </div>
+
+
       <div class="bak-container">
         <div v-for="bak in backupList" :key="bak.filename" class="bak-item">
-          <span class="iconbl bl-file-zip-line"></span>
-          <span class="name">{{ bak.filename }}</span>
-          <span class="size">{{ formatFileSize(bak.fileLength) }}</span>
-          <el-button class="visible" text bg style="margin-left: 5px;" @click="download(bak)"><span
+          <bl-row>
+            <span class="iconbl bl-file-zip-line"></span>
+            <span class="name">{{ bak.filename }}</span>
+            <span class="size">{{ formatFileSize(bak.fileLength) }}</span>
+          </bl-row>
+          <div>
+            <span class="desc">{{ bak.desc }}</span>
+          </div>
+          <el-button class="download-btn" text bg style="margin-left: 5px;" @click="download(bak)"><span
               class="iconbl bl-folder-download-line"></span></el-button>
         </div>
       </div>
@@ -44,12 +75,31 @@ const backupList = ref<BackupFile[]>()
 
 const getBackupList = () => {
   articleBackupListApi().then(resp => {
-    backupList.value = resp.data
+    backupList.value = resp.data?.map((bak) => {
+      let desc = ''
+      let type = bak.filename.charAt(1)
+      let toLocal = bak.filename.charAt(2)
+
+
+      if (toLocal === 'L') {
+        desc += '本地路径'
+      } else if (toLocal === 'N') {
+        desc += '网络地址'
+      }
+
+      if (type === 'M') {
+        desc += ', Markdown'
+      } else if (type === 'H') {
+        desc += ', Html'
+      }
+      bak.desc = desc
+      return bak
+    })
   })
 }
 
-const backupNow = () => {
-  articleBackupApi().then(_ => {
+const backupNow = (type: 'MARKDOWN' | 'HTML', toLocal: 'YES' | 'NO') => {
+  articleBackupApi({ type: type, toLocal: toLocal }).then(_ => {
     Notify.info('后台正在备份中, 请稍后刷新列表查看最新备份', '备份中')
   })
 }
@@ -73,6 +123,7 @@ const download = (file: BackupFile) => {
     a.setAttribute("href", objectUrl)
     a.setAttribute("download", filename)
     a.click()
+    a.remove()
   })
 }
 
@@ -114,7 +165,7 @@ $height-title: 50px;
     padding: 20px;
 
     .workbench {
-      @include box(100%, 60px);
+      @include box(100%, 90px);
       border-bottom: 1px solid var(--el-border-color);
       margin-bottom: 10px;
 
@@ -126,21 +177,27 @@ $height-title: 50px;
     }
 
     .bak-container {
-      @include box(100%, calc(100% - 70px));
+      @include box(100%, calc(100% - 100px));
       @include flex(column, flex-start, flex-start);
       align-content: flex-start;
       flex-wrap: wrap;
       overflow-x: overlay;
+      padding: 10px;
 
       .bak-item {
-        width: 400px;
-        // border: 1px solid red;
+        width: 350px;
         margin-bottom: 5px;
         margin-right: 5px;
         font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: box-shadow 0.1s;
+        position: relative;
 
         &:hover {
-          .visible {
+          box-shadow: var(--bl-box-shadow);
+
+          .download-btn {
             opacity: 1;
           }
         }
@@ -155,12 +212,17 @@ $height-title: 50px;
         }
 
 
-        .size {
+        .size,
+        .desc {
           font-size: 12px;
           color: var(--bl-text-color-light);
         }
 
-        .visible {
+
+        .download-btn {
+          position: absolute;
+          right: 5px;
+          top: calc(50% - 12px);
           opacity: 0;
         }
       }

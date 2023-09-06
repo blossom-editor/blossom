@@ -1,7 +1,8 @@
 <template>
   <!-- 文件夹操作 -->
   <div class="doc-workbench">
-    <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></ArticleTreeWorkbench>
+    <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort" ref="ArticleTreeWorkbenchRef">
+    </ArticleTreeWorkbench>
   </div>
 
   <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档..."
@@ -126,14 +127,21 @@
           <span class="iconbl bl-planet-line"></span>浏览器打开
         </div>
 
-        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 3)">
+        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
+          <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
           <div class="menu-content-level2" :style="rMenuLevel2">
             <div @click="articleDownload">
-              <span class="iconbl bl-file-markdown"></span>导出为 Markdown
+              <span class="iconbl bl-file-markdown"></span>导出为 MD
+            </div>
+            <div @click="articleBackup('MARKDOWN')">
+              <span class="iconbl bl-file-markdown"></span>导出为本地 MD
             </div>
             <div @click="articleDownloadHtml">
-              <span class="iconbl bl-HTML"></span>导出为 Html
+              <span class="iconbl bl-HTML"></span>导出为 HTML
+            </div>
+            <div @click="articleBackup('HTML')">
+              <span class="iconbl bl-HTML"></span>导出为本地 HTML
             </div>
           </div>
         </div>
@@ -188,7 +196,7 @@ import { isNotNull } from "@renderer/assets/utils/obj"
 import { isEmpty } from 'lodash'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
 import { grammar } from './scripts/markedjs'
-import { folderDelApi, articleDownloadApi, articleSyncApi, articleDelApi } from '@renderer/api/blossom'
+import { folderDelApi, articleDownloadApi, articleSyncApi, articleDelApi, articleBackupApi } from '@renderer/api/blossom'
 import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
 
@@ -291,6 +299,7 @@ const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, 
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rMenuLevel2 = ref<RightMenuLevel2>({ top: '0px' })
 const ArticleDocTreeRightMenuRef = ref()
+const ArticleTreeWorkbenchRef = ref()
 
 /**
  * 显示有检查菜单
@@ -377,12 +386,13 @@ const articleDownload = () => {
     a.setAttribute("href", objectUrl)
     a.setAttribute("download", filename)
     a.click()
+    a.remove()
   })
 }
 
 
 /**
- * 下载文章
+ * 下载HTML文章
  */
 const articleDownloadHtml = () => {
   articleDownloadHtmlApi({ id: curDoc.value.i }).then(resp => {
@@ -398,6 +408,25 @@ const articleDownloadHtml = () => {
     a.setAttribute("href", objectUrl)
     a.setAttribute("download", filename)
     a.click()
+    a.remove()
+  })
+}
+
+const articleBackup = (type: 'MARKDOWN' | 'HTML') => {
+  articleBackupApi({ type: type, articleId: curDoc.value.i, toLocal: 'YES' }).then(resp => {
+    ElMessageBox.confirm(
+      `由于导出为本地文章时需要导出图片等信息，所以文章将会以
+    <span style="color:#C02B2B;text-decoration: underline;">备份压缩包</span>
+    的形式存储在服务器上，文件名为：「${resp.data.filename}」，你可以前往备份页面查看导出进度和导出文件压缩包。`, {
+      confirmButtonText: '立即查看',
+      cancelButtonText: '稍后再说',
+      type: 'info',
+      draggable: true,
+      dangerouslyUseHTMLString: true,
+    }
+    ).then(() => {
+      ArticleTreeWorkbenchRef.value.handleShowBackupDialog()
+    })
   })
 }
 

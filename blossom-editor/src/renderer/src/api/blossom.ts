@@ -304,7 +304,7 @@ export const articleBackupApi = (params?: object): Promise<R<any>> => {
  * @param params 
  * @returns 
  */
-export interface BackupFile { date: string, time: string, filename: string, fileLength: number }
+export interface BackupFile { date: string, time: string, filename: string, fileLength: number, desc?: string }
 export const articleBackupListApi = (): Promise<R<BackupFile[]>> => {
   return rq.get<BackupFile[]>("/article/backup/list");
 }

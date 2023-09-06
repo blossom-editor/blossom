@@ -40,6 +40,12 @@
         margin-right: 5px;
       }
 
+      // 拥有二级菜单的箭头指示
+      .bl-a-rightsmallline-line {
+        position: absolute;
+        right: -2px;
+      }
+
       &:hover {
         background: var(--el-color-primary-light-8);
 
