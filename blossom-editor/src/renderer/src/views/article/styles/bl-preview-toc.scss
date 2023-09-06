@@ -61,7 +61,7 @@
   .toc-title {
     @include box(100%, 20px);
     @include font(15px, 700);
-    @include themeColor(#FFFFFF, #ffffff);
+    @include themeColor(#FFFFFF, #cdcdcd);
     cursor: move;
   }
 
