@@ -44,7 +44,7 @@
 
     $heightTools: 45px;
     $heightStatus: 28px;
-    $heightEP: calc(100% - 5px - #{$heightStatus} - #{$heightTools});
+    $heightEP: calc(100% - #{$heightStatus} - #{$heightTools});
 
     .editor-tools {
       @include box(100%, $heightTools);

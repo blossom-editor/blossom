@@ -24,6 +24,22 @@ export const getNowTime = (): string => {
 }
 
 /**
+ * 将毫秒转为时分秒的格式
+ * @param time 毫秒
+ * @returns 
+ */
+export const formateMs = (ms: number): string => {
+  let time = ms / 1000
+  let hour: number | string = Math.floor(time / 60 / 60)
+  hour = hour.toString().padStart(2, "0")
+  let minute: number | string = Math.floor(time / 60) % 60
+  minute = minute.toString().padStart(2, "0")
+  let second: number | string = Math.floor(time) % 60
+  second = second.toString().padStart(2, "0")
+  return `${hour}:${minute}:${second}`
+}
+
+/**
  * 获取当前时间的 yyyy-MM-dd HH:mm:ss
  * @returns {string}
  */
@@ -124,7 +140,6 @@ export const timestampToDatetime = (timestamp: number | string | Date): string =
   return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s + '.' + SSS;
 }
 
-
 /**
  * 两个日期相差的条数
  * 
@@ -142,9 +157,6 @@ export const betweenDay = (date1: string, date2: string): number => {
   diffDay = Math.floor(diffMs / (1000 * 3600 * 24))
   return diffDay
 }
-
-console.log(betweenDay('2020-01-01 12:00:00', '2022-01-01 21:00:00'));
-
 
 const formatNum = (num: number) => {
   if (num < 10) {
@@ -242,7 +254,6 @@ export const escape2Html = (str: string): string => {
   temp.innerHTML = str;
   // 3.最后返回这个元素的innerText或者textContent，即得到经过HTML解码的字符串了。
   let output = temp.innerText || temp.textContent;
-  // console.log('output', output);
   if (output == null) {
     return ''
   }

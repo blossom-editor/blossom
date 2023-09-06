@@ -1,4 +1,5 @@
 <template>
+  <div class="tomato-bell" :style="tomato.style"></div>
   <div class="editor-tools-root">
     <!-- 文章的操作 -->
     <div class="iconbl bl-a-texteditorsave-line" @click="emits('save')"></div>
@@ -16,7 +17,6 @@
 
     <!--  -->
     <div class="divider"></div>
-    <!-- <div class="iconbl bl-a-rightsmallline-line" @click="emits('blockquote')"> -->
     <el-dropdown>
       <div class="iconbl bl-a-rightsmallline-line"></div>
       <template #dropdown>
@@ -271,10 +271,38 @@
       </template>
       <div class="iconbl bl-jianpan-xianxing"></div>
     </el-tooltip>
+    <el-popover placement="bottom" :width="220" trigger="click" popper-style="padding:0;">
+      <template #reference>
+        <div class="iconbl bl-fanqiezhong"></div>
+      </template>
+      <template #default>
+        <div
+          style="padding: 5px 10px;font-size: 18px;margin-bottom: 15px;border-bottom: 1px solid var(--el-border-color);">
+          <span class="iconbl bl-fanqiezhong" style="font-size: 18px;padding-right: 6px;color: #EC7259;"></span>番茄时钟
+        </div>
+        <bl-row style="padding: 0 10px;">
+          <span>时长分钟：</span>
+          <el-input-number v-model="duration"></el-input-number>
+        </bl-row>
+        <bl-row style="padding: 0 10px;margin-top: 15px;">
+          <span>到期时间：</span>
+          <span style="font-size: 11px;">{{ endTime }}</span>
+        </bl-row>
+        <bl-row just="space-between"
+          style="padding: 8px 10px;margin-top: 15px;border-top: 1px solid var(--el-border-color);">
+          <el-button @click="stop">停止番茄钟</el-button>
+          <el-button @click="start" type="primary">开始</el-button>
+        </bl-row>
+      </template>
+    </el-popover>
+    <div style="font-size: 12px;padding: 4px 5px;">{{ tomato.remain }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed, onUnmounted, ref } from 'vue'
+import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util';
+
 const emits = defineEmits([
   'save', 'editorFullScreen', 'previewFullScreen',
   'bold', 'italic', 'strike', 'sup', 'sub',
@@ -282,18 +310,85 @@ const emits = defineEmits([
   'code', 'pre', 'unordered', 'ordered', 'checkbox',
   'table', 'image', 'link'
 ])
+
+onUnmounted(() => {
+  stop()
+})
+
+/**
+ * 预览番茄钟到期时间
+ */
+const endTime = computed(() => {
+  return secondsToDatetime((Date.now() / 1000) + (duration.value * 60))
+})
+
+// 番茄钟时长(分钟)
+const duration = ref(30)
+// 番茄钟的展示信息, 
+const tomato = ref({ remain: '00:00:00', style: { width: 'calc((100% - 20px) * 0)' } })
+// 番茄钟参数, 开始时间, 时长(毫秒)
+let param = { start: 0, duration: 0 }
+let bell: NodeJS.Timer
+
+/**
+ * 番茄钟开始
+ */
+const start = () => {
+  clearInterval(bell)
+  param.start = Date.now()
+  param.duration = duration.value * 60 * 1000
+  bell = setInterval(() => {
+    const now = Date.now()
+    const remain = param.start + param.duration - now
+    tomato.value = {
+      remain: formateMs(Math.max(remain, 0)),
+      style: { width: `calc((100% - 20px) * ${remain / param.duration})` }
+    }
+    if (remain <= 0) {
+      stop()
+    }
+  }, 1000)
+}
+
+/**
+ * 番茄钟结束
+ */
+const stop = () => {
+  console.log('清除番茄钟');
+  clearInterval(bell)
+  tomato.value = {
+    remain: formateMs(0),
+    style: { width: `calc((100% - 20px) * 0)` }
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
+.tomato-bell {
+  @include themeBg(#B593FDC7, #354F00);
+  // transform: rotate(180deg);
+  height: 35px;
+  position: absolute;
+  right: 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+  z-index: 1;
+}
+
 .editor-tools-root {
   @include box(calc(100% - 20px), 35px);
   @include flex(row, flex-start, center);
   @include themeShadow(0 3px 5px 1px #d3d3d3, 0 3px 5px 1px rgb(20, 20, 20));
-  @include themeBg(#ad8cf280, #323232);
-  margin: 5px 10px 10px 10px;
+  @include themeBg(#EFEFEF80, #8A8A8A90);
+  position: absolute;
+  left: 10px;
+  // margin: 5px 10px 10px 10px;
   padding: 0 5px;
   border-radius: 5px;
   overflow-x: overlay;
+  z-index: 2;
+
 
   &>div {
     @include themeColor(#5B5B5B, #0D0D0D);
@@ -323,6 +418,7 @@ const emits = defineEmits([
 <style lang=scss>
 .editor-tools-content {
   @include flex(column, flex-start, flex-start);
+  color: var(--bl-text-color);
 
   .editor-tools-col {
     @include flex(column, flex-start, center);
@@ -340,14 +436,14 @@ const emits = defineEmits([
   .info-title {
     width: 100%;
     @include font(15px, 500);
-    border-bottom: 1px solid #c9c9c9;
+    border-bottom: 1px solid var(--el-border-color);
     padding: 5px;
     margin-bottom: 10px;
   }
 
   .iconbl {
     margin-right: 10px;
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--el-border-color);
     padding: 1px 3px;
     border-radius: 3px;
   }
