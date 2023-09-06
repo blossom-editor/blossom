@@ -2,10 +2,10 @@
 <img src="../doc/imgs/icon.png" height="200">
 </p>
 <p align="center" style="font-size: 30px;font-weight:500;">
-Blossom 1.2.0
+Blossom 1.3.0
 </p>
 <p align="center">
-<a href="https://www.wangyunf.com/blossom-doc/doc/tryuse">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index">📃 文档</a> | <a href="https://github.com/blossom-editor/blossom/releases">📥 下载</a> 
+<a href="https://www.wangyunf.com/blossom-doc/doc/tryuse">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index">📃 文档</a> | <a href="https://github.com/blossom-editor/blossom/releases">📥 下载</a>
 </p>
 
 ---
