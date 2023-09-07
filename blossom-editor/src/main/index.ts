@@ -416,15 +416,17 @@ export const initOnWindow = (window: BrowserWindow) => {
   /**
    * 打开链接, 如果打开链接于服务器域名相同, 则在新窗口中打开
    */
-  window.webContents.setWindowOpenHandler((details: HandlerDetails) => {
+  window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
     let url = (details.url as string)
-    if (url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
+    console.log(url);
+
+    if (blossomUserinfo && url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
       let articleId: string = url.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
       createNewWindow('article', articleId, Number(articleId))
     } else {
       shell.openExternal(url)
     }
-    return { action: "deny" }
+    // return { action: "deny" }
   })
 
 }
@@ -439,7 +441,7 @@ const interceptorATag = (e: Event, url: string): boolean => {
   e.preventDefault()
   console.log(`[${new Date()}] electron 执行 <a/> 标签拦截器`);
   let innerUrl = url
-  if (innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
+  if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
     let articleId: string = innerUrl.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
     createNewWindow('article', articleId, Number(articleId))
   }
