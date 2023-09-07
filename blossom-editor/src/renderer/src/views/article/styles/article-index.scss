@@ -14,6 +14,7 @@
       width: 100%;
     }
 
+    // 临时内容
     .doc-temp-textarea {
       width: 100%;
 
@@ -27,9 +28,18 @@
 
       .doc-temp-textarea-input {
         overflow: hidden;
+        transition: height 0.1s;
 
         :deep(.el-textarea__inner) {
           height: 130px;
+        }
+      }
+
+      .bl-subtract-line {
+        cursor: pointer;
+
+        &:hover {
+          color: var(--el-color-primary)
         }
       }
     }
