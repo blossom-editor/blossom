@@ -6,7 +6,7 @@ const blossom: any = {
     NAME: 'Blossom',
     FULL_NAME: 'BLOSSOM-EDITOR',
     VERSION: 'v1.3.0',
-    DATETIME: '2023-08-15',
+    DATETIME: '2023-09-08',
 
     //
     DOC: 'https://www.wangyunf.com/blossom-doc/index',

@@ -176,6 +176,11 @@
                   <div class="label">按键说明</div>
                   <div class="keyboard">暂无</div>
                 </bl-row>
+                <bl-row>
+                  <div class="iconbl bl-fanqiezhong"></div>
+                  <div class="label">番茄时钟</div>
+                  <div class="keyboard">暂无</div>
+                </bl-row>
               </bl-col>
             </bl-row>
 
