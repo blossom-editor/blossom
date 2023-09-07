@@ -87,7 +87,7 @@
       </div>
 
       <div class="info-form">
-        <el-form :inline="true" :model="docForm" :rules="docFormRule" label-width="60px">
+        <el-form :inline="true" :model="docForm" :rules="docFormRule" label-width="60px" ref="DocFormRef">
           <el-form-item label="上级菜单">
             <!-- 
               clearable      : 下拉列表可以被清空
@@ -182,7 +182,7 @@
 
       <div class="info-footer">
         <div>
-          <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc">
+          <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc(DocFormRef)">
             <span class="iconbl bl-a-filechoose-line" /> 保存
           </el-button>
         </div>
@@ -193,7 +193,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, inject, computed } from 'vue'
-import { ElInput, ElMessageBox } from 'element-plus'
+import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document, Picture } from '@element-plus/icons-vue'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
@@ -236,12 +236,28 @@ const docForm = ref<DocInfo>({
   type: 3
 })
 
+const DocFormRef = ref<FormInstance>()
 const docFormRule = ref<FormRules<DocInfo>>({
   storePath: [
-    { required: true, message: '上传目录为必填项', trigger: 'blur' }
+    {
+      required: true, message: '上传目录为必填项', trigger: 'blur'
+    }
   ],
   name: [
-    { required: true, message: '名称为必填项', trigger: 'blur' }
+    {
+      required: true, trigger: 'blur', validator: (_rule: any, value: any, callback: any) => {
+        if (value === '') {
+          callback(new Error('文档名称为必填项'))
+        }
+
+        const reg = /^\.|[\\\\/:*?\"<>|]/img;
+        if (reg.test(value)) {
+          callback(new Error(`文档名不得包含以下字符 . * " : \\ / ? < > |`))
+        } else {
+          callback()
+        }
+      }
+    }
   ]
 })
 
@@ -425,28 +441,33 @@ const sync = () => {
  * 保存表单
  */
 const saveLoading = ref<boolean>(false)
-const saveDoc = () => {
-  console.log(docForm.value.type, curDocDialogType, docForm);
-  saveLoading.value = true
-  // then 回调
-  const handleResp = (_: any) => {
-    Notify.success(curDocDialogType === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
-    emits('saved')
-  }
-  // finally 回调
-  const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
-  if (docForm.value.type == 1) {
-    if (curDocDialogType == 'add') // 新增文件夹
-      folderAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-    if (curDocDialogType == 'upd') // 修改文件夹
-      folderUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-  }
-  if (docForm.value.type == 3) {
-    if (curDocDialogType == 'add') // 新增文章
-      articleAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-    if (curDocDialogType == 'upd') // 修改文章
-      articleUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-  }
+const saveDoc = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid, _fields) => {
+    if (valid) {
+      console.log(docForm.value.type, curDocDialogType, docForm);
+      saveLoading.value = true
+      // then 回调
+      const handleResp = (_: any) => {
+        Notify.success(curDocDialogType === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
+        emits('saved')
+      }
+      // finally 回调
+      const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
+      if (docForm.value.type == 1) {
+        if (curDocDialogType == 'add') // 新增文件夹
+          folderAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+        if (curDocDialogType == 'upd') // 修改文件夹
+          folderUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+      }
+      if (docForm.value.type == 3) {
+        if (curDocDialogType == 'add') // 新增文章
+          articleAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+        if (curDocDialogType == 'upd') // 修改文章
+          articleUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+      }
+    }
+  })
 }
 //#endregion
 
