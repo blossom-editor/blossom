@@ -40,11 +40,10 @@
 
       <!-- 编辑器与预览 -->
       <div class="editor-preview" :style="editorStyle">
-        <div class="gutter-holder" :style="editorPreviewStyle.gutter"></div>
-        <div class="editor-codemirror" ref="EditorRef" :style="editorPreviewStyle.editor"
-          @click.right="handleEditorClickRight"></div>
+        <div class="gutter-holder" ref="GutterHolderRef"></div>
+        <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
-        <div class="preview-marked bl-preview" ref="PreviewRef" :style="editorPreviewStyle.preview" v-html="articleHtml">
+        <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml">
         </div>
         <el-backtop target=".editor-codemirror" :right="50" :bottom="50">
           <div class="iconbl bl-send-line backtop"></div>
@@ -120,7 +119,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent } from "vue"
 import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
@@ -135,8 +134,8 @@ import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
-import EditorTools from './EditorTools.vue'
-import EditorStatus from './EditorStatus.vue'
+// import EditorTools from './EditorTools.vue'
+// import EditorStatus from './EditorStatus.vue'
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
 // ts
 import Notify from '@renderer/scripts/notify'
@@ -145,7 +144,7 @@ import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
 import { beforeUpload, onError } from '@renderer/views/picture/scripts/picture'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
-import { TempTextareaKey, ArticleReference, DocEditorStyle, EditorPreviewStyle } from './scripts/article'
+import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
 import { useResize } from "./scripts/editor-preview-resize"
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
@@ -156,6 +155,8 @@ import { EPScroll } from './scripts/editor-preview-scroll'
 // const ArticleTreeDocs = defineAsyncComponent(() =>
 //   import('./ArticleTreeDocs.vue')
 // )
+const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
+const EditorStatus = defineAsyncComponent(() => import('./EditorStatus.vue'))
 
 onMounted(() => {
   initEditor()
@@ -186,6 +187,11 @@ const { editorStyle } = storeToRefs(configStore)
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
+const GutterHolderRef = ref()   // editor gutter holder
+const EditorRef = ref()         // editor
+const ResizeDividerRef = ref()  // editor&preview resize dom
+const PreviewRef = ref()        // html 预览
+
 /**
  * 文档列表的展开和收起
  */
@@ -197,32 +203,32 @@ const docEditorStyle = computed<DocEditorStyle>(() => {
   }
   return { docs: '250px', editor: 'calc(100% - 250px)' }
 })
+
 /**
  * 编辑器和预览的展开收起
  */
-const previewFullScreen = ref<boolean>(false) // 是否全屏展开预览
-const editorFullScreen = ref<boolean>(false)  // 是否全屏展开编辑
-const editorPreviewStyle = computed<EditorPreviewStyle>(() => {
-  if (previewFullScreen.value) {
-    return {
-      gutter: { width: '0' },
-      editor: { width: '0' },
-      preview: { width: '100%' }
-    }
+let previewFullScreen = false // 是否全屏展开预览
+let editorFullScreen = false  // 是否全屏展开编辑
+const changeEditorPreviewStyle = () => {
+  if (previewFullScreen) {
+    GutterHolderRef.value.style.width = '0px'
+    EditorRef.value.style.width = '0px'
+    PreviewRef.value.style.width = '100%'
+    PreviewRef.value.style.padding = '10px 20px 0 20px'
+    return
   }
-  if (editorFullScreen.value) {
-    return {
-      gutter: { width: '50px' },
-      editor: { width: '100%' },
-      preview: { width: '0', padding: '0' }
-    }
+  if (editorFullScreen) {
+    GutterHolderRef.value.style.width = '50px'
+    EditorRef.value.style.width = 'calc(100% - 6px)'
+    PreviewRef.value.style.width = '0'
+    PreviewRef.value.style.padding = '0'
+    return
   }
-  return {
-    gutter: { width: '50px' },
-    editor: { width: '50%' },
-    preview: { width: '50%' }
-  }
-})
+  GutterHolderRef.value.style.width = '50px'
+  EditorRef.value.style.width = '50%'
+  PreviewRef.value.style.width = '50%'
+  PreviewRef.value.style.padding = '10px 20px 0 20px'
+}
 /**
  * 临时文本框
  */
@@ -407,8 +413,6 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
 //#endregion
 
 //#region ----------------------------------------< codemirror/editor >----------------------------
-const EditorRef = ref()           // editor dom
-const ResizeDividerRef = ref()    // editor&preview resize dom
 const editorLoading = ref(false)  // eidtor loading
 let cmw: CmWrapper                // codemirror editor wrapper
 
@@ -461,7 +465,6 @@ const setDoc = (md: string): void => {
 
 //#region ----------------------------------------< marked/preview >-------------------------------
 const renderInterval = ref<number>(0)     // 解析用时
-const PreviewRef = ref()                  // 显式 html 的 dom
 const articleHtml = ref<string>('')       // 解析后的 html 内容
 let isDebounce: boolean = false           // 是否在渲染时设置防抖, 切换文档时不用防抖渲染
 /**
@@ -636,17 +639,21 @@ const formatTable = () => {
 const shortcutRegistrant: ShortcutRegistrant = new ShortcutRegistrant().setDebug(false)
 const alt_1: shortcutFunc = (): void => { docsExpand.value = !docsExpand.value }
 const alt_2: shortcutFunc = (): void => { tocsExpand.value = !tocsExpand.value }
+// 全屏预览
 const alt_3: shortcutFunc = (): void => {
-  previewFullScreen.value = !previewFullScreen.value
-  if (previewFullScreen.value) {
-    editorFullScreen.value = false
+  previewFullScreen = !previewFullScreen
+  if (previewFullScreen) {
+    editorFullScreen = false
   }
+  changeEditorPreviewStyle()
 }
+// 全屏编辑
 const alt_4: shortcutFunc = (): void => {
-  editorFullScreen.value = !editorFullScreen.value
-  if (previewFullScreen.value) {
-    previewFullScreen.value = false
+  editorFullScreen = !editorFullScreen
+  if (previewFullScreen) {
+    previewFullScreen = false
   }
+  changeEditorPreviewStyle()
 }
 
 const keydown = (evnet: KeyboardEvent) => { shortcutRegistrant.keydown(evnet) }

@@ -15,15 +15,6 @@ export interface DocEditorStyle {
 }
 
 /**
- * editor and preview styles
- */
-export interface EditorPreviewStyle {
-  gutter: any,
-  editor: any,
-  preview: any
-}
-
-/**
  * article reference
  */
 export interface ArticleReference {

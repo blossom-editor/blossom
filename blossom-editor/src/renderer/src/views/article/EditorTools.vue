@@ -354,7 +354,7 @@ const start = () => {
       ElNotification.success({
         title: '番茄时钟',
         dangerouslyUseHTMLString: true,
-        message: `<span class="iconbl bl-fanqiezhong" style="font-size: 16px;padding-right: 6px;color: #EC7259;"></span>番茄时钟已到期结束`,
+        message: `<span class="iconbl bl-fanqiezhong" style="font-size: 16px;padding-right: 6px;color: #EC7259;"></span>番茄时钟已结束`,
         offset: 30,
         position: 'bottom-right'
       })
@@ -369,7 +369,9 @@ const stop = () => {
   console.log('清除番茄钟')
   clearInterval(bell)
   remainStr.value = formateMs(0)
-  TomatoBellRef.value.style.transform = `translateX(100%)`
+  if (TomatoBellRef.value) {
+    TomatoBellRef.value.style.transform = `translateX(100%)`
+  }
 }
 
 </script>
