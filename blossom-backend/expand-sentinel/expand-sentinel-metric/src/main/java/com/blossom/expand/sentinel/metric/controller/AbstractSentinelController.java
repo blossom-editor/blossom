@@ -200,10 +200,13 @@ public abstract class AbstractSentinelController {
         if ("local".equals(repoType)) {
             rh.setSubTitle(String.format(
                     "1. 机器名【%s(%s)】\n" +
-                            "2. %s\n" +
-                            "3. 单机流量请在右上角选择集群\n" +
-                            "4. 被查询的机器受负载均衡控制",
-                    SystemUtil.getHostName(), SystemUtil.getIp(), rh.getTitle()));
+                    "2. %s\n",
+//                            "3. 单机流量请在右上角选择集群\n" +
+//                            "4. 被查询的机器受负载均衡控制",
+                    SystemUtil.getHostName(),
+                    SystemUtil.getIp(),
+                    rh.getTitle()
+            ));
             rh.setTitle("单机流量统计");
         } else if ("elasticsearch".equals(repoType)) {
             rh.setSubTitle(String.format(
