@@ -7,7 +7,7 @@ import { ref, onMounted, nextTick, watch } from "vue"
 import { articleHeatmapApi } from '@renderer/api/blossom'
 import { useDark } from '@vueuse/core'
 // echarts
-import * as echartTheme from './chartTheme'
+import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import * as echarts from 'echarts/core'
 import { TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, LegendComponent } from 'echarts/components'
 import { HeatmapChart } from 'echarts/charts'

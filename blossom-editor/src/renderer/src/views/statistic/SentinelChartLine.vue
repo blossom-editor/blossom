@@ -1,16 +1,14 @@
 <template>
-  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量统计, 请稍后..." :style="{
-    'height': fixedBox.height,
-    'width': fixedBox.width
-  }"></div>
+  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量统计, 请稍后..."
+    style="height: 100%;width: 100%;"></div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, inject, watch } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import { metricLineApi } from '@renderer/api/sentinel'
 import { useDark } from '@vueuse/core'
 // echarts
-import * as echartTheme from './chartTheme'
+import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import * as echarts from 'echarts/core'
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
@@ -24,21 +22,10 @@ watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
   renderChart()
 })
 
-/* ============================================================
- * inject
- * 用于多层嵌套中使用流量, 下列相关信息使用
- * ============================================================ */
-const fixedBox: any = inject('chartLineResourceFixedBox', { height: '100%', width: '100%' })
-
-/* ============================================================
- * props
- * 在单层嵌套中使用的简单的参数
- * ============================================================ */
 const props = defineProps({
-  resource: { type: String, default: '__total_inbound_traffic__' },
-  interval: { type: String, default: '1d' },
-  startTime: { type: String, default: '' },
-  endTime: { type: String, default: '' }
+  showTitle: {
+    type: Boolean, default: false
+  }
 })
 
 // -------------------- ref
@@ -57,20 +44,25 @@ let chartData = {
 // -------------------- methods
 /**
  * 查询指标数据
+ * @param resource 资源
+ * @param interval 数据时间区间枚举
+ * @param cumtomInterval 自定义聚合时间范围
  */
-const getChartLineMetric = () => {
+const getChartLineMetric = (resource: string, interval: string, customInterval: number) => {
   rqLoading.value = true;
   let params = {
-    resource: '__total_inbound_traffic__',
-    interval: props.interval,
-    startTime: props.startTime,
-    endTime: props.endTime,
-    customInterval: 30,
+    resource: resource,
+    interval: interval,
+    startTime: '',
+    endTime: '',
+    customInterval: customInterval,
     customIntervalUnit: 'MINUTES'
   }
   metricLineApi(params).then(resp => {
-    chartData.title = resp.data.title
-    chartData.subTitle = resp.data.subTitle
+    if (props.showTitle) {
+      chartData.title = resp.data.title
+      chartData.subTitle = resp.data.subTitle
+    }
     chartData.x = []
     chartData.success = []
     chartData.avgRt = []
@@ -91,7 +83,7 @@ const renderChart = (callback?: any) => {
     grid: { top: 30, left: 40, right: 15, bottom: 35 },
     title: {
       ...echartTheme.title(),
-      ...{ top: 0, left: 0, text: '' }
+      ...{ top: 30, right: 5, text: chartData.title, subtext: chartData.subTitle, subtextStyle: { lineHeight: 18 } }
     },
     legend: {
       ...echartTheme.legend(),
@@ -203,9 +195,9 @@ onMounted(() => {
   windowResize()
 })
 
-const reload = () => {
+const reload = (resource: string = '__total_inbound_traffic__', interval: string = '1d', customInterval: number = 30) => {
   nextTick(() => {
-    getChartLineMetric()
+    getChartLineMetric(resource, interval, customInterval)
   })
 }
 

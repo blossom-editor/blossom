@@ -10,7 +10,7 @@ import { articleWordLineApi } from "@renderer/api/blossom";
 import { useDark } from '@vueuse/core'
 import { formartNumber } from '@renderer/assets/utils/util'
 // echarts
-import * as echartTheme from './chartTheme'
+import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import * as echarts from 'echarts/core';
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
 import { LineChart } from 'echarts/charts';

@@ -44,7 +44,7 @@
         <span class="iconbl bl-refresh-smile container-refresh" @click="loadSentinlLine"></span>
       </bl-row>
       <bl-row width="880px" height="250px">
-        <ChartLineSentinel ref="ChartLineSentinelRef"></ChartLineSentinel>
+        <SentinelChartLine ref="SentinelChartLineRef"></SentinelChartLine>
       </bl-row>
 
       <!-- 热力图 -->
@@ -88,8 +88,6 @@
         <bl-row class="container-sub-name">记录瞬间的灵感 (Ctrl+Enter 快速保存)</bl-row>
         <bl-row style="padding:20px 10px 30px 10px;height: calc(100% - 80px);text-align: right;">
           <NoteEditor></NoteEditor>
-
-          <!-- <textarea type="textarea" style="height: 100%;width:  100%;;background-color: #ffffff00;"></textarea> -->
         </bl-row>
       </bl-col>
     </div>
@@ -122,8 +120,8 @@ import UserAvatar from "@renderer/components/UserAvatar.vue"
 import Weather from "@renderer/components/Weather.vue"
 // charts
 import ChartLineWords from "./ChartLineWords.vue"
-import ChartLineSentinel from "./ChartLineSentinel.vue"
 import ChartHeatmap from "./ChartHeatmap.vue"
+import SentinelChartLine from "@renderer/views/statistic/SentinelChartLine.vue"
 // articles
 import ArticleSubjects from "./ArticleSubjects.vue"
 import ArticleStars from "./ArticleStars.vue"
@@ -137,7 +135,7 @@ const userStore = useUserStore()
 const { userinfo } = storeToRefs(userStore)
 
 const ChartLineWordsRef = ref()
-const ChartLineSentinelRef = ref()
+const SentinelChartLineRef = ref()
 const ChartHeatmapRef = ref()
 
 onActivated(() => {
@@ -148,12 +146,12 @@ const loadWordLine = () => {
   ChartLineWordsRef.value.reload()
 }
 
-const loadSentinlLine = () => {
-  ChartLineSentinelRef.value.reload()
-}
-
 const loadArticleHeapmap = () => {
   ChartHeatmapRef.value.reload()
+}
+
+const loadSentinlLine = () => {
+  SentinelChartLineRef.value.reload()
 }
 
 let now: string = nowWhen()

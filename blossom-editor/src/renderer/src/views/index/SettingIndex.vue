@@ -14,6 +14,9 @@
       <el-tab-pane label="关于">
         <SettingAboutVue></SettingAboutVue>
       </el-tab-pane>
+      <el-tab-pane label="流量监控" :lazy="true">
+        <SentinelResources></SentinelResources>
+      </el-tab-pane>
     </el-tabs>
   </div>
   <div class="version">
@@ -28,6 +31,7 @@
 import SettingLogin from './SettingLogin.vue'
 import SettingConfig from './SettingConfig.vue'
 import SettingAboutVue from './SettingAbout.vue'
+import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
 import WaveFooter from '@renderer/components/WaveFooter.vue'
 import CONFIG from '@renderer/assets/constants/system'
 
