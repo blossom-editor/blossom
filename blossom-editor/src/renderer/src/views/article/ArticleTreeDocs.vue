@@ -386,6 +386,7 @@ const articleDownload = () => {
     a.setAttribute("href", objectUrl)
     a.setAttribute("download", filename)
     a.click()
+    URL.revokeObjectURL(a.href)
     a.remove()
   })
 }
@@ -408,6 +409,7 @@ const articleDownloadHtml = () => {
     a.setAttribute("href", objectUrl)
     a.setAttribute("download", filename)
     a.click()
+    URL.revokeObjectURL(a.href)
     a.remove()
   })
 }
