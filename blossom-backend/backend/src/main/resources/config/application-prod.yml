@@ -39,7 +39,7 @@ project:
     log-type: simple
     # 授权 token 的方式, 注意, 如果使用 redis, 需要引入 redis 包, 否则会提示错误
     # com.blossom.backend.base.auth.enums.AuthTypeEnum
-    type: jwt
+    type: caffeine
     default-password: 123456 # 默认密码
     password-encoder: bcrypt # 加密方式
     clients: # 客户端

@@ -41,7 +41,7 @@ public interface TokenRepository {
     /**
      * 获取唯一生效的 token 令牌
      *
-     * @param userId 用户ID
+     * @param userId 用户ID, 注意, 为了保证兼容性, 用户ID为 String 类型, 如果是使用其他类型的用户的ID, 注意转换为 String 类型进行存储
      * @return 该用户有效的 token
      */
     String getUniqueToken(String userId);
