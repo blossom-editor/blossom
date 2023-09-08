@@ -15,11 +15,12 @@
       <bl-row just="center">
         <div class="input-wrapper" style="width:235px;margin-right:30px;">
           <input type="text" class="form__input" placeholder="username" v-model="formLogin.username"
-            @input="handleServerUsername">
+            @input="handleServerUsername" @keyup.enter="login">
           <div class="iconbl bl-user-line"></div>
         </div>
         <div class="input-wrapper" style="width:235px;">
-          <input type="password" class="form__input" placeholder="password" v-model="formLogin.password">
+          <input type="password" class="form__input" placeholder="password" v-model="formLogin.password"
+            @keyup.enter="login">
           <div class="iconbl bl-a-Securitypermissions-line"></div>
         </div>
       </bl-row>
