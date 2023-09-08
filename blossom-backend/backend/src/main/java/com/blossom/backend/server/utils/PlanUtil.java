@@ -60,6 +60,7 @@ public class PlanUtil {
         Map<Date, List<PlanDayRes>> byDay = byDay(plans);
         Map<Long, List<PlanDayRes>> byGroupId = byGroupId(plans);
 
+        // 先为所有计划设置默认排序
         plans.forEach(p -> p.setSort(-1));
 
         byDay.forEach((date, list) -> {
@@ -67,15 +68,19 @@ public class PlanUtil {
                 if (plan.getSort() == null) {
                     plan.setSort(-1);
                 }
+                // 排序如果不为 -1，相当于该计划已经被安排好排序了，则跳过
                 if (plan.getSort() > -1) {
                     continue;
                 }
+                // 遍历当天中所有的计划
                 for (int i = 0; i < list.size(); i++) {
                     final int targetSort = i;
+                    // 如果该排序已经被占用，则跳过
                     boolean targetSortHasUsed = list.stream().anyMatch(p -> p.getSort() == targetSort && p.getId() > 0);
                     if (targetSortHasUsed) {
                         continue;
                     }
+                    // 否则将该计划以及计划所在组的所有计划都设置为该排序
                     for (PlanDayRes groupPlan : byGroupId.get(plan.getGroupId())) {
                         groupPlan.setSort(targetSort);
                     }
@@ -152,6 +157,41 @@ public class PlanUtil {
         holder.setSort(sort);
         holder.setColor("hold");
         return holder;
+    }
+
+    public static void main(String[] args) {
+        List<PlanDayRes> plans = new ArrayList<>();
+        PlanDayRes p1_1 = new PlanDayRes();
+        p1_1.setId(1L);
+        p1_1.setGroupId(1L);
+        p1_1.setPlanDate(DateUtils.parse("2023-09-01", DateUtils.PATTERN_YYYYMMDD));
+        plans.add(p1_1);
+
+        PlanDayRes p1_2 = new PlanDayRes();
+        p1_2.setId(2L);
+        p1_2.setGroupId(1L);
+        p1_2.setPlanDate(DateUtils.parse("2023-09-02", DateUtils.PATTERN_YYYYMMDD));
+        plans.add(p1_2);
+
+        PlanDayRes p2 = new PlanDayRes();
+        p2.setId(3L);
+        p2.setGroupId(2L);
+        p2.setPlanDate(DateUtils.parse("2023-09-01", DateUtils.PATTERN_YYYYMMDD));
+        plans.add(p2);
+
+        PlanDayRes p3_1 = new PlanDayRes();
+        p3_1.setId(4L);
+        p3_1.setGroupId(3L);
+        p3_1.setPlanDate(DateUtils.parse("2023-09-02", DateUtils.PATTERN_YYYYMMDD));
+        plans.add(p3_1);
+
+        PlanDayRes p3_2 = new PlanDayRes();
+        p3_2.setId(4L);
+        p3_2.setGroupId(3L);
+        p3_2.setPlanDate(DateUtils.parse("2023-09-03", DateUtils.PATTERN_YYYYMMDD));
+        plans.add(p3_2);
+
+        sortToTreeMap(plans, true);
     }
 
 }
