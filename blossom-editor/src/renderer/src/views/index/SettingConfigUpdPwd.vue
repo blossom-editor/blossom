@@ -45,7 +45,7 @@ const updPwdForm = ref<UpdPwdForm>({
 })
 const rules = ref<FormRules<UpdPwdForm>>({
   password: [{ required: true, message: '请填写旧密码', trigger: 'blur' }],
-  newPassword: [{ required: true, message: '请填写信密码', trigger: 'blur' }],
+  newPassword: [{ required: true, message: '请填写新密码', trigger: 'blur' }],
   confirmPassword: [{ required: true, message: '请填写确认密码', trigger: 'blur' }],
 })
 

@@ -288,7 +288,6 @@ const articleNamesToArray = (names: string): string[] => {
     return []
   }
   let result = names.split(',').filter(name => isNotBlank(name))
-  console.log(result)
   return result
 }
 

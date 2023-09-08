@@ -53,7 +53,6 @@ const getArticleQrCode = (name: string, id: number) => {
   articleQrCodeApi({ id: id }).then(resp => {
     let blob = new Blob([resp.data], { type: "image/png" })
     qrcodeImg.value = URL.createObjectURL(blob)
-    console.log(qrcodeImg.value);
     qrcodeUrl.value = resp.headers.get('Article-Url')
   }).finally(() => {
     isLoading.value = false

@@ -63,7 +63,6 @@ const getNoteList = () => {
 }
 
 const saveToStorage = (content: string) => {
-  console.log(TempTextareaKey);
   Local.set(TempTextareaKey, content)
 }
 

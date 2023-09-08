@@ -151,8 +151,6 @@ const useInnerImg = (img: string) => {
 }
 
 const useOutsideImg = (img: string) => {
-  console.log(img);
-  
   dailyForm.value.imgPreview = img
 }
 

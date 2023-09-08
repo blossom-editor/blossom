@@ -206,20 +206,6 @@ export class CmWrapper {
           drop(a: DragEvent) {
             uploadFileCallback(a)
             return
-            // let data: DataTransfer | null = a.dataTransfer
-            // if (data?.files.length && data?.files.length > 0 && window.FileReader) {
-            //   // uploadPicture(data?.files)
-            //   this._editor.state.doc.toString()
-            //   console.log("🚀 ~ file: codemirror.ts:192 ~ CmWrapper ~ drop ~ this._editor.state.doc.toString():", this._editor.state.doc.toString())
-            //   // let file: File = data?.files[0]
-            //   // let reader = new FileReader();
-
-            //   // reader.addEventListener('load', () => {
-            //   //   console.log(reader.result);
-            //   // })
-
-            //   // reader.readAsDataURL(file);
-            // }
           }
         })
       ]
@@ -401,9 +387,6 @@ export class CmWrapper {
     const suffixFrom: number = range.to
     const suffixTo: number = range.to + suffixLen
     const suffix = this.sliceDoc(editor, suffixFrom, suffixTo)
-
-    console.log(prefix, suffix);
-
 
     // 判断是取消还是添加, 如果被选中的文本前后已经是 target 字符, 则删除前后字符
     if (prefix == prefixTarget && suffix == suffixTarget) {

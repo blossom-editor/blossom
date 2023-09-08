@@ -307,7 +307,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util';
 import { ElNotification } from 'element-plus';
 
@@ -318,9 +318,6 @@ const emits = defineEmits([
   'code', 'pre', 'unordered', 'ordered', 'checkbox',
   'table', 'image', 'link'
 ])
-
-onMounted(() => {
-})
 
 onUnmounted(() => {
   stop()

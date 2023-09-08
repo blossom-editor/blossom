@@ -445,7 +445,6 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, _fields) => {
     if (valid) {
-      console.log(docForm.value.type, curDocDialogType, docForm);
       saveLoading.value = true
       // then 回调
       const handleResp = (_: any) => {

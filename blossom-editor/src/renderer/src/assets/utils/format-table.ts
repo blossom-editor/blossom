@@ -142,7 +142,3 @@ function getPadding(len: number): string {
 function repeatStr(str: string, count: number): string {
   return count > 0 ? Array(count + 1).join(str) : '';
 }
-
-// console.log(formartMarkdownTable(`|张三|列22222|
-// |---|---|
-// |1|2|`))

@@ -204,7 +204,6 @@ const formatStorePath = () => {
  */
 const saveLoading = ref<boolean>(false)
 const saveDoc = () => {
-  console.log(docForm.value.type, curDocDialogType, docForm);
   saveLoading.value = true
   // then 回调
   const handleResp = (_: any) => {

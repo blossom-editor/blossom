@@ -39,8 +39,6 @@ const saveNote = () => {
     Notify.info('不能保存空的便签')
     return
   }
-  console.log(noteContent.value)
-
   noteAddApi({ content: noteContent.value }).then(_resp => {
     emits('saved')
     noteContent.value = ''

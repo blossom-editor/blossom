@@ -116,7 +116,6 @@ const handlePrintScreenUpload = (isShow?: boolean) => {
  */
 const selectCheck = (treeNode: DocTree, checked: any) => {
   docTreeChecked.value = treeNode
-  console.log(checked.checkedKeys);
   if (isEmpty(checked.checkedKeys)) {
     pid.value = -1
     docTreeChecked.value = docTreeData.value[0]
