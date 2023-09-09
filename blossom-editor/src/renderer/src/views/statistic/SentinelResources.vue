@@ -122,6 +122,7 @@ const rowClick = (row: ResourceRow) => {
     background-color: var(--bl-bg-color);
     border-radius: 4px;
     padding: 5px 10px;
+    height: 36px;
   }
 
   .table-container {
