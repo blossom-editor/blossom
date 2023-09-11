@@ -19,6 +19,8 @@ const { userinfo } = storeToRefs(userStore)
  */
 export const enum AuthStatus {
   Wait = '请登录',
+  Loging = '正在登录...',
+  Checking = '正在检查登录状态...',
   Succ = '登录成功',
   Fail = '登录失败'
 }
@@ -61,7 +63,7 @@ const initUserinfo = () => {
   Local.set(userinfoKey, userinfo)
   return userinfo
 }
-
+const timeoutMs = 800
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     auth: Local.get(storeKey) || initAuth(),
@@ -73,45 +75,55 @@ export const useUserStore = defineStore('userStore', {
      * @param username 用户名
      * @param password 密码
      */
-    loginByPassword(username: string, password: string) {
+    async loginByPassword(username: string, password: string) {
+      this.auth.status = AuthStatus.Loging
       /*
        * 客户端ID, 见服务器配置 project.auth.clients.clientid
        * 登录模式, 见服务器配置 project.auth.clients.grantType
        */
-      loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
+      await loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
         .then((resp: any) => {
-          let auth = { token: resp.data.token, status: AuthStatus.Succ };
-          this.auth = auth;
-          Local.set(storeKey, auth);
-          this.getUserinfo()
+          setTimeout(() => {
+            let auth = { token: resp.data.token, status: AuthStatus.Succ };
+            this.auth = auth;
+            Local.set(storeKey, auth);
+            this.getUserinfo()
+          }, timeoutMs);
         }).catch((_e) => {
-          this.reset()
-          // 登录失败的状态需要特别更改
-          let auth = { token: '', status: AuthStatus.Fail }
-          this.auth = auth
+          setTimeout(() => {
+            this.reset()
+            // 登录失败的状态需要特别更改
+            let auth = { token: '', status: AuthStatus.Fail }
+            this.auth = auth
+          }, timeoutMs);
         })
     },
-    logout() {
-      logoutApi().then(_ => {
+    async logout() {
+      await logoutApi().then(_ => {
         this.reset();
       })
     },
     /**
      * 检查登录状态
      */
-    checkToken(succ: any, fail: any) {
-      checkApi().then(resp => {
-        let auth = { token: resp.data.token, status: AuthStatus.Succ }
-        this.auth = auth
-        Local.set(storeKey, auth)
-        this.getUserinfo()
-        succ()
+    async checkToken(succ: any, fail: any) {
+      this.auth.status = AuthStatus.Checking
+      await checkApi().then(resp => {
+        setTimeout(() => {
+          let auth = { token: resp.data.token, status: AuthStatus.Succ }
+          this.auth = auth
+          Local.set(storeKey, auth)
+          this.getUserinfo()
+          succ()
+        }, timeoutMs);
       }).catch(_error => {
-        this.reset()
-        // 登录失败的状态需要特别更改
-        let auth = { token: '', status: AuthStatus.Wait }
-        this.auth = auth
-        fail()
+        setTimeout(() => {
+          this.reset()
+          // 登录失败的状态需要特别更改
+          let auth = { token: '', status: AuthStatus.Wait }
+          this.auth = auth
+          fail()
+        }, timeoutMs);
       })
     },
     /**

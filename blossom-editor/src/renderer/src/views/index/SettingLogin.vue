@@ -26,7 +26,18 @@
       </bl-row>
       <button class="custom-btn btn-logout" style="margin-right: 30px;" @click="logout"><span>Logout</span></button>
       <button :class="['custom-btn btn-login', logingIn ? 'loging-in' : '']" @click="login"><span>Login</span></button>
-      <div :class="[loginStatClass]" style="margin-top: 20px;">{{ loginResult }}</div>
+      <bl-col height="80px" just="center">
+        <div class="login-progress">
+          <el-progress :text-inside="true" :stroke-width="20" :percentage="loginDesc.percentage" striped striped-flow
+            :duration="30" :color="loginDesc.color">
+            <div :style="{ color: loginDesc.textColor, fontWeight: 700, textShadow: loginDesc.textShadow }">
+              {{
+                loginDesc.status
+              }}</div>
+          </el-progress>
+        </div>
+      </bl-col>
+      <!-- {{ loginDesc }} -->
     </div>
   </div>
 </template>
@@ -34,6 +45,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useDark } from '@vueuse/core'
 import { useServerStore } from '@renderer/stores/server'
 import { useUserStore, AuthStatus } from '@renderer/stores/user'
 
@@ -43,53 +55,58 @@ onMounted(() => {
   checkLogin()
 })
 
-// --------------------------------------------------< 授权 >--------------------------------------------------
+
+const isDark = useDark()
 const userStore = useUserStore()
 const { auth, userinfo } = storeToRefs(userStore)
-
-const loginResult = ref<string>(AuthStatus.Wait)
+// --------------------------------------------------< 授权 >--------------------------------------------------
 const logingIn = ref(false)
-
-const login = () => {
+const login = async () => {
   if (logingIn.value) {
     return
   }
   logingIn.value = true
-  loginResult.value = '正在登录...'
-  setTimeout(() => {
-    userStore.loginByPassword(formLogin.value.username, formLogin.value.password)
-    logingIn.value = false
-  }, 500);
+  await userStore.loginByPassword(formLogin.value.username, formLogin.value.password)
+  logingIn.value = false
 }
 
-const logout = () => {
-  userStore.logout();
+const logout = async () => {
+  await userStore.logout()
 }
 
-const checkLogin = () => {
-  loginResult.value = '正在检查登录状态...'
-  setTimeout(() => {
-    userStore.checkToken(
-      () => {
-        console.warn('已登录');
-      },
-      () => {
-        console.warn('未登录')
-      })
-  }, 500);
+const checkLogin = async () => {
+  await userStore.checkToken(
+    () => { console.log('%c已登录', 'background-color:#09A113;color:#fff;padding:10px 40px;border-radius:5px;font-size:17px;') },
+    () => { console.log('%c未登录', 'background-color:#C9BB1F;color:#fff;padding:10px 40px;border-radius:5px;font-size:17px;') })
 }
 
-const loginStatClass = computed(() => {
-  if (auth.value.status === AuthStatus.Succ) {
-    loginResult.value = AuthStatus.Succ
-    return 'login-succ'
+interface LoginStyle { status: string, textColor: string, textShadow: string, color?: string, percentage?: number }
+
+const loginDesc = computed(() => {
+  let loginStyle: LoginStyle = {
+    status: auth.value.status,
+    textColor: isDark.value ? '#2F2F2F' : '#FFFFFF',
+    textShadow: isDark.value ? '0 0 5px #3D3D3D' : '0 0 5px #000000'
   }
-  if (auth.value.status === AuthStatus.Fail) {
-    loginResult.value = AuthStatus.Fail
-    return 'login-fail'
+  if (auth.value.status === AuthStatus.Loging) {
+    loginStyle.color = '#EFC75E'
+    loginStyle.percentage = 50
+  } else if (auth.value.status === AuthStatus.Checking) {
+    loginStyle.color = '#EFC75E'
+    loginStyle.percentage = 50
+  } else if (auth.value.status === AuthStatus.Succ) {
+    loginStyle.color = '#2BB532'
+    loginStyle.percentage = 100
+  } else if (auth.value.status === AuthStatus.Fail) {
+    loginStyle.color = '#E8564F'
+    loginStyle.percentage = 100
+  } else if (auth.value.status === AuthStatus.Wait) {
+    loginStyle.color = '#EFC75E'
+    loginStyle.percentage = 1
+    loginStyle.textColor = isDark.value ? '#7E7E7E' : '#A8ABB2'
+    loginStyle.textShadow = isDark.value ? '0 0 5px #000000' : '0 0 5px #CBCBCB'
   }
-  loginResult.value = AuthStatus.Wait
-  return 'login-wait'
+  return loginStyle
 })
 
 const formLogin = ref({
@@ -327,7 +344,6 @@ const handleServerUsername = () => {
     cursor: no-drop !important;
   }
 
-
   .login-succ {
     color: #09A113;
   }
@@ -338,6 +354,20 @@ const handleServerUsername = () => {
 
   .login-fail {
     color: #A11109
+  }
+
+  .login-progress {
+    width: 200px;
+
+    :deep(.el-progress-bar__outer) {
+      border-radius: 5px;
+    }
+
+    :deep(.el-progress-bar__inner) {
+      @include themeShadow(inset 0 0 5px 0px rgb(24, 24, 24), inset 0 0 5px 2px #000);
+      text-align: center;
+      border-radius: 5px;
+    }
   }
 }
 </style>
