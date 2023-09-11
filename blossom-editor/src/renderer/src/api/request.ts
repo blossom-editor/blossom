@@ -36,12 +36,13 @@ export class Request {
           token = tokenCache.token
         }
         config.url = Local.get(serverUrlKey) + config.url
-        return {
-          ...config,
-          headers: {
+        config.headers = {
+          ...config.headers,
+          ...{
             "Authorization": 'Bearer ' + token
           }
         }
+        return config
       },
       (err: any) => {
         return Promise.reject(err)
@@ -61,7 +62,10 @@ export class Request {
         let isSuccess = false
 
         // 返回文件流
-        if (res.config.responseType === 'blob' || res.headers['content-type'] === 'application/force-download') {
+        if (res.config.responseType === 'blob' ||
+          res.headers['content-type'] === 'application/force-download' ||
+          res.headers['content-type'] === 'application/octet-stream'
+        ) {
           // 返回文件流但仍然有JSON返回体(例如接口报错时), 仍要判断返回码
           if (isNotNull(data.code) && !isSuccessRCode(data.code)) {
             isSuccess = false
@@ -108,11 +112,15 @@ export class Request {
     return this.instance.request(config)
   }
 
+  public head<T>(url: string, params?: object): Promise<R<T>> {
+    return this.instance.head(url, params)
+  }
+
   public get<T>(url: string, params?: object): Promise<R<T>> {
     return this.instance.get(url, params)
   }
 
-  public post<T>(url: string, data?: object, config?: object): Promise<R<T>> {
+  public post<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<R<T>> {
     return this.instance.post(url, data, config)
   }
 
