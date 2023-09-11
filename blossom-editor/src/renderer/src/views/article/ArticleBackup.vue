@@ -33,11 +33,16 @@
             <span class="iconbl bl-HTML" style="margin-right: 7px;"></span>备份本地 Html
           </el-button>
         </el-tooltip>
+        <el-button @click="cancelDownload" type="danger" plain>
+          <span class="iconbl bl-a-closeline-line" style="margin-right: 7px;"></span>取消下载
+        </el-button>
         <div class="backup-tip">
           服务器将于每日早上 7 点备份 Markdown 数据。
         </div>
         <div class="backup-tip">
-          当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。
+          <!-- 当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。 -->
+          <el-progress :text-inside="true" :stroke-width="20" :percentage="downloadProgress" striped striped-flow
+            :duration="200" />
         </div>
       </div>
 
@@ -52,7 +57,7 @@
           <div>
             <span class="desc">{{ bak.desc }}</span>
           </div>
-          <el-button class="download-btn" text bg style="margin-left: 5px;" @click="download(bak)"><span
+          <el-button class="download-btn" text bg style="margin-left: 5px;" @click="downloadFragment(bak)"><span
               class="iconbl bl-folder-download-line"></span></el-button>
         </div>
       </div>
@@ -63,7 +68,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { formatFileSize } from '@renderer/assets/utils/util'
-import { articleBackupListApi, articleBackupApi, articleBackupDownloadApi } from '@renderer/api/blossom'
+import { articleBackupListApi, articleBackupApi, articleBackupDownloadApi, articleBackupDownloadFragmentApi, articleBackupDownloadFragmentHeadApi } from '@renderer/api/blossom'
 import type { BackupFile } from '@renderer/api/blossom'
 import Notify from '@renderer/scripts/notify'
 
@@ -79,8 +84,6 @@ const getBackupList = () => {
       let desc = ''
       let type = bak.filename.charAt(1)
       let toLocal = bak.filename.charAt(2)
-
-
       if (toLocal === 'L') {
         desc += '本地路径'
       } else if (toLocal === 'N') {
@@ -103,6 +106,76 @@ const backupNow = (type: 'MARKDOWN' | 'HTML', toLocal: 'YES' | 'NO') => {
     Notify.info('后台正在备份中, 请稍后刷新列表查看最新备份', '备份中')
   })
 }
+
+let downloadState: 'IDLE' | 'LOADING' | 'CANCEL' = 'IDLE'
+const downloadProgress = ref(0)
+const fragmentSize = 32768
+
+const downloadFragment = async (file: BackupFile) => {
+  const filename = file.filename + '.zip'
+
+  let start = 0;
+  let end = fragmentSize - 1;
+  let fileSize = 0;
+  let all: any[] = [];
+  downloadProgress.value = 0
+  downloadState = 'LOADING'
+
+  let headResp = await articleBackupDownloadFragmentHeadApi({ filename: filename })
+  fileSize = headResp.headers.get('Content-Length')
+  const fragmentCount = Math.ceil(fileSize / fragmentSize)
+  if (fileSize < fragmentCount) {
+    end = fileSize - 1;
+  }
+
+  for (let i = 0; i < fragmentCount; i++) {
+    const range = `bytes=${start}-${end}`;
+    const resp = await articleBackupDownloadFragmentApi({ filename: filename }, range);
+    all.push(resp.data)
+    start = end + 1;
+    end = Math.min(end + fragmentSize, fileSize - 1);
+    downloadProgress.value = Math.round((end / fileSize) * 100)
+    //@ts-ignore
+    if (downloadState == 'CANCEL') {
+      break;
+    }
+  }
+
+  //@ts-ignore
+  if (downloadState == 'CANCEL') {
+    downloadProgress.value = 0
+    Notify.warning('下载任务已取消', '已取消')
+    return
+  }
+
+  let a: HTMLAnchorElement = document.createElement('a')
+  let blob: Blob = new Blob(all, { type: 'application/octet-stream' })
+  let objectUrl = URL.createObjectURL(blob)
+  a.setAttribute("href", objectUrl)
+  a.setAttribute("download", filename)
+  a.click()
+  URL.revokeObjectURL(a.href)
+  a.remove()
+  downloadState = 'IDLE'
+}
+
+const cancelDownload = async () => {
+  downloadState = 'CANCEL'
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const download = (file: BackupFile) => {
   if (file.fileLength > 10485760) {
@@ -174,6 +247,14 @@ $height-title: 50px;
         margin-top: 10px;
         font-size: 12px;
         color: var(--bl-text-color-light);
+
+        :deep(.el-progress-bar__outer) {
+          border-radius: 5px;
+        }
+
+        :deep(.el-progress-bar__inner) {
+          border-radius: 5px;
+        }
       }
     }
 

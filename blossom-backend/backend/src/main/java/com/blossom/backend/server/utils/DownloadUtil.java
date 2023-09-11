@@ -1,5 +1,7 @@
 package com.blossom.backend.server.utils;
 
+import org.springframework.http.HttpHeaders;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -22,8 +24,8 @@ public class DownloadUtil {
         // 设置强制下载不打开
         response.setContentType("application/force-download");
         // 将请求头暴露给前端
-        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        response.addHeader("Content-Disposition", "attachment;filename=" + filename);
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename);
         byte[] buffer = new byte[1024];
         int i = bis.read(buffer);
         while (i != -1) {

@@ -264,6 +264,9 @@ public class ArticleBackupService {
         }
         List<BackupFile> backupFiles = listAll(rootPath);
         for (BackupFile backupFile : backupFiles) {
+            if (StrUtil.isBlank(backupFile.getDate())) {
+                continue;
+            }
             Date today = DateUtils.date();
             Date bakDate = DateUtils.parse(backupFile.getDate(), DatePattern.PURE_DATE_FORMAT);
             long gap = DateUtils.betweenDay(bakDate, today, true);
