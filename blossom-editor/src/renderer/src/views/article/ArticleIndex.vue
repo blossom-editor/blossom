@@ -119,7 +119,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from "vue"
 import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
@@ -134,8 +134,6 @@ import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
-// import EditorTools from './EditorTools.vue'
-// import EditorStatus from './EditorStatus.vue'
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
 // ts
 import Notify from '@renderer/scripts/notify'
@@ -152,9 +150,6 @@ import { CmWrapper } from './scripts/codemirror'
 import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './scripts/markedjs'
 import { EPScroll } from './scripts/editor-preview-scroll'
 
-// const ArticleTreeDocs = defineAsyncComponent(() =>
-//   import('./ArticleTreeDocs.vue')
-// )
 const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
 const EditorStatus = defineAsyncComponent(() => import('./EditorStatus.vue'))
 
@@ -184,6 +179,13 @@ const userStore = useUserStore()
 const serverStore = useServerStore()
 const configStore = useConfigStore()
 const { editorStyle } = storeToRefs(configStore)
+
+watch(() => userStore.userinfo.id, (_newId: number, _oldId: number) => {
+  curDoc.value = undefined
+  curActiveDoc.value = undefined
+  curActiveDoc.value = undefined
+  setDoc('')
+})
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
