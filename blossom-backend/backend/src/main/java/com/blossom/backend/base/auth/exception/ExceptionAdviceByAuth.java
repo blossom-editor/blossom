@@ -27,7 +27,7 @@ public class ExceptionAdviceByAuth extends AbstractExceptionAdvice {
 
     @ExceptionHandler(AuthException.class)
     public R<?> authExceptionHandler(XzAbstractException exception) {
-        printExLog(exception, exception.getMessage());
+//        printExLog(exception, exception.getMessage());
         return R.fault(exception.getCode(), exception.getMessage());
     }
 }

@@ -30,7 +30,7 @@ public class ArticleStatJob {
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     public void update() {
-        log.info("[BLOSSOM] 刷新文章统计");
+        log.debug("[BLOSSOM] 刷新文章统计");
         // 修改本日编辑文章数
         String toDay = DateUtils.today();
         String toDayBegin = toDay + " 00:00:00";

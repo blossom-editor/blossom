@@ -5,9 +5,11 @@ import com.blossom.common.base.BaseProperties;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.pojo.RCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.List;
@@ -193,11 +196,21 @@ public class ExceptionAdviceByGlobal extends AbstractExceptionAdvice {
     }
 
     /**
+     * 远程主机强迫关闭了一个现有的连接
+     */
+    @ExceptionHandler(ClientAbortException.class)
+    public R<?> clientAbortExceptionHandler(ClientAbortException exception, HttpServletResponse response) {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        return R.fault(RCode.INTERNAL_SERVER_ERROR.getCode(), "IO 异常", exception.getMessage());
+    }
+
+    /**
      * IO 异常
      */
     @ExceptionHandler(IOException.class)
-    public R<?> ioExceptionHandler(IOException exception) {
+    public R<?> ioExceptionHandler(IOException exception, HttpServletResponse response) {
         printExLog(exception, exception.getMessage());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return R.fault(RCode.INTERNAL_SERVER_ERROR.getCode(), "IO 异常", exception.getMessage());
     }
 
@@ -257,6 +270,7 @@ public class ExceptionAdviceByGlobal extends AbstractExceptionAdvice {
 
     /**
      * 上传文件大小的错误
+     *
      * @param exception 异常
      */
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)

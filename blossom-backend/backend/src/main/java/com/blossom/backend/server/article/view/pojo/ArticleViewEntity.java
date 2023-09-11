@@ -33,6 +33,10 @@ public class ArticleViewEntity extends AbstractPOJO implements Serializable {
     private String ip;
     /** 设备 */
     private String userAgent;
+    /**
+     * 国家
+     */
+    private String country;
     /** 省 */
     private String province;
     /** 市 */

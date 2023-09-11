@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamEntity;
@@ -15,13 +16,13 @@ import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenReq;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenRes;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenSyncReq;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.util.ServletUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ import java.io.IOException;
  *
  * @author xzzz
  */
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/article/open")
@@ -55,6 +57,7 @@ public class ArticleOpenController {
     @AuthIgnore
     @GetMapping("/info")
     public R<ArticleInfoRes> infoOpen(@RequestParam("id") Long id, HttpServletRequest request) {
+        log.info("公开文章被查看:{}", id);
         ArticleOpenEntity open = openService.selectById(id, true, false, true);
         XzException404.throwBy(ObjUtil.isNull(open), "文章不存在");
 

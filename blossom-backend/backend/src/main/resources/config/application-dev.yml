@@ -27,8 +27,10 @@ logging:
 project:
   base: # 基础信息
     version: @project.version@
-    ex: # 异常打印格式
+    ex:
+      # 异常打印格式 all/project
       stack-trace: project
+      # format/line
       format: format
     log: # 日志配置
       duration: 600000 # 动态日志级别 6 分钟后失效
@@ -38,7 +40,6 @@ project:
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Auth ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   auth: # 授权
     enabled: true # 开启授权
-    log-type: simple # 日志类型
     # 授权 token 的方式, 注意, 如果使用 redis, 需要引入 redis 包, 否则会提示错误
     type: caffeine
     default-password: 123456 # 默认密码

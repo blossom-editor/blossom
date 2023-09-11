@@ -53,7 +53,7 @@ public class ArticleViewService extends ServiceImpl<ArticleViewMapper, ArticleVi
     }
 
     /**
-     * 清空文章的放问记录
+     * 清空文章的访问记录
      *
      * @param articleId 文章ID
      */

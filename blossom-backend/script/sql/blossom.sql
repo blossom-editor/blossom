@@ -178,21 +178,22 @@ KEY `idx_article_ref_targetid` (`target_Id`) USING BTREE COMMENT 'target id'
 -- Table structure for blossom_article_view
 -- ----------------------------
 DROP TABLE IF EXISTS `blossom_article_view`;
-CREATE TABLE `blossom_article_view`  (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `article_id` bigint NOT NULL COMMENT '文章ID',
-  `type` char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '事件类型 1:uv; 2:like',
-  `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '地址,IPV4',
-  `user_agent` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '设备',
-  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '省',
-  `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '市',
-  `cre_day` date NOT NULL COMMENT '日期 yyyy-MM-dd',
-  `cre_time` datetime NOT NULL COMMENT '日期',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_view_articleid`(`article_id`) USING BTREE COMMENT '文章ID',
-  INDEX `idx_view_ip`(`ip`) USING BTREE COMMENT 'IP',
-  INDEX `idx_view_creday`(`cre_day`) USING BTREE COMMENT '日期'
-) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '文章访问记录，ArticleView' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `blossom_article_view` (
+    `id` int NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `article_id` bigint NOT NULL COMMENT '文章ID',
+    `type` char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '事件类型 1:uv; 2:like',
+    `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '地址,IPV4',
+    `user_agent` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '设备',
+    `country` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '国家',
+    `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '省',
+    `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '市',
+    `cre_day` date NOT NULL COMMENT '日期 yyyy-MM-dd',
+    `cre_time` datetime NOT NULL COMMENT '日期',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `idx_view_articleid` (`article_id`) USING BTREE COMMENT '文章ID',
+    KEY `idx_view_ip` (`ip`) USING BTREE COMMENT 'IP',
+    KEY `idx_view_creday` (`cre_day`) USING BTREE COMMENT '日期'
+) ENGINE=InnoDB AUTO_INCREMENT=465 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='文章访问记录，ArticleView';
 
 -- ----------------------------
 -- Records of blossom_article_view
