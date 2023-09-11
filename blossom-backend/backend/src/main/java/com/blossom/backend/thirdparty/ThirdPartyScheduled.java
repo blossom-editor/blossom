@@ -42,7 +42,7 @@ public class ThirdPartyScheduled {
     @RequestMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
     public void refreshWeather() {
-        log.info("[BLOSSOM] 刷新天气");
+        log.debug("[BLOSSOM] 刷新天气");
         List<UserEntity> users = userService.listAll();
         Set<String> locations = users.stream().collect(Collectors.groupingBy(UserEntity::getLocation)).keySet();
         for (String location : locations) {
@@ -59,7 +59,7 @@ public class ThirdPartyScheduled {
         try {
             giteeManager.clearCache();
             giteeManager.heatmap();
-            log.info("[BLOSSOM] 刷新码云热力图");
+            log.debug("[BLOSSOM] 刷新码云热力图");
         } catch (Exception e) {
             e.printStackTrace();
         }
