@@ -1,5 +1,6 @@
 import { defaultRequest as rq } from "./request";
 import type { R } from "./request";
+import { AxiosRequestConfig } from "axios";
 
 //#region ====================================================< sys >=======================================================
 
@@ -317,6 +318,26 @@ export const articleBackupListApi = (): Promise<R<BackupFile[]>> => {
 export const articleBackupDownloadApi = (params?: object): Promise<any> => {
   let config = { params: params, responseType: 'blob' }
   return rq.get("/article/backup/download", config);
+}
+
+
+/**
+ * 获取下载文件信息
+ * @param data 
+ * @returns 
+ */
+export const articleBackupDownloadFragmentHeadApi = (params: object): Promise<any> => {
+  let config = { params: params, responseType: 'blob' }
+  return rq.head("/article/backup/download/fragment", config);
+}
+/**
+ * 分片下载备份文件
+ * @param params 
+ * @returns 
+ */
+export const articleBackupDownloadFragmentApi = (data: object, range: string): Promise<any> => {
+  let config: AxiosRequestConfig = { responseType: "blob", headers: { Range: range } }
+  return rq.post("/article/backup/download/fragment", data, config);
 }
 
 
