@@ -259,3 +259,14 @@ export const escape2Html = (str: string): string => {
   }
   return output;
 }
+
+/**
+ * 休眠, 注意外部使用 await
+ * @param millis 休眠时长, 毫秒
+ * @returns 
+ */
+export const sleep = (millis: number) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, millis);
+  })
+}

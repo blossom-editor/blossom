@@ -131,6 +131,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApi, uploadFileApiUrl }
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
+import { sleep } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
@@ -277,8 +278,12 @@ const curDoc = ref<DocInfo>()           // 当前选中的文档, 包含文件�
 const curArticle = ref<DocInfo>()       // 当前选中的文章, 用于在编辑器中展示
 const curActiveDoc = ref<DocInfo>()     // 当前激活的文档的 index, 防止在刷新列表时重置选中, 导致需要再次从文档菜单中逐个点击
 // 非绑定数据
-let articleIsChange: boolean = false    // 编辑器内容是否有变更, 防止在没有变更时频繁保存导致请求接口和版本号的无意义变更
-let lastSaveTime: number = new Date().valueOf()// 上次保存时间
+// 文章是否在解析时, 为 true 则正在解析, 为 false 则解析完成
+let articleParseing = false
+// 编辑器内容是否有变更, 防止在没有变更时频繁保存导致请求接口和版本号的无意义变更, 如果为 true, 则文章允许保存, 为 false 时跳过保存
+let articleChanged = false
+// 上次保存时间
+let lastSaveTime: number = new Date().getTime()
 let autoSaveInterval: NodeJS.Timer
 const authSaveMs = 5 * 60 * 1000
 
@@ -311,8 +316,8 @@ const clickCurDoc = async (tree: DocTree) => {
         return
       }
       curArticle.value = resp.data
-      // 初次加载, 不需要防抖解析 markdown 内容
-      isDebounce = false
+      // 初次加载时立即渲染
+      immediateParse = true
       if (isBlank(resp.data.markdown)) {
         setDoc('')
       } else {
@@ -320,11 +325,10 @@ const clickCurDoc = async (tree: DocTree) => {
       }
     }).finally(() => {
       editorLoading.value = false
-      articleIsChange = false
+      articleChanged = false
     })
   }
 }
-
 /**
  * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
  * 
@@ -336,16 +340,20 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   const saveCallback = () => {
     if (!auto) {
-      ElMessage.success({ message: '保存成功', duration: 1000, offset: 50, grouping: true })
+      ElMessage.success({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
     }
   }
   // 如果文档发生变动才保存
-  if (!articleIsChange) {
-    console.info('文档内容无变化, 无需保存')
+  if (!articleChanged) {
+    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;padding: 3px 10px;color:#fff;border-radius:10px;')
     saveCallback()
     return
   }
-  articleIsChange = false
+  // 如果文档正在解析中, 则等待解析完成
+  while (articleParseing) {
+    await sleep(100);
+  }
+  articleChanged = false
   let data = {
     id: curArticle.value!.id,
     name: curArticle.value!.name,
@@ -355,7 +363,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     references: articleImg.value.concat(articleLink.value)
   }
   await articleUpdContentApi(data).then(resp => {
-    lastSaveTime = new Date().valueOf()
+    lastSaveTime = new Date().getTime()
     curArticle.value!.words = resp.data.words as number
     curArticle.value!.updTime = resp.data.updTime as string
     if (curArticle.value!.version != undefined) {
@@ -372,7 +380,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
  */
 const initAutoSaveInterval = () => {
   autoSaveInterval = setInterval(() => {
-    let current = new Date().valueOf()
+    let current = new Date().getTime()
     if ((current - lastSaveTime) > authSaveMs) {
       autoSave()
     }
@@ -447,7 +455,14 @@ const uploadFileCallback = async (event: DragEvent) => {
 const initEditor = (_doc?: string) => {
   cmw = new CmWrapper(CmWrapper.newEditor(
     // 创建 state
-    CmWrapper.newState(() => { debounce(parse, 300) }, saveCurArticleContent, uploadFileCallback),
+    CmWrapper.newState(
+      () => {
+        articleParseing = true
+        debounce(parse, 300)
+      },
+      saveCurArticleContent,
+      uploadFileCallback
+    ),
     EditorRef.value)
   )
 }
@@ -456,19 +471,26 @@ const initEditor = (_doc?: string) => {
  * @param md markdown
  */
 const setDoc = (md: string): void => {
-  cmw.setState(CmWrapper.newState(() => {
-    articleIsChange = true
-    debounce(parse, 300)
-  }, saveCurArticleContent, uploadFileCallback, md))
+  cmw.setState(
+    CmWrapper.newState(
+      () => {
+        articleChanged = true
+        articleParseing = true
+        debounce(parse, 300)
+      },
+      saveCurArticleContent,
+      uploadFileCallback, md
+    )
+  )
   parse()
 }
 
 //#endregion
 
 //#region ----------------------------------------< marked/preview >-------------------------------
-const renderInterval = ref<number>(0)     // 解析用时
-const articleHtml = ref<string>('')       // 解析后的 html 内容
-let isDebounce: boolean = false           // 是否在渲染时设置防抖, 切换文档时不用防抖渲染
+const renderInterval = ref(0) // 解析用时
+const articleHtml = ref('')   // 解析后的 html 内容
+let immediateParse = false    // 是否立即渲染, 文档初次加载时立即渲染, 内容变更时防抖渲染
 /**
  * 自定义渲染
  */
@@ -511,12 +533,13 @@ marked.use({ tokenizer: tokenizer, renderer: renderer })
  */
 const parse = () => {
   const begin = Date.now()
-  isDebounce = true
+  immediateParse = false
   let mdContent = cmw.getDocString()
   clearTocAndImg()
   marked.parse(mdContent, { async: true }).then((content: string) => {
     articleHtml.value = content
     renderInterval.value = Date.now() - begin
+    articleParseing = false
   })
 }
 
@@ -528,10 +551,10 @@ function debounce(fn: () => void, time = 500) {
   if (debounceTimeout != undefined) {
     clearTimeout(debounceTimeout)
   }
-  if (isDebounce) {
-    debounceTimeout = setTimeout(fn, time)
-  } else {
+  if (immediateParse) {
     fn()
+  } else {
+    debounceTimeout = setTimeout(fn, time)
   }
 }
 
