@@ -32,14 +32,14 @@
             </el-radio-group>
           </div>
 
-          <div class="radio">
+          <!-- <div class="radio">
             <div>图片清晰度</div>
             <el-radio-group v-model="resolution">
               <el-radio-button label="low">低</el-radio-button>
               <el-radio-button label="hight">高</el-radio-button>
               <el-radio-button label="orgin">原始</el-radio-button>
             </el-radio-group>
-          </div>
+          </div> -->
         </div>
 
         <div class="workbench-group">

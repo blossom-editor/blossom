@@ -19,9 +19,9 @@ const { userinfo } = storeToRefs(userStore)
  */
 export const enum AuthStatus {
   Wait = '请登录',
-  Loging = '正在登录...',
-  Checking = '正在检查登录状态...',
-  Succ = '登录成功',
+  Loging = '登录中...',
+  Checking = '检查登录...',
+  Succ = '已登录',
   Fail = '登录失败'
 }
 

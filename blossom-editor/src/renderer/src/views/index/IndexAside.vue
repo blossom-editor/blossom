@@ -44,8 +44,8 @@ const menus = ref<AsideMenu[]>([
   { login: true, name: 'Home', path: '/home', icon: 'bl-a-home1-line' },
   { login: true, name: 'Editor', path: '/articleIndex', icon: 'bl-a-texteditorhighlightcolor-line' },
   { login: true, name: 'Pic', path: '/pictureIndex', icon: 'bl-picture-line' },
-  { login: true, name: 'Note', path: '/noteIndex', icon: 'bl-note-line' },
   { login: true, name: 'Plan', path: '/planIndex', icon: 'bl-calendar-line' },
+  { login: true, name: 'Note', path: '/noteIndex', icon: 'bl-note-line' },
   { login: false, name: 'Icon', path: '/iconListIndex', icon: 'bl-a-radiochoose-line' },
 ])
 

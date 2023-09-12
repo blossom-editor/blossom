@@ -10,7 +10,6 @@ import com.blossom.common.base.enums.ExStackTrace;
 import com.blossom.common.base.pojo.IRCode;
 import com.blossom.common.base.pojo.R;
 import com.blossom.common.base.pojo.RCode;
-import com.blossom.common.base.util.ExceptionUtil;
 import com.blossom.common.base.util.ServletUtil;
 import com.blossom.common.base.util.json.JsonUtil;
 import com.blossom.common.base.util.spring.SpringUtil;
@@ -123,6 +122,6 @@ public abstract class AuthFilterProxy extends GenericFilterBean {
 
         log.error("{} | {}({})", ServletUtil.getUri(), exception.getClass().getSimpleName(),
                 Optional.ofNullable(authCode.getMsg()).orElse(""));
-        log.error(ExceptionUtil.printStackTrace(exception, filterStackTrace, onLine));
+//        log.error(ExceptionUtil.printStackTrace(exception, filterStackTrace, onLine));
     }
 }

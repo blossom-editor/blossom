@@ -104,7 +104,12 @@ public class ArticleBackupController {
         }
     }
 
-
+    /**
+     * 用于 head 请求获取文件信息
+     *
+     * @param filename 文件名
+     * @param request  request
+     */
     @AuthIgnore
     @GetMapping("/download/fragment")
     public ResponseEntity<ResourceRegion> downloadFragment(@RequestParam("filename") String filename,
@@ -114,6 +119,17 @@ public class ArticleBackupController {
         return downloadFragment(req, request);
     }
 
+    /**
+     * 分片下载
+     * <p>
+     * 通过 Range 请求头获取分片请求
+     * <p>
+     * 返回头中会比说明本次分片大小 Content-Range
+     *
+     * @param req     下载请求
+     * @param request request
+     * @return 文件分片
+     */
     @AuthIgnore
     @PostMapping("/download/fragment")
     public ResponseEntity<ResourceRegion> downloadFragment(@RequestBody DownloadReq req,
@@ -129,15 +145,12 @@ public class ArticleBackupController {
         PathResource resource = new PathResource(filename);
         ResourceRegion resourceRegion;
         try {
-            // Get the range header and validate it.
             String rangeHeader = request.getHeader(HttpHeaders.RANGE);
             List<HttpRange> ranges = HttpRange.parseRanges(rangeHeader);
 
             if (ranges.isEmpty() || ranges.get(0).equals(HttpRange.createByteRange(0))) {
-                // Return full file.
                 resourceRegion = new ResourceRegion(resource, 0, contentLength);
             } else {
-                // Return partial content.
                 HttpRange range = ranges.get(0);
                 long start = range.getRangeStart(contentLength);
                 long end = range.getRangeEnd(contentLength);

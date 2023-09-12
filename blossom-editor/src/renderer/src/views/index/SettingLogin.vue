@@ -364,7 +364,7 @@ const handleServerUsername = () => {
     }
 
     :deep(.el-progress-bar__inner) {
-      @include themeShadow(inset 0 0 5px 0px rgb(24, 24, 24), inset 0 0 5px 2px #000);
+      @include themeShadow(inset 0 0 5px 0px rgb(226, 226, 226), inset 0 0 5px 2px #000);
       text-align: center;
       border-radius: 5px;
     }
