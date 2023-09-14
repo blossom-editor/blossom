@@ -31,9 +31,19 @@ const blossom: any = {
    */
   LINKS: [
     {
-      NAME: 'Blossom 文档',
+      NAME: '我的个人主页',
+      URL: 'https://www.wangyunf.com',
+      LOGO: 'luban.png'
+    },
+    {
+      NAME: 'Blossom 双链笔记软件',
       URL: 'https://www.wangyunf.com/blossom-doc/index',
       LOGO: 'blossom_logo.png'
+    },
+    {
+      NAME: 'GuardCat 服务监控解决方案',
+      URL: 'https://www.wangyunf.com/view/#/home',
+      LOGO: 'guardcat_logo.jpg'
     }
   ]
 }

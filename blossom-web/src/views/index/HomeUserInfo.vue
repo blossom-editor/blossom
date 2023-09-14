@@ -16,7 +16,7 @@
       <!-- 操作按钮 -->
       <div class="userinfo-content-btns">
         <ul>
-          <li @click="() => { toRoute('/articles') }">专题文章</li>
+          <li @click="() => { toRoute('/articles') }">我的所有文章</li>
           <li v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
             {{ link.NAME }}
           </li>
