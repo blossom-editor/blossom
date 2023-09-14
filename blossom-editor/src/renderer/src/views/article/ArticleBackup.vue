@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { formatFileSize } from '@renderer/assets/utils/util'
-import { articleBackupListApi, articleBackupApi, articleBackupDownloadApi, articleBackupDownloadFragmentApi, articleBackupDownloadFragmentHeadApi } from '@renderer/api/blossom'
+import { articleBackupListApi, articleBackupApi, articleBackupDownloadFragmentApi, articleBackupDownloadFragmentHeadApi } from '@renderer/api/blossom'
 import type { BackupFile } from '@renderer/api/blossom'
 import Notify from '@renderer/scripts/notify'
 
@@ -161,44 +161,6 @@ const downloadFragment = async (file: BackupFile) => {
 
 const cancelDownload = async () => {
   downloadState = 'CANCEL'
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const download = (file: BackupFile) => {
-  if (file.fileLength > 10485760) {
-    Notify.error('暂不支持下载超过 [10MB] 的文件', '下载失败')
-    return;
-  }
-
-  articleBackupDownloadApi({ filename: file.filename + '.zip' }).then(resp => {
-    let filename: string = resp.headers.get('content-disposition')
-    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    let matches = filenameRegex.exec(filename);
-    if (matches != null && matches[1]) {
-      filename = decodeURI(matches[1].replace(/['"]/g, ''));
-    }
-    let a: HTMLAnchorElement = document.createElement('a')
-    let blob = new Blob([resp.data], { type: "text/plain" })
-    let objectUrl = URL.createObjectURL(blob)
-    a.setAttribute("href", objectUrl)
-    a.setAttribute("download", filename)
-    a.click()
-    URL.revokeObjectURL(a.href)
-    a.remove()
-  })
 }
 
 </script>
