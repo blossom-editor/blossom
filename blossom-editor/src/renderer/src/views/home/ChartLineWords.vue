@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-line-log-root" v-loading="rqLoading" element-loading-text="正在查询字数统计, 请稍后...">
+  <div class="chart-line-word-root" v-loading="rqLoading" element-loading-text="正在查询字数统计, 请稍后...">
     <div style="width: 100%;height: 100%;" ref="ChartLineLogRef" />
   </div>
 </template>
@@ -65,7 +65,7 @@ const renderChart = (callback?: any) => {
         extraCssText: 'box-shadow: none;',
         padding: 0,
         // alwaysShowContent: true,
-        appendToBody: true,
+        appendToBody: false,
         formatter: (params: any) => {
           return `
           <div class="chart-line-word-tooltip">
@@ -136,7 +136,7 @@ defineExpose({ reload, windowResize })
 </script>
 
 <style scoped lang="scss">
-.chart-line-log-root {
+.chart-line-word-root {
   @include box(100%, 100%);
 }
 </style>

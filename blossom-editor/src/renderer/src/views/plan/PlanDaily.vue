@@ -35,16 +35,12 @@
 
 <script setup lang="ts">
 
-import { onActivated, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { planListDailyApi, planDelApi } from '@renderer/api/plan'
 import { isNull } from '@renderer/assets/utils/obj'
 import PlanDailyInfo from './PlanDailyInfo.vue'
 
 onMounted(() => {
-  
-})
-
-onActivated(() => {
   getPlanDaily()
 })
 

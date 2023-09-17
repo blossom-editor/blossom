@@ -107,7 +107,7 @@ const renderChart = (callback?: any) => {
         extraCssText: 'box-shadow: none;',
         padding: 0,
         // alwaysShowContent: true,
-        appendToBody: true,
+        appendToBody: false,
         formatter: (params: any) => {
           return `
           <div class="chart-line-sentinel-tooltip">

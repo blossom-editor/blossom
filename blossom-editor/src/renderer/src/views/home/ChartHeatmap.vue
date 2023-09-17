@@ -98,7 +98,7 @@ const renderChart = (callback?: any) => {
         extraCssText: 'box-shadow: none',
         padding: 0,
         // alwaysShowContent: true,
-        appendToBody: true,
+        appendToBody: false,
         formatter: (params: any) => {
           let date = params.data[0]
           let num = params.data[1]

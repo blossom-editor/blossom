@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onActivated, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { planListDayApi, planDelApi } from '@renderer/api/plan'
 import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@renderer/assets/utils/util'
 import { isNull } from '@renderer/assets/utils/obj'
@@ -64,9 +64,6 @@ import PlanDaily from './PlanDaily.vue'
 import PlanDayInfo from './PlanDayInfo.vue'
 
 onMounted(() => {
-})
-
-onActivated(() => {
   getPlanAll(getDateTimeFormat().substring(0, 7))
 })
 
@@ -163,9 +160,13 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 
   .bl-calendar {
     @include box(calc(100% - 250px), 100%);
+    @include themeShadow(0 0 5px #D7D7D7, 0 0 5px #000000);
     --el-calendar-border: 1px solid var(--el-border-color);
-    border: var(--el-calendar-border);
+    // border: var(--el-calendar-border);
     z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 0;
 
     ::-webkit-scrollbar {
       width: 0;
@@ -193,6 +194,8 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 
           th {
             border-bottom: var(--el-calendar-border);
+
+            &:last-child {}
           }
         }
 
@@ -236,6 +239,12 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
               border-top: 0;
               overflow: scroll;
               padding: 0;
+
+              &:last-child {
+                .el-calendar-day {
+                  border-right: 0;
+                }
+              }
 
               .el-calendar-day {
                 min-height: 100%;
