@@ -39,6 +39,19 @@ export const formateMs = (ms: number): string => {
   return `${hour}:${minute}:${second}`
 }
 
+
+/**
+ * 获取当前时间的 yyyy-MM-dd HH:mm:ss
+ * @returns {string}
+ */
+export const getDateFormat = (): string => {
+  const now = new Date()
+  let y = now.getFullYear()
+  let m = formatNum(now.getMonth() + 1)
+  let d = formatNum(now.getDate())
+  return '' + y + '-' + m + '-' + d;
+}
+
 /**
  * 获取当前时间的 yyyy-MM-dd HH:mm:ss
  * @returns {string}
