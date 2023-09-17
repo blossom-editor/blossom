@@ -7,6 +7,7 @@ export const windowMin = () => { window.electronAPI.windowMin() }
 export const windowMax = () => { window.electronAPI.windowMax() }
 export const windowHide = () => { window.electronAPI.windowHide() }
 export const windowClose = () => { window.electronAPI.windowClose() }
+export const setBestSize = () => { window.electronAPI.setBestSize() }
 
 /**
  * 设置用户信息

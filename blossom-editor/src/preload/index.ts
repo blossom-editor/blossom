@@ -33,6 +33,7 @@ const rednerToIpc = {
   windowHide: () => ipcRenderer.send('window-hide'),
   windowClose: () => ipcRenderer.send('window-close'),
   openDevTools: () => ipcRenderer.send('openDevTools'),
+  setBestSize: () => ipcRenderer.send('set-best-size'),
   /**
    * 设置用户信息
    * @param userinfo 用户信息

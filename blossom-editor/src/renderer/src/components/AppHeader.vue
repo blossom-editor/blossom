@@ -5,10 +5,10 @@
       <img v-else class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
     </div>
     <div class="drag">
-      <!-- <div>{{ userStore.auth.status }}</div> -->
     </div>
     <div class="window-workbench">
       <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
+      <div class="iconbl bl-computer-line" @click="setBestSize"></div>
       <div class="iconbl bl-subtract-line" @click="windowMin"></div>
       <div class="iconbl bl-box-line" @click="windowMax"></div>
       <div class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useDark } from '@vueuse/core'
-import { openDevTools, windowMin, windowMax, windowHide } from '@renderer/assets/utils/electron'
+import { openDevTools, windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
 
 const isDark = useDark();

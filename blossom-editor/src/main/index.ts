@@ -296,6 +296,13 @@ const initOnFocusedWindow = (): void => {
       BrowserWindow.getFocusedWindow()?.webContents.openDevTools({ mode: 'right' })
     }
   })
+
+  /**
+   * 将窗口大小设置为最佳显示效果
+   */
+  ipcMain.on('set-best-size', () => {
+    BrowserWindow.getFocusedWindow()?.setSize(1905, 1020)
+  })
 }
 
 /** 
