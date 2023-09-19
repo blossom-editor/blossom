@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.todo.TodoMapper">
+
+    <!-- 全表字段 -->
+    <sql id="columns_all">
+        id,
+        todo_id,
+        todo_name,
+        todo_status,
+        todo_type,
+        task_name,
+        task_content,
+        task_status,
+        dead_line,
+        start_time,
+        end_time,
+        process,
+        color,
+        user_id,
+        cre_time
+	</sql>
+
+
+    <select id="listAll" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select <include refid="columns_all"/>
+        from blossom_todo
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="todoId != null and todoId != ''">and todo_id = #{todoId}</if>
+            <if test="todoName != null and todoName != ''">and todo_name = #{todoName}</if>
+            <if test="todoStatus != null">and todo_status = #{todoStatus}</if>
+            <if test="todoType != null">and todo_type = #{todoType}</if>
+            <if test="taskStatus != null and taskStatus != ''">and task_status = #{taskStatus}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="beginCreTime != null and beginCreTime != ''">and cre_time >= #{beginCreTime}</if>
+            <if test="endCreTime != null and endCreTime != ''">and #{endCreTime} >= cre_time</if>
+            <if test="todoIds != null and todoIds.size() != 0">and todo_id in
+                <foreach collection="todoIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+            </if>
+        </where>
+        order by todo_id,cre_time
+    </select>
+
+    <select id="listTodo" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select todo_id,todo_name,todo_type,todo_status,
+               count(*) as taskCount
+          from blossom_todo
+         where user_id = #{userId}
+         <if test="todoId != null"> and todo_name = #{todoId}</if>
+      group by todo_id order by id desc
+    </select>
+
+    <select id="selectByTodoId" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select <include refid="columns_all"></include>
+          from blossom_todo
+         where todo_id = #{todoId} limit 1
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from blossom_todo where todo_id = #{todoId}
+    </select>
+
+    <!--
+    修改事项名称, 仅限于阶段性事项
+    -->
+    <update id="updTodoName">
+        update blossom_todo set todo_name = #{todoName} where todo_id = #{todoId}
+    </update>
+
+    <!--
+    完成阶段性事项
+    -->
+    <update id="updTodoStatus">
+        update blossom_todo set todo_status = #{todoStatus} where todo_id = #{todoId}
+    </update>
+
+    <select id="listTask" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select id,
+               todo_id,
+               todo_name,
+               todo_type,
+               task_name,
+               task_content,
+               task_status,
+               dead_line,
+               start_time,
+               end_time,
+               process,
+               color,
+               cre_time
+          from blossom_todo
+         where todo_id = #{todoId}
+    </select>
+
+    <select id="statisticTask" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select task_status,
+               cre_time
+          from blossom_todo
+         where cre_time >= #{beginCreTime}
+           and #{endCreTime} >= cre_time
+           and user_id = #{userId}
+<!--           and todo_type = 10-->
+    </select>
+
+    <select id="statisticTodo" resultType="com.blossom.backend.server.todo.pojo.TodoStatisticRes">
+        select todo_id,todo_name,todo_type,todo_status,
+               min(cre_time) as firstCreTime,
+               min(start_time) as firstStartTime,
+               max(end_time) as lastEndTime
+          from blossom_todo
+         where todo_id = #{todoId}
+    </select>
+</mapper>

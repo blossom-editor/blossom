@@ -15,7 +15,7 @@ spring:
 
 logging:
   level:
-    com.blossom: info
+    com.blossom: debug
     com.blossom.expand.tracker: info
     com.blossom.admin.base.test: trace
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn
