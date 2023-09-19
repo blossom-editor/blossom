@@ -37,9 +37,20 @@
           </el-progress>
         </div>
       </bl-col>
+      <bl-row just="center">
+        <span class="try-use" @click="showTryUse">我想试用!</span>
+      </bl-row>
       <!-- {{ loginDesc }} -->
     </div>
   </div>
+
+  <el-dialog draggable v-model="isShowTryUse" :align-center="true" :append-to-body="true" :destroy-on-close="true"
+    :close-on-click-modal="true" width="550" style="--el-dialog-border-radius:10px;
+    --el-dialog-padding-primary:0;
+    --el-dialog-box-shadow:var(--bl-box-shadow);
+    --el-dialog-bg-color:var(--bl-html-color);">
+    <TryUse ref="TryUseRef" @help-me-login="helpMeLogin"></TryUse>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -48,6 +59,7 @@ import { storeToRefs } from 'pinia'
 import { useDark } from '@vueuse/core'
 import { useServerStore } from '@renderer/stores/server'
 import { useUserStore, AuthStatus } from '@renderer/stores/user'
+import TryUse from './setting/TryUse.vue'
 
 onMounted(() => {
   formLogin.value.serverUrl = serverUrl.value
@@ -59,7 +71,8 @@ onMounted(() => {
 const isDark = useDark()
 const userStore = useUserStore()
 const { auth, userinfo } = storeToRefs(userStore)
-// --------------------------------------------------< 授权 >--------------------------------------------------
+
+//#region --------------------------------------------------< 授权 >--------------------------------------------------
 const logingIn = ref(false)
 const login = async () => {
   if (logingIn.value) {
@@ -118,7 +131,9 @@ const formLogin = ref({
   password: ''
 })
 
-// --------------------------------------------------< 服务器地址 >--------------------------------------------------
+//#endregion
+
+//#region --------------------------------------------------< 服务器地址 >--------------------------------------------------
 const serverStore = useServerStore();
 const { serverUrl, serverUsername } = storeToRefs(serverStore);
 
@@ -134,12 +149,33 @@ const handleServerUrl = () => {
 const handleServerUsername = () => {
   serverStore.setServerUsername(formLogin.value.username)
 }
+
+//#endregion
+
+//#region --------------------------------------------------< 试用 >--------------------------------------------------
+const isShowTryUse = ref(false)
+
+const showTryUse = () => {
+  isShowTryUse.value = true
+}
+
+const helpMeLogin = () => {
+  formLogin.value = {
+    serverUrl: 'https://www.wangyunf.com/bl',
+    username: 'blos',
+    password: 'blos'
+  }
+  isShowTryUse.value = false
+  login()
+}
+//#endregion
 </script>
 
 <style scoped lang="scss">
 .login-root {
   @include box(100%, 100%);
   @include flex(column, center, center);
+  padding: 40px;
 
   .avatar-img {
     height: 150px;
@@ -367,6 +403,20 @@ const handleServerUsername = () => {
       @include themeShadow(inset 0 0 5px 0px rgb(226, 226, 226), inset 0 0 5px 2px #000);
       text-align: center;
       border-radius: 5px;
+    }
+  }
+
+  .try-use {
+    margin-top: 10px;
+    color: var(--bl-text-color-light);
+    font-weight: 300;
+    font-style: italic;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      color: var(--el-color-primary);
     }
   }
 }

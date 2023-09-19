@@ -1,0 +1,36 @@
+$height-title: 50px;
+$height-footer: 50px;
+$height-form: calc(100% - #{$height-title} - #{$height-footer});
+
+.info-title-wrapper {
+  @include box(100%, $height-title);
+  @include flex(row, flex-start, center);
+  border-bottom: 1px solid var(--el-border-color);
+
+  .info-title {
+    @include font(16px);
+    @include box(calc(100% - 50px - 50px), 100%);
+    padding-top: 10px;
+    padding-left: 10px;
+    color: var(--el-color-primary);
+  }
+}
+
+.info-form {
+  @include box(100%, $height-form);
+  padding: 10px 10px 0;
+
+  :deep(.el-form--inline .el-form-item) {
+    width: calc(100% - 10px);
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.info-footer {
+  @include box(100%, $height-footer);
+  @include flex(row, space-between, center);
+  border-top: 1px solid var(--el-border-color);
+  padding: 10px;
+  text-align: right;
+}
