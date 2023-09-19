@@ -308,8 +308,8 @@
 
 <script lang="ts" setup>
 import { computed, onUnmounted, ref } from 'vue'
-import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util';
-import { ElNotification } from 'element-plus';
+import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util'
+import { ElNotification } from 'element-plus'
 
 const emits = defineEmits([
   'save', 'editorFullScreen', 'previewFullScreen',

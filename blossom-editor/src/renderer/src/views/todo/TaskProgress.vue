@@ -315,12 +315,12 @@ const download = () => {
   if (curTodo.value.todoType == 10) {
     
   }
-  let filename = ''
+  let filename = '任务导出.md'
   let a = document.createElement('a')
   let blob = new Blob([exportContent.value], { type: "text/plain" })
   let objectUrl = URL.createObjectURL(blob)
   a.setAttribute("href", objectUrl)
-  a.setAttribute("download", '任务导出.md')
+  a.setAttribute("download", filename)
   a.click()
   URL.revokeObjectURL(a.href)
   a.remove()

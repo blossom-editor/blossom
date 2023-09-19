@@ -33,16 +33,6 @@
   </div>
 </template>
 
-<!-- 
-文档编辑的首页, 主要包含4个主体区域
-┌──────┬──────────┐
-|      |   this   |
-├──────┼──────────┤
-|      |          |
-|      |          |
-|      |          |
-└──────┴──────────┘
- -->
 <script setup lang="ts">
 import { inject, toRaw } from 'vue'
 import type { Ref } from 'vue'

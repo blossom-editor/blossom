@@ -216,7 +216,6 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
         :deep(.el-collapse-item.is-active) {
           height: calc(100% - #{$item-height * 2});
-          border-bottom: 1px solid var(--el-collapse-border-color);
           overflow: hidden;
         }
 
@@ -225,9 +224,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
           padding-left: 20px;
         }
 
-        :deep(.el-collapse-item__header.is-active) {
-          border-bottom: 1px solid var(--el-collapse-border-color);
-        }
+        // :deep(.el-collapse-item__header.is-active) {
+        // }
 
         :deep(.el-collapse-item__wrap) {
           height: 100%;
@@ -235,10 +233,14 @@ const blurPhasedUpdHandle = (todoId: string) => {
         }
 
         :deep(.el-collapse-item__content) {
-          @include themeShadow(inset -1px 3px 5px #DFDFDF, inset -1px 3px 5px #000);
+          box-shadow: inset -1px 3px 5px #DFDFDF, inset -1px -3px 5px #DFDFDF;
           height: calc(100% - #{$item-height});
           overflow-y: scroll;
           padding: 0 10px 0 20px;
+
+          [class="dark"] & {
+            box-shadow: inset -1px 3px 5px #000, inset -1px -3px 5px #000;
+          }
         }
       }
     }
