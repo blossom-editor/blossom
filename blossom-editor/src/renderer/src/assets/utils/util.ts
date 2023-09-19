@@ -41,7 +41,7 @@ export const formateMs = (ms: number): string => {
 
 
 /**
- * 获取当前时间的 yyyy-MM-dd HH:mm:ss
+ * 获取当前时间的 yyyy-MM-dd
  * @returns {string}
  */
 export const getDateFormat = (): string => {

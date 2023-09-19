@@ -1,4 +1,3 @@
-// 盒子基础设置
 @mixin box($w: 100%, $h: 100%, $minW: null, $maxW: null, $minH: null, $maxH: null, ) {
   @if $w {
     width: $w;
@@ -25,11 +24,6 @@
   }
 }
 
-/**
- * 字体基础属性
- * fz : 字体大小
- * fw : 字体粗细
- */
 @mixin font($fz, $fw: null, $fm: null) {
   font-size: $fz;
 
@@ -42,9 +36,6 @@
   }
 }
 
-/**
- * 边框
- */
 @mixin border($borderWidth, $borderColor, $radio: 0) {
   border: $borderWidth solid;
   border-radius: $radio;
@@ -54,12 +45,6 @@
   }
 }
 
-/**
- * flex布局属性
- * dir   : 对齐方式
- * main  : 主轴
- * cross : 交叉轴
- */
 @mixin flex($dir: row, $justifyContent: flex-start, $alignItem: stretch) {
   display: flex;
   flex-direction: $dir;
@@ -93,9 +78,6 @@
   text-overflow: ellipsis;
 }
 
-/**
-
- */
 @mixin color-logo ($colorA, $colorB) {
   color: transparent;
   font-family: current, sans-serif;
@@ -116,10 +98,6 @@
     }
   }
 }
-
-/*
- 主题控制
-*/
 
 @mixin themeShadow ($light-color: 0 0 12px 0 #7c7c7c, $dark-color: 0 0 12px 0 #000000) {
   box-shadow: $light-color;
