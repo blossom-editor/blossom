@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24341450",
+      "name": "computer-line",
+      "font_class": "computer-line",
+      "unicode": "ea46",
+      "unicode_decimal": 59974
+    },
+    {
+      "icon_id": "24341646",
+      "name": "fixed position-line",
+      "font_class": "a-fixedposition-line",
+      "unicode": "ea47",
+      "unicode_decimal": 59975
+    },
+    {
+      "icon_id": "24341217",
+      "name": "box choice-line",
+      "font_class": "a-boxchoice-line",
+      "unicode": "e9d8",
+      "unicode_decimal": 59864
+    },
+    {
+      "icon_id": "24341244",
+      "name": "box download-line",
+      "font_class": "a-boxdownload-line",
+      "unicode": "ea4a",
+      "unicode_decimal": 59978
+    },
+    {
+      "icon_id": "24341693",
+      "name": "flag-line",
+      "font_class": "flag-line",
+      "unicode": "ea4b",
+      "unicode_decimal": 59979
+    },
+    {
+      "icon_id": "24341703",
+      "name": "flow chart 1-line",
+      "font_class": "a-flowchart1-line",
+      "unicode": "ea4c",
+      "unicode_decimal": 59980
+    },
+    {
+      "icon_id": "24341988",
+      "name": "more 1-line",
+      "font_class": "a-morecross-line",
+      "unicode": "ea49",
+      "unicode_decimal": 59977
+    },
+    {
       "icon_id": "23655473",
       "name": "番茄钟",
       "font_class": "fanqiezhong",
@@ -340,27 +389,6 @@
       "font_class": "a-folderset-line",
       "unicode": "ea0e",
       "unicode_decimal": 59918
-    },
-    {
-      "icon_id": "36393612",
-      "name": "blossom-logo-dark",
-      "font_class": "blossom-logo-dark",
-      "unicode": "e601",
-      "unicode_decimal": 58881
-    },
-    {
-      "icon_id": "36393841",
-      "name": "blossom-logo-grey",
-      "font_class": "blossom-logo-grey",
-      "unicode": "e602",
-      "unicode_decimal": 58882
-    },
-    {
-      "icon_id": "36393559",
-      "name": "blossom-logo",
-      "font_class": "blossom-logo",
-      "unicode": "62",
-      "unicode_decimal": 98
     },
     {
       "icon_id": "24341467",

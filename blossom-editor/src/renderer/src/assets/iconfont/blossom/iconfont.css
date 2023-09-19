@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconbl"; /* Project id 4118609 */
-  src: url('iconfont.woff2?t=1693997980759') format('woff2'),
-       url('iconfont.woff?t=1693997980759') format('woff'),
-       url('iconfont.ttf?t=1693997980759') format('truetype');
+  src: url('iconfont.woff2?t=1694876858381') format('woff2'),
+       url('iconfont.woff?t=1694876858381') format('woff'),
+       url('iconfont.ttf?t=1694876858381') format('truetype');
 }
 
 .iconbl {
@@ -11,6 +11,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.bl-computer-line:before {
+  content: "\ea46";
+}
+
+.bl-a-fixedposition-line:before {
+  content: "\ea47";
+}
+
+.bl-a-boxchoice-line:before {
+  content: "\e9d8";
+}
+
+.bl-a-boxdownload-line:before {
+  content: "\ea4a";
+}
+
+.bl-flag-line:before {
+  content: "\ea4b";
+}
+
+.bl-a-flowchart1-line:before {
+  content: "\ea4c";
+}
+
+.bl-a-morecross-line:before {
+  content: "\ea49";
 }
 
 .bl-fanqiezhong:before {
@@ -203,18 +231,6 @@
 
 .bl-a-folderset-line:before {
   content: "\ea0e";
-}
-
-.bl-blossom-logo-dark:before {
-  content: "\e601";
-}
-
-.bl-blossom-logo-grey:before {
-  content: "\e602";
-}
-
-.bl-blossom-logo:before {
-  content: "\62";
 }
 
 .bl-delete-line:before {
