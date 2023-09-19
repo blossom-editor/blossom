@@ -90,7 +90,7 @@ const toTask = (todoId: string, todoName: string, todoType: TodoType) => {
 
 const TaskProgressRef = ref()
 const TodoStatRef = ref()
-const activeName = ref('2')
+const activeName = ref('1')
 const today = ref(getDateFormat())
 const nextWeek = ref(getNextDay(getDateFormat(), 7))
 const todoDays = ref<TodoList[]>([])

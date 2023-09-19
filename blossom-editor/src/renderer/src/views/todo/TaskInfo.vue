@@ -36,11 +36,25 @@
             value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
         </el-form-item>
         <el-form-item label="颜色" style="width: auto;">
-          <el-input v-model="taskSaveForm.color" style="width:80px;margin-right: 5px;"></el-input>
-          <el-color-picker v-model="taskSaveForm.color" />
+          <el-input v-model="taskSaveForm.color" style="width:200px;margin-right: 5px;"
+            placeholder="推荐半透明色,更兼容暗黑模式"></el-input>
+          <el-color-picker show-alpha v-model="taskSaveForm.color" :predefine="[
+            'rgba(68, 173, 56, 0.7)',
+            'rgba(186, 196, 44, 0.7)',
+            'rgba(235, 205, 72, 0.7)',
+            'rgba(232, 144, 144, 0.7)',
+            'rgba(112, 145, 188, 0.7)',
+            'rgba(157, 129, 216, 0.7)',
+            'rgba(0, 0, 0, 0.65)',
+          ]" />
+
+          <el-tooltip content="颜色搭配参考" effect="blossomt" placement="top" :hide-after="0">
+            <a href="https://colorhunt.co/" target="_blank" class="color-hunt iconbl bl-a-colorpalette-line"
+              :style="{ color: taskSaveForm.color }"></a>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="进度" style="width: auto;">
-          <el-input-number v-model="taskSaveForm.process" :min="0" :max="100" style="width: 97px;"></el-input-number>
+          <el-input-number v-model="taskSaveForm.process" :min="0" :max="100" style="width: 100%;"></el-input-number>
         </el-form-item>
       </el-form>
     </div>
@@ -207,6 +221,21 @@ $height-form: calc(100% - #{$height-title} - #{$height-footer});
       width: calc(100% - 10px);
       margin-right: 10px;
       margin-bottom: 10px;
+    }
+
+    .color-hunt {
+      @include box(24px, 24px);
+      line-height: 20px;
+      font-size: 18px;
+      padding: 1px 3px;
+      margin-left: 5px;
+      border: 1px solid var(--el-border-color);
+      border-radius: 4px;
+      text-decoration: none;
+
+      &:hover {
+        border: 1px solid var(--el-border-color-hover);
+      }
     }
   }
 

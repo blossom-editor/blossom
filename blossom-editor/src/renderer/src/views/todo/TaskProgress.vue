@@ -41,7 +41,7 @@
 
           <div v-if="t.todoType == 99" class="middle"></div>
           <div v-else>
-            <bl-row class="task-title" just="space-between" :style="{ backgroundImage: getColor(t.color) }">
+            <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -72,7 +72,7 @@
           @dragstart="dragstartWait([WaitDragRef, CompDragRef], $event)" @dragend="dragendProc(t, $event)">
           <div v-if="t.todoType == 99" class="middle">中午 12:00</div>
           <div v-else>
-            <bl-row class="task-title" just="space-between" :style="{ backgroundImage: getColor(t.color) }">
+            <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -108,7 +108,7 @@
           @dragstart="dragstartWait([WaitDragRef, ProcDragRef], $event)" @dragend="dragendComp(t, $event)">
           <div v-if="t.todoType == 99" class="middle">中午 12:00</div>
           <div v-else>
-            <bl-row class="task-title" just="space-between" :style="{ backgroundImage: getColor(t.color) }">
+            <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -175,7 +175,8 @@ import { getDateFormat } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
 
 const getColor = (color: string) => {
-  return `linear-gradient(270deg, ${color}, var(--bl-html-color))`
+  // return `linear-gradient(270deg, ${color}, var(--bl-html-color))`
+  return `${color}`
 }
 
 //#region ---------------------------------------- 列表弹框显示 ----------------------------------------
@@ -313,7 +314,7 @@ const exportTodo = () => {
 
 const download = () => {
   if (curTodo.value.todoType == 10) {
-    
+
   }
   let filename = '任务导出.md'
   let a = document.createElement('a')
@@ -677,12 +678,12 @@ const emits = defineEmits(['refreshTodo'])
 
   .task-title {
     @include themeBrightness(100%, 80%);
+    @include themeColor(#000000, #D8D8D8);
     font-size: 14px;
     padding: 5px 10px;
     margin-bottom: 5px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    // border-bottom: 1px solid var(--el-border-color);
     cursor: move;
 
 
