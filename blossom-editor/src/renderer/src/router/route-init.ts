@@ -5,6 +5,7 @@ import Index from '@renderer/views/Index.vue'
 import Home from '@renderer/views/home/Home.vue'
 import ArticleIndex from '@renderer/views/article/ArticleIndex.vue'
 import PictureIndex from '@renderer/views/picture/PictureIndex.vue'
+import TodoIndex from '@renderer/views/todo/TodoIndex.vue'
 import NoteIndex from '@renderer/views/note/NoteIndex.vue'
 import PlanIndex from '@renderer/views/plan/PlanIndex.vue'
 import IconListIndex from '@renderer/components/IconList.vue'
@@ -28,9 +29,10 @@ router.addRoute(
       // 功能页面
       { path: '/articleIndex', name: 'ArticleIndex', component: ArticleIndex, meta: { keepAlive: true } },
       { path: '/pictureIndex', name: 'PictureIndex', component: PictureIndex, meta: { keepAlive: true } },
-      { path: '/noteIndex', name: 'NoteIndex', component: NoteIndex, meta: { keepAlive: true } },
-      { path: '/planIndex', name: 'PlanIndex', component: PlanIndex, meta: { keepAlive: true } },
-      { path: '/iconListIndex', name: 'IconListIndex', component: IconListIndex, meta: { keepAlive: true } },
+      { path: '/todoIndex', name: 'TodoIndex', component: TodoIndex, meta: { keepAlive: false } },
+      { path: '/noteIndex', name: 'NoteIndex', component: NoteIndex, meta: { keepAlive: false } },
+      { path: '/planIndex', name: 'PlanIndex', component: PlanIndex, meta: { keepAlive: false } },
+      { path: '/iconListIndex', name: 'IconListIndex', component: IconListIndex, meta: { keepAlive: false } },
 
     ]
   }

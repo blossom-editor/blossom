@@ -61,10 +61,6 @@ defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">
-:deep(.el-loading-spinner) {
-  @extend .bl-loading-spinner;
-}
-
 .article-stars-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);

@@ -296,6 +296,7 @@ const articleNamesToArray = (names: string): string[] => {
 
 <style scoped lang="scss">
 @import './styles/picture-index.scss';
+@import '@renderer/assets/styles/bl-loading-spinner.scss';
 
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;

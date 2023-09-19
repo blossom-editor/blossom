@@ -719,6 +719,7 @@ const removeListenerShortcutMap = () => {
 @import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
+@import '@renderer/assets/styles/bl-loading-spinner.scss';
 
 .bl-preview {}
 

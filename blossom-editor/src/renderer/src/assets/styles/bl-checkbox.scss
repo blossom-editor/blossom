@@ -1,0 +1,12 @@
+.el-checkbox {
+
+  .el-checkbox__input {
+    .el-checkbox__inner {
+      transition: none;
+
+      &::after {
+        transition: none;
+      }
+    }
+  }
+}
