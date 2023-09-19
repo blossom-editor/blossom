@@ -11,7 +11,6 @@ logging:
   level:
     com.blossom: info
     com.blossom.expand.tracker: info
-    com.blossom.admin.base.test: trace
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn
     com.baomidou.dynamic.datasource.DynamicRoutingDataSource: warn
     com.zaxxer.hikari.HikariDataSource: warn

@@ -54,7 +54,7 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
      *
      * @param todoId todoid
      */
-    List<TodoEntity> listTask(@Param("todoId") String todoId);
+    List<TodoEntity> listTask(@Param("userId") Long userId, @Param("todoId") String todoId);
 
     /**
      * 事项统计信息

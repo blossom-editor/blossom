@@ -91,6 +91,7 @@
                cre_time
           from blossom_todo
          where todo_id = #{todoId}
+           and user_id = #{userId}
     </select>
 
     <select id="statisticTask" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">

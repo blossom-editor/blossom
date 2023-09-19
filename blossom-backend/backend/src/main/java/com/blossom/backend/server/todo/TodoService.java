@@ -111,7 +111,7 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
      * @param todoId todoId, 每日待办事项, 则 todoId 为 yyyy-MM-dd 格式, 如果是阶段性事项, 则为字符串ID
      */
     public TaskRes listTask(String todoId) {
-        List<TodoEntity> tasks = baseMapper.listTask(todoId);
+        List<TodoEntity> tasks = baseMapper.listTask(AuthContext.getUserId(), todoId);
         if (CollUtil.isEmpty(tasks)) {
             return TaskRes.build();
         }
@@ -144,10 +144,41 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         // 今日中午12点
         Date noon = DateUtils.parse(todoId + " 12:00:00", DateUtils.PATTERN_YYYYMMDDHHMMSS);
         List<TodoEntity> processing = res.getProcessing();
-        addNoon(noon, processing);
+        addDateDivider(noon, processing, TaskStatusEnum.PROCESSING);
         List<TodoEntity> completed = res.getCompleted();
-        addNoon(noon, completed);
+        addDateDivider(noon, completed, TaskStatusEnum.COMPLETED);
         return res;
+    }
+
+    /**
+     * 添加时间分割节点, 只有每日待办事项具有分割节点
+     *
+     * @param divideDate 分割的日期, 注意
+     * @param tasks      任务列表
+     */
+    private void addDateDivider(Date divideDate, List<TodoEntity> tasks, TaskStatusEnum taskStatus) {
+        if (CollUtil.isEmpty(tasks)) {
+            return;
+        }
+        for (int i = 0; i < tasks.size(); i++) {
+            Date date;
+            if (taskStatus == TaskStatusEnum.PROCESSING) {
+                date = tasks.get(i).getStartTime();
+            } else if (taskStatus == TaskStatusEnum.COMPLETED) {
+                date = tasks.get(i).getEndTime();
+            } else {
+                continue;
+            }
+            if (date == null) {
+                continue;
+            }
+            if (DateUtils.compare(divideDate, date) < 0) {
+                TodoEntity placeHolder = new TodoEntity();
+                placeHolder.setTodoType(TodoTypeEnum.NOON_AM_12.getType());
+                tasks.add(i, placeHolder);
+                break;
+            }
+        }
     }
 
     /**
@@ -159,26 +190,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         return baseMapper.count(todoId);
     }
 
-    /**
-     * 添加中午12点的分割节点
-     *
-     * @param noon  中午的日期
-     * @param tasks 任务列表
-     */
-    private void addNoon(Date noon, List<TodoEntity> tasks) {
-        if (CollUtil.isEmpty(tasks)) {
-            return;
-        }
-        for (int i = 0; i < tasks.size(); i++) {
-            Date start = tasks.get(i).getStartTime();
-            if (DateUtils.compare(noon, start) < 0) {
-                TodoEntity placeHolder = new TodoEntity();
-                placeHolder.setTodoType(TodoTypeEnum.NOON_AM_12.getType());
-                tasks.add(i, placeHolder);
-                break;
-            }
-        }
-    }
 
     /**
      * 查询任务信息
