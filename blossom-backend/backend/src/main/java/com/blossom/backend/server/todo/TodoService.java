@@ -53,7 +53,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         return res;
     }
 
-
     /**
      * 新增阶段性事项
      */
@@ -167,7 +166,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         return res;
     }
 
-
     /**
      * 查看事项的任务数量
      *
@@ -176,7 +174,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
     public Integer count(String todoId) {
         return baseMapper.count(todoId);
     }
-
 
     /**
      * 查询任务信息
@@ -220,7 +217,9 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
     @Transactional(rollbackFor = Exception.class)
     public void updById(TaskUpdReq req) {
         TodoEntity task = req.to(TodoEntity.class);
-        task.setTaskTags(DocUtil.toTagStr(req.getTaskTags()));
+        if (req.getTaskTags() != null) {
+            task.setTaskTags(DocUtil.toTagStr(req.getTaskTags()));
+        }
         baseMapper.updateById(task);
     }
 
