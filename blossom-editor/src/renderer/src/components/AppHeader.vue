@@ -7,6 +7,8 @@
     <div class="drag">
     </div>
     <div class="window-workbench">
+      
+      <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
       <div class="iconbl bl-computer-line" @click="setBestSize"></div>
       <div class="iconbl bl-subtract-line" @click="windowMin"></div>
@@ -25,6 +27,7 @@ import { ref } from 'vue'
 import { useDark } from '@vueuse/core'
 import { openDevTools, windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
+import { toRoute } from '@renderer/router';
 
 const isDark = useDark();
 
