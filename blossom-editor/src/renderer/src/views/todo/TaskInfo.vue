@@ -24,6 +24,19 @@
         <el-form-item label="内容">
           <el-input type="textarea" :rows="4" v-model="taskSaveForm.taskContent"></el-input>
         </el-form-item>
+        <el-form-item label="标签">
+          <div class="info-tags-container">
+            <el-input v-if="isShowTagInput" ref="TagInputRef" style="width: 75px;" v-model="tagInputValue"
+              @keyup.enter="blurTagInput" @blur="blurTagInput" />
+            <el-button v-else style="width: 75px;" @click="showInput">
+              + 标签
+            </el-button>
+            <el-tag v-for="tag in taskSaveForm?.taskTags" :key="tag" :disable-transitions="false"
+              @close="handleTagClose(tag)" closable>
+              {{ tag }}
+            </el-tag>
+          </div>
+        </el-form-item>
         <el-form-item label="截止至">
           <el-input v-model="taskSaveForm.deadLine" placeholder="如下午3点会议之间"></el-input>
         </el-form-item>
@@ -70,14 +83,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElMessageBox, FormInstance, FormRules } from 'element-plus'
-import { isNotBlank } from '@renderer/assets/utils/obj'
+import { nextTick, ref } from 'vue'
+import { ElInput, ElMessageBox, FormInstance, FormRules } from 'element-plus'
+import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { taskInfoApi, addTaskApi, updTaskApi, delTaskApi, countTaskApi } from '@renderer/api/todo'
 import { TaskInfo, TodoType } from './scripts/types'
 import { openExtenal } from '@renderer/assets/utils/electron'
 
-//#region ---------------------------------------- 修改任务 ----------------------------------------
+//#region --------------------------------------------------< 修改任务 >--------------------------------------------------
 const formLoading = ref(false)
 const saveLoading = ref(false)
 const TaskSaveFormRef = ref()
@@ -89,6 +102,7 @@ const taskSaveForm = ref<TaskInfo>({
   todoType: 10,
   taskName: '',
   taskContent: '',
+  taskTags: [],
   deadLine: '',
   creTime: '',
   startTime: '',
@@ -180,80 +194,74 @@ const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, tod
   }
 }
 
+//#endregion
+
+//#region --------------------------------------------------< 标签 >--------------------------------------------------
+const TagInputRef = ref<InstanceType<typeof ElInput>>()
+const tagInputValue = ref('')
+const isShowTagInput = ref(false)
+
+const handleTagClose = (tag: string) => {
+  taskSaveForm.value.taskTags.splice(taskSaveForm.value.taskTags.indexOf(tag), 1)
+}
+
+const showInput = () => {
+  isShowTagInput.value = true
+  nextTick(() => {
+    TagInputRef.value!.input!.focus()
+  })
+}
+
+const blurTagInput = () => {
+  if (isBlank(tagInputValue.value)) {
+    return
+  }
+  if (taskSaveForm.value.taskTags.indexOf(tagInputValue.value) == -1) {
+    taskSaveForm.value.taskTags.push(tagInputValue.value)
+  }
+  isShowTagInput.value = false
+  tagInputValue.value = ''
+}
+
+
 defineExpose({ reload })
 const emits = defineEmits(['saved'])
 </script>
 
 <style scoped lang="scss">
-$height-title: 50px;
-$height-footer: 50px;
-$height-form: calc(100% - #{$height-title} - #{$height-footer});
+@import '@renderer/assets/styles/bl-dialog-info';
 
 .article-info-root {
   border-radius: 10px;
 
-  .info-title-wrapper {
-    @include box(100%, $height-title);
-    @include flex(row, flex-start, center);
-    border-bottom: 1px solid var(--el-border-color);
+  .color-hunt {
+    @include box(24px, 24px);
+    line-height: 20px;
+    font-size: 18px;
+    padding: 1px 3px;
+    margin-left: 5px;
+    border: 1px solid var(--el-border-color);
+    border-radius: 4px;
+    text-decoration: none;
 
-    .info-icon {
-      @include box(50px, 100%);
-      padding: 5px 0;
-      text-align: center;
-    }
-
-    .info-title {
-      @include font(16px);
-      width: calc(100% - 50px - 50px);
-      height: 100%;
-      padding-top: 10px;
-      color: var(--el-color-primary);
-      padding-left: 10px;
+    &:hover {
+      border: 1px solid var(--el-border-color-hover);
     }
   }
+}
 
-  .info-form {
-    @include box(100%, $height-form);
-    padding: 10px 10px 0;
 
-    :deep(.el-form--inline .el-form-item) {
-      width: calc(100% - 10px);
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
+.info-tags-container {
+  text-align: left;
+  overflow-y: scroll;
 
-    .color-hunt {
-      @include box(24px, 24px);
-      line-height: 20px;
-      font-size: 18px;
-      padding: 1px 3px;
-      margin-left: 5px;
-      border: 1px solid var(--el-border-color);
-      border-radius: 4px;
-      text-decoration: none;
-
-      &:hover {
-        border: 1px solid var(--el-border-color-hover);
-      }
-    }
+  &>span,
+  button {
+    margin: 3px 3px;
   }
 
-  .info-footer {
-    @include box(100%, $height-footer);
-    @include flex(row, space-between, center);
-    border-top: 1px solid var(--el-border-color);
-    padding: 10px;
-    text-align: right;
-
-    .iconbl {
-      font-size: 18px;
-      margin-right: 5px;
-    }
-  }
-
-  .emoji-link {
-    cursor: pointer;
+  .el-input {
+    margin: 3px 3px;
   }
 }
 </style>

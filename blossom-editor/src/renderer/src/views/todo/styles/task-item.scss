@@ -1,0 +1,118 @@
+.task-item {
+  @include themeShadow(0 0 5px #C0C0C0, 0 0 5px #000000);
+  @include themeBg(#F9F9F9, #0F0F0F);
+  width: 270px;
+  min-width: 270px;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  transition: box-shadow 0.3s;
+
+  .divider {
+    @include themeColor(#CFCFCF, #545454E0);
+    @include themeBorder(2px, #CFCFCF, #545454E0, 'bottom', 0, dashed);
+    width: 100%;
+    font-size: 12px;
+    top: 500px;
+  }
+
+  &:has(.divider) {
+    width: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    pointer-events: none;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  &:hover {
+    @include themeShadow(0 0 9px #C0C0C0, 0 0 15px #000000);
+
+    .task-title {
+      .iconbl {
+        opacity: 1;
+      }
+    }
+  }
+
+  .task-title {
+    @include themeBrightness(100%, 80%);
+    @include themeColor(#000000, #D8D8D8);
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    cursor: move;
+
+    &>div {
+      transition: color 0.2s;
+
+      &:hover {
+        @include themeColor(#000000, #ECECEC);
+      }
+    }
+
+    // 任务的操作按钮
+    .iconbl {
+      opacity: 0;
+    }
+  }
+
+  .task-tags {
+    padding: 2px 7px;
+    align-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+
+  .task-times {
+    height: 20px;
+    font-size: 13px;
+    padding: 0 10px;
+    color: var(--bl-text-color-light);
+  }
+
+  .dead-line {
+    @include themeColor(#D5002E, #740019);
+  }
+
+  .task-content {
+    padding: 5px 10px;
+    font-size: 13px;
+    color: var(--bl-text-color-light);
+    // border-top: 1px solid var(--el-border-color);
+    white-space: pre-line;
+    word-wrap: break-word;
+    overflow: auto;
+    transition: color 0.2s;
+
+    &:hover {
+      @include themeColor(#555555, #A5A5A5);
+    }
+  }
+
+  .el-progress {
+    padding: 0 10px;
+    margin-bottom: 10px;
+
+    .el-progress__text {
+      font-size: 12px !important;
+      min-width: auto;
+      color: var(--bl-text-color-light);
+    }
+  }
+
+}
+
+.task-item.moving {
+  border: 1px dashed var(--el-border-color);
+  box-shadow: none;
+  cursor: move;
+
+  * {
+    visibility: hidden;
+  }
+}

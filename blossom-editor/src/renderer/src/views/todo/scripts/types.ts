@@ -20,7 +20,7 @@ export type TaskStatus = 'WAITING' | 'PROCESSING' | 'COMPLETED'
 
 /**
  *
- * 事项 todo
+ * 事项 todo 列表
  */
 export interface TodoList {
   id?: string,
@@ -66,6 +66,7 @@ export interface TaskInfo {
   todoType: TodoType,
   taskName: string,
   taskContent: string,
+  taskTags: string[],
   deadLine: string,
   creTime: string,
   startTime?: string,
@@ -80,19 +81,4 @@ export interface TaskInfo {
   // 
   updTaskName: boolean,
   updTaskContent: boolean
-}
-
-/**
- * 新增任务
- */
-export interface TaskForm {
-  id?: string,
-  todoId: string,
-  todoName: string,
-  todoType: TodoType,
-  taskName: string,
-  taskContent?: string,
-  deadLine?: string,
-  startTime?: string,
-  endTime?: string,
 }

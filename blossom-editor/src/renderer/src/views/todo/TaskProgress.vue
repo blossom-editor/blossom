@@ -19,7 +19,10 @@
       </bl-row>
     </bl-row>
     <bl-row just="flex-end" style="padding: 0 10px 0 0;margin-top: 5px;">
-      <el-checkbox v-model="showAnyTime" label="显示时间" border />
+      <el-select class="tag-select" v-model="queryTags" multiple collapse-tags collapse-tags-tooltip placeholder="根据标签筛选">
+        <el-option v-for="tag in queryTagOptions" :key="tag" :label="tag" :value="tag"></el-option>
+      </el-select>
+      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px;" />
       <el-button style="margin-left: 10px;" @click="showExportDialog">导出任务</el-button>
     </bl-row>
   </div>
@@ -32,25 +35,25 @@
         <span class="iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>
       </div>
 
-      <div class="tasks-sub-title" align="flex-start"><span>Waiting</span><span>{{ taskWait.length }}</span></div>
+      <div class="tasks-sub-title" align="flex-start"><span>Waiting</span><span>{{ countWait }}</span></div>
       <div class="tasks-container">
         <div class="drag-container" ref="WaitDragRef">将任务设置为未开始</div>
-
-        <div v-for="t in taskWait" :key="t.id" draggable="true" class="task-item"
+        <div v-for="t in taskWaitComputed" :key="t.id" draggable="true" class="task-item"
           @dragstart="dragstartWait([ProcDragRef, CompDragRef], $event)" @dragend="dragendWait(t, $event)">
-
-          <div v-if="t.todoType == 99" class="middle"></div>
+          <div v-if="t.todoType == 99" class="divider"></div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-a-fileedit-line" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
             <div v-if="isNotBlank(t.deadLine)" class="dead-line task-times">截止至: {{ t.deadLine }}</div>
-
+            <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
+              <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
+            </bl-row>
             <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
               @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
@@ -64,25 +67,27 @@
     <div class="processing" ref="ProcRef" @dragenter="onDragenter(ProcDragRef, 'PROCESSING', $event)"
       @dragleave="onDragleave(ProcDragRef, $event)">
       <div class="tasks-title"><span>进行中</span></div>
-      <div class="tasks-sub-title"><span>Processing</span><span>{{ taskProc.length }}</span></div>
+      <div class="tasks-sub-title"><span>Processing</span><span>{{ countProc }}</span></div>
       <div class="tasks-container">
         <div class="drag-container" ref="ProcDragRef">将任务设置为进行中</div>
         <!--  -->
-        <div v-for="t in taskProc" :key="t.id" class="task-item" draggable="true"
+        <div v-for="t in taskProcComputed" :key="t.id" class="task-item" draggable="true"
           @dragstart="dragstartWait([WaitDragRef, CompDragRef], $event)" @dragend="dragendProc(t, $event)">
-          <div v-if="t.todoType == 99" class="middle">中午 12:00</div>
+          <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-a-fileedit-line" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
             <div v-if="showAnyTime" class="task-times">开始于: {{ t.startTime }}</div>
             <div v-if="isNotBlank(t.deadLine)" class="dead-line task-times">截止至: {{ t.deadLine }}</div>
-
+            <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
+              <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
+            </bl-row>
             <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
               @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
@@ -96,30 +101,28 @@
     <div class="completed" ref="CompRef" @dragenter="onDragenter(CompDragRef, 'COMPLETED', $event)"
       @dragleave="onDragleave(CompDragRef, $event)">
       <div class="tasks-title">完成</div>
-      <div class="tasks-sub-title">
-        <span>Completed</span>
-        <span>{{ taskComp.length }}</span>
-      </div>
+      <div class="tasks-sub-title"><span>Completed</span><span>{{ countComp }}</span></div>
       <div class="tasks-container">
         <div class="drag-container" ref="CompDragRef">将任务设置为完成</div>
-
         <!--  -->
-        <div v-for="t in taskComp" :key="t.id" draggable="true" class="task-item"
+        <div v-for="t in taskCompComputed" :key="t.id" draggable="true" class="task-item"
           @dragstart="dragstartWait([WaitDragRef, ProcDragRef], $event)" @dragend="dragendComp(t, $event)">
-          <div v-if="t.todoType == 99" class="middle">中午 12:00</div>
+          <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
                 @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-a-fileedit-line" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
             <div v-if="showAnyTime" class="task-times">开始于: {{ t.startTime }}</div>
             <div v-if="showAnyTime" class="task-times">结束于: {{ t.endTime }}</div>
             <div v-if="isNotBlank(t.deadLine)" class="dead-line task-times">截止至: {{ t.deadLine }}</div>
-
+            <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
+              <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
+            </bl-row>
             <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
               @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
@@ -172,6 +175,7 @@ import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, ex
 import { TaskInfo, TaskStatus, TodoType } from './scripts/types'
 import TaskInfoComponent from './TaskInfo.vue'
 import { getDateFormat } from '@renderer/assets/utils/util'
+import { isEmpty } from 'lodash'
 import Notify from '@renderer/scripts/notify'
 
 const getColor = (color: string) => {
@@ -179,17 +183,38 @@ const getColor = (color: string) => {
   return `${color}`
 }
 
-//#region ---------------------------------------- 列表弹框显示 ----------------------------------------
+//#region ---------------------------------------- 列表/弹框显示 ----------------------------------------
 const curTodo = ref({ todoId: '', todoName: '', todoType: 10 })
 const taskWait = ref<TaskInfo[]>([])
 const taskProc = ref<TaskInfo[]>([])
 const taskComp = ref<TaskInfo[]>([])
-const countWait = computed<number>(() => taskWait.value.length)
-const countProc = computed<number>(() => taskProc.value.filter(t => t.todoType != 99).length)
-const countComp = computed<number>(() => taskComp.value.filter(t => t.todoType != 99).length)
+const countWait = computed<number>(() => taskWaitComputed.value.length)
+const countProc = computed<number>(() => taskProcComputed.value.filter(t => t.todoType != 99).length)
+const countComp = computed<number>(() => taskCompComputed.value.filter(t => t.todoType != 99).length)
 const countTotal = computed(() => countWait.value + countProc.value + countComp.value)
 
-const getTasksApi = (todoId: string) => {
+const taskWaitComputed = computed<TaskInfo[]>(() => {
+  if (queryTags.value.length == 0) {
+    return taskWait.value
+  }
+  return includeQueryTags(taskWait)
+})
+
+const taskProcComputed = computed<TaskInfo[]>(() => {
+  if (queryTags.value.length == 0) {
+    return taskProc.value
+  }
+  return includeQueryTags(taskProc)
+})
+
+const taskCompComputed = computed<TaskInfo[]>(() => {
+  if (queryTags.value.length == 0) {
+    return taskComp.value
+  }
+  return includeQueryTags(taskComp)
+})
+
+const getTasks = (todoId: string) => {
   tasksApi({ todoId: todoId }).then(resp => {
     taskWait.value = resp.data.waiting
     taskProc.value = resp.data.processing
@@ -271,7 +296,8 @@ const blurTaskContentInput = (task: TaskInfo) => {
  */
 const reload = (todoId: string, todoName: string, todoType: TodoType) => {
   curTodo.value = { todoId: todoId, todoName: todoName, todoType: todoType }
-  getTasksApi(todoId)
+  queryTags.value = []
+  getTasks(todoId)
 }
 
 //
@@ -279,8 +305,49 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
 //#endregion
 
 //#region ---------------------------------------- 顶部操作台 ----------------------------------------
-const isShowExportDialog = ref(false)
+const queryTagOptions = computed(() => {
+  let tags = new Set()
+  taskWait.value.forEach(task => {
+    task.taskTags.forEach(tag => {
+      tags.add(tag)
+    })
+  })
+  taskProc.value.forEach(task => {
+    task.taskTags.forEach(tag => {
+      tags.add(tag)
+    })
+  })
+  taskComp.value.forEach(task => {
+    task.taskTags.forEach(tag => {
+      tags.add(tag)
+    })
+  })
+  console.log(tags)
+  return tags
+})
+const queryTags = ref<string[]>([])
 const showAnyTime = ref(false)
+
+const isInclude = (taskTags: any[], queryTags: any[]) => queryTags.every((val) => taskTags.includes(val))
+/**
+ * 检查传入的任务列表中, 是否包含 queryTags 中的全部值
+ */
+const includeQueryTags = (tasks: Ref<TaskInfo[]>) => {
+  let result: TaskInfo[] = []
+  for (let index = 0; index < tasks.value.length; index++) {
+    const task: TaskInfo = tasks.value[index]
+    const taskTags = task.taskTags
+    if (!taskTags) {
+      continue
+    }
+    if (isInclude(taskTags, queryTags.value)) {
+      result.push(task)
+    }
+  }
+  return result
+}
+
+const isShowExportDialog = ref(false)
 const exportContent = ref('')
 const exportForm = ref({
   todoId: '',
@@ -472,290 +539,9 @@ const emits = defineEmits(['refreshTodo'])
 </script>
 
 <style scoped lang="scss">
-.task-workbench {
-  @include box(100%, 90px);
-  font-weight: 300;
-  color: var(--bl-text-color);
-  border-bottom: 1px solid var(--el-border-color);
-
-  .task-name {
-    @include font(16px, 300);
-    text-shadow: var(--bl-text-shadow);
-  }
-
-  .waiting {
-    background-color: #FE63706B;
-  }
-
-  .processing {
-    background-color: #FBA85F6B;
-  }
-
-  .completed {
-    background-color: #9974FE6B;
-  }
-
-  .bars {
-    padding: 10px 10px 5px;
-
-    div {
-      // @include themeShadow(0 0 4px #C0C0C0, 0 0 6px #000000);
-      @include font(13px, 300);
-      height: 13px;
-      margin: 0 3px;
-      border-radius: 4px;
-      padding: 3px 10px;
-      text-align: center;
-      transition: width 1s;
-      box-shadow:
-        inset 0 3px #FFFFFF5D,
-        inset 0 -2px #46464680,
-        0 2px 4px #C0C0C0;
-
-
-      [class="dark"] & {
-        box-shadow:
-          inset 0 3px #FFFFFF48,
-          inset 0 -3px #2F2F2FA9,
-          0 2px 4px #000000;
-      }
-
-    }
-
-  }
-
-  .bars-legend {
-    font-size: 14px;
-    color: var(--bl-text-color-light);
-
-    &>div {
-      @include box(7px, 7px);
-      border-radius: 50%;
-      margin: 0 5px 0 20px;
-    }
-
-  }
-}
-
-.task-progress-root {
-  @include box(100%, calc(100% - 100px));
-  @include flex(row, flex-start, center);
-  padding-top: 20px;
-  overflow-x: scroll;
-
-  .waiting,
-  .processing,
-  .completed {
-    @include flex(column, flex-start, center);
-    @include box(350px, 100%, 350px, 350px);
-    color: var(--bl-text-color);
-    position: relative;
-    padding: 0 10px;
-
-
-    .tasks-title {
-      @include flex(row, space-between, center);
-      @include box(270px, 30px);
-      @include font(28px, 700);
-      text-shadow: var(--bl-text-shadow);
-
-      .iconbl {
-        @include font(13px, 300);
-        padding-right: 3px;
-        color: var(--bl-text-color-light);
-        cursor: pointer;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
-      }
-    }
-
-    .tasks-sub-title {
-      @include flex(row, space-between, center);
-      @include box(270px, 30px);
-      @include font(13px, 300);
-      padding: 0 5px;
-      color: var(--bl-text-color-light);
-      border-bottom: 1px solid var(--el-border-color);
-    }
-
-    .tasks-container {
-      @include box(100%, calc(100% - 60px));
-      @include flex(column, flex-start, center);
-      position: relative;
-      overflow-y: overlay;
-      padding: 20px 0;
-
-      .drag-container {
-        @include box(295px, 100%);
-        position: absolute;
-        top: 0;
-        left: calc(50% - 140px);
-        padding: 30px 0;
-        color: transparent;
-        text-align: center;
-        display: none;
-        z-index: 2;
-
-      }
-
-      .drag-container.enter {
-        @include themeBg(#F5F5F5E8, #000000E0);
-        border-radius: 10px;
-        border: 3px solid var(--el-color-primary);
-        color: var(--bl-text-color);
-      }
-    }
-  }
-
-}
-
-.task-popover {
-  background-color: var(--bl-bg-color) !important;
-  color: red;
-
-  &>div {
-    padding: 5px 5px 5px 5px;
-    margin: 0 5px 5px 5px;
-    border-radius: 5px;
-    text-align: left;
-    cursor: pointer;
-
-    &:hover {
-      background: var(--el-color-primary-light-8);
-    }
-
-    .el-input-number--small {
-      margin-left: 10px;
-      width: 80px;
-    }
-  }
-}
+@import './styles/task-progress.scss'
 </style>
 
 <style lang="scss">
-.task-item {
-  @include themeShadow(0 0 5px #C0C0C0, 0 0 5px #000000);
-  @include themeBg(#F9F9F9, #0F0F0F);
-  width: 270px;
-  min-width: 270px;
-  height: auto;
-  border-radius: 4px;
-  margin-bottom: 15px;
-  transition: box-shadow 0.3s;
-
-
-  .middle {
-    @include themeColor(#CFCFCF, #545454E0);
-    @include themeBorder(2px, #CFCFCF, #545454E0, 'bottom', 0, dashed);
-    width: 100%;
-    font-size: 12px;
-    top: 500px;
-  }
-
-  &:has(.middle) {
-    width: 100%;
-    background-color: transparent;
-    box-shadow: none;
-    pointer-events: none;
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-
-  &:hover {
-    @include themeShadow(0 0 9px #C0C0C0, 0 0 15px #000000);
-
-    .task-title {
-
-      .iconbl {
-        opacity: 1;
-      }
-    }
-  }
-
-  .task-title {
-    @include themeBrightness(100%, 80%);
-    @include themeColor(#000000, #D8D8D8);
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-bottom: 5px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    cursor: move;
-
-
-    &>div {
-      transition: color 0.2s;
-
-      &:hover {
-        @include themeColor(#000000, #ECECEC);
-      }
-    }
-
-    // 任务的操作按钮
-    .iconbl {
-      opacity: 0;
-    }
-  }
-
-
-  .task-times {
-    height: 20px;
-    font-size: 13px;
-    padding: 0 10px;
-    color: var(--bl-text-color-light);
-  }
-
-  .dead-line {
-    @include themeColor(#D5002E, #740019);
-    // @include themeBg(#D5002E, #740019);
-    // @include themeColor(#ffffff, #CCB6BB);
-    // @include themeShadow(inset 0 0 5px #AEAEAE, inset 0 0 5px #000000);
-    // font-size: 12px;
-    // margin: 10px 10px 5px 10px;
-    // padding: 4px 5px;
-    // border-radius: 4px;
-  }
-
-  .task-content {
-    margin-top: 5px;
-    padding: 5px 10px;
-    font-size: 13px;
-    color: var(--bl-text-color-light);
-    // border-top: 1px solid var(--el-border-color);
-    white-space: pre-line;
-    word-wrap: break-word;
-    overflow: auto;
-    transition: color 0.2s;
-
-    &:hover {
-      @include themeColor(#555555, #A5A5A5);
-    }
-  }
-
-  .el-progress {
-    padding: 0 10px;
-    margin-bottom: 10px;
-
-    .el-progress__text {
-      font-size: 12px !important;
-      min-width: auto;
-      color: var(--bl-text-color-light);
-    }
-  }
-
-}
-
-.task-item.moving {
-  border: 1px dashed var(--el-border-color);
-  box-shadow: none;
-  cursor: move;
-
-  * {
-    visibility: hidden;
-  }
-}
+@import './styles/task-item.scss'
 </style>
