@@ -2,8 +2,8 @@
   <div class="article-import-root">
 
     <!-- 标题 -->
-    <div class="info-title-wrapper">
-      <div class="info-title">导入文章</div>
+    <div class="info-title">
+      <div class="iconbl bl-file-upload-line"></div>导入文章
     </div>
 
     <div class="content">

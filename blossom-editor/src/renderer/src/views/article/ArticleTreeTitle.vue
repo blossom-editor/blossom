@@ -1,5 +1,6 @@
 <template>
   <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
+
     <div class="doc-name">
       <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
@@ -66,7 +67,8 @@ $icon-size: 17px;
 
 .menu-icon {
   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  // margin-right: 9px;
+  margin-bottom: 4px;
+  // margin-right: 8px;
 }
 
 .doc-title {

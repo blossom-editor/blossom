@@ -75,11 +75,27 @@
   }
 }
 
-.task-progress-root {
+.tasks-container {
   @include box(100%, calc(100% - 100px));
   @include flex(row, flex-start, center);
   padding-top: 20px;
   overflow-x: scroll;
+
+  .task-tip {
+    @include font(12px, 300);
+    @include themeColor(#d3d3d3, rgb(65, 65, 65));
+  }
+
+  .add-icon {
+    @include font(13px, 300);
+    padding-right: 3px;
+    color: var(--bl-text-color-light);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
 
   .waiting,
   .processing,
@@ -96,17 +112,6 @@
       @include box(270px, 30px);
       @include font(28px, 700);
       text-shadow: var(--bl-text-shadow);
-
-      .iconbl {
-        @include font(13px, 300);
-        padding-right: 3px;
-        color: var(--bl-text-color-light);
-        cursor: pointer;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
-      }
     }
 
     .tasks-sub-title {
@@ -127,22 +132,21 @@
 
       .drag-container {
         @include box(295px, 100%);
-        position: absolute;
-        top: 0;
-        left: calc(50% - 140px);
+        @include absolute(0, '', '', calc(50% - 140px));
         padding: 30px 0;
         color: transparent;
         text-align: center;
         display: none;
         z-index: 2;
-
       }
 
       .drag-container.enter {
-        @include themeBg(#F5F5F5E8, #000000E0);
+        @include themeBg(#F5F5F5E8, #171717e0);
+        @include themeColor(#c6c6c6, #505050);
+        @include themeShadow(inset 0 0 5px 2px #c4c4c4, inset 0 0 8px 2px #000000);
+        font-weight: 300;
         border-radius: 10px;
         border: 3px solid var(--el-color-primary);
-        color: var(--bl-text-color);
       }
     }
   }

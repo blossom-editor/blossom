@@ -2,17 +2,18 @@ $height-title: 50px;
 $height-footer: 50px;
 $height-form: calc(100% - #{$height-title} - #{$height-footer});
 
-.info-title-wrapper {
+.info-title {
   @include box(100%, $height-title);
   @include flex(row, flex-start, center);
+  @include font(16px);
   border-bottom: 1px solid var(--el-border-color);
+  padding-left: 10px;
+  color: var(--el-color-primary);
+  text-shadow: var(--bl-text-shadow);
 
-  .info-title {
-    @include font(16px);
-    @include box(calc(100% - 50px - 50px), 100%);
-    padding-top: 10px;
-    padding-left: 10px;
-    color: var(--el-color-primary);
+  .iconbl {
+    font-size: 25px;
+    margin-right: 10px;
   }
 }
 

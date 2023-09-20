@@ -2,8 +2,8 @@
   <div class="article-qrcode-root">
 
     <!-- 标题 -->
-    <div class="info-title-wrapper">
-      <div class="info-title">公网访问二维码</div>
+    <div class="info-title">
+      <div class="iconbl bl-qr-code-line"></div>公网访问二维码
     </div>
 
     <div class="content" v-loading="isLoading">

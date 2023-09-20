@@ -2,8 +2,8 @@
   <div class="article-backup-root">
 
     <!-- 标题 -->
-    <div class="title-wrapper">
-      <div class="title">文章全量备份记录</div>
+    <div class="info-title">
+      <div class="iconbl bl-a-cloudstorage-line"></div>文章全量备份记录
     </div>
 
     <div class="content">
@@ -166,38 +166,15 @@ const cancelDownload = async () => {
 </script>
 
 <style scoped lang="scss">
-$height-title: 50px;
+@import '@renderer/assets/styles/bl-dialog-info';
+
 
 .article-backup-root {
   border-radius: 10px;
   @include box(100%, 100%);
 
-  .title-wrapper {
-    @include box(100%, $height-title);
-    @include flex(row, flex-start, center);
-    border-bottom: 1px solid var(--el-border-color);
-
-    .info-icon {
-      @include box(50px, 100%);
-      padding: 5px 0;
-      text-align: center;
-    }
-
-    .title {
-      @include font(16px);
-      @include box(100%, 100%);
-      height: 100%;
-      padding-top: 10px;
-      color: var(--el-color-primary);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      padding-left: 30px;
-    }
-  }
-
   .content {
-    @include box(100%, calc(100% - #{$height-title}));
+    @include box(100%, calc(100% - 50px));
     padding: 20px;
 
     .workbench {

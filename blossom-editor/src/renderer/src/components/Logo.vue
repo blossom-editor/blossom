@@ -2,7 +2,7 @@
   <div class="logo-root">
     <img v-if="isDark" class="logo-img" src="@renderer/assets/imgs/blossom_logo_dark.png" />
     <img v-else class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
-    <div class="project-name">{{ BLOSSOM.SYS.NAME }}</div>
+    <div v-if="props.showName" class="project-name">{{ BLOSSOM.SYS.NAME }}</div>
   </div>
 </template>
 
@@ -11,6 +11,13 @@ import BLOSSOM from '@renderer/assets/constants/system'
 import { useDark } from '@vueuse/core'
 
 const isDark = useDark();
+
+const props = defineProps({
+  showName: {
+    type: Boolean,
+    default: true
+  }
+})
 </script>
 
 <style scoped lang="scss">

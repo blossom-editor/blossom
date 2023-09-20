@@ -2,11 +2,9 @@
   <div class="daily-info-root">
 
     <!-- 标题 -->
-    <div class="info-title-wrapper">
-      <bl-row class="info-title">
-        <div class="iconbl bl-a-pagelevel-line" style="font-size: 25px;margin-right: 10px;"></div>
-        <div>新增日常计划</div>
-      </bl-row>
+    <div class="info-title">
+      <div class="iconbl bl-a-pagelevel-line"></div>
+      <div>新增日常计划</div>
     </div>
 
     <div class="info-form">

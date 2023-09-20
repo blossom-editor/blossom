@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark } from '@vueuse/core'
 import { useServerStore } from '@renderer/stores/server'
@@ -157,13 +157,17 @@ const showTryUse = () => {
 }
 
 const helpMeLogin = () => {
+  // serverUrl.value = 'https://www.wangyunf.com/bl'
   formLogin.value = {
     serverUrl: 'https://www.wangyunf.com/bl',
     username: 'blos',
     password: 'blos'
   }
+  handleServerUrl()
   isShowTryUse.value = false
-  login()
+  nextTick(() => {
+    login()
+  })
 }
 //#endregion
 </script>

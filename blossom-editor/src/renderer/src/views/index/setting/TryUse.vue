@@ -1,7 +1,7 @@
 <template>
   <div class="try-use-root">
-    <div class="info-title-wrapper">
-      <div class="info-title">如何试用 Blossom</div>
+    <div class="info-title">
+      <Logo :show-name="false" style="width: 70px;padding-top:5px;"></Logo>如何试用 Blossom
     </div>
 
     <div class="info-form">
@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+import Logo from '@renderer/components/Logo.vue'
 
 const helpMeLogin = () => {
   emits('helpMeLogin')

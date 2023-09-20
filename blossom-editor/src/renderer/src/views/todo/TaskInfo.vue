@@ -2,8 +2,8 @@
   <div class="article-info-root">
 
     <!-- 标题 -->
-    <div class="info-title-wrapper">
-      <div class="info-title">{{ taskSaveFormTitle }}</div>
+    <div class="info-title">
+      <div class="iconbl bl-a-labellist-line"></div>{{ taskSaveFormTitle }}
     </div>
 
     <div v-loading="formLoading" class="info-form">
@@ -128,9 +128,15 @@ const taskSaveFormRule = ref<FormRules<TaskInfo>>({
 const save = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, _fields) => {
+    if (taskSaveForm.value.color == null) {
+      taskSaveForm.value.color = ''
+    }
     if (valid) {
       if (isNotBlank(taskSaveForm.value.id)) {
-        updTask(taskSaveForm.value)
+        let datas = { ...taskSaveForm.value, ...{ returnTasks: true } }
+        updTaskApi(datas).then(resp => {
+          emits('saved', resp.data)
+        })
       } else {
         addTaskApi(taskSaveForm.value).then(resp => {
           emits('saved', resp.data)
@@ -141,18 +147,7 @@ const save = async (formEl: FormInstance | undefined) => {
 }
 
 /**
- * 修改任务
- * @param data 
- */
-const updTask = (data: any) => {
-  let datas = { ...data, ...{ returnTasks: true } }
-  updTaskApi(datas).then(resp => {
-    emits('saved', resp.data)
-  })
-}
-
-/**
- * 删除节点
+ * 删除节点前的检查, 会从服务端获取当前事项是否最后一个任务
  */
 const delTaskBefore = () => {
   if (taskSaveForm.value.todoType === 20) {
