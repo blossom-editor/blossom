@@ -27,17 +27,21 @@
     </bl-row>
   </div>
 
-  <div class="task-progress-root">
+  <div class="tasks-container">
     <div class="waiting" @dragenter="onDragenter(WaitDragRef, 'WAITING', $event)"
       @dragleave="onDragleave(WaitDragRef, $event)" ref="WaitRef">
       <div class="tasks-title">
         <span>待办</span>
-        <span class="iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>
+        <span class="add-icon iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>
       </div>
 
       <div class="tasks-sub-title" align="flex-start"><span>Waiting</span><span>{{ countWait }}</span></div>
       <div class="tasks-container">
         <div class="drag-container" ref="WaitDragRef">将任务设置为未开始</div>
+
+        <div v-if="countTotal == 0" class="task-tip">在待办列表右侧点击<span class="add-icon iconbl bl-a-addline-line"
+            @click="showTaskInfoDialog()"></span>添加任务</div>
+
         <div v-for="t in taskWaitComputed" :key="t.id" draggable="true" class="task-item"
           @dragstart="dragstartWait([ProcDragRef, CompDragRef], $event)" @dragend="dragendWait(t, $event)">
           <div v-if="t.todoType == 99" class="divider"></div>
@@ -296,8 +300,6 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
   getTasks(todoId)
 }
 
-//
-
 //#endregion
 
 //#region --------------------------------------------------< 顶部操作台 >--------------------------------------------------
@@ -318,8 +320,7 @@ const queryTagOptions = computed(() => {
       tags.add(tag)
     })
   })
-  console.log(tags)
-  return tags
+  return Array.from(tags).sort()
 })
 const queryTags = ref<string[]>([])
 const showAnyTime = ref(false)
