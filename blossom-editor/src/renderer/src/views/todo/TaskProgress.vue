@@ -137,8 +137,7 @@
   <el-dialog draggable title="导出任务" v-model="isShowExportDialog" :align-center="true" :append-to-body="true"
     :destroy-on-close="true" :close-on-click-modal="false" width="800px" style="--el-dialog-border-radius:10px;
     --el-dialog-padding-primary: 10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow);
-    --el-dialog-bg-color:var(--bl-html-color);">
+    --el-dialog-box-shadow:var(--bl-box-shadow);">
     <bl-row align="center" height="20px">
       <bl-row width="250px" v-if="curTodo.todoType == 20">
         导出 {{ curTodo.todoName }}
@@ -160,10 +159,7 @@
   </el-dialog>
 
   <el-dialog draggable v-model="isShowTaskInfoDialog" :align-center="true" :modal="false" :lock-scroll="false"
-    :append-to-body="false" :destroy-on-close="true" :close-on-click-modal="false" width="350" style="--el-dialog-border-radius:10px;
-    --el-dialog-padding-primary:0;
-    --el-dialog-box-shadow:var(--bl-box-shadow);
-    --el-dialog-bg-color:var(--bl-html-color);">
+    :append-to-body="false" :destroy-on-close="true" :close-on-click-modal="false" width="350">
     <TaskInfoComponent ref="TaskInfoRef" @saved="savedCallback"></TaskInfoComponent>
   </el-dialog>
 </template>
@@ -183,7 +179,7 @@ const getColor = (color: string) => {
   return `${color}`
 }
 
-//#region ---------------------------------------- 列表/弹框显示 ----------------------------------------
+//#region --------------------------------------------------< 列表/弹框显示 >--------------------------------------------------
 const curTodo = ref({ todoId: '', todoName: '', todoType: 10 })
 const taskWait = ref<TaskInfo[]>([])
 const taskProc = ref<TaskInfo[]>([])
@@ -254,7 +250,7 @@ const savedCallback = (data: any) => {
 
 //#endregion
 
-//#region ---------------------------------------- 文本框修改内容 ----------------------------------------
+//#region --------------------------------------------------< 文本框修改内容 >--------------------------------------------------
 const showTaskNameInput = (task: TaskInfo) => {
   task.updTaskName = true
   nextTick(() => {
@@ -304,7 +300,7 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
 
 //#endregion
 
-//#region ---------------------------------------- 顶部操作台 ----------------------------------------
+//#region --------------------------------------------------< 顶部操作台 >--------------------------------------------------
 const queryTagOptions = computed(() => {
   let tags = new Set()
   taskWait.value.forEach(task => {
@@ -395,7 +391,7 @@ const download = () => {
 }
 //#endregion
 
-//#region ---------------------------------------- 组件拖动 ----------------------------------------
+//#region --------------------------------------------------< 组件拖动 >--------------------------------------------------
 const WaitRef = ref()
 const WaitDragRef = ref()
 

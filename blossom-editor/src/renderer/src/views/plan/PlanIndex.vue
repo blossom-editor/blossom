@@ -46,11 +46,8 @@
     </el-calendar>
   </div>
 
-  <el-dialog v-model="isShowPlanAddDialog" width="400" top="60px" style="margin-left: 300px;
-    --el-dialog-padding-primary:0;
-    --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="false"
-    :close-on-click-modal="true" draggable>
+  <el-dialog v-model="isShowPlanAddDialog" width="400" top="60px" style="margin-left: 300px;" :append-to-body="true"
+    :destroy-on-close="false" :close-on-click-modal="true" draggable>
     <PlanDayInfo ref="PlanDayInfoRef" @saved="savedCallback"></PlanDayInfo>
   </el-dialog>
 </template>

@@ -45,10 +45,7 @@
   </div>
 
   <el-dialog draggable v-model="isShowTryUse" :align-center="true" :append-to-body="true" :destroy-on-close="true"
-    :close-on-click-modal="true" width="550" style="--el-dialog-border-radius:10px;
-    --el-dialog-padding-primary:0;
-    --el-dialog-box-shadow:var(--bl-box-shadow);
-    --el-dialog-bg-color:var(--bl-html-color);">
+    :close-on-click-modal="true" width="550">
     <TryUse ref="TryUseRef" @help-me-login="helpMeLogin"></TryUse>
   </el-dialog>
 </template>

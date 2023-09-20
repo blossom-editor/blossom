@@ -35,7 +35,7 @@
           <span class="icon-shadow iconbl bl-a-boxdownload-line"></span>
         </div>
       </bl-row>
-
+      
     </div>
 
     <div class="phared-details">

@@ -80,7 +80,7 @@
         <el-button v-else style="width: 75px;" @click="showInput">
           + 标签
         </el-button>
-        <el-tag v-for=" tag  in  docForm?.tags " :key="tag" :disable-transitions="false" @close="handleTagClose(tag)"
+        <el-tag v-for="tag in docForm?.tags" :key="tag" :disable-transitions="false" @close="handleTagClose(tag)"
           size="default" closable>
           {{ tag }}
         </el-tag>
@@ -238,27 +238,20 @@ const docForm = ref<DocInfo>({
 
 const DocFormRef = ref<FormInstance>()
 const docFormRule = ref<FormRules<DocInfo>>({
-  storePath: [
-    {
-      required: true, message: '上传目录为必填项', trigger: 'blur'
-    }
-  ],
-  name: [
-    {
-      required: true, trigger: 'blur', validator: (_rule: any, value: any, callback: any) => {
-        if (value === '') {
-          callback(new Error('文档名称为必填项'))
-        }
-
-        const reg = /^\.|[\\\\/:*?\"<>|]/img;
-        if (reg.test(value)) {
-          callback(new Error(`文档名不得包含以下字符 . * " : \\ / ? < > |`))
-        } else {
-          callback()
-        }
+  storePath: [{ required: true, message: '上传目录为必填项', trigger: 'blur' }],
+  name: [{
+    required: true, trigger: 'blur', validator: (_rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('文档名称为必填项'))
+      }
+      const reg = /^\.|[\\\\/:*?\"<>|]/img;
+      if (reg.test(value)) {
+        callback(new Error(`文档名不得包含以下字符 . * " : \\ / ? < > |`))
+      } else {
+        callback()
       }
     }
-  ]
+  }]
 })
 
 /**
@@ -470,7 +463,7 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
 }
 //#endregion
 
-//#region --------------------------------------------------<新增标签相关>--------------------------------------------------
+//#region --------------------------------------------------< 新增标签 >--------------------------------------------------
 const inputValue = ref('')
 const inputVisible = ref(false)
 const InputRef = ref<InstanceType<typeof ElInput>>()
@@ -533,13 +526,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       white-space: nowrap;
       text-overflow: ellipsis;
       padding-left: 10px;
-    }
-
-    .info-title-close {
-      width: 50px;
-      font-size: 40px;
-      color: var(--el-border-color);
-      text-align: center;
     }
   }
 
@@ -686,5 +672,3 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
   }
 }
 </style>
-
-<style></style>@renderer/common/notify@renderer/scripts/notify

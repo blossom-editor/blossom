@@ -10,7 +10,7 @@
 
   <!-- 截图上传弹框 -->
   <el-dialog title="设置上传目录" class="dialog-ps-upload" v-model="isShowPrintScreenUpload" height="400" width="300"
-    :append-to-body="true" :destroy-on-close="false" :close-on-click-modal="true">
+    style="border-radius: 4px;" :append-to-body="true" :destroy-on-close="false" :close-on-click-modal="true">
     <div class="ps-upload-root">
       <el-image fit="cover" :src="printScreenImgUrl">
         <template #error>

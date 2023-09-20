@@ -40,11 +40,11 @@
         <el-form-item label="截止至">
           <el-input v-model="taskSaveForm.deadLine" placeholder="如下午3点会议之间"></el-input>
         </el-form-item>
-        <el-form-item label="开始于">
+        <el-form-item label="开始于" v-if="infoType == 'upd'">
           <el-date-picker v-model="taskSaveForm.startTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
             value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="结束于">
+        <el-form-item label="结束于" v-if="infoType == 'upd'">
           <el-date-picker v-model="taskSaveForm.endTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
             value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
         </el-form-item>
@@ -66,8 +66,8 @@
               :style="{ color: taskSaveForm.color }"></a>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="进度" style="width: auto;">
-          <el-input-number v-model="taskSaveForm.process" :min="0" :max="100" style="width: 100%;"></el-input-number>
+        <el-form-item label="进度" v-if="infoType == 'upd'" style="width: auto;">
+          <el-input-number v-model="taskSaveForm.process" :min="0" :max="100" :step="5"></el-input-number>
         </el-form-item>
       </el-form>
     </div>
@@ -91,6 +91,7 @@ import { TaskInfo, TodoType } from './scripts/types'
 import { openExtenal } from '@renderer/assets/utils/electron'
 
 //#region --------------------------------------------------< 修改任务 >--------------------------------------------------
+const infoType = ref<'upd' | 'add'>('add')
 const formLoading = ref(false)
 const saveLoading = ref(false)
 const TaskSaveFormRef = ref()
@@ -182,6 +183,7 @@ const delTask = () => {
  * @param taskId 
  */
 const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, todoType?: TodoType) => {
+  infoType.value = dialogType
   if (dialogType == 'upd') {
     taskSaveFormTitle.value = '修改任务'
     taskInfoApi({ id: taskId }).then(resp => {
@@ -223,6 +225,7 @@ const blurTagInput = () => {
   tagInputValue.value = ''
 }
 
+//#endregion
 
 defineExpose({ reload })
 const emits = defineEmits(['saved'])

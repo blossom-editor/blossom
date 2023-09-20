@@ -25,6 +25,10 @@ $height-form: calc(100% - #{$height-title} - #{$height-footer});
     margin-right: 10px;
     margin-bottom: 10px;
   }
+
+  .emoji-link {
+    cursor: pointer;
+  }
 }
 
 .info-footer {

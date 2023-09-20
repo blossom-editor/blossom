@@ -161,58 +161,9 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-// @import url(./PlanColor.scss);
+@import '@renderer/assets/styles/bl-dialog-info';
 
 .day-info-root {
-  $height-title: 50px;
-  $height-footer: 50px;
-  $height-form: calc(100% - #{$height-title} - #{$height-footer});
-
-  .info-title-wrapper {
-    @include box(100%, $height-title);
-    @include flex(row, flex-start, center);
-    border-bottom: 1px solid var(--el-border-color);
-
-    .info-title {
-      @include font(16px);
-      width: calc(100% - 50px - 50px);
-      height: 100%;
-      color: var(--el-color-primary);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      padding-left: 10px;
-    }
-
-    .info-title-close {
-      width: 50px;
-      font-size: 40px;
-      color: var(--el-border-color);
-      text-align: center;
-    }
-  }
-
-  .info-form {
-    @include box(100%, $height-form);
-    padding: 10px;
-
-    :deep(.el-form--inline .el-form-item) {
-      margin-right: 20px;
-    }
-  }
-
-  .info-footer {
-    @include box(100%, $height-footer);
-    @include flex(row, space-between, center);
-    border-top: 1px solid var(--el-border-color);
-    padding: 10px;
-    text-align: right;
-
-    .iconbl {
-      font-size: 18px;
-      margin-right: 5px;
-    }
-  }
 
   .color-container {
     align-content: flex-start;
@@ -222,13 +173,13 @@ defineExpose({
     padding: 10px;
 
     .color {
+      @include font(11px, 300);
       color: #fff;
       margin: 0 3px;
       border-radius: 5px;
-      font-size: 11px;
-      cursor: pointer;
       transition: box-shadow 0.2s;
       filter: blur(1px);
+      cursor: pointer;
     }
 
     .selected {

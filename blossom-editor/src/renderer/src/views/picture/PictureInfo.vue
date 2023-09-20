@@ -390,13 +390,12 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 
   .info-tags-container {
     @include box(calc(100% - 20px), $height-tags);
+    @include themeShadow(inset 0 0 4px 1px rgb(222, 222, 222), inset 0 0 4px 1px rgb(0, 0, 0));
     padding: 10px;
     margin: 10px;
     border-radius: 10px;
-    border: 1px solid var(--el-border-color);
     text-align: left;
     overflow-y: scroll;
-    box-shadow: inset 0 0 4px 1px rgb(222, 222, 222);
 
     &>span,
     button {

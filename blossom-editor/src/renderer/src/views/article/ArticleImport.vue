@@ -2,12 +2,11 @@
   <div class="article-import-root">
 
     <!-- 标题 -->
-    <div class="title-wrapper">
-      <div class="title">导入文章</div>
+    <div class="info-title-wrapper">
+      <div class="info-title">导入文章</div>
     </div>
 
     <div class="content">
-
       <el-upload class="article-upload" ref="uploadRef" name="file" :action="serverStore.serverUrl + articleImportApiUrl"
         :data="{ pid: porps.doc.i }" :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }"
         :on-change="onChange" :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError"
@@ -53,34 +52,10 @@ const submitUpload = () => {
 
 
 <style scoped lang="scss">
-$height-title: 50px;
+@import '@renderer/assets/styles/bl-dialog-info';
 
 .article-import-root {
   border-radius: 10px;
-
-  .title-wrapper {
-    @include box(100%, $height-title);
-    @include flex(row, flex-start, center);
-    border-bottom: 1px solid var(--el-border-color);
-
-    .info-icon {
-      @include box(50px, 100%);
-      padding: 5px 0;
-      text-align: center;
-    }
-
-    .title {
-      @include font(16px);
-      @include box(100%, 100%);
-      height: 100%;
-      padding-top: 10px;
-      color: var(--el-color-primary);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      padding-left: 30px;
-    }
-  }
 
   .content {
     padding: 20px;
@@ -100,9 +75,6 @@ $height-title: 50px;
         }
       }
     }
-
   }
-
-
 }
 </style>

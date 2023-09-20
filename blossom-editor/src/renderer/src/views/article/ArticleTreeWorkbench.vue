@@ -63,19 +63,13 @@
     </bl-row>
   </div>
 
-  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 320px;
-    --el-dialog-padding-primary:0;
-    --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
-    :close-on-click-modal="false" draggable>
+  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 320px;" :append-to-body="true"
+    :destroy-on-close="true" :close-on-click-modal="false" draggable>
     <ArticleInfo ref="ArticleInfoRef" @saved="savedCallback"></ArticleInfo>
   </el-dialog>
 
-  <el-dialog class="backup-dialog" v-model="isShowBackupDialog" width="80%" top="100px" style="height: 80%;
-    --el-dialog-padding-primary:0;
-    --el-dialog-border-radius:10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow-dialog)" :append-to-body="true" :destroy-on-close="true"
-    :close-on-click-modal="false" draggable>
+  <el-dialog class="backup-dialog" v-model="isShowBackupDialog" width="80%" top="100px" style="height: 80%;"
+    :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="false" draggable>
     <ArticleBackup ref="ArticleBackupRef"></ArticleBackup>
   </el-dialog>
 </template>
