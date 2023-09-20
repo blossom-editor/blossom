@@ -33,6 +33,10 @@ public class TaskAddReq extends AbstractPOJO {
      */
     private String deadLine;
     /**
+     * 颜色
+     */
+    private String color;
+    /**
      * 标签集合
      */
     private List<String> taskTags;
