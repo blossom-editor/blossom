@@ -7,6 +7,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.server.todo.pojo.*;
+import com.blossom.backend.server.utils.DocUtil;
+import com.blossom.backend.server.utils.TodoUtil;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.PrimaryKeyUtil;
@@ -104,7 +106,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
 
 
     // region 任务
-
     /**
      * 获取待办任务列表
      *
@@ -117,69 +118,55 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         }
 
         Map<String, List<TodoEntity>> maps = tasks.stream().collect(Collectors.groupingBy(TodoEntity::getTaskStatus));
-        TaskRes res = new TaskRes();
-        res.setWaiting(maps.getOrDefault(TaskStatusEnum.WAITING.name(), new ArrayList<>())
-                .stream()
+
+        List<TodoEntity> waiting = maps.getOrDefault(TaskStatusEnum.WAITING.name(), new ArrayList<>()).stream()
                 .sorted((t1, t2) -> SortUtil.dateSort.compare(t1.getCreTime(), t2.getCreTime()))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList());
 
-        res.setProcessing(maps.getOrDefault(TaskStatusEnum.PROCESSING.name(), new ArrayList<>())
-                .stream()
+        List<TodoEntity> processing = maps.getOrDefault(TaskStatusEnum.PROCESSING.name(), new ArrayList<>()).stream()
                 .sorted((t1, t2) -> SortUtil.dateSort.compare(t1.getStartTime(), t2.getStartTime()))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList());
 
-        res.setCompleted(maps.getOrDefault(TaskStatusEnum.COMPLETED.name(), new ArrayList<>())
-                .stream()
+        List<TodoEntity> completed = maps.getOrDefault(TaskStatusEnum.COMPLETED.name(), new ArrayList<>()).stream()
                 .sorted((t1, t2) -> SortUtil.dateSort.compare(t1.getEndTime(), t2.getEndTime()))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList());
 
-        // 如果是阶段性事项, 则直接返回
-        if (tasks.get(0).getTodoType().equals(TodoTypeEnum.PHASED.getType())) {
-            return res;
+        // 如果每日任务, 则添加分割节点
+        if (tasks.get(0).getTodoType().equals(TodoTypeEnum.DAY.getType())) {
+            Date noon = DateUtils.parse(todoId + " 12:00:00", DateUtils.PATTERN_YYYYMMDDHHMMSS);
+            TodoUtil.addDateDivider(noon, processing, TaskStatusEnum.PROCESSING);
+            TodoUtil.addDateDivider(noon, completed, TaskStatusEnum.COMPLETED);
         }
 
-        // 今日中午12点
-        Date noon = DateUtils.parse(todoId + " 12:00:00", DateUtils.PATTERN_YYYYMMDDHHMMSS);
-        List<TodoEntity> processing = res.getProcessing();
-        addDateDivider(noon, processing, TaskStatusEnum.PROCESSING);
-        List<TodoEntity> completed = res.getCompleted();
-        addDateDivider(noon, completed, TaskStatusEnum.COMPLETED);
+        List<TaskInfoRes> wTasks = new ArrayList<>();
+        for (TodoEntity task : waiting) {
+            TaskInfoRes wTask = task.to(TaskInfoRes.class);
+            wTask.setTaskTags(DocUtil.toTagList(task.getTaskTags()));
+            wTasks.add(wTask);
+        }
+
+        List<TaskInfoRes> pTasks = new ArrayList<>();
+        for (TodoEntity task : processing) {
+            TaskInfoRes pTask = task.to(TaskInfoRes.class);
+            pTask.setTaskTags(DocUtil.toTagList(task.getTaskTags()));
+            pTasks.add(pTask);
+        }
+
+        List<TaskInfoRes> cTasks = new ArrayList<>();
+        for (TodoEntity task : completed) {
+            TaskInfoRes cTask = task.to(TaskInfoRes.class);
+            cTask.setTaskTags(DocUtil.toTagList(task.getTaskTags()));
+            cTasks.add(cTask);
+        }
+
+        TaskRes res = new TaskRes();
+        res.setWaiting(wTasks);
+        res.setProcessing(pTasks);
+        res.setCompleted(cTasks);
+
         return res;
     }
 
-    /**
-     * 添加时间分割节点, 只有每日待办事项具有分割节点
-     *
-     * @param divideDate 分割的日期, 注意
-     * @param tasks      任务列表
-     */
-    private void addDateDivider(Date divideDate, List<TodoEntity> tasks, TaskStatusEnum taskStatus) {
-        if (CollUtil.isEmpty(tasks)) {
-            return;
-        }
-        for (int i = 0; i < tasks.size(); i++) {
-            Date date;
-            if (taskStatus == TaskStatusEnum.PROCESSING) {
-                date = tasks.get(i).getStartTime();
-            } else if (taskStatus == TaskStatusEnum.COMPLETED) {
-                date = tasks.get(i).getEndTime();
-            } else {
-                continue;
-            }
-            if (date == null) {
-                continue;
-            }
-            if (DateUtils.compare(divideDate, date) < 0) {
-                TodoEntity placeHolder = new TodoEntity();
-                placeHolder.setTodoType(TodoTypeEnum.NOON_AM_12.getType());
-                tasks.add(i, placeHolder);
-                break;
-            }
-        }
-    }
 
     /**
      * 查看事项的任务数量
@@ -196,8 +183,11 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
      *
      * @param id 任务ID
      */
-    public TodoEntity selectById(Long id) {
-        return baseMapper.selectById(id);
+    public TaskInfoRes selectById(Long id) {
+        TodoEntity task = baseMapper.selectById(id);
+        TaskInfoRes res = task.to(TaskInfoRes.class);
+        res.setTaskTags(DocUtil.toTagList(task.getTaskTags()));
+        return res;
     }
 
     /**
@@ -205,7 +195,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public void insert(TaskAddReq req) {
-
         TodoEntity todo = selectByTodoId(req.getTodoId());
         TodoEntity ist = req.to(TodoEntity.class);
 
@@ -219,6 +208,7 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             ist.setTodoType(todo.getTodoType());
         }
 
+        ist.setTaskTags(DocUtil.toTagStr(req.getTaskTags()));
         ist.setTaskStatus(TaskStatusEnum.WAITING.name());
         ist.setUserId(AuthContext.getUserId());
         baseMapper.insert(ist);
@@ -230,6 +220,7 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
     @Transactional(rollbackFor = Exception.class)
     public void updById(TaskUpdReq req) {
         TodoEntity task = req.to(TodoEntity.class);
+        task.setTaskTags(DocUtil.toTagStr(req.getTaskTags()));
         baseMapper.updateById(task);
     }
 
@@ -382,72 +373,7 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             todos.addAll(baseMapper.listAll(query));
         }
         XzException404.throwBy(CollUtil.isEmpty(todos), "未查询到任何待办任务, 无法导出");
-        return export(todos, req);
-    }
-
-    /**
-     * 导出
-     *
-     * @param todos 事项列表
-     * @return 返回 Markdown 格式的字符串
-     */
-    public static String export(List<TodoEntity> todos, TodoExportReq req) {
-        if (CollUtil.isEmpty(todos)) {
-            return "无内容";
-        }
-        Map<String, List<TodoEntity>> maps = todos.stream().collect(Collectors.groupingBy(TodoEntity::getTodoName));
-        StringBuilder sb = new StringBuilder();
-        maps.forEach((todoName, tasks) -> {
-            sb.append(String.format("# %s \n\n", todoName));
-
-            for (TodoEntity task : tasks) {
-
-                String status = "未开始";
-                if (task.getTaskStatus().equals(TaskStatusEnum.PROCESSING.name())) {
-                    status = "进行中";
-                } else if (task.getTaskStatus().equals(TaskStatusEnum.COMPLETED.name())) {
-                    status = "已完成";
-                }
-
-                // 在标题增加进度
-                if (req.getExportProcess() && task.getProcess() != null && task.getProcess() > 0) {
-                    sb.append(String.format("### [%s] %s (%d%%)\n\n", status, task.getTaskName(), task.getProcess()));
-                } else {
-                    sb.append(String.format("### [%s] %s \n\n", status, task.getTaskName()));
-                }
-
-                // 导出时间
-                if (req.getExportDate()) {
-                    String creTime = task.getCreTime() == null ? "" : DateUtils.format(task.getCreTime(), DateUtils.PATTERN_YYYYMMDDHHMMSS);
-                    String starTime = task.getStartTime() == null ? "" : DateUtils.format(task.getStartTime(), DateUtils.PATTERN_YYYYMMDDHHMMSS);
-                    String endTime = task.getEndTime() == null ? "" : DateUtils.format(task.getEndTime(), DateUtils.PATTERN_YYYYMMDDHHMMSS);
-
-                    sb.append(String.format("- 创建日期: %s\n", creTime));
-                    sb.append(String.format("- 开始日期: %s\n", starTime));
-                    sb.append(String.format("- 完成日期: %s\n\n", endTime));
-                }
-                if (StrUtil.isNotBlank(task.getTaskContent())) {
-                    sb.append(String.format("%s\n\n", task.getTaskContent()));
-                }
-            }
-        });
-        return sb.toString();
-    }
-
-    public static void main(String[] args) {
-//        TodoEntity cs = new TodoEntity();
-//        cs.setTodoName("2023-09-15");
-//        cs.setTaskName("测试测试");
-//        cs.setProcess(35);
-//        cs.setTaskContent("");
-//        cs.setCreTime(new Date());
-//        cs.setStartTime(new Date());
-//        cs.setEndTime(new Date());
-//        TodoService.export(CollUtil.newArrayList(cs, cs), true, true);
-
-        for (DateTime dateTime : DateUtils.range(DateUtils.parse("2023-09-01"), DateUtils.parse("2023-09-11"), DateField.DAY_OF_MONTH)) {
-            System.out.println(dateTime.toString(DateUtils.PATTERN_YYYYMMDD));
-        }
+        return TodoUtil.export(todos, req);
     }
 
 

@@ -1,28 +1,22 @@
 package com.blossom.backend.server.todo.pojo;
 
-import com.blossom.common.base.pojo.AbstractPOJO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class TaskUpdReq extends AbstractPOJO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class TaskInfoRes {
 
-    /**
-     * ID
-     */
-    @NotNull(message = "任务ID为必填项")
     private Long id;
-    /**
-     * todoId
-     */
-    @NotBlank(message = "事项ID为必填项")
+
     private String todoId;
+    /**
+     * 待办类型
+     **/
+    private Integer todoType;
     /**
      * 任务名称
      */
@@ -36,7 +30,11 @@ public class TaskUpdReq extends AbstractPOJO {
      */
     private List<String> taskTags;
     /**
-     * 截止日期
+     * 任务状态 WAITING | PROCESSING | COMPLETED
+     */
+    private String taskStatus;
+    /**
+     * 截止至, 可填写任意内容
      */
     private String deadLine;
     /**
@@ -56,7 +54,7 @@ public class TaskUpdReq extends AbstractPOJO {
      */
     private String color;
     /**
-     * 接口是否返回列表
+     * 创建时间
      */
-    private Boolean returnTasks;
+    private Date creTime;
 }

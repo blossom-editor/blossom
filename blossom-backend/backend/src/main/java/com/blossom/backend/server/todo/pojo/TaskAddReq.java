@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  *
@@ -31,4 +32,8 @@ public class TaskAddReq extends AbstractPOJO {
      * 截止日期
      */
     private String deadLine;
+    /**
+     * 标签集合
+     */
+    private List<String> taskTags;
 }

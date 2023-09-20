@@ -33,7 +33,7 @@ public class TaskController {
      * @param id 任务ID
      */
     @GetMapping("/info")
-    public R<TodoEntity> info(@RequestParam("id") Long id) {
+    public R<TaskInfoRes> info(@RequestParam("id") Long id) {
         return R.ok(baseService.selectById(id));
     }
 
@@ -64,7 +64,7 @@ public class TaskController {
     @PostMapping("/add")
     public R<TaskRes> add(@RequestBody @Validated TaskAddReq req) {
         baseService.insert(req);
-        return this.list(req.getTodoId());
+        return R.ok(baseService.listTask(req.getTodoId()));
     }
 
     /**
@@ -77,7 +77,7 @@ public class TaskController {
     public R<TaskRes> upd(@RequestBody @Validated TaskUpdReq req) {
         baseService.updById(req);
         if (BooleanUtil.isTrue(req.getReturnTasks())) {
-            return this.list(req.getTodoId());
+            return R.ok(baseService.listTask(req.getTodoId()));
         }
         return R.ok(TaskRes.build());
     }
@@ -85,19 +85,19 @@ public class TaskController {
     @PostMapping("/waiting")
     public R<TaskRes> toWaiting(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toWaiting(req);
-        return this.list(req.getTodoId());
+        return R.ok(baseService.listTask(req.getTodoId()));
     }
 
     @PostMapping("/processing")
     public R<TaskRes> toProcessing(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toProcessing(req);
-        return this.list(req.getTodoId());
+        return R.ok(baseService.listTask(req.getTodoId()));
     }
 
     @PostMapping("/completed")
     public R<TaskRes> toCompleted(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toCompleted(req);
-        return this.list(req.getTodoId());
+        return R.ok(baseService.listTask(req.getTodoId()));
     }
 
     /**
@@ -106,6 +106,6 @@ public class TaskController {
     @PostMapping("/del")
     public R<TaskRes> toProcessing(@RequestBody @Validated TaskDelReq req) {
         baseService.delById(req.getId());
-        return this.list(req.getTodoId());
+        return R.ok(baseService.listTask(req.getTodoId()));
     }
 }

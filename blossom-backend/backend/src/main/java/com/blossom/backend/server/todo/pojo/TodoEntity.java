@@ -18,7 +18,6 @@ import java.util.List;
 @Data
 @TableName("blossom_todo")
 @EqualsAndHashCode(callSuper = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoEntity extends AbstractPOJO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +37,10 @@ public class TodoEntity extends AbstractPOJO implements Serializable {
     private String taskName;
     /** 任务内容 */
     private String taskContent;
+    /**
+     * 标签集合
+     */
+    private String taskTags;
     /** 任务状态 WAITING | PROCESSING | COMPLETED */
     private String taskStatus;
     /** 截止至, 可填写任意内容 */

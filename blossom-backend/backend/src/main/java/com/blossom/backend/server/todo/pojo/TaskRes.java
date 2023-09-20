@@ -7,9 +7,9 @@ import java.util.List;
 
 @Data
 public class TaskRes {
-    private List<TodoEntity> waiting;
-    private List<TodoEntity> processing;
-    private List<TodoEntity> completed;
+    private List<TaskInfoRes> waiting;
+    private List<TaskInfoRes> processing;
+    private List<TaskInfoRes> completed;
 
     public static TaskRes build() {
         TaskRes res = new TaskRes();
@@ -18,4 +18,5 @@ public class TaskRes {
         res.setCompleted(new ArrayList<>());
         return res;
     }
+
 }
