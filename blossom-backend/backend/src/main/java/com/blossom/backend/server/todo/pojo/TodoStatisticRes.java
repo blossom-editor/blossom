@@ -5,7 +5,7 @@ import com.blossom.backend.server.todo.TodoTypeEnum;
 import lombok.Data;
 
 /**
- * 事项统计
+ * 待办事项统计
  *
  * @since 1.4.0
  */

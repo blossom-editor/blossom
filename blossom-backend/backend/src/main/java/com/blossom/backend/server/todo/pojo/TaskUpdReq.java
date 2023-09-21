@@ -9,6 +9,12 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * 任务修改
+ *
+ * @since 1.4.0
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TaskUpdReq extends AbstractPOJO {

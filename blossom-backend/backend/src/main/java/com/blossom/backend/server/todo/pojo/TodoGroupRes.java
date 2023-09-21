@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 待办事项分组列表
+ *
+ * @since 1.4.0
+ */
 @Data
 public class TodoGroupRes {
 

@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * 待办事项
+ *
+ * @since 1.4.0
  */
 @Mapper
 public interface TodoMapper extends BaseMapper<TodoEntity> {
@@ -21,9 +23,11 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
     List<TodoEntity> listAll(TodoEntity todo);
 
     /**
-     * 查询全部事项
+     * 查询某事项的全部任务
+     *
+     * @param userId 用户ID
      */
-    List<TodoEntity> listTodo(@Param("userId") Long userId, @Param("todoId") String todoName);
+    List<TodoEntity> listTodo(@Param("userId") Long userId);
 
     /**
      * 统计事项下的任务
@@ -38,14 +42,15 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
     TodoEntity selectByTodoId(@Param("todoId") String todoId);
 
     /**
-     * 修改todo名称
+     * 修改事项名称
      */
     void updTodoName(TodoPhasedUpdReq req);
 
     /**
-     * 完成阶段性事项
+     * 修改阶段性事项的状态
      *
-     * @param todoId 事项ID
+     * @param todoId     事项ID
+     * @param todoStatus 事项状态
      */
     void updTodoStatus(@Param("todoId") String todoId, @Param("todoStatus") Integer todoStatus);
 
@@ -68,6 +73,7 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
      *
      * @param beginCreTime 开始时间
      * @param endCreTime   结束时间
+     * @param userId       用户ID
      */
     List<TodoEntity> statisticTask(@Param("beginCreTime") String beginCreTime,
                                    @Param("endCreTime") String endCreTime,

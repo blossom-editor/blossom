@@ -2,7 +2,7 @@ server:
   port: 9999
   compression:
     enabled: true
-    # 响应内容长度该值进行压缩, 默认值为 2048 (2KB,不带单位时默认为字节)
+    # 响应内容长度(Content-Length)进行压缩, 默认值为 2048 (2KB,不带单位时默认为字节)
     min-response-size: 10KB
     # 对指定的响应类型进行压缩, 逗号隔开
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,application/xml

@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * 任务统计列表
+ *
+ * @since 1.4.0
  */
 @Data
 public class TaskStatisticRes {

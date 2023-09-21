@@ -6,6 +6,11 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 任务信息
+ *
+ * @since 1.4.0
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskInfoRes {

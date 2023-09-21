@@ -21,18 +21,17 @@ public class TodoController {
     /**
      * 待办事项列表
      *
-     * @param todoName 待办事项名称或日期
      * @return 待办事项列表
      */
     @GetMapping("/list")
-    public R<TodoGroupRes> list(@RequestParam(value = "todoName", required = false) String todoName) {
-        return R.ok(baseService.listTodo(todoName));
+    public R<TodoGroupRes> list() {
+        return R.ok(baseService.listTodo());
     }
 
     /**
      * 修改阶段性事项名称
      */
-    @PostMapping("/upd/todoname")
+    @PostMapping("/upd/name")
     public R<?> updTodoName(@RequestBody @Validated TodoPhasedUpdReq req) {
         baseService.updTodoName(req);
         return R.ok();
@@ -68,7 +67,7 @@ public class TodoController {
     /**
      * 待办事项列表
      *
-     * @param todoId todoId
+     * @param todoId todoId 待办事项ID
      * @return 待办事项列表
      */
     @GetMapping("/stat")

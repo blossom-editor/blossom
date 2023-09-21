@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 
 /**
  * 待办事项
+ *
+ * @since 1.4.0
  */
 @Slf4j
 @Service
@@ -34,8 +36,8 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
     /**
      * 全部列表
      */
-    public TodoGroupRes listTodo(String todoName) {
-        List<TodoEntity> todos = baseMapper.listTodo(AuthContext.getUserId(), todoName);
+    public TodoGroupRes listTodo() {
+        List<TodoEntity> todos = baseMapper.listTodo(AuthContext.getUserId());
         TodoGroupRes res = TodoGroupRes.build();
         for (TodoEntity todo : todos) {
             TodoGroupRes.TodoGroup group = todo.to(TodoGroupRes.TodoGroup.class);
@@ -322,7 +324,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         res.setCompleted(all.stream().filter(t -> t.getTaskStatus().equals(TaskStatusEnum.COMPLETED.name())).count());
         return res;
     }
-
 
     /**
      * 指定事项统计信息

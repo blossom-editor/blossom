@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 待办事项任务
+ *
  * @since 1.4.0
  */
 @RestController
@@ -82,18 +84,27 @@ public class TaskController {
         return R.ok(TaskRes.build());
     }
 
+    /**
+     * 事项移动到待办
+     */
     @PostMapping("/waiting")
     public R<TaskRes> toWaiting(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toWaiting(req);
         return R.ok(baseService.listTask(req.getTodoId()));
     }
 
+    /**
+     * 事项移动到进行中
+     */
     @PostMapping("/processing")
     public R<TaskRes> toProcessing(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toProcessing(req);
         return R.ok(baseService.listTask(req.getTodoId()));
     }
 
+    /**
+     * 事项移动到完成
+     */
     @PostMapping("/completed")
     public R<TaskRes> toCompleted(@RequestBody @Validated TaskUpdStatusReq req) {
         baseService.toCompleted(req);

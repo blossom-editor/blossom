@@ -5,7 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 新增阶段性事项的名称
+ * 新增阶段性事项
+ *
+ * @since 1.4.0
  */
 @Data
 public class TodoPhasedAddReq {

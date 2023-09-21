@@ -7,6 +7,11 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 任务状态修改
+ *
+ * @since 1.4.0
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TaskUpdStatusReq extends AbstractPOJO {

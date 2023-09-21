@@ -5,6 +5,11 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 任务列表
+ *
+ * @since 1.4.0
+ */
 @Data
 public class TaskRes {
     private List<TaskInfoRes> waiting;

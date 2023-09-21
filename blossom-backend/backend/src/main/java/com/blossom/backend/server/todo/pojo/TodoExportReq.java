@@ -2,6 +2,11 @@ package com.blossom.backend.server.todo.pojo;
 
 import lombok.Data;
 
+/**
+ * 待办事项导出
+ *
+ * @since 1.4.0
+ */
 @Data
 public class TodoExportReq {
 

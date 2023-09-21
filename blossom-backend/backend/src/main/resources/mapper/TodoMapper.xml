@@ -47,8 +47,8 @@
                count(*) as taskCount
           from blossom_todo
          where user_id = #{userId}
-         <if test="todoId != null"> and todo_name = #{todoId}</if>
-      group by todo_id order by id desc
+      group by todo_id
+      order by id desc
     </select>
 
     <select id="selectByTodoId" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
