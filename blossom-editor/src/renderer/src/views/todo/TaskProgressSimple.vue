@@ -1,6 +1,11 @@
 <template>
   <div class="task-progress-simple-root">
-    <div v-if="countWait > 0" class="task-workbench">
+    <div class="todo-select">
+      <el-select style="width: 170px;" placeholder="点击选择显示阶段性事项" v-model="choiseTodoId" @change="changeChoiseTodoId">
+        <el-option v-for="op in todoOptions" :key="op.value" :label="op.label" :value="op.value"></el-option>
+      </el-select>
+    </div>
+    <div v-if="countTotal > 0" class="task-workbench">
       <bl-row class="bars">
         <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }">
         </div>
@@ -21,16 +26,13 @@
       </bl-row>
     </div>
 
-    <div v-if="countWait == 0" class="placeholder">
+    <div v-if="countTotal == 0" class="placeholder">
       无待办事项
     </div>
 
     <div class="progress-container">
       <div class="waiting">
-        <!-- <div class="tasks-title"><span>待办</span></div>
-        <div class="tasks-sub-title" align="flex-start"><span>Waiting</span><span>{{ countWait }}</span></div> -->
         <div class="tasks-container">
-
           <div v-for="t in taskWait" :key="t.id" class="task-item">
             <div v-if="t.todoType == 99" class="divider"></div>
             <div v-else>
@@ -46,10 +48,7 @@
 
 
       <div class="processing">
-        <!-- <div class="tasks-title"><span>进行中</span></div>
-        <div class="tasks-sub-title"><span>Processing</span><span>{{ countProc }}</span></div> -->
         <div class="tasks-container">
-          <!--  -->
           <div v-for="t in taskProc" :key="t.id" class="task-item">
             <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
             <div v-else>
@@ -68,10 +67,7 @@
 
       <!--  -->
       <div class="completed">
-        <!-- <div class="tasks-title">完成</div>
-        <div class="tasks-sub-title"><span>Completed</span><span>{{ countComp }}</span></div> -->
         <div class="tasks-container">
-          <!--  -->
           <div v-for="t in taskComp" :key="t.id" class="task-item">
             <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
             <div v-else>
@@ -93,18 +89,54 @@
 
 <script setup lang="ts">
 import { computed, onActivated, onMounted, ref } from 'vue'
-import { tasksApi } from '@renderer/api/todo'
+import { todosApi, tasksApi } from '@renderer/api/todo'
 import { TaskInfo } from './scripts/types'
 import { isEmpty } from 'lodash'
 import { getDateFormat } from '@renderer/assets/utils/util'
+import { Local } from '@renderer/assets/utils/storage'
+import { isBlank } from '@renderer/assets/utils/obj'
 
 onMounted(() => {
-  getTasks(getDateFormat())
+  initChoiseTodoId()
+  getTodos()
 })
 
 onActivated(() => {
-  getTasks(getDateFormat())
+  getTodos()
 })
+
+const DAY_TODO_ID = 'day_todo_id'
+const HOME_CHOISE_TODO_ID = 'blossom-home-choise-todo-id'
+const choiseTodoId = ref('')
+const todoOptions = ref<{ label: string, value: string }[]>([])
+
+const initChoiseTodoId = () => {
+  let todoId = Local.get(HOME_CHOISE_TODO_ID)
+  if (isBlank(todoId)) {
+    choiseTodoId.value = DAY_TODO_ID
+  } else {
+    choiseTodoId.value = todoId
+  }
+}
+
+const changeChoiseTodoId = (value: string) => {
+  Local.set(HOME_CHOISE_TODO_ID, value)
+  getTasks()
+}
+
+const getTodos = () => {
+  todosApi().then(resp => {
+    let options = [{ label: '今日待办', value: DAY_TODO_ID }]
+    resp.data.taskPhased.forEach((todo: { todoName: string; todoId: string }) => {
+      options.push({
+        label: todo.todoName,
+        value: todo.todoId
+      })
+    });
+    todoOptions.value = options
+    getTasks()
+  })
+}
 
 //#region --------------------------------------------------< 列表/弹框显示 >--------------------------------------------------
 const curTodo = ref({ todoId: '', todoName: '', todoType: 10 })
@@ -116,7 +148,14 @@ const countProc = computed<number>(() => taskProc.value.filter(t => t.todoType !
 const countComp = computed<number>(() => taskComp.value.filter(t => t.todoType != 99).length)
 const countTotal = computed(() => countWait.value + countProc.value + countComp.value)
 
-const getTasks = (todoId: string) => {
+const getTasks = () => {
+  let todoId = getDateFormat()
+  if (isBlank(choiseTodoId.value) || choiseTodoId.value == DAY_TODO_ID) {
+    todoId = getDateFormat()
+  } else {
+    todoId = choiseTodoId.value
+  }
+
   tasksApi({ todoId: todoId }).then(resp => {
     taskWait.value = resp.data.waiting
     taskProc.value = resp.data.processing
@@ -131,6 +170,26 @@ const getTasks = (todoId: string) => {
 
 .task-progress-simple-root {
   @include box(100%, 100%);
+  position: relative;
+
+  .todo-select {
+    position: absolute;
+    top: -43px;
+    left: 90px;
+
+    :deep(.el-input) {
+      border: none;
+    }
+
+    :deep(.el-input__wrapper) {
+      box-shadow: none;
+      --el-input-bg-color: transparent;
+
+      .el-input__inner {
+        color: #ABABAB;
+      }
+    }
+  }
 
   .placeholder {
     padding: 20px 0 0 20px;
@@ -160,11 +219,15 @@ const getTasks = (todoId: string) => {
 
         .task-item {
           @include themeBg(linear-gradient(155deg, #ffffff00 0%, #FFFFFF84 60%, var(--el-color-primary-light-9) 100%),
-            linear-gradient(155deg, var(--bl-html-color) 0%, #00000015 60%, var(--el-color-primary-light-9) 100%));
+            linear-gradient(155deg, var(--bl-html-color) 0%, #00000015 60%, rgba(165, 184, 20, 0.1) 100%));
           width: 210px;
           min-width: 210px;
           max-width: 210px;
           margin: 10px 20px;
+
+          .task-title {
+            cursor: auto;
+          }
 
           &:has(.divider) {
             background: transparent !important;
