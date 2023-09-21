@@ -436,5 +436,3 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
   }
 }
 </style>
-
-<style></style>../doc@renderer/common/notify@renderer/scripts/notify

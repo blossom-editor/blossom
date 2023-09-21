@@ -179,10 +179,6 @@ const toToc = (articleId: number) => {
         font-size: 15px;
       }
     }
-
-
   }
-
-
 }
-</style>@renderer/common/notify@renderer/scripts/notify
+</style>

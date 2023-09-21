@@ -162,4 +162,4 @@ const emits = defineEmits(['saved'])
   }
 
 }
-</style>@renderer/common/notify@renderer/scripts/notify
+</style>

@@ -72,4 +72,4 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-</script>@renderer/common/notify@renderer/scripts/notify
+</script>
