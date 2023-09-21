@@ -31,6 +31,7 @@
         <li><strong>多账号权限</strong>，可以和你的朋友一起使用。</li>
         <li><strong>一键导出</strong>，可以一键导出所有文章和图片，并将图片链接转换为图片路径，轻松转为本地笔记。</li>
         <li><strong>网页转换</strong>，可以一键将指定或全部文章转换为网页，方便分享。</li>
+        <li><strong>丰富的功能拓展</strong>，包含日历计划，待办事项清单，一个完善的个人管理工具。</li>
         <li>你甚至可以只把 Blossom <strong>当做个人图床</strong>，并使用你自己的域名。</li>
       </ol>
       <p class="paragraph" style="margin-bottom: 0;">
@@ -39,13 +40,14 @@
       <ol>
         <li><strong>文章编辑：</strong>Markdown 文章编写，文章公网访问权限，文章分类管理。</li>
         <li><strong>双链笔记：</strong>内部文章与外部链接引用形成的双链笔记知识网络。</li>
-        <li><strong>备份导出：</strong>每日全量备份，备份一键下载。</li>
+        <li><strong>全量导出：</strong>每日全量备份，备份一键下载。</li>
         <li><strong>网页转换：</strong>将 Markdown 文章转换成网页，一键打包分享。</li>
         <li><strong>番茄时钟：</strong>编辑器包含一个番茄钟功能。</li>
-        <li><strong>图片管理：</strong>按文章目录分类你的图片，或自定义图片目录，图片与文章双向查询。</li>
+        <li><strong>图片存储：</strong>按文章目录分类你的图片，或自定义图片目录，图片与文章双向查询。</li>
         <li><strong>自带截图：</strong>(仅windows)，你不再需要使用其他截图工具截图后保存在本地再上传到云端了。</li>
-        <li><strong>快捷便签：</strong>方便你记录随意的日常信息。</li>
+        <li><strong>待办清单：</strong>以 Todo List 的方式管理你的每日事项或阶段性计划。</li>
         <li><strong>计划安排：</strong>阶段性的长期计划，或者日历中的短期计划安排。</li>
+        <li><strong>快捷便签：</strong>方便你记录随意的日常信息。</li>
         <li><strong>网站收藏：</strong>常用网站快捷访问，或者说是一个书签功能。</li>
         <li>笔记总字数折线图，笔记编辑数量热力图，服务器请求量折线图展示。</li>
       </ol>
