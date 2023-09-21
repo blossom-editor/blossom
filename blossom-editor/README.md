@@ -13,7 +13,7 @@ Blossom 1.4.0
 Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于MIT协议完全开源。
 
 <p align="center">
-<img src="./doc/imgs/home_ld.png">
+<img src="../doc/imgs/home_ld_1_4_0.png">
 </p>
 
 - 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)，我们提供了一个试用账号帮你体验该应用。
