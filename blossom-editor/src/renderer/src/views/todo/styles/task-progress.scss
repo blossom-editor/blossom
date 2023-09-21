@@ -75,7 +75,7 @@
   }
 }
 
-.tasks-container {
+.progress-container {
   @include box(100%, calc(100% - 100px));
   @include flex(row, flex-start, center);
   padding-top: 20px;

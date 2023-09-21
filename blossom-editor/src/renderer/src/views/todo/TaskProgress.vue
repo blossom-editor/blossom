@@ -27,7 +27,7 @@
     </bl-row>
   </div>
 
-  <div class="tasks-container">
+  <div class="progress-container">
     <div class="waiting" @dragenter="onDragenter(WaitDragRef, 'WAITING', $event)"
       @dragleave="onDragleave(WaitDragRef, $event)" ref="WaitRef">
       <div class="tasks-title">

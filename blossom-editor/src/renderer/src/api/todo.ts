@@ -42,7 +42,7 @@ export const addPhasedApi = (data?: object): Promise<R<any>> => {
  * 修改阶段性事项的名称
  */
 export const updTodoNameApi = (data?: object): Promise<R<any>> => {
-  return rq.post<R<any>>("/todo/upd/todoname", data);
+  return rq.post<R<any>>("/todo/upd/name", data);
 }
 
 /**

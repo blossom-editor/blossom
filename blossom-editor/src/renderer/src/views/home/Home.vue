@@ -38,7 +38,7 @@
       </bl-row>
 
       <!-- 流量统计 -->
-      <bl-row class="container-name">流量</bl-row>
+      <bl-row class="container-name">请求流量</bl-row>
       <bl-row class="container-sub-name">
         Flow Statistic / Requests & Average Response Time(ms)
         <span class="iconbl bl-refresh-smile container-refresh" @click="loadSentinlLine"></span>
@@ -66,7 +66,6 @@
       middle
       =======================================================
      -->
-
     <div class="middle">
       <div style="height: 45px;">
       </div>
@@ -84,10 +83,15 @@
       </bl-col>
 
       <bl-col width="100%" height="calc(100% - 45px - 270px - 330px)">
-        <bl-row class="container-name">便签</bl-row>
+        <!-- <bl-row class="container-name">便签</bl-row>
         <bl-row class="container-sub-name">记录瞬间的灵感 (Ctrl+Enter 快速保存)</bl-row>
         <bl-row style="padding:20px 10px 30px 10px;height: calc(100% - 80px);text-align: right;">
           <NoteEditor></NoteEditor>
+        </bl-row> -->
+        <bl-row class="container-name">待办事项</bl-row>
+        <bl-row class="container-sub-name">Todo List</bl-row>
+        <bl-row style="padding-bottom: 10px;height: calc(100% - 80px);">
+          <TaskProgressSimpleVue></TaskProgressSimpleVue>
         </bl-row>
       </bl-col>
     </div>
@@ -126,8 +130,9 @@ import SentinelChartLine from "@renderer/views/statistic/SentinelChartLine.vue"
 import ArticleSubjects from "./ArticleSubjects.vue"
 import ArticleStars from "./ArticleStars.vue"
 import StatisticCard from './StatisticCard.vue'
-import NoteEditor from '@renderer/views/note/NoteEditor.vue'
+// import NoteEditor from '@renderer/views/note/NoteEditor.vue'
 import WaveFooter from "@renderer/components/WaveFooter.vue"
+import TaskProgressSimpleVue from "../todo/TaskProgressSimple.vue"
 
 import { nowWhen } from "@renderer/assets/utils/util"
 
@@ -336,5 +341,11 @@ let now: string = nowWhen()
       background-position: 300%;
     }
   }
+}
+
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 3px;
 }
 </style>

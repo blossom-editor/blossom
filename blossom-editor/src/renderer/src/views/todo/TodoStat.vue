@@ -35,7 +35,7 @@
           <span class="icon-shadow iconbl bl-a-boxdownload-line"></span>
         </div>
       </bl-row>
-      
+
     </div>
 
     <div class="phared-details">
@@ -55,19 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onActivated, onMounted, ref } from 'vue'
 import { todoStatApi, taskStatApi, completedTodoApi, openTodoApi } from '@renderer/api/todo'
 import TodoChartCompleted from './TodoChartCompleted.vue'
 
-const TodoChartCompletedRef = ref()
-const taskStat = ref({
-  waiting: 0,
-  processing: 0,
-  completed: 0,
-  total: 0,
+onMounted(() => {
+  getTaskStat()
 })
 
-onMounted(() => {
+onActivated(() => {
+  getTaskStat()
+})
+
+const getTaskStat = () => {
   taskStatApi().then(resp => {
     taskStat.value = {
       waiting: resp.data.waiting,
@@ -77,6 +77,14 @@ onMounted(() => {
     }
     TodoChartCompletedRef.value.reload(resp.data.dates, resp.data.rates)
   })
+}
+
+const TodoChartCompletedRef = ref()
+const taskStat = ref({
+  waiting: 0,
+  processing: 0,
+  completed: 0,
+  total: 0,
 })
 
 const openTodo = () => {
