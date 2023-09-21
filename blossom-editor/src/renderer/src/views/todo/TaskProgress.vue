@@ -138,28 +138,29 @@
   </div>
 
   <!-- 导出 dialog -->
-  <el-dialog draggable title="导出任务" v-model="isShowExportDialog" :align-center="true" :append-to-body="true"
-    :destroy-on-close="true" :close-on-click-modal="false" width="800px" style="--el-dialog-border-radius:10px;
-    --el-dialog-padding-primary: 10px;
-    --el-dialog-box-shadow:var(--bl-box-shadow);">
-    <bl-row align="center" height="20px">
-      <bl-row width="250px" v-if="curTodo.todoType == 20">
-        导出 {{ curTodo.todoName }}
+  <el-dialog draggable v-model="isShowExportDialog" :align-center="true" :append-to-body="true" :destroy-on-close="true"
+    :close-on-click-modal="false" width="800px" style="
+    --el-dialog-padding-primary: 10px !important;">
+    <div style="padding: 15px;">
+      <bl-row align="center" height="20px">
+        <bl-row width="250px" v-if="curTodo.todoType == 20">
+          导出 {{ curTodo.todoName }}
+        </bl-row>
+        <bl-row width="250px" v-if="curTodo.todoType == 10">
+          导出时间范围：
+          <el-date-picker style="width: 150px;" v-model="exportForm.exportDays" type="daterange" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期" format="MM-DD" value-format="YYYY-MM-DD" />
+        </bl-row>
+        <el-checkbox v-model="exportForm.exportDate" label="导出时间" border style="margin: 10px;" />
+        <el-checkbox v-model="exportForm.exportProcess" label="导出进度" border />
+        <el-button style="margin-left: 10px;" @click="exportTodo">预览</el-button>
+        <el-button @click="download">下载 Markdown</el-button>
       </bl-row>
-      <bl-row width="250px" v-if="curTodo.todoType == 10">
-        导出时间范围：
-        <el-date-picker style="width: 150px;" v-model="exportForm.exportDays" type="daterange" range-separator="至"
-          start-placeholder="开始日期" end-placeholder="结束日期" format="MM-DD" value-format="YYYY-MM-DD" />
+      <el-divider style="margin: 10px 0;"></el-divider>
+      <bl-row>
+        <el-input type="textarea" :rows="27" v-model="exportContent"></el-input>
       </bl-row>
-      <el-checkbox v-model="exportForm.exportDate" label="导出时间" border style="margin: 10px;" />
-      <el-checkbox v-model="exportForm.exportProcess" label="导出进度" border />
-      <el-button style="margin-left: 10px;" @click="exportTodo">预览</el-button>
-      <el-button @click="download">下载 Markdown</el-button>
-    </bl-row>
-    <el-divider style="margin: 10px 0;"></el-divider>
-    <bl-row>
-      <el-input type="textarea" :rows="27" v-model="exportContent"></el-input>
-    </bl-row>
+    </div>
   </el-dialog>
 
   <el-dialog draggable v-model="isShowTaskInfoDialog" :align-center="true" :modal="false" :lock-scroll="false"
@@ -536,9 +537,9 @@ const emits = defineEmits(['refreshTodo'])
 </script>
 
 <style scoped lang="scss">
-@import './styles/task-progress.scss'
+@import './styles/task-progress.scss';
 </style>
 
 <style lang="scss">
-@import './styles/task-item.scss'
+@import './styles/task-item.scss';
 </style>
