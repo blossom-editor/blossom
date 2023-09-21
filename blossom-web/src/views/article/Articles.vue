@@ -22,7 +22,7 @@
           :default-active="docTreeDefaultActive" :default-openeds="defaultOpeneds" :unique-opened="true">
 
           <!-- ================================================ L1 ================================================ -->
-          <div v-for="L1 in docTreeData" :key="L1.i">
+          <div v-for="L1 in docTreeData" :key="L1.i" class="menu-level-one">
 
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
@@ -32,7 +32,7 @@
 
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
               <template #title>
-                <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px;font-weight: bold;" />
+                <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px;" />
               </template>
 
               <!-- ================================================ L2 ================================================ -->
@@ -334,6 +334,16 @@ const onresize = () => {
       font-weight: 200;
       transition: 0.1s;
 
+      .menu-level-one {
+        margin-top: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 10px;
+
+        &:first-child {
+          margin-top: 0px;
+        }
+      }
+
       .doc-trees {
         @include box(100%, 100%);
         font-weight: 200;
@@ -633,7 +643,8 @@ const onresize = () => {
           border-spacing: 0;
           margin: 10px 0;
           max-width: 100%;
-          table-layout: fixed;
+          // table-layout: fixed;
+          table-layout: auto;
           width: 100%;
 
           thead {

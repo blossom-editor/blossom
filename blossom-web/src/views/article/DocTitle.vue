@@ -73,6 +73,7 @@ $icon-size: 17px;
 .menu-icon {
   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
   // margin-right: 5px;
+  transform: translateY(3px);
 }
 
 .doc-title {
