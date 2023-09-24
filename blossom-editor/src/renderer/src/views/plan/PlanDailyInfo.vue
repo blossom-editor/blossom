@@ -121,26 +121,14 @@ const saveDaily = async (formEl: FormInstance | undefined) => {
 const imgs = [
   getImg('base-awesome.png'),
   getImg('base-cool.png'),
-  getImg('base-cry.png'),
   getImg('base-learning.png'),
-  getImg('base-seesee.png'),
-  getImg('dog.png'),
   getImg('cat-kiss.png'),
   getImg('cat-nice.png'),
-  getImg('cat-shock.png'),
   getImg('cat-smile.png'),
   getImg('cat.png'),
-  getImg('computer.png'),
   getImg('coffee.png'),
   getImg('juice.png'),
-  getImg('beer.png'),
-  getImg('ball.png'),
-  getImg('bike.png'),
-  getImg('crossbones.png'),
-  getImg('hand-ok.png'),
-  getImg('hand-write.png'),
-  getImg('love.png'),
-  getImg('sleep.png')
+  getImg('beer.png')
 ]
 
 const useInnerImg = (img: string) => {

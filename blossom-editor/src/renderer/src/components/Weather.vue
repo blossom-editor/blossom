@@ -7,11 +7,8 @@
     <div class="now hover-dark">
       <div class="weather-title"></div>
       <div class="weather-body">
-        <!-- <svg aria-hidden="true">
-          <use :xlink:href="weather.now.iconValue"></use>
-        </svg> -->
         <img :src="weather.now.img" style="width: 190px;height: 190px;">
-        <!-- <img src="@renderer/assets/imgs/weather/xue.png" style="width: 190px;height: 190px;"> -->
+        <!-- <img src="@renderer/assets/imgs/weather/feng.png" style="width: 190px;height: 190px;"> -->
         <div class="temp-wrapper">
           <!-- 温度 -->
           <span class="now-temp">
@@ -34,10 +31,8 @@
     <div class="today hover-dark">
       <div class="weather-title">Today</div>
       <div class="weather-body">
-        <!-- <svg aria-hidden="true">
-          <use :xlink:href="weather.daily[0].iconValueDay"></use>
-        </svg> -->
         <img :src="weather.daily[0].img" style="width: 40px;height: 40px;">
+        <!-- <img src="@renderer/assets/imgs/weather/feng.png" style="width: 40px;height: 40px;"> -->
         <span>{{ weather.daily[0].tempMax }}°C</span>
         ~
         <span>{{ weather.daily[0].tempMin }}°C </span>
@@ -51,9 +46,6 @@
     <div class="tomorrow hover-dark">
       <div class="weather-title">Tomorrow</div>
       <div class="weather-body">
-        <!-- <svg aria-hidden="true">
-          <use :xlink:href="weather.daily[1].iconValueDay"></use>
-        </svg> -->
         <img :src="weather.daily[1].img" style="width: 40px;height: 40px;">
         <span>{{ weather.daily[1].tempMax }}°C</span>
         ~
@@ -71,9 +63,6 @@
         <span>After</span>
       </div>
       <div class="weather-body">
-        <!-- <svg aria-hidden="true">
-          <use :xlink:href="weather.daily[2].iconValueDay"></use>
-        </svg> -->
         <img :src="weather.daily[2].img" style="width: 40px;height: 40px;">
         <span>{{ weather.daily[2].tempMax }}°C</span>
         ~
