@@ -6,7 +6,7 @@ const blossom: any = {
     NAME: 'Blossom',
     SHORT_NAME: 'BLOSSOM-WEB',
     // 版本
-    VERSION: 'v1.4.0',
+    VERSION: 'v1.4.1',
     // 公网安备号
     GONG_WANG_AN_BEI: "X公网安备 XXXXXXXXXX号",
     // ICP 备案号
