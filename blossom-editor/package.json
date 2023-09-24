@@ -39,7 +39,7 @@
     "katex": "^0.16.8",
     "marked": "^7.0.4",
     "marked-highlight": "^2.0.4",
-    "mermaid": "^10.3.1",
+    "mermaid": "^10.4.0",
     "pinia": "^2.1.6",
     "prettier": "^3.0.2",
     "sass": "^1.65.1",

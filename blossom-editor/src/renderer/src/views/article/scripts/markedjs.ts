@@ -20,7 +20,7 @@ mermaid.initialize({
     // 主要配色
     'primaryColor': '#cfbef1',
     'primaryTextColor': '#606266',
-    'primaryBorderColor': '#8143FF',
+    'primaryBorderColor': '#A67AFF',
     // 第二颜色
     'secondaryColor': '#efc75e',
     'secondaryTextColor': '#606266',
