@@ -336,4 +336,31 @@ CREATE TABLE `blossom_web`  (
 -- Records of blossom_web
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for blossom_todo
+-- ----------------------------
+DROP TABLE IF EXISTS `blossom_todo`;
+CREATE TABLE `blossom_todo` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `todo_id` varchar(50) COLLATE utf8mb4_bin NOT NULL COMMENT '事项ID',
+    `todo_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '事项名称',
+    `todo_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '事项状态 1:未完成 | 2:完成 | 9:作废',
+    `todo_type` tinyint(1) NOT NULL DEFAULT '10' COMMENT '事项类型 10:每日待办事项 | 20:阶段性事项',
+    `task_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务名称',
+    `task_content` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务内容',
+    `task_tags` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '便签',
+    `task_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'WAITING' COMMENT '任务状态 WAIT | PROC | DONE',
+    `dead_line` varchar(100) COLLATE utf8mb4_bin DEFAULT '' COMMENT '截止日期',
+    `start_time` datetime DEFAULT NULL COMMENT '开始日期',
+    `end_time` datetime DEFAULT NULL COMMENT '结束日期',
+    `color` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '颜色',
+    `process` tinyint(1) NOT NULL DEFAULT '0' COMMENT '进度 0 ~ 100',
+    `user_id` bigint DEFAULT NULL COMMENT '用户ID',
+    `cre_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_todo_todoid` (`todo_id`) COMMENT 'todoid 索引',
+    KEY `idx_todo_userid` (`user_id`) USING BTREE COMMENT 'userid 索引',
+    KEY `idx_todo_cretime` (`cre_time`) USING BTREE COMMENT '创建时间'
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='待办事项，Todo';
 SET FOREIGN_KEY_CHECKS = 1;
+
