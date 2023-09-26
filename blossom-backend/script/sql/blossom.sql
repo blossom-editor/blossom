@@ -31,7 +31,7 @@ CREATE TABLE `base_sys_param`  (
   `upd_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unq_param_name`(`param_name`) USING BTREE COMMENT '参数名称唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统参数' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '系统参数' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of base_sys_param
@@ -156,6 +156,7 @@ CREATE TABLE `blossom_article_open`  (
 -- ----------------------------
 -- Table structure for blossom_article_reference
 -- ----------------------------
+DROP TABLE IF EXISTS `blossom_article_reference`;
 CREATE TABLE `blossom_article_reference` (
 `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
 `source_id` bigint NOT NULL COMMENT '文章ID',
