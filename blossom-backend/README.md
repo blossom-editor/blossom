@@ -30,6 +30,8 @@ root
 
 ```shell
 maven install
+maven clean build
+maven package
 ```
 
 ```shell
