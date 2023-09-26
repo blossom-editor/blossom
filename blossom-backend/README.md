@@ -26,11 +26,16 @@ root
 
 安装好`Docker`环境，安装好`git`，克隆代码仓库，
 
-在 `blossom-backend` 目录下，运行如下命令：
+在项目根目录下，运行如下命令：
 
 ```shell
 maven install
 maven clean build
+```
+
+在 `blossom-backend` 目录下，运行如下命令：
+
+```shell
 maven package
 ```
 
