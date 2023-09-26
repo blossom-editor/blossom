@@ -1,6 +1,6 @@
 FROM eclipse-temurin:8-jre as builder
 WORKDIR application
-ARG JAR_FILE=blossom-backend/backend/target/*.jar
+ARG JAR_FILE=backend/target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 

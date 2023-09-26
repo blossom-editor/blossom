@@ -274,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `blossom_article_open`  (
 -- ----------------------------
 -- Table structure for blossom_article_reference
 -- ----------------------------
-CREATE TABLE `blossom_article_reference` (
+CREATE TABLE IF NOT EXISTS `blossom_article_reference` (
                                              `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
                                              `source_id` bigint NOT NULL COMMENT '文章ID',
                                              `source_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '文章名称',
