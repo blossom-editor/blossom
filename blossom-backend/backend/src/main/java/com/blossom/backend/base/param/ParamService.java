@@ -11,6 +11,9 @@ import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.util.BeanUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +34,8 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
 
     private static final Map<String, ParamEntity> CACHE = new HashMap<>(20);
 
-    @PostConstruct
+    // @PostConstruct
+    @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
         log.info("[    BASE] 初始化系统参数缓存");
         CACHE.clear();
