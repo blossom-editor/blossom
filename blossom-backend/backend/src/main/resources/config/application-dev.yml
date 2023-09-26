@@ -47,7 +47,7 @@ project:
     clients: # 客户端
       - client-id: blossom
         grant-type: 'password'
-        expire: 21600 # 客户端授权时间 6 小时
+        duration: 21600 # 客户端授权时间 6 小时
         multi-place-login: true # 客户端是否允许多地登录
     white-list: # 白名单
       - /sentinel/**
