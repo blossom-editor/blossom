@@ -37,7 +37,6 @@
         <!--
         BOM 在 dependencyManagement 中指定依赖版本
         -->
-        <elasticsearch.version>7.10.2</elasticsearch.version>
         <caffeine.version>2.9.3</caffeine.version>
     </properties>
 
