@@ -64,6 +64,7 @@ public class PlanUtil {
         plans.forEach(p -> p.setSort(-1));
 
         byDay.forEach((date, list) -> {
+            list.sort((p1, p2) -> SortUtil.strSort.compare(p1.getPlanStartTime(), p2.getPlanStartTime()));
             for (PlanDayRes plan : list) {
                 if (plan.getSort() == null) {
                     plan.setSort(-1);
@@ -84,6 +85,7 @@ public class PlanUtil {
                     for (PlanDayRes groupPlan : byGroupId.get(plan.getGroupId())) {
                         groupPlan.setSort(targetSort);
                     }
+                    break;
                 }
             }
 
