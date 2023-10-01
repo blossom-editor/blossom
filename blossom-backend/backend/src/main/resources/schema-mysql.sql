@@ -13,23 +13,11 @@ CREATE TABLE IF NOT EXISTS `base_sys_param`  (
                                    `upd_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                    PRIMARY KEY (`id`) USING BTREE,
                                    UNIQUE INDEX `unq_param_name`(`param_name`) USING BTREE COMMENT '参数名称唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统参数' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '系统参数' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of base_sys_param
 -- ----------------------------
--- INSERT INTO `base_sys_param` VALUES (1, 'WEB_ARTICLE_URL', 'https://www.domain.com/blossom/#/articles?articleId=', '博客端文章地址,用于PC端直接调往WEB端阅读文章', 1, '2023-04-04 08:20:57', '2023-08-06 22:19:07');
--- INSERT INTO `base_sys_param` VALUES (3, 'ARTICLE_LOG_EXP_DAYS', '30', '文章修改记录保存天数, 超过该天数将被删除', 1, '2023-08-02 17:46:58', '2023-08-02 18:03:43');
--- INSERT INTO `base_sys_param` VALUES (11, 'HEFENG_KEY', 'ABC', '和风天气的KEY', 1, '2023-07-31 19:28:54', '2023-08-06 22:19:11');
--- INSERT INTO `base_sys_param` VALUES (21, 'GITEE_ACCESS_TOKEN', 'ABC', '[过时配置]GITEE API 的访问 token', 1, '2023-07-31 20:12:05', '2023-08-06 22:20:12');
--- INSERT INTO `base_sys_param` VALUES (31, 'BACKUP_PATH', '/home/bl/backup/', '备份路径, 参考格式: /home/bl/backup/', 1, '2023-08-26 16:59:11', '2023-08-26 19:32:38');
--- INSERT INTO `base_sys_param` VALUES (32, 'BACKUP_EXP_DAYS', '7', '备份过期天数', 1, '2023-08-26 19:21:43', '2023-08-26 19:21:43');
--- INSERT INTO `base_sys_param` VALUES (900, 'SERVER_JWT_SECRET', '96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e', 'JWT加密字符串', 1, '2023-08-31 18:39:11', '2023-08-31 18:52:50');
--- INSERT INTO `base_sys_param` VALUES (901, 'SERVER_MACHINE_EXPIRE', '2024-01-01', '过期时间 - 服务器', 1, '2023-08-31 17:29:55', '2023-08-31 17:35:10');
--- INSERT INTO `base_sys_param` VALUES (902, 'SERVER_DOMAIN_EXPIRE', '2024-01-01', '过期时间 - 域名', 1, '2023-08-31 17:30:45', '2023-08-31 17:35:12');
--- INSERT INTO `base_sys_param` VALUES (903, 'SERVER_HTTPS_EXPIRE', '2024-01-01', '过期时间 - HTTPS 证书', 1, '2023-08-31 17:31:06', '2023-08-31 17:35:15');
--- INSERT INTO `base_sys_param` VALUES (904, 'SERVER_DATABASE_EXPIRE', '2024-01-01', '过期时间 - 数据库', 1, '2023-08-31 17:31:33', '2023-08-31 17:35:17');
-
 INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
 SELECT 1,
        'WEB_ARTICLE_URL',
@@ -181,7 +169,6 @@ CREATE TABLE IF NOT EXISTS `base_user`  (
 -- ----------------------------
 -- Records of base_user
 -- ----------------------------
--- INSERT INTO `base_user` VALUES (1, 1, 'blos', '', '$2a$10$SgMx8T/06595PEq3EA9US.ja1oHxpIDG/XnERmBXS.wYS8qbxAGDa', 'UVeESP5NgXwb8JmjCHUK', '用户', 'blos', '', '预设管理员账号, 用户名密码都是 blos', '0,SYS', '2023-08-04 16:48:28', '0,SYS', '2023-08-06 22:17:35', '0', 0, '101100101');
 INSERT INTO base_user (id, type, username, phone, password, salt, nick_name, real_name, remark, cre_by, cre_time, upd_by, upd_time, location)
 SELECT 1,
        1,

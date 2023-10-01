@@ -11,6 +11,7 @@ logging:
   level:
     com.blossom: info
     com.blossom.expand.tracker: info
+    com.blossom.backend.base.auth: info
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn
     com.baomidou.dynamic.datasource.DynamicRoutingDataSource: warn
     com.zaxxer.hikari.HikariDataSource: warn
@@ -18,12 +19,12 @@ logging:
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ project ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 project:
-  # 基础信息
   base:
     version: @project.version@
-    # 异常日志配置
     ex:
+      # 异常打印格式 all/project
       stack-trace: project
+      # format/line
       format: format
     # 动态日志级别配置
     log:
@@ -70,6 +71,7 @@ project:
     os-type: blossom
     blos:
       # 请以 /pic 结尾, 如果你在 nginx 中配置有代理, 注意别忘了添加你的代理路径
+      # 注意：在下方示例中, /bl 即为 nginx 反向代理路径, 如果你的访问路径中不包含反向代理或路径不同, 请酌情删除或修改
       domain: "https://www.wangyunf.com/bl/pic/"
       # 请以 / 开头, / 结尾, 简短的路径在文章中有更好的显示效果, 过长一定程度会使文章内容混乱
       default-path: "/home/bl/img/"
