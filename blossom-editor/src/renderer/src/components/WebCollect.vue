@@ -31,7 +31,7 @@
           </el-form-item>
           <el-form-item label="网站类型">
             <el-select v-model="webForm.type" class="m-2" placeholder="选择类型" style="width: 140px;">
-              <el-option label="日常 - Daily" value="daliy" />
+              <el-option label="日常 - Daily" value="daily" />
               <el-option label="工作 - Work" value="work" />
               <el-option label="其他 - Other" value="other" />
             </el-select>
