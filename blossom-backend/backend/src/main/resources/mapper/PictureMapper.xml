@@ -12,9 +12,9 @@
                p.star_status,
                p.size,
                p.cre_time,
-               group_concat(distinct pa.source_name) as article_names
-          from blossom_picture p
-     left join blossom_article_reference pa on p.url = pa.target_url
+        group_concat(distinct pa.source_name) as article_names
+        from blossom_picture p
+        left join blossom_article_reference pa on p.url = pa.target_url
         <where>
             <if test="id != null">and p.id = #{id}</if>
             <if test="pid != null">and p.pid = #{pid}</if>
@@ -22,8 +22,8 @@
             <if test="pathName != null and pathName != ''">and p.path_name like concat('%',#{pathName}, '%')</if>
             <if test="url != null and url != ''">and p.url like concat('%',#{url}, '%')</if>
             <if test="starStatus != null">and p.star_status = #{starStatus}</if>
-            <if test="userId != null">and user_id = #{userId}</if>
-            <if test="urls != null and urls.size() != 0">and url in
+            <if test="userId != null">and p.user_id = #{userId}</if>
+            <if test="urls != null and urls.size() != 0">and p.url in
                 <foreach collection="urls" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </if>
         </where>
@@ -46,9 +46,9 @@
 
     <select id="stat" resultType="com.blossom.backend.server.picture.pojo.PictureStatRes">
         select count(*) as picture_count,
-               sum(size) as picture_size
-          from blossom_picture
-         where user_id = #{userId}
-            <if test="pid != null">and pid = #{pid}</if>
+        sum(size) as picture_size
+        from blossom_picture
+        where user_id = #{userId}
+        <if test="pid != null">and pid = #{pid}</if>
     </select>
 </mapper>

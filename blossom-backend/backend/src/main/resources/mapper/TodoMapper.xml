@@ -19,7 +19,7 @@
         color,
         user_id,
         cre_time
-	</sql>
+    </sql>
 
 
     <select id="listAll" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
@@ -43,18 +43,18 @@
     </select>
 
     <select id="listTodo" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
-        select todo_id,todo_name,todo_type,todo_status,
+        select min(id) as id,todo_id,todo_name,todo_type,todo_status,
                count(*) as taskCount
-          from blossom_todo
-         where user_id = #{userId}
-      group by todo_id
-      order by id desc
+        from blossom_todo
+        where user_id = #{userId}
+        group by todo_id,todo_name,todo_type,todo_status
+        order by id desc
     </select>
 
     <select id="selectByTodoId" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
         select <include refid="columns_all"></include>
-          from blossom_todo
-         where todo_id = #{todoId} limit 1
+        from blossom_todo
+        where todo_id = #{todoId} limit 1
     </select>
 
     <select id="count" resultType="java.lang.Integer">
@@ -90,27 +90,30 @@
                process,
                color,
                cre_time
-          from blossom_todo
-         where todo_id = #{todoId}
-           and user_id = #{userId}
+        from blossom_todo
+        where todo_id = #{todoId}
+          and user_id = #{userId}
     </select>
 
     <select id="statisticTask" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
         select task_status,
-               cre_time
-          from blossom_todo
-         where cre_time >= #{beginCreTime}
-           and #{endCreTime} >= cre_time
-           and user_id = #{userId}
-<!--           and todo_type = 10-->
+        cre_time
+        from blossom_todo
+        where cre_time >= #{beginCreTime}
+        and #{endCreTime} >= cre_time
+        and user_id = #{userId}
+        <!--           and todo_type = 10-->
     </select>
 
     <select id="statisticTodo" resultType="com.blossom.backend.server.todo.pojo.TodoStatisticRes">
-        select todo_id,todo_name,todo_type,todo_status,
+        select min(todo_id) as todo_id,
+               min(todo_name) as todo_name,
+               min(todo_type) as todo_type,
+               min(todo_status) as todo_status,
                min(cre_time) as firstCreTime,
                min(start_time) as firstStartTime,
                max(end_time) as lastEndTime
-          from blossom_todo
-         where todo_id = #{todoId}
+        from blossom_todo
+        where todo_id = #{todoId}
     </select>
 </mapper>
