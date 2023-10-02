@@ -6,10 +6,9 @@
 docker
  ├─ build                    镜像构建
  |  └─ Dockerfile            应用镜像构建脚本
- ├─ compose                  docker compose 配置
- |  ├─ blossom.yaml          包含后台应用 Blossom-backend
- |  └─ blossom-mysql8.yaml   包含后台应用 Blossom-backend 与 MySql8
- └─ env                      环境配置
+ └─ compose                  docker compose 配置
+    ├─ blossom.yaml          包含后台应用 Blossom-backend
+    └─ blossom-mysql8.yaml   包含后台应用 Blossom-backend 与 MySql8
 ```
 
 应用所需环境与版本
@@ -76,6 +75,7 @@ docker run -d \
 ```
 
 windows 控制台如下
+
 ```bash
 docker run -d --name blossom-backend -p 9999:9999 -v /home/bl/img/:/home/bl/img/ jasminexzzz/blossom:latest --spring.profiles.active=prod --project.iaas.blos.domain="http://127.0.0.1:9999/pic/" --project.iaas.blos.default-path="/home/bl/img/" --spring.datasource.url="jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8" --spring.datasource.username=root --spring.datasource.password=jasmine888
 ```
@@ -113,13 +113,13 @@ services:
 
 启动不含有 MYSQL 的 Docker Compose
 
-```
+```bash
 docker compose -f docker/compose/blossom.yaml up -d
 ```
 
 ---
 
-## 2. 拉取应用镜像与MYSQL镜像示例
+## 2. 拉取应用镜像与 MySQL 镜像示例
 
 ```yml
 version: "3.8"
@@ -181,9 +181,8 @@ services:
 docker compose -f docker/compose/blossom-mysql8.yaml up -d
 ```
 
-# 三、使用 Dockerfile 自己构建应用镜像
+# 三、使用 Dockerfile 构建应用镜像
 
-> ##red##
 > 该方式构建镜像只包含后台应用，不包含数据库在内
 
 ## 1. 后台工程打包
@@ -207,7 +206,7 @@ maven clean package
 
 ## 2. 构建本地镜像
 
-进入到根目录下，运行如下命令
+进入到项目根目录下，运行如下命令
 
 ```bash
 docker build -t <自定义前缀>/<自定义镜像名称>:<自定义镜像标签> -f docker/build/Dockerfile .
@@ -216,8 +215,10 @@ docker build -t <自定义前缀>/<自定义镜像名称>:<自定义镜像标签
 docker build -t self/blossom:self -f docker/build/Dockerfile .
 ```
 
-> 注意：要在根目录下运行`docker build`命令，否则无法找到后台jar包文件
+> [!WARNING] 
+> 注意：一定要在项目根目录下运行`docker build`命令，否则无法找到后台 jar 包文件
 
+> [!NOTE] 
 > 在后台项目`blossom-backend\`路径下也包含一个 Dockerfile 文件，只有构建命令略有不同，具体参阅`blossom-backend\README.md`文件
 
 ## 3. 启动容器
@@ -246,7 +247,7 @@ docker run -d \
   --spring.datasource.password=jasmine888
 ```
 
-# 四、使用 Idea Cloud Toolket 插件部署
+# 四、使用 Idea Cloud Toolkit 插件部署
 
 > 该部署方式适合修改代码后部署在物理机器中。
 
@@ -258,13 +259,11 @@ docker run -d \
 
 ![idea_plugin1](../doc/imgs/deploy/idea_plugin2.png)
 
-
 ![idea_plugin1](../doc/imgs/deploy/idea_plugin3.png)
 
+新增启动项
 
-新增启动
-
-![idea_plugin1](../doc/imgs/deploy/idea_plugin4.png)项
+![idea_plugin1](../doc/imgs/deploy/idea_plugin4.png)
 
 配置启动项
 
