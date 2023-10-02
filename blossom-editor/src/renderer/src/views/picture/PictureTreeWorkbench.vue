@@ -10,19 +10,24 @@
 
     <!--  -->
     <bl-row just="flex-end" align="flex-end">
-      <el-tooltip content="显示排序" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="显示排序" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
         <template #content> 显示排序<br />
-          <bl-tag :bgColor="TitleColor.ONE">一级</bl-tag>
-          <bl-tag :bgColor="TitleColor.TWO">二级</bl-tag>
-          <bl-tag :bgColor="TitleColor.THREE">三级</bl-tag>
-          <bl-tag :bgColor="TitleColor.FOUR">四级</bl-tag>
+          <bl-row>
+            <bl-tag :bgColor="TitleColor.ONE">一级</bl-tag>
+            <bl-tag :bgColor="TitleColor.TWO">二级</bl-tag>
+          </bl-row>
+          <bl-row>
+            <bl-tag :bgColor="TitleColor.THREE">三级</bl-tag>
+            <bl-tag :bgColor="TitleColor.FOUR">四级</bl-tag>
+          </bl-row>
         </template>
       </el-tooltip>
-      <el-tooltip content="刷新列表" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="刷新列表" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
       </el-tooltip>
-      <el-tooltip content="新增文件夹或文档" effect="blossomb" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="新增文件夹或文档" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+        :auto-close="2000">
         <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
       </el-tooltip>
     </bl-row>
