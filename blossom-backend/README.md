@@ -2,7 +2,7 @@
 
 Blossom 笔记软件的后台服务
 
-[Blossom 后台的使用文档](https://www.wangyunf.com/blossom-doc/doc/backend)
+[Blossom 后台部署文档](https://www.wangyunf.com/blossom-doc/doc/backend)
 
 # 模块说明
 
@@ -13,10 +13,10 @@ root
  |  ├─ common-base    基础对象（如公共响应 R.class），工具类，异常捕获，动态日志级别。
  |  ├─ common-cache   缓存封装，Redis 封装，Caffeine 封装。
  |  ├─ common-db      数据库模块，mybatis plus, 慢SQL监控。
- |  ├─ common-iaas    云厂商功能
+ |  └─ common-iaas    云厂商功能
  | 
  ├─ expand-sentinel   对 Alibaba Sentinel 的封装，拓展了一些功能，实现了一些本地流量查询接口。
- └─ expand-tracker    自研的链路追踪核心模块, 源自 tracker-core, 仅提供本地日志记录和日志中插入 Trace 的功能。
+ ├─ expand-tracker    自研的链路追踪核心模块, 源自 tracker-core, 仅提供本地日志记录和日志中插入 Trace 的功能。
  └─ script            数据库与启动脚本
 ```
 
@@ -66,11 +66,11 @@ docker build -t jasminexzzz/blossom:dev -f Dockerfile .
 ```shell
 docker run -d \
   --name blossom-dev \
-  -p 9988:9999 \
+  -p 9999:9999 \
   -v ~/blossom:/home/bl \
   jasminexzzz/blossom:dev \
   --spring.profiles.active=prod \
-  --project.iaas.blos.domain="http://192.168.2.222:9988/pic/" \
+  --project.iaas.blos.domain="http://192.168.2.222:9999/pic/" \
   --spring.datasource.url="jdbc:mysql://192.168.2.222:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8" \
   --spring.datasource.username=root \
   --spring.datasource.password=123456 

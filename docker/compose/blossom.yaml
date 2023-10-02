@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  blossom:
+    image: jasminexzzz/blossom:latest
+    container_name: blossom-backend
+    volumes:
+      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
+      - /d/blossom/bl/img/:/home/bl/img/
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      # 【需修改】配置数据库访问地址
+      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+      # 【需修改】配置数据库用户名
+      SPRING_DATASOURCE_USERNAME: root
+      # 【需修改】配置数据库密码
+      SPRING_DATASOURCE_PASSWORD: jasmine888
+      # 【需修改】配置图片上传后对应生成的访问 URL，需要以/pic/结尾。注意，该访问 URL 需要与访问后台的域名和端口相同
+      PROJECT_IAAS_BLOS_DOMAIN: http://localhost:9999/pic/
+      # 配置图片保存的磁盘路径，并在 volumes 中将该路径挂载为本地路径，如上方 volumes 中的示例
+      PROJECT_IAAS_BLOS_DEFAULT-PATH: /home/bl/img/
+    ports:
+      - "9999:9999"
+    restart: always
