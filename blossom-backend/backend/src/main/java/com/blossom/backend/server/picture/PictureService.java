@@ -134,7 +134,7 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
         final String pname = "/" + pic.getName();
 
         // 上传文件夹为空, 则上传至默认文件夹, 默认文件夹是系统提供的无法删除的文件夹, ID为 userId * -1
-        if (pid == null || pid < 0) {
+        if (pid == null || pid <= 0) {
             pic.setPid(userId * -1);
             pic.setPathName(rootPath + uid + pname);
         } else {
