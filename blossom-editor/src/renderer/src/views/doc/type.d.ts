@@ -22,6 +22,8 @@ declare interface DocTree {
   ty: DocType,
   /** 是否 star */
   star: number,
+  /** 是否显示排序 */
+  showSort?: boolean,
   /** 子集 */
   children?: DocTree[]
 }

@@ -11,9 +11,13 @@
     <!--  -->
     <bl-row just="flex-end" align="flex-end">
       <el-tooltip content="显示排序" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
-        <div>
-          <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
-        </div>
+        <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
+        <template #content> 显示排序<br />
+          <bl-tag :bgColor="TitleColor.ONE">一级</bl-tag>
+          <bl-tag :bgColor="TitleColor.TWO">二级</bl-tag>
+          <bl-tag :bgColor="TitleColor.THREE">三级</bl-tag>
+          <bl-tag :bgColor="TitleColor.FOUR">四级</bl-tag>
+        </template>
       </el-tooltip>
       <el-tooltip content="刷新列表" effect="blossomt" placement="top" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
@@ -31,7 +35,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, inject } from "vue"
-import { provideKeyDocInfo } from '@renderer/views/doc/doc'
+import { provideKeyDocInfo, TitleColor } from '@renderer/views/doc/doc'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 
 // 当前菜单中选择的文档

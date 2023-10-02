@@ -16,7 +16,7 @@
         <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
           <template #title>
             <div class="menu-item-wrapper" @click="clickCurDoc(L1)" @click.right="handleClickRightMenu(L1, $event)">
-              <ArticleTreeTitle :trees="L1" />
+              <ArticleTreeTitle :trees="L1" :level="1" />
             </div>
           </template>
         </el-menu-item>
@@ -25,7 +25,7 @@
         <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
           <template #title>
             <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L1, $event)">
-              <ArticleTreeTitle :trees="L1" />
+              <ArticleTreeTitle :trees="L1" :level="1" />
             </div>
           </template>
 
@@ -35,7 +35,7 @@
             <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
               <template #title>
                 <div class="menu-item-wrapper" @click="clickCurDoc(L2)" @click.right="handleClickRightMenu(L2, $event)">
-                  <ArticleTreeTitle :trees="L2" />
+                  <ArticleTreeTitle :trees="L2" :level="2" />
                 </div>
               </template>
             </el-menu-item>
@@ -44,7 +44,7 @@
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
               <template #title>
                 <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L2, $event)">
-                  <ArticleTreeTitle :trees="L2" />
+                  <ArticleTreeTitle :trees="L2" :level="2" />
                 </div>
               </template>
 
@@ -55,7 +55,7 @@
                   <template #title>
                     <div class="menu-item-wrapper" @click="clickCurDoc(L3)"
                       @click.right="handleClickRightMenu(L3, $event)">
-                      <ArticleTreeTitle :trees="L3" />
+                      <ArticleTreeTitle :trees="L3" :level="3" />
                     </div>
                   </template>
                 </el-menu-item>
@@ -64,7 +64,7 @@
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                   <template #title>
                     <div class="menu-item-wrapper" @click.right="handleClickRightMenu(L3, $event)">
-                      <ArticleTreeTitle :trees="L3" />
+                      <ArticleTreeTitle :trees="L3" :level="3" />
                     </div>
                   </template>
 
@@ -75,7 +75,7 @@
                       <template #title>
                         <div class="menu-item-wrapper" @click="clickCurDoc(L4)" style="width: 100%;"
                           @click.right="handleClickRightMenu(L4, $event)">
-                          <ArticleTreeTitle :trees="L4" />
+                          <ArticleTreeTitle :trees="L4" :level="4" />
                         </div>
                       </template>
                     </el-menu-item>
@@ -262,11 +262,7 @@ const concatSort = (trees: DocTree[]) => {
     if (!isEmpty(trees[i].children)) {
       concatSort(trees[i].children as DocTree[])
     }
-    if (showSort.value) {
-      trees[i].n = trees[i].s + '〉' + trees[i].n
-    } else {
-      trees[i].n = trees[i].n.substring(trees[i].n.indexOf('〉') + 1)
-    }
+    trees[i].showSort = showSort.value
   }
 }
 

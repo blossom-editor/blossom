@@ -1,6 +1,8 @@
 <template>
   <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
-
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
+      {{ props.trees.s }}
+    </bl-tag>
     <div class="doc-name">
       <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
@@ -23,10 +25,16 @@
 import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
+import { computedDocTitleColor } from '@renderer/views/doc/doc'
 
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} },
-  size: { type: Number, default: 14 }
+  size: { type: Number, default: 14 },
+  level: { type: Number, required: true },
+})
+
+const levelColor = computed(() => {
+  return computedDocTitleColor(props.level)
 })
 
 /**
@@ -86,6 +94,11 @@ $icon-size: 17px;
     // @include flex(row, flex-start, center);
     @include themeBrightness(100%, 80%);
     @include ellipsis();
+  }
+
+  .sort {
+    position: absolute;
+    right: -15px;
   }
 }
 

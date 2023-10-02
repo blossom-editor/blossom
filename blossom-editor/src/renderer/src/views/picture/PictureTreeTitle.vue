@@ -1,9 +1,14 @@
 <template>
   <div class="doc-title">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
+      {{ props.trees.s }}
+    </bl-tag>
     <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
       <use :xlink:href="'#' + props.trees.icon"></use>
     </svg>
-    <span class="doc-name">{{ props.trees.n }}</span>
+    <span class="doc-name">
+      {{ props.trees.n }}
+    </span>
     <!-- 如果专题是公开的, 则单独显示公开标签 -->
     <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
     <div v-for="tag in tags">
@@ -18,15 +23,21 @@
 import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
+import { computedDocTitleColor } from '@renderer/views/doc/doc'
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
 const props = defineProps({
-  trees: { type: Object as PropType<DocTree>, default: {} }
+  trees: { type: Object as PropType<DocTree>, default: {} },
+  level: { type: Number, required: true },
 })
 
 const isSubjectDoc = computed(() => {
   return props.trees.t?.includes('subject')
+})
+
+const levelColor = computed(() => {
+  return computedDocTitleColor(props.level)
 })
 
 /**
@@ -60,11 +71,15 @@ $icon-size: 17px;
   @include flex(row, flex-start, center);
   align-content: flex-start;
   flex-wrap: wrap;
+  font-size: 14px;
   max-width: calc(100% - 10px);
   min-width: calc(100% - 10px);
   padding-bottom: 1px;
   position: relative;
-  font-size: 14px;
+  .sort {
+    position: absolute;
+    right: -10px;
+  }
 }
 
 .open-line,
