@@ -22,7 +22,7 @@ docker
 
 > 如果已安装数据库，可以跳过该步骤。
 
-```
+```bash
 docker pull mysql:8.0.31
 ```
 
@@ -40,13 +40,21 @@ docker run \
 mysql:8.0.31
 ```
 
-## 2. 拉取镜像
+## 2. 创建数据库
+
+你需要在 MySQL 中先创建一个数据库，数据库名称与启动容器时的`--spring.datasource.url`配置的数据库名称相同，如果不需要自定义数据库名称，你可以直接使用如下语句创建数据库：
+
+```sql
+CREATE DATABASE `blossom` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+```
+
+## 3. 拉取镜像
 
 ```
 docker pull jasminexzzz/blossom:latest
 ```
 
-## 3. 启动容器
+## 4. 启动容器
 
 启动示例
 
@@ -56,7 +64,7 @@ docker run -d \
   --name blossom-backend \
   # 指定端口映射
   -p 9999:9999 \
-  # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
+  # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/来指定磁盘
   -v /home/bl/:/home/bl/ \
   # 启动的镜像名称
   jasminexzzz/blossom:latest \
@@ -77,12 +85,23 @@ docker run -d \
 windows 控制台如下
 
 ```bash
-docker run -d --name blossom-backend -p 9999:9999 -v /home/bl/img/:/home/bl/img/ jasminexzzz/blossom:latest --spring.profiles.active=prod --project.iaas.blos.domain="http://127.0.0.1:9999/pic/" --project.iaas.blos.default-path="/home/bl/img/" --spring.datasource.url="jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8" --spring.datasource.username=root --spring.datasource.password=jasmine888
+docker run -d --name blossom-backend -p 9999:9999 -v /home/bl/:/home/bl/ jasminexzzz/blossom:latest --spring.profiles.active=prod --project.iaas.blos.domain="http://127.0.0.1:9999/pic/" --project.iaas.blos.default-path="/home/bl/img/" --spring.datasource.url="jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8" --spring.datasource.username=root --spring.datasource.password=jasmine888
 ```
 
 # 二、使用 docker compose 拉取镜像
 
+可以使用 docker compose 单独拉取应用镜像，或者连同 MySQL 一起拉取构建。下列示例均可在项目`/docker/compose`目录下查看
+
 ## 1. 只拉取应用镜像示例
+
+该 docker compose 不包含 MySQL，需要你自行安装 MySQL，并在 MySQL 中先创建一个数据库，数据库名称需要与启动容器命令中参数SPRING_DATASOURCE_URL配置的数据库名称相同，如果不需要自定义数据库名称，你可以直接使用如下语句创建数据库：
+
+```sql
+CREATE DATABASE `blossom` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+```
+
+docker compose 文件示例
+
 
 ```yml
 version: "3.8"
@@ -91,12 +110,12 @@ services:
     image: jasminexzzz/blossom:latest
     container_name: blossom-backend
     volumes:
-      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
+      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/来指定磁盘
       - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
       # 【需修改】配置数据库访问地址
-      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
       # 【需修改】配置数据库用户名
       SPRING_DATASOURCE_USERNAME: root
       # 【需修改】配置数据库密码
@@ -117,9 +136,13 @@ services:
 docker compose -f docker/compose/blossom.yaml up -d
 ```
 
+> 该方式与使用公共镜像基本相同
+
 ---
 
 ## 2. 拉取应用镜像与 MySQL 镜像示例
+
+该 docker compose 包含 MySQL，MySQL 容器在初始化时会自动创建数据库 Blossom，但你需要挂载 MySQL 文件到宿主机，防止数据丢失。
 
 ```yml
 version: "3.8"
@@ -134,7 +157,7 @@ services:
     image: jasminexzzz/blossom:latest
     container_name: blossom-backend
     volumes:
-      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
+      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/来指定磁盘
       - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -177,6 +200,8 @@ services:
 
 ```
 
+启动 Docker Compose
+
 ```
 docker compose -f docker/compose/blossom-mysql8.yaml up -d
 ```
@@ -191,10 +216,12 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 - Docker 运行环境
 - git 运行环境
+- Maven 3.6.1+
 
 克隆代码仓库，然后进入到`blossom-backend/`目录下，运行如下命令编译打包后台工程
 
 ```bash
+git clone https://github.com/blossom-editor/blossom.git
 maven clean package
 ```
 
@@ -221,7 +248,15 @@ docker build -t self/blossom:self -f docker/build/Dockerfile .
 > [!NOTE] 
 > 在后台项目`blossom-backend\`路径下也包含一个 Dockerfile 文件，只有构建命令略有不同，具体参阅`blossom-backend\README.md`文件
 
-## 3. 启动容器
+## 3. 创建数据库
+
+你需要在 MySQL 中先创建一个数据库，数据库名称需要与启动容器命令中参数--spring.datasource.url配置的数据库名称相同，如果不需要自定义数据库名称，你可以直接使用如下语句创建数据库：
+
+```sql
+CREATE DATABASE `blossom` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+```
+
+## 4. 启动容器
 
 ```bash
 docker run -d \
@@ -229,7 +264,7 @@ docker run -d \
   --name blossom-backend \
   # 指定端口映射
   -p 9999:9999 \
-  # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
+  # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/来指定磁盘
   -v /home/bl/:/home/bl/ \
   # 启动的镜像名称
   jasminexzzz/blossom:latest \
@@ -284,6 +319,7 @@ echo "进程ID : " $pid
 kill -9 $pid
 echo "进程" $pid "已被杀死"
 echo "开始重启 backend-blossom 服务器"
+# 注意修改对应路径
 nohup java -Xms1024m -Xmx1024m -jar /usr/local/jasmine/blossom/backend/backend-blossom.jar &
 echo "backend-blossom 正在启动,请查看日志 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓"
 ```
