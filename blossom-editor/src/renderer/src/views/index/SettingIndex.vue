@@ -20,7 +20,7 @@
     </el-tabs>
   </div>
   <div class="version">
-    <span>{{ CONFIG.SYS.NAME + ' | ' + CONFIG.SYS.VERSION + ' | ' + CONFIG.SYS.DATETIME }}</span>
+    <span>{{ CONFIG.SYS.NAME + ' | ' + CONFIG.SYS.VERSION }}</span>
   </div>
   <bl-row class="footer">
     <WaveFooter></WaveFooter>

@@ -26,20 +26,17 @@
     }
 
     .html-loading {
+      justify-content: center;
+      align-items: center;
       -webkit-app-region: drag;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      /* background-image: linear-gradient(to bottom right, #8070a1, #3F296A); */
       background-image: linear-gradient(to bottom right, #a59aca, #5f479a);
-      /* background-image: linear-gradient(to bottom right, #7c739f, #c3272b); */
-      /* background-image: linear-gradient(to bottom right, #1e3b7a, #ca462f); */
       z-index: 999999;
       display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
 
@@ -58,6 +55,7 @@
     }
 
     .html-loading-version {
+      font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
       font-size: 15px;
       color: #FFF;
       opacity: 0.5;
@@ -168,7 +166,7 @@
         <br>
         <span style="font-size: 13px;">加载中...</span>
       </div>
-      <div class="html-loading-version">V1.4.1</div>
+      <div class="html-loading-version">V1.5.0</div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </div>

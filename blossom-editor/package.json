@@ -1,6 +1,6 @@
 {
   "name": "blossom",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "A markdown editor",
   "license": "MIT",
   "main": "./out/main/index.js",

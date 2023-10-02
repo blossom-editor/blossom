@@ -4,16 +4,25 @@
       Blossom <span style="font-size: 13px;color: var(--bl-text-color-light);">{{ CONFIG.SYS.VERSION }}</span>
     </div>
     <bl-row just="center" style="margin-top: 10px;filter: drop-shadow(0 0 3px rgb(184, 184, 184));">
-      <div @click="toView(CONFIG.SYS.GITHUB_REPO)">
+
+      <bl-col @click="toView(CONFIG.SYS.GITHUB_REPO)">
         <svg style="width: 25px;height: 25px;cursor: pointer;" aria-hidden="true">
           <use xlink:href="#wl-github2"></use>
         </svg>
-      </div>
-      <div @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px;">
+
+        <img alt="GitHub Repo stars" style="margin-top: 10px;"
+          src="https://img.shields.io/github/stars/blossom-editor/blossom?logo=github&label=Stars&labelColor=AD8CF2&color=fff&cacheSeconds=60">
+      </bl-col>
+
+
+
+      <bl-col @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px;">
         <svg style="width: 25px;height: 25px;cursor: pointer;" aria-hidden="true">
           <use xlink:href="#wl-gitee"></use>
         </svg>
-      </div>
+        <img style="margin-top: 10px;" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white">
+      </bl-col>
+
     </bl-row>
     <div class="bl-preview">
       <p class="paragraph">
