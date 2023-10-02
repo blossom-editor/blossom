@@ -11,7 +11,7 @@ services:
     container_name: blossom-backend
     volumes:
       # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
-      - /d/blossom/bl/img/:/home/bl/img/
+      - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
       # 配置数据库访问地址

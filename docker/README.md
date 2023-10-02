@@ -57,7 +57,7 @@ docker run -d \
   # 指定端口映射
   -p 9999:9999 \
   # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
-  -v /home/bl/img/:/home/bl/img/ \
+  -v /home/bl/:/home/bl/ \
   # 启动的镜像名称
   jasminexzzz/blossom:latest \
   # 使用的后台配置文件，不需要修改
@@ -92,7 +92,7 @@ services:
     container_name: blossom-backend
     volumes:
       # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
-      - /d/blossom/bl/img/:/home/bl/img/
+      - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
       # 【需修改】配置数据库访问地址
@@ -135,11 +135,11 @@ services:
     container_name: blossom-backend
     volumes:
       # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
-      - /d/blossom/bl/img/:/home/bl/img/
+      - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
       # 配置数据库访问地址
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_URL: jdbc:mysql://blmysql:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
       # 【需修改】配置数据库用户名
       SPRING_DATASOURCE_USERNAME: root
       # 【需修改】配置数据库密码
@@ -154,8 +154,8 @@ services:
       - blossomnet
     restart: always
     depends_on:
-      - mysql
-  mysql:
+      - blmysql
+  blmysql:
     image: mysql:8.0.31
     container_name: blossom-mysql
     restart: always
@@ -230,7 +230,7 @@ docker run -d \
   # 指定端口映射
   -p 9999:9999 \
   # 挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
-  -v /home/bl/img/:/home/bl/img/ \
+  -v /home/bl/:/home/bl/ \
   # 启动的镜像名称
   jasminexzzz/blossom:latest \
   # 使用的后台配置文件，不需要修改
