@@ -7,12 +7,24 @@
     <div class="drag">
     </div>
     <div class="window-workbench">
-      
-      <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
-      <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
-      <div class="iconbl bl-computer-line" @click="setBestSize"></div>
+
+      <el-tooltip content="显示自带图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+        :auto-close="2000">
+        <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
+      </el-tooltip>
+
+      <el-tooltip content="显示网页收藏" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+        :auto-close="2000">
+        <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
+      </el-tooltip>
+
+      <el-tooltip content="最佳窗口大小" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+        :auto-close="2000">
+        <div class="iconbl bl-computer-line" @click="setBestSize"></div>
+      </el-tooltip>
+
       <div class="iconbl bl-subtract-line" @click="windowMin"></div>
-      <div class="iconbl bl-box-line" @click="windowMax"></div>
+      <div :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
       <div class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
     </div>
   </div>
@@ -23,15 +35,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { toRoute } from '@renderer/router'
 import { useDark } from '@vueuse/core'
 import { openDevTools, windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
-import { toRoute } from '@renderer/router';
 
-const isDark = useDark();
+onMounted(() => {
+  window.addEventListener("resize", handleResize)
+})
 
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
+/**
+ * 判断是否全屏
+ */
+const checkFullScreen = () => {
+  if (window.outerHeight === screen.availHeight && window.outerWidth === screen.availWidth) {
+    return true
+  }
+  return false
+}
+
+const isDark = useDark()
 const isShowWebDrawer = ref(false)
+const isFullScreen = ref(checkFullScreen())
+
+const handleResize = () => {
+  isFullScreen.value = checkFullScreen()
+}
 
 </script>
 
