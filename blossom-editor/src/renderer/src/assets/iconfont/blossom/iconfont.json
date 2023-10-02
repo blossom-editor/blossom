@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1845739",
+      "name": "窗口还原",
+      "font_class": "win-reset",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
       "icon_id": "924483",
       "name": "pen",
       "font_class": "pen",
