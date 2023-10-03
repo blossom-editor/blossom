@@ -157,7 +157,7 @@ services:
     image: jasminexzzz/blossom:latest
     container_name: blossom-backend
     volumes:
-      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/来指定磁盘
+      # 【需修改】挂载图片保存路径，如果是windows环境，可以使用/c/home/bl/img/来指定磁盘
       - /d/blossom/bl/:/home/bl/
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -175,13 +175,20 @@ services:
       - "9999:9999"
     networks:
       - blossomnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/sys/alive"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
     restart: always
     depends_on:
-      - blmysql
+      blmysql:
+        condition: service_healthy
   blmysql:
     image: mysql:8.0.31
     container_name: blossom-mysql
-    restart: always
+    restart: on-failure:3
     # 【需修改】注意挂载路径
     volumes:
       - /d/blossom/Docker/mysql/data:/var/lib/mysql
@@ -197,6 +204,11 @@ services:
       - "3306:3306"
     networks:
       - blossomnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot", "-pjasmine888", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
 
 ```
 

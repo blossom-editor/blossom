@@ -17,12 +17,12 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 </p>
 
 - 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)，我们提供了一个试用账号帮你体验该应用。
-- 使用 [Docker / Docker Compose](http://localhost:5174/blossom-doc/doc/backend) 进行部署。
+- 使用 [Docker / Docker Compose](https://www.wangyunf.com/blossom-doc/doc/backend) 进行部署。
 - 阅读[文档](https://www.wangyunf.com/blossom-doc/index)来查看更多使用细节。
 
 ---
 
-#### Blossom 具有以下优势:
+### 👏 Blossom 具有以下优势:
 
 1. **不再需要为同步设备数量付费**。
 2. **不再需要为公网访问付费**。
@@ -35,7 +35,7 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 9. **丰富的功能拓展**，包含日历计划，待办事项清单，一个完善的个人管理工具。
 10. **支持 Docker / Docker Compose 部署**。
 
-#### Blossom 具有以下功能:
+### 🎁 Blossom 具有以下功能:
 1. **文章编辑**：Markdown 文章编写，文章公网访问权限，文章分类管理。
 2. **双链笔记**：内部文章与外部链接引用形成的双链笔记知识网络。
 3. **全量导出**：每日全量备份，备份一键下载。
