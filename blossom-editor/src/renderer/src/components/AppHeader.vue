@@ -8,7 +8,7 @@
     </div>
     <div class="window-workbench">
 
-      <el-tooltip content="显示自带图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+      <el-tooltip content="查看图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
         :auto-close="2000">
         <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>

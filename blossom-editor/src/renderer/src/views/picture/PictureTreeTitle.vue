@@ -1,6 +1,6 @@
 <template>
   <div class="doc-title">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding:0 2px">
       {{ props.trees.s }}
     </bl-tag>
     <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
@@ -76,6 +76,7 @@ $icon-size: 17px;
   min-width: calc(100% - 10px);
   padding-bottom: 1px;
   position: relative;
+
   .sort {
     position: absolute;
     right: -10px;

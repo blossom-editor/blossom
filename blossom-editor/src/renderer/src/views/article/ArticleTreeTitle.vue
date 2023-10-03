@@ -1,6 +1,6 @@
 <template>
   <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding:0 2px">
       {{ props.trees.s }}
     </bl-tag>
     <div class="doc-name">
