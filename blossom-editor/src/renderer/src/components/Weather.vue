@@ -1,7 +1,10 @@
 <template>
   <div class="weather-root">
 
-    <div class="location">{{ weather.location.name }}</div>
+    <bl-row class="location" just="flex-end">
+      {{ weather.location.name }}
+      <span class="iconbl bl-refresh-smile container-refresh" @click="getWeather"></span>
+    </bl-row>
 
     <!-- 现在 -->
     <div class="now hover-dark">
@@ -74,7 +77,7 @@
     </div>
 
     <!-- 遮罩 -->
-    <div class="weather-mask" v-show="maskVisible" @click="findWeather">
+    <div class="weather-mask" v-show="maskVisible" @click="getWeather">
       <div :class="weatherResult === 'LOADING' ? 'big-text masking' : 'big-text'">
         <div :class="weatherResult === 'LOADING' ? 'big-text masking' : 'big-text'">
           {{ weatherResult === 'LOADING' ? '正在查询天气' : '获取天气失败' }}
@@ -95,7 +98,7 @@ onMounted(() => {
 })
 
 onActivated(() => {
-  findWeather()
+  getWeather()
 })
 
 const userStore = useUserStore()
@@ -127,7 +130,7 @@ const weather = ref({
   ]
 });
 
-const findWeather = () => {
+const getWeather = () => {
   weatherResult.value = 'LOADING';
   setTimeout(() => {
     getAll({ location: userStore.userinfo.location }).then(resp => {
@@ -143,7 +146,7 @@ const findWeather = () => {
 
 const refreshWeatherTask = () => {
   // 20 分钟刷新一次日期
-  setInterval(findWeather, 1000 * 60 * 20);
+  setInterval(getWeather, 1000 * 60 * 20);
 }
 </script>
 
@@ -164,6 +167,27 @@ const refreshWeatherTask = () => {
     @include font(12px, 300);
     @include absolute(30px, 10px, '', '');
     color: var(--bl-text-color-light);
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
+
+    .container-refresh {
+      cursor: pointer;
+      margin-left: 3px;
+
+      &:hover {
+        animation: rotation 10s linear infinite;
+        ;
+        text-shadow: none;
+      }
+    }
   }
 
   .weather-mask {
