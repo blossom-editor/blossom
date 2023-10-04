@@ -121,6 +121,31 @@ export const renderBlockquote = (quote: string) => {
       break
     }
   }
+
+  /**
+   * 支持了新的语义化引用
+   * 
+   * https://github.com/orgs/community/discussions/16925#discussioncomment-3192118
+   * https://learn.microsoft.com/en-us/contribute/content/markdown-reference#alerts-note-tip-important-caution-warning
+   */
+  if (quote.startsWith('<p>[!NOTE]')) {
+    clazz = 'bl-blockquote-blue'
+    finalQuote = quote.replaceAll('<p>[!NOTE]', '<p>')
+  } else if (quote.startsWith('<p>[!IMPORTANT]')) {
+    clazz = 'bl-blockquote-purple'
+    finalQuote = quote.replaceAll('<p>[!IMPORTANT]', '<p>')
+  } else if (quote.startsWith('<p>[!WARNING]')) {
+    clazz = 'bl-blockquote-yellow'
+    finalQuote = quote.replaceAll('<p>[!WARNING]', '<p>')
+  }
+
+  // else if (quote.startsWith('<p>[!TIP]')) {
+  //   clazz = 'bl-blockquote-green'
+  //   finalQuote = quote.replaceAll('<p>[!TIP]', '<p>')
+  // } else if (quote.startsWith('<p>[!CAUTION]')) {
+  //   clazz = 'bl-blockquote-red'
+  //   finalQuote = quote.replaceAll('<p>[!CAUTION]', '<p>')
+  // }
   return `<blockquote class="${clazz}">${finalQuote}</blockquote>`
 }
 
