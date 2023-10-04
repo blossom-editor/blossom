@@ -24,7 +24,7 @@ export interface Picture {
  * @returns 
  */
 export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 10) {
+  if (rawFile.size / 1024 / 1024 > 50) {
     Notify.error('文件大小不能超过 50MB!', '上传失败')
     return false
   }
