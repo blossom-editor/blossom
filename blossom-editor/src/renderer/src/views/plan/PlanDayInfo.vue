@@ -28,7 +28,7 @@
 
         <el-form-item>
           <el-checkbox v-model="dayForm.allDay" label="全天" style="margin-right: 50px;" @change="allDayChange" />
-          <el-checkbox v-model="dayForm.repeat" label="重复" style="margin-right: 60px;" />
+          <el-checkbox v-model="dayForm.repeat" label="重复" style="margin-right: 60px;" @change="repeatChange" />
           <div style="margin-right: 10px;">重复天数</div>
           <el-input-number v-model="dayForm.repeatDay" :min="1" :disabled="!dayForm.repeat" />
         </el-form-item>
@@ -102,7 +102,7 @@ const dayForm = ref<DayForm>({
   planEndTime: '',
   allDay: false,
   repeat: false,
-  repeatDay: 0,
+  repeatDay: 1,
   color: 'purple'
 })
 
@@ -128,6 +128,12 @@ const allDayChange = (allDay: boolean) => {
   } else {
     dayForm.value.planStartTime = ''
     dayForm.value.planEndTime = ''
+  }
+}
+
+const repeatChange = (repeat: boolean) => {
+  if (!repeat) {
+    dayForm.value.repeatDay = 1
   }
 }
 
