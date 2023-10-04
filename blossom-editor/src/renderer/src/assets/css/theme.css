@@ -133,7 +133,6 @@ html.dark {
   --bl-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
 
   --bl-box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
-  --bl-box-shadow-dialog: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
 
   /* ================================= switch custom colors ================================== */
   --bl-switch-action-color: #ffffff;
@@ -166,7 +165,6 @@ html.dark {
 
   /*  */
   --bl-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
-  --bl-box-shadow-dialog: 3px 3px 10px 2px rgba(0, 0, 0, 1);
   /* ================================= switch custom colors ================================== */
   --bl-switch-action-color: rgb(58, 58, 58);
   --bl-switch-action-color-checked: #ffffff;
