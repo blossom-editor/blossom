@@ -79,6 +79,7 @@ const toToc = (articleId: number) => {
 
 <style scoped lang="scss">
 .el-scrollbar {
+  width: 100%;
   --el-scrollbar-opacity: 1;
   --el-scrollbar-hover-opacity: 1;
   --el-scrollbar-bg-color: var(--el-color-primary-light-8);
