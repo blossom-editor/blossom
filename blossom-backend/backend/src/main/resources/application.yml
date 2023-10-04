@@ -14,7 +14,7 @@ spring:
   application:
     name: blossom-backend
   profiles:
-    active: dev
+    active: prod
   servlet:
     multipart:
       max-file-size: 50MB
