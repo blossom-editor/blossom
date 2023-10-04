@@ -6,6 +6,27 @@
   "description": "各个网站的LOGO",
   "glyphs": [
     {
+      "icon_id": "22800926",
+      "name": "file.markdown",
+      "font_class": "markdown",
+      "unicode": "e70e",
+      "unicode_decimal": 59150
+    },
+    {
+      "icon_id": "29924563",
+      "name": "create-electron",
+      "font_class": "electron",
+      "unicode": "e710",
+      "unicode_decimal": 59152
+    },
+    {
+      "icon_id": "12904232",
+      "name": "文件夹",
+      "font_class": "folder",
+      "unicode": "e70f",
+      "unicode_decimal": 59151
+    },
+    {
       "icon_id": "24346804",
       "name": "codemirror",
       "font_class": "codemirror",
@@ -160,13 +181,6 @@
       "unicode_decimal": 59135
     },
     {
-      "icon_id": "19116730",
-      "name": "logitech",
-      "font_class": "logitech1",
-      "unicode": "e7c6",
-      "unicode_decimal": 59334
-    },
-    {
       "icon_id": "19116912",
       "name": "sennheiser",
       "font_class": "sennheiser",
@@ -221,13 +235,6 @@
       "font_class": "acer",
       "unicode": "e6d2",
       "unicode_decimal": 59090
-    },
-    {
-      "icon_id": "1963045",
-      "name": "China_Post",
-      "font_class": "chinapost",
-      "unicode": "e6d3",
-      "unicode_decimal": 59091
     },
     {
       "icon_id": "1963049",
@@ -503,13 +510,6 @@
       "unicode_decimal": 58954
     },
     {
-      "icon_id": "20299380",
-      "name": "ffmpeg",
-      "font_class": "ffmpeg2",
-      "unicode": "e6ce",
-      "unicode_decimal": 59086
-    },
-    {
       "icon_id": "377061",
       "name": "codeopen",
       "font_class": "codeopen",
@@ -617,7 +617,7 @@
     {
       "icon_id": "28640199",
       "name": "花瓣网",
-      "font_class": "huabanwang1",
+      "font_class": "huabanwang",
       "unicode": "e6c6",
       "unicode_decimal": 59078
     },
@@ -627,13 +627,6 @@
       "font_class": "prometheus",
       "unicode": "e6c8",
       "unicode_decimal": 59080
-    },
-    {
-      "icon_id": "33392911",
-      "name": "openai-logo",
-      "font_class": "openai",
-      "unicode": "e6c9",
-      "unicode_decimal": 59081
     },
     {
       "icon_id": "34999706",
@@ -669,13 +662,6 @@
       "font_class": "bootstrap1",
       "unicode": "e6a2",
       "unicode_decimal": 59042
-    },
-    {
-      "icon_id": "7370960",
-      "name": "electron",
-      "font_class": "electron1",
-      "unicode": "e6a4",
-      "unicode_decimal": 59044
     },
     {
       "icon_id": "7470494",
@@ -767,13 +753,6 @@
       "font_class": "maven",
       "unicode": "e700",
       "unicode_decimal": 59136
-    },
-    {
-      "icon_id": "26267540",
-      "name": "baidu",
-      "font_class": "baidu2",
-      "unicode": "e6bb",
-      "unicode_decimal": 59067
     },
     {
       "icon_id": "27272589",
@@ -1525,13 +1504,6 @@
       "unicode_decimal": 59186
     },
     {
-      "icon_id": "3060363",
-      "name": "花瓣网",
-      "font_class": "huabanwang",
-      "unicode": "e7bc",
-      "unicode_decimal": 59324
-    },
-    {
       "icon_id": "11983514",
       "name": "windows",
       "font_class": "microsoft-windows2",
@@ -1616,13 +1588,6 @@
       "unicode_decimal": 58909
     },
     {
-      "icon_id": "7040707",
-      "name": "RabbitMQ1",
-      "font_class": "rabbitmq",
-      "unicode": "e6ad",
-      "unicode_decimal": 59053
-    },
-    {
       "icon_id": "8185085",
       "name": "kafka",
       "font_class": "kafka1",
@@ -1663,13 +1628,6 @@
       "font_class": "docker1",
       "unicode": "e7b9",
       "unicode_decimal": 59321
-    },
-    {
-      "icon_id": "12502624",
-      "name": "electron",
-      "font_class": "electron",
-      "unicode": "e62b",
-      "unicode_decimal": 58923
     },
     {
       "icon_id": "12695230",
@@ -1770,13 +1728,6 @@
       "unicode_decimal": 58921
     },
     {
-      "icon_id": "10191294",
-      "name": "OCR识别",
-      "font_class": "ocr",
-      "unicode": "e7b1",
-      "unicode_decimal": 59313
-    },
-    {
       "icon_id": "10410817",
       "name": "谷歌",
       "font_class": "google-chrome",
@@ -1868,13 +1819,6 @@
       "unicode_decimal": 58933
     },
     {
-      "icon_id": "16084316",
-      "name": "阿里云",
-      "font_class": "aliyun1",
-      "unicode": "e660",
-      "unicode_decimal": 58976
-    },
-    {
       "icon_id": "434719",
       "name": "VB",
       "font_class": "vb",
@@ -1947,7 +1891,7 @@
     {
       "icon_id": "11227995",
       "name": "excel",
-      "font_class": "excel",
+      "font_class": "microsoft-excel",
       "unicode": "e63a",
       "unicode_decimal": 58938
     },
@@ -2290,7 +2234,7 @@
     {
       "icon_id": "12959160",
       "name": "腾讯云",
-      "font_class": "tengxunyun1",
+      "font_class": "tengxunyun",
       "unicode": "e651",
       "unicode_decimal": 58961
     },

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconwl"; /* Project id 4163717 */
-  src: url('iconfont.woff2?t=1693666689836') format('woff2'),
-       url('iconfont.woff?t=1693666689836') format('woff'),
-       url('iconfont.ttf?t=1693666689836') format('truetype');
+  src: url('iconfont.woff2?t=1696426702758') format('woff2'),
+       url('iconfont.woff?t=1696426702758') format('woff'),
+       url('iconfont.ttf?t=1696426702758') format('truetype');
 }
 
 .iconwl {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.wl-markdown:before {
+  content: "\e70e";
+}
+
+.wl-electron:before {
+  content: "\e710";
+}
+
+.wl-folder:before {
+  content: "\e70f";
 }
 
 .wl-codemirror:before {
@@ -101,10 +113,6 @@
   content: "\e6ff";
 }
 
-.wl-logitech1:before {
-  content: "\e7c6";
-}
-
 .wl-sennheiser:before {
   content: "\e7ed";
 }
@@ -135,10 +143,6 @@
 
 .wl-acer:before {
   content: "\e6d2";
-}
-
-.wl-chinapost:before {
-  content: "\e6d3";
 }
 
 .wl-bank-ccb:before {
@@ -297,10 +301,6 @@
   content: "\e64a";
 }
 
-.wl-ffmpeg2:before {
-  content: "\e6ce";
-}
-
 .wl-codeopen:before {
   content: "\e6cd";
 }
@@ -361,16 +361,12 @@
   content: "\e6c5";
 }
 
-.wl-huabanwang1:before {
+.wl-huabanwang:before {
   content: "\e6c6";
 }
 
 .wl-prometheus:before {
   content: "\e6c8";
-}
-
-.wl-openai:before {
-  content: "\e6c9";
 }
 
 .wl-chatgpt:before {
@@ -391,10 +387,6 @@
 
 .wl-bootstrap1:before {
   content: "\e6a2";
-}
-
-.wl-electron1:before {
-  content: "\e6a4";
 }
 
 .wl-docker2:before {
@@ -447,10 +439,6 @@
 
 .wl-maven:before {
   content: "\e700";
-}
-
-.wl-baidu2:before {
-  content: "\e6bb";
 }
 
 .wl-nvidia1:before {
@@ -881,10 +869,6 @@
   content: "\e732";
 }
 
-.wl-huabanwang:before {
-  content: "\e7bc";
-}
-
 .wl-microsoft-windows2:before {
   content: "\ea06";
 }
@@ -933,10 +917,6 @@
   content: "\e61d";
 }
 
-.wl-rabbitmq:before {
-  content: "\e6ad";
-}
-
 .wl-kafka1:before {
   content: "\e69e";
 }
@@ -959,10 +939,6 @@
 
 .wl-docker1:before {
   content: "\e7b9";
-}
-
-.wl-electron:before {
-  content: "\e62b";
 }
 
 .wl-javascript1:before {
@@ -1021,10 +997,6 @@
   content: "\e629";
 }
 
-.wl-ocr:before {
-  content: "\e7b1";
-}
-
 .wl-google-chrome:before {
   content: "\e62a";
 }
@@ -1077,10 +1049,6 @@
   content: "\e635";
 }
 
-.wl-aliyun1:before {
-  content: "\e660";
-}
-
 .wl-vb:before {
   content: "\e636";
 }
@@ -1121,7 +1089,7 @@
   content: "\e639";
 }
 
-.wl-excel:before {
+.wl-microsoft-excel:before {
   content: "\e63a";
 }
 
@@ -1317,7 +1285,7 @@
   content: "\e600";
 }
 
-.wl-tengxunyun1:before {
+.wl-tengxunyun:before {
   content: "\e651";
 }
 
