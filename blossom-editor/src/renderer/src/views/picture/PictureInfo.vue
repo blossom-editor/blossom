@@ -5,7 +5,7 @@
     <div class="info-title-wrapper">
       <div class="info-icon">
         <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px;width: 40px;" aria-hidden="true">
-          <use :xlink:href="'#icon-' + docForm.icon"></use>
+          <use :xlink:href="'#' + docForm.icon"></use>
         </svg>
       </div>
       <div class="info-title">{{ docForm.name }}</div>
@@ -56,7 +56,17 @@
           </el-form-item>
 
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标"></el-input>
+            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标">
+              <template #append>
+                <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
+                  <div style="cursor: pointer;font-size: 20px;" @click="openNewIconWindow()">
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#wl-yanfa"></use>
+                    </svg>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-input>
           </el-form-item>
 
           <!--  -->
@@ -97,7 +107,7 @@ import { provideKeyDocTree } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import { folderInfoApi, folderAddApi, folderUpdApi } from '@renderer/api/blossom'
 import { isNotBlank } from '@renderer/assets/utils/obj'
-import { openExtenal } from '@renderer/assets/utils/electron'
+import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
@@ -118,7 +128,7 @@ const docForm = ref<DocInfo>({
   id: 0,
   pid: 0,
   name: '',
-  icon: '',
+  icon: 'wl-folder',
   tags: [],
   sort: 0,
   cover: '',
@@ -128,7 +138,6 @@ const docForm = ref<DocInfo>({
   storePath: '/',
   type: 2
 })
-
 const docFormRule = ref<FormRules<DocInfo>>({
   storePath: [
     { required: true, message: '上传目录为必填项', trigger: 'blur' }
@@ -268,7 +277,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 
     .info-icon {
       @include box(50px, 100%);
-      padding: 5px 0;
       text-align: center;
     }
 
@@ -276,7 +284,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       @include font(16px);
       width: calc(100% - 50px - 50px);
       height: 100%;
-      padding-top: 20px;
+      padding-top: 10px;
       color: var(--el-color-primary);
       overflow: hidden;
       white-space: nowrap;

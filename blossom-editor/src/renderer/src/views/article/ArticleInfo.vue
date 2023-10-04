@@ -5,7 +5,7 @@
     <div class="info-title-wrapper">
       <div class="info-icon">
         <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px;width: 40px;" aria-hidden="true">
-          <use :xlink:href="'#icon-' + docForm.icon"></use>
+          <use :xlink:href="'#' + docForm.icon"></use>
         </svg>
       </div>
       <div class="info-title">{{ docForm.name }}</div>
@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject, computed } from 'vue'
+import { ref, nextTick, inject, computed, watch } from 'vue'
 import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document, Picture } from '@element-plus/icons-vue'
@@ -252,6 +252,15 @@ const docFormRule = ref<FormRules<DocInfo>>({
       }
     }
   }]
+})
+
+watch(() => docForm.value.type, (val) => {
+  if (val === 1 && docForm.value.icon === '') {
+    docForm.value.icon = 'wl-folder'
+  }
+  if (val === 3 && docForm.value.icon === 'wl-folder') {
+    docForm.value.icon = ''
+  }
 })
 
 /**
@@ -446,8 +455,9 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
       }
       // finally 回调
       const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
+      // 新增文件夹
       if (docForm.value.type == 1) {
-        if (curDocDialogType == 'add') // 新增文件夹
+        if (curDocDialogType == 'add')
           folderAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
         if (curDocDialogType == 'upd') // 修改文件夹
           folderUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
@@ -512,7 +522,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 
     .info-icon {
       @include box(50px, 100%);
-      padding: 5px 0;
       text-align: center;
     }
 
@@ -520,7 +529,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       @include font(16px);
       width: calc(100% - 50px - 50px);
       height: 100%;
-      padding-top: 20px;
+      padding-top: 10px;
       color: var(--el-color-primary);
       overflow: hidden;
       white-space: nowrap;
