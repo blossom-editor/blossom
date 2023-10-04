@@ -4,6 +4,7 @@
 
 .doc-trees-container {
   @include box(100%, calc(100% - 90px));
+  // 图片文档菜单中需要有 padding-top
   padding-top: 8px;
 
   * {
@@ -14,12 +15,18 @@
     width: 100%;
   }
 
+  .doc-trees-empty-placeholder {
+    padding: 0 20px;
+    color: var(--bl-text-color-light);
+    font-size: 13.5px;
+  }
+
   .doc-trees {
     @include box(100%, 100%);
     font-weight: 200;
     border: 0;
-    // overflow-y: overlay;
-    overflow-y: scroll;
+    overflow-y: overlay;
+    // overflow-y: scroll;
     // 基础的 padding
     --el-menu-base-level-padding: 25px;
     // 每级别的的缩进

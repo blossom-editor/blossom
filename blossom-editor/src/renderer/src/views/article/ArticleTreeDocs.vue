@@ -87,6 +87,9 @@
         </el-sub-menu>
       </div>
     </el-menu>
+    <div v-else class="doc-trees-empty-placeholder">
+      暂无文档，可点击上方 ↑ 添加
+    </div>
   </div>
 
   <!-- 右键菜单, 添加到 body 下 -->
