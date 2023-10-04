@@ -157,6 +157,7 @@ const getDocTree = () => {
     const docTree: DocTree[] = resp.data
     // 两种类型的交界位置
     let lastPicIndex: number = docTree.length - 1
+    // 循环一级文件夹，第一个文章文件夹即是最后一个图片文件夹的位置
     for (let i = 0; i < docTree.length; i++) {
       let doc = docTree[i]
       if (doc.ty === 1) {
@@ -165,10 +166,11 @@ const getDocTree = () => {
       }
     }
 
-    docTree.splice(lastPicIndex, 0, {
+    // 插入分割符
+    docTree.splice(Math.max(lastPicIndex, 1), 0, {
       i: docTree[0].i - 100000,
       p: 0,
-      n: '───────────────────────',
+      n: '',
       o: 0,
       t: [],
       s: 0,
