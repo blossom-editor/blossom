@@ -67,7 +67,7 @@ onActivated(() => {
   transition: 0.3s;
 
   &:hover {
-    box-shadow: var(--bl-box-shadow-dialog);
+    @include themeShadow(2px 3px 7px 0 rgba(58, 47, 47, 0.5), 3px 3px 10px 0 rgba(0, 0, 0, 1));
 
     .icon-shadow {
       @include font(150px, 500);

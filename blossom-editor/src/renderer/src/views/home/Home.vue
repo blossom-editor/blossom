@@ -1,7 +1,7 @@
 <template>
   <div class="global-home-root">
     <div class="main">
-      <bl-row class="greetings">
+      <bl-row class="greetings" height="65px">
         Good {{ now }}.
       </bl-row>
       <!--  -->
@@ -20,45 +20,46 @@
       </bl-row>
 
       <!-- 统计 -->
-      <bl-row class="container-name">字数统计</bl-row>
-      <bl-row width="100%" height="270px">
-        <!-- 字数图表 -->
-        <bl-col width="calc(100% - 200px)">
-          <bl-row class="container-sub-name">
-            Article Words
-            <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
-          </bl-row>
-          <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
-        </bl-col>
-        <!-- 统计卡片 -->
-        <bl-col width="200px" style="margin-left: 20px;">
-          <bl-row class="container-sub-name">Blossom Statistic</bl-row>
-          <StatisticCard></StatisticCard>
-        </bl-col>
-      </bl-row>
+      <el-scrollbar height="calc(100% - 315px)" wrap-style="padding-right:20px">
+        <bl-row class="container-name">字数统计</bl-row>
+        <bl-row width="100%" height="270px">
+          <!-- 字数图表 -->
+          <bl-col width="calc(100% - 200px)">
+            <bl-row class="container-sub-name">
+              Article Words
+              <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
+            </bl-row>
+            <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
+          </bl-col>
+          <!-- 统计卡片 -->
+          <bl-col width="200px" style="margin-left: 20px;">
+            <bl-row class="container-sub-name">Blossom Statistic</bl-row>
+            <StatisticCard></StatisticCard>
+          </bl-col>
+        </bl-row>
 
-      <!-- 流量统计 -->
-      <bl-row class="container-name">请求流量</bl-row>
-      <bl-row class="container-sub-name">
-        Flow Statistic / Requests & Average Response Time(ms)
-        <span class="iconbl bl-refresh-smile container-refresh" @click="loadSentinlLine"></span>
-      </bl-row>
-      <bl-row width="880px" height="250px">
-        <SentinelChartLine ref="SentinelChartLineRef"></SentinelChartLine>
-      </bl-row>
-
-      <!-- 热力图 -->
-      <bl-col class="heatmap-container" width="100%" style="height: 330px;">
-        <bl-row class="container-name">编辑热力图</bl-row>
+        <!-- 流量统计 -->
+        <bl-row class="container-name">请求流量</bl-row>
         <bl-row class="container-sub-name">
-          每日编辑文章数 (每5分钟更新)
-          <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
+          Flow Statistic / Requests & Average Response Time(ms)
+          <span class="iconbl bl-refresh-smile container-refresh" @click="loadSentinlLine"></span>
         </bl-row>
-        <bl-row style="height: calc(100% - 60px - 20px);">
-          <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
+        <bl-row width="880px" height="250px">
+          <SentinelChartLine ref="SentinelChartLineRef"></SentinelChartLine>
         </bl-row>
-      </bl-col>
 
+        <!-- 热力图 -->
+        <bl-col class="heatmap-container" width="100%" style="height: 360px;">
+          <bl-row class="container-name">编辑热力图</bl-row>
+          <bl-row class="container-sub-name">
+            每日编辑文章数 (每5分钟更新)
+            <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
+          </bl-row>
+          <bl-row style="height: calc(100% - 60px - 20px);">
+            <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
+          </bl-row>
+        </bl-col>
+      </el-scrollbar>
     </div>
 
     <!-- 
@@ -195,8 +196,8 @@ let now: string = nowWhen()
     cursor: pointer;
 
     &:hover {
-      animation: rotation 4s linear infinite;
-      text-shadow: var(--bl-text-shadow);
+      animation: rotation 10s linear infinite;
+      text-shadow: none;
     }
   }
 
@@ -205,7 +206,7 @@ let now: string = nowWhen()
   $margin-web: 30px 0 50px 0px;
   $margin-middle: 10px;
 
-  $width-main: 900px;
+  $width-main: 910px;
   $width-web: 420px;
   $width-middle: calc(100% -
       /* border */
@@ -219,8 +220,7 @@ let now: string = nowWhen()
 
   .main {
     @include box($width-main, 100%, $width-main, $width-main);
-    padding: 0 10px 10px 20px;
-    $height-greetings: 65px;
+    padding: 0 0 10px 20px;
     z-index: 2;
 
     // 笔记本图片等
@@ -240,21 +240,28 @@ let now: string = nowWhen()
     }
 
     .greetings {
-      height: $height-greetings;
       @include font(50px, 700);
       @include themeColor(#5C5C5C, var(--el-color-primary));
       text-shadow: var(--bl-text-shadow);
     }
 
     .now-time {
-      height: 20px;
       @include themeColor(#5C5C5C, var(--el-color-primary));
+      height: 20px;
       text-shadow: var(--bl-text-shadow);
       font-size: 12px;
     }
 
-    .heatmap-container {
-      opacity: 0;
+    .el-scrollbar {
+      --el-scrollbar-opacity: 1;
+      --el-scrollbar-hover-opacity: 1;
+      --el-scrollbar-bg-color: var(--el-color-primary-light-8);
+      --el-scrollbar-hover-bg-color: var(--el-color-primary-light-6);
+
+      :deep(.el-scrollbar__bar) {
+        width: 5px;
+        right: 3px;
+      }
     }
   }
 
@@ -263,7 +270,8 @@ let now: string = nowWhen()
     @include box($width-middle, 100%, $width-middle, $width-middle);
     position: relative;
     transition: 0.2s;
-    opacity: 0;
+    // opacity: 0;
+    display: none;
     z-index: 2;
   }
 
@@ -287,21 +295,13 @@ let now: string = nowWhen()
     }
   }
 
-  @media screen and (min-height: 1120px) {
-    .main {
-      .heatmap-container {
-        opacity: 1 !important;
-      }
-    }
-  }
-
   // 大于1600时使用以下样式
   @media screen and (min-width: 1600px) {
-
     .middle {
       @include themeBorder(1px, #E6E6E6, #171717, 'left');
-      opacity: 1 !important;
-      margin-left: $margin-middle;
+      // opacity: 1 !important;
+      display: block;
+      // margin-left: $margin-middle;
       padding: 0 10px 10px 20px;
     }
   }

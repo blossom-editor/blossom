@@ -1,5 +1,5 @@
 <template>
-  <div class="home-subject-root">
+  <el-scrollbar>
     <div v-if="isEmpty(subjects)" class="placeholder">
       无专题内容
     </div>
@@ -35,9 +35,10 @@
           <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}
         </div>
       </bl-row>
-
     </div>
-  </div>
+
+    <div style="width: 100%;height: 5px;"></div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -77,107 +78,125 @@ const toToc = (articleId: number) => {
 </script>
 
 <style scoped lang="scss">
-.home-subject-root {
-  // @include box(900px, 100%);
-  @include box(100%, 100%);
-  @include flex(row, flex-start, flex-start);
-  flex-wrap: wrap;
-  align-content: flex-start;
-  overflow: auto;
-  overflow-y: overlay;
+.el-scrollbar {
+  --el-scrollbar-opacity: 1;
+  --el-scrollbar-hover-opacity: 1;
+  --el-scrollbar-bg-color: var(--el-color-primary-light-8);
+  --el-scrollbar-hover-bg-color: var(--el-color-primary-light-6);
 
-  .placeholder {
-    padding: 20px 0 0 20px;
-    color: var(--bl-text-color-light);
+  :deep(.el-scrollbar__bar) {
+    width: 5px;
+    right: 0px;
   }
 
-  $width-item: 210px;
+  :deep(.el-scrollbar__view) {
+    @include box(100%, 100%);
+    @include flex(row, flex-start, flex-start);
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+}
 
-  .subject-item {
-    @include flex(column, flex-start, flex-start);
-    @include box($width-item, 90px, $width-item, $width-item);
-    @include themeShadow(3px 3px 5px 1px rgba(88, 88, 88, 0.3), 3px 3px 5px 1px rgba(0, 0, 0, 1));
-    @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--bl-subject-color1) 100%),
-      linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%));
-    border-radius: 5px;
-    margin: 15px;
-    transition: 0.3s;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    z-index: 1;
+// .home-subject-root {
+//   @include box(100%, 100%);
+//   @include flex(row, flex-start, flex-start);
+//   flex-wrap: wrap;
+//   align-content: flex-start;
+//   overflow: auto;
+//   overflow-y: overlay;
+// }
 
-    &:hover {
-      transform: translateY(-5px);
-      @include themeShadow(3px 3px 5px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
+.placeholder {
+  padding: 20px 0 0 20px;
+  color: var(--bl-text-color-light);
+}
 
-      .seal {
-        text-shadow: 3px 3px 5px rgba(0, 0, 0, 1);
-        transform: translateY(-30px);
-        @include themeShadow(0 3px 15px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
+$width-item: 210px;
 
-        [class="dark"] & {
-          text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, .5);
-        }
-      }
+.subject-item {
+  @include flex(column, flex-start, flex-start);
+  @include box($width-item, 90px, $width-item, $width-item);
+  @include themeShadow(3px 3px 5px 1px rgba(88, 88, 88, 0.3), 3px 3px 5px 1px rgba(0, 0, 0, 1));
+  @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--bl-subject-color1) 100%),
+    linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%));
+  border-radius: 5px;
+  margin: 15px;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1;
 
-      .inner {
-        opacity: 1;
-      }
-    }
-
-    .progress {
-      @include box($width-item, 2px);
-      @include absolute(0, '', '', 0);
-      z-index: 3;
-    }
+  &:hover {
+    transform: translateY(-5px);
+    @include themeShadow(3px 3px 5px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
 
     .seal {
-      @include flex(row, space-between, center);
-      @include box($width-item, 40px);
-      @include font(14px, 500);
-      @include themeColor(#636363, #CDCDCD);
-      @include themeShadow(0 3px 10px rgb(144, 144, 144), 0 3px 5px rgb(37, 37, 37));
-      padding: 5px 10px;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      text-shadow: 2px 2px 5px rgb(54, 54, 54);
-      backdrop-filter: blur(5px);
-      transition: 0.3s;
-      z-index: 2;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 1);
+      transform: translateY(-30px);
+      @include themeShadow(0 3px 15px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
+
+      [class="dark"] & {
+        text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, .5);
+      }
     }
 
     .inner {
-      @include box(calc(#{$width-item} - 30px), 25px);
-      @include absolute(1px, '', '', 15px);
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      @include themeShadow(inset 0 3px 10px rgb(84, 84, 84), inset 0 3px 10px rgb(0, 0, 0));
-      transition: 1.5s;
-      opacity: 0;
+      opacity: 1;
+    }
+  }
+
+  .progress {
+    @include box($width-item, 2px);
+    @include absolute(0, '', '', 0);
+    z-index: 3;
+  }
+
+  .seal {
+    @include flex(row, space-between, center);
+    @include box($width-item, 40px);
+    @include font(14px, 500);
+    @include themeColor(#636363, #CDCDCD);
+    @include themeShadow(0 3px 10px rgb(144, 144, 144), 0 3px 5px rgb(37, 37, 37));
+    padding: 5px 10px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    text-shadow: 2px 2px 5px rgb(54, 54, 54);
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+    z-index: 2;
+  }
+
+  .inner {
+    @include box(calc(#{$width-item} - 30px), 25px);
+    @include absolute(1px, '', '', 15px);
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    @include themeShadow(inset 0 3px 10px rgb(84, 84, 84), inset 0 3px 10px rgb(0, 0, 0));
+    transition: 1.5s;
+    opacity: 0;
+  }
+
+  .subject-icon {
+    @include box(55px, 55px);
+    @include absolute('', 2px, 8px, '');
+    @include themeFilter(drop-shadow(0 0 3px rgb(62, 62, 62)), drop-shadow(0 0 3px #000000));
+  }
+
+  .infos {
+    @include box(100%, 25px);
+    @include font(11px, 300);
+    @include themeColor(#595959, #8D8D8D);
+    padding: 5px 10px;
+
+    .iconbl {
+      font-size: 12px;
+      margin-right: 5px;
+      transition: 0.3s;
     }
 
-    .subject-icon {
-      @include box(55px, 55px);
-      @include absolute('', 2px, 8px, '');
-      @include themeFilter(drop-shadow(0 0 3px rgb(62, 62, 62)), drop-shadow(0 0 3px #000000));
-    }
-
-    .infos {
-      @include box(100%, 25px);
-      @include font(11px, 300);
-      @include themeColor(#595959, #8D8D8D);
-      padding: 5px 10px;
-
-      .iconbl {
-        font-size: 12px;
-        margin-right: 5px;
-        transition: 0.3s;
-      }
-
-      .bl-sendmail-fill {
-        font-size: 15px;
-      }
+    .bl-sendmail-fill {
+      font-size: 15px;
     }
   }
 }
