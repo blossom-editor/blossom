@@ -2,6 +2,7 @@ package com.blossom.backend.thirdparty.hefeng;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONObject;
@@ -45,7 +46,7 @@ public class WeatherManager {
     public HeWeatherDTO findWeatherAll(String location) {
         Map<String, Object> maps = initParam(location);
         if (maps == null) {
-            log.warn("未配置天气信息");
+            log.info("未配置天气信息, 忽略天气查询");
             return null;
         }
         HttpResponse city;
@@ -129,7 +130,7 @@ public class WeatherManager {
      */
     public Map<String, Object> initParam(String location) {
         Map<String, String> paramMap = paramService.selectMap(false, ParamEnum.HEFENG_KEY);
-        if (MapUtil.isNotEmpty(paramMap)) {
+        if (MapUtil.isNotEmpty(paramMap) && StrUtil.isBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))) {
             Map<String, Object> map = new HashMap<>(2);
             map.put("location", location);
             map.put("key", paramMap.get(ParamEnum.HEFENG_KEY.name()));
