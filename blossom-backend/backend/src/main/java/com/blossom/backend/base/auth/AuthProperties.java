@@ -127,10 +127,10 @@ public class AuthProperties implements EnvironmentAware, ApplicationContextAware
 
         final Client defaultClient = Client.getDefault();
 
-        log.info("[AUTHORIZ] 授权类型:{}, Client:客户端, Expire(h):授权时间(小时), Refresh:请求刷新授权, Unique:用户Token唯一", type);
-        log.info("[AUTHORIZ] ┌──────────┬───────────┬─────────┬────────────┐");
-        log.info("[AUTHORIZ] | ClientId | Expire(h) | Refresh | MultiPlace |");
-        log.info("[AUTHORIZ] ├──────────┼───────────┼─────────┼────────────┤");
+        log.info("[AUTHORIZ] 授权类型:{}, Client:客户端, Duration(h):授权时长(小时), Refresh:请求刷新授权, MultiPlace:允许多处登录", type);
+        log.info("[AUTHORIZ] ┌──────────┬──────────┬─────────┬────────────┐");
+        log.info("[AUTHORIZ] | ClientId | Duration | Refresh | MultiPlace |");
+        log.info("[AUTHORIZ] ├──────────┼──────────┼─────────┼────────────┤");
         for (Client client : this.clients) {
             // 配置文件有配置,但配置不全,则未配置的参数使用默认配置
             if (client.getDuration() == null || client.getDuration() == 0) {
@@ -151,7 +151,7 @@ public class AuthProperties implements EnvironmentAware, ApplicationContextAware
             }
             log.info("[AUTHORIZ] | {}| {}| {}| {}| {}",
                     StrUtil.fillAfter(client.getClientId(), StrUtil.C_SPACE, 9),
-                    StrUtil.fillAfter(client.getDuration() / 3600L + "", StrUtil.C_SPACE, 10),
+                    StrUtil.fillAfter(client.getDuration() / 3600L + " Hour", StrUtil.C_SPACE, 9),
                     StrUtil.fillAfter(String.valueOf(client.getRequestRefresh()), StrUtil.C_SPACE, 8),
                     StrUtil.fillAfter(String.valueOf(client.getMultiPlaceLogin()), StrUtil.C_SPACE, 11),
                     client.getGrantType()
@@ -159,7 +159,7 @@ public class AuthProperties implements EnvironmentAware, ApplicationContextAware
         }
         // 转换为 map, 有相同的 type, 后者会覆盖前者
         this.clientMap = this.clients.stream().collect(Collectors.toMap(Client::getClientId, Function.identity(), (key1, key2) -> key2));
-        log.info("[AUTHORIZ] └──────────┴───────────┴─────────┴────────────┘");
+        log.info("[AUTHORIZ] └──────────┴──────────┴─────────┴────────────┘");
     }
 
     private void initAfterProcessorTypeCheck() {

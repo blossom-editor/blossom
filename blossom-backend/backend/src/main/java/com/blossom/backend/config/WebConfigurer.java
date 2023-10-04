@@ -31,7 +31,7 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Bean("taskExecutor")
     public Executor taskExecutor(Environment env) {
-        log.info("[TRACKERS] 已经适配框架 : Spring Task");
+        log.debug("[TRACKERS] 已经适配框架 : Spring Task");
         executor = new ThreadPoolTaskExecutor();
         // 核心线程池10
         executor.setCorePoolSize(10);

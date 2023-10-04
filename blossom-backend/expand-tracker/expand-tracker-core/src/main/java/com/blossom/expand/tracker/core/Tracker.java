@@ -165,7 +165,7 @@ public class Tracker implements AutoCloseable {
             // 初始化收集器失败时, 则不需要收集
             trackerCollector = SpringUtil.getBean(TrackerCollector.class);
         } catch (Exception e) {
-            log.info("[TRACKERS] 无法发现任何 TrackerCollector 收集器, TRACE 将只在日志 MDC 中记录, 不会持久化...");
+            log.debug("[TRACKERS] 无法发现任何 TrackerCollector 收集器, TRACE 将只在日志 MDC 中记录, 不会持久化...");
             needCollectSpan = false;
         }
     }

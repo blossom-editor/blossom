@@ -57,7 +57,7 @@ public class TrackerFilter extends GenericFilterBean {
 
     @PostConstruct
     public void init () {
-        log.info("[TRACKERS] 已经适配框架 : Spring Filter");
+        log.debug("[TRACKERS] 已经适配框架 : Spring Filter");
     }
 
 }

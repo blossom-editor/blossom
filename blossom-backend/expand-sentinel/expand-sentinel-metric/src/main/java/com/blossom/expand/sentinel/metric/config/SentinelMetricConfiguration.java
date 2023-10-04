@@ -21,6 +21,6 @@ public class SentinelMetricConfiguration {
 
     @PostConstruct
     public void init() {
-         log.info("[SENTINEL] 指标接口初始化完成");
+         log.debug("[SENTINEL] 指标接口初始化完成");
     }
 }

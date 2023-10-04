@@ -28,7 +28,7 @@ public class SentinelInterceptorConfig implements WebMvcConfigurer {
 
     @PostConstruct
     public void init() {
-        log.info("[SENTINEL] 已适配 SPRING_MVC BY INTERCEPTOR");
+        log.debug("[SENTINEL] 已适配 SPRING_MVC BY INTERCEPTOR");
     }
 
 }

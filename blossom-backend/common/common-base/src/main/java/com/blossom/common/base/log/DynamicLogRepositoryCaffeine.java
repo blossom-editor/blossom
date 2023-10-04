@@ -29,7 +29,7 @@ public class DynamicLogRepositoryCaffeine implements DynamicLogRepository {
     private final ScheduledExecutorService clearUpScheduled = Executors.newScheduledThreadPool(1);
 
     public DynamicLogRepositoryCaffeine(LoggingSystem loggingSystem, BaseProperties properties) {
-        log.info("[    BASE] 日志级别存储 : Caffeine, 配置持续时长[{}ms], 刷新间隔[{}ms]",
+        log.debug("[    BASE] 日志级别存储 : Caffeine, 配置持续时长[{}ms], 刷新间隔[{}ms]",
                 properties.getLog().getDuration(), properties.getLog().getRestoreDuration());
         cache = Caffeine.newBuilder()
                 .initialCapacity(100)
@@ -49,9 +49,7 @@ public class DynamicLogRepositoryCaffeine implements DynamicLogRepository {
     }
 
     /**
-     * @param appName 应用名称, 非必填
-     * @param path    日志路径
-     * @param level   级别
+     * @param levelWrapper 日志级别封装
      */
     @Override
     public void save(LevelWrapper levelWrapper) {
