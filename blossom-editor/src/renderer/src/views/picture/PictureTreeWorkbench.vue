@@ -26,7 +26,7 @@
       <el-tooltip content="刷新列表" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
       </el-tooltip>
-      <el-tooltip content="新增文件夹或文档" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
+      <el-tooltip content="新增图片文件夹" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
         :auto-close="2000">
         <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
       </el-tooltip>
