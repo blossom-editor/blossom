@@ -6,6 +6,13 @@
   "description": "各个网站的LOGO",
   "glyphs": [
     {
+      "icon_id": "9826664",
+      "name": "警告",
+      "font_class": "jinggao",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
       "icon_id": "22800926",
       "name": "file.markdown",
       "font_class": "markdown",
