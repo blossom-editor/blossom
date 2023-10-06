@@ -39,25 +39,28 @@ public class PictureBlosController {
 
     private final PictureService baseService;
     private final OSManager osManager;
-    /**
-     * 大于 300KB 的图片才进行压缩
-     */
-    private final static long COMPRESS_MIN_SIZE = 307200;
 
     // region 上传下载
 
     /**
      * 上传文件
      *
-     * @param file 文件
+     * @param file         文件
+     * @param filename     文件名
+     * @param pid          图片上级ID
+     * @param repeatUpload 是否允许重复上传 @since 1.6.0
      * @apiNote 上传成功返回文件对象存储地址, 该接口需授权后才可使用。[Content-Type=multipart/form-data]
      */
     @PostMapping("/picture/file/upload")
     public R<String> uploadFile(@RequestParam("file") MultipartFile file,
                                 @RequestParam(value = "filename", required = false) String filename,
-                                @RequestParam(value = "pid", required = false) Long pid) {
+                                @RequestParam(value = "pid", required = false) Long pid,
+                                @RequestParam(value = "repeatUpload", required = false) Boolean repeatUpload) {
+        if (repeatUpload == null) {
+            repeatUpload = false;
+        }
         log.warn("上传文件: {}, {}", pid, file.getOriginalFilename());
-        PictureEntity picture = baseService.insert(file, filename, pid, AuthContext.getUserId());
+        PictureEntity picture = baseService.insert(file, filename, pid, AuthContext.getUserId(), repeatUpload);
         if (picture.getId() == null) {
             return R.ok("上传失败");
         }
@@ -92,24 +95,6 @@ public class PictureBlosController {
         // sendfile 方式下载图片
         sendfile(filename, resp);
         return ResponseEntity.ok(null);
-
-//        File file = osManager.get(filename);
-//        resp.setContentType("");
-//        resp.setContentLengthLong(file.length());
-//        try {
-//            InputStream is = new FileInputStream(file);
-//            StreamingResponseBody body = os -> {
-//                int nRead;
-//                byte[] data = new byte[1024];
-//                while ((nRead = is.read(data, 0, data.length)) != -1) {
-//                    os.write(data, 0, nRead);
-//                }
-//            };
-//            return ResponseEntity.ok().body(body);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.ok().body(null);
-//        }
     }
 
 
@@ -124,6 +109,7 @@ public class PictureBlosController {
             }
             resp.setContentType(contentType);
             resp.setContentLengthLong(size);
+            // resp.setHeader(HttpHeaders.CACHE_CONTROL,"max-age=3600");
 
             long position = 0;
             WritableByteChannel channel = Channels.newChannel(os);

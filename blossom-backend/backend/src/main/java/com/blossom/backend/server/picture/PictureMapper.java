@@ -29,6 +29,13 @@ public interface PictureMapper extends BaseMapper<PictureEntity> {
     List<Long> listDistinctPid(@Param("userId") Long userId);
 
     /**
+     * 根据路径名称查询
+     *
+     * @param pathName 路径名称
+     */
+    PictureEntity selectByPathName(@Param("pathName") String pathName);
+
+    /**
      * 修改
      */
     void updById(PictureEntity entity);

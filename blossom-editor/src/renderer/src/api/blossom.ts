@@ -355,6 +355,15 @@ export const picturePageApi = (params?: object): Promise<R<any>> => {
 }
 
 /**
+ * 图片详情
+ * @param params 
+ * @returns 
+ */
+export const pictureInfoApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>("/picture/info", { params });
+}
+
+/**
  * 星标图片
  * @param params {id:id}
  * @returns 

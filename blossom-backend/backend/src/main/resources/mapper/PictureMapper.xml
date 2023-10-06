@@ -20,7 +20,7 @@
             <if test="pid != null">and p.pid = #{pid}</if>
             <if test="name != null and name != ''">and name like concat('%',#{name}, '%')</if>
             <if test="pathName != null and pathName != ''">and p.path_name like concat('%',#{pathName}, '%')</if>
-            <if test="url != null and url != ''">and p.url like concat('%',#{url}, '%')</if>
+            <if test="url != null and url != ''">and p.url = #{url}</if>
             <if test="starStatus != null">and p.star_status = #{starStatus}</if>
             <if test="userId != null">and p.user_id = #{userId}</if>
             <if test="urls != null and urls.size() != 0">and p.url in
@@ -30,11 +30,31 @@
         group by p.url order by p.id desc
     </select>
 
-
+    <select id="selectByPathName" resultType="com.blossom.backend.server.picture.pojo.PictureEntity">
+        select p.id,
+               p.pid,
+               p.`name`,
+               p.path_name,
+               p.url,
+               p.star_status,
+               p.size
+          from blossom_picture p
+         where p.path_name = #{pathName}
+    </select>
 
     <select id="listDistinctPid" resultType="java.lang.Long">
         select distinct pid from blossom_picture where user_id = #{userId}
     </select>
+
+    <update id="updById">
+        update blossom_picture
+        <set>
+            <if test="starStatus != null">star_status = #{starStatus},</if>
+            <if test="size != null">size = #{size},</if>
+            <if test="creTime != null">cre_time = #{creTime},</if>
+        </set>
+        where id = #{id}
+    </update>
 
     <update id="updById">
         update blossom_picture
@@ -51,4 +71,7 @@
         where user_id = #{userId}
         <if test="pid != null">and pid = #{pid}</if>
     </select>
+
+    <update id="updByPathName">
+    </update>
 </mapper>

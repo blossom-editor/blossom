@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.folder.FolderService;
@@ -26,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +71,21 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
     }
 
     /**
+     * 根据路径查询图片信息
+     *
+     * @param url 图片路径
+     */
+    public PictureEntity selectByUrl(String url) {
+        PictureEntity where = new PictureEntity();
+        where.setUrl(url);
+        List<PictureEntity> pic = baseMapper.listAll(where);
+        if (CollUtil.isEmpty(pic)) {
+            return null;
+        }
+        return pic.get(0);
+    }
+
+    /**
      * 查询所有的 pid, 并去重, 相当于获取所有有图片的文件夹.
      * <pre>{@code select distinct pid from blossom_picture }</pre>
      *
@@ -104,12 +119,15 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
      * 2.3. 如果没有上级文件夹, 即 {@param pid} 为空, 则 parentFolder.storePath = "/"
      * }</pre>
      *
-     * @param file     文件
-     * @param filename 文件名, 文件名不能包含后缀
-     * @param pid      上级ID
+     * @param file         文件
+     * @param filename     文件名, 文件名不能包含后缀
+     * @param pid          上级ID
+     * @param userId       用户ID
+     * @param repeatUpload 重复上传
+     * @since 1.6.0 允许重复上传图片
      */
     @Transactional(rollbackFor = Exception.class)
-    public PictureEntity insert(MultipartFile file, String filename, Long pid, Long userId) {
+    public PictureEntity insert(MultipartFile file, String filename, Long pid, Long userId, Boolean repeatUpload) {
         PictureEntity pic = new PictureEntity();
         pic.setUserId(userId);
         pic.setId(PrimaryKeyUtil.nextId());
@@ -148,17 +166,25 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
         pic.setPathName(pic.getPathName().replaceAll("//", "/"));
         pic.setUrl(domain + pic.getPathName());
 
-        System.out.println(pic.getPathName());
-        System.out.println(pic.getUrl());
+        PictureEntity originPic;
+        if ((originPic = baseMapper.selectByPathName(pic.getPathName())) != null) {
 
-        if (baseMapper.exists(new LambdaQueryWrapper<PictureEntity>().eq(PictureEntity::getPathName, pic.getPathName()))) {
+            // 如果允许重复上传, 则修改大小
+            if (repeatUpload) {
+                PictureEntity upd = new PictureEntity();
+                upd.setId(originPic.getId());
+                upd.setSize(pic.getSize());
+                upd.setCreTime(new Date());
+                baseMapper.updById(upd);
+                pic.setId(originPic.getId());
+                return pic;
+            }
             throw new XzException400HTTP("图片[" + pic.getPathName() + "]已存在, 请重命名文件或选择其他路径!");
         }
 
         baseMapper.insert(pic);
         return pic;
     }
-
 
     /**
      * 修改
@@ -172,14 +198,19 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
 
     /**
      * 删除
+     *
+     * @param id          图片ID
+     * @param ignoreCheck 忽略引用校验 @since 1.6.0
      */
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
+    public void delete(Long id, boolean ignoreCheck) {
         PictureEntity pic = baseMapper.selectById(id);
         if (pic == null) {
             return;
         }
-        XzException400.throwBy(articleReferenceService.check(pic.getUrl()), "尚有文章正在引用该图片, 请先将文章中的图片引用删除后, 再删除图片!");
+        if (!ignoreCheck) {
+            XzException400.throwBy(articleReferenceService.check(pic.getUrl()), "尚有文章正在引用该图片, 请先将文章中的图片引用删除后, 再删除图片!");
+        }
         baseMapper.deleteById(id);
         osManager.delete(pic.getPathName());
     }

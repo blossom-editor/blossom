@@ -1,11 +1,10 @@
 package com.blossom.backend.server.picture;
 
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.server.picture.pojo.*;
-import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.PageRes;
 import com.blossom.common.base.pojo.R;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -35,14 +34,27 @@ public class PictureController {
     }
 
     /**
+     * 查询图片信息
+     *
+     * @param url 图片URL
+     */
+    @GetMapping("/info")
+    public R<PictureRes> info(@RequestParam("url") String url) {
+        return R.ok(baseService.selectByUrl(url), PictureRes.class);
+    }
+
+    /**
      * 删除图片
      *
      * @param req 图片对象
      * @return 删除结果
      */
     @PostMapping("/del")
-    public R<?> deleteById(@Validated @RequestBody DelReq req) {
-        baseService.delete(req.getId());
+    public R<?> deleteById(@Validated @RequestBody PictureDelReq req) {
+        if (req.getIgnoreCheck() == null) {
+            req.setIgnoreCheck(false);
+        }
+        baseService.delete(req.getId(), req.getIgnoreCheck());
         return R.ok();
     }
 
