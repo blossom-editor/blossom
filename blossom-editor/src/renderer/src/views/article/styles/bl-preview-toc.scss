@@ -157,7 +157,7 @@
   .img-content {
     @include box(100%, auto);
     @include flex(row, flex-start, flex-start);
-    min-height: 60px;
+    // min-height: 60px;
     max-height: 130px;
     align-content: flex-start;
     flex-wrap: wrap;

@@ -121,7 +121,7 @@ $width-item: 210px;
   @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--bl-subject-color1) 100%),
     linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%));
   border-radius: 5px;
-  margin: 15px;
+  margin: 15px 10px;
   transition: 0.3s;
   position: relative;
   overflow: hidden;

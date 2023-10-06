@@ -84,16 +84,6 @@ defineExpose({ reload })
   }
 }
 
-
-// .article-stars-root {
-//   @include box(100%, 100%);
-//   @include flex(row, flex-start, flex-start);
-//   flex-wrap: wrap;
-//   align-content: flex-start;
-//   overflow: auto;
-//   overflow-y: overlay;
-// }
-
 .placeholder {
   padding: 20px 0 0 20px;
   color: var(--bl-text-color-light);
@@ -102,7 +92,7 @@ defineExpose({ reload })
 .star-item {
   @include box(210px, 70px, 210px, 210px);
   position: relative;
-  margin: 10px 15px;
+  margin: 10px 10px;
   filter: drop-shadow(2px 2px 2px rgb(180, 180, 180));
 
   [class="dark"] & {

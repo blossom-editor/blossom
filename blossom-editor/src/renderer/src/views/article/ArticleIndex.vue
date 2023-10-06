@@ -3,17 +3,13 @@
 
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
-
       <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree">
         <ArticleTreeDocs @click-doc="clickCurDoc" ref="ArticleTreeDocsRef"></ArticleTreeDocs>
       </div>
 
       <div class="doc-temp-textarea">
         <bl-row just="space-between" height="28px" class="doc-temp-textarea-workbench">
-          <bl-row style="font-size: 10px;">
-            <img src="@renderer/assets/imgs/note/cd.png" style="width: 15px;margin-right: 5px;">
-            临时内容(可从便签快速设置)
-          </bl-row>
+          <bl-row><img src="@renderer/assets/imgs/note/cd.png">临时内容(可从便签快速设置)</bl-row>
           <div class="iconbl bl-subtract-line" @click="tempTextareaExpand = !tempTextareaExpand"></div>
         </bl-row>
         <bl-row class="doc-temp-textarea-input" :style="tempTextareaStyle.tempTextarea">
@@ -273,7 +269,6 @@ const exitView = () => {
 }
 
 //#endregion
-
 
 //#region ----------------------------------------< 图片管理 >--------------------------------------
 const PictureViewerInfoRef = ref()

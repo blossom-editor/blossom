@@ -80,10 +80,10 @@
             <el-tooltip placement="bottom" trigger="click" :hide-after="0">
               <template #content>
                 <div style="max-width: 300px;white-space:break-spaces;word-wrap: break-word;word-break:break-all;">
-                  <bl-row style="word-wrap: break-word;">图片名称: {{ pic.name }}</bl-row>
+                  <bl-row>图片名称: {{ pic.name }}</bl-row>
                   <bl-row>图片大小: {{ formatFileSize(pic.size) }}</bl-row>
-                  <bl-row style="word-wrap: break-word;">上传时间: {{ pic.creTime }}</bl-row>
-                  <bl-row style="word-wrap: break-word;">图片路径: {{ pic.pathName }}</bl-row>
+                  <bl-row>上传时间: {{ pic.creTime }}</bl-row>
+                  <bl-row>图片路径: {{ pic.pathName }}</bl-row>
                   <bl-row v-if="!isEmpty(pic.articleNames)" align="flex-start">引用文章:
                     <div>
                       <div v-for="aname in articleNamesToArray(pic.articleNames)" style="margin-left: -13px;">
@@ -95,7 +95,7 @@
               </template>
               <div class="item iconbl bl-problem-line"></div>
             </el-tooltip>
-            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)"></div>
+            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)" @click.right="copyMarkdownUrl(pic.url)"></div>
             <div class="item iconbl bl-a-clouddownload-line" @click="download(pic.url)"></div>
             <div v-if="pic.starStatus == 0" class="item iconbl bl-star-line" @click="starPicture(pic)"></div>
             <div v-else-if="pic.starStatus == 1" class="item iconbl bl-star-fill" @click="starPicture(pic)"></div>
@@ -192,6 +192,7 @@ const clickCurFolder = (tree: DocTree) => {
   curFolder.value = treeToInfo(tree)
   picuturePageParam.value.pageNum = 1
   picuturePageParam.value.pid = curFolder.value.id
+  picturePages.value = []
   picturePageApi(picuturePageParam.value).then(resp => {
     picturePages.value = resp.data.datas
   })
