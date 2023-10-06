@@ -47,7 +47,11 @@ public class WeatherManager {
         Map<String, Object> maps = initParam(location);
         if (maps == null) {
             log.info("未配置天气信息, 忽略天气查询");
-            return null;
+            HeWeatherDTO weather = new HeWeatherDTO();
+            HeWeatherDTO.Location l = new HeWeatherDTO.Location();
+            l.setName("未配置天气");
+            weather.setLocation(l);
+            return weather;
         }
         HttpResponse city;
         HttpResponse now;
@@ -130,7 +134,7 @@ public class WeatherManager {
      */
     public Map<String, Object> initParam(String location) {
         Map<String, String> paramMap = paramService.selectMap(false, ParamEnum.HEFENG_KEY);
-        if (MapUtil.isNotEmpty(paramMap) && StrUtil.isBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))) {
+        if (MapUtil.isNotEmpty(paramMap) && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))) {
             Map<String, Object> map = new HashMap<>(2);
             map.put("location", location);
             map.put("key", paramMap.get(ParamEnum.HEFENG_KEY.name()));

@@ -112,7 +112,7 @@ const getImgUrl = (name: string) => {
 
 const weather = ref({
   location: {
-    name: ''
+    name: '未配置天气'
   },
   now: {
     iconValue: '#wt-qing',
@@ -134,12 +134,16 @@ const getWeather = () => {
   weatherResult.value = 'LOADING';
   setTimeout(() => {
     getAll({ location: userStore.userinfo.location }).then(resp => {
-      resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
-      // resp.data.now.img = '@renderer/assets/imgs/weather/' + resp.data.now.iconValue.replaceAll('#wt-', '') + '.png'
-      resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
-      resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay.replaceAll('#wt-', '') + '-s')
-      resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay.replaceAll('#wt-', '') + '-s')
-      weather.value = resp.data
+      console.log(resp.data);
+      if (resp.data.now) {
+        resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+      }
+      if (resp.data.daily) {
+        resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
+        resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay.replaceAll('#wt-', '') + '-s')
+        resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay.replaceAll('#wt-', '') + '-s')
+      }
+      weather.value = { ...weather.value, ...resp.data }
     })
   }, 0);
 }
