@@ -255,6 +255,19 @@ export const formartNumber = (param: number): string => {
 export const randomBoolean = (): boolean => {
   return Math.random() >= 0.5
 }
+
+/**
+ * 随机整数范围 min <= return < max
+ * @param min 
+ * @param max 
+ * @returns 
+ */
+export const randomInt = (min: number, max: number): number => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 /**
  * html 反转义
  * @param str 
