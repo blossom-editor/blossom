@@ -93,7 +93,7 @@
       <ol>
         <li v-for="ref in references">
           <bl-row>
-            <span style="width: 170px;">{{ ref.name }}</span>: <a :href="ref.url">{{ ref.url }}</a>
+            <span style="width: 130px;">{{ ref.name }}</span>: <a :href="ref.url">{{ ref.url }}</a>
           </bl-row>
         </li>
       </ol>
@@ -107,7 +107,7 @@ import { toView } from '@renderer/assets/utils/util';
 
 const references = [
   { name: '基础icon(作者:宗伟)', url: 'https://www.iconfont.cn/collections/detail?cid=35578' },
-  { name: 'Microsoft Teams Emojis', url: 'https://github.com/esuca/Microsoft-Teams-Animated-Emojis' },
+  { name: 'Fluentui-Emoji', url: 'https://github.com/microsoft/fluentui-emoji' },
   { name: 'JetBrains Mono', url: 'https://www.jetbrains.com/lp/mono/' },
 ]
 

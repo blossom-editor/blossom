@@ -1,6 +1,7 @@
 <template>
   <div class="picture-upload-root">
-    <el-upload :action="serverStore.serverUrl + uploadFileApiUrl" name="file" :data="{ pid: curFolder?.id }"
+    <el-upload :action="serverStore.serverUrl + uploadFileApiUrl" name="file"
+      :data="{ pid: curFolder?.id, repeatUpload: porps.repeatUpload }"
       :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }" :show-file-list="true" list-type="text"
       :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError" drag multiple>
       <span style="font-size: 12px;">
@@ -18,6 +19,13 @@ import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { provideKeyDocInfo } from '@renderer/views/doc/doc'
 import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/scripts/picture'
+
+const porps = defineProps({
+  repeatUpload: {
+    type: Boolean,
+    default: false
+  }
+})
 
 // 当前菜单中选择的文档
 const curFolder = inject(provideKeyDocInfo)

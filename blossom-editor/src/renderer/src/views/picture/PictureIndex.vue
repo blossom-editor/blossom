@@ -9,7 +9,7 @@
       </div>
 
       <div class="doc-upload">
-        <PictureUpload></PictureUpload>
+        <PictureUpload :repeat-upload="isReplaceUpload"></PictureUpload>
       </div>
     </div>
 
@@ -32,14 +32,27 @@
             </el-radio-group>
           </div>
 
-          <!-- <div class="radio">
-            <div>图片清晰度</div>
-            <el-radio-group v-model="resolution">
-              <el-radio-button label="low">低</el-radio-button>
-              <el-radio-button label="hight">高</el-radio-button>
-              <el-radio-button label="orgin">原始</el-radio-button>
-            </el-radio-group>
-          </div> -->
+
+          <div class="radio">
+            <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+              <template #content>
+                开启重复上传后<br />重名的图片将会被覆盖
+              </template>
+              <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px;margin-left: 3px;"></span></div>
+            </el-tooltip>
+            <el-switch width="70" class="replace-upload-switch" inline-prompt size="large" v-model="isReplaceUpload"
+              active-text="开启" inactive-text="关闭" />
+          </div>
+
+          <div class="cache-clear">
+            <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+              <template #content>
+                重复上传图片后<br />如果图片无变化可刷新缓存
+              </template>
+              <div>清空图片缓存<span class="iconbl bl-admonish-line" style="font-size: 12px;margin-left: 3px;"></span></div>
+            </el-tooltip>
+            <el-button @click="picCacheRefresh">清空图片缓存</el-button>
+          </div>
         </div>
 
         <div class="workbench-group">
@@ -56,14 +69,13 @@
 
       <div class="picture-card-container">
         <div :class="['picture-card', cardClass]" v-for="pic in picturePages">
-          <el-image style="width: 100%;height: 100%;" :src="pic.url + pictureCompressParam" fit="cover"
-            :preview-src-list="[pic.url]" :preview-teleported="true">
-            <template #error>
-              <div class="img-error" style="">
-                {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
-              </div>
-            </template>
-          </el-image>
+          <div class="img-wrapper" @click="showPicInfo(pic.url)">
+            <img v-if="!pic.delTime" :src="picCacheWrapper(pic.url)">
+            <div v-else class="img-error">
+              {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
+            </div>
+          </div>
+
           <div class="picuter-card-workbench">
             <el-tooltip placement="bottom" trigger="click" :hide-after="0">
               <template #content>
@@ -83,7 +95,7 @@
               </template>
               <div class="item iconbl bl-problem-line"></div>
             </el-tooltip>
-            <div class="item iconbl bl-copy-line" @click="writeTextTo(pic.url)"></div>
+            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)"></div>
             <div class="item iconbl bl-a-clouddownload-line" @click="download(pic.url)"></div>
             <div v-if="pic.starStatus == 0" class="item iconbl bl-star-line" @click="starPicture(pic)"></div>
             <div v-else-if="pic.starStatus == 1" class="item iconbl bl-star-fill" @click="starPicture(pic)"></div>
@@ -97,6 +109,8 @@
       </div>
     </div>
 
+    <PictureViewerInfo ref="PictureViewerInfoRef"></PictureViewerInfo>
+
   </div>
 </template>
 <script setup lang="ts">
@@ -107,37 +121,31 @@ import { CopyDocument } from '@element-plus/icons-vue'
 import { picturePageApi, pictureStarApi, pictureDelApi, pictureStatApi } from '@renderer/api/blossom'
 import { treeToInfo, provideKeyDocInfo } from '@renderer/views/doc/doc'
 import { isEmpty } from 'lodash'
+import { isNotNull, isNull } from "@renderer/assets/utils/obj"
 import { formatFileSize } from '@renderer/assets/utils/util'
 import { writeText, download } from '@renderer/assets/utils/electron'
 
 // component
-import { Picture } from './scripts/picture'
+import { articleNamesToArray, picCacheWrapper, Picture, picCacheRefresh } from './scripts/picture'
 import PictureTreeDocs from "./PictureTreeDocs.vue"
 import PictureUpload from "./PictureUpload.vue"
-import { isBlank, isNotBlank, isNotNull, isNull } from "@renderer/assets/utils/obj"
+import PictureViewerInfo from "./PictureViewerInfo.vue"
 
 onActivated(() => {
   getPictureStat()
 })
 
+// 是否替换上传
+const isReplaceUpload = ref(false)
 const cardSize = ref('mini');
-const resolution = ref('hight')
+
 const cardClass = computed(() => {
   if (cardSize.value == 'large') {
     return 'picutre-card-large'
   }
   return 'picutre-card-mini'
 })
-// 图片列表图片请求地址的参数
-const pictureCompressParam = computed(() => {
-  if (resolution.value == 'low') {
-    return '?scale=0.2&quality=0.2'
-  }
-  if (resolution.value == 'hight') {
-    return '?scale=0.5&quality=0.5'
-  }
-  return ''
-})
+
 //#region ----------------------------------------< 当前文件当前文件 >----------------------------
 const curFolder = ref<DocInfo>()       // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 type PageParam = { pageNum: number, pageSize: number, pid: number, name: string, starStatus: number | undefined } // 分页对象类型
@@ -227,11 +235,27 @@ const changeStarStatus = () => {
   }
 }
 
-//#region ----------------------------------------< 图片卡片操作 >------------------------------------------
+//#endregion
 
-const writeTextTo = (url: string) => {
+//#region ----------------------------------------< 图片卡片操作 >------------------------------------------
+const PictureViewerInfoRef = ref()
+
+const showPicInfo = (url: string) => {
+  PictureViewerInfoRef.value.showPicInfo(url)
+}
+
+/**
+ * 复制文章链接
+ * @param url 
+ */
+const copyUrl = (url: string) => {
   writeText(url)
-  ElMessage.info({ message: '已复制', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
+  ElMessage.info({ message: '已复制链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
+}
+
+const copyMarkdownUrl = (url: string) => {
+  writeText(url)
+  ElMessage.info({ message: '已复制 MD 链接格式', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }
 
 /**
@@ -283,15 +307,10 @@ const deletePicture = (pic: Picture) => {
     })
 }
 
-const articleNamesToArray = (names: string): string[] => {
-  if (isBlank(names)) {
-    return []
-  }
-  let result = names.split(',').filter(name => isNotBlank(name))
-  return result
-}
+
 
 //#endregion
+
 </script>
 
 <style scoped lang="scss">
@@ -300,5 +319,33 @@ const articleNamesToArray = (names: string): string[] => {
 
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;
+}
+
+.replace-upload-switch {
+  --el-switch-off-color: var(--el-color-primary-light-7);
+  height: 24px;
+
+  :deep(.el-switch__core) {
+    border-radius: 4px;
+  }
+
+  :deep(.is-text) {
+    color: #A9A9A9;
+  }
+
+  :deep(.el-switch__action) {
+    @include themeBg(#ffffff, #A9A9A9);
+    border-radius: 4px;
+  }
+}
+
+.is-checked {
+  :deep(.is-text) {
+    color: #fff;
+  }
+
+  :deep(.el-switch__action) {
+    background-color: #ffffff !important;
+  }
 }
 </style>

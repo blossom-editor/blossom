@@ -82,7 +82,7 @@
   transition: width 0.2s, height 0.2s;
 
   .toc-content {
-    overflow-y: scroll;
+    overflow-y: overlay;
     padding-top: 10px;
 
     .toc-1,
@@ -151,25 +151,32 @@
     margin-top: 20px;
     height: 40px;
     padding-top: 10px;
+    cursor: auto;
   }
 
   .img-content {
     @include box(100%, auto);
     @include flex(row, flex-start, flex-start);
-    max-height: 150px;
+    min-height: 60px;
+    max-height: 130px;
     align-content: flex-start;
     flex-wrap: wrap;
     overflow-y: scroll;
 
-    .elimg {
-      @include flex(row, center, center);
+    .img-wrapper {
       @include box(50px, 50px);
-      border-radius: 4px;
-      object-fit: cover;
       background-color: aliceblue;
+      border-radius: 4px;
       margin: 3px;
-      filter: brightness(90%);
       color: #a7a7a7;
+      filter: brightness(90%);
+      cursor: pointer;
+      overflow: hidden;
+
+      img {
+        @include box(50px, 50px);
+        object-fit: cover;
+      }
 
       &:hover {
         filter: brightness(100%);

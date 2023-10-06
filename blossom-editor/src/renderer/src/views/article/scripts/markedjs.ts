@@ -7,9 +7,9 @@ import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import mermaid from 'mermaid'
 import { ArticleReference, getDocInfoFromTrees } from './article'
+import { picCacheWrapper } from '@renderer/views/picture/scripts/picture'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
-
 
 mermaid.initialize({
   theme: 'base',
@@ -293,7 +293,7 @@ export const renderCodespan = (src: string) => {
    * @param _title null
    * @param text   图片的名称
    */
-export const renderImage = (href: string | null, _title: string | null, text: string) => {
+export const renderImage = (href: string | null, title: string | null, text: string) => {
   let width = 'auto'
   let style = ''
   let tags: string[] = text.split(grammar)
@@ -311,7 +311,9 @@ export const renderImage = (href: string | null, _title: string | null, text: st
       }
     }
   }
-  return `<img width="${width}" style="${style}" src="${href}" alt="${text}">`
+  // 为图片增加缓存标识
+  return `<img width="${width}" style="${style}" src="${picCacheWrapper(href as string)}" alt="${title}">`
+  // return `<img width="${width}" style="${style}" src="${href}" alt="${title}">`
 }
 
 /**

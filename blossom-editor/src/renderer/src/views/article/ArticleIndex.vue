@@ -63,24 +63,25 @@
             {{ toc.content }}
           </div>
         </div>
-        <div class="img-title">引用图片</div>
+        <div class="img-title">
+          引用图片
+          <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+            <template #content>
+              重复上传图片后<br />如果图片无变化可刷新缓存
+            </template>
+            <span class="iconbl bl-refresh-line" @click="refreshCache"></span>
+          </el-tooltip>
+        </div>
         <div class="img-content">
-          <div v-for="image in articleImg" :key="image.targetUrl">
-            <el-image class="elimg" :src="image.targetUrl" fit="cover" :preview-src-list="[image.targetUrl]"
-              :preview-teleported="true">
-              <template #error>
-                <div class="image-slot">
-                  <el-icon :size="25">
-                    <Picture />
-                  </el-icon>
-                </div>
-              </template>
-            </el-image>
+          <div class="img-wrapper" v-for="image in articleImg" :key="image.targetUrl"
+            @click="showPicInfo(image.targetUrl)">
+            <img :src="picCacheWrapper(image.targetUrl)" />
           </div>
         </div>
       </div>
-
     </div>
+
+    <PictureViewerInfo ref="PictureViewerInfoRef" @saved="refreshCache"></PictureViewerInfo>
 
     <Teleport to="body">
       <div v-show="editorRightMenu.show" class="editor-right-menu"
@@ -120,7 +121,6 @@
 <script setup lang="ts">
 // vue
 import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from "vue"
-import { Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
 import { storeToRefs } from "pinia"
@@ -136,14 +136,15 @@ import { openExtenal, writeText, readText } from '@renderer/assets/utils/electro
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
+import PictureViewerInfo from "@renderer/views/picture/PictureViewerInfo.vue"
 // ts
 import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
 import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
-import { beforeUpload, onError } from '@renderer/views/picture/scripts/picture'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
+import { beforeUpload, onError, picCacheWrapper, picCacheRefresh } from '@renderer/views/picture/scripts/picture'
 import { useResize } from "./scripts/editor-preview-resize"
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
@@ -269,6 +270,19 @@ const enterView = () => {
  */
 const exitView = () => {
   autoSave()
+}
+
+//#endregion
+
+
+//#region ----------------------------------------< 图片管理 >--------------------------------------
+const PictureViewerInfoRef = ref()
+const showPicInfo = (url: string) => {
+  PictureViewerInfoRef.value.showPicInfo(url)
+}
+const refreshCache = () => {
+  picCacheRefresh()
+  parse()
 }
 //#endregion
 

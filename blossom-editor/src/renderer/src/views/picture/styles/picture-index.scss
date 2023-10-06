@@ -75,7 +75,6 @@
 
       :deep(.el-upload) {
         width: 150px;
-        // @include box(150px, 100%);
         --el-upload-dragger-padding-horizontal: 20px;
         --el-upload-dragger-padding-vertical: 3px;
         --el-fill-color-blank: var(--el-color-primary-light-9);
@@ -93,6 +92,7 @@
 
 
       .radio,
+      .cache-clear,
       .statistic {
         @include themeColor(#a7a7a7, #6d6d6d);
         margin-left: 15px;
@@ -100,6 +100,12 @@
         &>div {
           font-size: 11px;
           text-align: center;
+        }
+      }
+
+      .cache-clear {
+        .iconbl {
+          margin-right: 5px;
         }
       }
 
@@ -146,13 +152,19 @@
 
           .picuter-card-workbench {
             opacity: 1;
-
           }
         }
 
-        img {
+        .img-wrapper {
           height: 100%;
-          object-fit: cover;
+          width: 100%;
+          cursor: pointer;
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
         }
 
         .img-error {
@@ -171,6 +183,7 @@
           bottom: 0;
           opacity: 0;
           transition: 0.3s;
+          z-index: 3;
 
           .item {
             @include box(25%, 100%);
