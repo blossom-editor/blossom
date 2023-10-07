@@ -56,14 +56,6 @@
         where id = #{id}
     </update>
 
-    <update id="updById">
-        update blossom_picture
-        <set>
-            <if test="starStatus != null">star_status = #{starStatus}</if>
-        </set>
-        where id = #{id}
-    </update>
-
     <select id="stat" resultType="com.blossom.backend.server.picture.pojo.PictureStatRes">
         select count(*) as picture_count,
         sum(size) as picture_size

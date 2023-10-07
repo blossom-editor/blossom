@@ -134,7 +134,6 @@ const getWeather = () => {
   weatherResult.value = 'LOADING';
   setTimeout(() => {
     getAll({ location: userStore.userinfo.location }).then(resp => {
-      console.log(resp.data);
       if (resp.data.now) {
         resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
       }
