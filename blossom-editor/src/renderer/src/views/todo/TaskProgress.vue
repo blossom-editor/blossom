@@ -30,7 +30,7 @@
     <div
       class="waiting"
       @dragenter="onDragenter(WaitDragRef, $event)"
-      @drop="onDrop('WAITING', $event)"
+      @drop="onDrop('WAITING')"
       @dragleave="onDragleave(WaitDragRef, $event)"
       ref="WaitRef">
       <div class="tasks-title">
@@ -86,7 +86,7 @@
       class="processing"
       ref="ProcRef"
       @dragenter="onDragenter(ProcDragRef, $event)"
-      @drop="onDrop('PROCESSING', $event)"
+      @drop="onDrop('PROCESSING')"
       @dragleave="onDragleave(ProcDragRef, $event)">
       <div class="tasks-title"><span>进行中</span></div>
       <div class="tasks-sub-title">
@@ -135,7 +135,7 @@
       class="completed"
       ref="CompRef"
       @dragenter="onDragenter(CompDragRef, $event)"
-      @drop="onDrop('COMPLETED', $event)"
+      @drop="onDrop('COMPLETED')"
       @dragleave="onDragleave(CompDragRef, $event)">
       <div class="tasks-title">完成</div>
       <div class="tasks-sub-title">
@@ -554,7 +554,7 @@ const dragendWait = (task: TaskInfo, _e: DragEvent) => {
 /**
  * processing 中的元素在拖拽完成后执行
  */
-const dragendProc = (task: TaskInfo, e: DragEvent) => {
+const dragendProc = (task: TaskInfo, _e: DragEvent) => {
   WaitDragRef.value.style.display = 'none'
   CompDragRef.value.style.display = 'none'
   if (toStage == '' || toStage === 'PROCESSING') return
@@ -565,7 +565,7 @@ const dragendProc = (task: TaskInfo, e: DragEvent) => {
 /**
  * 从 completed 中拖出
  */
-const dragendComp = (task: TaskInfo, e: DragEvent) => {
+const dragendComp = (task: TaskInfo, _e: DragEvent) => {
   WaitDragRef.value.style.display = 'none'
   ProcDragRef.value.style.display = 'none'
   if (toStage == '' || toStage === 'COMPLETED') return

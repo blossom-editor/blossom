@@ -1,6 +1,6 @@
 <template>
   <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding:0 2px">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding: 0 2px">
       {{ props.trees.s }}
     </bl-tag>
     <div class="doc-name">
@@ -16,8 +16,7 @@
       <bl-tag v-else :bg-color="tag.bgColor" :icon="tag.icon" />
     </div>
 
-    <div v-for="line, index in tagLins" :key="line" :class="[line]" :style="{ left: (-1 * (index + 1) * 5) + 'px' }">
-    </div>
+    <div v-for="(line, index) in tagLins" :key="line" :class="[line]" :style="{ left: -1 * (index + 1) * 5 + 'px' }"></div>
   </div>
 </template>
 
@@ -30,7 +29,7 @@ import { computedDocTitleColor } from '@renderer/views/doc/doc'
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} },
   size: { type: Number, default: 14 },
-  level: { type: Number, required: true },
+  level: { type: Number, required: true }
 })
 
 const levelColor = computed(() => {
@@ -42,7 +41,7 @@ const levelColor = computed(() => {
  */
 const tags = computed(() => {
   let icons: any = []
-  props.trees.t?.forEach(tag => {
+  props.trees.t?.forEach((tag) => {
     if (tag === 'subject') {
       icons.unshift({ content: '专题', bgColor: 'salmon', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
@@ -50,8 +49,8 @@ const tags = computed(() => {
     } else {
       icons.push({ content: tag })
     }
-  });
-  return icons;
+  })
+  return icons
 })
 
 const tagLins = computed(() => {
@@ -67,7 +66,6 @@ const tagLins = computed(() => {
   }
   return lines
 })
-
 </script>
 
 <style scoped lang="scss">
@@ -89,11 +87,10 @@ $icon-size: 17px;
   position: relative;
 
   .doc-name {
-    font-size: inherit;
-    font-weight: 300;
-    // @include flex(row, flex-start, center);
     @include themeBrightness(100%, 80%);
     @include ellipsis();
+    font-size: inherit;
+    font-weight: 300;
   }
 
   .sort {
@@ -104,17 +101,15 @@ $icon-size: 17px;
 
 // 专题样式, 包括边框和文字样式
 .subject-title {
-  @include themeShadow(2px 2px 10px 1px #fad7d7, 1px 2px 10px 1px #0A0A0A);
-  @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff),
-    linear-gradient(135deg, #594A23, #453D28, #33302B));
+  @include themeShadow(2px 2px 10px 1px #fad7d7, 1px 2px 10px 1px #0a0a0a);
+  @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff), linear-gradient(135deg, #594a23, #453d28, #33302b));
   padding: 2px 5px;
   margin: 5px 0 10px 0;
   border-radius: 7px;
   position: relative;
 
-
   .doc-name {
-    @include themeText(2px 2px 2px #D8D8D8, 2px 2px 2px #0A0A0A);
+    @include themeText(2px 2px 2px #d8d8d8, 2px 2px 2px #0a0a0a);
     @include ellipsis();
     color: var(--el-color-primary);
     min-width: 180px;
@@ -138,10 +133,10 @@ $icon-size: 17px;
 }
 
 .open-line {
-  background: #79C20C71;
+  background: #79c20c71;
 }
 
 .sync-line {
-  background: #E8122479;
+  background: #e8122479;
 }
 </style>

@@ -30,7 +30,7 @@
   }
 
   .iconbl {
-    @include themeColor(#909399, #535353);
+    @include themeColor(#909399, #717171);
     text-shadow: var(--bl-iconbl-text-shadow);
     font-size: 25px;
     padding: 3px 2px;
@@ -49,15 +49,15 @@
 
   // 公开图标
   .bl-cloud-fill {
-    color: #7AC20C;
-    @include themeText(0px 5px 5px #79C20CA4, 2px 3px 5px rgba(183, 183, 183, 0.8));
+    color: #7ac20c;
+    @include themeText(0px 5px 5px #79c20ca4, 2px 3px 5px rgba(183, 183, 183, 0.8));
   }
 
   .bl-cloud-fill,
   .bl-cloud-line {
     &:hover {
-      color: #7AC20C;
-      @include themeText(5px 5px 5px #79C20CA4, 2px 3px 5px rgba(183, 183, 183, 0.8));
+      color: #7ac20c;
+      @include themeText(5px 5px 5px #79c20ca4, 2px 3px 5px rgba(183, 183, 183, 0.8));
     }
   }
 
@@ -101,7 +101,8 @@
     }
   }
 
-  .bl-a-fileadd-line {}
+  .bl-a-fileadd-line {
+  }
 
   .bl-correlation-line {
     color: var(--el-color-primary) !important;

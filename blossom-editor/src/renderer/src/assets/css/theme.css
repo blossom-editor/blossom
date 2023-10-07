@@ -1,5 +1,4 @@
 :root {
-
   /* 数字越大, 颜色越淡 */
   --el-color-primary: #ad8cf2;
   --el-color-primary-dark-2: rgba(173, 140, 242, 0.8);
@@ -96,7 +95,7 @@ html.dark {
   /* ================================= 文本颜色 =================================*/
   --el-text-color-primary: #909399;
   --el-text-color-regular: #a8a8a8;
-  --el-text-color-secondary: #A3A6AD;
+  --el-text-color-secondary: #a3a6ad;
   --el-text-color-placeholder: #535353;
 
   /* ================================= 背景颜色 =================================*/
@@ -125,6 +124,7 @@ html.dark {
   /* background color */
   --bl-bg-color: #f1f1f1;
   /* ================================= text styles =================================*/
+  --bl-text-doctree-color: #909399;
   /* primary color */
   --bl-text-color: #606266;
   /* lighter than primary color */
@@ -143,10 +143,10 @@ html.dark {
   /* ================================= iconbl ================================== */
   --bl-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
 
-  --bl-subject-color1: #040EFF;
+  --bl-subject-color1: #040eff;
 
   /* ================================= 弹框样式 =================================*/
-  --bl-dialog-bg-color: #FAFAFA;
+  --bl-dialog-bg-color: #fafafa;
   --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
 }
 
@@ -156,6 +156,7 @@ html.dark {
   /* background color */
   --bl-bg-color: #333434;
   /* ================================= text styles =================================*/
+  --bl-text-doctree-color: #a8a8a8;
   /* primary color */
   --bl-text-color: #a8a8a8;
   /* lighter than primary color */
@@ -178,15 +179,14 @@ html.dark {
   --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(0, 0, 0);
 }
 
-
 :root {
   /*  */
   --bl-editor-color: #707070;
-  --bl-editor-bg-color: #FFFFFF;
+  --bl-editor-bg-color: #ffffff;
 
   /* gutter */
   --bl-editor-gutters-bg-color: #f5f5f5;
-  --bl-editor-gutters-border-color: #DDDDDD00;
+  --bl-editor-gutters-border-color: #dddddd00;
   --bl-editor-active-line-gutter-bg-color: #d6d6d67f;
   --bl-editor-active-line-gutter-color: #000000;
 
@@ -206,16 +206,15 @@ html.dark {
   --bl-editor-ci-color: #ba7300;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: #7843E9;
-  --bl-editor-c7-color: #7843E9;
+  --bl-editor-c5-color: #7843e9;
+  --bl-editor-c7-color: #7843e9;
   --bl-editor-c7-bg-color: #00000000;
-
 
   /* ======================================= */
 
   /* 预览的字体颜色 */
   --bl-preview-color: #2b2b2b;
-  --bl-preview-bg-color: #FFFFFF;
+  --bl-preview-bg-color: #ffffff;
   --bl-preview-border-radius: 4px;
 
   /* 目录 */

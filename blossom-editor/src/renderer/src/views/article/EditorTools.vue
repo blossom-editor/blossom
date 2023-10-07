@@ -39,7 +39,6 @@
       <div class="iconbl bl-list-unordered" @click="emits('unordered')"></div>
       <div class="iconbl bl-list-ordered" @click="emits('ordered')"></div>
 
-
       <!-- 表格及其他 -->
       <div class="divider"></div>
       <div class="iconbl bl-table-" @click="emits('table')"></div>
@@ -144,18 +143,18 @@
                 <bl-row>
                   <div class="iconbl bl-list-unordered"></div>
                   <div class="label">无序列表</div>
-                  <div class="keyboard">- </div>
+                  <div class="keyboard">-</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-list-ordered"></div>
                   <div class="label">有序列表</div>
-                  <div class="keyboard">1. </div>
+                  <div class="keyboard">1.</div>
                 </bl-row>
               </bl-col>
 
               <bl-col>
                 <!--  -->
-                <el-divider style="margin:5px 0;border: 0;"></el-divider>
+                <el-divider style="margin: 5px 0; border: 0"></el-divider>
                 <bl-row>
                   <div class="iconbl bl-table-"></div>
                   <div class="label">插入表格</div>
@@ -184,7 +183,7 @@
               </bl-col>
             </bl-row>
 
-            <el-divider style="margin:5px 0;border: 0;"></el-divider>
+            <el-divider style="margin: 5px 0; border: 0"></el-divider>
             <bl-row>
               <div class="info-title">编辑器快捷键</div>
             </bl-row>
@@ -284,26 +283,24 @@
           <div class="iconbl bl-fanqiezhong"></div>
         </template>
         <template #default>
-          <div
-            style="padding: 5px 10px;font-size: 18px;margin-bottom: 15px;border-bottom: 1px solid var(--el-border-color);">
-            <span class="iconbl bl-fanqiezhong" style="font-size: 18px;padding-right: 6px;color: #EC7259;"></span>番茄时钟
+          <div style="padding: 5px 10px; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid var(--el-border-color)">
+            <span class="iconbl bl-fanqiezhong" style="font-size: 18px; padding-right: 6px; color: #ec7259"></span>番茄时钟
           </div>
-          <bl-row style="padding: 0 10px;">
+          <bl-row style="padding: 0 10px">
             <span>时长分钟：</span>
             <el-input-number v-model="duration"></el-input-number>
           </bl-row>
-          <bl-row style="padding: 0 10px;margin-top: 15px;">
+          <bl-row style="padding: 0 10px; margin-top: 15px">
             <span>结束时间：</span>
-            <span style="font-size: 11px;">{{ endTime }}</span>
+            <span style="font-size: 11px">{{ endTime }}</span>
           </bl-row>
-          <bl-row just="space-between"
-            style="padding: 8px 10px;margin-top: 15px;border-top: 1px solid var(--el-border-color);">
+          <bl-row just="space-between" style="padding: 8px 10px; margin-top: 15px; border-top: 1px solid var(--el-border-color)">
             <el-button @click="stop">停止番茄钟</el-button>
             <el-button @click="start" type="primary">开始</el-button>
           </bl-row>
         </template>
       </el-popover>
-      <div style="font-size: 12px;padding: 4px 5px;">{{ remainStr }}</div>
+      <div style="font-size: 12px; padding: 4px 5px">{{ remainStr }}</div>
     </div>
   </div>
 </template>
@@ -314,39 +311,56 @@ import { secondsToDatetime, formateMs, platform } from '@renderer/assets/utils/u
 import { ElNotification } from 'element-plus'
 
 const emits = defineEmits([
-  'save', 'editorFullScreen', 'previewFullScreen',
-  'bold', 'italic', 'strike', 'sup', 'sub',
-  'separator', 'blockquote', 'blockquoteBlock', 'blockquoteGreen', 'blockquoteYellow', 'blockquoteRed', 'blockquoteBlue', 'blockquotePurple',
-  'code', 'pre', 'unordered', 'ordered', 'checkbox',
-  'table', 'image', 'link'
+  'save',
+  'editorFullScreen',
+  'previewFullScreen',
+  'bold',
+  'italic',
+  'strike',
+  'sup',
+  'sub',
+  'separator',
+  'blockquote',
+  'blockquoteBlock',
+  'blockquoteGreen',
+  'blockquoteYellow',
+  'blockquoteRed',
+  'blockquoteBlue',
+  'blockquotePurple',
+  'code',
+  'pre',
+  'unordered',
+  'ordered',
+  'checkbox',
+  'table',
+  'image',
+  'link'
 ])
 
 const isMac = platform() === 'darwin'
 
 const keymaps = {
-  save       : isMac ? 'Cmd + S' : 'Ctrl + S',
-  hideDocs   : isMac ? 'Cmd + 1' : 'Alt + 1',
-  hideToc    : isMac ? 'Cmd + 2' : 'Alt + 2',
-  fullViewer : isMac ? 'Cmd + 3' : 'Alt + 3',
-  fullEditor : isMac ? 'Cmd + 4' : 'Alt + 4',
-  formatAll  : isMac ? 'Slift + Cmd + F' : 'Slift + Alt + F',
-  
-  blod       : isMac ? 'Cmd + B' : 'Alt + B',
-  italic     : isMac ? 'Cmd + I' : 'Alt + I',
-  striket    : isMac ? 'Cmd + S' : 'Alt + S',
-  sup        : isMac ? 'Ctrl + Cmd + P' : 'Ctrl + Alt + P',
-  sub        : isMac ? 'Ctrl + Cmd + B' : 'Ctrl + Alt + B',
-  separator  : isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + S',
+  save: isMac ? 'Cmd + S' : 'Ctrl + S',
+  hideDocs: isMac ? 'Cmd + 1' : 'Alt + 1',
+  hideToc: isMac ? 'Cmd + 2' : 'Alt + 2',
+  fullViewer: isMac ? 'Cmd + 3' : 'Alt + 3',
+  fullEditor: isMac ? 'Cmd + 4' : 'Alt + 4',
+  formatAll: isMac ? 'Slift + Cmd + F' : 'Slift + Alt + F',
 
-  blockquote : isMac ? '>' : '>',
-  code       : isMac ? 'Cmd + E' : 'Alt + E',
-  pre        : isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + E',
+  blod: isMac ? 'Cmd + B' : 'Alt + B',
+  italic: isMac ? 'Cmd + I' : 'Alt + I',
+  striket: isMac ? 'Cmd + S' : 'Alt + S',
+  sup: isMac ? 'Ctrl + Cmd + P' : 'Ctrl + Alt + P',
+  sub: isMac ? 'Ctrl + Cmd + B' : 'Ctrl + Alt + B',
+  separator: isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + S',
 
-  table      : isMac ? 'Cmd + T' : 'Alt + T',
-  image      : isMac ? 'Cmd + M' : 'Alt + M',
-  link       : isMac ? 'Cmd + K' : 'Alt + K',
+  blockquote: isMac ? '>' : '>',
+  code: isMac ? 'Cmd + E' : 'Alt + E',
+  pre: isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + E',
 
-
+  table: isMac ? 'Cmd + T' : 'Alt + T',
+  image: isMac ? 'Cmd + M' : 'Alt + M',
+  link: isMac ? 'Cmd + K' : 'Alt + K'
 }
 
 onUnmounted(() => {
@@ -357,13 +371,13 @@ onUnmounted(() => {
  * 预览番茄钟到期时间
  */
 const endTime = computed(() => {
-  return secondsToDatetime((Date.now() / 1000) + (duration.value * 60))
+  return secondsToDatetime(Date.now() / 1000 + duration.value * 60)
 })
 
 const TomatoBellRef = ref()
 // 番茄钟时长(分钟)
 const duration = ref(30)
-// 番茄钟的展示信息, 
+// 番茄钟的展示信息,
 const remainStr = ref('00:00:00')
 // 番茄钟参数, 开始时间, 时长(毫秒)
 let param = { start: 0, duration: 0 }
@@ -380,7 +394,7 @@ const start = () => {
     const now = Date.now()
     const remain = param.start + param.duration - now
     remainStr.value = formateMs(Math.max(remain, 0))
-    TomatoBellRef.value.style.transform = `translateX(${100 - ((remain / param.duration) * 100)}%)`
+    TomatoBellRef.value.style.transform = `translateX(${100 - (remain / param.duration) * 100}%)`
     if (remain <= 0) {
       stop()
       ElNotification.success({
@@ -405,7 +419,6 @@ const stop = () => {
     TomatoBellRef.value.style.transform = `translateX(100%)`
   }
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -419,7 +432,7 @@ const stop = () => {
 
   .tomato-bell {
     @include box(100%, 100%);
-    @include themeBg(#B593FDC7, #354F00);
+    @include themeBg(#b593fdc7, #354f00);
     transform: translateX(100%);
     position: absolute;
     right: 0;
@@ -431,15 +444,15 @@ const stop = () => {
   .tools-container {
     @include box(100%, 100%);
     @include flex(row, flex-start, center);
-    @include themeBg(#EFEFEF80, #8A8A8A4A);
+    @include themeBg(#efefef80, #8a8a8a4a);
     padding: 0 5px;
     position: absolute;
     z-index: 2;
     overflow-x: overlay;
 
-    &>div {
-      @include themeColor(#5B5B5B, #0D0D0D);
-      @include themeBorder(1px, #A7A7A7, #1C1C1C);
+    & > div {
+      @include themeColor(#5b5b5b, #909090);
+      @include themeBorder(1px, #a7a7a7, #1c1c1c);
       margin: 0 5px;
       padding: 3px;
       border-radius: 3px;
@@ -448,12 +461,13 @@ const stop = () => {
 
       &:hover {
         background-color: var(--el-color-primary);
+        color: #ffffff;
       }
     }
 
     .divider {
       @include box(2px, 60%);
-      @include themeBg(#ad8cf280, #1C1C1C);
+      @include themeBg(#ad8cf280, #1c1c1c);
       padding: 0;
       border: 0;
     }
@@ -463,7 +477,7 @@ const stop = () => {
 <!-- 
 快捷键说明为弹出框 需要设置全局的样式
 -->
-<style lang=scss>
+<style lang="scss">
 .editor-tools-content {
   @include flex(column, flex-start, flex-start);
   color: var(--bl-text-color);
@@ -482,8 +496,8 @@ const stop = () => {
   }
 
   .info-title {
-    width: 100%;
     @include font(15px, 500);
+    width: 100%;
     border-bottom: 1px solid var(--el-border-color);
     padding: 5px;
     margin-bottom: 10px;
@@ -497,15 +511,14 @@ const stop = () => {
   }
 
   .label {
-    height: 20px;
-    width: 48px;
+    @include box(48px, 20px);
     text-align: justify;
     margin-right: 10px;
 
     &:after {
       display: inline-block;
       width: 100%;
-      content: "";
+      content: '';
     }
   }
 }

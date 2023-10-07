@@ -59,6 +59,7 @@
         min-height: 25px;
         padding-right: 0;
         overflow: hidden;
+        color: var(--bl-text-doctree-color);
         white-space: nowrap;
         text-overflow: ellipsis;
         font-size: inherit;
@@ -74,6 +75,7 @@
 
     :deep(.el-menu-item) {
       --el-menu-hover-bg-color: #ffffff00 !important;
+      color: var(--bl-text-doctree-color);
       height: auto;
       min-height: 25px;
       padding-right: 0;
@@ -86,9 +88,15 @@
 
     :deep(.el-menu-item.is-active) {
       @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
-      background: linear-gradient(90deg, var(--bl-html-color) 0%, var(--el-color-primary-light-5) 40%, var(--el-color-primary-light-5) 60%, var(--bl-html-color) 100%);
+      background: linear-gradient(
+        90deg,
+        var(--bl-html-color) 0%,
+        var(--el-color-primary-light-5) 40%,
+        var(--el-color-primary-light-5) 60%,
+        var(--bl-html-color) 100%
+      );
       color: #ffffff;
-      font-weight: 700;
+      font-weight: bold;
     }
 
     :deep(.el-badge__content) {
