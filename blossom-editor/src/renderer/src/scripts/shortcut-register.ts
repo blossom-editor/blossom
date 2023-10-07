@@ -3,8 +3,7 @@ import { isMap, isUndefined } from "lodash"
 export type shortcutFunc = () => void
 
 // 以下快捷键不会参与到监听中
-const ignoreCodes: string[] = ['Backspace', 'Enter', 'MetaLeft', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
-
+const ignoreCodes: string[] = ['Backspace', 'Enter', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
 /**
  * 局部快捷键注册
@@ -65,6 +64,10 @@ class ShortcutRegistrant {
     }
 
     let code: string = event.code
+    // 主要针对 mac 下的按键逻辑
+    if (code === 'MetaLeft') {
+      this.clearDownCodes()
+    }
     let upCodeIndex: number = this.downCodes.indexOf(code)
 
     if (upCodeIndex !== -1) {
@@ -78,6 +81,13 @@ class ShortcutRegistrant {
    * @param event 
    */
   public keydown(event: KeyboardEvent): void {
+    if (this.debug) {
+      console.log(event)
+      let row1 = { col1: '动作', col2: '按下' }
+      let row2 = { col1: 'key', col2: event.key }
+      let row3 = { col1: 'code', col2: event.code }
+      console.table([row1, row2, row3])
+    }
     if (ignoreCodes.indexOf(event.code) > -1) {
       return
     }

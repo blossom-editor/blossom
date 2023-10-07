@@ -59,44 +59,44 @@
                 <bl-row>
                   <div class="iconbl bl-a-texteditorsave-line"></div>
                   <div class="label">保存内容</div>
-                  <div class="keyboard">Ctrl + S</div>
+                  <div class="keyboard">{{ keymaps.save }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-a-eyeclose-line"></div>
                   <div class="label">隐藏菜单</div>
-                  <div class="keyboard">Alt + 1</div>
+                  <div class="keyboard">{{ keymaps.hideDocs }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-a-eyeclose-line"></div>
                   <div class="label">隐藏目录</div>
-                  <div class="keyboard">Alt + 2</div>
+                  <div class="keyboard">{{ keymaps.hideToc }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-eye-line"></div>
                   <div class="label">全屏预览</div>
-                  <div class="keyboard">Alt + 3</div>
+                  <div class="keyboard">{{ keymaps.fullViewer }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-expansion-line"></div>
                   <div class="label">全屏编辑</div>
-                  <div class="keyboard">Alt + 4</div>
+                  <div class="keyboard">{{ keymaps.fullEditor }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-transcript-fill"></div>
                   <div class="label">格式化</div>
-                  <div class="keyboard">Shift + Alt + F</div>
+                  <div class="keyboard">{{ keymaps.formatAll }}</div>
                 </bl-row>
               </bl-col>
               <bl-col width="230px">
                 <bl-row>
                   <div class="iconbl bl-bold"></div>
                   <div class="label">加粗</div>
-                  <div class="keyboard">Alt + B</div>
+                  <div class="keyboard">{{ keymaps.blod }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-italic"></div>
                   <div class="label">斜体</div>
-                  <div class="keyboard">Alt + I</div>
+                  <div class="keyboard">{{ keymaps.italic }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-strikethrough"></div>
@@ -106,17 +106,17 @@
                 <bl-row>
                   <div class="iconbl bl-a-texteditorsuperscript-line"></div>
                   <div class="label">上标</div>
-                  <div class="keyboard">Ctrl + Alt + P</div>
+                  <div class="keyboard">{{ keymaps.sup }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-a-texteditorsubscript-line"></div>
                   <div class="label">下标</div>
-                  <div class="keyboard">Ctrl + Alt + B</div>
+                  <div class="keyboard">{{ keymaps.sub }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-separator"></div>
                   <div class="label">分割线</div>
-                  <div class="keyboard">Ctrl + Alt + S</div>
+                  <div class="keyboard">{{ keymaps.separator }}</div>
                 </bl-row>
               </bl-col>
               <!--  -->
@@ -129,17 +129,17 @@
                 <bl-row>
                   <div class="iconbl bl-single-quotes-r"></div>
                   <div class="label">行内代码</div>
-                  <div class="keyboard">Alt + E</div>
+                  <div class="keyboard">{{ keymaps.code }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-double-quotes-r"></div>
                   <div class="label">多行代码</div>
-                  <div class="keyboard">Ctrl + Alt + E</div>
+                  <div class="keyboard">{{ keymaps.pre }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-a-underbox-line"></div>
                   <div class="label">单选框</div>
-                  <div class="keyboard">Ctrl + Alt + C</div>
+                  <div class="keyboard">- []</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-list-unordered"></div>
@@ -159,17 +159,17 @@
                 <bl-row>
                   <div class="iconbl bl-table-"></div>
                   <div class="label">插入表格</div>
-                  <div class="keyboard">Alt + T</div>
+                  <div class="keyboard">{{ keymaps.table }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-image--line"></div>
                   <div class="label">添加图片</div>
-                  <div class="keyboard">Alt + M</div>
+                  <div class="keyboard">{{ keymaps.image }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-link-m"></div>
                   <div class="label">添加链接</div>
-                  <div class="keyboard">Alt + K</div>
+                  <div class="keyboard">{{ keymaps.link }}</div>
                 </bl-row>
                 <bl-row>
                   <div class="iconbl bl-jianpan-xianxing"></div>
@@ -277,6 +277,8 @@
         </template>
         <div class="iconbl bl-jianpan-xianxing"></div>
       </el-tooltip>
+
+      <!-- 番茄 -->
       <el-popover placement="bottom" :width="220" trigger="click" popper-style="padding:0;">
         <template #reference>
           <div class="iconbl bl-fanqiezhong"></div>
@@ -308,7 +310,7 @@
 
 <script lang="ts" setup>
 import { computed, onUnmounted, ref } from 'vue'
-import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util'
+import { secondsToDatetime, formateMs, platform } from '@renderer/assets/utils/util'
 import { ElNotification } from 'element-plus'
 
 const emits = defineEmits([
@@ -318,6 +320,34 @@ const emits = defineEmits([
   'code', 'pre', 'unordered', 'ordered', 'checkbox',
   'table', 'image', 'link'
 ])
+
+const isMac = platform() === 'darwin'
+
+const keymaps = {
+  save       : isMac ? 'Cmd + S' : 'Ctrl + S',
+  hideDocs   : isMac ? 'Cmd + 1' : 'Alt + 1',
+  hideToc    : isMac ? 'Cmd + 2' : 'Alt + 2',
+  fullViewer : isMac ? 'Cmd + 3' : 'Alt + 3',
+  fullEditor : isMac ? 'Cmd + 4' : 'Alt + 4',
+  formatAll  : isMac ? 'Slift + Cmd + F' : 'Slift + Alt + F',
+  
+  blod       : isMac ? 'Cmd + B' : 'Alt + B',
+  italic     : isMac ? 'Cmd + I' : 'Alt + I',
+  striket    : isMac ? 'Cmd + S' : 'Alt + S',
+  sup        : isMac ? 'Ctrl + Cmd + P' : 'Ctrl + Alt + P',
+  sub        : isMac ? 'Ctrl + Cmd + B' : 'Ctrl + Alt + B',
+  separator  : isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + S',
+
+  blockquote : isMac ? '>' : '>',
+  code       : isMac ? 'Cmd + E' : 'Alt + E',
+  pre        : isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + E',
+
+  table      : isMac ? 'Cmd + T' : 'Alt + T',
+  image      : isMac ? 'Cmd + M' : 'Alt + M',
+  link       : isMac ? 'Cmd + K' : 'Alt + K',
+
+
+}
 
 onUnmounted(() => {
   stop()

@@ -1,5 +1,6 @@
 <template>
-  <div class="index-article-root">
+  <div class="index-article-root" @keydown.ctrl="() => {
+  }">
 
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
@@ -53,7 +54,9 @@
 
       <!-- toc -->
       <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
-        <div class="toc-title" ref="TocTitleRef">目录 <span style="font-size: 10px;">(Alt+2 可隐藏)</span></div>
+        <div class="toc-title" ref="TocTitleRef">目录
+          <span style="font-size: 10px;">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
+        </div>
         <div class="toc-content" v-show="(tocsExpand)">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
             {{ toc.content }}
@@ -127,7 +130,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApi, uploadFileApiUrl }
 // utils
 import { Local } from "@renderer/assets/utils/storage"
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
-import { sleep } from '@renderer/assets/utils/util'
+import { sleep, platform } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
@@ -695,17 +698,16 @@ const keyup = (evnet: KeyboardEvent) => { shortcutRegistrant.keyup(evnet) }
 
 /** 注册快捷键 */
 const addListererShortcutMap = () => {
-  // Alt + 1: 隐藏菜单
-  // Alt + 2: 隐藏目录
-  // Alt + 3: 隐藏编辑
-  // Alt + 4: 隐藏预览
   let altAnd: Map<string, shortcutFunc> = new Map()
-  altAnd.set("Digit1", alt_1)
-  altAnd.set("Digit2", alt_2)
-  altAnd.set("Digit3", alt_3)
-  altAnd.set("Digit4", alt_4)
-  shortcutRegistrant.register("AltLeft", altAnd)
-
+  altAnd.set("Digit1", alt_1) // Alt + 1: 隐藏菜单
+  altAnd.set("Digit2", alt_2) // Alt + 2: 隐藏目录
+  altAnd.set("Digit3", alt_3) // Alt + 3: 隐藏编辑
+  altAnd.set("Digit4", alt_4) // Alt + 4: 隐藏预览
+  if (platform() === 'darwin') {
+    shortcutRegistrant.register("MetaLeft", altAnd)
+  } else {
+    shortcutRegistrant.register("AltLeft", altAnd)
+  }
   window.addEventListener("keydown", keydown)
   window.addEventListener("keyup", keyup)
   window.onblur = () => {

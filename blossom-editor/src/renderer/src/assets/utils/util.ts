@@ -296,3 +296,22 @@ export const sleep = (millis: number) => {
     setTimeout(resolve, millis);
   })
 }
+
+/**
+ * 判断系统类型
+ * @returns 
+ */
+export const platform = (): 'windows' | 'darwin' => {
+  var agent = navigator.userAgent.toLowerCase();
+  var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+  if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+    alert("windows");
+  }
+  if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+    alert("windows");
+  }
+  if (isMac) {
+    return "darwin"
+  }
+  return "windows"
+}

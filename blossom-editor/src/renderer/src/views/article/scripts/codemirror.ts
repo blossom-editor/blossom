@@ -162,16 +162,16 @@ export class CmWrapper {
     return this._editor
   }
 
-  /**
+  /**™™
    * 创建 EditorState
    * 
    * @param updateCallback 编辑器内容变动时的回调
    * @param saveCallback 保存内容时的回调
+   * @param uploadFileCallback 拖拽上传文件后的会调
    * @param doc 初始化的内容
    * @returns 
    */
   static newState = (updateCallback: any, saveCallback: any, uploadFileCallback: any, doc?: string): EditorState => {
-
     return EditorState.create({
       doc: doc,
       extensions: [
@@ -182,20 +182,20 @@ export class CmWrapper {
         keymap.of([
           { key: 'Tab', run: insertTab, },
           { key: 'Shift-Tab', run: indentLess },
-          { key: 'Ctrl-s', run(_view: EditorView) { saveCallback(); return true } },
-          { key: 'Alt-b', run(view: EditorView) { CmWrapper.commandBold(view); return true } },
-          { key: 'Alt-i', run(view: EditorView) { CmWrapper.commandItalic(view); return true } },
-          { key: 'Alt-s', run(view: EditorView) { CmWrapper.commandStrike(view); return true } },
-          { key: 'Alt-t', run(view: EditorView) { CmWrapper.commandTable(view); return true } },
-          { key: 'Alt-e', run(view: EditorView) { CmWrapper.commandCode(view); return true } },
-          { key: 'Alt-m', run(view: EditorView) { CmWrapper.commandImg(view); return true } },
-          { key: 'Alt-k', run(view: EditorView) { CmWrapper.commandLink(view); return true } },
-          { key: 'Ctrl-Alt-c', run(view: EditorView) { CmWrapper.commandCheckBox(view); return true } },
-          { key: 'Ctrl-Alt-p', run(view: EditorView) { CmWrapper.commandSup(view); return true } },
-          { key: 'Ctrl-Alt-b', run(view: EditorView) { CmWrapper.commandSub(view); return true } },
-          { key: 'Ctrl-Alt-e', run(view: EditorView) { CmWrapper.commandPre(view); return true } },
-          { key: 'Ctrl-Alt-s', run(view: EditorView) { CmWrapper.commandSeparator(view); return true } },
-          { key: 'Shift-Alt-f', run(view: EditorView) { CmWrapper.commandFormatMarkdown(view); return true } },
+          { key: 'Ctrl-s', mac: 'Cmd-s', run(_view: EditorView) { saveCallback(); return true }, },
+          { key: 'Alt-b', mac: 'Cmd-b', run(view: EditorView) { CmWrapper.commandBold(view); return true } },
+          { key: 'Alt-i', mac: 'Cmd-i', run(view: EditorView) { CmWrapper.commandItalic(view); return true } },
+          { key: 'Alt-s', mac: 'Cmd-s', run(view: EditorView) { CmWrapper.commandStrike(view); return true } },
+          { key: 'Alt-t', mac: 'Cmd-t', run(view: EditorView) { CmWrapper.commandTable(view); return true } },
+          { key: 'Alt-e', mac: 'Cmd-e', run(view: EditorView) { CmWrapper.commandCode(view); return true } },
+          { key: 'Alt-m', mac: 'Cmd-m', run(view: EditorView) { CmWrapper.commandImg(view); return true } },
+          { key: 'Alt-k', mac: 'Cmd-k', run(view: EditorView) { CmWrapper.commandLink(view); return true } },
+          // { key: 'Ctrl-Alt-c', mac: 'Ctrl-Cmd-c', run(view: EditorView) { CmWrapper.commandCheckBox(view); return true } },
+          { key: 'Ctrl-Alt-p', mac: 'Ctrl-Cmd-p', run(view: EditorView) { CmWrapper.commandSup(view); return true } },
+          { key: 'Ctrl-Alt-b', mac: 'Ctrl-Cmd-b', run(view: EditorView) { CmWrapper.commandSub(view); return true } },
+          { key: 'Ctrl-Alt-e', mac: 'Ctrl-Cmd-e', run(view: EditorView) { CmWrapper.commandPre(view); return true } },
+          { key: 'Ctrl-Alt-s', mac: 'Ctrl-Cmd-s', run(view: EditorView) { CmWrapper.commandSeparator(view); return true } },
+          { key: 'Shift-Alt-f', mac: 'Shift-Cmd-f', run(view: EditorView) { CmWrapper.commandFormatMarkdown(view); return true } },
         ]),
         EditorView.updateListener.of((viewUpd: ViewUpdate) => {
           if (viewUpd.docChanged) {
