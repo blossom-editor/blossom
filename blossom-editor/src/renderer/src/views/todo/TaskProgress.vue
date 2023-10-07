@@ -43,7 +43,7 @@
             @click="showTaskInfoDialog()"></span>添加任务</div>
 
         <div v-for="t in taskWaitComputed" :key="t.id" draggable="true" class="task-item"
-          @dragstart="dragstartWait([ProcDragRef, CompDragRef], $event)" @dragend="dragendWait(t, $event)">
+          @dragstart="dragStart([ProcDragRef, CompDragRef], $event)" @dragend="dragendWait(t, $event)">
           <div v-if="t.todoType == 99" class="divider"></div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
@@ -69,14 +69,14 @@
 
 
     <div class="processing" ref="ProcRef" @dragenter="onDragenter(ProcDragRef, 'PROCESSING', $event)"
-      @dragleave="onDragleave(ProcDragRef, $event)">
+      @dragleave="onDragleave(ProcDragRef, $event)" @drop.native="onDrop($event)">
       <div class="tasks-title"><span>进行中</span></div>
       <div class="tasks-sub-title"><span>Processing</span><span>{{ countProc }}</span></div>
       <div class="tasks-container">
         <div class="drag-container" ref="ProcDragRef">将任务设置为进行中</div>
         <!--  -->
         <div v-for="t in taskProcComputed" :key="t.id" class="task-item" draggable="true"
-          @dragstart="dragstartWait([WaitDragRef, CompDragRef], $event)" @dragend="dragendProc(t, $event)">
+          @dragstart="dragStart([WaitDragRef, CompDragRef], $event)" @dragend="dragendProc(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
@@ -110,7 +110,7 @@
         <div class="drag-container" ref="CompDragRef">将任务设置为完成</div>
         <!--  -->
         <div v-for="t in taskCompComputed" :key="t.id" draggable="true" class="task-item"
-          @dragstart="dragstartWait([WaitDragRef, ProcDragRef], $event)" @dragend="dragendComp(t, $event)">
+          @dragstart="dragStart([WaitDragRef, ProcDragRef], $event)" @dragend="dragendComp(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
@@ -170,7 +170,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, Ref, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi } from '@renderer/api/todo'
 import { TaskInfo, TaskStatus, TodoType } from './scripts/types'
@@ -179,8 +179,15 @@ import { getDateFormat } from '@renderer/assets/utils/util'
 import { isEmpty } from 'lodash'
 import Notify from '@renderer/scripts/notify'
 
+onMounted(() => {
+  document.addEventListener('dragover', preventDefaultDragover, false)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('dragover', preventDefaultDragover)
+})
+
 const getColor = (color: string) => {
-  // return `linear-gradient(270deg, ${color}, var(--bl-html-color))`
   return `${color}`
 }
 
@@ -394,6 +401,15 @@ const download = () => {
 //#endregion
 
 //#region --------------------------------------------------< 组件拖动 >--------------------------------------------------
+/**
+ * 在 mac 中, dragend 事件会在鼠标松开后半秒左右触发, 导致样式出现问题
+ * 禁用掉 dragover 的默认行为后就正常了, 虽然不知道是为什么
+ * https://stackoverflow.com/a/65910078/22700578
+ */ 
+const preventDefaultDragover = (event: DragEvent) => {
+  event.preventDefault();
+}
+
 const WaitRef = ref()
 const WaitDragRef = ref()
 
@@ -405,9 +421,15 @@ const CompDragRef = ref()
 
 let toStage: TaskStatus | ''
 
-const dragstartWait = (doms: any, e: DragEvent) => {
-  let img = new Image()
-  img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath /%3E%3C/svg%3E"
+const img = new Image()
+img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath /%3E%3C/svg%3E"
+
+/**
+ * 开始拖动
+ * @param doms 可以拖到哪两个范围内
+ * @param e 
+ */
+const dragStart = (doms: any, e: DragEvent) => {
   e.dataTransfer!.setDragImage(img, 0, 0)
   let ele = (e!.target as Element)
   let cloneNode = ele.cloneNode(true) as HTMLElement
@@ -416,39 +438,54 @@ const dragstartWait = (doms: any, e: DragEvent) => {
   const distTop = e.clientY - targetRect.top
 
   cloneNode.style.position = 'fixed'
-  cloneNode.style.left = '0'
-  cloneNode.style.top = '0'
+  cloneNode.style.left = `${targetRect.left}px`
+  cloneNode.style.top = `${targetRect.top}px`
   cloneNode.style.zIndex = '999'
   cloneNode.style.pointerEvents = 'none'
-  cloneNode.style.transform = `translate(${e.clientX - distLeft}px,${e.clientY - distTop}px)`
+  // cloneNode.style.transform = `translate(${e.clientX - distLeft}px,${e.clientY - distTop}px)`
   document.body.appendChild(cloneNode)
+
+  // 拖拽事件
   const onDrag = (de: any) => {
     if (cloneNode) {
-      cloneNode.style.transform = `translate(${de.clientX - distLeft}px,${de.clientY - distTop}px)`
+      cloneNode.style.transform = `translate(${de.clientX - distLeft - targetRect.left}px, ${de.clientY - distTop - targetRect.top}px)`
     }
   }
+
+  // 松开事件
   const onDragend = () => {
-    document.body.removeChild(cloneNode);
+    ele.removeEventListener('drag', onDrag)
+    ele.removeEventListener('dragend', onDragend)
+    ele.classList.remove('moving')
+    cloneNode.remove()
   }
+
+  
   ele.addEventListener('drag', onDrag)
   ele.addEventListener('dragend', onDragend)
+  // 原始元素隐藏
   ele.classList.add('moving')
+
   for (let i = 0; i < doms.length; i++) {
     doms[i].style.display = 'block'
   }
+
   toStage = ''
 }
 
 /**
- * 从 waiting 中拖出
+ * waiting 中的元素在拖拽完成后执行
  */
-const dragendWait = (task: TaskInfo, e: DragEvent) => {
-  (e!.target as Element).classList.remove('moving')
+const dragendWait = (task: TaskInfo, _e: DragEvent) => {
+  // 删除元素的拖拽样式
+  // (e!.target as Element).classList.remove('moving')
   ProcDragRef.value.style.display = 'none'
   CompDragRef.value.style.display = 'none'
+  // 如果没有拖入任何元素
   if (toStage == '') return
-  removeTask(taskWait, task)
-  toStageHandle(task)
+  // 如果拖入到其他阶段
+  removeTask(taskWait, task)// 1. 从本阶段删除
+  toStageHandle(task)       // 2. 数据条件到其他阶段
 }
 
 /**
@@ -518,16 +555,23 @@ const onDragenter = (dom: any, type: TaskStatus, e: DragEvent) => {
   }
   toStage = type
   dom.classList.add('enter')
+  console.log('进入 ' + toStage);
+}
+
+const onDrop = (_e: DragEvent) => {
+  console.log('在这松开了');
 }
 
 const onDragleave = (dom: any, e: DragEvent) => {
   if (e.target !== dom) {
     return
   }
-  debounceTimeout = setTimeout(() => {
-    toStage = ''
-  }, 200);
+  // debounceTimeout = setTimeout(() => {
+  //   toStage = ''
+  // }, 200);
   dom.classList.remove('enter')
+  console.log('离开 ' + toStage + ' ' + new Date().getTime());
+  toStage = ''
 }
 
 //#endregion
