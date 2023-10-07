@@ -1,54 +1,64 @@
 <template>
   <div class="task-workbench">
-
     <bl-row class="bars">
-      <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }">
-      </div>
-      <div v-if="countProc != 0" class="processing" :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }">
-      </div>
-      <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }">
-      </div>
-      <div v-if="countTotal == 0" class="completed" style="width:calc(100% - 6px)"></div>
+      <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
+      <div v-if="countProc != 0" class="processing" :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
+      <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
+      <div v-if="countTotal == 0" class="completed" style="width: calc(100% - 6px)"></div>
     </bl-row>
-    <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px;">
+    <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px">
       <div class="task-name">{{ curTodo.todoName }}</div>
       <bl-row width="200px" class="bars-legend">
-        <div class="waiting"></div>待办
-        <div class="processing"></div>进行中
-        <div class="completed"></div>完成
+        <div class="waiting"></div>
+        待办
+        <div class="processing"></div>
+        进行中
+        <div class="completed"></div>
+        完成
       </bl-row>
     </bl-row>
-    <bl-row just="flex-end" style="padding: 0 10px 0 0;margin-top: 5px;">
+    <bl-row just="flex-end" style="padding: 0 10px 0 0; margin-top: 5px">
       <el-select class="tag-select" v-model="queryTags" multiple collapse-tags collapse-tags-tooltip placeholder="根据标签筛选">
         <el-option v-for="tag in queryTagOptions" :key="tag" :label="tag" :value="tag"></el-option>
       </el-select>
-      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px;" />
-      <el-button style="margin-left: 10px;" @click="showExportDialog">导出任务</el-button>
+      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px" />
+      <el-button style="margin-left: 10px" @click="showExportDialog">导出任务</el-button>
     </bl-row>
   </div>
 
   <div class="progress-container">
-    <div class="waiting" @dragenter="onDragenter(WaitDragRef, 'WAITING', $event)"
-      @dragleave="onDragleave(WaitDragRef, $event)" ref="WaitRef">
+    <div
+      class="waiting"
+      @dragenter="onDragenter(WaitDragRef, $event)"
+      @drop="onDrop('WAITING', $event)"
+      @dragleave="onDragleave(WaitDragRef, $event)"
+      ref="WaitRef">
       <div class="tasks-title">
         <span>待办</span>
         <span class="add-icon iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>
       </div>
 
-      <div class="tasks-sub-title" align="flex-start"><span>Waiting</span><span>{{ countWait }}</span></div>
+      <div class="tasks-sub-title" align="flex-start">
+        <span>Waiting</span><span>{{ countWait }}</span>
+      </div>
       <div class="tasks-container">
         <div class="drag-container" ref="WaitDragRef">将任务设置为未开始</div>
 
-        <div v-if="countTotal == 0" class="task-tip">在待办列表右侧点击<span class="add-icon iconbl bl-a-addline-line"
-            @click="showTaskInfoDialog()"></span>添加任务</div>
+        <div v-if="countTotal == 0" class="task-tip">
+          在待办列表右侧点击<span class="add-icon iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>添加任务
+        </div>
 
-        <div v-for="t in taskWaitComputed" :key="t.id" draggable="true" class="task-item"
-          @dragstart="dragStart([ProcDragRef, CompDragRef], $event)" @dragend="dragendWait(t, $event)">
+        <div
+          v-for="t in taskWaitComputed"
+          :key="t.id"
+          draggable="true"
+          class="task-item"
+          @dragstart="dragStart([ProcDragRef, CompDragRef], $event)"
+          @dragend="dragendWait(t, $event)">
           <div v-if="t.todoType == 99" class="divider"></div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
-              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
-                @blur="blurTaskNameInput(t)"></el-input>
+              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
               <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
@@ -58,8 +68,13 @@
             <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
               <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
             </bl-row>
-            <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
-              @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
+            <el-input
+              class="task-content"
+              type="textarea"
+              v-if="t.updTaskContent"
+              v-model="t.taskContent"
+              @blur="blurTaskContentInput(t)"
+              :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
@@ -67,21 +82,30 @@
       </div>
     </div>
 
-
-    <div class="processing" ref="ProcRef" @dragenter="onDragenter(ProcDragRef, 'PROCESSING', $event)"
-      @dragleave="onDragleave(ProcDragRef, $event)" @drop.native="onDrop($event)">
+    <div
+      class="processing"
+      ref="ProcRef"
+      @dragenter="onDragenter(ProcDragRef, $event)"
+      @drop="onDrop('PROCESSING', $event)"
+      @dragleave="onDragleave(ProcDragRef, $event)">
       <div class="tasks-title"><span>进行中</span></div>
-      <div class="tasks-sub-title"><span>Processing</span><span>{{ countProc }}</span></div>
+      <div class="tasks-sub-title">
+        <span>Processing</span><span>{{ countProc }}</span>
+      </div>
       <div class="tasks-container">
         <div class="drag-container" ref="ProcDragRef">将任务设置为进行中</div>
         <!--  -->
-        <div v-for="t in taskProcComputed" :key="t.id" class="task-item" draggable="true"
-          @dragstart="dragStart([WaitDragRef, CompDragRef], $event)" @dragend="dragendProc(t, $event)">
+        <div
+          v-for="t in taskProcComputed"
+          :key="t.id"
+          class="task-item"
+          draggable="true"
+          @dragstart="dragStart([WaitDragRef, CompDragRef], $event)"
+          @dragend="dragendProc(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
-              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
-                @blur="blurTaskNameInput(t)"></el-input>
+              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
               <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
@@ -92,8 +116,13 @@
             <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
               <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
             </bl-row>
-            <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
-              @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
+            <el-input
+              class="task-content"
+              type="textarea"
+              v-if="t.updTaskContent"
+              v-model="t.taskContent"
+              @blur="blurTaskContentInput(t)"
+              :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
@@ -102,20 +131,30 @@
     </div>
 
     <!--  -->
-    <div class="completed" ref="CompRef" @dragenter="onDragenter(CompDragRef, 'COMPLETED', $event)"
+    <div
+      class="completed"
+      ref="CompRef"
+      @dragenter="onDragenter(CompDragRef, $event)"
+      @drop="onDrop('COMPLETED', $event)"
       @dragleave="onDragleave(CompDragRef, $event)">
       <div class="tasks-title">完成</div>
-      <div class="tasks-sub-title"><span>Completed</span><span>{{ countComp }}</span></div>
+      <div class="tasks-sub-title">
+        <span>Completed</span><span>{{ countComp }}</span>
+      </div>
       <div class="tasks-container">
         <div class="drag-container" ref="CompDragRef">将任务设置为完成</div>
         <!--  -->
-        <div v-for="t in taskCompComputed" :key="t.id" draggable="true" class="task-item"
-          @dragstart="dragStart([WaitDragRef, ProcDragRef], $event)" @dragend="dragendComp(t, $event)">
+        <div
+          v-for="t in taskCompComputed"
+          :key="t.id"
+          draggable="true"
+          class="task-item"
+          @dragstart="dragStart([WaitDragRef, ProcDragRef], $event)"
+          @dragend="dragendComp(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
-              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id"
-                @blur="blurTaskNameInput(t)"></el-input>
+              <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
               <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
             </bl-row>
@@ -127,8 +166,13 @@
             <bl-row class="task-tags" v-if="!isEmpty(t.taskTags)">
               <bl-tag v-for="tag in t.taskTags" :key="tag" :size="11">{{ tag }}</bl-tag>
             </bl-row>
-            <el-input class="task-content" type="textarea" v-if="t.updTaskContent" v-model="t.taskContent"
-              @blur="blurTaskContentInput(t)" :id="'task-content-input-' + t.id"></el-input>
+            <el-input
+              class="task-content"
+              type="textarea"
+              v-if="t.updTaskContent"
+              v-model="t.taskContent"
+              @blur="blurTaskContentInput(t)"
+              :id="'task-content-input-' + t.id"></el-input>
             <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
@@ -138,33 +182,53 @@
   </div>
 
   <!-- 导出 dialog -->
-  <el-dialog draggable v-model="isShowExportDialog" :align-center="true" :append-to-body="true" :destroy-on-close="true"
-    :close-on-click-modal="false" width="800px" style="
-    --el-dialog-padding-primary: 10px !important;">
-    <div style="padding: 15px;">
+  <el-dialog
+    draggable
+    v-model="isShowExportDialog"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    width="800px"
+    style="--el-dialog-padding-primary: 10px !important">
+    <div style="padding: 15px">
       <bl-row align="center" height="20px">
-        <bl-row width="250px" v-if="curTodo.todoType == 20">
-          导出 {{ curTodo.todoName }}
-        </bl-row>
+        <bl-row width="250px" v-if="curTodo.todoType == 20"> 导出 {{ curTodo.todoName }} </bl-row>
         <bl-row width="250px" v-if="curTodo.todoType == 10">
           导出时间范围：
-          <el-date-picker style="width: 150px;" v-model="exportForm.exportDays" type="daterange" range-separator="至"
-            start-placeholder="开始日期" end-placeholder="结束日期" format="MM-DD" value-format="YYYY-MM-DD" />
+          <el-date-picker
+            style="width: 150px"
+            v-model="exportForm.exportDays"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            format="MM-DD"
+            value-format="YYYY-MM-DD" />
         </bl-row>
-        <el-checkbox v-model="exportForm.exportDate" label="导出时间" border style="margin: 10px;" />
+        <el-checkbox v-model="exportForm.exportDate" label="导出时间" border style="margin: 10px" />
         <el-checkbox v-model="exportForm.exportProcess" label="导出进度" border />
-        <el-button style="margin-left: 10px;" @click="exportTodo">预览</el-button>
+        <el-button style="margin-left: 10px" @click="exportTodo">预览</el-button>
         <el-button @click="download">下载 Markdown</el-button>
       </bl-row>
-      <el-divider style="margin: 10px 0;"></el-divider>
+      <el-divider style="margin: 10px 0"></el-divider>
       <bl-row>
         <el-input type="textarea" :rows="27" v-model="exportContent"></el-input>
       </bl-row>
     </div>
   </el-dialog>
 
-  <el-dialog draggable v-model="isShowTaskInfoDialog" :align-center="true" :modal="false" :lock-scroll="false"
-    :append-to-body="false" :destroy-on-close="true" :close-on-click-modal="false" width="350">
+  <!-- 详情 dialog -->
+  <el-dialog
+    draggable
+    v-model="isShowTaskInfoDialog"
+    :align-center="true"
+    :modal="false"
+    :lock-scroll="false"
+    :append-to-body="false"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    width="350">
     <TaskInfoComponent ref="TaskInfoRef" @saved="savedCallback"></TaskInfoComponent>
   </el-dialog>
 </template>
@@ -174,10 +238,10 @@ import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi } from '@renderer/api/todo'
 import { TaskInfo, TaskStatus, TodoType } from './scripts/types'
-import TaskInfoComponent from './TaskInfo.vue'
 import { getDateFormat } from '@renderer/assets/utils/util'
 import { isEmpty } from 'lodash'
 import Notify from '@renderer/scripts/notify'
+import TaskInfoComponent from './TaskInfo.vue'
 
 onMounted(() => {
   document.addEventListener('dragover', preventDefaultDragover, false)
@@ -197,8 +261,8 @@ const taskWait = ref<TaskInfo[]>([])
 const taskProc = ref<TaskInfo[]>([])
 const taskComp = ref<TaskInfo[]>([])
 const countWait = computed<number>(() => taskWaitComputed.value.length)
-const countProc = computed<number>(() => taskProcComputed.value.filter(t => t.todoType != 99).length)
-const countComp = computed<number>(() => taskCompComputed.value.filter(t => t.todoType != 99).length)
+const countProc = computed<number>(() => taskProcComputed.value.filter((t) => t.todoType != 99).length)
+const countComp = computed<number>(() => taskCompComputed.value.filter((t) => t.todoType != 99).length)
 const countTotal = computed(() => countWait.value + countProc.value + countComp.value)
 
 const taskWaitComputed = computed<TaskInfo[]>(() => {
@@ -223,7 +287,7 @@ const taskCompComputed = computed<TaskInfo[]>(() => {
 })
 
 const getTasks = (todoId: string) => {
-  tasksApi({ todoId: todoId }).then(resp => {
+  tasksApi({ todoId: todoId }).then((resp) => {
     taskWait.value = resp.data.waiting
     taskProc.value = resp.data.processing
     taskComp.value = resp.data.completed
@@ -235,7 +299,7 @@ const isShowTaskInfoDialog = ref(false)
 
 /**
  * 显示
- * @param id 
+ * @param id
  */
 const showTaskInfoDialog = (id?: string) => {
   isShowTaskInfoDialog.value = true
@@ -250,7 +314,7 @@ const showTaskInfoDialog = (id?: string) => {
 
 /**
  * 保存数据后的回调
- * @param data 
+ * @param data
  */
 const savedCallback = (data: any) => {
   taskWait.value = data.waiting
@@ -267,7 +331,9 @@ const showTaskNameInput = (task: TaskInfo) => {
   task.updTaskName = true
   nextTick(() => {
     let ele = document.getElementById('task-name-input-' + task.id)
-    if (ele) { ele.focus() }
+    if (ele) {
+      ele.focus()
+    }
   })
 }
 
@@ -283,7 +349,9 @@ const showTaskContentInput = (task: TaskInfo) => {
   task.updTaskContent = true
   nextTick(() => {
     let ele = document.getElementById('task-content-input-' + task.id)
-    if (ele) { ele.focus() }
+    if (ele) {
+      ele.focus()
+    }
   })
 }
 
@@ -297,10 +365,10 @@ const blurTaskContentInput = (task: TaskInfo) => {
 
 /**
  * 菜单点击调用该方法
- * 
- * @param todoId 
+ *
+ * @param todoId
  * @param todoName
- * @param todoType 
+ * @param todoType
  */
 const reload = (todoId: string, todoName: string, todoType: TodoType) => {
   curTodo.value = { todoId: todoId, todoName: todoName, todoType: todoType }
@@ -313,18 +381,18 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
 //#region --------------------------------------------------< 顶部操作台 >--------------------------------------------------
 const queryTagOptions = computed(() => {
   let tags = new Set()
-  taskWait.value.forEach(task => {
-    task.taskTags.forEach(tag => {
+  taskWait.value.forEach((task) => {
+    task.taskTags.forEach((tag) => {
       tags.add(tag)
     })
   })
-  taskProc.value.forEach(task => {
-    task.taskTags.forEach(tag => {
+  taskProc.value.forEach((task) => {
+    task.taskTags.forEach((tag) => {
       tags.add(tag)
     })
   })
-  taskComp.value.forEach(task => {
-    task.taskTags.forEach(tag => {
+  taskComp.value.forEach((task) => {
+    task.taskTags.forEach((tag) => {
       tags.add(tag)
     })
   })
@@ -366,7 +434,7 @@ const showExportDialog = () => {
 }
 
 const exportTodo = () => {
-  console.log(curTodo.value.todoId);
+  console.log(curTodo.value.todoId)
   if (isBlank(curTodo.value.todoId)) {
     Notify.error('请先选择待办事项再使用导出')
     return
@@ -378,22 +446,21 @@ const exportTodo = () => {
     exportProcess: exportForm.value.exportProcess,
     exportDate: exportForm.value.exportDate
   }
-  exportTodoApi(params).then(resp => {
+  exportTodoApi(params).then((resp) => {
     exportContent.value = resp.data
-    console.log(resp);
+    console.log(resp)
   })
 }
 
 const download = () => {
   if (curTodo.value.todoType == 10) {
-
   }
   let filename = '任务导出.md'
   let a = document.createElement('a')
-  let blob = new Blob([exportContent.value], { type: "text/plain" })
+  let blob = new Blob([exportContent.value], { type: 'text/plain' })
   let objectUrl = URL.createObjectURL(blob)
-  a.setAttribute("href", objectUrl)
-  a.setAttribute("download", filename)
+  a.setAttribute('href', objectUrl)
+  a.setAttribute('download', filename)
   a.click()
   URL.revokeObjectURL(a.href)
   a.remove()
@@ -405,9 +472,9 @@ const download = () => {
  * 在 mac 中, dragend 事件会在鼠标松开后半秒左右触发, 导致样式出现问题
  * 禁用掉 dragover 的默认行为后就正常了, 虽然不知道是为什么
  * https://stackoverflow.com/a/65910078/22700578
- */ 
+ */
 const preventDefaultDragover = (event: DragEvent) => {
-  event.preventDefault();
+  event.preventDefault()
 }
 
 const WaitRef = ref()
@@ -427,11 +494,11 @@ img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpa
 /**
  * 开始拖动
  * @param doms 可以拖到哪两个范围内
- * @param e 
+ * @param e
  */
 const dragStart = (doms: any, e: DragEvent) => {
   e.dataTransfer!.setDragImage(img, 0, 0)
-  let ele = (e!.target as Element)
+  let ele = e!.target as Element
   let cloneNode = ele.cloneNode(true) as HTMLElement
   const targetRect = ele.getBoundingClientRect()
   const distLeft = e.clientX - targetRect.left
@@ -442,7 +509,6 @@ const dragStart = (doms: any, e: DragEvent) => {
   cloneNode.style.top = `${targetRect.top}px`
   cloneNode.style.zIndex = '999'
   cloneNode.style.pointerEvents = 'none'
-  // cloneNode.style.transform = `translate(${e.clientX - distLeft}px,${e.clientY - distTop}px)`
   document.body.appendChild(cloneNode)
 
   // 拖拽事件
@@ -460,13 +526,12 @@ const dragStart = (doms: any, e: DragEvent) => {
     cloneNode.remove()
   }
 
-  
   ele.addEventListener('drag', onDrag)
   ele.addEventListener('dragend', onDragend)
-  // 原始元素隐藏
-  ele.classList.add('moving')
+  ele.classList.add('moving') // 原始元素隐藏
 
   for (let i = 0; i < doms.length; i++) {
+    doms[i].classList.remove('enter')
     doms[i].style.display = 'block'
   }
 
@@ -477,25 +542,22 @@ const dragStart = (doms: any, e: DragEvent) => {
  * waiting 中的元素在拖拽完成后执行
  */
 const dragendWait = (task: TaskInfo, _e: DragEvent) => {
-  // 删除元素的拖拽样式
-  // (e!.target as Element).classList.remove('moving')
   ProcDragRef.value.style.display = 'none'
   CompDragRef.value.style.display = 'none'
   // 如果没有拖入任何元素
-  if (toStage == '') return
+  if (toStage == '' || toStage === 'WAITING') return
   // 如果拖入到其他阶段
-  removeTask(taskWait, task)// 1. 从本阶段删除
-  toStageHandle(task)       // 2. 数据条件到其他阶段
+  removeTask(taskWait, task) // 1. 从本阶段删除
+  toStageHandle(task) // 2. 数据条件到其他阶段
 }
 
 /**
- * 从 processing 中拖出
+ * processing 中的元素在拖拽完成后执行
  */
 const dragendProc = (task: TaskInfo, e: DragEvent) => {
-  (e!.target as Element).classList.remove('moving')
   WaitDragRef.value.style.display = 'none'
   CompDragRef.value.style.display = 'none'
-  if (toStage == '') return
+  if (toStage == '' || toStage === 'PROCESSING') return
   removeTask(taskProc, task)
   toStageHandle(task)
 }
@@ -504,10 +566,9 @@ const dragendProc = (task: TaskInfo, e: DragEvent) => {
  * 从 completed 中拖出
  */
 const dragendComp = (task: TaskInfo, e: DragEvent) => {
-  (e!.target as Element).classList.remove('moving')
   WaitDragRef.value.style.display = 'none'
   ProcDragRef.value.style.display = 'none'
-  if (toStage == '') return
+  if (toStage == '' || toStage === 'COMPLETED') return
   removeTask(taskComp, task)
   toStageHandle(task)
 }
@@ -521,7 +582,6 @@ const removeTask = (tasks: Ref<TaskInfo[]>, task: TaskInfo) => {
   for (let index = 0; index < tasks.value.length; index++) {
     const ele = tasks.value[index]
     if (task.id == ele.id) {
-      console.log(index);
       tasks.value.splice(index, 1)
       break
     }
@@ -533,45 +593,41 @@ const removeTask = (tasks: Ref<TaskInfo[]>, task: TaskInfo) => {
  */
 const toStageHandle = (task: TaskInfo): boolean => {
   if (toStage === 'WAITING') {
-    toWaitingApi({ id: task.id, todoId: task.todoId }).then(resp => savedCallback(resp.data))
+    toWaitingApi({ id: task.id, todoId: task.todoId }).then((resp) => savedCallback(resp.data))
     return true
   } else if (toStage === 'PROCESSING') {
-    toProcessingApi({ id: task.id, todoId: task.todoId }).then(resp => savedCallback(resp.data))
+    toProcessingApi({ id: task.id, todoId: task.todoId }).then((resp) => savedCallback(resp.data))
     return true
   } else if (toStage === 'COMPLETED') {
-    toCompletedApi({ id: task.id, todoId: task.todoId }).then(resp => savedCallback(resp.data))
+    toCompletedApi({ id: task.id, todoId: task.todoId }).then((resp) => savedCallback(resp.data))
     return true
   }
   return false
 }
 
-let debounceTimeout: NodeJS.Timeout | undefined
-const onDragenter = (dom: any, type: TaskStatus, e: DragEvent) => {
-  if (e.target !== dom) {
-    return
-  }
-  if (debounceTimeout != undefined) {
-    clearTimeout(debounceTimeout)
-  }
-  toStage = type
+/**
+ * 当拖拽的元素进入 dom 阶段, 增该阶段增加 enter 样式
+ * @param dom 进入到的阶段
+ */
+const onDragenter = (dom: any, e: DragEvent) => {
+  if (e.target !== dom) return
   dom.classList.add('enter')
-  console.log('进入 ' + toStage);
 }
 
-const onDrop = (_e: DragEvent) => {
-  console.log('在这松开了');
+/**
+ * 元素拖拽到 type 阶段
+ */
+const onDrop = (type: TaskStatus) => {
+  toStage = type
 }
 
+/**
+ * 当拖拽的元素离开 dom 该段, 增该阶段删除 enter 样式
+ * @param dom 离开的阶段
+ */
 const onDragleave = (dom: any, e: DragEvent) => {
-  if (e.target !== dom) {
-    return
-  }
-  // debounceTimeout = setTimeout(() => {
-  //   toStage = ''
-  // }, 200);
+  if (e.target !== dom) return
   dom.classList.remove('enter')
-  console.log('离开 ' + toStage + ' ' + new Date().getTime());
-  toStage = ''
 }
 
 //#endregion

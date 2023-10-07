@@ -1,6 +1,5 @@
 <template>
-  <div class="index-article-root" @keydown.ctrl="() => {
-  }">
+  <div class="index-article-root">
 
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
@@ -307,7 +306,7 @@ provide(provideKeyCurArticleInfo, curArticle)
  * 选中分为两种
  * 1:选中的是文件夹
  * 2:选中的是文章, 则查询文章内容, 变
- * 
+ *
  * @param tree
  */
 const clickCurDoc = async (tree: DocTree) => {
@@ -343,7 +342,7 @@ const clickCurDoc = async (tree: DocTree) => {
 }
 /**
  * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
- * 
+ *
  * @param auto 是否为自动保存, 如果是自动保存, 则不弹出保存成功的提示框, 避免在非用户主动操作下弹框
  */
 const saveCurArticleContent = async (auto: boolean = false) => {
@@ -422,7 +421,7 @@ const curIsArticle = (): boolean => {
 /**
  * 文件上传成功
  * @param resp
- * @param file 
+ * @param file
  */
 const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
   if (resp.code === '20000') {
@@ -440,7 +439,7 @@ let cmw: CmWrapper                // codemirror editor wrapper
 
 /**
  * 拖拽上传的回调
- * @param event 
+ * @param event
  */
 const uploadFileCallback = async (event: DragEvent) => {
   if (!curIsArticle()) {
@@ -461,8 +460,8 @@ const uploadFileCallback = async (event: DragEvent) => {
   }
 }
 
-/** 
- * 初始化编辑器 
+/**
+ * 初始化编辑器
  */
 const initEditor = (_doc?: string) => {
   cmw = new CmWrapper(CmWrapper.newEditor(
