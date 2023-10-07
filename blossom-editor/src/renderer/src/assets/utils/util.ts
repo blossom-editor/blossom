@@ -303,14 +303,13 @@ export const sleep = (millis: number) => {
  */
 export const platform = (): 'windows' | 'darwin' => {
   var agent = navigator.userAgent.toLowerCase();
-  var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
   if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-    alert("windows");
+    return 'windows'
   }
   if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-    alert("windows");
+    return 'windows'
   }
-  if (isMac) {
+  if (/macintosh|mac os x/i.test(navigator.userAgent)) {
     return "darwin"
   }
   return "windows"
