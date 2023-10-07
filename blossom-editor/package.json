@@ -1,11 +1,12 @@
 {
   "name": "blossom",
+  "productName": "Blossom",
   "version": "1.5.0",
   "description": "A markdown editor",
   "license": "MIT",
   "main": "./out/main/index.js",
   "author": "xzzz",
-  "homepage": "https://www.wangyunf.com",
+  "homepage": "https://github.com/blossom-editor/blossom",
   "keywords": [
     "markdown",
     "editor"
@@ -18,6 +19,7 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "chcp 65001 && electron-vite dev --watch",
+    "dev:mac": "electron-vite dev --watch",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run build && electron-builder --win --config ",

@@ -1,7 +1,8 @@
 import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDetails } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
+import iconPng from '../../resources/imgs/icon.png?asset'
 // 拓展功能
 import printScreen from "./printScreen"
 import ShortcutRegistrant from './shortcut'
@@ -18,10 +19,8 @@ if (!gotTheLock) {
   app.quit()
 } else {
 
-  app.on('second-instance', (_event, _commandLine, _workingDirectory, additionalData) => {
+  app.on('second-instance', (_event, _commandLine, _workingDirectory, _additionalData) => {
     // 输出从第二个实例中接收到的数据
-    console.log(additionalData)
-
     // 有人试图运行第二个实例，我们应该关注我们的窗口
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
@@ -46,15 +45,22 @@ if (!gotTheLock) {
       optimizer.watchWindowShortcuts(window)
     })
 
+    if (platform.isMacOS) {
+      app.dock.setIcon(iconPng)
+    }
+
     setTimeout(() => {
       createMainWindow()
     }, 300);
 
-
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+      if (BrowserWindow.getAllWindows().length === 0) { 
+        createMainWindow()
+      } else if (mainWindow) {
+        mainWindow.show()
+      }
     })
 
     // Quit when all windows are closed, except on macOS. There, it's common
@@ -89,7 +95,7 @@ const buildWindow = (_title: string): BrowserWindow => {
     opacity: 1,
     hasShadow: true,
     autoHideMenuBar: false,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...(platform.isLinux ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       // 是否沙盒模式, 沙盒模式下, 渲染进程可以直接与主进程通信
@@ -142,6 +148,9 @@ function createMainWindow(): void {
  * =========================================================================================================================
  */
 const initTray = () => {
+  if (platform.isMacOS) {
+    return
+  }
   console.log('1. 创建托盘 Tray');
   tray = new Tray(icon);
   const contextMenu = Menu.buildFromTemplate([
@@ -365,7 +374,9 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
   ipcMain.on('set-userinfo', (_: IpcMainEvent, userinfo: any): void => {
     blossomUserinfo = userinfo
     console.log('当前登录用户:', userinfo);
-    tray.setToolTip(`Blossom\n用户: ${userinfo.username}\n昵称: ${userinfo.nickName}`)
+    if (platform.isWindows) {
+      tray.setToolTip(`Blossom\n用户: ${userinfo.username}\n昵称: ${userinfo.nickName}`)
+    }
   })
   /**
    * 新文章窗口

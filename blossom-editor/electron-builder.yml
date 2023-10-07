@@ -17,8 +17,11 @@ win:
 # https://www.electron.build/configuration/nsis
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
+  # 快捷方式名称
   shortcutName: ${productName}
+  # 写在工具名称
   uninstallDisplayName: ${productName}
+  # 是否创建桌面快捷方式
   createDesktopShortcut: always
   # 安装退保
   # installerIcon: 'icon.ico'
@@ -33,6 +36,7 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+# https://www.electron.build/configuration/dmg
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
