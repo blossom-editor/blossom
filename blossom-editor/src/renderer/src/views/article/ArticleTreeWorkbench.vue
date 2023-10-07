@@ -178,14 +178,15 @@ const refreshDocTree = () => {
  * 2. 关闭 dialog 页面
  */
 const savedCallback = () => {
-  isShowDocInfoDialog.value = false;
+  // isShowDocInfoDialog.value = false
+  emits('refreshDocTree', onlyOpen.value, onlySubject.value, onlyStars.value)
 }
 
 //#endregion
 
 //#region 备份记录
 const ArticleBackupRef = ref()
-const isShowBackupDialog = ref<boolean>(false);
+const isShowBackupDialog = ref<boolean>(false)
 
 const handleShowBackupDialog = () => {
   isShowBackupDialog.value = true

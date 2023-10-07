@@ -162,7 +162,7 @@
   <!-- 详情 -->
   <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 320px;" :append-to-body="true"
     :destroy-on-close="true" :close-on-click-modal="false" draggable>
-    <ArticleInfo ref="ArticleInfoRef"></ArticleInfo>
+    <ArticleInfo ref="ArticleInfoRef" @saved="savedCallback"></ArticleInfo>
   </el-dialog>
 
   <!-- 二维码 -->
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
   document.body.removeEventListener('contextmenu', closeTreeDocsMenuShow)
 })
 
-//#region 菜单
+//#region ----------------------------------------< 菜单 >--------------------------------------
 
 const docTreeLoading = ref(true)        // 文档菜单的加载动画
 const showSort = ref(false)             // 是否显示文档排序
@@ -283,7 +283,6 @@ const handleShowSort = () => {
 
 //#endregion
 
-
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
 const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
@@ -333,7 +332,6 @@ const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 
     rMenuLevel2.value.top = '0px'
   }
 }
-//#endregion
 
 /**
  * 打开新页面, 文件夹(curDoc.value.ty == 1)无法使用新页面打开
@@ -381,7 +379,6 @@ const articleDownload = () => {
   })
 }
 
-
 /**
  * 下载HTML文章
  */
@@ -404,6 +401,10 @@ const articleDownloadHtml = () => {
   })
 }
 
+/**
+ * 导出文章
+ * @param type 导出类型
+ */
 const articleBackup = (type: 'MARKDOWN' | 'HTML') => {
   articleBackupApi({ type: type, articleId: curDoc.value.i, toLocal: 'YES' }).then(resp => {
     ElMessageBox.confirm(
@@ -456,6 +457,10 @@ const delDoc = () => {
   })
 }
 
+//#endregion
+
+//#region ----------------------------------------< 二维码 >--------------------------------------
+
 const isShowQrCodeDialog = ref<boolean>(false);
 const ArticleQrCodeRef = ref()
 
@@ -466,8 +471,13 @@ const handleArticleQrCodeDialog = () => {
   })
 }
 
+//#endregion
+
+//#region ----------------------------------------< 文章详情 >--------------------------------------
+
 const ArticleInfoRef = ref()
 const isShowDocInfoDialog = ref<boolean>(false)
+
 /**
  * 显示弹框
  * @param dialogType 弹框的类型, 新增, 修改
@@ -493,12 +503,24 @@ const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
   }
 }
 
+const savedCallback = (dialogType: DocDialogType) => {
+  getDocTree(false, false, false)
+  if (dialogType === 'upd') {
+    isShowDocInfoDialog.value = false
+  }
+}
+
+//#endregion
+
+//#region 导出
+
 const ArticleImportRef = ref()
 const isShowArticleImportDialog = ref<boolean>(false)
 
 const handleShowArticleImportDialog = () => {
   isShowArticleImportDialog.value = true
 }
+
 //#endregion
 
 const clickCurDoc = (tree: DocTree) => {

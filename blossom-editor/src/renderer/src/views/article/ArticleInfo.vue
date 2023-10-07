@@ -451,7 +451,7 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
       // then 回调
       const handleResp = (_: any) => {
         Notify.success(curDocDialogType === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
-        emits('saved')
+        emits('saved', curDocDialogType)
       }
       // finally 回调
       const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
