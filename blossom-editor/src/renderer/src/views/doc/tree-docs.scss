@@ -75,6 +75,7 @@
 
     :deep(.el-menu-item) {
       --el-menu-hover-bg-color: #ffffff00 !important;
+      font-weight: 300;
       color: var(--bl-text-doctree-color);
       height: auto;
       min-height: 25px;

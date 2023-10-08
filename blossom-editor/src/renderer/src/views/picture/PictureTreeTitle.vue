@@ -69,6 +69,7 @@ $icon-size: 17px;
 
 .doc-title {
   @include flex(row, flex-start, center);
+  @include themeBrightness(100%, 90%);
   align-content: flex-start;
   flex-wrap: wrap;
   font-size: 14px;

@@ -87,10 +87,9 @@ $icon-size: 17px;
   position: relative;
 
   .doc-name {
-    @include themeBrightness(100%, 80%);
+    @include themeBrightness(100%, 90%);
     @include ellipsis();
     font-size: inherit;
-    font-weight: 300;
   }
 
   .sort {
@@ -109,6 +108,7 @@ $icon-size: 17px;
   position: relative;
 
   .doc-name {
+    @include themeBrightness(100%, 100%);
     @include themeText(2px 2px 2px #d8d8d8, 2px 2px 2px #0a0a0a);
     @include ellipsis();
     color: var(--el-color-primary);
