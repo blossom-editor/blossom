@@ -126,19 +126,21 @@ export const cwTheme: any = {
 }
 
 const zhCNPhrases = {
-  "Go to line": "前往行",
-  "go": "前往",
-  "Find": "查找内容",
-  "Replace": "替换内容",
-  "next": "下一个",
-  "previous": "上一个",
-  "all": "全部",
-  "match case": "区分大小写",
-  "by word": "全字匹配",
-  "replace": "替换",
-  "replace all": "替换全部",
-  "close": "schließen",
-  "regexp": "使用正则表达式"
+  'Fold line': '折叠',
+  'Unfold line': '展开',
+  'Go to line': '前往行',
+  go: '前往',
+  Find: '查找内容',
+  Replace: '替换内容',
+  next: '下一个',
+  previous: '上一个',
+  all: '全部',
+  'match case': '区分大小写',
+  'by word': '全字匹配',
+  replace: '替换',
+  'replace all': '替换全部',
+  close: 'schließen',
+  regexp: '使用正则表达式'
 }
 
 /**

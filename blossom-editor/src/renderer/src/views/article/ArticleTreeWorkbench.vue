@@ -1,7 +1,7 @@
 <template>
   <div class="doc-workbench-root">
     <bl-row just="flex-end" align="flex-end">
-      <div v-show="curDoc !== undefined" style="font-size: 12px; text-align: right; color: var(--bl-text-color-light)">
+      <div v-show="curDoc !== undefined" style="font-size: 12px; text-align: right; color: var(--bl-text-color)">
         <span>《{{ curDoc?.name }}》</span>
         <br />
         <span style="font-size: 9px; padding-right: 5px">{{ curDoc?.id }}</span>
@@ -177,17 +177,20 @@ const openArticleReferenceWindow = () => {
   openNewArticleReferenceWindow()
 }
 
+/**
+ * 控制台刷新文档列表
+ */
 const refreshDocTree = () => {
   emits('refreshDocTree', onlyOpen.value, onlySubject.value, onlyStars.value)
 }
 
 /**
  * 保存后的回调
- * 1. [暂无] 刷新菜单列表
+ * 1. 刷新菜单列表
  * 2. 关闭 dialog 页面
  */
 const savedCallback = () => {
-  // isShowDocInfoDialog.value = false
+  isShowDocInfoDialog.value = false
   emits('refreshDocTree', onlyOpen.value, onlySubject.value, onlyStars.value)
 }
 

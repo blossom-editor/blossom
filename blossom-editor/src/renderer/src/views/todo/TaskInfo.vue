@@ -1,38 +1,36 @@
 <template>
   <div class="article-info-root">
-
     <!-- 标题 -->
     <div class="info-title">
-      <div class="iconbl bl-a-labellist-line"></div>{{ taskSaveFormTitle }}
+      <div class="iconbl bl-a-labellist-line"></div>
+      {{ taskSaveFormTitle }}
     </div>
 
     <div v-loading="formLoading" class="info-form">
       <el-form :inline="true" :model="taskSaveForm" :rules="taskSaveFormRule" label-width="52px" ref="TaskSaveFormRef">
-        <!-- <el-form-item label="todoId">
-          <el-input v-model="taskSaveForm.todoId" style="width: 90px;" disabled></el-input>
-          <el-input v-model="taskSaveForm.todoName" style="width: 90px;" disabled></el-input>
-          <el-input v-model="taskSaveForm.todoType" style="width: 30px;" disabled></el-input>
-        </el-form-item> -->
         <el-form-item label="标题" prop="taskName">
           <el-input v-model="taskSaveForm.taskName">
             <template #append>
               <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
                 <div class="emoji-link" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
               </el-tooltip>
-            </template></el-input>
+            </template></el-input
+          >
         </el-form-item>
         <el-form-item label="内容">
           <el-input type="textarea" :rows="4" v-model="taskSaveForm.taskContent"></el-input>
         </el-form-item>
         <el-form-item label="标签">
           <div class="info-tags-container">
-            <el-input v-if="isShowTagInput" ref="TagInputRef" style="width: 75px;" v-model="tagInputValue"
-              @keyup.enter="blurTagInput" @blur="blurTagInput" />
-            <el-button v-else style="width: 75px;" @click="showInput">
-              + 标签
-            </el-button>
-            <el-tag v-for="tag in taskSaveForm?.taskTags" :key="tag" :disable-transitions="false"
-              @close="handleTagClose(tag)" closable>
+            <el-input
+              v-if="isShowTagInput"
+              ref="TagInputRef"
+              style="width: 75px"
+              v-model="tagInputValue"
+              @keyup.enter="blurTagInput"
+              @blur="blurTagInput" />
+            <el-button v-else style="width: 75px" @click="showInput"> + 标签 </el-button>
+            <el-tag v-for="tag in taskSaveForm?.taskTags" :key="tag" :disable-transitions="false" @close="handleTagClose(tag)" closable>
               {{ tag }}
             </el-tag>
           </div>
@@ -41,32 +39,45 @@
           <el-input v-model="taskSaveForm.deadLine" placeholder="如下午3点会议之间"></el-input>
         </el-form-item>
         <el-form-item label="开始于" v-if="infoType == 'upd'">
-          <el-date-picker v-model="taskSaveForm.startTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+          <el-date-picker
+            v-model="taskSaveForm.startTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            style="width: 100%" />
         </el-form-item>
         <el-form-item label="结束于" v-if="infoType == 'upd'">
-          <el-date-picker v-model="taskSaveForm.endTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+          <el-date-picker
+            v-model="taskSaveForm.endTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            style="width: 100%" />
         </el-form-item>
-        <el-form-item label="颜色" style="width: auto;">
-          <el-input v-model="taskSaveForm.color" style="width:200px;margin-right: 5px;"
-            placeholder="推荐半透明色,更兼容暗黑模式"></el-input>
-          <el-color-picker show-alpha v-model="taskSaveForm.color" :predefine="[
-            'rgba(68, 173, 56, 0.7)',
-            'rgba(186, 196, 44, 0.7)',
-            'rgba(235, 205, 72, 0.7)',
-            'rgba(232, 144, 144, 0.7)',
-            'rgba(112, 145, 188, 0.7)',
-            'rgba(157, 129, 216, 0.7)',
-            'rgba(0, 0, 0, 0.65)',
-          ]" />
+        <el-form-item label="颜色" style="width: auto">
+          <el-input v-model="taskSaveForm.color" style="width: 200px; margin-right: 5px" placeholder="推荐半透明色,更兼容暗黑模式"></el-input>
+          <el-color-picker
+            show-alpha
+            v-model="taskSaveForm.color"
+            :predefine="[
+              'rgba(68, 173, 56, 0.7)',
+              'rgba(186, 196, 44, 0.7)',
+              'rgba(235, 205, 72, 0.7)',
+              'rgba(232, 144, 144, 0.7)',
+              'rgba(112, 145, 188, 0.7)',
+              'rgba(157, 129, 216, 0.7)',
+              'rgba(0, 0, 0, 0.65)'
+            ]" />
 
           <el-tooltip content="颜色搭配参考" effect="blossomt" placement="top" :hide-after="0">
-            <a href="https://colorhunt.co/" target="_blank" class="color-hunt iconbl bl-a-colorpalette-line"
+            <a
+              href="https://colorhunt.co/"
+              target="_blank"
+              class="color-hunt iconbl bl-a-colorpalette-line"
               :style="{ color: taskSaveForm.color }"></a>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="进度" v-if="infoType == 'upd'" style="width: auto;">
+        <el-form-item label="进度" v-if="infoType == 'upd'" style="width: auto">
           <el-input-number v-model="taskSaveForm.process" :min="0" :max="100" :step="5"></el-input-number>
         </el-form-item>
       </el-form>
@@ -123,7 +134,7 @@ const taskSaveFormRule = ref<FormRules<TaskInfo>>({
 
 /**
  * 保存表单,内部决定是否存还是新增
- * @param formEl 
+ * @param formEl
  */
 const save = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -134,11 +145,11 @@ const save = async (formEl: FormInstance | undefined) => {
     if (valid) {
       if (isNotBlank(taskSaveForm.value.id)) {
         let datas = { ...taskSaveForm.value, ...{ returnTasks: true } }
-        updTaskApi(datas).then(resp => {
+        updTaskApi(datas).then((resp) => {
           emits('saved', resp.data)
         })
       } else {
-        addTaskApi(taskSaveForm.value).then(resp => {
+        addTaskApi(taskSaveForm.value).then((resp) => {
           emits('saved', resp.data)
         })
       }
@@ -151,10 +162,13 @@ const save = async (formEl: FormInstance | undefined) => {
  */
 const delTaskBefore = () => {
   if (taskSaveForm.value.todoType === 20) {
-    countTaskApi({ todoId: taskSaveForm.value.todoId }).then(resp => {
+    countTaskApi({ todoId: taskSaveForm.value.todoId }).then((resp) => {
       if (resp.data == 1) {
         ElMessageBox.confirm(`当删除阶段性事项的最后一个任务时, 该事项也将一并删除, 是否确定删除?`, {
-          confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true,
+          confirmButtonText: '确定删除',
+          cancelButtonText: '我再想想',
+          type: 'info',
+          draggable: true
         }).then(() => {
           delTask()
         })
@@ -162,26 +176,25 @@ const delTaskBefore = () => {
         delTask()
       }
     })
-  }
-  else {
+  } else {
     delTask()
   }
 }
 
 const delTask = () => {
-  delTaskApi(taskSaveForm.value).then(resp => emits('saved', resp.data))
+  delTaskApi(taskSaveForm.value).then((resp) => emits('saved', resp.data))
 }
 
 /**
  * 回显数据
- * @param dialogType 
- * @param taskId 
+ * @param dialogType
+ * @param taskId
  */
 const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, todoType?: TodoType) => {
   infoType.value = dialogType
   if (dialogType == 'upd') {
     taskSaveFormTitle.value = '修改任务'
-    taskInfoApi({ id: taskId }).then(resp => {
+    taskInfoApi({ id: taskId }).then((resp) => {
       taskSaveForm.value = resp.data
     })
   } else {
@@ -248,12 +261,11 @@ const emits = defineEmits(['saved'])
   }
 }
 
-
 .info-tags-container {
   text-align: left;
   overflow-y: scroll;
 
-  &>span,
+  & > span,
   button {
     margin: 3px 3px;
   }

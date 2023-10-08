@@ -1,10 +1,5 @@
-# 单引号
 singleQuote: true
-# 不以分号结尾
 semi: false
-# 每行 150
 printWidth: 150
-# 不以逗号结尾
 trailingComma: none
-# 标签末尾在同一行
 bracketSameLine: true
