@@ -1,0 +1,53 @@
+{
+  "serverUrl": "http://127.0.0.1",
+  "isStrict": false,
+  "allInOne": true,
+  "outPath": "D://md2",
+  "coverOld": true,
+  "allInOneDocFileName": "demoProject.html",
+  "packageFilters": "",
+  "md5EncryptedHtmlName": false,
+  "projectName": "smart-doc",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "revisionLogs": [
+    {
+      "version": "1.0",
+      "status": "use",
+      "author": "author",
+      "revisionTime": "2019-10-12",
+      "remarks": "desc"
+    }
+  ],
+  "errorCodes": [
+    {
+      "value": "200",
+      "type": "string",
+      "desc": "desc"
+    }
+  ],
+  "customResponseFields": [
+    {
+      "name": "name",
+      "desc": "desc",
+      "ownerClassName": "ownerClassName",
+      "value": "value"
+    }
+  ],
+  "requestHeaders": [
+    {
+      "name": "token",
+      "type": "string",
+      "desc": "desc",
+      "required": false,
+      "since": "-"
+    }
+  ],
+  "sourceCodePaths": [
+    {
+      "path": "src/main/java",
+      "desc": "测试"
+    }
+  ]
+}

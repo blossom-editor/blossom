@@ -1,0 +1,110 @@
+
+== ${desc}
+<%
+for(doc in list){
+%>
+<%if(doc.deprecated){%>
+=== [line-through]#${doc.desc}#
+<%}else{%>
+=== ${doc.desc}
+<%}%>
+*URL:* `${doc.url}`
+
+*Type:* `${doc.type}`
+
+<%if(isNotEmpty(doc.author)){%>
+*Author:* ${doc.author}
+<%}%>
+
+*Content-Type:* `${doc.contentType}`
+
+*Description:* ${doc.detail}
+
+<%if(isNotEmpty(doc.headers)){%>
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+${doc.headers}
+|====================
+<%}%>
+
+
+<%if(isNotEmpty(doc.pathParams)){%>
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+<%
+for(param in doc.pathParams){
+%>
+|${param.field}|${param.type}|${param.required}|${param.desc}|${param.version}
+<%}%>
+|====================
+<%}%>
+
+<%if(isNotEmpty(doc.queryParams)){%>
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+<%
+for(param in doc.queryParams){
+%>
+|${param.field}|${param.type}|${param.required}|${param.desc}|${param.version}
+<%}%>
+|====================
+<%}%>
+
+<%if(isNotEmpty(doc.requestParams)){%>
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+<%
+for(param in doc.requestParams){
+%>
+|${param.field}|${param.type}|${param.required}|${param.desc}|${param.version}
+<%}%>
+|====================
+<%}%>
+
+
+<%if(isNotEmpty(doc.requestUsage)&&isRequestExample){%>
+*Request-example:*
+----
+${doc.requestUsage}
+----
+<%}%>
+<%if(isNotEmpty(doc.responseParams)){%>
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+<%
+for(param in doc.responseParams){
+%>
+|${param.field}|${param.type}|${param.desc}|${param.version}
+<%}%>
+|====================
+<%}%>
+
+
+<%if(isNotEmpty(doc.responseUsage)&&isResponseExample){%>
+*Response-example:*
+----
+${doc.responseUsage}
+----
+<%}%>
+
+<% } %>
