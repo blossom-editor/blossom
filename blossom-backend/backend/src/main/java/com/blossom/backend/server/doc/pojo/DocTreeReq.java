@@ -17,25 +17,25 @@ public class DocTreeReq extends AbstractPOJO {
      */
     private Boolean onlyFolder;
     /**
-     * [Picture + Article]只查询图片文件夹, 以及含有图片的文章文件夹
-     */
-    private Boolean onlyPicture;
-    /**
-     * [Article]只查询公开的文章文件夹
+     * [Article] 只查询公开的文章和文件夹
      */
     private Boolean onlyOpen;
     /**
-     * [Article]只查询专题文件夹
+     * [Article] 只查询专题文章和文件夹
      */
     private Boolean onlySubject;
     /**
-     * [Article]问查询有 star 文章的文件夹
+     * [Article] 只查询 star 文章和文件夹
      */
     private Boolean onlyStar;
     /**
-     * [Article]文章ID, 指查询指定文章
+     * [Article] 文章ID, 指查询指定文章
      */
     private Long articleId;
+    /**
+     * [Picture + Article] 只查询图片文件夹, 以及含有图片的文章文件夹
+     */
+    private Boolean onlyPicture;
     /**
      * 用户ID
      */

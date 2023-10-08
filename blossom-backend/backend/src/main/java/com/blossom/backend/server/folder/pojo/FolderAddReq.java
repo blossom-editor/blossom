@@ -1,6 +1,7 @@
 package com.blossom.backend.server.folder.pojo;
 
 
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -65,10 +66,10 @@ public class FolderAddReq extends AbstractPOJO {
      */
     private String color;
     /**
-     * 文件夹类型, 1:文章文件夹; 2:图片文件夹;
+     * 文件夹类型 {@link FolderTypeEnum}
      * <p>文件夹类型确认后无法修改
      *
-     * @see com.blossom.backend.server.FolderTypeEnum
+     * @see com.blossom.backend.server.folder.FolderTypeEnum
      */
     @NotNull(message = "文件夹类型为必填项")
     @Min(value = 1, message = "文件夹类型必须为[1/2]")

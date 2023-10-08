@@ -1,4 +1,4 @@
-package com.blossom.backend.server;
+package com.blossom.backend.server.folder;
 
 import lombok.Getter;
 
@@ -11,17 +11,21 @@ public enum FolderTypeEnum {
     /**
      * 文章文件夹
      */
-    ARTICLE(1),
+    ARTICLE(1, "文章文件夹"),
 
     /**
      * 图片文件夹
      */
-    PICTURE(2);
+    PICTURE(2, "图片文件夹");
 
     @Getter
     private final Integer type;
 
-    FolderTypeEnum(Integer type) {
+    @Getter
+    private final String desc;
+
+    FolderTypeEnum(Integer type, String desc) {
         this.type = type;
+        this.desc = desc;
     }
 }

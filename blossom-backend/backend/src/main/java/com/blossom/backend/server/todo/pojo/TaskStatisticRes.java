@@ -12,14 +12,29 @@ import java.util.List;
  */
 @Data
 public class TaskStatisticRes {
-
+    /**
+     * 日期
+     */
     private List<String> dates;
-
+    /**
+     * 对应日期的完成率
+     */
     private List<Long> rates;
-
+    /**
+     * 待完成数
+     */
     private Long waiting;
+    /**
+     * 进行中数
+     */
     private Long processing;
+    /**
+     * 完成数
+     */
     private Long completed;
+    /**
+     * 总数
+     */
     private Long total;
 
     public static TaskStatisticRes build() {

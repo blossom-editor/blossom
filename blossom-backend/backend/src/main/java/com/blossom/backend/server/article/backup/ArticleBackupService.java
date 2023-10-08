@@ -433,16 +433,31 @@ public class ArticleBackupService {
      */
     @Data
     public static class BackupFile {
-        // 1
+        /**
+         * 用户ID
+         */
         private String userId;
-        // 2
+        /**
+         * 备份日期 YYYYMMDD
+         * @mock 20230101
+         */
         private String date;
-        // 3
+        /**
+         * 备份时间 HHMMSS
+         * @mock 123001
+         */
         private String time;
-        // 2 + 3
+        /**
+         * 备份的日期和时间, yyyy-MM-dd HH:mm:ss
+         */
         private Date datetime;
-        // all
+        /**
+         * 备份包的名称
+         */
         private String filename;
+        /**
+         * 备份包路径
+         */
         private String path;
 
         /**

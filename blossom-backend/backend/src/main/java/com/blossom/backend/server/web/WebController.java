@@ -15,9 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 网站收藏
+ * 网站收藏 [Web]
  *
  * @author xzzz
+ * @order 60
  */
 @Slf4j
 @RestController

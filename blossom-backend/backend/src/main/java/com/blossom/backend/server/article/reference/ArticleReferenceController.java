@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * 文章引用
+ * 文章引用 [A#Reference]
  *
  * @author xzzz
+ * @order 5
  */
 @RestController
 @AllArgsConstructor
@@ -26,12 +27,12 @@ public class ArticleReferenceController {
      * 文章引用关系
      *
      * @param onlyInner 是否只查询内部文章之间的引用
+     * @param articleId 查询指定文章的引用关系
      */
     @GetMapping("/list")
     public R<Map<String, Object>> listAll(
             @RequestParam("onlyInner") Boolean onlyInner,
-            @RequestParam(value = "articleId", required = false) Long articleId
-    ) {
+            @RequestParam(value = "articleId", required = false) Long articleId) {
         if (onlyInner == null) {
             onlyInner = true;
         }

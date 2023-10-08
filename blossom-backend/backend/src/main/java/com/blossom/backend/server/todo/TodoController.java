@@ -7,8 +7,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 待办事项
+ * 待办事项 [Todo]
  *
+ * @order 40
  * @since 1.4.0
  */
 @RestController
@@ -29,20 +30,20 @@ public class TodoController {
     }
 
     /**
-     * 修改阶段性事项名称
+     * 新增阶段性事项
      */
-    @PostMapping("/upd/name")
-    public R<?> updTodoName(@RequestBody @Validated TodoPhasedUpdReq req) {
-        baseService.updTodoName(req);
+    @PostMapping("/add/phased")
+    public R<?> addPhased(@RequestBody @Validated TodoPhasedAddReq req) {
+        baseService.addPhased(req);
         return R.ok();
     }
 
     /**
      * 修改阶段性事项名称
      */
-    @PostMapping("/add/phased")
-    public R<?> addPhased(@RequestBody @Validated TodoPhasedAddReq req) {
-        baseService.addPhased(req);
+    @PostMapping("/upd/name")
+    public R<?> updTodoName(@RequestBody @Validated TodoPhasedUpdReq req) {
+        baseService.updTodoName(req);
         return R.ok();
     }
 

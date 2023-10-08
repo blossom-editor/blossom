@@ -15,14 +15,26 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 public class UserUpdPwdReq extends AbstractPOJO {
 
+    /**
+     * 非必填, 自动填充
+     */
     private Long userId;
 
+    /**
+     * 旧密码
+     */
     @NotBlank(message = "旧密码为必填项")
     private String password;
 
+    /**
+     * 新密码
+     */
     @NotBlank(message = "新密码为必填项")
     private String newPassword;
 
+    /**
+     * 确认密码
+     */
     @NotBlank(message = "确认密码为必填项")
     private String confirmPassword;
 }

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 
 /**
- * 文章访问记录
+ * 文章访问记录 [@A#View]
  *
  * @author xzzz
  */

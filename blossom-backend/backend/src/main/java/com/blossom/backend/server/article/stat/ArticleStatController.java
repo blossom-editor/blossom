@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 文章统计
+ * 文章统计 [A#Stat]
  *
  * @author xzzz
+ * @order 9
  */
 @RestController
 @AllArgsConstructor
@@ -24,8 +25,9 @@ public class ArticleStatController {
     private final ArticleStatService statService;
 
     /**
-     * 文章每日编辑热力图 [OP]
+     * 每日编辑热力图 [OP]
      *
+     * @param userId      博客配置的用户ID
      * @param offsetMonth 向前查询的月数, 填写负数, 默认为 -2
      */
     @AuthIgnore
@@ -40,7 +42,7 @@ public class ArticleStatController {
     }
 
     /**
-     * 文章每日编辑热力图
+     * 每日编辑热力图
      *
      * @param offsetMonth 向前查询的月数, 填写负数, 默认为 -2
      */
@@ -50,7 +52,9 @@ public class ArticleStatController {
     }
 
     /**
-     * 当前文章数和文章字数 [OP]
+     * 文章数和文章字数 [OP]
+     *
+     * @param userId 博客配置的用户ID
      */
     @AuthIgnore
     @GetMapping("/words/open")
@@ -62,7 +66,7 @@ public class ArticleStatController {
     }
 
     /**
-     * 当前文章数和文章字数
+     * 文章数和文章字数
      */
     @GetMapping("/words")
     public R<ArticleStatRes> word() {
@@ -70,7 +74,9 @@ public class ArticleStatController {
     }
 
     /**
-     * 文章字数折线图
+     * 文章字数折线图 [OP]
+     *
+     * @param userId 博客配置的用户ID
      */
     @AuthIgnore
     @GetMapping("/line/open")
@@ -81,6 +87,9 @@ public class ArticleStatController {
         return R.ok(statService.statArticleWordsByMonth(userId));
     }
 
+    /**
+     * 字数折线图
+     */
     @GetMapping("/line")
     public R<ArticleLineRes> line() {
         return R.ok(statService.statArticleWordsByMonth(AuthContext.getUserId()));

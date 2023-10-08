@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 登录授权
+ * 登录授权 [Auth]
  *
  * @author xzzz
  */
@@ -53,15 +53,7 @@ public class AuthController {
     }
 
     /**
-     * 用户主动注册
-     */
-    @PostMapping("register")
-    public void register() {
-
-    }
-
-    /**
-     * 检查 token 状态
+     * 检查 Token 状态
      */
     @GetMapping("check")
     public R<AccessToken> check() {

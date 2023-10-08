@@ -1,6 +1,6 @@
 package com.blossom.backend.server.utils;
 
-import com.blossom.backend.server.FolderTypeEnum;
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import net.coobird.thumbnailator.Thumbnails;
 

@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 文章记录 [A#Log]
+ *
+ * @author xzzz
+ * @order 6
+ */
 @RestController
 @RequestMapping("/article/log")
 @AllArgsConstructor
@@ -22,6 +28,9 @@ public class ArticleLogController {
 
     /**
      * 文章编辑记录
+     *
+     * @param articleId 文章ID
+     * @apiNote 文章记录不会分页, 可能会一次返回大量数据
      */
     @GetMapping
     public R<List<ArticleLogRes>> open(@RequestParam("articleId") Long articleId) {
@@ -42,6 +51,7 @@ public class ArticleLogController {
      * 查文章记录内容
      *
      * @param id 记录ID
+     * @apiNote 返回文章的 Markdown 正文内容
      */
     @GetMapping("content")
     public R<String> content(@RequestParam("id") Long id) {

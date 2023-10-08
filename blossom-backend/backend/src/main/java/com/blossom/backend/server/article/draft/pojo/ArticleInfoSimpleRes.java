@@ -51,7 +51,7 @@ public class ArticleInfoSimpleRes extends AbstractPOJO implements Serializable {
      */
     private Integer starStatus;
     /**
-     * 开放状态
+     * 公开状态
      */
     private Integer openStatus;
     /**

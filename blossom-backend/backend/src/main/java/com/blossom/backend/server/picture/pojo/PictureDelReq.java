@@ -21,7 +21,7 @@ public class PictureDelReq {
     private Long id;
 
     /**
-     * 忽略图片引用检查
+     * 忽略图片引用检查, 强制进行删除
      */
     private Boolean ignoreCheck;
 }

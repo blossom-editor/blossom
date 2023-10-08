@@ -33,9 +33,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- * 公开文章 [Article]
+ * 文章公开 [A#Open]
  *
  * @author xzzz
+ * @order 4
  */
 @Slf4j
 @RestController
@@ -49,10 +50,10 @@ public class ArticleOpenController {
 
 
     /**
-     * 查询公开文章, 只返回 html 内容
+     * 查询公开文章
      *
      * @param id 文章ID
-     * @return 文章信息
+     * @apiNote 只返回 html 内容, 每次查询公开会递增 PV 和 UV, 接口每调用一次都会递增 PV 数据, UV 数据每个 IP 每天只会递增一次
      */
     @AuthIgnore
     @GetMapping("/info")
@@ -74,9 +75,7 @@ public class ArticleOpenController {
             res.setUv(article.getUv());
             res.setLikes(article.getLikes());
         }
-
         articleService.uvAndPv(ServletUtil.getIP(request), ServletUtil.getUserAgent(request), id);
-
         return R.ok(res);
     }
 
@@ -107,6 +106,7 @@ public class ArticleOpenController {
      * 生成公开文章二维码
      *
      * @param id 文章ID
+     * @apiNote 返回流
      */
     @GetMapping("/qrcode")
     public void qrcode(@RequestParam("id") Long id, HttpServletResponse response) {

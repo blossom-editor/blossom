@@ -31,7 +31,7 @@ public class UserUpdReq extends AbstractEntity {
     @NotBlank(message = "说明为必填项")
     private String remark;
     /**
-     * 位置
+     * 和风天气的位置
      */
     private String location;
     /**

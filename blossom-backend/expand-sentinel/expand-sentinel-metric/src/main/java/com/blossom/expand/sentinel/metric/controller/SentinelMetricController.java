@@ -68,7 +68,6 @@ public class SentinelMetricController extends AbstractSentinelController {
      *
      * @param id 资源名称
      * @return 资源列表
-     * @apiNote 详细信息见: https://www.yuque.com/xiaozeizeizi/learning/rczi6d
      */
     @GetMapping("/clusterNode")
     public R<JsonNode> clusterNode(@RequestParam(value = "id", required = false) String id) {
@@ -91,7 +90,6 @@ public class SentinelMetricController extends AbstractSentinelController {
      * @param endTime   结束时间
      * @param interval  快捷区间, 优先级比日期高
      * @return 资源列表
-     * @apiNote 详细信息见: https://www.yuque.com/xiaozeizeizi/learning/rczi6d
      */
     @GetMapping("/resources")
     public R<List<ResourcesRes>> resources(
@@ -257,9 +255,10 @@ public class SentinelMetricController extends AbstractSentinelController {
     }
 
     /**
-     * 集群过去24小时的总体信息(__total_inbound_traffic__)
+     * 集群过去24小时的总体信息
      *
      * @return 集群流量信息
+     * @apiNote 资源名: __total_inbound_traffic__
      */
     @GetMapping("/metric/app")
     public R<MetricRes> metricTotalInboundTraffic(@RequestParam(required = false) String appName) {

@@ -28,9 +28,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * 图片上传下载, 当使用本地图片存储时, 简短的接口名有助于优化文档布局
+ * 图片上传查看 [P#Blos]
  *
  * @author xzzz
+ * @order 21
+ * @apiNote 图片上传下载, 当使用本地图片存储时, 简短的接口名有助于优化文档布局
  */
 @Slf4j
 @RestController
@@ -49,7 +51,6 @@ public class PictureBlosController {
      * @param filename     文件名
      * @param pid          图片上级ID
      * @param repeatUpload 是否允许重复上传 @since 1.6.0
-     * @apiNote 上传成功返回文件对象存储地址, 该接口需授权后才可使用。[Content-Type=multipart/form-data]
      */
     @PostMapping("/picture/file/upload")
     public R<String> uploadFile(@RequestParam("file") MultipartFile file,
@@ -85,7 +86,7 @@ public class PictureBlosController {
     /**
      * 查看图片 [OP]
      *
-     * @param filename 文件名
+     * @param filename 文件名, 注意: 如果使用 Blossom 保存图片, 那么生成的图片地址就是访问该接口的地址, 无需再拼接图片地址
      */
     @AuthIgnore
     @GetMapping("/pic/{filename}/**")

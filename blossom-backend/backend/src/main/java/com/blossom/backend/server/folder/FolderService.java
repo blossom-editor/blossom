@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.blossom.backend.server.TagEnum;
+import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
@@ -163,7 +163,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * <p>3. 由于文件夹在常规操作下是逐层创建的, 所以只会寻找父级, 而不会递归向上直到顶级.
      * <p>======================================================
      * <h2>Type 文件夹类型</h2>
-     * <p>1. 文件夹类型: 1:文章文件夹; 2:图片文件夹 {@link com.blossom.backend.server.FolderTypeEnum}
+     * <p>1. 文件夹类型: 1:文章文件夹; 2:图片文件夹 {@link FolderTypeEnum}
      * <p>2. 文件夹类型一经创建, 无法修改.
      */
     @Transactional(rollbackFor = Exception.class)

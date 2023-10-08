@@ -22,7 +22,7 @@ public class ArticleAddReq extends AbstractPOJO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 文件夹ID
+     * 文章所在的文件夹ID
      */
     @Min(value = 0, message = "[上级菜单ID] 不能小于0")
     @NotNull(message = "[上级菜单] 为必填项")

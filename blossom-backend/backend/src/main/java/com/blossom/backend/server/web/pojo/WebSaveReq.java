@@ -47,6 +47,8 @@ public class WebSaveReq extends AbstractPOJO {
      */
     @NotNull(message = "排序为必填项")
     private Integer sort;
-
+    /**
+     * 用户ID
+     */
     private Long userId;
 }

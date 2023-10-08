@@ -57,6 +57,8 @@ public class PlanDayAddReq extends AbstractPOJO {
      * 重复天数
      */
     private Integer repeatDay;
-
+    /**
+     * 用户ID
+     */
     private Long userId;
 }

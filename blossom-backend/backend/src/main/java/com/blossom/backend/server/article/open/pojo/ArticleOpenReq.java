@@ -1,6 +1,7 @@
 package com.blossom.backend.server.article.open.pojo;
 
 
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,8 @@ public class ArticleOpenReq extends AbstractPOJO {
     private Long id;
 
     /**
-     * 公开状态
+     * 公开状态 {@link YesNo}
+     * @see com.blossom.common.base.enums.YesNo
      */
     @Min(value = 0, message = "[open 状态] 不能小于0")
     @Max(value = 1, message = "[open 状态] 不能大于1")

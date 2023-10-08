@@ -52,7 +52,6 @@ public class DefaultBlockExceptionHandler implements BlockExceptionHandler {
         flowRule.put("flowRule", JsonUtil.toJsonNode(e.getRule()));
 
         R<Map<String, Object>> r = R.fault(RCode.TOO_MANY_REQUESTS.getCode(), RCode.TOO_MANY_REQUESTS.getMsg(), e.getMessage());
-        r.setApi(url.toString());
         r.setData(flowRule);
         r.setEx(StrUtil.isBlank(e.getMessage()) ? e.getClass().getName() : e.getMessage());
 

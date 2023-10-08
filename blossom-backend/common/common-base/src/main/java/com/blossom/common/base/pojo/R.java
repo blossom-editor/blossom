@@ -35,24 +35,6 @@ public class R<T> implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String ex;
     /**
-     * [公共响应] 请求的唯一后台标识, 方便接口联调。生产环境不会返回该字段。
-     * @mock FAE58E61DD814D3D98DD6191051E8A6E
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String traceId;
-    /**
-     * [公共响应] 请求的用户信息, 方便接口联调。生产环境不会返回该字段。
-     * @mock 123
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String userMetadata;
-    /**
-     * [公共响应] 请求的接口, 方便接口联调。生产环境不会返回该字段。
-     * @mock /test
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String api;
-    /**
      * [公共响应] 响应内容, 响应类如果为[?]则代表无 data
      */
     private T data;

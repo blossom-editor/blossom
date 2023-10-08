@@ -24,7 +24,8 @@ public class FolderOpenCloseReq extends AbstractPOJO implements Serializable {
     private Long id;
 
     /**
-     * open 状态 {@link com.blossom.common.base.enums.YesNo}
+     * open 状态 {@link YesNo}
+     * @see com.blossom.common.base.enums.YesNo
      */
     @Min(value = 0, message = "[open 状态] 不能小于0")
     @Max(value = 1, message = "[open 状态] 不能大于1")

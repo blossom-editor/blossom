@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- *
+ * 文章记录
  */
 @Data
 public class ArticleLogRes {

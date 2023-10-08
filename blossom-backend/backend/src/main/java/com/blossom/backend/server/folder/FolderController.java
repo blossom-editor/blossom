@@ -21,6 +21,7 @@ import java.util.List;
  * 文件夹 [Folder]
  *
  * @author xzzz
+ * @order 2
  */
 @RestController
 @AllArgsConstructor
@@ -30,6 +31,8 @@ public class FolderController {
 
     /**
      * 查询专题列表 [OP]
+     *
+     * @param userId 博客配置的用户ID
      */
     @AuthIgnore
     @GetMapping("/subjects/open")
@@ -90,7 +93,7 @@ public class FolderController {
     }
 
     /**
-     * 公开
+     * 公开文件夹
      */
     @PostMapping("/open")
     public R<Long> open(@Validated @RequestBody FolderOpenCloseReq req) {
@@ -98,6 +101,11 @@ public class FolderController {
         return R.ok(baseService.update(folder));
     }
 
+    /**
+     * 删除文件夹
+     *
+     * @apiNote 文件夹下无文章时才可删除
+     */
     @PostMapping("/del")
     public R<?> del(@Validated @RequestBody DelReq req) {
         baseService.delete(req.getId());

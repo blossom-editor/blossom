@@ -13,6 +13,7 @@
 
     <properties>
         <java-jwt.version>4.3.0</java-jwt.version> <!-- JWT -->
+        <smart-doc.version>2.6.7-BL-SNAPSHOT</smart-doc.version>
     </properties>
 
     <dependencies>
@@ -67,6 +68,13 @@
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
             <version>0.4.20</version>
+        </dependency>
+
+        <!-- smart-doc, 需要本地编译, 版本为自定义版本 -->
+        <dependency>
+            <groupId>com.github.shalousun</groupId>
+            <artifactId>smart-doc</artifactId>
+            <version>${smart-doc.version}</version>
         </dependency>
 
     </dependencies>

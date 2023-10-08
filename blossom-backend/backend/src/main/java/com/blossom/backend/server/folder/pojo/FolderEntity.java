@@ -2,6 +2,7 @@ package com.blossom.backend.server.folder.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -75,7 +76,7 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     private Date subjectUpdTime;
     /**
      * 文件夹类型, 1:文章文件夹; 2:图片文件夹;
-     * @see com.blossom.backend.server.FolderTypeEnum
+     * @see FolderTypeEnum
      */
     private Integer type;
     /**

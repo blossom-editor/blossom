@@ -15,8 +15,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskInfoRes {
 
+    /**
+     * 任务ID
+     */
     private Long id;
-
+    /**
+     * 事项ID
+     */
     private String todoId;
     /**
      * 待办类型

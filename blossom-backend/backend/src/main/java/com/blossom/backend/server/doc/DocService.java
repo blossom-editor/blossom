@@ -1,8 +1,8 @@
 package com.blossom.backend.server.doc;
 
 import cn.hutool.core.collection.CollUtil;
-import com.blossom.backend.server.FolderTypeEnum;
-import com.blossom.backend.server.TagEnum;
+import com.blossom.backend.server.folder.FolderTypeEnum;
+import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
 import com.blossom.backend.server.doc.pojo.DocTreeReq;

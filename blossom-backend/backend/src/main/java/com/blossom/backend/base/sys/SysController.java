@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 系统功能
- *
- * @apiNote 服务在线检查, 文件上传
- * @author xzzz
+ * 系统功能 [Sys]
  */
 @Slf4j
 @RestController
@@ -38,13 +35,16 @@ public class SysController {
     }
 
     /**
-     * 对象存储的配置信息
+     * 对象存储配置
      */
     @GetMapping("/osconfig")
     public R<OSRes> getOsConfig() {
         return R.ok(sysService.getOsConfig());
     }
 
+    /**
+     * 刷新系统配置
+     */
     @PostMapping("/param/refresh")
     public R<?> paramRefresh() {
         paramService.refresh();

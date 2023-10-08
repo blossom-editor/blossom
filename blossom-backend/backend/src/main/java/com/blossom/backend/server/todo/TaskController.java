@@ -8,8 +8,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 待办事项任务
+ * 待办事项 [Todo#Task]
  *
+ * @order 41
  * @since 1.4.0
  */
 @RestController
@@ -58,7 +59,7 @@ public class TaskController {
     }
 
     /**
-     * 修改任务
+     * 新增任务
      *
      * @param req 请求对象
      * @return 任务列表
@@ -112,7 +113,7 @@ public class TaskController {
     }
 
     /**
-     * 删除节点
+     * 删除事项
      */
     @PostMapping("/del")
     public R<TaskRes> toProcessing(@RequestBody @Validated TaskDelReq req) {

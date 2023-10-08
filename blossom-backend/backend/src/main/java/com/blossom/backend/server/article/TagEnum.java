@@ -1,4 +1,4 @@
-package com.blossom.backend.server;
+package com.blossom.backend.server.article;
 
 import cn.hutool.core.util.StrUtil;
 

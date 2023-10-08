@@ -31,9 +31,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 文章 [Article]
+ * 文章备份 [A#Backup]
  *
  * @author xzzz
+ * @order 8
  */
 @RestController
 @AllArgsConstructor
@@ -46,8 +47,9 @@ public class ArticleBackupController {
     /**
      * 执行备份
      *
-     * @param type    导出类型 MARKDOWN/HTML
-     * @param toLocal 是否导出为本地图片映射 YES/NO
+     * @param type      导出类型 MARKDOWN / HTML, 默认为 MARKDOWN {@link BackupTypeEnum}
+     * @param toLocal   是否导出为本地图片映射 YES / NO, 默认为 NO {@link YesNo}
+     * @param articleId 备份指定的文章
      */
     @GetMapping
     public R<ArticleBackupService.BackupFile> backup(
@@ -96,8 +98,7 @@ public class ArticleBackupController {
         XzException500.throwBy(StrUtil.isBlank(rootPath), ArticleBackupService.ERROR_MSG);
         File file = new File(rootPath + "/" + filename);
         XzException404.throwBy(!file.exists(), "备份文件[" + filename + "]不存在");
-        try (InputStream is = FileUtil.getInputStream(file);
-             BufferedInputStream bis = new BufferedInputStream(is)) {
+        try (InputStream is = FileUtil.getInputStream(file); BufferedInputStream bis = new BufferedInputStream(is)) {
             DownloadUtil.forceDownload(response, bis, filename);
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,10 +106,11 @@ public class ArticleBackupController {
     }
 
     /**
-     * 用于 head 请求获取文件信息
+     * head 请求获取分片信息
      *
      * @param filename 文件名
      * @param request  request
+     * @apiNote 返回类 ResponseEntity<ResourceRegion>
      */
     @AuthIgnore
     @GetMapping("/download/fragment")
@@ -121,14 +123,11 @@ public class ArticleBackupController {
 
     /**
      * 分片下载
-     * <p>
-     * 通过 Range 请求头获取分片请求
-     * <p>
-     * 返回头中会比说明本次分片大小 Content-Range
      *
      * @param req     下载请求
      * @param request request
-     * @return 文件分片
+     * @apiNote 返回类 ResponseEntity<ResourceRegion>
+     * @apiNote 通过 Range 请求头获取分片请求, 返回头中会比说明本次分片大小 Content-Range
      */
     @AuthIgnore
     @PostMapping("/download/fragment")

@@ -22,7 +22,7 @@ public class PictureStatRes extends AbstractPOJO implements Serializable {
      */
     private Long pictureCount;
     /**
-     * 图片大小
+     * 图片大小 byte
      */
     private Long pictureSize;
 }

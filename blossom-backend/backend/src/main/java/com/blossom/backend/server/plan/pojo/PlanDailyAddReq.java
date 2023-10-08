@@ -34,6 +34,9 @@ public class PlanDailyAddReq extends AbstractPOJO {
      */
     private String img;
 
+    /**
+     * 用户ID
+     */
     private Long userId;
 
 }

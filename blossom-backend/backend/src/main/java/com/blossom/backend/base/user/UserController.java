@@ -45,6 +45,8 @@ public class UserController {
 
     /**
      * 用户信息 [OP]
+     *
+     * @param userId 博客配置的用户ID
      */
     @AuthIgnore
     @GetMapping("/info/open")

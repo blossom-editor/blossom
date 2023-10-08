@@ -40,6 +40,7 @@ import java.util.List;
  * 文章 [Article]
  *
  * @author xzzz
+ * @order 3
  */
 @Slf4j
 @RestController
@@ -64,12 +65,12 @@ public class ArticleController {
     }
 
     /**
-     * 通过ID查询文章
+     * 文章详情 [ID]
      *
      * @param id           文章ID
-     * @param showToc      返回目录
-     * @param showMarkdown 返回 markdown 内容
-     * @param showHtml     返回 html 内容
+     * @param showToc      是否返回目录
+     * @param showMarkdown 是否返回 markdown 内容
+     * @param showHtml     是否返回 html 内容
      * @return 文章信息
      */
     @GetMapping("/info")
@@ -119,10 +120,10 @@ public class ArticleController {
     }
 
     /**
-     * 修改文章
+     * 修改文章基础信息
      *
      * @param req 文章对象
-     * @apiNote 该接口只能修改文章的基本信息, 正文及版本修改请使用 {@link ArticleService#updateContentById(ArticleEntity)}
+     * @apiNote 该接口只能修改文章的基本信息, 正文及版本修改请使用 "/upd/content" 接口，或者 {@link ArticleService#updateContentById(ArticleEntity)}
      */
     @PostMapping("/upd")
     public R<Long> insert(@Validated @RequestBody ArticleUpdReq req) {
@@ -170,6 +171,7 @@ public class ArticleController {
      *
      * @param id       文章ID
      * @param response 文章流
+     * @apiNote 返回流
      */
     @GetMapping("/download")
     public void download(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
@@ -190,6 +192,7 @@ public class ArticleController {
      *
      * @param id       文章ID
      * @param response 文章流
+     * @apiNote 返回流
      */
     @GetMapping("/download/html")
     public void downloadHtml(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {

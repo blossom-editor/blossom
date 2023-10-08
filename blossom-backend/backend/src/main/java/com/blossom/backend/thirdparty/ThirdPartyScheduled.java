@@ -2,7 +2,6 @@ package com.blossom.backend.thirdparty;
 
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
-import com.blossom.backend.thirdparty.gitee.GiteeManager;
 import com.blossom.backend.thirdparty.hefeng.WeatherManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +27,15 @@ public class ThirdPartyScheduled {
     private static final Logger log = LoggerFactory.getLogger(ThirdPartyScheduled.class);
 
     @Autowired
-    private GiteeManager giteeManager;
-
-    @Autowired
     private WeatherManager weatherManager;
 
     @Autowired
     private UserService userService;
 
     /**
-     * 每30分钟刷新
+     * 天气
+     *
+     * @apiNote 每30分钟刷新, 请求会立即刷新
      */
     @RequestMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
@@ -50,19 +48,4 @@ public class ThirdPartyScheduled {
             weatherManager.findWeatherAll(location);
         }
     }
-
-    /**
-     * 每10分钟刷新
-     */
-    @RequestMapping("/gitee")
-    public void refreshHeatmapCache() {
-        try {
-            giteeManager.clearCache();
-            giteeManager.heatmap();
-            log.debug("[BLOSSOM] 刷新码云热力图");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

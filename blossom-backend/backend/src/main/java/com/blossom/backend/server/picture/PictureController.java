@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 图片 [Picture]
  *
+ * @order 20
  * @author xzzz
  */
 @Slf4j

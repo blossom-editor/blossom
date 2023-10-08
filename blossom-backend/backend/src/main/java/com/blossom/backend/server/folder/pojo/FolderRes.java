@@ -1,5 +1,6 @@
 package com.blossom.backend.server.folder.pojo;
 
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,38 +19,69 @@ import java.util.List;
 public class FolderRes extends AbstractPOJO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    /** id */
+    /**
+     * id
+     */
     private Long id;
-    /** 父id */
+    /**
+     * 父id
+     */
     private Long pid;
-    /** 文件夹名称 */
+    /**
+     * 文件夹名称
+     */
     private String name;
-    /** 图标 */
+    /**
+     * 图标
+     */
     private String icon;
-    /** 标签 */
+    /**
+     * 标签
+     */
     private List<String> tags;
-    /** 是否公开文件夹 [0:未公开，1:公开] */
+    /**
+     * 是否公开文件夹 [0:未公开，1:公开]
+     */
     private Integer openStatus;
-    /** 排序 */
+    /**
+     * 排序
+     */
     private Integer sort;
-    /** 封面图片 */
+    /**
+     * 封面图片
+     */
     private String cover;
     /**
      * 颜色
      */
     private String color;
-    /** 备注 */
+    /**
+     * 备注
+     */
     private String describes;
-    /** 存储地址 */
+    /**
+     * 存储地址
+     */
     private String storePath;
-    /** 专题字数 */
+    /**
+     * 专题字数
+     */
     private Integer subjectWords;
-    /** 专题的最后修改时间 */
+    /**
+     * 专题的最后修改时间
+     */
     private Date subjectUpdTime;
-    /** 1:文章;2:图片 */
+    /**
+     * 文件夹类型 {@link FolderTypeEnum}
+     * @see FolderTypeEnum
+     */
     private Integer type;
-    /** 创建时间 */
+    /**
+     * 创建时间
+     */
     private Date creTime;
-    /** 修改时间 */
+    /**
+     * 修改时间
+     */
     private Date updTime;
 }

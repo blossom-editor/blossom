@@ -1,5 +1,6 @@
 package com.blossom.backend.server.note.pojo;
 
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ public class NoteTopReq extends AbstractPOJO {
     private Long id;
 
     /**
-     * 是否置顶
+     * 是否置顶 {@link YesNo}
      */
     @NotNull(message = "是否指定为必填项")
     private Integer top;

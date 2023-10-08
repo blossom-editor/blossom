@@ -16,6 +16,7 @@ import java.util.List;
  * 文档 [Doc]
  *
  * @author xzzz
+ * @order 1
  * @apiNote 包含文件夹和文章
  */
 @RestController
@@ -26,9 +27,10 @@ public class DocController {
     private final DocService docService;
 
     /**
-     * 全部列表, 编辑器使用
+     * 文档列表
      *
      * @return 文件夹列表
+     * @apiNote 文档包含文章和文件夹, 文件夹分为图片文件夹和文章文件夹 {@link DocTypeEnum}
      */
     @GetMapping("/trees")
     public R<List<DocTreeRes>> trees(@ModelAttribute DocTreeReq req) {
@@ -37,9 +39,11 @@ public class DocController {
     }
 
     /**
-     * 公开文章和列表, web 使用, 只查询公开的文章
+     * 文档列表 [OP]
      *
+     * @param userId 博客配置的用户ID
      * @return 文件夹列表
+     * @apiNote 文档列表的公开接口, 接收
      */
     @AuthIgnore
     @GetMapping("/trees/open")

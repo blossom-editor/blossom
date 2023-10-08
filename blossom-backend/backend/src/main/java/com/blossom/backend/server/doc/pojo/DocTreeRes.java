@@ -1,5 +1,7 @@
 package com.blossom.backend.server.doc.pojo;
 
+import com.blossom.backend.server.doc.DocTypeEnum;
+import com.blossom.common.base.enums.YesNo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,7 +46,7 @@ public class DocTreeRes implements Serializable {
      */
     private String icon;
     /**
-     * 标签
+     * 标签, 字符串数组
      */
     private List<String> t;
     /**
@@ -52,7 +54,8 @@ public class DocTreeRes implements Serializable {
      */
     private Integer s;
     /**
-     * 是否收藏
+     * 是否收藏 {@link YesNo}
+     * @see com.blossom.common.base.enums.YesNo
      */
     private Integer star;
     /**
@@ -60,7 +63,7 @@ public class DocTreeRes implements Serializable {
      */
     private String sp;
     /**
-     * 类型
+     * 类型 {@link DocTypeEnum}
      * @see com.blossom.backend.server.doc.DocTypeEnum
      */
     private Integer ty;
