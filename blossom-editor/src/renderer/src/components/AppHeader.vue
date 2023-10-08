@@ -1,6 +1,6 @@
 <template>
   <div class="app-header-root">
-    <div @click="openDevTools">
+    <div v-if="platform() === 'windows'" @click="openDevTools">
       <img v-if="isDark" class="logo-img" src="@renderer/assets/imgs/blossom_logo_dark.png" />
       <img v-else class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
     </div>
@@ -23,9 +23,9 @@
         <div class="iconbl bl-computer-line" @click="setBestSize"></div>
       </el-tooltip>
 
-      <div class="iconbl bl-subtract-line" @click="windowMin"></div>
-      <div :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
-      <div class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
+      <div v-if="platform() === 'windows'" class="iconbl bl-subtract-line" @click="windowMin"></div>
+      <div v-if="platform() === 'windows'" :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
+      <div v-if="platform() === 'windows'" class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
     </div>
   </div>
 
@@ -40,6 +40,7 @@ import { toRoute } from '@renderer/router'
 import { useDark } from '@vueuse/core'
 import { openDevTools, windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
+import { platform } from '@renderer/assets/utils/util'
 
 onMounted(() => {
   window.addEventListener("resize", handleResize)

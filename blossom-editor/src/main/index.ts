@@ -92,6 +92,7 @@ const buildWindow = (_title: string): BrowserWindow => {
     icon: icon,
     frame: false,// 无边框
     transparent: false,// 透明窗口
+    titleBarStyle:'hidden',
     opacity: 1,
     hasShadow: true,
     autoHideMenuBar: false,
