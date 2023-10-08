@@ -47,19 +47,19 @@ export default defineConfig({
       }
     },
     // electorn 应用不需要拆分文件打包
-    // build: {
-    //   // 警告大小, 单位kb
-    //   // chunkSizeWarningLimit: 1000,
-    //   rollupOptions: {
-    //     output: {
-    //       //@ts-ignore
-    //       manualChunks(id) {
-    //         if (id.includes('node_modules')) {
-    //           return id.toString().split('node_modules/')[1].split('/')[0].toString();
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    build: {
+      // 警告大小, 单位kb
+      // chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          //@ts-ignore
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
+          }
+        }
+      }
+    }
   }
 })
