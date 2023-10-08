@@ -21,8 +21,9 @@
       <el-select class="tag-select" v-model="queryTags" multiple collapse-tags collapse-tags-tooltip placeholder="根据标签筛选">
         <el-option v-for="tag in queryTagOptions" :key="tag" :label="tag" :value="tag"></el-option>
       </el-select>
-      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px" />
-      <el-button style="margin-left: 10px" @click="showExportDialog">导出任务</el-button>
+      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px; margin-right: 10px" />
+      <el-button @click="showExportDialog">导出任务</el-button>
+      <el-checkbox v-model="configViewStyle.todoStatExpand" label="显示统计" border style="margin-left: 10px" @change="statExpandChange" />
     </bl-row>
   </div>
 
@@ -234,6 +235,9 @@
 </template>
 
 <script setup lang="ts">
+import { useConfigStore } from '@renderer/stores/config'
+import type { ViewStyle } from '@renderer/stores/config'
+
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi } from '@renderer/api/todo'
@@ -379,6 +383,10 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
 //#endregion
 
 //#region --------------------------------------------------< 顶部操作台 >--------------------------------------------------
+
+const configStore = useConfigStore()
+const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
+
 const queryTagOptions = computed(() => {
   let tags = new Set()
   taskWait.value.forEach((task) => {
@@ -464,6 +472,10 @@ const download = () => {
   a.click()
   URL.revokeObjectURL(a.href)
   a.remove()
+}
+
+const statExpandChange = () => {
+  configStore.setViewStyle(configViewStyle.value)
 }
 //#endregion
 

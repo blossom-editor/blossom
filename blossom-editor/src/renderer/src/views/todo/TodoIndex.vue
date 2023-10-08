@@ -7,8 +7,7 @@
       <div class="task-collapse">
         <el-collapse v-model="activeName" accordion>
           <el-collapse-item title="每日待办事项" name="1">
-            <div v-for="taskday in todoDays" class="task-day"
-              @click="toTask(taskday.todoId, taskday.todoName, taskday.todoType)">
+            <div v-for="taskday in todoDays" class="task-day" @click="toTask(taskday.todoId, taskday.todoName, taskday.todoType)">
               {{ taskday.todoName }}
               <bl-tag v-if="taskday.taskCount > 0">{{ taskday.taskCount }}</bl-tag>
               <bl-tag v-if="taskday.today">今日</bl-tag>
@@ -17,25 +16,32 @@
 
           <!--  -->
           <el-collapse-item title="阶段性事项" name="2">
-            <div v-for="phased in todoPhased" class="task-phased"
-              @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
+            <div v-for="phased in todoPhased" class="task-phased" @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
               <!-- update name -->
-              <el-input v-if="phased.updTodoName" :id="'phased-name-input-' + phased.todoId" v-model="phased.todoName"
-                type="textarea" :rows="3" @blur="blurPhasedUpdHandle(phased.todoId!)"></el-input>
+              <el-input
+                v-if="phased.updTodoName"
+                :id="'phased-name-input-' + phased.todoId"
+                v-model="phased.todoName"
+                type="textarea"
+                :rows="3"
+                @blur="blurPhasedUpdHandle(phased.todoId!)"></el-input>
               <div v-else @dblclick="showPhasedUpdHandle(phased.todoId!)">{{ phased.todoName }}</div>
               <bl-tag v-if="phased.taskCount > 0">{{ phased.taskCount }}</bl-tag>
             </div>
 
             <!-- add phased -->
-            <el-input v-if="showPhasedAdd" ref="phasedAddInputRef" v-model="phasedAddName" @blur="blurPhasedAddHandle"
-              style="margin-top: 10px;"></el-input>
+            <el-input
+              v-if="showPhasedAdd"
+              ref="phasedAddInputRef"
+              v-model="phasedAddName"
+              @blur="blurPhasedAddHandle"
+              style="margin-top: 10px"></el-input>
             <div v-else class="task-phased-add" @click="showPhasedAddHandle">新增计划</div>
           </el-collapse-item>
 
           <!--  -->
           <el-collapse-item title="阶段性事项 已完成" name="3">
-            <div v-for="phased in todoPhasedClose" class="task-phased"
-              @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
+            <div v-for="phased in todoPhasedClose" class="task-phased" @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
               {{ phased.todoName }}
               <bl-tag v-if="phased.taskCount > 0">{{ phased.taskCount }}</bl-tag>
             </div>
@@ -44,10 +50,10 @@
       </div>
     </div>
     <div class="todo-main gradient-linear">
-      <div class="todo-tasks">
+      <div class="todo-tasks" :style="{ width: viewStyle.todoStatExpand ? 'calc(100% - 450px)' : '100%' }">
         <TaskProgress ref="TaskProgressRef" @refresh-todo="getTodos"></TaskProgress>
       </div>
-      <div class="todo-stat">
+      <div v-if="viewStyle.todoStatExpand" class="todo-stat">
         <TodoStat ref="TodoStatRef" @refresh-todo="getTodos"></TodoStat>
       </div>
     </div>
@@ -55,13 +61,17 @@
 </template>
 
 <script setup lang="ts">
-import { isNotBlank } from '@renderer/assets/utils/obj'
-import { getNextDay, getDateFormat } from '@renderer/assets/utils/util'
+import { useConfigStore } from '@renderer/stores/config'
+
 import { nextTick, onActivated, onMounted, ref } from 'vue'
 import { TodoList, TodoType } from './scripts/types'
+import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
+import { isNotBlank } from '@renderer/assets/utils/obj'
+import { getNextDay, getDateFormat } from '@renderer/assets/utils/util'
 import TaskProgress from './TaskProgress.vue'
 import TodoStat from './TodoStat.vue'
-import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
+
+const { viewStyle } = useConfigStore()
 
 onMounted(() => {
   getTodos()
@@ -75,7 +85,7 @@ onActivated(() => {
 
 let todoDaysResource: any
 const getTodos = () => {
-  todosApi().then(resp => {
+  todosApi().then((resp) => {
     todoDaysResource = resp.data.todoDays
     todoPhased.value = resp.data.taskPhased
     todoPhasedClose.value = resp.data.taskPhasedClose
@@ -85,7 +95,9 @@ const getTodos = () => {
 
 const toTask = (todoId: string, todoName: string, todoType: TodoType) => {
   TaskProgressRef.value.reload(todoId, todoName, todoType)
-  TodoStatRef.value.reload(todoId)
+  if (viewStyle.todoStatExpand) {
+    TodoStatRef.value.reload(todoId)
+  }
 }
 
 const TaskProgressRef = ref()
@@ -106,8 +118,10 @@ const initTaskDays = () => {
   let addDay = (day: string) => {
     let resource = todoDaysResource[day]
     days.push({
-      todoId: day, todoName: day,
-      todoStatus: 1, todoType: 10,
+      todoId: day,
+      todoName: day,
+      todoStatus: 1,
+      todoType: 10,
       today: day === today.value,
       taskCount: resource ? resource.taskCount : 0,
       updTodoName: false
@@ -142,7 +156,7 @@ const showPhasedAddHandle = () => {
 const blurPhasedAddHandle = () => {
   showPhasedAdd.value = false
   if (isNotBlank(phasedAddName.value)) {
-    addPhasedApi({ todoName: phasedAddName.value }).then(_ => {
+    addPhasedApi({ todoName: phasedAddName.value }).then((_) => {
       getTodos()
     })
   }
@@ -177,7 +191,6 @@ const blurPhasedUpdHandle = (todoId: string) => {
 }
 
 //#endregion
-
 </script>
 
 <style scoped lang="scss">
@@ -208,7 +221,6 @@ const blurPhasedUpdHandle = (todoId: string) => {
         border-bottom: none;
         --el-transition-duration: 0s;
 
-
         :deep(.el-collapse-item) {
           max-height: calc(100% - #{$item-height * 2});
           overflow: hidden;
@@ -219,13 +231,9 @@ const blurPhasedUpdHandle = (todoId: string) => {
           overflow: hidden;
         }
 
-
         :deep(.el-collapse-item__header) {
           padding-left: 20px;
         }
-
-        // :deep(.el-collapse-item__header.is-active) {
-        // }
 
         :deep(.el-collapse-item__wrap) {
           height: 100%;
@@ -233,13 +241,17 @@ const blurPhasedUpdHandle = (todoId: string) => {
         }
 
         :deep(.el-collapse-item__content) {
-          box-shadow: inset -1px 3px 5px #DFDFDF, inset -1px -3px 5px #DFDFDF;
+          box-shadow:
+            inset -1px 3px 5px #dfdfdf,
+            inset -1px -3px 5px #dfdfdf;
           height: calc(100% - #{$item-height});
           overflow-y: scroll;
           padding: 0 10px 0 20px;
 
-          [class="dark"] & {
-            box-shadow: inset -1px 3px 5px #000, inset -1px -3px 5px #000;
+          [class='dark'] & {
+            box-shadow:
+              inset -1px 3px 5px #000,
+              inset -1px -3px 5px #000;
           }
         }
       }
@@ -278,7 +290,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
     }
 
     .task-phased-add {
-      @include themeBorder(1px, #B4B4B4, #515151, 'around', 6px, dashed);
+      @include themeBorder(1px, #b4b4b4, #515151, 'around', 6px, dashed);
       padding: 1px 5px;
       margin: 10px 0;
       color: var(--bl-text-color-light);
@@ -287,7 +299,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
       cursor: pointer;
 
       &:hover {
-        @include themeShadow(0 0 5px #9E9E9E, 0 0 8px 1px #000000);
+        @include themeShadow(0 0 5px #9e9e9e, 0 0 8px 1px #000000);
       }
     }
   }
@@ -298,32 +310,28 @@ const blurPhasedUpdHandle = (todoId: string) => {
     border-left: 1px solid var(--el-border-color);
 
     .todo-tasks {
-      @include box(calc(100% - 450px), 100%);
+      height: 100%;
+      //@include box(calc(100% - 450px), 100%);
       overflow: hidden;
     }
 
     .todo-stat {
       @include box(450px, 100%);
+      // height: 100%;
       border-left: 1px solid var(--el-border-color);
     }
   }
 
   .gradient-linear {
     --color1: #ffffff;
-    --color2: #9A9A9A05;
+    --color2: #9a9a9a05;
 
-    [class="dark"] & {
-      --color1: #1E1E1E;
-      --color2: #4A4A4A03;
+    [class='dark'] & {
+      --color1: #1e1e1e;
+      --color2: #4a4a4a03;
     }
 
-    background: linear-gradient(135deg,
-      var(--color1) 25%,
-      var(--color2) 0,
-      var(--color2) 50%,
-      var(--color1) 0,
-      var(--color1) 75%,
-      var(--color2) 0);
+    background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);
     background-size: 60px 60px;
     animation: alwaysToLeftBottom 320s linear infinite;
   }
@@ -334,9 +342,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
     }
   }
 
-  @media screen and (max-width:1120px) {
+  @media screen and (max-width: 1120px) {
     .todo-main {
-
       .todo-tasks {
         @include box(100%, 100%);
       }
@@ -345,7 +352,6 @@ const blurPhasedUpdHandle = (todoId: string) => {
         display: none;
       }
     }
-
   }
 }
 </style>
