@@ -1,7 +1,7 @@
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html } from '@renderer/assets/utils/util'
 import { marked, Marked } from 'marked'
-import { markedHighlight } from "marked-highlight"
+import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
@@ -15,24 +15,23 @@ mermaid.initialize({
   theme: 'base',
   startOnLoad: false,
   securityLevel: 'loose',
-  'themeVariables': {
-    'fontFamily': 'inherit',
+  themeVariables: {
+    fontFamily: 'inherit',
     // 主要配色
-    'primaryColor': '#cfbef1',
-    'primaryTextColor': '#606266',
-    'primaryBorderColor': '#A67AFF',
+    primaryColor: '#cfbef1',
+    primaryTextColor: '#606266',
+    primaryBorderColor: '#A67AFF',
     // 第二颜色
-    'secondaryColor': '#efc75e',
-    'secondaryTextColor': '#606266',
+    secondaryColor: '#efc75e',
+    secondaryTextColor: '#606266',
     // 第三颜色
-    'tertiaryColor': '#C4DFFF',
-    'tertiaryTextColor': '#606266',
+    tertiaryColor: '#C4DFFF',
+    tertiaryTextColor: '#606266',
     // 连线的颜色
-    'lineColor': '#A0A0A0',
+    lineColor: '#A0A0A0'
   }
-});
-mermaid.parseError = (_err, _hash) => {
-}
+})
+mermaid.parseError = (_err, _hash) => {}
 
 /**
  * 标记标识
@@ -51,14 +50,32 @@ marked.use({
   headerIds: false
 })
 
-// 高亮拓展
-marked.use(markedHighlight({
+// 行号插件, 对 mermaid 等有些许影响
+// hljs.addPlugin({
+//   'after:highlight': (el) => {
+//     console.log(el.language)
+//     if (el.language == 'mermaid' || el.language == 'katex') {
+//       return
+//     }
+//     let result = '<ol>'
+//     let snsArr: string[] = el.value.split(/[\n\r]+/)
+//     snsArr.forEach((item: string) => {
+//       result += `<li>${item}</li>`
+//     })
+//     el.value = result += '</ol>'
+//   }
+// })
+
+let hljsConfig = {
   langPrefix: 'hljs language-',
   highlight(code, lang) {
     const language = hljs.getLanguage(lang) ? lang : 'shell'
     return hljs.highlight(code, { language }).value
   }
-}))
+}
+
+// 高亮拓展
+marked.use(markedHighlight(hljsConfig))
 
 //
 
@@ -80,7 +97,6 @@ export const tokenizerCodespan = (src: string): any => {
 
 //#region ----------------------------------------< renderer >--------------------------------------
 
-
 /**
  * 标题解析为 TOC 集合, 增加锚点跳转
  * @param text  标题内容
@@ -90,7 +106,6 @@ export const renderHeading = (text: any, level: number) => {
   const realLevel = level
   return `<h${realLevel} id="${realLevel}-${text}">${text}</h${realLevel}>`
 }
-
 
 /**
  * 表格 header/body
@@ -124,7 +139,7 @@ export const renderBlockquote = (quote: string) => {
 
   /**
    * 支持了新的语义化引用
-   * 
+   *
    * https://github.com/orgs/community/discussions/16925#discussioncomment-3192118
    * https://learn.microsoft.com/en-us/contribute/content/markdown-reference#alerts-note-tip-important-caution-warning
    */
@@ -154,47 +169,55 @@ export const renderBlockquote = (quote: string) => {
  * 1. bilibili
  *    格式为: ```bilibili${grammar}bvid${grammar}w100${grammar}h100
  *    官方使用文档: https://player.bilibili.com/
- * 
- * 2. katex 
+ *
+ * 2. katex
  * 3. mermaid
- * 
+ *
  * @param code      解析后的 HTML 代码
  * @param language  语言
- * @param isEscaped 
+ * @param isEscaped
  * @param mermaidCallback 替换 html 结果中的 mermaid 内容
  */
-export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean, mermaidCallback?: (eleid: string, svg: string) => void) => {
+export const renderCode = (
+  code: string,
+  language: string | undefined,
+  _isEscaped: boolean,
+  mermaidCallback?: (eleid: string, svg: string) => void
+) => {
   if (language == undefined) {
     language = 'text'
   }
   if (language === 'mermaid' && isNotBlank(code)) {
     const eleid = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
     const escape = escape2Html(code) as string
-    mermaid.parse(escape).then(syntax => {
-      let canSyntax: boolean | void = syntax
-      if (canSyntax) {
-        mermaid.render(eleid + '-svg', escape).then((resp) => {
-          if (mermaidCallback != undefined) {
-            const { svg } = resp
-            let element = document.getElementById(eleid)
-            element!.innerHTML = svg
-            mermaidCallback(eleid, svg)
-          }
-        })
-      }
-    }).catch(error => {
-      console.error('mermaid 格式校验失败:错误信息如下:\n', error)
-      let html = `<div class='bl-preview-analysis-fail-block'>
+    mermaid
+      .parse(escape)
+      .then((syntax) => {
+        let canSyntax: boolean | void = syntax
+        if (canSyntax) {
+          mermaid.render(eleid + '-svg', escape).then((resp) => {
+            if (mermaidCallback != undefined) {
+              const { svg } = resp
+              let element = document.getElementById(eleid)
+              element!.innerHTML = svg
+              mermaidCallback(eleid, svg)
+            }
+          })
+        }
+      })
+      .catch((error) => {
+        console.error('mermaid 格式校验失败:错误信息如下:\n', error)
+        let html = `<div class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Mermaid 语法解析失败!</div><br/>
           ${error}<br/><br/>
           你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
           </div>`
-      if (mermaidCallback != undefined) {
-        let element = document.getElementById(eleid)
-        element!.innerHTML = html
-        mermaidCallback(eleid, html)
-      }
-    })
+        if (mermaidCallback != undefined) {
+          let element = document.getElementById(eleid)
+          element!.innerHTML = html
+          mermaidCallback(eleid, html)
+        }
+      })
     return `<p id="${eleid}">${eleid}</p>`
   }
 
@@ -260,8 +283,8 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
 /**
  * 单行代码块的解析拓展
  * 1. katex `$内部写表达式$`
- * @param src 
- * @returns 
+ * @param src
+ * @returns
  */
 export const renderCodespan = (src: string) => {
   let arr = src.match(singleDollar)
@@ -282,17 +305,17 @@ export const renderCodespan = (src: string) => {
 }
 
 /**
-   * 拓展图片设置
-   * ![照片A${grammar}shadow${grammar}w100]()
-   * 上面格式解析为
-   *  - 图片名称为 照片A
-   *  - 图片包含阴影
-   *  - 图片宽度为100px
-   * 
-   * @param href   图片路径
-   * @param _title null
-   * @param text   图片的名称
-   */
+ * 拓展图片设置
+ * ![照片A${grammar}shadow${grammar}w100]()
+ * 上面格式解析为
+ *  - 图片名称为 照片A
+ *  - 图片包含阴影
+ *  - 图片宽度为100px
+ *
+ * @param href   图片路径
+ * @param _title null
+ * @param text   图片的名称
+ */
 export const renderImage = (href: string | null, title: string | null, text: string) => {
   let width = 'auto'
   let style = ''
@@ -318,7 +341,7 @@ export const renderImage = (href: string | null, title: string | null, text: str
 
 /**
  * 解析链接, 拓展双链功能
- * 
+ *
  * @param href 链接地址
  * @param title 链接标题 <a title="title">, 语法拓展内容在title中
  * @param text 链接的文字
@@ -363,13 +386,7 @@ export const renderLink = (href: string | null, title: string | null, text: stri
 
 //#region ----------------------------------------< simpleMarked >--------------------------------------
 const simpleMarked = new Marked({ mangle: false, headerIds: false })
-simpleMarked.use(markedHighlight({
-  langPrefix: 'hljs language-',
-  highlight(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : 'shell'
-    return hljs.highlight(code, { language }).value
-  }
-}))
+simpleMarked.use(markedHighlight(hljsConfig))
 
 const simpleRenderer = {
   code(code: string, language: string | undefined, _isEscaped: boolean): string {
@@ -386,11 +403,15 @@ const simpleRenderer = {
     }
     return `<pre><code class="hljs language-${language}">${code}</code></pre>`
   },
-  codespan(src: string): string { return renderCodespan(src) },
+  codespan(src: string): string {
+    return renderCodespan(src)
+  }
 }
 
 const tokenizer = {
-  codespan(src: string): any { return tokenizerCodespan(src) }
+  codespan(src: string): any {
+    return tokenizerCodespan(src)
+  }
 }
 
 //@ts-ignore
@@ -400,6 +421,4 @@ simpleMarked.use({ tokenizer: tokenizer, renderer: simpleRenderer })
 
 export default marked
 
-export {
-  simpleMarked
-}
+export { simpleMarked }

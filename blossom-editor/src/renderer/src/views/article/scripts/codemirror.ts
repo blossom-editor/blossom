@@ -432,7 +432,7 @@ export class CmWrapper {
   /** 在当前位置增加表格 */
   private static commandTable = (editor: EditorView) => { this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`) }
   /** 在当前位置增加多行代码块 */
-  private static commandPre = (editor: EditorView) => { this.insertBlockCommand(editor, `\n\`\`\`java\n\n\`\`\`\n`) }
+  private static commandPre = (editor: EditorView) => { this.insertBlockCommand(editor, `\n\`\`\`\n\n\`\`\`\n`) }
   /** 在当前位置增加单选框 */
   private static commandCheckBox = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- [ ] \n`) }
   /** 在当前位置增加分割线 */
