@@ -1,7 +1,6 @@
 <template>
   <div class="index-setting-root">
-    <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon"
-      :inactive-icon="Sunny" />
+    <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon" :inactive-icon="Sunny" />
     <el-button-group>
       <el-button class="setting-button" type="primary" :icon="Setting" @click="toSetting" />
       <el-button class="setting-button" type="primary" :icon="Crop" @click="handlePrintScreenUpload()" />
@@ -9,8 +8,16 @@
   </div>
 
   <!-- 截图上传弹框 -->
-  <el-dialog title="设置上传目录" class="dialog-ps-upload" v-model="isShowPrintScreenUpload" height="400" width="300"
-    style="border-radius: 4px;" :append-to-body="true" :destroy-on-close="false" :close-on-click-modal="true">
+  <el-dialog
+    title="设置上传目录"
+    class="dialog-ps-upload"
+    v-model="isShowPrintScreenUpload"
+    height="400"
+    width="300"
+    style="border-radius: 4px"
+    :append-to-body="true"
+    :destroy-on-close="false"
+    :close-on-click-modal="true">
     <div class="ps-upload-root">
       <el-image fit="cover" :src="printScreenImgUrl">
         <template #error>
@@ -21,8 +28,19 @@
         </template>
       </el-image>
       <bl-row>
-        <el-tree-select style="width:290px;" v-model="pid" :data="docTreeData" node-key="i" :props="{ label: 'n' }"
-          :indent="10" clearable accordion show-checkbox check-strictly @clear="clearPid" @check="selectCheck"
+        <el-tree-select
+          style="width: 290px"
+          v-model="pid"
+          :data="docTreeData"
+          node-key="i"
+          :props="{ label: 'n' }"
+          :indent="10"
+          clearable
+          accordion
+          show-checkbox
+          check-strictly
+          @clear="clearPid"
+          @check="selectCheck"
           placeholder="请选择上传目录">
         </el-tree-select>
       </bl-row>
@@ -30,13 +48,14 @@
         <el-input v-model="printScreenName" placeholder="图片名称"></el-input>
       </bl-row>
       <bl-row>
-        <span>当前截图将上传至《{{ docTreeChecked?.n }}》目录, 上传后可粘贴为
+        <span
+          >当前截图将上传至《{{ docTreeChecked?.n }}》目录, 上传后可粘贴为
           <span class="copy-type-desc">
             {{ copyType == 'http' ? '图片链接' : copyType == 'markdown' ? '图片链接(Markdown 格式)' : '图片文件' }}
           </span>
         </span>
       </bl-row>
-      <bl-row just="space-between" style="border-top: 1px solid var(--el-border-color);">
+      <bl-row just="space-between" style="border-top: 1px solid var(--el-border-color)">
         <el-radio-group v-model="copyType">
           <el-radio-button label="http">HT</el-radio-button>
           <el-radio-button label="markdown">MD</el-radio-button>
@@ -61,13 +80,14 @@ import { handleUploadSeccess, handleUploadError } from '@renderer/views/picture/
 import { isEmpty } from 'lodash'
 import { printScreen, readImageToDataUrl, readImageToPNG, writeText } from '@renderer/assets/utils/electron'
 import { isBlank } from '@renderer/assets/utils/obj'
-import { getNowTime } from '@renderer/assets/utils/util'
+import { getNowTime, platform } from '@renderer/assets/utils/util'
+import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
   printscreenAfter()
 })
 
-const isDark = useDark();
+const isDark = useDark()
 
 const toSetting = () => {
   toLogin()
@@ -94,8 +114,12 @@ const copyType = ref('markdown')
  * @param isShow 是否显示, 传入否时, 将会根据当前状态取反, 否则设置为 isShow
  */
 const handlePrintScreenUpload = (isShow?: boolean) => {
+  if (platform() !== 'windows') {
+    Notify.warning('您所在的平台暂不支持截图功能', '抱歉')
+    return
+  }
   if (!docTreeInit) {
-    docTreeApi({ onlyFolder: true }).then(resp => {
+    docTreeApi({ onlyFolder: true }).then((resp) => {
       docTreeData.value = resp.data
       pid.value = resp.data[0].i
       docTreeChecked.value = resp.data[0]
@@ -146,8 +170,8 @@ const printscreenAfter = () => {
     if (psCode == 1) {
       handlePrintScreenUpload(true)
       setTimeout(() => {
-        printScreenImgUrl.value = readImageToDataUrl();
-      }, (0));
+        printScreenImgUrl.value = readImageToDataUrl()
+      }, 0)
     }
   })
 }
@@ -168,28 +192,29 @@ const printscreenUpload = () => {
   formData.append('file', blob, blob.name)
   formData.append('pid', pid.value.toString())
   formData.append('filename', filename)
-  uploadFileApi(formData).then(resp => {
-    /**
-     * 上传成功
-     */
-    if (handleUploadSeccess(resp)) {
-      let url: string = resp.data
-      // 1. 复制上传结果
-      if (copyType.value == 'http') {
-        writeText(url)
-      } else if (copyType.value == 'markdown') {
-        writeText(`![${filename}](${resp.data})`)
-      } else {
+  uploadFileApi(formData)
+    .then((resp) => {
+      /**
+       * 上传成功
+       */
+      if (handleUploadSeccess(resp)) {
+        let url: string = resp.data
+        // 1. 复制上传结果
+        if (copyType.value == 'http') {
+          writeText(url)
+        } else if (copyType.value == 'markdown') {
+          writeText(`![${filename}](${resp.data})`)
+        } else {
+        }
+        // 2. 重置截图预览
+        printScreenImgUrl.value = ''
+        // 3. 重置截图名称
+        printScreenName.value = ''
       }
-      // 2. 重置截图预览
-      printScreenImgUrl.value = ''
-      // 3. 重置截图名称
-      printScreenName.value = ''
-
-    }
-  }).catch(error => {
-    handleUploadError(error)
-  })
+    })
+    .catch((error) => {
+      handleUploadError(error)
+    })
 }
 
 //#endregion
