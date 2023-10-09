@@ -1,22 +1,19 @@
 <template>
   <div class="doc-title">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding:0 2px">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding: 0 2px">
       {{ props.trees.s }}
     </bl-tag>
-    <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
-      <use :xlink:href="'#' + props.trees.icon"></use>
-    </svg>
     <span class="doc-name">
-      {{ props.trees.n }}
+      <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
+        <use :xlink:href="'#' + props.trees.icon"></use>
+      </svg>
+      <div class="name-wrapper">
+        {{ props.trees.n }}
+      </div>
+      <!-- 如果专题是公开的, 则单独显示公开标签 -->
+      <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
+      <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </span>
-    <!-- 如果专题是公开的, 则单独显示公开标签 -->
-    <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
-    <div v-for="tag in tags">
-      <bl-tag v-if="tag.content" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
-      <bl-tag v-else :bg-color="tag.bgColor" :icon="tag.icon" />
-    </div>
-    <div v-if="props.trees.o === 1 && !isSubjectDoc" class="open-line"></div>
-    <div v-if="props.trees.star === 1" class="star-line"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -29,7 +26,7 @@ import { computedDocTitleColor } from '@renderer/views/doc/doc'
 
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} },
-  level: { type: Number, required: true },
+  level: { type: Number, required: true }
 })
 
 const isSubjectDoc = computed(() => {
@@ -45,7 +42,7 @@ const levelColor = computed(() => {
  */
 const tags = computed(() => {
   let icons: any = []
-  props.trees.t?.forEach(tag => {
+  props.trees.t?.forEach((tag) => {
     if (tag === 'subject') {
       icons.unshift({ content: '专题', bgColor: 'salmon', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
@@ -53,34 +50,52 @@ const tags = computed(() => {
     } else {
       icons.push({ content: tag })
     }
-  });
+  })
   return icons
 })
-
 </script>
 
 <style scoped lang="scss">
 $icon-size: 17px;
 
-.menu-icon {
-  @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  margin-right: 9px;
-}
+// .menu-icon {
+//   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+//   margin-right: 9px;
+// }
 
 .doc-title {
-  @include flex(row, flex-start, center);
-  @include themeBrightness(100%, 90%);
-  align-content: flex-start;
-  flex-wrap: wrap;
-  font-size: 14px;
-  max-width: calc(100% - 10px);
-  min-width: calc(100% - 10px);
+  @include flex(row, flex-start, flex-start);
+  max-width: calc(100% - 15px);
+  min-width: calc(100% - 15px);
+  width: 100%;
   padding-bottom: 1px;
   position: relative;
 
+  .doc-name {
+    @include flex(row, flex-start, flex-start);
+    @include themeBrightness(100%, 90%);
+    @include ellipsis();
+    font-size: inherit;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .menu-icon {
+      @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+      margin-top: 5px;
+      margin-right: 8px;
+    }
+
+    .name-wrapper {
+      @include ellipsis();
+      max-width: calc(100% - 25px);
+    }
+  }
+
   .sort {
     position: absolute;
-    right: -10px;
+    right: -15px;
+    top: 2px;
   }
 }
 
@@ -96,7 +111,7 @@ $icon-size: 17px;
 
 .open-line {
   left: -5px;
-  background: #79C20C71;
+  background: #79c20c71;
 }
 
 .star-line {

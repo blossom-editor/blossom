@@ -1,5 +1,5 @@
 <template>
-  <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']">
+  <div :class="[props.trees.t?.includes('subject') ? 'subject-title' : 'doc-title']">
     <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding: 0 2px">
       {{ props.trees.s }}
     </bl-tag>
@@ -7,15 +7,12 @@
       <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
-      {{ props.trees.n }}
+      <div class="name-wrapper">
+        {{ props.trees.n }}
+      </div>
+      <bl-tag v-if="props.trees.o === 1 && props.trees.ty != 3" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
+      <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>
-
-    <bl-tag v-if="props.trees.o === 1 && props.trees.ty != 3" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
-    <div v-for="tag in tags">
-      <bl-tag v-if="tag.content" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
-      <bl-tag v-else :bg-color="tag.bgColor" :icon="tag.icon" />
-    </div>
-
     <div v-for="(line, index) in tagLins" :key="line" :class="[line]" :style="{ left: -1 * (index + 1) * 5 + 'px' }"></div>
   </div>
 </template>
@@ -53,6 +50,7 @@ const tags = computed(() => {
   return icons
 })
 
+// 竖条状态标识
 const tagLins = computed(() => {
   let lines: string[] = []
   if (props.trees.star === 1) {
@@ -71,49 +69,78 @@ const tagLins = computed(() => {
 <style scoped lang="scss">
 $icon-size: 17px;
 
-.menu-icon {
-  @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-  margin-bottom: 4px;
-  // margin-right: 8px;
-}
-
 .doc-title {
-  @include flex(row, flex-start, center);
-  align-content: flex-start;
-  flex-wrap: wrap;
+  @include flex(row, flex-start, flex-start);
   max-width: calc(100% - 15px);
   min-width: calc(100% - 15px);
+  width: 100%;
   padding-bottom: 1px;
   position: relative;
 
   .doc-name {
+    @include flex(row, flex-start, flex-start);
     @include themeBrightness(100%, 90%);
     @include ellipsis();
     font-size: inherit;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .menu-icon {
+      @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+      margin-top: 5px;
+      margin-right: 8px;
+    }
+
+    .name-wrapper {
+      @include ellipsis();
+      max-width: calc(100% - 25px);
+    }
   }
 
   .sort {
     position: absolute;
     right: -15px;
+    top: 2px;
   }
 }
 
 // 专题样式, 包括边框和文字样式
 .subject-title {
+  @include flex(row, flex-start, flex-start);
   @include themeShadow(2px 2px 10px 1px #fad7d7, 1px 2px 10px 1px #0a0a0a);
   @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff), linear-gradient(135deg, #594a23, #453d28, #33302b));
+  max-width: calc(100% - 15px);
+  min-width: calc(100% - 15px);
   padding: 2px 5px;
   margin: 5px 0 10px 0;
   border-radius: 7px;
   position: relative;
 
   .doc-name {
+    @include flex(row, flex-start, flex-start);
     @include themeBrightness(100%, 100%);
-    @include themeText(2px 2px 2px #d8d8d8, 2px 2px 2px #0a0a0a);
-    @include ellipsis();
     color: var(--el-color-primary);
-    min-width: 180px;
-    max-width: 180px;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .menu-icon {
+      @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+      margin-top: 5px;
+      margin-right: 8px;
+    }
+
+    .name-wrapper {
+      @include ellipsis();
+      max-width: calc(100% - 25px);
+      min-width: calc(100% - 25px);
+    }
+  }
+
+  .sort {
+    position: absolute;
+    right: -15px;
   }
 }
 

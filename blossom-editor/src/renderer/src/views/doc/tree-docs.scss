@@ -88,7 +88,7 @@
     }
 
     :deep(.el-menu-item.is-active) {
-      @include themeText(0px 4px 5px rgba(107, 104, 104, 1), 0px 4px 5px rgb(145, 145, 145));
+      @include themeText(0px 1px 3px rgba(107, 104, 104, 1), 0px 1px 3px rgb(145, 145, 145));
       background: linear-gradient(
         90deg,
         var(--bl-html-color) 0%,
