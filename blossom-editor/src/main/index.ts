@@ -2,7 +2,7 @@ import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDe
 import { join } from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
-import iconPng from '../../resources/imgs/icon.png?asset'
+// import iconPng from '../../resources/imgs/iconBigSur.png?asset'
 import printScreen from './printScreen'
 import ShortcutRegistrant from './shortcut'
 
@@ -45,7 +45,7 @@ if (!gotTheLock) {
 
     if (platform.isMacOS) {
       // Mac 平台下要设置 dock 栏图标
-      app.dock.setIcon(iconPng)
+      // app.dock.setIcon(iconPng)
     }
 
     setTimeout(() => {

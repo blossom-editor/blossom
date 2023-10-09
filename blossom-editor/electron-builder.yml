@@ -1,5 +1,5 @@
 appId: com.xzzz.blossom
-productName: blossom
+productName: Blossom
 directories:
   buildResources: build
 files:
@@ -13,7 +13,7 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: blossom
+  executableName: ${productName}
 # https://www.electron.build/configuration/nsis
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
