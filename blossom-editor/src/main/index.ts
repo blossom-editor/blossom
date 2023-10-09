@@ -3,7 +3,6 @@ import { join } from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
 import iconPng from '../../resources/imgs/icon.png?asset'
-// 拓展功能
 import printScreen from './printScreen'
 import ShortcutRegistrant from './shortcut'
 
@@ -45,6 +44,7 @@ if (!gotTheLock) {
     })
 
     if (platform.isMacOS) {
+      // Mac 平台下要设置 dock 栏图标
       app.dock.setIcon(iconPng)
     }
 
@@ -56,7 +56,11 @@ if (!gotTheLock) {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) {
-        createMainWindow()
+        if (mainWindow) {
+          mainWindow.show()
+        } else {
+          createMainWindow()
+        }
       } else if (mainWindow) {
         mainWindow.show()
       }
@@ -68,6 +72,10 @@ if (!gotTheLock) {
     app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {
         app.quit()
+      } else {
+        if (mainWindow?.isDestroyed()) {
+          mainWindow = undefined
+        }
       }
     })
   })
@@ -199,27 +207,27 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleViewWindow?articleId=' + id })
     }
   } else if (windowType === 'wlIcon') {
-  /**
-   * 图标窗口
-   */
+    /**
+     * 图标窗口
+     */
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/iconListIndexWindow')
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/iconListIndexWindow' })
     }
   } else if (windowType === 'articleReference') {
-  /**
-   * 文章引用网络窗口
-   */
+    /**
+     * 文章引用网络窗口
+     */
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id)
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow?articleId=' + id })
     }
   } else if (windowType === 'articleLog') {
-  /**
-   * 文章编辑记录
-   */
+    /**
+     * 文章编辑记录
+     */
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleHistory?articleId=' + id)
     } else {
