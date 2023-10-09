@@ -3,16 +3,16 @@
     <div class="icon-desc">
       <h2>Blossom 图标</h2>
       {{ iconDesc }}
-      <div v-show="activeTab === 'weblogo'" style="padding: 10px 0;">
-        <el-input v-model="iconSearch" size="large" style="width: 300px;" placeholder="查询图标"></el-input>
+      <div v-show="activeTab === 'weblogo'" style="padding: 10px 0">
+        <el-input v-model="iconSearch" size="large" style="width: 300px" placeholder="查询图标"></el-input>
       </div>
     </div>
 
     <el-tabs class="icon-tabs" v-model="activeTab">
       <el-tab-pane label="网站及LOGO" name="weblogo">
         <div class="icon-container">
-          <div v-for="icon in filterWebLogo" class="icon-item" :key="icon.icon_id">
-            <svg style="width: 40px;height: 40px;" aria-hidden="true">
+          <div v-for="icon in filterWebLogo" class="icon-item" :key="icon.icon_id" @click="copyIcon('wl-' + icon.font_class)">
+            <svg style="width: 40px; height: 40px" aria-hidden="true">
               <use :xlink:href="'#wl-' + icon.font_class"></use>
             </svg>
             <div class="icon-name">{{ 'wl-' + icon.font_class }}</div>
@@ -21,7 +21,11 @@
       </el-tab-pane>
       <el-tab-pane label="单色图标" name="blossom">
         <div class="icon-container">
-          <div v-for="icon in blossom" :class="['iconbl icon-item', 'bl-' + icon.font_class]" :key="icon.icon_id">
+          <div
+            v-for="icon in blossom"
+            :class="['iconbl icon-item', 'bl-' + icon.font_class]"
+            :key="icon.icon_id"
+            @click="copyIcon('bl-' + icon.font_class)">
             <div class="icon-name">{{ 'bl-' + icon.font_class }}</div>
           </div>
         </div>
@@ -29,7 +33,7 @@
       <el-tab-pane label="系统图片" name="sysimg">
         <div class="icon-container">
           <div v-for="img in imgs" class="icon-item" :key="img.icon_id">
-            <img style="width: 40px;height: 40px;object-fit: contain;" :src="img" />
+            <img style="width: 40px; height: 40px; object-fit: contain" :src="img" />
             <div class="icon-name">{{ img.substring(img.lastIndexOf('/') + 1) }}</div>
           </div>
         </div>
@@ -40,9 +44,18 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, shallowRef } from 'vue'
+import { ElMessage } from 'element-plus'
 import blossomIcons from '@renderer/assets/iconfont/blossom/iconfont.json'
 import weblogIcons from '@renderer/assets/iconfont/weblogo/iconfont.json'
 import { isNull } from '@renderer/assets/utils/obj'
+import { writeText } from '@renderer/assets/utils/electron'
+
+onMounted(() => {
+  blossom.value = blossomIcons.glyphs
+  weblogo.value = weblogIcons.glyphs.sort((w1, w2) => {
+    return w1.font_class.localeCompare(w2.font_class)
+  })
+})
 
 const getImg = (img: string) => {
   return new URL(`../assets/imgs/${img}`, import.meta.url).href
@@ -96,8 +109,7 @@ const imgs = shallowRef<any[]>([
   getImg('weather/yu-s.png'),
   getImg('weather/yu.png'),
   getImg('weather/zhongyu-s.png'),
-  getImg('weather/zhongyu.png'),
-
+  getImg('weather/zhongyu.png')
 ])
 
 const iconSearch = ref('')
@@ -105,31 +117,27 @@ const iconSearch = ref('')
 const filterWebLogo = computed(() => {
   return weblogo.value.filter((icon: any) => {
     if (isNull(iconSearch.value)) {
-      return true;
+      return true
     }
     return icon.font_class.toLowerCase().includes(iconSearch.value.toLowerCase())
-  })
-})
-
-onMounted(() => {
-  blossom.value = blossomIcons.glyphs
-  weblogo.value = weblogIcons.glyphs.sort((w1, w2) => {
-    return w1.font_class.localeCompare(w2.font_class)
   })
 })
 
 const iconDesc = computed(() => {
   if (activeTab.value === 'blossom') {
     return 'Blossom 单色图标, 页面组件使用'
-  }
-  else if (activeTab.value === 'weblogo') {
+  } else if (activeTab.value === 'weblogo') {
     return '网站或品牌 LOGO, 常用在文档图标, 网站收藏图标中'
-  }
-  else if (activeTab.value === 'sysimg') {
-    return 'Blossom 使用的全部图片.'
+  } else if (activeTab.value === 'sysimg') {
+    return 'Blossom 使用的全部图片. 图片无法使用在网站收藏和文档列表中'
   }
   return ''
 })
+
+const copyIcon = (icon: string) => {
+  writeText(icon)
+  ElMessage.info({ message: `已复制: ${icon}`, duration: 1000, offset: 70, grouping: true })
+}
 </script>
 
 <style lang="scss">
@@ -160,6 +168,8 @@ const iconDesc = computed(() => {
         @include box(143px, 110px);
         padding: 15px 10px 10px 10px;
         font-size: 35px;
+        // border-top:  1px solid var(--el-border-color);
+        // border-left:  1px solid var(--el-border-color);
         border-right: 1px solid var(--el-border-color);
         border-bottom: 1px solid var(--el-border-color);
         transition: 0.3s;
