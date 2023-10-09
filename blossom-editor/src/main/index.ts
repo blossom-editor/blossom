@@ -4,7 +4,7 @@ import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
 import iconPng from '../../resources/imgs/icon.png?asset'
 // 拓展功能
-import printScreen from "./printScreen"
+import printScreen from './printScreen'
 import ShortcutRegistrant from './shortcut'
 
 // 主窗口
@@ -18,7 +18,6 @@ const gotTheLock = app.requestSingleInstanceLock(additionalData)
 if (!gotTheLock) {
   app.quit()
 } else {
-
   app.on('second-instance', (_event, _commandLine, _workingDirectory, _additionalData) => {
     // 输出从第二个实例中接收到的数据
     // 有人试图运行第二个实例，我们应该关注我们的窗口
@@ -51,12 +50,12 @@ if (!gotTheLock) {
 
     setTimeout(() => {
       createMainWindow()
-    }, 300);
+    }, 300)
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (BrowserWindow.getAllWindows().length === 0) { 
+      if (BrowserWindow.getAllWindows().length === 0) {
         createMainWindow()
       } else if (mainWindow) {
         mainWindow.show()
@@ -74,9 +73,7 @@ if (!gotTheLock) {
   })
 }
 
-
-
-/** 
+/**
  * =========================================================================================================================
  * 创建窗口
  * =========================================================================================================================
@@ -90,9 +87,9 @@ const buildWindow = (_title: string): BrowserWindow => {
     minWidth: 972,
     minHeight: 700,
     icon: icon,
-    frame: false,// 无边框
-    transparent: false,// 透明窗口
-    titleBarStyle:'hidden',
+    frame: false, // 无边框
+    transparent: false, // 透明窗口
+    titleBarStyle: 'hidden',
     opacity: 1,
     hasShadow: true,
     autoHideMenuBar: false,
@@ -102,11 +99,11 @@ const buildWindow = (_title: string): BrowserWindow => {
       // 是否沙盒模式, 沙盒模式下, 渲染进程可以直接与主进程通信
       sandbox: false
     }
-  });
-  return win;
+  })
+  return win
 }
 
-/** 
+/**
  * =========================================================================================================================
  * 创建主窗口
  * 官网API
@@ -129,7 +126,7 @@ function createMainWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-  console.log('============================================================');
+  console.log('============================================================')
   // 开发环境自动打开控制台
   openDevToos(mainWindow)
   // 创建 Tray
@@ -140,7 +137,7 @@ function createMainWindow(): void {
   initOnMainWindow(mainWindow)
   // 注册全局快捷键 printScreen:截屏快捷键
   new ShortcutRegistrant(mainWindow).printScreen()
-  console.log('============================================================');
+  console.log('============================================================')
 }
 
 /**
@@ -152,8 +149,8 @@ const initTray = () => {
   if (platform.isMacOS) {
     return
   }
-  console.log('1. 创建托盘 Tray');
-  tray = new Tray(icon);
+  console.log('1. 创建托盘 Tray')
+  tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
     { label: '显示', click: () => mainWindow!.show() },
     { label: '退出', click: () => app.quit() }
@@ -165,30 +162,30 @@ const initTray = () => {
   })
 }
 
-/** 
+/**
  * =========================================================================================================================
  * 新的窗口
  * =========================================================================================================================
  */
 type WindowType = 'article' | 'wlIcon' | 'articleReference' | 'articleLog'
-const newWindowMaps = new Map<string, BrowserWindow | undefined>();
+const newWindowMaps = new Map<string, BrowserWindow | undefined>()
 
 /**
  * 创建新窗口
  * @param windowType 窗口类型
  * @param title      窗口标题, 窗口类型_窗口标题会保存在 newWindowMaps 中保存唯一
  * @param id         id
- * @returns 
+ * @returns
  */
 function createNewWindow(windowType: WindowType, title: string, id?: number) {
-  console.log('打开新窗口, 窗口标题:', title);
-  let newWindow: BrowserWindow | undefined = newWindowMaps.get(windowType + '_' + title);
+  console.log('打开新窗口, 窗口标题:', title)
+  let newWindow: BrowserWindow | undefined = newWindowMaps.get(windowType + '_' + title)
   if (newWindow != undefined) {
-    newWindow.show();
-    return;
+    newWindow.show()
+    return
   }
-  newWindow = buildWindow(title);
-  console.log('窗口ID', newWindow.id);
+  newWindow = buildWindow(title)
+  console.log('窗口ID', newWindow.id)
 
   /**
    * 新文章窗口
@@ -196,38 +193,35 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
   if (windowType === 'article') {
     // HMR for renderer base on electron-vite cli. Load the remote URL for development or the local html file for production.
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleViewWindow?articleId=' + id);
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleViewWindow?articleId=' + id)
     } else {
       // https://www.electronjs.org/zh/docs/latest/api/browser-window#winloadfilefilepath-options
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleViewWindow?articleId=' + id })
     }
-  }
+  } else if (windowType === 'wlIcon') {
   /**
    * 图标窗口
    */
-  else if (windowType === 'wlIcon') {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/iconListIndexWindow');
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/iconListIndexWindow')
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/iconListIndexWindow' })
     }
-  }
+  } else if (windowType === 'articleReference') {
   /**
    * 文章引用网络窗口
    */
-  else if (windowType === 'articleReference') {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id);
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id)
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow?articleId=' + id })
     }
-  }
+  } else if (windowType === 'articleLog') {
   /**
    * 文章编辑记录
    */
-  else if (windowType === 'articleLog') {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleHistory?articleId=' + id);
+      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleHistory?articleId=' + id)
     } else {
       newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleHistory?articleId=' + id })
     }
@@ -236,10 +230,10 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
   openDevToos(newWindow)
   initOnWindow(newWindow)
   newWindow.on('closed', () => {
-    console.log('关闭新窗口, 窗口标题:', title);
+    console.log('关闭新窗口, 窗口标题:', title)
     newWindowMaps.delete(windowType + '_' + title)
   })
-  newWindowMaps.set(windowType + '_' + title, newWindow);
+  newWindowMaps.set(windowType + '_' + title, newWindow)
 }
 
 // In this file you can include the rest of your app"s specific main process
@@ -256,25 +250,25 @@ const openDevToos = (win: BrowserWindow) => {
   }
 }
 
-/** 
+/**
  * =========================================================================================================================
  * 主进程监听的事件 ipcMain
  * =========================================================================================================================
  */
 const initOnFocusedWindow = (): void => {
-  console.log('2. 监听焦点窗口事件');
+  console.log('2. 监听焦点窗口事件')
   /**
    * 窗口最小化
    */
   ipcMain.on('window-min', () => {
-    BrowserWindow.getFocusedWindow()?.minimize();
+    BrowserWindow.getFocusedWindow()?.minimize()
   })
   /**
    * 窗口最大化, 或变为原窗口大小
    */
   ipcMain.on('window-max', () => {
     if (BrowserWindow.getFocusedWindow()?.isMaximized()) {
-      BrowserWindow.getFocusedWindow()?.unmaximize();
+      BrowserWindow.getFocusedWindow()?.unmaximize()
     } else {
       BrowserWindow.getFocusedWindow()?.maximize()
     }
@@ -283,7 +277,6 @@ const initOnFocusedWindow = (): void => {
    * 隐藏窗口
    */
   ipcMain.on('window-hide', () => {
-
     if (BrowserWindow.getFocusedWindow()?.id != mainWindow!.id) {
       BrowserWindow.getFocusedWindow()?.close()
     } else {
@@ -315,7 +308,7 @@ const initOnFocusedWindow = (): void => {
   })
 }
 
-/** 
+/**
  * =========================================================================================================================
  * 主窗口监听的事件 mainWindow
  * =========================================================================================================================
@@ -336,7 +329,7 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
    * @param webContents
    */
   mainWindow.webContents.session.on('will-download', (_event, item, _webContents) => {
-    console.log('准备下载文件');
+    console.log('准备下载文件')
     // 无参数时弹出文件选择框
     item.setSavePath('')
     item.on('updated', (_event, state) => {
@@ -358,7 +351,7 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
       }
     })
   })
-  /* 
+  /*
    * =========================================================================================================================
    * 主进程监听事件
    * =========================================================================================================================
@@ -374,7 +367,7 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
    */
   ipcMain.on('set-userinfo', (_: IpcMainEvent, userinfo: any): void => {
     blossomUserinfo = userinfo
-    console.log('当前登录用户:', userinfo);
+    console.log('当前登录用户:', userinfo)
     if (platform.isWindows) {
       tray.setToolTip(`Blossom\n用户: ${userinfo.username}\n昵称: ${userinfo.nickName}`)
     }
@@ -410,7 +403,7 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
     createNewWindow('articleLog', article.name + '编辑记录', article.id)
   })
   /**
-   * 下载, 最终会调用 
+   * 下载, 最终会调用
    * mainWin.webContents.session.on('will-download', (_event, item, _webContents) => {}
    */
   ipcMain.on('download', (_event, url: string) => {
@@ -418,7 +411,7 @@ const initOnMainWindow = (mainWindow: BrowserWindow): void => {
   })
 }
 
-/** 
+/**
  * =========================================================================================================================
  * 非主窗口的事件
  * =========================================================================================================================
@@ -436,8 +429,8 @@ export const initOnWindow = (window: BrowserWindow) => {
    * 打开链接, 如果打开链接于服务器域名相同, 则在新窗口中打开
    */
   window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
-    let url = (details.url as string)
-    console.log(url);
+    let url = details.url as string
+    console.log(url)
 
     if (blossomUserinfo && url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
       let articleId: string = url.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
@@ -447,25 +440,22 @@ export const initOnWindow = (window: BrowserWindow) => {
     }
     // return { action: "deny" }
   })
-
 }
-
 
 /**
  * 拦截 a 标签
- * @param e 
- * @param url 
+ * @param e
+ * @param url
  */
 const interceptorATag = (e: Event, url: string): boolean => {
   e.preventDefault()
-  console.log(`[${new Date()}] electron 执行 <a/> 标签拦截器`);
+  console.log(`[${new Date()}] electron 执行 <a/> 标签拦截器`)
   let innerUrl = url
   if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
     let articleId: string = innerUrl.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
     createNewWindow('article', articleId, Number(articleId))
-  }
-  else if (!is.dev) {
+  } else if (!is.dev) {
     shell.openExternal(url)
   }
-  return true;
+  return true
 }
