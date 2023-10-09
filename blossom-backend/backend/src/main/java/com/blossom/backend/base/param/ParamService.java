@@ -7,8 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.param.pojo.ParamEntity;
-import com.blossom.backend.base.param.pojo.ParamReq;
-import com.blossom.common.base.exception.XzException404;
+import com.blossom.backend.base.param.pojo.ParamUpdReq;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.BeanUtil;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,6 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
 
     private static final Map<String, ParamEntity> CACHE = new HashMap<>(20);
 
-    // @PostConstruct
     @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
         log.info("[    BASE] 初始化系统参数缓存");
@@ -73,7 +71,7 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
         Map<String, String> result = new HashMap<>(names.length);
         for (ParamEnum name : names) {
             ParamEntity param = BeanUtil.toObj(CACHE.get(name.name()), ParamEntity.class);
-            XzException500.throwBy(ObjUtil.isNull(param), "缺失所有系统参数, 请检查系统参数[BASE_SYS_PARAM]中是否包含数据");
+            XzException500.throwBy(ObjUtil.isNull(param), "缺失所有系统参数, 请检查系统参数配置[BASE_SYS_PARAM]中是否包含数据");
             if (masking && name.getMasking()) {
                 param.setParamValue(StrUtil.hide(param.getParamValue(), 0, Math.min(param.getParamValue().length(), name.getMaskingLength())));
             }
@@ -86,8 +84,7 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
      * 修改参数
      */
     @Transactional(rollbackFor = Exception.class)
-    public Long update(ParamReq req) {
-        XzException404.throwBy(req.getId() == null, "ID不得为空");
-        return req.getId();
+    public void update(ParamUpdReq req) {
+        baseMapper.updByParamName(req.getParamName(), req.getParamValue());
     }
 }
