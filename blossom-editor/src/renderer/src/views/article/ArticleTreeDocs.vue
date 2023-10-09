@@ -106,11 +106,8 @@
         <div v-if="curDoc.ty != 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
         <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
-
         <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口打开</div>
-
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>浏览器打开</div>
-
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
@@ -316,7 +313,7 @@ const removeListenerTreeDocsRightMenu = () => {
 }
 
 const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 1) => {
-  const domHeight = 25 * childMenuCount + 10
+  const domHeight = 30 * childMenuCount + 10
   if (document.body.clientHeight - event.clientY <= domHeight) {
     rMenuLevel2.value.top = domHeight * -1 + 20 + 'px'
   } else {

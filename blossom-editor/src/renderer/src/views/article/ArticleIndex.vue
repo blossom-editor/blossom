@@ -1,6 +1,5 @@
 <template>
   <div class="index-article-root">
-
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
       <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree">
@@ -9,7 +8,7 @@
 
       <div class="doc-temp-textarea">
         <bl-row just="space-between" height="28px" class="doc-temp-textarea-workbench">
-          <bl-row><img src="@renderer/assets/imgs/note/cd.png">临时内容(可从便签快速设置)</bl-row>
+          <bl-row><img src="@renderer/assets/imgs/note/cd.png" />临时内容(可从便签快速设置)</bl-row>
           <div class="iconbl bl-subtract-line" @click="tempTextareaExpand = !tempTextareaExpand"></div>
         </bl-row>
         <bl-row class="doc-temp-textarea-input" :style="tempTextareaStyle.tempTextarea">
@@ -19,18 +18,38 @@
     </div>
 
     <!-- editor -->
-    <div class="editor-container" :style="{ width: docEditorStyle.editor }" v-loading="editorLoading"
-      element-loading-spinner="1" element-loading-text="正在读取文章内容...">
+    <div
+      class="editor-container"
+      :style="{ width: docEditorStyle.editor }"
+      v-loading="editorLoading"
+      element-loading-spinner="1"
+      element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
-        <EditorTools @save="saveCurArticleContent()" @preview-full-screen="alt_3()" @editor-full-screen="alt_4()"
-          @bold="cmw.commandBold()" @italic="cmw.commandItalic()" @strike="cmw.commandStrike()" @sub="cmw.commandSub()"
-          @sup="cmw.commandSup()" @separator="cmw.commandSeparator()" @blockquote="cmw.commandQuote()"
-          @blockquote-block="cmw.commandQuoteBlack()" @blockquote-green="cmw.commandQuoteGreen()"
-          @blockquote-yellow="cmw.commandQuoteYellow()" @blockquote-red="cmw.commandQuoteRed()"
-          @blockquote-blue="cmw.commandQuoteBlue()" @blockquote-purple="cmw.commandQuotePurple()"
-          @code="cmw.commandCode()" @pre="cmw.commandPre()" @checkbox="cmw.commandCheckBox()"
-          @unordered="cmw.commandUnordered()" @ordered="cmw.commandOrdered()" @table="cmw.commandTable()"
-          @image="cmw.commandImg()" @link="cmw.commandLink()">
+        <EditorTools
+          @save="saveCurArticleContent()"
+          @preview-full-screen="alt_3()"
+          @editor-full-screen="alt_4()"
+          @bold="cmw.commandBold()"
+          @italic="cmw.commandItalic()"
+          @strike="cmw.commandStrike()"
+          @sub="cmw.commandSub()"
+          @sup="cmw.commandSup()"
+          @separator="cmw.commandSeparator()"
+          @blockquote="cmw.commandQuote()"
+          @blockquote-block="cmw.commandQuoteBlack()"
+          @blockquote-green="cmw.commandQuoteGreen()"
+          @blockquote-yellow="cmw.commandQuoteYellow()"
+          @blockquote-red="cmw.commandQuoteRed()"
+          @blockquote-blue="cmw.commandQuoteBlue()"
+          @blockquote-purple="cmw.commandQuotePurple()"
+          @code="cmw.commandCode()"
+          @pre="cmw.commandPre()"
+          @checkbox="cmw.commandCheckBox()"
+          @unordered="cmw.commandUnordered()"
+          @ordered="cmw.commandOrdered()"
+          @table="cmw.commandTable()"
+          @image="cmw.commandImg()"
+          @link="cmw.commandLink()">
         </EditorTools>
       </div>
 
@@ -39,8 +58,7 @@
         <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
-        <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml">
-        </div>
+        <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
         <el-backtop target=".editor-codemirror" :right="50" :bottom="50">
           <div class="iconbl bl-send-line backtop"></div>
         </el-backtop>
@@ -52,11 +70,12 @@
       </div>
 
       <!-- toc -->
-      <div :class="['bl-preview-toc-absolute', (tocsExpand) ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
-        <div class="toc-title" ref="TocTitleRef">目录
-          <span style="font-size: 10px;">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
+      <div :class="['bl-preview-toc-absolute', tocsExpand ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
+        <div class="toc-title" ref="TocTitleRef">
+          目录
+          <span style="font-size: 10px">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
         </div>
-        <div class="toc-content" v-show="(tocsExpand)">
+        <div class="toc-content" v-show="tocsExpand">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
             {{ toc.content }}
           </div>
@@ -64,15 +83,12 @@
         <div class="img-title">
           引用图片
           <el-tooltip effect="blossomr" placement="right" :hide-after="0">
-            <template #content>
-              重复上传图片后<br />如果图片无变化可刷新缓存
-            </template>
+            <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
             <span class="iconbl bl-refresh-line" @click="refreshCache"></span>
           </el-tooltip>
         </div>
         <div class="img-content">
-          <div class="img-wrapper" v-for="image in articleImg" :key="image.targetUrl"
-            @click="showPicInfo(image.targetUrl)">
+          <div class="img-wrapper" v-for="image in articleImg" :key="image.targetUrl" @click="showPicInfo(image.targetUrl)">
             <img :src="picCacheWrapper(image.targetUrl)" />
           </div>
         </div>
@@ -82,25 +98,27 @@
     <PictureViewerInfo ref="PictureViewerInfoRef" @saved="refreshCache"></PictureViewerInfo>
 
     <Teleport to="body">
-      <div v-show="editorRightMenu.show" class="editor-right-menu"
+      <div
+        v-show="editorRightMenu.show"
+        class="editor-right-menu"
         :style="{ left: editorRightMenu.clientX + 'px', top: editorRightMenu.clientY + 'px' }">
         <div class="menu-content">
-          <div class="menu-item" @click="rightMenuCopy">
-            <span class="iconbl bl-copy-line"></span>复制
-          </div>
-          <div class="menu-item" @click="rightMenuPaste">
-            <span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴
-          </div>
+          <div class="menu-item" @click="rightMenuCopy"><span class="iconbl bl-copy-line"></span>复制</div>
+          <div class="menu-item" @click="rightMenuPaste"><span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴</div>
           <div class="menu-item">
-            <el-upload :action="serverStore.serverUrl + uploadFileApiUrl" name="file" :data="{ pid: curArticle?.pid }"
-              :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }" :show-file-list="false"
-              :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError">
-              <span class="iconbl bl-image--line"></span>插入图片
+            <el-upload
+              name="file"
+              :action="serverStore.serverUrl + uploadFileApiUrl"
+              :data="{ pid: curArticle?.pid }"
+              :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
+              :show-file-list="false"
+              :before-upload="beforeUpload"
+              :on-success="onUploadSeccess"
+              :on-error="onError">
+              <bl-row><span class="iconbl bl-image--line"></span>插入图片</bl-row>
             </el-upload>
           </div>
-          <div class="menu-item" @click="formatTable">
-            <span class="iconbl bl-transcript-line"></span>格式化选中表格
-          </div>
+          <div class="menu-item" @click="formatTable"><span class="iconbl bl-transcript-line"></span>格式化选中表格</div>
           <div class="menu-item" @click="openExtenal('https://katex.org/#demo')">
             <span class="iconbl bl-a-texteditorsuperscript-line"></span>Katex 在线校验
           </div>
@@ -108,7 +126,7 @@
             <span class="iconbl bl-a-statisticalviewpiechart3-line"></span>Mermaid 在线校验
           </div>
           <div class="menu-item" @click="openExtenal('https://www.emojiall.com/zh-hans')">
-            <span style="margin-right: 4px;padding: 2px 0;">😉</span>Emoji网站
+            <span style="margin-right: 4px; padding: 2px 0">😉</span>Emoji网站
           </div>
         </div>
       </div>
@@ -118,23 +136,23 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from "vue"
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
-import { storeToRefs } from "pinia"
+import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
 import { articleInfoApi, articleUpdContentApi, uploadFileApi, uploadFileApiUrl } from '@renderer/api/blossom'
 // utils
-import { Local } from "@renderer/assets/utils/storage"
+import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { sleep, platform } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
-import PictureViewerInfo from "@renderer/views/picture/PictureViewerInfo.vue"
+import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
 // ts
 import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
@@ -143,11 +161,20 @@ import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh } from '@renderer/views/picture/scripts/picture'
-import { useResize } from "./scripts/editor-preview-resize"
+import { useResize } from './scripts/editor-preview-resize'
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
 // marked
-import marked, { renderBlockquote, renderCode, renderCodespan, renderHeading, renderImage, renderTable, tokenizerCodespan, renderLink } from './scripts/markedjs'
+import marked, {
+  renderBlockquote,
+  renderCode,
+  renderCodespan,
+  renderHeading,
+  renderImage,
+  renderTable,
+  tokenizerCodespan,
+  renderLink
+} from './scripts/markedjs'
 import { EPScroll } from './scripts/editor-preview-scroll'
 
 const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
@@ -180,19 +207,22 @@ const serverStore = useServerStore()
 const configStore = useConfigStore()
 const { editorStyle } = storeToRefs(configStore)
 
-watch(() => userStore.userinfo.id, (_newId: number, _oldId: number) => {
-  curDoc.value = undefined
-  curActiveDoc.value = undefined
-  curActiveDoc.value = undefined
-  setDoc('')
-})
+watch(
+  () => userStore.userinfo.id,
+  (_newId: number, _oldId: number) => {
+    curDoc.value = undefined
+    curActiveDoc.value = undefined
+    curActiveDoc.value = undefined
+    setDoc('')
+  }
+)
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
-const GutterHolderRef = ref()   // editor gutter holder
-const EditorRef = ref()         // editor
-const ResizeDividerRef = ref()  // editor&preview resize dom
-const PreviewRef = ref()        // html 预览
+const GutterHolderRef = ref() // editor gutter holder
+const EditorRef = ref() // editor
+const ResizeDividerRef = ref() // editor&preview resize dom
+const PreviewRef = ref() // html 预览
 
 /**
  * 文档列表的展开和收起
@@ -210,7 +240,7 @@ const docEditorStyle = computed<DocEditorStyle>(() => {
  * 编辑器和预览的展开收起
  */
 let previewFullScreen = false // 是否全屏展开预览
-let editorFullScreen = false  // 是否全屏展开编辑
+let editorFullScreen = false // 是否全屏展开编辑
 const changeEditorPreviewStyle = () => {
   if (previewFullScreen) {
     GutterHolderRef.value.style.width = '0px'
@@ -255,7 +285,6 @@ const tempInput = (value: string) => {
   Local.set(TempTextareaKey, value)
 }
 
-
 /**
  * 进入页面时, 保存文章
  */
@@ -285,9 +314,9 @@ const refreshCache = () => {
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
 const ArticleTreeDocsRef = ref()
-const curDoc = ref<DocInfo>()           // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
-const curArticle = ref<DocInfo>()       // 当前选中的文章, 用于在编辑器中展示
-const curActiveDoc = ref<DocInfo>()     // 当前激活的文档的 index, 防止在刷新列表时重置选中, 导致需要再次从文档菜单中逐个点击
+const curDoc = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
+const curArticle = ref<DocInfo>() // 当前选中的文章, 用于在编辑器中展示
+const curActiveDoc = ref<DocInfo>() // 当前激活的文档的 index, 防止在刷新列表时重置选中, 导致需要再次从文档菜单中逐个点击
 // 非绑定数据
 // 文章是否在解析时, 为 true 则正在解析, 为 false 则解析完成
 let articleParseing = false
@@ -322,22 +351,24 @@ const clickCurDoc = async (tree: DocTree) => {
     editorLoading.value = true
     await saveCurArticleContent(true)
     clearTocAndImg()
-    await articleInfoApi({ id: doc.id, showToc: false, showMarkdown: true, showHtml: false }).then(resp => {
-      if (isNull(resp.data)) {
-        return
-      }
-      curArticle.value = resp.data
-      // 初次加载时立即渲染
-      immediateParse = true
-      if (isBlank(resp.data.markdown)) {
-        setDoc('')
-      } else {
-        setDoc(resp.data.markdown)
-      }
-    }).finally(() => {
-      editorLoading.value = false
-      articleChanged = false
-    })
+    await articleInfoApi({ id: doc.id, showToc: false, showMarkdown: true, showHtml: false })
+      .then((resp) => {
+        if (isNull(resp.data)) {
+          return
+        }
+        curArticle.value = resp.data
+        // 初次加载时立即渲染
+        immediateParse = true
+        if (isBlank(resp.data.markdown)) {
+          setDoc('')
+        } else {
+          setDoc(resp.data.markdown)
+        }
+      })
+      .finally(() => {
+        editorLoading.value = false
+        articleChanged = false
+      })
   }
 }
 /**
@@ -362,7 +393,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   // 如果文档正在解析中, 则等待解析完成
   while (articleParseing) {
-    await sleep(100);
+    await sleep(100)
   }
   articleChanged = false
   let data = {
@@ -373,7 +404,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
-  await articleUpdContentApi(data).then(resp => {
+  await articleUpdContentApi(data).then((resp) => {
     lastSaveTime = new Date().getTime()
     curArticle.value!.words = resp.data.words as number
     curArticle.value!.updTime = resp.data.updTime as string
@@ -392,7 +423,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
 const initAutoSaveInterval = () => {
   autoSaveInterval = setInterval(() => {
     let current = new Date().getTime()
-    if ((current - lastSaveTime) > authSaveMs) {
+    if (current - lastSaveTime > authSaveMs) {
       autoSave()
     }
   }, 30 * 1000)
@@ -413,9 +444,15 @@ const autoSave = () => {
  * 判断当前选中的是否是文章
  */
 const curIsArticle = (): boolean => {
-  if (isNull(curArticle)) { return false }
-  if (isNull(curArticle.value)) { return false }
-  if (isNull(curArticle.value?.type) || curArticle.value?.type != 3) { return false }
+  if (isNull(curArticle)) {
+    return false
+  }
+  if (isNull(curArticle.value)) {
+    return false
+  }
+  if (isNull(curArticle.value?.type) || curArticle.value?.type != 3) {
+    return false
+  }
   return true
 }
 /**
@@ -434,8 +471,8 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
 //#endregion
 
 //#region ----------------------------------------< codemirror/editor >----------------------------
-const editorLoading = ref(false)  // eidtor loading
-let cmw: CmWrapper                // codemirror editor wrapper
+const editorLoading = ref(false) // eidtor loading
+let cmw: CmWrapper // codemirror editor wrapper
 
 /**
  * 拖拽上传的回调
@@ -453,7 +490,7 @@ const uploadFileCallback = async (event: DragEvent) => {
       form.append('file', file)
       form.append('name', file.name)
       form.append('pid', curArticle.value!.pid.toString())
-      uploadFileApi(form).then(resp => {
+      uploadFileApi(form).then((resp) => {
         cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
       })
     }
@@ -464,17 +501,19 @@ const uploadFileCallback = async (event: DragEvent) => {
  * 初始化编辑器
  */
 const initEditor = (_doc?: string) => {
-  cmw = new CmWrapper(CmWrapper.newEditor(
-    // 创建 state
-    CmWrapper.newState(
-      () => {
-        articleParseing = true
-        debounce(parse, 300)
-      },
-      saveCurArticleContent,
-      uploadFileCallback
-    ),
-    EditorRef.value)
+  cmw = new CmWrapper(
+    CmWrapper.newEditor(
+      // 创建 state
+      CmWrapper.newState(
+        () => {
+          articleParseing = true
+          debounce(parse, 300)
+        },
+        saveCurArticleContent,
+        uploadFileCallback
+      ),
+      EditorRef.value
+    )
   )
 }
 /**
@@ -490,7 +529,8 @@ const setDoc = (md: string): void => {
         debounce(parse, 300)
       },
       saveCurArticleContent,
-      uploadFileCallback, md
+      uploadFileCallback,
+      md
     )
   )
   parse()
@@ -500,15 +540,21 @@ const setDoc = (md: string): void => {
 
 //#region ----------------------------------------< marked/preview >-------------------------------
 const renderInterval = ref(0) // 解析用时
-const articleHtml = ref('')   // 解析后的 html 内容
-let immediateParse = false    // 是否立即渲染, 文档初次加载时立即渲染, 内容变更时防抖渲染
+const articleHtml = ref('') // 解析后的 html 内容
+let immediateParse = false // 是否立即渲染, 文档初次加载时立即渲染, 内容变更时防抖渲染
 /**
  * 自定义渲染
  */
 const renderer = {
-  table(header: string, body: string): string { return renderTable(header, body) },
-  blockquote(quote: string): string { return renderBlockquote(quote) },
-  codespan(src: string): string { return renderCodespan(src) },
+  table(header: string, body: string): string {
+    return renderTable(header, body)
+  },
+  blockquote(quote: string): string {
+    return renderBlockquote(quote)
+  },
+  codespan(src: string): string {
+    return renderCodespan(src)
+  },
   code(code: string, language: string | undefined, _isEscaped: boolean): string {
     return renderCode(code, language, _isEscaped, (eleid: string, svg: string) => {
       articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
@@ -533,7 +579,9 @@ const renderer = {
  * 自定义解析
  */
 const tokenizer = {
-  codespan(src: string): any { return tokenizerCodespan(src) }
+  codespan(src: string): any {
+    return tokenizerCodespan(src)
+  }
 }
 
 //@ts-ignore
@@ -574,7 +622,7 @@ useResize(EditorRef, PreviewRef, ResizeDividerRef)
 
 //#region ----------------------------------------< TOC >------------------------------------------
 const articleToc = ref<any[]>([])
-const articleImg = ref<ArticleReference[]>([])  // 文章对图片引用
+const articleImg = ref<ArticleReference[]>([]) // 文章对图片引用
 const articleLink = ref<ArticleReference[]>([]) // 文章对链接的引用
 const TocRef = ref()
 const TocTitleRef = ref()
@@ -586,7 +634,7 @@ const TocTitleRef = ref()
 const toScroll = (level: number, content: string) => {
   let id = level + '-' + content
   let elm: HTMLElement = document.getElementById(id) as HTMLElement
-  (elm.parentNode as Element).scrollTop = elm.offsetTop
+  ;(elm.parentNode as Element).scrollTop = elm.offsetTop
 }
 // 清空当前目录内容
 const clearTocAndImg = () => {
@@ -622,7 +670,6 @@ const removeListenerScroll = () => {
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rightMenuHeight = 215
 
-
 const handleEditorClickRight = (event: MouseEvent) => {
   editorRightMenu.value = { show: false, clientX: 0, clientY: 0 }
   let y = event.clientY
@@ -644,11 +691,14 @@ const removeListenerEditorRightMenu = () => {
   document.body.removeEventListener('click', closeEditorRightMenu)
 }
 
-
 /** 复制当前选中内容 */
-const rightMenuCopy = () => { writeText(cmw.getSelectionRangesText()) }
+const rightMenuCopy = () => {
+  writeText(cmw.getSelectionRangesText())
+}
 /** 右键黏贴功能 */
-const rightMenuPaste = () => { cmw.insertBlockCommand(readText()) }
+const rightMenuPaste = () => {
+  cmw.insertBlockCommand(readText())
+}
 
 /**
  * 右键格式化表格功能
@@ -673,8 +723,12 @@ const formatTable = () => {
 
 //#region ----------------------------------------< 快捷键注册 >-------------------------------------
 const shortcutRegistrant: ShortcutRegistrant = new ShortcutRegistrant().setDebug(false)
-const alt_1: shortcutFunc = (): void => { docsExpand.value = !docsExpand.value }
-const alt_2: shortcutFunc = (): void => { tocsExpand.value = !tocsExpand.value }
+const alt_1: shortcutFunc = (): void => {
+  docsExpand.value = !docsExpand.value
+}
+const alt_2: shortcutFunc = (): void => {
+  tocsExpand.value = !tocsExpand.value
+}
 // 全屏预览
 const alt_3: shortcutFunc = (): void => {
   previewFullScreen = !previewFullScreen
@@ -692,23 +746,27 @@ const alt_4: shortcutFunc = (): void => {
   changeEditorPreviewStyle()
 }
 
-const keydown = (evnet: KeyboardEvent) => { shortcutRegistrant.keydown(evnet) }
-const keyup = (evnet: KeyboardEvent) => { shortcutRegistrant.keyup(evnet) }
+const keydown = (evnet: KeyboardEvent) => {
+  shortcutRegistrant.keydown(evnet)
+}
+const keyup = (evnet: KeyboardEvent) => {
+  shortcutRegistrant.keyup(evnet)
+}
 
 /** 注册快捷键 */
 const addListererShortcutMap = () => {
   let altAnd: Map<string, shortcutFunc> = new Map()
-  altAnd.set("Digit1", alt_1) // Alt + 1: 隐藏菜单
-  altAnd.set("Digit2", alt_2) // Alt + 2: 隐藏目录
-  altAnd.set("Digit3", alt_3) // Alt + 3: 隐藏编辑
-  altAnd.set("Digit4", alt_4) // Alt + 4: 隐藏预览
+  altAnd.set('Digit1', alt_1) // Alt + 1: 隐藏菜单
+  altAnd.set('Digit2', alt_2) // Alt + 2: 隐藏目录
+  altAnd.set('Digit3', alt_3) // Alt + 3: 隐藏编辑
+  altAnd.set('Digit4', alt_4) // Alt + 4: 隐藏预览
   if (platform() === 'darwin') {
-    shortcutRegistrant.register("MetaLeft", altAnd)
+    shortcutRegistrant.register('MetaLeft', altAnd)
   } else {
-    shortcutRegistrant.register("AltLeft", altAnd)
+    shortcutRegistrant.register('AltLeft', altAnd)
   }
-  window.addEventListener("keydown", keydown)
-  window.addEventListener("keyup", keyup)
+  window.addEventListener('keydown', keydown)
+  window.addEventListener('keyup', keyup)
   window.onblur = () => {
     shortcutRegistrant.clearDownCodes()
   }
@@ -721,7 +779,6 @@ const removeListenerShortcutMap = () => {
 }
 
 //#endregion
-
 </script>
 
 <style scoped lang="scss">
@@ -731,7 +788,8 @@ const removeListenerShortcutMap = () => {
 @import './styles/article-backtop.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
 
-.bl-preview {}
+.bl-preview {
+}
 
 :deep(.el-loading-spinner) {
   @extend .bl-loading-spinner;
