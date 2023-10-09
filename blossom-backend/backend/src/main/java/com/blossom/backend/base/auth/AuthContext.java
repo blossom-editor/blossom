@@ -1,7 +1,9 @@
 package com.blossom.backend.base.auth;
 
+import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.pojo.AccessToken;
 import com.blossom.backend.base.auth.redis.RedisTokenValidateFilter;
+import com.blossom.common.base.exception.XzException500;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletRequest;
@@ -72,6 +74,21 @@ public class AuthContext {
         }
         return getContext().getUserId();
     }
+
+    /**
+     * 获取用户的类型
+     *
+     * @return 用户的类型
+     */
+    public static Integer getType() {
+        Map<String, String> metadata = getUserMetadata();
+        String type = metadata.get("type");
+        if (StrUtil.isBlank(type)) {
+            throw new XzException500("用户类型错误, 请重新登录");
+        }
+        return Integer.valueOf(type);
+    }
+
 
     /**
      * 获取BID

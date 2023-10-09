@@ -130,5 +130,6 @@ public abstract class AbstractAuthService {
         accessToken.setUserId(user.getId());
         accessToken.getMetadata().put("userId", String.valueOf(user.getId()));
         accessToken.getMetadata().put("username", user.getUsername());
+        accessToken.getMetadata().put("type", user.getType().toString());
     }
 }
