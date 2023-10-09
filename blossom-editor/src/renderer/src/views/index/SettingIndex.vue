@@ -34,20 +34,17 @@ import SettingAboutVue from './SettingAbout.vue'
 import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
 import WaveFooter from '@renderer/components/WaveFooter.vue'
 import CONFIG from '@renderer/assets/constants/system'
-
 </script>
 
 <style scoped lang="scss">
 .setting-index-root {
   @include box(100%, 100%);
-  background-image: linear-gradient(135deg,
-      var(--bl-html-color),
-      var(--bl-html-color),
-      var(--el-color-primary-light-5));
-  padding: 50px;
+  background-image: linear-gradient(135deg, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-5));
+  padding: 50px 0 0 50px;
   z-index: 2;
 
   .setting-tabs {
+    width: 100%;
     height: 100%;
 
     :deep(.el-tabs__nav-wrap::after) {
@@ -75,7 +72,7 @@ import CONFIG from '@renderer/assets/constants/system'
 }
 
 .version {
-  @include themeColor(#D0D0D0, #3A3A3A);
+  @include themeColor(#adadad, #3a3a3a);
   @include font(13px, 300);
   @include absolute('', 10px, 10px, '');
   z-index: 2;

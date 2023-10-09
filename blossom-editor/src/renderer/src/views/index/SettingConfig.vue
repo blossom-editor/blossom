@@ -1,5 +1,5 @@
 <template>
-  <div class="server-config-root">
+  <div class="server-config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用设置...">
     <el-tabs tab-position="left" type="card" style="height: 100%" class="config-tabs">
       <el-tab-pane label="服务器配置">
         <div class="tab-content">
@@ -18,8 +18,10 @@
       <el-tab-pane label="修改个人信息" :lazy="true">
         <div class="tab-content">
           <div class="title">修改用户信息</div>
-          <div class="desc">天气预报使用<a style="color: var(--el-color-primary);" target="_blank"
-              href="https://dev.qweather.com/">和风天气API</a>，您可以在其上免费创建您的令牌以使用天气预报功能。</div>
+          <div class="desc">
+            天气预报使用<a style="color: var(--el-color-primary)" target="_blank" href="https://dev.qweather.com/">和风天气API</a
+            >，您可以在其上免费创建您的令牌以使用天气预报功能。
+          </div>
           <ConfigUserinfo></ConfigUserinfo>
         </div>
       </el-tab-pane>
@@ -42,11 +44,16 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@renderer/stores/user'
 import ConfigUserinfo from './SettingConfigUserinfo.vue'
 import ConfigUpdPwd from './SettingConfigUpdPwd.vue'
 import ConfigAddUser from './SettingConfigAddUser.vue'
 import ConfigClient from './SettingConfigClient.vue'
 import ConfigServer from './SettingConfigServer.vue'
+
+const userStore = useUserStore()
+const { auth } = storeToRefs(userStore)
 </script>
 
 <style scoped lang="scss">
@@ -63,11 +70,11 @@ import ConfigServer from './SettingConfigServer.vue'
     :deep(.el-tabs__item) {
       font-weight: 300;
     }
-
   }
 
   .tab-content {
     width: 100%;
+    height: 100%;
     padding-left: 30px;
 
     .title {
