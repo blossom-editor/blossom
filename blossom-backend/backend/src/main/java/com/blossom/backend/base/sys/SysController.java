@@ -32,7 +32,7 @@ public class SysController {
     private ParamService paramService;
 
     /**
-     * 服务在线检查
+     * 服务在线检查 [OP]
      */
     @AuthIgnore
     @GetMapping("/alive")

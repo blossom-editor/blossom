@@ -29,7 +29,7 @@ public class WebController {
     private final WebService baseService;
 
     /**
-     * 网站列表
+     * 网站列表 [OP]
      */
     @AuthIgnore
     @GetMapping("/list")

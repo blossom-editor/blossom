@@ -34,7 +34,7 @@ public class ThirdPartyScheduled {
     private UserService userService;
 
     /**
-     * 天气
+     * 刷新天气缓存
      *
      * @apiNote 每30分钟刷新, 请求会立即刷新
      */

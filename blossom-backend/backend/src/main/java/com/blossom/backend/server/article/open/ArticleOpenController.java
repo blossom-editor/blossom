@@ -50,7 +50,7 @@ public class ArticleOpenController {
 
 
     /**
-     * 查询公开文章
+     * 查询公开文章 [OP]
      *
      * @param id 文章ID
      * @apiNote 只返回 html 内容, 每次查询公开会递增 PV 和 UV, 接口每调用一次都会递增 PV 数据, UV 数据每个 IP 每天只会递增一次

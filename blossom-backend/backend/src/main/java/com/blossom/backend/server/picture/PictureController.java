@@ -70,7 +70,7 @@ public class PictureController {
     }
 
     /**
-     * 统计图片
+     * 统计图片 [OP]
      *
      * @param pid 文件夹ID
      */

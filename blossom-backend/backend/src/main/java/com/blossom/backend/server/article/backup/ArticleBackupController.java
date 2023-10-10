@@ -106,7 +106,7 @@ public class ArticleBackupController {
     }
 
     /**
-     * head 请求获取分片信息
+     * head 请求获取分片信息 [OP]
      *
      * @param filename 文件名
      * @param request  request
@@ -122,7 +122,7 @@ public class ArticleBackupController {
     }
 
     /**
-     * 分片下载
+     * 分片下载 [OP]
      *
      * @param req     下载请求
      * @param request request
