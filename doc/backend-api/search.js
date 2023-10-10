@@ -41,7 +41,7 @@ api[0].list[1].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/sys/alive',
-    desc: '服务在线检查',
+    desc: '服务在线检查 [OP]',
 });
 api[0].list[1].list.push({
     order: '2',
@@ -255,7 +255,7 @@ api[1].list[3].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/article/open/info',
-    desc: '查询公开文章',
+    desc: '查询公开文章 [OP]',
 });
 api[1].list[3].list.push({
     order: '2',
@@ -336,13 +336,13 @@ api[1].list[6].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/article/backup/download/fragment',
-    desc: 'head 请求获取分片信息',
+    desc: 'head 请求获取分片信息 [OP]',
 });
 api[1].list[6].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/article/backup/download/fragment',
-    desc: '分片下载',
+    desc: '分片下载 [OP]',
 });
 api[1].list.push({
     alias: 'ArticleStatController',
@@ -422,7 +422,7 @@ api[1].list[8].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/picture/stat',
-    desc: '统计图片',
+    desc: '统计图片 [OP]',
 });
 api[1].list.push({
     alias: 'PictureBlosController',
@@ -638,7 +638,7 @@ api[1].list[14].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/web/list',
-    desc: '网站列表',
+    desc: '网站列表 [OP]',
 });
 api[1].list[14].list.push({
     order: '2',
