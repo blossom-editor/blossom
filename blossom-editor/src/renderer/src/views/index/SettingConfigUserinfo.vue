@@ -37,7 +37,7 @@
       </el-input>
     </el-form-item>
     <el-form-item label="头像" prop="avatar">
-      <el-input v-model="userinfoForm.avatar" size="default" placeholder="请输入图片地址">
+      <el-input v-model="userinfoForm.avatar" size="default" placeholder="请输入图片地址, http://...">
         <template #prefix>
           <div class="iconbl bl-image--line" style="font-size: 20px;"></div>
         </template>

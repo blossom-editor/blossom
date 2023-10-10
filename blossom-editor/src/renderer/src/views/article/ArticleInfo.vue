@@ -139,7 +139,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标">
+            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标, wl-">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
                   <div style="cursor: pointer;font-size: 20px;" @click="openNewIconWindow()">
@@ -154,7 +154,7 @@
 
           <!--  -->
           <el-form-item label="封面">
-            <el-input v-model="docForm.cover" style="width:432px" placeholder="封面图片的访问地址">
+            <el-input v-model="docForm.cover" style="width:432px" placeholder="封面图片的访问地址, http://...">
               <template #prefix>
                 <el-icon size="15">
                   <Picture />

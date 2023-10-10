@@ -6,18 +6,18 @@
         <div class="iconbl bl-a-closeline-line" @click="closeForm"></div>
       </bl-row>
       <bl-row>
-        <el-form label-width="70px" v-model="webForm" style="width: calc(100% - 90px);">
+        <el-form label-width="70px" v-model="webForm" style="width: calc(100% - 90px)">
           <el-form-item label="网站名称">
-            <el-input v-model="webForm.name" style="width: 100%;" />
+            <el-input v-model="webForm.name" style="width: 100%" />
           </el-form-item>
           <el-form-item label="网站地址">
-            <el-input v-model="webForm.url" />
+            <el-input v-model="webForm.url" placeholder="http://..." />
           </el-form-item>
           <el-form-item label="网站图标">
-            <el-input v-model="webForm.icon">
+            <el-input v-model="webForm.icon" placeholder="wl-">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
-                  <div style="cursor: pointer;font-size: 20px;" @click="openNewIconWindow()">
+                  <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>
                     </svg>
@@ -27,26 +27,26 @@
             </el-input>
           </el-form-item>
           <el-form-item label="图标地址">
-            <el-input v-model="webForm.img" />
+            <el-input v-model="webForm.img" placeholder="http://..." />
           </el-form-item>
           <el-form-item label="网站类型">
-            <el-select v-model="webForm.type" class="m-2" placeholder="选择类型" style="width: 140px;">
+            <el-select v-model="webForm.type" class="m-2" placeholder="选择类型" style="width: 140px">
               <el-option label="日常 - Daily" value="daily" />
               <el-option label="工作 - Work" value="work" />
               <el-option label="其他 - Other" value="other" />
             </el-select>
-            <el-input-number v-model="webForm.sort" :min="1" style="width: 80px;margin-left: 10px;" />
+            <el-input-number v-model="webForm.sort" :min="1" style="width: 80px; margin-left: 10px" />
           </el-form-item>
         </el-form>
         <div class="web-item hover">
-          <img v-if="isNotBlank(webForm.img)" :src="webForm.img" style="width: 40px;height: 40px;object-fit: contain;">
-          <svg v-else style="width: 40px;height: 40px;" aria-hidden="true">
+          <img v-if="isNotBlank(webForm.img)" :src="webForm.img" style="width: 40px; height: 40px; object-fit: contain" />
+          <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
             <use :xlink:href="'#' + webForm.icon"></use>
           </svg>
           <div class="web-name">{{ webForm.name }}</div>
         </div>
       </bl-row>
-      <bl-row just="space-between" style="margin-bottom: 10px;padding: 0 20px;">
+      <bl-row just="space-between" style="margin-bottom: 10px; padding: 0 20px">
         <el-button type="danger" @click="delWeb" :disabled="!(webForm.id > 0)">删除</el-button>
         <el-button type="primary" @click="saveWeb">保存</el-button>
       </bl-row>
@@ -54,10 +54,8 @@
 
     <bl-row just="flex-end" class="web-collect-title">
       <span class="title-remind" style="">右键点击卡片修改</span>
-      <span class="iconbl bl-add-line" style="font-size: 20px;margin-right: 10px;cursor: pointer;"
-        @click="showForm()"></span>
-      <span class="iconbl bl-refresh-smile" style="font-size: 20px;margin-right: 10px;cursor: pointer;"
-        @click="getWebAll"></span>
+      <span class="iconbl bl-add-line" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="showForm()"></span>
+      <span class="iconbl bl-refresh-smile" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="getWebAll"></span>
       Quick Access
     </bl-row>
     <div v-for="(collect, index) in data" @click="closeForm">
@@ -65,10 +63,9 @@
         {{ collect.title }}
       </bl-row>
       <div class="web-collect-content">
-        <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)"
-          @contextmenu="showForm(web)">
-          <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px;height: 40px;object-fit: contain;">
-          <svg v-else style="width: 40px;height: 40px;" aria-hidden="true">
+        <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm(web)">
+          <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
+          <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
             <use :xlink:href="'#' + web.icon"></use>
           </svg>
           <div class="web-name">{{ web.name }}</div>
@@ -95,7 +92,7 @@ onActivated(() => {
 
 const data = ref<any>([])
 const getWebAll = () => {
-  webAllApi().then(resp => {
+  webAllApi().then((resp) => {
     let webs = [
       { title: 'Daily', webs: resp.data.daily },
       { title: 'Work', webs: resp.data.work },
@@ -117,19 +114,22 @@ const showForm = (updWeb?: any) => {
   }
 }
 const closeForm = () => {
-  saveFormStyle.value = { display: 'none' };
+  saveFormStyle.value = { display: 'none' }
 }
 const saveWeb = () => {
-  webSaveApi(webForm.value).then(_resp => {
+  webSaveApi(webForm.value).then((_resp) => {
     getWebAll()
     closeForm()
   })
 }
 const delWeb = () => {
   ElMessageBox.confirm(`删除后将不可恢复, 是否确定删除[${webForm.value.name}]?`, {
-    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true,
+    confirmButtonText: '确定删除',
+    cancelButtonText: '我再想想',
+    type: 'info',
+    draggable: true
   }).then(() => {
-    webDelApi(webForm.value).then(_resp => {
+    webDelApi(webForm.value).then((_resp) => {
       getWebAll()
       closeForm()
     })
@@ -140,14 +140,14 @@ const delWeb = () => {
 <style scoped lang="scss">
 .web-collect-root {
   @include box(100%, 100%);
-  @include themeBg(#ffffff00, #1E1E1E75);
+  @include themeBg(#ffffff00, #1e1e1e75);
   backdrop-filter: blur(4px);
   padding-left: 10px;
   overflow: auto;
   overflow-y: overlay;
 
   .web-collect-title {
-    @include themeColor(#BDBDBD, #a3a6ad);
+    @include themeColor(#bdbdbd, #a3a6ad);
     flex-wrap: wrap-reverse;
     align-content: flex-end;
     text-shadow: var(--bl-text-shadow);
@@ -169,7 +169,7 @@ const delWeb = () => {
   }
 
   .web-collect-group {
-    @include themeColor(#BDBDBD, #a3a6ad);
+    @include themeColor(#bdbdbd, #a3a6ad);
     @include font(14px);
     text-shadow: var(--bl-text-shadow);
     padding: 10px 20px;
@@ -202,7 +202,7 @@ const delWeb = () => {
 
     .web-name {
       @include box(100%, 32px);
-      @include themeColor(#A5A5A5, #929292);
+      @include themeColor(#a5a5a5, #929292);
       @include themeText(2px 2px 4px rgba(107, 104, 104, 0.7), 2px 3px 5px rgb(0, 0, 0));
       text-align: center;
       font-size: 11px;
@@ -219,8 +219,8 @@ const delWeb = () => {
   .save-form {
     @include box(100%, 270px);
     @include absolute(0, 0);
-    @include themeBg(#FFFFFFF1, #000000DD);
-    @include themeShadow(3px 3px 10px 1px #CCCCCC, 3px 3px 10px 1px #000000);
+    @include themeBg(#fffffff1, #000000dd);
+    @include themeShadow(3px 3px 10px 1px #cccccc, 3px 3px 10px 1px #000000);
     z-index: 99999999;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
