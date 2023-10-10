@@ -52,6 +52,18 @@ api[0].list[1].list.push({
 api[0].list[1].list.push({
     order: '3',
     deprecated: 'false',
+    url: 'http://127.0.0.1:9999/sys/param/list',
+    desc: '系统参数列表',
+});
+api[0].list[1].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'http://127.0.0.1:9999/sys/param/upd',
+    desc: '修改系统参数',
+});
+api[0].list[1].list.push({
+    order: '5',
+    deprecated: 'false',
     url: 'http://127.0.0.1:9999/sys/param/refresh',
     desc: '刷新系统配置',
 });
@@ -669,7 +681,7 @@ api[2].list[1].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1:9999/thirdparty/scheduled/weather',
-    desc: '天气',
+    desc: '刷新天气缓存',
 });
 api.push({
     name: '拓展功能',
