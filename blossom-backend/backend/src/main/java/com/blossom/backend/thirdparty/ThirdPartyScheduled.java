@@ -3,6 +3,7 @@ package com.blossom.backend.thirdparty;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.thirdparty.hefeng.WeatherManager;
+import com.blossom.common.base.pojo.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class ThirdPartyScheduled {
      */
     @RequestMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
-    public void refreshWeather() {
+    public R<?> refreshWeather() {
         log.debug("[BLOSSOM] 刷新天气");
         List<UserEntity> users = userService.listAll();
         Set<String> locations = users.stream().collect(Collectors.groupingBy(UserEntity::getLocation)).keySet();
@@ -47,5 +48,6 @@ public class ThirdPartyScheduled {
             weatherManager.clearAll(location);
             weatherManager.findWeatherAll(location);
         }
+        return R.ok();
     }
 }

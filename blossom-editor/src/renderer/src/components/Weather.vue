@@ -1,16 +1,22 @@
 <template>
   <div class="weather-root">
-
     <bl-row class="location" just="flex-end">
       {{ weather.location.name }}
-      <span class="iconbl bl-refresh-smile container-refresh" @click="getWeather"></span>
+      <el-tooltip effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="3000">
+        <span class="iconbl bl-refresh-smile container-refresh" @click="refresh"></span>
+        <template #content>
+          刷新天气信息
+          <br />
+          注意: 请勿频繁刷新, 避免超出三方免费额度
+        </template>
+      </el-tooltip>
     </bl-row>
 
     <!-- 现在 -->
     <div class="now hover-dark">
       <div class="weather-title"></div>
       <div class="weather-body">
-        <img :src="weather.now.img" style="width: 190px;height: 190px;">
+        <img :src="weather.now.img" style="width: 190px; height: 190px" />
         <!-- <img src="@renderer/assets/imgs/weather/feng.png" style="width: 190px;height: 190px;"> -->
         <div class="temp-wrapper">
           <!-- 温度 -->
@@ -19,7 +25,7 @@
           </span>
           <!-- 温度的单位和说明 -->
           <div class="now-temp-extra">
-            <span style="font-size: 25px;">°C</span>
+            <span style="font-size: 25px">°C</span>
             <span style="">{{ weather.now.text }}</span>
           </div>
         </div>
@@ -34,7 +40,7 @@
     <div class="today hover-dark">
       <div class="weather-title">Today</div>
       <div class="weather-body">
-        <img :src="weather.daily[0].img" style="width: 40px;height: 40px;">
+        <img :src="weather.daily[0].img" style="width: 40px; height: 40px" />
         <!-- <img src="@renderer/assets/imgs/weather/feng.png" style="width: 40px;height: 40px;"> -->
         <span>{{ weather.daily[0].tempMax }}°C</span>
         ~
@@ -49,7 +55,7 @@
     <div class="tomorrow hover-dark">
       <div class="weather-title">Tomorrow</div>
       <div class="weather-body">
-        <img :src="weather.daily[1].img" style="width: 40px;height: 40px;">
+        <img :src="weather.daily[1].img" style="width: 40px; height: 40px" />
         <span>{{ weather.daily[1].tempMax }}°C</span>
         ~
         <span>{{ weather.daily[1].tempMin }}°C</span>
@@ -66,7 +72,7 @@
         <span>After</span>
       </div>
       <div class="weather-body">
-        <img :src="weather.daily[2].img" style="width: 40px;height: 40px;">
+        <img :src="weather.daily[2].img" style="width: 40px; height: 40px" />
         <span>{{ weather.daily[2].tempMax }}°C</span>
         ~
         <span>{{ weather.daily[2].tempMin }}°C</span>
@@ -89,12 +95,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onActivated } from "vue"
+import { ref, onMounted, onActivated } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
-import { getAll } from "@renderer/api/weather"
+import { getAll, refreshApi } from '@renderer/api/weather'
 
 onMounted(() => {
-  refreshWeatherTask();
+  refreshWeatherTask()
 })
 
 onActivated(() => {
@@ -103,8 +109,8 @@ onActivated(() => {
 
 const userStore = useUserStore()
 
-const maskVisible = ref(false);
-const weatherResult = ref('LOADING');
+const maskVisible = ref(false)
+const weatherResult = ref('LOADING')
 
 const getImgUrl = (name: string) => {
   return new URL(`../assets/imgs/weather/${name}.png`, import.meta.url).href
@@ -120,20 +126,22 @@ const weather = ref({
     temp: '0',
     text: '晴'
   },
-  hourly: [{
-    text: '0'
-  }],
+  hourly: [
+    {
+      text: '0'
+    }
+  ],
   daily: [
     { iconValueDay: '#wt-qing', img: getImgUrl('qing-s'), tempMin: '0', tempMax: '0', textDay: '晴' },
     { iconValueDay: '#wt-qing', img: getImgUrl('qing-s'), tempMin: '0', tempMax: '0', textDay: '晴' },
     { iconValueDay: '#wt-qing', img: getImgUrl('qing-s'), tempMin: '0', tempMax: '0', textDay: '晴' }
   ]
-});
+})
 
 const getWeather = () => {
-  weatherResult.value = 'LOADING';
+  weatherResult.value = 'LOADING'
   setTimeout(() => {
-    getAll({ location: userStore.userinfo.location }).then(resp => {
+    getAll({ location: userStore.userinfo.location }).then((resp) => {
       if (resp.data.now) {
         resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
       }
@@ -144,12 +152,18 @@ const getWeather = () => {
       }
       weather.value = { ...weather.value, ...resp.data }
     })
-  }, 0);
+  }, 0)
+}
+
+const refresh = () => {
+  refreshApi().then((_) => {
+    getWeather()
+  })
 }
 
 const refreshWeatherTask = () => {
   // 20 分钟刷新一次日期
-  setInterval(getWeather, 1000 * 60 * 20);
+  setInterval(getWeather, 1000 * 60 * 20)
 }
 </script>
 
@@ -157,7 +171,7 @@ const refreshWeatherTask = () => {
 .weather-root {
   @include flex(row, center, flex-end);
   @include font(15px, 500, 'jellee');
-  @include themeColor(#ffffff, #D8D8D8); // width: 100%;
+  @include themeColor(#ffffff, #d8d8d8); // width: 100%;
   @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 4px rgba(39, 39, 39, 0.5));
   min-height: 250px;
   max-height: 250px;
@@ -187,7 +201,6 @@ const refreshWeatherTask = () => {
 
       &:hover {
         animation: rotation 10s linear infinite;
-        ;
         text-shadow: none;
       }
     }
@@ -218,7 +231,6 @@ const refreshWeatherTask = () => {
       cursor: pointer;
       flex-shrink: 0;
     }
-
   }
 
   .weather-title {
@@ -244,7 +256,9 @@ const refreshWeatherTask = () => {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     background-color: var(--el-color-primary);
-    transition: box-shadow 0.3s, width 0.2s;
+    transition:
+      box-shadow 0.3s,
+      width 0.2s;
     margin-left: 10px;
 
     svg {
@@ -288,7 +302,10 @@ const refreshWeatherTask = () => {
   .tomorrow,
   .dayaftert {
     @include box(100px, 200px);
-    transition: box-shadow 0.3s, width 0.2s, height 0.2s;
+    transition:
+      box-shadow 0.3s,
+      width 0.2s,
+      height 0.2s;
 
     &:hover {
       z-index: 15;
@@ -323,7 +340,7 @@ const refreshWeatherTask = () => {
 
 .hover-dark {
   &:hover {
-    box-shadow: 0 2px 10px 3px rgba(0, 0, 0, .3);
+    box-shadow: 0 2px 10px 3px rgba(0, 0, 0, 0.3);
   }
 }
 </style>
