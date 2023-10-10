@@ -10,6 +10,6 @@ export const getAll = (params?: object): Promise<R<any>> => {
  * @param params
  * @returns
  */
-export const refreshApi = (params?: object): Promise<R<any>> => {
-  return rq.get<R<any>>('/thirdparty/scheduled/weather', { params })
+export const refreshApi = (): Promise<R<any>> => {
+  return rq.post<R<any>>('/thirdparty/scheduled/weather')
 }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,7 @@ public class ThirdPartyScheduled {
      *
      * @apiNote 每30分钟刷新, 请求会立即刷新
      */
-    @RequestMapping("/weather")
+    @PostMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
     public R<?> refreshWeather() {
         log.debug("[BLOSSOM] 刷新天气");
