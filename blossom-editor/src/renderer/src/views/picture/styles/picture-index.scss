@@ -12,24 +12,21 @@
     top: 0;
 
     .doc-tree-menu-container {
-      @include box(100%, calc(100% - 239px))
+      @include box(100%, calc(100% - 239px));
     }
 
     .doc-upload {
       @include box(100%, 239px);
       border-top: 1px solid var(--el-border-color);
     }
-
   }
-
-
 
   // 编辑器内容
   .picture-container {
     @include box(calc(100% - 250px), 100%);
     position: relative;
     border-left: 1px solid var(--el-border-color);
-    background-color: #FFFFFF00;
+    background-color: #ffffff00;
 
     .star {
       @include box(40px, 100%);
@@ -90,14 +87,13 @@
         }
       }
 
-
       .radio,
       .cache-clear,
       .statistic {
         @include themeColor(#a7a7a7, #6d6d6d);
         margin-left: 15px;
 
-        &>div {
+        & > div {
           font-size: 11px;
           text-align: center;
         }
@@ -138,7 +134,6 @@
       padding: 10px 20px;
       overflow-y: scroll;
 
-
       .picture-card {
         @include themeShadow(3px 3px 10px 1px #d3d3d3, 3px 3px 10px 1px #000);
         @include flex(column, flex-start, center);
@@ -155,19 +150,40 @@
           }
         }
 
-        .img-wrapper {
-          height: 100%;
-          width: 100%;
-          cursor: pointer;
+        .other-file {
+          @include flex(column, center, center);
+          @include box(100%, 100%);
+          background-color: var(--bl-bg-color);
+          color: var(--bl-text-color-light);
 
-          img {
-            height: 100%;
+          .other-filename {
+            @include ellipsis();
+            text-align: center;
             width: 100%;
-            object-fit: cover;
+            font-size: 12px;
+          }
+
+          .other-suffix {
+            @include font(23px, 300);
+            white-space: pre;
           }
         }
 
+        .img-wrapper {
+          @include box(100%, 100%);
+          @include flex(row, center, center);
+          cursor: pointer;
+        }
+
+        img {
+          @include box(100%, 100%);
+          object-fit: cover;
+        }
+
         .img-error {
+        }
+
+        .img-deleted {
           @include flex(row, center, center);
           color: var(--el-color-primary-light-7);
           height: 100%;
@@ -198,7 +214,6 @@
               // background-color: var(--el-color-primary);
             }
           }
-
         }
       }
 
@@ -233,6 +248,5 @@
         text-align: center;
       }
     }
-
   }
 }

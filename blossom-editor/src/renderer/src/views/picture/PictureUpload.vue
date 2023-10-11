@@ -1,13 +1,25 @@
 <template>
   <div class="picture-upload-root">
-    <el-upload :action="serverStore.serverUrl + uploadFileApiUrl" name="file"
+    <el-upload
+      name="file"
+      list-type="text"
+      drag
+      multiple
+      :disabled="!curFolder || !curFolder?.id"
+      :action="serverStore.serverUrl + uploadFileApiUrl"
       :data="{ pid: curFolder?.id, repeatUpload: porps.repeatUpload }"
-      :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }" :show-file-list="true" list-type="text"
-      :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError" drag multiple>
-      <span style="font-size: 12px;">
+      :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
+      :show-file-list="true"
+      :before-upload="beforeUpload"
+      :on-success="onUploadSeccess"
+      :on-error="onError">
+      <bl-row v-if="!curFolder || !curFolder?.id" just="center" align="center" height="100%" style="font-size: 12px"
+        >请先选择文件夹，再上传文件</bl-row
+      >
+      <bl-row v-else just="center" align="center" height="100%" style="font-size: 12px">
         点击或拖拽上传至<br />
         《{{ curFolder?.name }}》
-      </span>
+      </bl-row>
     </el-upload>
   </div>
 </template>
@@ -34,7 +46,6 @@ const curFolder = inject(provideKeyDocInfo)
 const userStore = useUserStore()
 const serverStore = useServerStore()
 //#endregion
-
 </script>
 
 <style scoped lang="scss">
@@ -42,7 +53,7 @@ const serverStore = useServerStore()
   @include box(100%, 100%);
   padding: 10px 10px 5px 10px;
 
-  &>div {
+  & > div {
     @include box(100%, 100%);
   }
 

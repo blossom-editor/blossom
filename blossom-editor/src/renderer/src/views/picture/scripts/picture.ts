@@ -6,22 +6,22 @@ import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
  * Picture Object
  */
 export interface Picture {
-  creTime: string,
-  id: string | number,
-  name: string,
-  pathName: string,
-  pid: string | number,
-  size: number,
-  sourceName: string,
-  starStatus: number,
-  url: string,
-  articleNames: string,
+  creTime: string
+  id: string | number
+  name: string
+  pathName: string
+  pid: string | number
+  size: number
+  sourceName: string
+  starStatus: number
+  url: string
+  articleNames: string
   delTime: number
 }
 
 /**
  * 获取一个默认的图片实现
- * @returns 
+ * @returns
  */
 export const buildDefaultPicture = (): Picture => {
   return {
@@ -40,9 +40,9 @@ export const buildDefaultPicture = (): Picture => {
 }
 
 /**
- * 
- * @param rawFile 
- * @returns 
+ *
+ * @param rawFile
+ * @returns
  */
 export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.size / 1024 / 1024 > 50) {
@@ -53,9 +53,9 @@ export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 }
 
 /**
- * 
- * @param resp 
- * @param _file 
+ *
+ * @param resp
+ * @param _file
  */
 export const onUploadSeccess: UploadProps['onSuccess'] = (resp, _file?) => {
   handleUploadSeccess(resp)
@@ -77,23 +77,23 @@ export const handleUploadSeccess = (resp: any): boolean => {
 }
 
 /**
- * 
- * @param error 
- * @param _file 
- * @param _files 
+ *
+ * @param error
+ * @param _file
+ * @param _files
  */
 export const onError: UploadProps['onError'] = (error, _file, _files) => {
   handleUploadError(error)
 }
 
 /**
- * 
- * @param error 
+ *
+ * @param error
  */
 export const handleUploadError = (error: Error) => {
   if (error.message != undefined) {
     try {
-      let resp = JSON.parse(error.message);
+      let resp = JSON.parse(error.message)
       if (resp != undefined) {
         Notify.error(resp.msg, '上传失败')
       }
@@ -104,15 +104,15 @@ export const handleUploadError = (error: Error) => {
 }
 /**
  * 图片引用文章转为数组拼接转
- * 
+ *
  * @param names 文章名称拼接的字符串
- * @returns 
+ * @returns
  */
 export const articleNamesToArray = (names: string): string[] => {
   if (isBlank(names)) {
     return []
   }
-  let result = names.split(',').filter(name => isNotBlank(name))
+  let result = names.split(',').filter((name) => isNotBlank(name))
   return result
 }
 

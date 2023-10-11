@@ -1,9 +1,7 @@
 <template>
   <div class="index-picture-root">
-
     <!-- folder menu -->
     <div class="doc-container">
-
       <div class="doc-tree-menu-container">
         <PictureTreeDocs @click-doc="clickCurFolder"></PictureTreeDocs>
       </div>
@@ -18,8 +16,7 @@
       <div class="picutre-workbench">
         <div class="workbench-group">
           <div class="star">
-            <div v-if="picuturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus">
-            </div>
+            <div v-if="picuturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus"></div>
             <div v-else class="iconbl bl-star-fill" @click="changeStarStatus"></div>
           </div>
 
@@ -32,24 +29,25 @@
             </el-radio-group>
           </div>
 
-
           <div class="radio">
             <el-tooltip effect="blossomr" placement="right" :hide-after="0">
-              <template #content>
-                开启重复上传后<br />重名的图片将会被覆盖
-              </template>
-              <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px;margin-left: 3px;"></span></div>
+              <template #content> 开启重复上传后<br />重名的图片将会被覆盖 </template>
+              <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
             </el-tooltip>
-            <el-switch width="70" class="replace-upload-switch" inline-prompt size="large" v-model="isReplaceUpload"
-              active-text="开启" inactive-text="关闭" />
+            <el-switch
+              width="70"
+              class="replace-upload-switch"
+              inline-prompt
+              size="large"
+              v-model="isReplaceUpload"
+              active-text="开启"
+              inactive-text="关闭" />
           </div>
 
           <div class="cache-clear">
             <el-tooltip effect="blossomr" placement="right" :hide-after="0">
-              <template #content>
-                重复上传图片后<br />如果图片无变化可刷新缓存
-              </template>
-              <div>清空图片缓存<span class="iconbl bl-admonish-line" style="font-size: 12px;margin-left: 3px;"></span></div>
+              <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
+              <div>清空图片缓存<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
             </el-tooltip>
             <el-button @click="picCacheRefresh">清空图片缓存</el-button>
           </div>
@@ -69,33 +67,36 @@
 
       <div class="picture-card-container">
         <div :class="['picture-card', cardClass]" v-for="pic in picturePages">
-          <div class="img-wrapper" @click="showPicInfo(pic.url)">
-            <img v-if="!pic.delTime" :src="picCacheWrapper(pic.url)">
-            <div v-else class="img-error">
-              {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
-            </div>
+          <div v-if="pic.delTime" class="img-deleted">
+            {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
+          </div>
+          <div v-else-if="!isImage(pic.url)" class="other-file">
+            <div class="other-filename">{{ getFilePrefix(pic.name) }}</div>
+            <div class="other-suffix">{{ getFileSuffix(pic.url) }}</div>
+          </div>
+          <div v-else class="img-wrapper" @click="showPicInfo(pic.url)">
+            <img :src="picCacheWrapper(pic.url)" @error="onErrorImg" />
           </div>
 
           <div class="picuter-card-workbench">
             <el-tooltip placement="bottom" trigger="click" :hide-after="0">
               <template #content>
-                <div style="max-width: 300px;white-space:break-spaces;word-wrap: break-word;word-break:break-all;">
+                <div style="max-width: 300px; white-space: break-spaces; word-wrap: break-word; word-break: break-all">
                   <bl-row>图片名称: {{ pic.name }}</bl-row>
                   <bl-row>图片大小: {{ formatFileSize(pic.size) }}</bl-row>
                   <bl-row>上传时间: {{ pic.creTime }}</bl-row>
                   <bl-row>图片路径: {{ pic.pathName }}</bl-row>
-                  <bl-row v-if="!isEmpty(pic.articleNames)" align="flex-start">引用文章:
+                  <bl-row v-if="!isEmpty(pic.articleNames)" align="flex-start"
+                    >引用文章:
                     <div>
-                      <div v-for="aname in articleNamesToArray(pic.articleNames)" style="margin-left: -13px;">
-                        《{{ aname }}》
-                      </div>
+                      <div v-for="aname in articleNamesToArray(pic.articleNames)" style="margin-left: -13px">《{{ aname }}》</div>
                     </div>
                   </bl-row>
                 </div>
               </template>
               <div class="item iconbl bl-problem-line"></div>
             </el-tooltip>
-            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)" @click.right="copyMarkdownUrl(pic.url)"></div>
+            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)" @click.right="copyMarkdownUrl(pic.url, pic.name)"></div>
             <div class="item iconbl bl-a-clouddownload-line" @click="download(pic.url)"></div>
             <div v-if="pic.starStatus == 0" class="item iconbl bl-star-line" @click="starPicture(pic)"></div>
             <div v-else-if="pic.starStatus == 1" class="item iconbl bl-star-fill" @click="starPicture(pic)"></div>
@@ -104,32 +105,32 @@
         </div>
 
         <div class="picuter-card-next">
-          <el-button type="info" plain style="width: 100px;" @click="nextPage">下一页</el-button>
+          <el-button type="info" plain style="width: 100px" @click="nextPage">下一页</el-button>
         </div>
       </div>
     </div>
 
     <PictureViewerInfo ref="PictureViewerInfoRef"></PictureViewerInfo>
-
   </div>
 </template>
 <script setup lang="ts">
 // vue
-import { ref, provide, computed, onActivated } from "vue"
+import { ref, provide, computed, onActivated } from 'vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { CopyDocument } from '@element-plus/icons-vue'
 import { picturePageApi, pictureStarApi, pictureDelApi, pictureStatApi } from '@renderer/api/blossom'
 import { treeToInfo, provideKeyDocInfo } from '@renderer/views/doc/doc'
 import { isEmpty } from 'lodash'
-import { isNotNull, isNull } from "@renderer/assets/utils/obj"
-import { formatFileSize } from '@renderer/assets/utils/util'
+import { isNotNull, isNull } from '@renderer/assets/utils/obj'
+import { formatFileSize, getFilePrefix, getFileSuffix, isImage } from '@renderer/assets/utils/util'
 import { writeText, download } from '@renderer/assets/utils/electron'
 
 // component
 import { articleNamesToArray, picCacheWrapper, Picture, picCacheRefresh } from './scripts/picture'
-import PictureTreeDocs from "./PictureTreeDocs.vue"
-import PictureUpload from "./PictureUpload.vue"
-import PictureViewerInfo from "./PictureViewerInfo.vue"
+import PictureTreeDocs from './PictureTreeDocs.vue'
+import PictureUpload from './PictureUpload.vue'
+import PictureViewerInfo from './PictureViewerInfo.vue'
+import errorImg from '@renderer/assets/imgs/img_error.png'
 
 onActivated(() => {
   getPictureStat()
@@ -137,7 +138,7 @@ onActivated(() => {
 
 // 是否替换上传
 const isReplaceUpload = ref(false)
-const cardSize = ref('mini');
+const cardSize = ref('mini')
 
 const cardClass = computed(() => {
   if (cardSize.value == 'large') {
@@ -147,8 +148,8 @@ const cardClass = computed(() => {
 })
 
 //#region ----------------------------------------< 当前文件当前文件 >----------------------------
-const curFolder = ref<DocInfo>()       // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
-type PageParam = { pageNum: number, pageSize: number, pid: number, name: string, starStatus: number | undefined } // 分页对象类型
+const curFolder = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
+type PageParam = { pageNum: number; pageSize: number; pid: number; name: string; starStatus: number | undefined } // 分页对象类型
 // 列表参数
 const picuturePageParam = ref<PageParam>({
   pageNum: 1,
@@ -167,13 +168,17 @@ const pictureStat = ref<any>({
 provide(provideKeyDocInfo, curFolder)
 
 const curIsFolder = () => {
-  if (isNull(curFolder)) { return false }
-  if (isNull(curFolder.value)) { return false }
+  if (isNull(curFolder)) {
+    return false
+  }
+  if (isNull(curFolder.value)) {
+    return false
+  }
   return true
 }
 
 const getPictureStat = (pid?: number) => {
-  pictureStatApi({ pid: pid }).then(resp => {
+  pictureStatApi({ pid: pid }).then((resp) => {
     if (isNotNull(pid)) {
       pictureStat.value.cur.picCount = resp.data.pictureCount
       pictureStat.value.cur.picSize = formatFileSize(resp.data.pictureSize)
@@ -193,7 +198,7 @@ const clickCurFolder = (tree: DocTree) => {
   picuturePageParam.value.pageNum = 1
   picuturePageParam.value.pid = curFolder.value.id
   picturePages.value = []
-  picturePageApi(picuturePageParam.value).then(resp => {
+  picturePageApi(picuturePageParam.value).then((resp) => {
     picturePages.value = resp.data.datas
   })
   getPictureStat(curFolder.value.id)
@@ -207,14 +212,14 @@ const nextPage = () => {
     return
   }
   picuturePageParam.value.pageNum += 1
-  picturePageApi(picuturePageParam.value).then(resp => {
+  picturePageApi(picuturePageParam.value).then((resp) => {
     if (resp.data.pageNum < picuturePageParam.value.pageNum) {
       picuturePageParam.value.pageNum = resp.data.pageNum
       return
     }
     resp.data.datas.forEach((pic: Picture) => {
       picturePages.value.push(pic)
-    });
+    })
   })
 }
 
@@ -230,7 +235,7 @@ const changeStarStatus = () => {
   if (curIsFolder()) {
     picuturePageParam.value.pageNum = 1
     picuturePageParam.value.pid = curFolder.value?.id as number
-    picturePageApi(picuturePageParam.value).then(resp => {
+    picturePageApi(picuturePageParam.value).then((resp) => {
       picturePages.value = resp.data.datas
     })
   }
@@ -246,17 +251,32 @@ const showPicInfo = (url: string) => {
 }
 
 /**
+ * 图片查询失败时的处理
+ * @param a
+ */
+const onErrorImg = (a: Event) => {
+  console.log(a.target)
+  let imgEle = a.target as HTMLImageElement
+  if (imgEle) {
+    imgEle.src = errorImg
+    imgEle.classList.add('img-error')
+    imgEle.style.width = '32px'
+    imgEle.style.height = 'auto'
+  }
+}
+
+/**
  * 复制文章链接
- * @param url 
+ * @param url
  */
 const copyUrl = (url: string) => {
   writeText(url)
   ElMessage.info({ message: '已复制链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }
 
-const copyMarkdownUrl = (url: string) => {
-  writeText(url)
-  ElMessage.info({ message: '已复制 MD 链接格式', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
+const copyMarkdownUrl = (url: string, picName: string) => {
+  writeText(`![${picName}](${url})`)
+  ElMessage.info({ message: '已复制 MD 格式链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }
 
 /**
@@ -268,7 +288,7 @@ const starPicture = (pic: Picture) => {
     id: pic.id,
     starStatus: pic.starStatus == 1 ? 0 : 1
   }
-  pictureStarApi(param).then(_resp => {
+  pictureStarApi(param).then((_resp) => {
     pic.starStatus = param.starStatus
   })
 }
@@ -278,40 +298,41 @@ const starPicture = (pic: Picture) => {
  * @param pic 当前选中图片
  */
 const deletePicture = (pic: Picture) => {
-  ElMessageBox.confirm('删除图片可能会造成公网访问失效, 是否确定删除?', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning' })
-    .then(() => {
-      let articleCount = articleNamesToArray(pic.articleNames).length
-      if (articleCount > 0) {
-        ElNotification.error({
-          title: '删除失败',
-          dangerouslyUseHTMLString: true,
-          message: `尚有[${articleCount}]篇文章正在引用该图片, 请先将文章中的图片引用删除后, 再删除图片! <br/>
+  ElMessageBox.confirm('删除图片可能会造成公网访问失效, 是否确定删除?', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    let articleCount = articleNamesToArray(pic.articleNames).length
+    if (articleCount > 0) {
+      ElNotification.error({
+        title: '删除失败',
+        dangerouslyUseHTMLString: true,
+        message: `尚有[${articleCount}]篇文章正在引用该图片, 请先将文章中的图片引用删除后, 再删除图片! <br/>
           <span style="color:red">注意: 引用文章篇数[${articleCount}]为引用了该图片的草稿数, 并不会校验公开文章是否引用.</span>`,
-          offset: 30,
-          position: 'bottom-right'
-        })
-        return
-      }
-      let urlBak = pic.url
-      pic.url = "1"
-      pic.delTime = 1
+        offset: 30,
+        position: 'bottom-right'
+      })
+      return
+    }
+    let urlBak = pic.url
+    pic.url = '1'
+    pic.delTime = 1
 
-      pictureDelApi({ id: pic.id })
-        .then(_resp => {
-          pic.delTime = 2
-          getPictureStat(curFolder.value?.id)
-          getPictureStat()
-        }).catch(_ => {
-          pic.delTime = 0
-          pic.url = urlBak
-        })
-    })
+    pictureDelApi({ id: pic.id })
+      .then((_resp) => {
+        pic.delTime = 2
+        getPictureStat(curFolder.value?.id)
+        getPictureStat()
+      })
+      .catch((_) => {
+        pic.delTime = 0
+        pic.url = urlBak
+      })
+  })
 }
 
-
-
 //#endregion
-
 </script>
 
 <style scoped lang="scss">
@@ -331,11 +352,11 @@ const deletePicture = (pic: Picture) => {
   }
 
   :deep(.is-text) {
-    color: #A9A9A9;
+    color: #a9a9a9;
   }
 
   :deep(.el-switch__action) {
-    @include themeBg(#ffffff, #A9A9A9);
+    @include themeBg(#ffffff, #a9a9a9);
     border-radius: 4px;
   }
 }

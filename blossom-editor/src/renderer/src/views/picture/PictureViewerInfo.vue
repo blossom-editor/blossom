@@ -26,7 +26,7 @@
         <el-divider></el-divider>
         
         <div class="container btns">
-          <el-tooltip content="强制删除会使图片访问错误" placement="top" :hide-after="0">
+          <el-tooltip content="强制删除会使该图片链接失效" placement="top" :hide-after="0">
             <el-button type="primary" text style="--el-fill-color:#535353;--el-fill-color-light:#414141"
               @click="deletePicture">
               强制删除
