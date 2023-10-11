@@ -1,11 +1,12 @@
 .el-message {
   @include themeShadow(3px 3px 10px 1px rgb(191, 191, 191), 3px 3px 10px 1px #000);
+  @include themeColor(#a4a8b0, #64666b);
   padding: 10px 10px !important;
   border: 3px;
 }
 
 .el-message--success {
-  @include themeBg(#F7F7F7, #1e1e1e);
+  @include themeBg(#f7f7f7, #1e1e1e);
   // --el-message-bg-color: var(--bl-html-color) !important;
   // border: 0 !important;
   // border: 1px solid rgb(51, 217, 0) !important;
