@@ -1,13 +1,14 @@
 // index.ts
-import axios from "axios"
-import pinia from "@renderer/stores/store-config"
-import { toLogin } from "@renderer/router"
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
-import { Local } from "@renderer/assets/utils/storage"
-import { isNotNull } from "@renderer/assets/utils/obj"
+import axios from 'axios'
+import pinia from '@renderer/stores/store-config'
+import { toLogin } from '@renderer/router'
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { Local } from '@renderer/assets/utils/storage'
+import { isNotNull } from '@renderer/assets/utils/obj'
 import { storeKey as authKey, useUserStore } from '@renderer/stores/user'
 import { storeKey as serverUrlKey } from '@renderer/stores/server'
 import Notify from '@renderer/scripts/notify'
+import { log } from 'console'
 
 const userStore = useUserStore(pinia)
 
@@ -39,7 +40,7 @@ export class Request {
         config.headers = {
           ...config.headers,
           ...{
-            "Authorization": 'Bearer ' + token
+            Authorization: 'Bearer ' + token
           }
         }
         return config
@@ -62,7 +63,8 @@ export class Request {
         let isSuccess = false
 
         // 返回文件流
-        if (res.config.responseType === 'blob' ||
+        if (
+          res.config.responseType === 'blob' ||
           res.headers['content-type'] === 'application/force-download' ||
           res.headers['content-type'] === 'application/octet-stream'
         ) {
@@ -83,7 +85,7 @@ export class Request {
           return data
         } else if (data.code === 'AUTH-40101') {
           /* 授权被拦截, 则需要退回登录页请求 */
-          console.log('授权失败, 重置登录状态');
+          console.log('授权失败, 重置登录状态')
           userStore.reset()
           toLogin()
           return Promise.reject(res)
@@ -96,15 +98,20 @@ export class Request {
         }
       },
       (err: any) => {
+        console.log(err)
         let errorMsg = err.message
         let code = err.code
-        if (code === "ERR_NETWORK") {
-          errorMsg = "网络错误,请检查您的网络是否通畅"
+        let resp = err.response
+        if (resp && resp.data) {
+          errorMsg = resp.data.msg
+        }
+        if (code === 'ERR_NETWORK') {
+          errorMsg = '网络错误,请检查您的网络是否通畅'
         }
         Notify.error(errorMsg, '请求失败')
         return Promise.reject(err)
       }
-    );
+    )
   }
 
   // 定义请求方法
@@ -140,7 +147,7 @@ export interface R<T = any> {
 /**
  * 判断接口响应码是否正确
  * @param code 接口响应码
- * @returns 
+ * @returns
  */
 const isSuccessRCode = (code: string | number): boolean => {
   return code === 0 || code === '0' || code === 20000 || code === '20000'
