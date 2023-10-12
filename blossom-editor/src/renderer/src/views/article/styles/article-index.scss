@@ -48,7 +48,7 @@
         cursor: pointer;
 
         &:hover {
-          color: var(--el-color-primary)
+          color: var(--el-color-primary);
         }
       }
     }
@@ -59,7 +59,7 @@
     @include box(100%, 100%);
     position: relative;
     border-left: 1px solid var(--el-border-color);
-    background-color: #FFFFFF00;
+    background-color: #ffffff00;
 
     $heightTools: 45px;
     $heightStatus: 28px;
@@ -76,6 +76,14 @@
       position: relative;
       font-family: inherit;
       font-size: inherit;
+
+      .ep-placeholder {
+        position: absolute;
+        z-index: 2001;
+        height: 100%;
+        width: 100%;
+        background-color: var(--bl-html-color);
+      }
 
       .gutter-holder {
         height: 100%;
@@ -162,5 +170,4 @@
       @include box(150px, 40px);
     }
   }
-
 }

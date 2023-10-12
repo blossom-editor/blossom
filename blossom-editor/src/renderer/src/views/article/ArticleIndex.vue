@@ -54,7 +54,11 @@
       </div>
 
       <!-- 编辑器与预览 -->
+
       <div class="editor-preview" :style="editorStyle">
+        <div v-if="!curArticle" class="ep-placeholder">
+          <ArticleIndexPlaceholder></ArticleIndexPlaceholder>
+        </div>
         <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
@@ -139,7 +143,6 @@
 import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps } from 'element-plus'
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
@@ -153,6 +156,7 @@ import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
 import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
+import ArticleIndexPlaceholder from './ArticleIndexPlaceholder.vue'
 // ts
 import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
@@ -204,14 +208,12 @@ onDeactivated(() => {
 //#region ----------------------------------------< panin store >--------------------------------------
 const userStore = useUserStore()
 const serverStore = useServerStore()
-const configStore = useConfigStore()
-const { editorStyle } = storeToRefs(configStore)
+const { editorStyle } = useConfigStore()
 
 watch(
   () => userStore.userinfo.id,
   (_newId: number, _oldId: number) => {
     curDoc.value = undefined
-    curActiveDoc.value = undefined
     curActiveDoc.value = undefined
     setDoc('')
   }
