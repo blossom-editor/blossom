@@ -8,7 +8,6 @@ import { isNotNull } from '@renderer/assets/utils/obj'
 import { storeKey as authKey, useUserStore } from '@renderer/stores/user'
 import { storeKey as serverUrlKey } from '@renderer/stores/server'
 import Notify from '@renderer/scripts/notify'
-import { log } from 'console'
 
 const userStore = useUserStore(pinia)
 
@@ -97,8 +96,12 @@ export class Request {
           return Promise.reject(res)
         }
       },
+      /**
+       * 返回非 200 接口
+       * @param err
+       * @returns
+       */
       (err: any) => {
-        console.log(err)
         let errorMsg = err.message
         let code = err.code
         let resp = err.response

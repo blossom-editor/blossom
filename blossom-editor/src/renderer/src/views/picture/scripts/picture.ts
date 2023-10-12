@@ -48,7 +48,6 @@ export const buildDefaultPicture = (): Picture => {
  * @returns
  */
 export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  console.log('上传图片大小限制：', picStyle.maxSize)
   if (rawFile.size / 1024 / 1024 > picStyle.maxSize) {
     Notify.error(`文件大小不能超过 ${picStyle.maxSize}MB!`, '上传失败')
     return false

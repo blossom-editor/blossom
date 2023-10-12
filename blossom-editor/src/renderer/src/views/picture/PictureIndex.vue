@@ -255,7 +255,6 @@ const showPicInfo = (url: string) => {
  * @param a
  */
 const onErrorImg = (a: Event) => {
-  console.log(a.target)
   let imgEle = a.target as HTMLImageElement
   if (imgEle) {
     imgEle.src = errorImg

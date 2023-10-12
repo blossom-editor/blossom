@@ -442,7 +442,6 @@ const showExportDialog = () => {
 }
 
 const exportTodo = () => {
-  console.log(curTodo.value.todoId)
   if (isBlank(curTodo.value.todoId)) {
     Notify.error('请先选择待办事项再使用导出')
     return
@@ -456,7 +455,6 @@ const exportTodo = () => {
   }
   exportTodoApi(params).then((resp) => {
     exportContent.value = resp.data
-    console.log(resp)
   })
 }
 

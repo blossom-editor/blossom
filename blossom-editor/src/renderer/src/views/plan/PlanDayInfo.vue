@@ -145,7 +145,6 @@ const saveDay = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, _fields) => {
     if (valid) {
-      console.log(dayForm.value);
       planAddDayApi(dayForm.value).then(_resp => {
         emits('saved')
       })

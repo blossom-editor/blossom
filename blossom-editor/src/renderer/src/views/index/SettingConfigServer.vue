@@ -167,9 +167,7 @@ const refreshParam = () => {
 }
 
 const updParam = (paramName: string, paramValue: string) => {
-  console.log(paramName, paramValue)
   paramUpdApi({ paramName: paramName, paramValue: paramValue }).then((_resp) => {
-    // serverParamForm.value = resp.data
     userStore.getUserinfo()
   })
 }

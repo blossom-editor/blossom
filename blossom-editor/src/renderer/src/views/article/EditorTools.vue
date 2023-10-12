@@ -387,7 +387,6 @@ const start = () => {
  * 番茄钟结束
  */
 const stop = () => {
-  console.log('清除番茄钟')
   clearInterval(bell)
   remainStr.value = formateMs(0)
   if (TomatoBellRef.value) {
