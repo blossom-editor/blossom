@@ -11,6 +11,7 @@ import * as prettier from 'prettier/standalone'
 import pluginMarkdown from 'prettier/plugins/markdown'
 
 import { isBlank } from '@renderer/assets/utils/obj'
+import { log } from 'console'
 
 const { editorStyle } = useConfigStore()
 
@@ -297,8 +298,13 @@ export class CmWrapper {
           }
         }),
         EditorView.domEventHandlers({
-          drop(a: DragEvent) {
-            uploadFileCallback(a)
+          drop(event: DragEvent) {
+            console.log(event)
+            uploadFileCallback(event)
+            return
+          },
+          paste(event: ClipboardEvent) {
+            uploadFileCallback(event)
             return
           }
         })

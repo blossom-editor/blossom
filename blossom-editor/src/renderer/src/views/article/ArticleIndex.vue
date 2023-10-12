@@ -477,25 +477,59 @@ const editorLoading = ref(false) // eidtor loading
 let cmw: CmWrapper // codemirror editor wrapper
 
 /**
- * 拖拽上传的回调
- * @param event
+ * 文件上传回调
+ * @param event DragEvent | ClipboardEvent
  */
-const uploadFileCallback = async (event: DragEvent) => {
+const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
   if (!curIsArticle()) {
     return
   }
 
-  let data: DataTransfer | null = event.dataTransfer
-  if (data && data.files.length && data.files.length > 0) {
-    for (const file of data.files) {
-      const form = new FormData()
-      form.append('file', file)
-      form.append('name', file.name)
-      form.append('pid', curArticle.value!.pid.toString())
-      uploadFileApi(form).then((resp) => {
-        cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
-      })
+  /**
+   * 拖拽上传
+   */
+  if (event instanceof DragEvent) {
+    let data: DataTransfer | null = event.dataTransfer
+    if (data && data.files.length && data.files.length > 0) {
+      for (const file of data.files) {
+        const form = new FormData()
+        form.append('file', file)
+        form.append('name', file.name)
+        form.append('pid', curArticle.value!.pid.toString())
+        uploadFileApi(form).then((resp) => {
+          cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
+        })
+      }
     }
+  }
+
+  /**
+   * 黏贴上传
+   */
+  if (event instanceof ClipboardEvent) {
+    if (!event.clipboardData) {
+      return
+    }
+    const dataTransferItemList: DataTransferItemList = event.clipboardData?.items
+    // 过滤非图片类型
+    const items: DataTransferItem[] = [].slice.call(dataTransferItemList).filter((item: DataTransferItem) => {
+      return item.type.indexOf('image') !== -1
+    })
+    if (items.length === 0) {
+      return
+    }
+    const dataTransferItem: DataTransferItem = items[0]
+    const file: File | null = dataTransferItem.getAsFile()
+    if (file == null) {
+      return
+    }
+    const form = new FormData()
+    form.append('file', file)
+    form.append('name', file.name)
+    form.append('pid', curArticle.value!.pid.toString())
+    uploadFileApi(form).then((resp) => {
+      cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
+    })
   }
 }
 
