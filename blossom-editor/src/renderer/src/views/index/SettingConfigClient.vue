@@ -38,7 +38,7 @@
     <el-form label-position="right" label-width="110px" style="max-width: 800px">
       <bl-row just="center" class="config-module-titile">照片墙设置</bl-row>
       <el-form-item label="图片上传大小限制">
-        <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @input="changePicStyle">
+        <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @change="changePicStyle">
           <template #append>单位 MB</template>
         </el-input-number>
         <div class="conf-tip">
