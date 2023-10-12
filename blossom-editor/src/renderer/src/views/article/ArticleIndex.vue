@@ -146,7 +146,7 @@ import type { UploadProps } from 'element-plus'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
-import { articleInfoApi, articleUpdContentApi, uploadFileApi, uploadFileApiUrl } from '@renderer/api/blossom'
+import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@renderer/api/blossom'
 // utils
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
@@ -164,7 +164,7 @@ import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
-import { beforeUpload, onError, picCacheWrapper, picCacheRefresh } from '@renderer/views/picture/scripts/picture'
+import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm } from '@renderer/views/picture/scripts/picture'
 import { useResize } from './scripts/editor-preview-resize'
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
@@ -481,9 +481,7 @@ let cmw: CmWrapper // codemirror editor wrapper
  * @param event DragEvent | ClipboardEvent
  */
 const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
-  if (!curIsArticle()) {
-    return
-  }
+  if (!curIsArticle()) return
 
   /**
    * 拖拽上传
@@ -492,13 +490,7 @@ const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
     let data: DataTransfer | null = event.dataTransfer
     if (data && data.files.length && data.files.length > 0) {
       for (const file of data.files) {
-        const form = new FormData()
-        form.append('file', file)
-        form.append('name', file.name)
-        form.append('pid', curArticle.value!.pid.toString())
-        uploadFileApi(form).then((resp) => {
-          cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
-        })
+        uploadFile(file)
       }
     }
   }
@@ -507,30 +499,26 @@ const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
    * 黏贴上传
    */
   if (event instanceof ClipboardEvent) {
-    if (!event.clipboardData) {
-      return
+    if (!event.clipboardData) return
+    if (event.clipboardData.items.length === 0) return
+    for (let i = 0; i < event.clipboardData.items.length; i++) {
+      const file: File | null = event.clipboardData.items[i].getAsFile()
+      if (file == null) {
+        return
+      }
+      uploadFile(file)
     }
-    const dataTransferItemList: DataTransferItemList = event.clipboardData?.items
-    // 过滤非图片类型
-    const items: DataTransferItem[] = [].slice.call(dataTransferItemList).filter((item: DataTransferItem) => {
-      return item.type.indexOf('image') !== -1
-    })
-    if (items.length === 0) {
-      return
-    }
-    const dataTransferItem: DataTransferItem = items[0]
-    const file: File | null = dataTransferItem.getAsFile()
-    if (file == null) {
-      return
-    }
-    const form = new FormData()
-    form.append('file', file)
-    form.append('name', file.name)
-    form.append('pid', curArticle.value!.pid.toString())
-    uploadFileApi(form).then((resp) => {
-      cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
-    })
   }
+}
+
+/**
+ * 上传图片
+ * @param file 文件
+ */
+const uploadFile = (file: File) => {
+  uploadForm(file, curActiveDoc.value!.pid, (url: string) => {
+    cmw.insertBlockCommand(`\n![${file.name}](${url})\n`)
+  })
 }
 
 /**

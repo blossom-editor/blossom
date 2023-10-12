@@ -2,6 +2,7 @@ import { useConfigStore } from '@renderer/stores/config'
 import type { UploadProps } from 'element-plus'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
+import { uploadFileApi } from '@renderer/api/blossom'
 
 const { picStyle } = useConfigStore()
 
@@ -39,6 +40,29 @@ export const buildDefaultPicture = (): Picture => {
     url: '',
     articleNames: '',
     delTime: 0
+  }
+}
+
+export type UploadCallback = (url: string) => void
+
+/**
+ * form 表单上传图片
+ * @param file 文件
+ * @param pid 文件所属文件夹
+ * @param callback 上传回调
+ * @returns 返回文件路径
+ */
+export const uploadForm = (file: File, pid: number, callback: UploadCallback) => {
+  if (file.size / 1024 / 1024 > picStyle.maxSize) {
+    Notify.error(`文件大小不能超过 ${picStyle.maxSize}MB!`, '上传失败')
+  } else {
+    const form = new FormData()
+    form.append('file', file)
+    form.append('name', file.name)
+    form.append('pid', pid.toString())
+    uploadFileApi(form).then((resp) => {
+      callback(resp.data)
+    })
   }
 }
 
