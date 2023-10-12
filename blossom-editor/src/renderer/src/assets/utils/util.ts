@@ -311,7 +311,7 @@ export const platform = (): 'windows' | 'darwin' => {
   return 'windows'
 }
 
-const images = ['.jpeg', '.jpg', '.gif', '.png', '.apng', '.bmp', '.pic', '.svg', '.tif', '.tiff', '.webp']
+const images = ['.jpeg', '.jpg', '.gif', '.png', '.apng', '.bmp', '.pic', '.svg', '.tif', '.tiff', '.webp','.jfif']
 
 /**
  * 检查是否为图片
@@ -372,5 +372,3 @@ export const getFilePrefix = (name: string): string => {
   }
   return prefix
 }
-
-console.log(getFileSuffix('http://localhost:9999/pic/home/bl/img/U1/LICENSE'))
