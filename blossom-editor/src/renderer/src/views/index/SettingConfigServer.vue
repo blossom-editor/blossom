@@ -6,12 +6,12 @@
       </el-form-item>
       <el-form-item label="网页端地址">
         <el-input size="default" v-model="serverParamForm.WEB_ARTICLE_URL" @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"></el-input>
-        <div class="config-item-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code style="">/#/articles?articleId=</code>结尾。</div>
+        <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code style="">/#/articles?articleId=</code>结尾。</div>
       </el-form-item>
 
       <el-form-item label="备份文件路径">
         <el-input size="default" v-model="serverParamForm.BACKUP_PATH" @change="(cur: any) => updParam('BACKUP_PATH', cur)"></el-input>
-        <div class="config-item-tip">如果是 Docker 部署，推荐使用默认路径，如果需要改变路径，请注意路径挂载。</div>
+        <div class="conf-tip">如果是 Docker 部署，推荐使用默认路径，如果需要改变路径，请注意路径挂载。</div>
       </el-form-item>
 
       <el-form-item label="编辑记录保存天数">
@@ -24,7 +24,7 @@
             @change="(cur: any) => updParam('ARTICLE_LOG_EXP_DAYS', cur)">
           </el-input-number>
         </bl-row>
-        <div class="config-item-tip">文章编辑记录的保存天数。{{ serverParamForm.ARTICLE_LOG_EXP_DAYS }}天前的编辑记录将被删除</div>
+        <div class="conf-tip">文章编辑记录的保存天数。{{ serverParamForm.ARTICLE_LOG_EXP_DAYS }}天前的编辑记录将被删除</div>
       </el-form-item>
 
       <el-form-item label="备份文件保存天数">
@@ -36,42 +36,42 @@
             v-model="serverParamForm.BACKUP_EXP_DAYS"
             @change="(cur: any) => updParam('BACKUP_EXP_DAYS', cur)"></el-input-number>
         </bl-row>
-        <div class="config-item-tip">
+        <div class="conf-tip">
           备份文件的保存天数，每日早上7点进行全量文章备份(不包含图片)，同时删除{{ serverParamForm.BACKUP_EXP_DAYS }}天前的备份文件。
         </div>
       </el-form-item>
 
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
-        <div class="config-item-tip">和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">文档</a>。</div>
+        <div class="conf-tip">和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">文档</a>。修改后点击天气右上角刷新按钮获取最新天气。</div>
       </el-form-item>
 
       <el-form-item label="服务器到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_MACHINE_EXPIRE" @change="(cur: any) => updParam('SERVER_MACHINE_EXPIRE', cur)">
           <template #append> {{ serverExpire.machine }} 天后到期 </template>
         </el-input>
-        <div class="config-item-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
+        <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
 
       <el-form-item label="数据库到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_DATABASE_EXPIRE" @change="(cur: any) => updParam('SERVER_DATABASE_EXPIRE', cur)">
           <template #append> {{ serverExpire.database }} 天后到期 </template>
         </el-input>
-        <div class="config-item-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
+        <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
 
       <el-form-item label="域名到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_DOMAIN_EXPIRE" @change="(cur: any) => updParam('SERVER_DOMAIN_EXPIRE', cur)">
           <template #append> {{ serverExpire.domain }} 天后到期 </template>
         </el-input>
-        <div class="config-item-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
+        <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
 
       <el-form-item label="证书到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_HTTPS_EXPIRE" @change="(cur: any) => updParam('SERVER_HTTPS_EXPIRE', cur)">
           <template #append> {{ serverExpire.https }} 天后到期 </template>
         </el-input>
-        <div class="config-item-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
+        <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
     </el-form>
     <!-- <bl-row class="param-row">
@@ -210,7 +210,7 @@ const userinfoJson = computed(() => {
     margin: 0 5px;
   }
 
-  .config-item-tip {
+  .conf-tip {
     color: var(--bl-text-color-light);
   }
 }

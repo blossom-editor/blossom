@@ -1,5 +1,5 @@
 <template>
-  <div :class="[props.trees.t?.includes('subject') ? 'subject-title' : 'doc-title']">
+  <div :class="[viewStyle.isShowSubjectStyle ? (props.trees.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
     <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding: 0 2px">
       {{ props.trees.s }}
     </bl-tag>
@@ -20,8 +20,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PropType } from 'vue'
+import { useConfigStore } from '@renderer/stores/config'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { computedDocTitleColor } from '@renderer/views/doc/doc'
+
+const { viewStyle } = useConfigStore()
 
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} },

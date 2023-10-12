@@ -1,126 +1,128 @@
-import { EditorState } from "@codemirror/state"
-import { EditorView, basicSetup } from "codemirror"
-import { ViewUpdate, keymap, BlockInfo } from "@codemirror/view"
-import { insertTab, indentLess } from "@codemirror/commands"
+import { useConfigStore } from '@renderer/stores/config'
+import { EditorState } from '@codemirror/state'
+import { EditorView, basicSetup } from 'codemirror'
+import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
+import { insertTab, indentLess } from '@codemirror/commands'
 import { markdown as cmmd } from '@codemirror/lang-markdown'
-import { languages } from "@codemirror/language-data"
-import { EditorSelection, SelectionRange } from "@codemirror/state"
+import { languages } from '@codemirror/language-data'
+import { EditorSelection, SelectionRange } from '@codemirror/state'
 
-import * as prettier from "prettier/standalone"
-import pluginMarkdown from "prettier/plugins/markdown"
+import * as prettier from 'prettier/standalone'
+import pluginMarkdown from 'prettier/plugins/markdown'
 
-import { isBlank } from "@renderer/assets/utils/obj"
+import { isBlank } from '@renderer/assets/utils/obj'
 
+const { editorStyle } = useConfigStore()
 
 /**
  * codemirror 样式配置
  * https://codemirror.net/examples/styling/#themes
  */
 export const cwTheme: any = {
-  "&": {
-    color: "var(--bl-editor-color)",
-    backgroundColor: "var(--bl-editor-bg-color)",
+  '&': {
+    color: 'var(--bl-editor-color)',
+    backgroundColor: 'var(--bl-editor-bg-color)',
     fontSize: '14px'
   },
-  ".cm-panels": {
+  '.cm-panels': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     color: 'var(--el-color-primary)'
   },
-  ".cm-panels-bottom": {
-    borderColor: 'var(--el-border-color)',
+  '.cm-panels-bottom': {
+    borderColor: 'var(--el-border-color)'
   },
-  ".cm-textfield": {
-    backgroundColor: "var(--bl-editor-bg-color)",
-    border: "1px solid var(--el-border-color)",
-    outline: "none"
+  '.cm-textfield': {
+    backgroundColor: 'var(--bl-editor-bg-color)',
+    border: '1px solid var(--el-border-color)',
+    outline: 'none'
   },
-  ".cm-button": {
-    backgroundImage: "none",
-    backgroundColor: "var(--bl-editor-bg-color)",
-    border: "1px solid var(--el-border-color)",
+  '.cm-button': {
+    backgroundImage: 'none',
+    backgroundColor: 'var(--bl-editor-bg-color)',
+    border: '1px solid var(--el-border-color)'
   },
-  ".cm-button::active": {
-    backgroundColor: "var(--bl-text-bg-color)",
+  '.cm-button::active': {
+    backgroundColor: 'var(--bl-text-bg-color)'
   },
-  ".cm-gutters": {
+  '.cm-gutters': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     borderColor: 'var(--bl-editor-gutters-border-color)',
     fontSize: '12px'
   },
-  ".cm-activeLineGutter": {
+  '.cm-activeLineGutter': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     color: 'var(--el-color-primary)'
   },
-  ".cm-lineNumbers": {
+  '.cm-lineNumbers': {
     width: '40px'
   },
-  ".cm-foldGutter": {
+  '.cm-foldGutter': {
     // paddingRight: '3px'
   },
-  ".cm-content": {
-    whiteSpace: "break-spaces",
-    wordWrap: "break-word",
-    width: "calc(100% - 55px)",
+  '.cm-content': {
+    whiteSpace: 'break-spaces',
+    wordWrap: 'break-word',
+    width: 'calc(100% - 55px)',
     overflow: 'auto',
     padding: '0',
-    caretColor: "#707070"
+    caretColor: '#707070'
   },
-  ".cm-line": {
+  '.cm-line': {
     // color: '#707070'
     // caretColor: 'var(--bl-editor-caret-color) !important',
     wordWrap: 'break-word',
     wordBreak: 'break-all',
     padding: '0'
   },
-  ".cm-activeLine": {
-    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)',
+  '.cm-activeLine': {
+    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)'
   },
-  ".cm-selectionMatch": {
+  '.cm-selectionMatch': {
     backgroundColor: 'var(--bl-editor-selection-match-bg-color)'
   },
-  ".ͼ1.cm-focused": {
+  '.ͼ1.cm-focused': {
     outline: 'none'
   },
-  ".ͼ2 .cm-activeLine": {
-    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)',
+  '.ͼ2 .cm-activeLine': {
+    backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)'
   },
-  ".ͼ5": {
+  '.ͼ5': {
     color: 'var(--bl-editor-c5-color)',
     fontWeight: '700'
   },
-  ".ͼ6": {
+  '.ͼ6': {
     color: '#707070',
     fontWeight: '500'
   },
-  ".ͼ7": {
+  '.ͼ7': {
     backgroundColor: 'var(--bl-editor-c7-bg-color)',
     color: 'var(--bl-editor-c7-color)'
   },
-  ".ͼc": {
-    color: 'var(--bl-editor-cc-color)',
+  '.ͼc': {
+    color: 'var(--bl-editor-cc-color)'
   },
   // ͼm: 注释   #940
-  ".ͼm": {
+  '.ͼm': {
     color: 'var(--bl-editor-cm-color)'
   },
   // ͼb: 关键字 #708
-  ".ͼb": {
+  '.ͼb': {
     color: 'var(--bl-editor-cb-color)'
   },
   // ͼd: 数字 #708
-  ".ͼd": {
+  '.ͼd': {
     color: 'var(--bl-editor-cd-color)'
   },
   // ͼe: 字符串 #a11
-  ".ͼe": {
+  '.ͼe': {
     color: 'var(--bl-editor-ce-color)'
   },
-  //ͼi: 类名: 
-  ".ͼi": {
+  //ͼi: 类名:
+  '.ͼi': {
     color: 'var(--bl-editor-ci-color)'
   },
   //ͼg: 方法名和参数
-  ".ͼg": {
+  '.ͼg': {
     color: 'var(--bl-editor-cg-color)'
   }
 }
@@ -147,7 +149,6 @@ const zhCNPhrases = {
  * Codemirror 封装
  */
 export class CmWrapper {
-
   /**
    * editor
    */
@@ -166,12 +167,12 @@ export class CmWrapper {
 
   /**™™
    * 创建 EditorState
-   * 
+   *
    * @param updateCallback 编辑器内容变动时的回调
    * @param saveCallback 保存内容时的回调
    * @param uploadFileCallback 拖拽上传文件后的会调
    * @param doc 初始化的内容
-   * @returns 
+   * @returns
    */
   static newState = (updateCallback: any, saveCallback: any, uploadFileCallback: any, doc?: string): EditorState => {
     return EditorState.create({
@@ -182,22 +183,113 @@ export class CmWrapper {
         cmmd({ codeLanguages: languages }),
         EditorView.theme(cwTheme),
         keymap.of([
-          { key: 'Tab', run: insertTab, },
+          { key: 'Tab', run: insertTab },
           { key: 'Shift-Tab', run: indentLess },
-          { key: 'Ctrl-s', mac: 'Cmd-s', run(_view: EditorView) { saveCallback(); return true }, },
-          { key: 'Alt-b', mac: 'Cmd-b', run(view: EditorView) { CmWrapper.commandBold(view); return true } },
-          { key: 'Alt-i', mac: 'Cmd-i', run(view: EditorView) { CmWrapper.commandItalic(view); return true } },
-          { key: 'Alt-s', mac: 'Cmd-s', run(view: EditorView) { CmWrapper.commandStrike(view); return true } },
-          { key: 'Alt-t', mac: 'Cmd-t', run(view: EditorView) { CmWrapper.commandTable(view); return true } },
-          { key: 'Alt-e', mac: 'Cmd-e', run(view: EditorView) { CmWrapper.commandCode(view); return true } },
-          { key: 'Alt-m', mac: 'Cmd-m', run(view: EditorView) { CmWrapper.commandImg(view); return true } },
-          { key: 'Alt-k', mac: 'Cmd-k', run(view: EditorView) { CmWrapper.commandLink(view); return true } },
+          {
+            key: 'Ctrl-s',
+            mac: 'Cmd-s',
+            run(_view: EditorView) {
+              saveCallback()
+              return true
+            }
+          },
+          {
+            key: 'Alt-b',
+            mac: 'Cmd-b',
+            run(view: EditorView) {
+              CmWrapper.commandBold(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-i',
+            mac: 'Cmd-i',
+            run(view: EditorView) {
+              CmWrapper.commandItalic(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-s',
+            mac: 'Cmd-s',
+            run(view: EditorView) {
+              CmWrapper.commandStrike(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-t',
+            mac: 'Cmd-t',
+            run(view: EditorView) {
+              CmWrapper.commandTable(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-e',
+            mac: 'Cmd-e',
+            run(view: EditorView) {
+              CmWrapper.commandCode(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-m',
+            mac: 'Cmd-m',
+            run(view: EditorView) {
+              CmWrapper.commandImg(view)
+              return true
+            }
+          },
+          {
+            key: 'Alt-k',
+            mac: 'Cmd-k',
+            run(view: EditorView) {
+              CmWrapper.commandLink(view)
+              return true
+            }
+          },
           // { key: 'Ctrl-Alt-c', mac: 'Ctrl-Cmd-c', run(view: EditorView) { CmWrapper.commandCheckBox(view); return true } },
-          { key: 'Ctrl-Alt-p', mac: 'Ctrl-Cmd-p', run(view: EditorView) { CmWrapper.commandSup(view); return true } },
-          { key: 'Ctrl-Alt-b', mac: 'Ctrl-Cmd-b', run(view: EditorView) { CmWrapper.commandSub(view); return true } },
-          { key: 'Ctrl-Alt-e', mac: 'Ctrl-Cmd-e', run(view: EditorView) { CmWrapper.commandPre(view); return true } },
-          { key: 'Ctrl-Alt-s', mac: 'Ctrl-Cmd-s', run(view: EditorView) { CmWrapper.commandSeparator(view); return true } },
-          { key: 'Shift-Alt-f', mac: 'Shift-Cmd-f', run(view: EditorView) { CmWrapper.commandFormatMarkdown(view); return true } },
+          {
+            key: 'Ctrl-Alt-p',
+            mac: 'Ctrl-Cmd-p',
+            run(view: EditorView) {
+              CmWrapper.commandSup(view)
+              return true
+            }
+          },
+          {
+            key: 'Ctrl-Alt-b',
+            mac: 'Ctrl-Cmd-b',
+            run(view: EditorView) {
+              CmWrapper.commandSub(view)
+              return true
+            }
+          },
+          {
+            key: 'Ctrl-Alt-e',
+            mac: 'Ctrl-Cmd-e',
+            run(view: EditorView) {
+              CmWrapper.commandPre(view)
+              return true
+            }
+          },
+          {
+            key: 'Ctrl-Alt-s',
+            mac: 'Ctrl-Cmd-s',
+            run(view: EditorView) {
+              CmWrapper.commandSeparator(view)
+              return true
+            }
+          },
+          {
+            key: 'Shift-Alt-f',
+            mac: 'Shift-Cmd-f',
+            run(view: EditorView) {
+              CmWrapper.commandFormatMarkdown(view)
+              return true
+            }
+          }
         ]),
         EditorView.updateListener.of((viewUpd: ViewUpdate) => {
           if (viewUpd.docChanged) {
@@ -214,10 +306,10 @@ export class CmWrapper {
     })
   }
   /**
-   * 
-   * @param state 
-   * @param parent 
-   * @returns 
+   *
+   * @param state
+   * @param parent
+   * @returns
    */
   static newEditor = (state: EditorState, parent: Element | DocumentFragment): EditorView => {
     return new EditorView({
@@ -227,7 +319,7 @@ export class CmWrapper {
   }
   /**
    * 设置变成
-   * @param state 
+   * @param state
    */
   setState = (state: EditorState) => {
     this._editor.setState(state)
@@ -236,7 +328,7 @@ export class CmWrapper {
   //#region ============================================================ codemirror 方法封装 ============================================================
   /**
    * 获取指定范围的内容
-   * @param editor 
+   * @param editor
    * @param from 开始位置
    * @param to 结束位置
    * @returns 范围内的内容
@@ -246,7 +338,7 @@ export class CmWrapper {
   }
   /**
    * 获取文档内容
-   * @param editor 
+   * @param editor
    * @returns 内容
    */
   static getDocString = (editor: EditorView): string => {
@@ -254,7 +346,7 @@ export class CmWrapper {
   }
   /**
    * 获取文档长度
-   * @param editor 
+   * @param editor
    * @returns 长度
    */
   static getDocLength = (editor: EditorView): number => {
@@ -262,7 +354,7 @@ export class CmWrapper {
   }
   /**
    * 获取当前选中内容, 并返回选中的文本内容, 可以选中多个不同的段落, 多个段落之间会以 \n 换行
-   * @param editor 
+   * @param editor
    * @returns 文本内容, 多个选中之间会换行
    */
   static getSelectionRangesText = (editor: EditorView): string => {
@@ -274,7 +366,7 @@ export class CmWrapper {
         if (range != undefined) {
           let rangeText = editor.state.sliceDoc(range.from, range.to)
           if (isBlank(rangeText)) {
-            continue;
+            continue
           }
           if (i != 0) {
             text += '\n'
@@ -287,7 +379,7 @@ export class CmWrapper {
   }
   /**
    * 获取选中的内容
-   * @param editor 
+   * @param editor
    * @returns 存在多个选中所以返回数组
    */
   static getSlelctionRangesArr = (editor: EditorView): readonly SelectionRange[] => {
@@ -297,19 +389,17 @@ export class CmWrapper {
    * 在指定位置(istFrom -> istTo)插入 content, 或将内容替换为 content, 随后选中 (selectFrom -> selectTo)
    * istFrom 与 istTo 相同即为插入，不同即为替换
    * 如果要将光标移动到某处, selectFrom 与 selectTo 相同即可
-   * 
+   *
    * @param istFrom 插入的开始位置
    * @param istTo 插入的结束位置
    * @param content 插入的内容
-   * @param selectFrom 
-   * @param selectTo 
+   * @param selectFrom
+   * @param selectTo
    */
   static insert = (editor: EditorView, istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => {
     let changeByRange = {
       /* 创建变更的内容, 可以是个数组, 说明同时修改多个部分 */
-      changes: [
-        { from: istFrom, to: istTo, insert: content }
-      ],
+      changes: [{ from: istFrom, to: istTo, insert: content }],
       /* 修改之后光标移动到的位置 */
       range: EditorSelection.range(selectFrom, selectTo)
     }
@@ -322,20 +412,38 @@ export class CmWrapper {
       })
     )
   }
-  sliceDoc = (from?: number, to?: number): string => { return this._editor.state.sliceDoc(from, to) }
-  getDocString = (): string => { return CmWrapper.getDocString(this._editor) }
-  getDocLength = (): number => { return CmWrapper.getDocLength(this._editor) }
-  getSelectionRangesText = (): string => { return CmWrapper.getSelectionRangesText(this._editor) }
-  getSlelctionRangesArr = (): readonly SelectionRange[] => { return CmWrapper.getSlelctionRangesArr(this._editor) }
-  getDocumentTop = (): number => { return this._editor.documentTop }
-  getElementAtHeight = (height: number): BlockInfo => { return this._editor.elementAtHeight(height) }
-  getLineBlockAtHeight = (height: number): BlockInfo => { return this._editor.lineBlockAtHeight(height) }
-  insert = (istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => { CmWrapper.insert(this._editor, istFrom, istTo, content, selectFrom, selectTo) }
+  sliceDoc = (from?: number, to?: number): string => {
+    return this._editor.state.sliceDoc(from, to)
+  }
+  getDocString = (): string => {
+    return CmWrapper.getDocString(this._editor)
+  }
+  getDocLength = (): number => {
+    return CmWrapper.getDocLength(this._editor)
+  }
+  getSelectionRangesText = (): string => {
+    return CmWrapper.getSelectionRangesText(this._editor)
+  }
+  getSlelctionRangesArr = (): readonly SelectionRange[] => {
+    return CmWrapper.getSlelctionRangesArr(this._editor)
+  }
+  getDocumentTop = (): number => {
+    return this._editor.documentTop
+  }
+  getElementAtHeight = (height: number): BlockInfo => {
+    return this._editor.elementAtHeight(height)
+  }
+  getLineBlockAtHeight = (height: number): BlockInfo => {
+    return this._editor.lineBlockAtHeight(height)
+  }
+  insert = (istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => {
+    CmWrapper.insert(this._editor, istFrom, istTo, content, selectFrom, selectTo)
+  }
   //#endregion
   //#region ============================================================ 自定义命令 ============================================================
   /**
    * 行内格式的替换命令, 用于前后缀相同的格式, 如 `**` / `~~` 等
-   * 
+   *
    * @param editor 编辑器
    * @param range 范围
    * @param target 添加的前后缀字符, 如加粗是 **, 行内代码块是 `
@@ -354,8 +462,8 @@ export class CmWrapper {
     if (prefix == target && suffix == target) {
       return {
         changes: [
-          { from: prefixFrom, to: prefixTo, insert: "" },
-          { from: suffixFrom, to: suffixTo, insert: "" }
+          { from: prefixFrom, to: prefixTo, insert: '' },
+          { from: suffixFrom, to: suffixTo, insert: '' }
         ],
         range: EditorSelection.range(prefixFrom, suffixFrom - len)
       }
@@ -371,12 +479,12 @@ export class CmWrapper {
   }
   /**
    * 行内格式的替换命令, 用于前后缀不同的格式, 如 `<sup></sup>`等
-   * 
+   *
    * @param editor 编辑器
    * @param range  范围
    * @param prefixTarget 前缀
    * @param suffixTarget 后缀
-   * @returns 
+   * @returns
    */
   static replaceDifInlineCommand = (editor: EditorView, range: SelectionRange, prefixTarget: string, suffixTarget: string): any => {
     let prefixLen = prefixTarget.length
@@ -394,8 +502,8 @@ export class CmWrapper {
     if (prefix == prefixTarget && suffix == suffixTarget) {
       return {
         changes: [
-          { from: prefixFrom, to: prefixTo, insert: "" },
-          { from: suffixFrom, to: suffixTo, insert: "" }
+          { from: prefixFrom, to: prefixTo, insert: '' },
+          { from: suffixFrom, to: suffixTo, insert: '' }
         ],
         range: EditorSelection.range(prefixFrom, range.to - prefixLen)
       }
@@ -418,77 +526,165 @@ export class CmWrapper {
     editor.dispatch(editor.state.replaceSelection(content))
   }
   /** 选中内容加粗 */
-  private static commandBold = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '**'))) }
+  private static commandBold = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '**')))
+  }
   /** 选中内容斜体 */
-  private static commandItalic = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '*'))) }
+  private static commandItalic = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '*')))
+  }
   /** 选中内容增加删除线 */
-  private static commandStrike = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '~~'))) }
+  private static commandStrike = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '~~')))
+  }
   /** 选择内容设置为行内代码块 */
-  private static commandCode = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '`'))) }
+  private static commandCode = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '`')))
+  }
   /** 选择内容设置为上标 */
-  private static commandSup = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sup>', '</sup>'))) }
+  private static commandSup = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sup>', '</sup>')))
+  }
   /** 选择内容设置为下标 */
-  private static commandSub = (editor: EditorView) => { editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sub>', '</sub>'))) }
+  private static commandSub = (editor: EditorView) => {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sub>', '</sub>')))
+  }
   /** 在当前位置增加表格 */
-  private static commandTable = (editor: EditorView) => { this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`) }
+  private static commandTable = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
+  }
   /** 在当前位置增加多行代码块 */
-  private static commandPre = (editor: EditorView) => { this.insertBlockCommand(editor, `\n\`\`\`\n\n\`\`\`\n`) }
+  private static commandPre = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n\`\`\`${editorStyle.defaultPreLanguage}\n\n\`\`\`\n`)
+  }
   /** 在当前位置增加单选框 */
-  private static commandCheckBox = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- [ ] \n`) }
+  private static commandCheckBox = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n- [ ] \n`)
+  }
   /** 在当前位置增加分割线 */
-  private static commandSeparator = (editor: EditorView) => { this.insertBlockCommand(editor, `\n---\n`) }
+  private static commandSeparator = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n---\n`)
+  }
   /** 在当前位置增加引用 */
-  private static commandQuote = (editor: EditorView) => { this.insertBlockCommand(editor, `\n>\n>\n`) }
+  private static commandQuote = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n>\n>\n`)
+  }
   /** 在当前位置增加引用 black */
-  private static commandQuoteBlack = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##black##\n> ⚫\n`) }
+  private static commandQuoteBlack = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##black##\n> ⚫\n`)
+  }
   /** 在当前位置增加引用 green */
-  private static commandQuoteGreen = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##green##\n> 🟢\n`) }
+  private static commandQuoteGreen = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##green##\n> 🟢\n`)
+  }
   /** 在当前位置增加引用 yellow */
-  private static commandQuoteYellow = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##yellow##\n> 🟡\n`) }
+  private static commandQuoteYellow = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##yellow##\n> 🟡\n`)
+  }
   /** 在当前位置增加引用 red */
-  private static commandQuoteRed = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##red##\n> 🔴\n`) }
+  private static commandQuoteRed = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##red##\n> 🔴\n`)
+  }
   /** 在当前位置增加引用 blue */
-  private static commandQuoteBlue = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##blue##\n> 🔵\n`) }
+  private static commandQuoteBlue = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##blue##\n> 🔵\n`)
+  }
   /** 在当前位置增加引用 */
-  private static commandQuotePurple = (editor: EditorView) => { this.insertBlockCommand(editor, `\n> ##purple##\n> 🟣\n`) }
+  private static commandQuotePurple = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n> ##purple##\n> 🟣\n`)
+  }
   /** 在当前位置增加无序列表 */
-  private static commandUnordered = (editor: EditorView) => { this.insertBlockCommand(editor, `\n- \n`) }
+  private static commandUnordered = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n- \n`)
+  }
   /** 在当前位置增加有序列表 */
-  private static commandOrdered = (editor: EditorView) => { this.insertBlockCommand(editor, `\n1. \n`) }
+  private static commandOrdered = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n1. \n`)
+  }
   /** 在当前位置增加图片 */
-  private static commandImg = (editor: EditorView) => { this.insertBlockCommand(editor, `\n![]()\n`) }
+  private static commandImg = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n![]()\n`)
+  }
   /** 在当前位置增加链接 */
-  private static commandLink = (editor: EditorView) => { this.insertBlockCommand(editor, `\n[]()\n`) }
+  private static commandLink = (editor: EditorView) => {
+    this.insertBlockCommand(editor, `\n[]()\n`)
+  }
   /** 格式化内容, 使用 prettier */
   private static commandFormatMarkdown = async (editor: EditorView) => {
-    let formatContent = await prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: "markdown", plugins: [pluginMarkdown] })
+    let formatContent = await prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: 'markdown', plugins: [pluginMarkdown] })
     let maxLen = CmWrapper.getDocLength(editor)
-    CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0);
+    CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0)
   }
   // 实例调用
-  insertBlockCommand = (content: string) => { CmWrapper.insertBlockCommand(this._editor, content) }
-  commandBold = () => { CmWrapper.commandBold(this._editor) }
-  commandItalic = () => { CmWrapper.commandItalic(this._editor) }
-  commandStrike = () => { CmWrapper.commandStrike(this._editor) }
-  commandCode = () => { CmWrapper.commandCode(this._editor) }
-  commandSup = () => { CmWrapper.commandSup(this._editor) }
-  commandSub = () => { CmWrapper.commandSub(this._editor) }
-  commandTable = () => { CmWrapper.commandTable(this._editor) }
-  commandPre = () => { CmWrapper.commandPre(this._editor) }
-  commandCheckBox = () => { CmWrapper.commandCheckBox(this._editor) }
-  commandSeparator = () => { CmWrapper.commandSeparator(this._editor) }
-  commandQuote = () => { CmWrapper.commandQuote(this._editor) }
-  commandQuoteBlack = () => { CmWrapper.commandQuoteBlack(this._editor) }
-  commandQuoteGreen = () => { CmWrapper.commandQuoteGreen(this._editor) }
-  commandQuoteYellow = () => { CmWrapper.commandQuoteYellow(this._editor) }
-  commandQuoteRed = () => { CmWrapper.commandQuoteRed(this._editor) }
-  commandQuoteBlue = () => { CmWrapper.commandQuoteBlue(this._editor) }
-  commandQuotePurple = () => { CmWrapper.commandQuotePurple(this._editor) }
-  commandUnordered = () => { CmWrapper.commandUnordered(this._editor) }
-  commandOrdered = () => { CmWrapper.commandOrdered(this._editor) }
-  commandImg = () => { CmWrapper.commandImg(this._editor) }
-  commandLink = () => { CmWrapper.commandLink(this._editor) }
-  commandFormatMarkdown = async () => { CmWrapper.commandFormatMarkdown(this._editor) }
+  insertBlockCommand = (content: string) => {
+    CmWrapper.insertBlockCommand(this._editor, content)
+  }
+  commandBold = () => {
+    CmWrapper.commandBold(this._editor)
+  }
+  commandItalic = () => {
+    CmWrapper.commandItalic(this._editor)
+  }
+  commandStrike = () => {
+    CmWrapper.commandStrike(this._editor)
+  }
+  commandCode = () => {
+    CmWrapper.commandCode(this._editor)
+  }
+  commandSup = () => {
+    CmWrapper.commandSup(this._editor)
+  }
+  commandSub = () => {
+    CmWrapper.commandSub(this._editor)
+  }
+  commandTable = () => {
+    CmWrapper.commandTable(this._editor)
+  }
+  commandPre = () => {
+    CmWrapper.commandPre(this._editor)
+  }
+  commandCheckBox = () => {
+    CmWrapper.commandCheckBox(this._editor)
+  }
+  commandSeparator = () => {
+    CmWrapper.commandSeparator(this._editor)
+  }
+  commandQuote = () => {
+    CmWrapper.commandQuote(this._editor)
+  }
+  commandQuoteBlack = () => {
+    CmWrapper.commandQuoteBlack(this._editor)
+  }
+  commandQuoteGreen = () => {
+    CmWrapper.commandQuoteGreen(this._editor)
+  }
+  commandQuoteYellow = () => {
+    CmWrapper.commandQuoteYellow(this._editor)
+  }
+  commandQuoteRed = () => {
+    CmWrapper.commandQuoteRed(this._editor)
+  }
+  commandQuoteBlue = () => {
+    CmWrapper.commandQuoteBlue(this._editor)
+  }
+  commandQuotePurple = () => {
+    CmWrapper.commandQuotePurple(this._editor)
+  }
+  commandUnordered = () => {
+    CmWrapper.commandUnordered(this._editor)
+  }
+  commandOrdered = () => {
+    CmWrapper.commandOrdered(this._editor)
+  }
+  commandImg = () => {
+    CmWrapper.commandImg(this._editor)
+  }
+  commandLink = () => {
+    CmWrapper.commandLink(this._editor)
+  }
+  commandFormatMarkdown = async () => {
+    CmWrapper.commandFormatMarkdown(this._editor)
+  }
   //#endregion
 }
 

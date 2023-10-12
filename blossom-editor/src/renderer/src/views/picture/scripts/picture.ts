@@ -1,6 +1,9 @@
+import { useConfigStore } from '@renderer/stores/config'
 import type { UploadProps } from 'element-plus'
-import Notify from '@renderer/scripts/notify'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
+import Notify from '@renderer/scripts/notify'
+
+const { picStyle } = useConfigStore()
 
 /**
  * Picture Object
@@ -45,8 +48,9 @@ export const buildDefaultPicture = (): Picture => {
  * @returns
  */
 export const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.size / 1024 / 1024 > 50) {
-    Notify.error('文件大小不能超过 50MB!', '上传失败')
+  console.log('上传图片大小限制：', picStyle.maxSize)
+  if (rawFile.size / 1024 / 1024 > picStyle.maxSize) {
+    Notify.error(`文件大小不能超过 ${picStyle.maxSize}MB!`, '上传失败')
     return false
   }
   return true
@@ -92,13 +96,17 @@ export const onError: UploadProps['onError'] = (error, _file, _files) => {
  */
 export const handleUploadError = (error: Error) => {
   if (error.message != undefined) {
-    try {
-      let resp = JSON.parse(error.message)
-      if (resp != undefined) {
-        Notify.error(resp.msg, '上传失败')
+    if (error.message.indexOf('fail to post') > -1 && error.message.indexOf('/picture/file/upload 0') > -1) {
+      Notify.error('可能是由于您上传的文件过大, 请检查服务端上传大小限制。', '上传失败')
+    } else {
+      try {
+        let resp = JSON.parse(error.message)
+        if (resp != undefined) {
+          Notify.error(resp.msg, '上传失败')
+        }
+      } catch (e) {
+        Notify.error(error.message, '上传失败')
       }
-    } catch (e) {
-      Notify.error(error.message, '上传失败')
     }
   }
 }

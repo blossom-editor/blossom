@@ -1,18 +1,18 @@
 <template>
   <div class="server-config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用设置...">
     <el-tabs tab-position="left" type="card" style="height: 100%" class="config-tabs">
-      <el-tab-pane label="服务器配置">
-        <div class="tab-content">
-          <div class="title">服务器配置信</div>
-          <div class="desc">Blossom 服务器配置</div>
-          <ConfigServer></ConfigServer>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="客户端配置" :lazy="true">
+      <el-tab-pane label="客户端配置">
         <div class="tab-content">
           <div class="title">客户端配置</div>
           <div class="desc">Blossom 桌面客户端配置</div>
           <ConfigClient></ConfigClient>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="服务器配置" :lazy="true">
+        <div class="tab-content">
+          <div class="title">服务器配置信</div>
+          <div class="desc">Blossom 服务器配置，若无内容请点击刷新服务器参数缓存</div>
+          <ConfigServer></ConfigServer>
         </div>
       </el-tab-pane>
       <el-tab-pane label="修改个人信息" :lazy="true">
