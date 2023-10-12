@@ -261,6 +261,10 @@ const onErrorImg = (a: Event) => {
     imgEle.classList.add('img-error')
     imgEle.style.width = '32px'
     imgEle.style.height = 'auto'
+    if (imgEle.parentNode) {
+      let imgWrapper: HTMLElement = imgEle.parentNode as HTMLElement
+      imgWrapper.style.backgroundColor = 'var(--bl-bg-color)'
+    }
   }
 }
 
