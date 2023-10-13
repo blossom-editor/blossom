@@ -76,7 +76,6 @@ h6 {
 /* 无序列表 */
 .bl-preview ul {
   padding-left: 15px;
-
 }
 
 .bl-preview ul ul {
@@ -115,7 +114,6 @@ h6 {
   /* fixed|auto */
   table-layout: auto;
   width: 100%;
-
 }
 
 .bl-preview table thead {
@@ -123,7 +121,8 @@ h6 {
   color: #d4d4d4;
 }
 
-.bl-preview table thead tr {}
+.bl-preview table thead tr {
+}
 
 .bl-preview table thead tr th {
   font-size: 16px !important;
@@ -135,9 +134,11 @@ h6 {
   border: 0;
 }
 
-.bl-preview table tbody {}
+.bl-preview table tbody {
+}
 
-.bl-preview table tbody tr {}
+.bl-preview table tbody tr {
+}
 
 .bl-preview table tbody tr td {
   padding: 5px;
@@ -152,7 +153,8 @@ h6 {
   border-right: 0;
 }
 
-.bl-preview table tbody tr:last-child {}
+.bl-preview table tbody tr:last-child {
+}
 
 .bl-preview table tbody tr:last-child td {
   border-bottom: 0;
@@ -170,7 +172,8 @@ table container
   display: none;
 }
 
-.bl-preview .bl-table-container tbody {}
+.bl-preview .bl-table-container tbody {
+}
 
 .bl-preview .bl-table-container tbody td {
   border: 0;
@@ -232,12 +235,51 @@ table container
 
 /* 代码块 */
 .bl-preview pre {
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 10px 30px;
   background-color: var(--bl-preview-pre-bg-color);
-  overflow: scroll;
   border-radius: var(--bl-preview-border-radius);
   box-shadow: var(--bl-preview-pre-box-shadow);
+  overflow: auto;
   font-size: 13px;
+  position: relative;
+}
+
+.bl-preview pre .pre-copy {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  text-align: right;
+  z-index: 10;
+  color: #5c5c5c;
+  padding: 1px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bl-preview pre .pre-copy:hover {
+  background-color: #1a1a1a;
+}
+
+.bl-preview pre ol {
+  margin: 0;
+  padding-left: 0;
+  position: absolute;
+  top: 10px;
+  left: 3px;
+  user-select: none;
+}
+
+.bl-preview pre ol li {
+  list-style: none;
+}
+
+.bl-preview pre ol li .line-num {
+  width: 30px;
+  display: inline-block;
+  text-align: right;
+  padding-right: 10px;
+  color: #6a6a6a;
+  user-select: none;
 }
 
 .bl-preview pre code {
@@ -272,25 +314,25 @@ table container
 .hljs ::selection,
 .hljs::selection {
   background-color: #323232;
-  color: #a9b7c6
+  color: #a9b7c6;
 }
 
 .hljs-comment {
-  color: #606366
+  color: #606366;
 }
 
 .hljs-tag {
-  color: #a4a3a3
+  color: #a4a3a3;
 }
 
 .hljs-operator,
 .hljs-punctuation,
 .hljs-subst {
-  color: #a9b7c6
+  color: #a9b7c6;
 }
 
 .hljs-operator {
-  opacity: .7
+  opacity: 0.7;
 }
 
 .hljs-bullet,
@@ -299,7 +341,7 @@ table container
 .hljs-selector-tag,
 .hljs-template-variable,
 .hljs-variable {
-  color: #4eade5
+  color: #4eade5;
 }
 
 .hljs-attr {
@@ -311,25 +353,25 @@ table container
 .hljs-number,
 .hljs-symbol,
 .hljs-variable.constant_ {
-  color: #689757
+  color: #689757;
 }
 
 .hljs-class .hljs-title,
 .hljs-title,
 .hljs-title.class_ {
-  color: #e4b568
+  color: #e4b568;
 }
 
 .hljs-strong {
   font-weight: 700;
-  color: #bbb529
+  color: #bbb529;
 }
 
 .hljs-addition,
 .hljs-code,
 .hljs-string,
 .hljs-title.class_.inherited__ {
-  color: #6a8759
+  color: #6a8759;
 }
 
 .hljs-built_in,
@@ -337,7 +379,7 @@ table container
 .hljs-keyword.hljs-atrule,
 .hljs-quote,
 .hljs-regexp {
-  color: #629755
+  color: #629755;
 }
 
 .hljs-attribute,
@@ -345,19 +387,19 @@ table container
 .hljs-section,
 .hljs-title.function_,
 .ruby .hljs-property {
-  color: #9876aa
+  color: #9876aa;
 }
 
 .diff .hljs-meta,
 .hljs-keyword,
 .hljs-template-tag,
 .hljs-type {
-  color: #cc7832
+  color: #cc7832;
 }
 
 .hljs-emphasis {
   color: #cc7832;
-  font-style: italic
+  font-style: italic;
 }
 
 .hljs-meta,
@@ -368,7 +410,7 @@ table container
 
 .hljs-meta .hljs-keyword,
 .hljs-meta-keyword {
-  font-weight: 700
+  font-weight: 700;
 }
 
 .bl-preview-analysis-fail-block {
@@ -376,7 +418,6 @@ table container
   padding: 30px;
   background-color: #000000;
   color: #ffffff;
-
 }
 
 .bl-preview-analysis-fail-block .fail-title {

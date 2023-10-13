@@ -1,5 +1,5 @@
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
-import { escape2Html } from '@renderer/assets/utils/util'
+import { escape2Html, randomInt, sleep } from '@renderer/assets/utils/util'
 import { marked, Marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
@@ -8,8 +8,20 @@ import 'katex/dist/katex.min.css'
 import mermaid from 'mermaid'
 import { ArticleReference, getDocInfoFromTrees } from './article'
 import { picCacheWrapper } from '@renderer/views/picture/scripts/picture'
+
+import { Transformer } from 'markmap-lib'
+import { Markmap, deriveOptions } from 'markmap-view'
+const markmapOptions = deriveOptions({
+  colorFreezeLevel: 2,
+  duration: 0,
+  maxWidth: 160,
+  zoom: false,
+  pan: false
+})
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
+
+const transformer = new Transformer()
 
 mermaid.initialize({
   theme: 'base',
@@ -53,22 +65,46 @@ marked.use({
 // 行号插件, 对 mermaid 等有些许影响
 // hljs.addPlugin({
 //   'after:highlight': (el) => {
-//     console.log(el.language)
-//     if (el.language == 'mermaid' || el.language == 'katex') {
-//       return
-//     }
 //     let result = '<ol>'
-//     let snsArr: string[] = el.value.split(/[\n\r]+/)
-//     snsArr.forEach((item: string) => {
-//       result += `<li>${item}</li>`
+//     let lines: string[] = el.value.split(/[\n\r]+/)
+//     let isCommentBlock = false
+//     lines.forEach((line: string, index: number) => {
+//       console.log(line)
+
+//       // // 不在注释块内
+//       // if (!isCommentBlock && line.startsWith('<span class="hljs-comment">')) {
+//       //   isCommentBlock = true
+//       // }
+//       // // 注释块的最后一行
+//       // if (isCommentBlock && line.endsWith('<span class="hljs-comment">')) {
+//       //   result += `<li><span class="line-num">${index + 1}<span class="hljs-comment">${line}</span></li>`
+//       //   isCommentBlock = false
+//       // }
+//       // 在注释块内, 需要为每一个行增加注释
+//       // if (isCommentBlock) {
+//         // result += `<li><span class="line-num">${index + 1}</span><span class="hljs-comment">${line}</span></li>`
+//       // }
+//       result += `<li><span class="line-num">${index + 1}</span>${line}</li>`
 //     })
 //     el.value = result += '</ol>'
 //   }
 // })
 
+// hljs.addPlugin({
+//   'after:highlight': (el) => {
+//     let lines: string[] = el.value.split(/\n|\r\n?|\n\n+/g)
+//     let result = '<ol>'
+//     for (let i = 0; i < lines.length; i++) {
+//       result += `<li><span class="line-num">${i + 1}</span></li>`
+//     }
+//     el.value = el.value + result + '</ol>'
+//   }
+// })
+
 let hljsConfig = {
   langPrefix: 'hljs language-',
-  highlight(code, lang) {
+  highlight(code: string, lang: string) {
+    if (lang === 'katex' || lang === 'mermaid' || lang.startsWith('markmap') || lang.startsWith('bilibili')) return code
     const language = hljs.getLanguage(lang) ? lang : 'shell'
     return hljs.highlight(code, { language }).value
   }
@@ -176,19 +212,11 @@ export const renderBlockquote = (quote: string) => {
  * @param code      解析后的 HTML 代码
  * @param language  语言
  * @param isEscaped
- * @param mermaidCallback 替换 html 结果中的 mermaid 内容
  */
-export const renderCode = (
-  code: string,
-  language: string | undefined,
-  _isEscaped: boolean,
-  mermaidCallback?: (eleid: string, svg: string) => void
-) => {
-  if (language == undefined) {
-    language = 'text'
-  }
+export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
+  if (language == undefined) language = 'text'
   if (language === 'mermaid' && isNotBlank(code)) {
-    const eleid = 'mermaid-' + Date.now() + '-' + Math.round(Math.random() * 1000)
+    const eleid = 'mermaid-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
     mermaid
       .parse(escape)
@@ -196,12 +224,9 @@ export const renderCode = (
         let canSyntax: boolean | void = syntax
         if (canSyntax) {
           mermaid.render(eleid + '-svg', escape).then((resp) => {
-            if (mermaidCallback != undefined) {
-              const { svg } = resp
-              let element = document.getElementById(eleid)
-              element!.innerHTML = svg
-              mermaidCallback(eleid, svg)
-            }
+            const { svg } = resp
+            let element = document.getElementById(eleid)
+            element!.innerHTML = svg
           })
         }
       })
@@ -212,30 +237,58 @@ export const renderCode = (
           ${error}<br/><br/>
           你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
           </div>`
-        if (mermaidCallback != undefined) {
-          let element = document.getElementById(eleid)
-          element!.innerHTML = html
-          mermaidCallback(eleid, html)
-        }
+        let element = document.getElementById(eleid)
+        if (element) element!.innerHTML = html
       })
     return `<p id="${eleid}">${eleid}</p>`
   }
 
   if (language === 'katex') {
     try {
-      return katex.renderToString(escape2Html(code), {
-        throwOnError: true,
-        displayMode: true,
-        output: 'html'
-      })
+      return katex.renderToString(escape2Html(code), { throwOnError: true, displayMode: true, output: 'html' })
     } catch (error) {
-      console.error(error)
       return `<div class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Katex 语法解析失败!</div><br/>
           ${error}<br/><br/>
           你可以尝试前往 Katex 官网来校验你的公式, 或者查看相关文档: <a href='https://katex.org/#demo' target='_blank'>https://katex.org/#demo</a>
           </div>`
     }
+  }
+
+  if (language.startsWith('markmap')) {
+    let height = '300px'
+    let tags: string[] = language.split(grammar)
+    if (tags.length >= 2) {
+      let tag = tags[1]
+      if (tag.startsWith('h')) {
+        height = tag.substring(1)
+        if (!height.endsWith('%')) {
+          height += 'px'
+        }
+      }
+    }
+
+    const eleid = 'markmap-' + Date.now() + '-' + randomInt(1, 10000)
+    const escape = escape2Html(code) as string
+    const { root } = transformer.transform(escape)
+    new Promise<SVGElement>(async (resolve, reject) => {
+      let svgEl: SVGElement | null = document.querySelector(`#${eleid}`)
+      let retry = 0
+      while (!svgEl || svgEl == null) {
+        if (retry > 10) break
+        await sleep(10)
+        svgEl = document.querySelector(`#${eleid}`)
+        retry++
+      }
+      if (svgEl) {
+        resolve(svgEl)
+      } else {
+        reject()
+      }
+    }).then((svgEl: SVGElement) => {
+      Markmap.create(svgEl, markmapOptions, root)
+    })
+    return `<p><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
   }
 
   if (language.startsWith('bilibili')) {
@@ -276,8 +329,14 @@ export const renderCode = (
       scrolling="no" border="0" frameborder="no" framespacing="0"
       src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
   }
-
-  return `<pre><code class="hljs language-${language}">${code}</code></pre>`
+  const id = 'pre-' + Date.now() + '-' + randomInt(1, 1000000)
+  const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
+  let result = '<ol>'
+  for (let i = 0; i < lines.length; i++) {
+    result += `<li><span class="line-num">${i + 1}</span></li>`
+  }
+  let lineNumbers = result + '</ol>'
+  return `<pre><code id="${id}" class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy" onclick="onHtmlEventDispatch('copyPreCode','${id}')">${language}</div></pre>`
 }
 
 /**
@@ -400,8 +459,17 @@ const simpleRenderer = {
       } catch (error) {
         return `<div></div>`
       }
+    } else if (language === 'markmap') {
+      return `<p><svg></svg></p>`
     }
-    return `<pre><code class="hljs language-${language}">${code}</code></pre>`
+    const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
+    let result = '<ol>'
+    for (let i = 0; i < lines.length; i++) {
+      result += `<li><span class="line-num">${i + 1}</span></li>`
+    }
+    let lineNumbers = result + '</ol>'
+    return `<pre><code class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy">${language}</div></pre>`
+    // return `<pre><code class="hljs language-${language}">${code}</code></pre>`
   },
   codespan(src: string): string {
     return renderCodespan(src)

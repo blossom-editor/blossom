@@ -189,6 +189,7 @@ onMounted(() => {
   initScroll()
   addListenerScroll()
   initAutoSaveInterval()
+  window.onHtmlEventDispatch = onHtmlEventDispatch
 })
 onBeforeUnmount(() => {
   removeListenerShortcutMap()
@@ -312,6 +313,52 @@ const refreshCache = () => {
   picCacheRefresh()
   parse()
 }
+
+/**
+ * 右键菜单的上传回调
+ * @param resp
+ * @param file
+ */
+const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
+  if (resp.code === '20000') {
+    cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
+  } else {
+    Notify.error(resp.msg, '上传失败')
+  }
+}
+
+/**
+ * 拖拽和黏贴上传
+ * @param file 文件
+ */
+const uploadFile = (file: File) => {
+  uploadForm(file, curActiveDoc.value!.pid, (url: string) => {
+    cmw.insertBlockCommand(`\n![${file.name}](${url})\n`)
+  })
+}
+//#endregion
+
+//#region ----------------------------------------< html 事件监听 >----------------------------
+type HtmlEvent = 'copyPreCode' | ''
+const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
+  if (type === 'copyPreCode') {
+    let code = document.getElementById(data)
+    if (code) {
+      writeText(code.innerText)
+    }
+  }
+  // console.log('🚀 ~ file: ArticleIndex.vue:343 ~ onHtmlEventDispatch ~ data:', data)
+  // console.log('🚀 ~ file: ArticleIndex.vue:343 ~ onHtmlEventDispatch ~ type:', type)
+
+  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', id)
+  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', type)
+  // console.log(
+  //   "🚀 ~ file: ArticleIndex.vue:352 ~ onHtmlEventDispatch ~ type.target.parentNode.getElementsByTagName('code'):",
+  //   type.target.parentNode.getElementsByTagName('code')[0]
+  // )
+  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', type.target.parentNode.getElementsByTagName('code')[0].innerText)
+}
+
 //#endregion
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
@@ -402,7 +449,8 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     id: curArticle.value!.id,
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
-    html: articleHtml.value,
+    // html: articleHtml.value,
+    html: PreviewRef.value.innerHTML,
     toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
@@ -457,18 +505,6 @@ const curIsArticle = (): boolean => {
   }
   return true
 }
-/**
- * 文件上传成功
- * @param resp
- * @param file
- */
-const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
-  if (resp.code === '20000') {
-    cmw.insertBlockCommand(`\n![${file.name}](${resp.data})\n`)
-  } else {
-    Notify.error(resp.msg, '上传失败')
-  }
-}
 
 //#endregion
 
@@ -509,16 +545,6 @@ const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
       uploadFile(file)
     }
   }
-}
-
-/**
- * 上传图片
- * @param file 文件
- */
-const uploadFile = (file: File) => {
-  uploadForm(file, curActiveDoc.value!.pid, (url: string) => {
-    cmw.insertBlockCommand(`\n![${file.name}](${url})\n`)
-  })
 }
 
 /**
@@ -580,9 +606,7 @@ const renderer = {
     return renderCodespan(src)
   },
   code(code: string, language: string | undefined, _isEscaped: boolean): string {
-    return renderCode(code, language, _isEscaped, (eleid: string, svg: string) => {
-      articleHtml.value = articleHtml.value.replaceAll(`>${eleid}<`, `>${svg}<`)
-    })
+    return renderCode(code, language, _isEscaped)
   },
   heading(text: any, level: number): string {
     articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
