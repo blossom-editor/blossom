@@ -2,7 +2,6 @@ import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDe
 import { join } from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
-// import iconPng from '../../resources/imgs/iconBigSur.png?asset'
 import printScreen from './printScreen'
 import ShortcutRegistrant from './shortcut'
 

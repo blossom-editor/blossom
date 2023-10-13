@@ -11,7 +11,6 @@ import * as prettier from 'prettier/standalone'
 import pluginMarkdown from 'prettier/plugins/markdown'
 
 import { isBlank } from '@renderer/assets/utils/obj'
-import { log } from 'console'
 
 const { editorStyle } = useConfigStore()
 

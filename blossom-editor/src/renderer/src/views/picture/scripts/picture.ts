@@ -1,3 +1,4 @@
+import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
 import type { UploadProps } from 'element-plus'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
@@ -5,6 +6,7 @@ import Notify from '@renderer/scripts/notify'
 import { uploadFileApi } from '@renderer/api/blossom'
 
 const { picStyle } = useConfigStore()
+const { userinfo } = useUserStore()
 
 /**
  * Picture Object
@@ -159,7 +161,11 @@ export const picCacheRefresh = () => {
 
 // 图片路径包装
 export const picCacheWrapper = (url: string) => {
-  return url + '?picCache=' + picCache
+  if (url.includes(userinfo.osRes.domain)) {
+    return url + '?picCache=' + picCache
+  } else {
+    return url
+  }
 }
 
 //#endregion
