@@ -140,7 +140,8 @@
 
       .preview-marked {
         @include box(50%, 100%);
-        overflow: scroll;
+        overflow-y: scroll;
+        overflow-x: hidden;
         word-wrap: break-word;
         padding: 10px 20px 0 20px;
         z-index: 3;
