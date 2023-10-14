@@ -63,8 +63,11 @@ export class EPScroll {
         if (targetIndex > previewDoms.length) {
           targetIndex = previewDoms.length
         }
-        const tagetDom: Element = previewDoms[targetIndex]
-        tagetDom.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
+        const targetDom: Element = previewDoms[targetIndex]
+        if (targetDom) {
+          targetDom.scrollIntoView()
+        }
+        // tagetDom.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
       })
     }
   }
