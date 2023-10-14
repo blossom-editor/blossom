@@ -63,7 +63,7 @@
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
-        <el-backtop target=".editor-codemirror" :right="50" :bottom="50">
+        <el-backtop target=".editor-codemirror" :right="50" :bottom="70">
           <div class="iconbl bl-send-line backtop"></div>
         </el-backtop>
       </div>
@@ -347,16 +347,6 @@ const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
       writeText(code.innerText)
     }
   }
-  // console.log('🚀 ~ file: ArticleIndex.vue:343 ~ onHtmlEventDispatch ~ data:', data)
-  // console.log('🚀 ~ file: ArticleIndex.vue:343 ~ onHtmlEventDispatch ~ type:', type)
-
-  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', id)
-  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', type)
-  // console.log(
-  //   "🚀 ~ file: ArticleIndex.vue:352 ~ onHtmlEventDispatch ~ type.target.parentNode.getElementsByTagName('code'):",
-  //   type.target.parentNode.getElementsByTagName('code')[0]
-  // )
-  // console.log('🚀 ~ file: ArticleIndex.vue:342 ~ onHtmlEventDispatch ~ id:', type.target.parentNode.getElementsByTagName('code')[0].innerText)
 }
 
 //#endregion
