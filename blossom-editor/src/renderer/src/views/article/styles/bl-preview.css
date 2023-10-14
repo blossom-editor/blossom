@@ -246,7 +246,7 @@ table container
 
 .bl-preview pre .pre-copy {
   position: absolute;
-  top: 5px;
+  top: 10px;
   right: 10px;
   text-align: right;
   z-index: 10;
@@ -254,10 +254,16 @@ table container
   padding: 1px 8px;
   border-radius: 4px;
   cursor: pointer;
+  user-select: none;
 }
 
 .bl-preview pre .pre-copy:hover {
   background-color: #1a1a1a;
+  color: #9d9d9d;
+}
+
+.bl-preview pre .pre-copy:active {
+  color: #e2e2e2;
 }
 
 .bl-preview pre ol {

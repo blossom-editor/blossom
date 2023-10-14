@@ -8,22 +8,24 @@
 
     <div class="headmenu">
       <bl-row @click="handleMenu(!menuShow)">
-        <div class="iconbl  bl-model-line"></div>
-        <div style="font-size: 0.8rem;">菜单</div>
+        <div class="iconbl bl-model-line"></div>
+        <div style="font-size: 0.8rem">菜单</div>
       </bl-row>
       <bl-row just="flex-end" @click="handleToc(!tocShow)">
-        <div style="font-size: 0.8rem;">目录</div>
+        <div style="font-size: 0.8rem">目录</div>
         <div class="iconbl bl-list-ordered"></div>
       </bl-row>
     </div>
     <div class="main">
       <div class="menu" :style="menuStyle">
-        <el-menu v-if="docTreeData != undefined && docTreeData.length > 0" class="doc-trees"
-          :default-active="docTreeDefaultActive" :default-openeds="defaultOpeneds" :unique-opened="true">
-
+        <el-menu
+          v-if="docTreeData != undefined && docTreeData.length > 0"
+          class="doc-trees"
+          :default-active="docTreeDefaultActive"
+          :default-openeds="defaultOpeneds"
+          :unique-opened="true">
           <!-- ================================================ L1 ================================================ -->
           <div v-for="L1 in docTreeData" :key="L1.i" class="menu-level-one">
-
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
                 <DocTitle :trees="L1" @click-doc="clickCurDoc" />
@@ -32,7 +34,7 @@
 
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
               <template #title>
-                <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px;" />
+                <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px" />
               </template>
 
               <!-- ================================================ L2 ================================================ -->
@@ -56,8 +58,7 @@
                       </template>
                     </el-menu-item>
 
-                    <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold"
-                      :index="L3.i">
+                    <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                       <template #title>
                         <DocTitle :trees="L3" @click-doc="clickCurDoc" />
                       </template>
@@ -72,7 +73,6 @@
                       </div>
                     </el-sub-menu>
                   </div>
-
                 </el-sub-menu>
               </div>
             </el-sub-menu>
@@ -81,21 +81,23 @@
       </div>
 
       <div class="article">
-        <div class="bl-preview" v-html="article?.html">
-        </div>
+        <div class="bl-preview" v-html="article?.html"></div>
       </div>
 
       <div class="toc-container" :style="tocStyle">
         <div class="viewer-toc">
-          <div class="toc-subtitle" style="font-size: 15px;">《{{ article?.name }}》</div>
+          <div class="toc-subtitle" style="font-size: 15px">《{{ article?.name }}》</div>
           <div class="toc-subtitle">
-            <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 |
-            <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
+            <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
             <span class="iconbl bl-like-line"></span> {{ article?.likes }}
           </div>
-          <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}
+          <div class="toc-subtitle">
+            <span class="iconbl bl-a-clock3-line"></span> 公开
+            {{ article?.openTime }}
           </div>
-          <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.syncTime }}
+          <div class="toc-subtitle">
+            <span class="iconbl bl-a-clock3-line"></span> 修改
+            {{ article?.syncTime }}
           </div>
           <div class="toc-title">目录</div>
           <div class="toc-content">
@@ -111,16 +113,20 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onActivated, onUnmounted } from "vue";
+import { ref, onActivated, onUnmounted, onMounted } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, docTreeApi } from '@/api/blossom'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
-import IndexHeader from "../index/IndexHeader.vue"
+import IndexHeader from '../index/IndexHeader.vue'
 import 'katex/dist/katex.min.css'
 
+onMounted(() => {
+  window.onHtmlEventDispatch = onHtmlEventDispatch
+})
+
 onActivated(() => {
-  getRouteQueryParams();
+  getRouteQueryParams()
   window.addEventListener('resize', onresize)
   initStyle()
 })
@@ -133,7 +139,7 @@ onUnmounted(() => {
  * 路由中获取ID参数
  */
 const getRouteQueryParams = () => {
-  let articleId = route.query.articleId;
+  let articleId = route.query.articleId
   getDocTree()
   if (isNotNull(articleId)) {
     docTreeDefaultActive.value = articleId as string
@@ -142,7 +148,7 @@ const getRouteQueryParams = () => {
   }
 }
 
-const route = useRoute();
+const route = useRoute()
 // 文档菜单的加载动画
 const docTreeLoading = ref(true)
 // 文档菜单
@@ -170,17 +176,19 @@ const defaultOpeneds = ref<string[]>([])
  * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
  */
 const getDocTree = () => {
-  docTreeLoading.value = true;
+  docTreeLoading.value = true
   docTreeData.value = []
   defaultOpeneds.value = []
-  docTreeApi({ onlyOpen: true }).then(resp => {
-    docTreeData.value = resp.data
-    docTreeData.value.forEach((l1: DocTree) => {
-      defaultOpeneds.value.push(l1.i.toString())
+  docTreeApi({ onlyOpen: true })
+    .then((resp) => {
+      docTreeData.value = resp.data
+      docTreeData.value.forEach((l1: DocTree) => {
+        defaultOpeneds.value.push(l1.i.toString())
+      })
     })
-  }).finally(() => {
-    docTreeLoading.value = false
-  })
+    .finally(() => {
+      docTreeLoading.value = false
+    })
 }
 
 const clickCurDoc = async (tree: DocTree) => {
@@ -190,22 +198,17 @@ const clickCurDoc = async (tree: DocTree) => {
   }
 }
 
-
 /**
  * 如果点击的是文章, 则查询文章信息和正文, 并在编辑器中显示.
  */
 const getCurEditArticle = async (id: number) => {
-  // previewLoading.value = true
-  // tocList.value = []
-  await articleInfoOpenApi({ id: id, showToc: true, showMarkdown: false, showHtml: true }).then(resp => {
-    if (isNull(resp.data)) {
-      return
-    }
-    article.value = resp.data
-    tocList.value = JSON.parse(resp.data.toc)
-  }).finally(() => {
-    // setTimeout(() => { previewLoading.value = false }, 500);
-  })
+  await articleInfoOpenApi({ id: id, showToc: true, showMarkdown: false, showHtml: true })
+    .then((resp) => {
+      if (isNull(resp.data)) return
+      article.value = resp.data
+      tocList.value = JSON.parse(resp.data.toc)
+    })
+    .finally(() => {})
 }
 
 const toScroll = (level: number, content: string) => {
@@ -214,8 +217,20 @@ const toScroll = (level: number, content: string) => {
   elm?.scrollIntoView(true)
 }
 
+/**
+ * 监听 html 的内联事件
+ */
+type HtmlEvent = 'copyPreCode' | ''
+const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
+  if (type === 'copyPreCode') {
+    let code = document.getElementById(data)
+    if (code) {
+      navigator.clipboard.writeText(code.innerText)
+    }
+  }
+}
 
-//#region 样式
+//#region ----------------------------------------< 响应式样式 >--------------------------------------
 const maskStyle = ref({ display: 'none' })
 const menuShow = ref(false)
 const menuStyle = ref({ display: 'none', opacity: 0 })
@@ -227,11 +242,15 @@ const handleMenu = (show: boolean) => {
   if (show) {
     maskStyle.value = { display: 'block' }
     menuStyle.value = { display: 'block', opacity: 0 }
-    setTimeout(() => { menuStyle.value = { display: 'block', opacity: 1 } }, 1)
+    setTimeout(() => {
+      menuStyle.value = { display: 'block', opacity: 1 }
+    }, 1)
   }
   if (!show) {
     menuStyle.value = { display: 'block', opacity: 0 }
-    setTimeout(() => { menuStyle.value = { display: 'none', opacity: 0 } }, 300)
+    setTimeout(() => {
+      menuStyle.value = { display: 'none', opacity: 0 }
+    }, 300)
   }
 }
 
@@ -240,11 +259,15 @@ const handleToc = (show: boolean) => {
   if (show) {
     maskStyle.value = { display: 'block' }
     tocStyle.value = { display: 'block', opacity: 0 }
-    setTimeout(() => { tocStyle.value = { display: 'block', opacity: 1 } }, 1)
+    setTimeout(() => {
+      tocStyle.value = { display: 'block', opacity: 1 }
+    }, 1)
   }
   if (!show) {
     tocStyle.value = { display: 'block', opacity: 0 }
-    setTimeout(() => { tocStyle.value = { display: 'none', opacity: 0 } }, 300)
+    setTimeout(() => {
+      tocStyle.value = { display: 'none', opacity: 0 }
+    }, 300)
   }
 }
 
@@ -284,7 +307,6 @@ const onresize = () => {
     maskStyle.value = { display: 'none' }
     tocStyle.value = { display: 'block', opacity: 1 }
   }
-
 }
 
 //#endregion
@@ -313,7 +335,7 @@ const onresize = () => {
 
   .headmenu {
     display: none;
-    color: #BFBFBF;
+    color: #bfbfbf;
 
     .iconbl {
       font-size: 20px;
@@ -364,8 +386,8 @@ const onresize = () => {
         --el-menu-item-height: 25px;
         // item 的 字体大小
         --el-menu-item-font-size: 13px;
-        --el-color-primary-light-9: #FFFFFF00;
-        --el-menu-hover-bg-color: #FFFFFF00;
+        --el-color-primary-light-9: #ffffff00;
+        --el-menu-hover-bg-color: #ffffff00;
 
         :deep(.el-menu) {
           transition: 0.1s !important;
@@ -391,7 +413,7 @@ const onresize = () => {
         }
 
         :deep(.el-menu-item) {
-          --el-menu-hover-bg-color: #FFFFFF00 !important;
+          --el-menu-hover-bg-color: #ffffff00 !important;
           height: auto;
           min-height: 25px;
           padding-right: 0;
@@ -404,11 +426,7 @@ const onresize = () => {
 
         :deep(.el-menu-item.is-active) {
           text-shadow: 0px 4px 5px rgba(107, 104, 104, 1);
-          background: linear-gradient(90deg,
-              #3D454D00 0%,
-              #C3C3C3 40%,
-              #C3C3C3 60%,
-              #3D454D00 100%);
+          background: linear-gradient(90deg, #3d454d00 0%, #c3c3c3 40%, #c3c3c3 60%, #3d454d00 100%);
           color: #ffffff;
           font-weight: 700;
         }
@@ -417,19 +435,18 @@ const onresize = () => {
           top: 7px;
           transform: translateY(-50%) translateX(100%) scale(0.8);
         }
-
       }
     }
 
     .toc-container {
       @include box(270px, 100%, 270px, 270px);
-      border-left: 1px solid #EEEEEE;
+      border-left: 1px solid #eeeeee;
       overflow: auto;
       transition: 0.3s;
 
       .viewer-toc {
         @include box(100%, 100%);
-        color: #5E5E5E;
+        color: #5e5e5e;
         padding: 10px;
         z-index: 1000;
         transition: 0.3s;
@@ -440,14 +457,14 @@ const onresize = () => {
           line-height: 40px;
           margin-top: 10px;
           padding-top: 10px;
-          border-top: 3px solid #BCBCBC;
+          border-top: 3px solid #bcbcbc;
         }
 
         .toc-subtitle {
           width: 100%;
           @include flex(row, flex-start, center);
           @include font(12px);
-          color: #ABABAB;
+          color: #ababab;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -529,7 +546,6 @@ const onresize = () => {
         // font-size: 14px;
         line-height: 1.6;
 
-
         :deep(.katex > *) {
           font-size: 1.2em !important;
           // font-family: 'KaTeX_Size1', sans-serif !important;
@@ -586,8 +602,7 @@ const onresize = () => {
           font-size: 19px;
         }
 
-        :deep(h5,
-          h6) {
+        :deep(h5, h6) {
           font-size: 16px;
         }
 
@@ -623,7 +638,6 @@ const onresize = () => {
 
           ul {
             padding-left: 15px;
-
           }
 
           li::marker {
@@ -748,7 +762,7 @@ const onresize = () => {
 
         // 单行代码块
         :deep(code) {
-          background-color: #DEDEDE;
+          background-color: #dedede;
           padding: 0px 4px;
           border-radius: 3px;
           margin: 0 3px;
@@ -756,16 +770,56 @@ const onresize = () => {
           word-break: break-all;
         }
 
-
         // 代码块
         :deep(pre) {
-          padding: 10px 10px 10px 10px;
+          padding: 10px 10px 10px 30px;
           background-color: #2b2b2b;
           overflow: auto;
           border-radius: $borderRadius;
           box-shadow: 2px 2px 5px rgb(76, 76, 76);
           max-height: 1100px;
+          position: relative;
 
+          .pre-copy {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-align: right;
+            z-index: 10;
+            color: #5c5c5c;
+            padding: 1px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+          }
+
+          .pre-copy:hover {
+            background-color: #1a1a1a;
+            color: #9d9d9d;
+          }
+          .pre-copy:active {
+            color: #e2e2e2;
+          }
+
+          ol {
+            margin: 0;
+            padding-left: 0;
+            position: absolute;
+            top: 10px;
+            left: 3px;
+            user-select: none;
+            li {
+              list-style: none;
+              .line-num {
+                width: 30px;
+                display: inline-block;
+                text-align: right;
+                padding-right: 10px;
+                color: #6a6a6a;
+                user-select: none;
+              }
+            }
+          }
 
           code {
             background-color: inherit;
@@ -785,31 +839,31 @@ const onresize = () => {
 
           .hljs {
             color: #a9b7c6;
-            background: #2b2b2b
+            background: #2b2b2b;
           }
 
           .hljs ::selection,
           .hljs::selection {
             background-color: #323232;
-            color: #a9b7c6
+            color: #a9b7c6;
           }
 
           .hljs-comment {
-            color: #606366
+            color: #606366;
           }
 
           .hljs-tag {
-            color: #a4a3a3
+            color: #a4a3a3;
           }
 
           .hljs-operator,
           .hljs-punctuation,
           .hljs-subst {
-            color: #a9b7c6
+            color: #a9b7c6;
           }
 
           .hljs-operator {
-            opacity: .7
+            opacity: 0.7;
           }
 
           .hljs-bullet,
@@ -818,7 +872,7 @@ const onresize = () => {
           .hljs-selector-tag,
           .hljs-template-variable,
           .hljs-variable {
-            color: #4eade5
+            color: #4eade5;
           }
 
           .hljs-attr {
@@ -830,25 +884,25 @@ const onresize = () => {
           .hljs-number,
           .hljs-symbol,
           .hljs-variable.constant_ {
-            color: #689757
+            color: #689757;
           }
 
           .hljs-class .hljs-title,
           .hljs-title,
           .hljs-title.class_ {
-            color: #e4b568
+            color: #e4b568;
           }
 
           .hljs-strong {
             font-weight: 700;
-            color: #bbb529
+            color: #bbb529;
           }
 
           .hljs-addition,
           .hljs-code,
           .hljs-string,
           .hljs-title.class_.inherited__ {
-            color: #6a8759
+            color: #6a8759;
           }
 
           .hljs-built_in,
@@ -856,7 +910,7 @@ const onresize = () => {
           .hljs-keyword.hljs-atrule,
           .hljs-quote,
           .hljs-regexp {
-            color: #629755
+            color: #629755;
           }
 
           .hljs-attribute,
@@ -864,19 +918,19 @@ const onresize = () => {
           .hljs-section,
           .hljs-title.function_,
           .ruby .hljs-property {
-            color: #9876aa
+            color: #9876aa;
           }
 
           .diff .hljs-meta,
           .hljs-keyword,
           .hljs-template-tag,
           .hljs-type {
-            color: #cc7832
+            color: #cc7832;
           }
 
           .hljs-emphasis {
             color: #cc7832;
-            font-style: italic
+            font-style: italic;
           }
 
           .hljs-meta,
@@ -887,20 +941,19 @@ const onresize = () => {
 
           .hljs-meta .hljs-keyword,
           .hljs-meta-keyword {
-            font-weight: 700
+            font-weight: 700;
           }
         }
       }
     }
   }
 
-
   // 屏幕宽度在 1100 以内时使用以下样式
   @media screen and (max-width: 1100px) {
     .headmenu {
       @include box(100vw, 50px);
       @include flex(row, space-between, center);
-      border-bottom: 1px solid #E2E2E2;
+      border-bottom: 1px solid #e2e2e2;
     }
 
     .main {
@@ -944,6 +997,5 @@ const onresize = () => {
       z-index: 9999;
     }
   }
-
 }
 </style>
