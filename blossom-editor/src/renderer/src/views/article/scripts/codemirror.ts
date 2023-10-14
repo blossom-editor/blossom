@@ -398,8 +398,8 @@ export class CmWrapper {
    * @param istFrom 插入的开始位置
    * @param istTo 插入的结束位置
    * @param content 插入的内容
-   * @param selectFrom
-   * @param selectTo
+   * @param selectFrom 插入内容后, 将光标移动到的开始位置
+   * @param selectTo 插入内容后, 将光标移动到的结束位置
    */
   static insert = (editor: EditorView, istFrom: number, istTo: number, content: string, selectFrom: number, selectTo: number) => {
     let changeByRange = {
