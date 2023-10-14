@@ -29,6 +29,11 @@
         <div class="conf-tip">通过快捷键或者操作按钮生成多行代码块<code>```</code>时的默认语言。</div>
       </el-form-item>
 
+      <el-form-item label="显示代码块行数">
+        <el-switch v-model="configEditorStyleForm.isShowPreLineNumber" size="default" style="margin-right: 10px" @change="changeEditorStyle" />
+        <div class="conf-tip">是否在代码块中显示代码行数。</div>
+      </el-form-item>
+
       <el-form-item label="专题以特殊样式显示">
         <el-switch v-model="configViewStyleForm.isShowSubjectStyle" size="default" style="margin-right: 10px" @change="changeViewStyle" />
         <div class="conf-tip">是否以特殊的样式显示专题。</div>

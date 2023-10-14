@@ -1,28 +1,42 @@
+import { useConfigStore } from '@renderer/stores/config'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html, randomInt, sleep } from '@renderer/assets/utils/util'
 import { marked, Marked } from 'marked'
+// highlight
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
+// katex
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
+// mermaid
 import mermaid from 'mermaid'
-import { ArticleReference, getDocInfoFromTrees } from './article'
-import { picCacheWrapper } from '@renderer/views/picture/scripts/picture'
-
+// markmap
 import { Transformer } from 'markmap-lib'
 import { Markmap, deriveOptions } from 'markmap-view'
-const markmapOptions = deriveOptions({
-  colorFreezeLevel: 2,
-  duration: 0,
-  maxWidth: 160,
-  zoom: false,
-  pan: false
-})
+import { ArticleReference, getDocInfoFromTrees } from './article'
+import { picCacheWrapper } from '@renderer/views/picture/scripts/picture'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
-const transformer = new Transformer()
+const { editorStyle } = useConfigStore()
 
+//#region ----------------------------------------< 组件配置 >--------------------------------------
+
+/**
+ * markmap 配置
+ */
+const transformer = new Transformer()
+const markmapOptions = deriveOptions({
+  colorFreezeLevel: 2, // 颜色冻结级别
+  duration: 0, // 展开缩起动画
+  maxWidth: 160, // 每个节点最大宽度
+  zoom: true, // 缩放
+  pan: false // 拖动
+})
+
+/**
+ * mermaid 配置
+ */
 mermaid.initialize({
   theme: 'base',
   startOnLoad: false,
@@ -54,6 +68,9 @@ export const singleDollar = /^\$+([^\$\n]+?)\$+/
 export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
 export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
 
+/**
+ * markedjs 配置
+ */
 marked.use({
   async: true,
   pedantic: false,
@@ -61,45 +78,6 @@ marked.use({
   mangle: false,
   headerIds: false
 })
-
-// 行号插件, 对 mermaid 等有些许影响
-// hljs.addPlugin({
-//   'after:highlight': (el) => {
-//     let result = '<ol>'
-//     let lines: string[] = el.value.split(/[\n\r]+/)
-//     let isCommentBlock = false
-//     lines.forEach((line: string, index: number) => {
-//       console.log(line)
-
-//       // // 不在注释块内
-//       // if (!isCommentBlock && line.startsWith('<span class="hljs-comment">')) {
-//       //   isCommentBlock = true
-//       // }
-//       // // 注释块的最后一行
-//       // if (isCommentBlock && line.endsWith('<span class="hljs-comment">')) {
-//       //   result += `<li><span class="line-num">${index + 1}<span class="hljs-comment">${line}</span></li>`
-//       //   isCommentBlock = false
-//       // }
-//       // 在注释块内, 需要为每一个行增加注释
-//       // if (isCommentBlock) {
-//         // result += `<li><span class="line-num">${index + 1}</span><span class="hljs-comment">${line}</span></li>`
-//       // }
-//       result += `<li><span class="line-num">${index + 1}</span>${line}</li>`
-//     })
-//     el.value = result += '</ol>'
-//   }
-// })
-
-// hljs.addPlugin({
-//   'after:highlight': (el) => {
-//     let lines: string[] = el.value.split(/\n|\r\n?|\n\n+/g)
-//     let result = '<ol>'
-//     for (let i = 0; i < lines.length; i++) {
-//       result += `<li><span class="line-num">${i + 1}</span></li>`
-//     }
-//     el.value = el.value + result + '</ol>'
-//   }
-// })
 
 let hljsConfig = {
   langPrefix: 'hljs language-',
@@ -109,11 +87,8 @@ let hljsConfig = {
     return hljs.highlight(code, { language }).value
   }
 }
-
-// 高亮拓展
 marked.use(markedHighlight(hljsConfig))
-
-//
+//#endregion
 
 //#region ----------------------------------------< tokenizer >--------------------------------------
 export const tokenizerCodespan = (src: string): any => {
@@ -334,7 +309,11 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
   const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
   let result = '<ol>'
   for (let i = 0; i < lines.length; i++) {
-    result += `<li><span class="line-num">${i + 1}</span></li>`
+    if (editorStyle.isShowPreLineNumber) {
+      result += `<li><span class="line-num">${i + 1}</span></li>`
+    } else {
+      result += `<li><span class="line-num"></span></li>`
+    }
   }
   let lineNumbers = result + '</ol>'
   return `<pre><code id="${id}" class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy" onclick="onHtmlEventDispatch('copyPreCode','${id}')">${language}</div></pre>`
@@ -466,10 +445,10 @@ const simpleRenderer = {
     const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
     let result = '<ol>'
     for (let i = 0; i < lines.length; i++) {
-      result += `<li><span class="line-num">${i + 1}</span></li>`
+      result += `<li></li>`
     }
     let lineNumbers = result + '</ol>'
-    return `<pre><code class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy">${language}</div></pre>`
+    return `<pre><code class="hljs language-${language}"></code>${lineNumbers}<div class="pre-copy">${language}</div></pre>`
     // return `<pre><code class="hljs language-${language}">${code}</code></pre>`
   },
   codespan(src: string): string {

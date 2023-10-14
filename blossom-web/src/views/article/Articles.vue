@@ -772,7 +772,7 @@ const onresize = () => {
 
         // 代码块
         :deep(pre) {
-          padding: 10px 10px 10px 30px;
+          padding: 20px 10px 20px 30px;
           background-color: #2b2b2b;
           overflow: auto;
           border-radius: $borderRadius;
@@ -805,7 +805,7 @@ const onresize = () => {
             margin: 0;
             padding-left: 0;
             position: absolute;
-            top: 10px;
+            top: 20px;
             left: 3px;
             user-select: none;
             li {
@@ -844,8 +844,8 @@ const onresize = () => {
 
           .hljs ::selection,
           .hljs::selection {
-            background-color: #323232;
-            color: #a9b7c6;
+            // background-color: #323232;
+            // color: #a9b7c6;
           }
 
           .hljs-comment {

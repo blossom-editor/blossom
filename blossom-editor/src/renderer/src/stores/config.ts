@@ -30,6 +30,8 @@ export interface EditorStyle {
   defaultPreLanguage: string
   // 编辑器是否超出自动换行
   isAutoBreakLine: boolean
+  // 是否显示代码块行数
+  isShowPreLineNumber: boolean
 }
 
 /**
@@ -63,7 +65,8 @@ export const useConfigStore = defineStore('configStore', {
         fontFamily: "'Jetbrains Mono', sans-serif",
         fontSize: '14px',
         defaultPreLanguage: '',
-        isAutoBreakLine: true
+        isAutoBreakLine: true,
+        isShowPreLineNumber: false
       },
       ...Local.get(EDITOR_STYLE_KEY)
     },
