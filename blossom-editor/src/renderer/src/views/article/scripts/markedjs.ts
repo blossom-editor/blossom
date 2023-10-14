@@ -208,6 +208,7 @@ export const renderBlockquote = (quote: string) => {
  *
  * 2. katex
  * 3. mermaid
+ * 4. markmap
  *
  * @param code      解析后的 HTML 代码
  * @param language  语言

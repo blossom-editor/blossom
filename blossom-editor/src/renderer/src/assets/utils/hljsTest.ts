@@ -11,7 +11,7 @@ hljs.addPlugin({
     // el.value = result += '</ol>'
     let result = '<ol>'
     for (let i = 0; i < lines.length; i++) {
-      let line = lines[i]
+      // let line = lines[i]
       result += `<li>${i + 1}</li>`
     }
     el.value = el.value + result + '</ol>'
