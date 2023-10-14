@@ -311,7 +311,7 @@ export const platform = (): 'windows' | 'darwin' => {
   return 'windows'
 }
 
-const images = ['.jpeg', '.jpg', '.gif', '.png', '.apng', '.bmp', '.pic', '.svg', '.tif', '.tiff', '.webp','.jfif']
+const images = ['.jpeg', '.jpg', '.gif', '.png', '.apng', '.bmp', '.pic', '.svg', '.tif', '.tiff', '.webp', '.jfif', '.ico']
 
 /**
  * 检查是否为图片
