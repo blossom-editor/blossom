@@ -1,24 +1,31 @@
 <template>
   <div class="article-import-root">
-
     <!-- 标题 -->
     <div class="info-title">
-      <div class="iconbl bl-file-upload-line"></div>导入文章
+      <div class="iconbl bl-file-upload-line"></div>
+      导入文章
     </div>
 
     <div class="content">
-      <el-upload class="article-upload" ref="uploadRef" name="file" :action="serverStore.serverUrl + articleImportApiUrl"
-        :data="{ pid: porps.doc.i }" :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }"
-        :on-change="onChange" :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError"
-        :auto-upload="false" :limit="20" multiple>
+      <el-upload
+        multiple
+        class="article-upload"
+        ref="uploadRef"
+        name="file"
+        :action="serverStore.serverUrl + articleImportApiUrl"
+        :data="{ pid: porps.doc.i }"
+        :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
+        :on-change="onChange"
+        :before-upload="beforeUpload"
+        :on-success="onUploadSeccess"
+        :on-error="onError"
+        :auto-upload="false">
         <template #trigger>
           <el-button size="default">选择文章</el-button>
         </template>
-        <el-button style="margin-left: 10px;" size="default" type="primary" @click="submitUpload" plain>开始导入</el-button>
+        <el-button style="margin-left: 10px" size="default" type="primary" @click="submitUpload" plain>开始导入</el-button>
         <template #tip>
-          <div class="el-upload__tip upload-tip">
-            仅支持导入 [.md] 以及 [.txt] 后缀的文件，每次最多导入 20 个文件
-          </div>
+          <div class="el-upload__tip upload-tip">仅支持导入 [md，txt] 后缀的文件。</div>
         </template>
       </el-upload>
     </div>
@@ -49,7 +56,6 @@ const submitUpload = () => {
   uploadRef.value!.submit()
 }
 </script>
-
 
 <style scoped lang="scss">
 @import '@renderer/assets/styles/bl-dialog-info';
