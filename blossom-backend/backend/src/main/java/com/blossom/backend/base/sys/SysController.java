@@ -55,7 +55,9 @@ public class SysController {
      */
     @GetMapping("/param/list")
     public R<Map<String, String>> list() {
-        return R.ok(paramService.selectMap(true, ParamEnum.values()));
+        Map<String, String> param = paramService.selectMap(true, ParamEnum.values());
+        param.put("serverVersion", SpringUtil.get("project.base.version"));
+        return R.ok(param);
     }
 
     /**
