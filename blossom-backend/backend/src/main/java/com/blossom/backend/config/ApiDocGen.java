@@ -42,7 +42,7 @@ import java.util.List;
 public class ApiDocGen {
 
     private static String IP_DEVE = "http://127.0.0.1";
-    private static String VERSION = "v1.6.0";
+    private static String VERSION = "v1.7.0";
 
     private static final List<String> sourceCodePath = new ArrayList<String>() {{
         this.add("blossom-backend/common/common-base");

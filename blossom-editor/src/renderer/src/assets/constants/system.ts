@@ -5,8 +5,8 @@ const blossom: any = {
   SYS: {
     NAME: 'Blossom',
     FULL_NAME: 'BLOSSOM-EDITOR',
-    VERSION: 'v1.6.0',
-    
+    VERSION: 'v1.7.0',
+
     //
     DOC: 'https://www.wangyunf.com/blossom-doc/index',
     CONTACT: 'QQ群:522359970 / Email: kuamax888@qq.com',
