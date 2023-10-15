@@ -1,16 +1,14 @@
 <template>
   <div :class="['blossom-header-root', props.bg ? 'blossom-header-bg' : '']">
-    <div class="blossom-logo" @click="() => { toRoute('/home') }">
+    <div class="blossom-logo" @click="toRoute('/home')">
       <img src="@/assets/imgs/blossom/blossom_logo.png" />
     </div>
-    <div class="project-name" @click="() => { toRoute('/home') }">
-      Blossom
-    </div>
-    <div class="more-menu">
+    <div class="project-name" @click="toRoute('/home')">{{ SYSTEM.SYS.NAME }}</div>
+    <div v-if="SYSTEM.LINKS != undefined && SYSTEM.LINKS.length > 0" class="more-menu">
       <button class="menu-dropdown">更多</button>
       <div class="dropdown-content">
         <div class="dropdown-item" v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
-          <img :src="getImg(link.LOGO)" style="width: 25px;">{{ link.NAME }}
+          <img :src="getImg(link.LOGO)" style="width: 25px" />{{ link.NAME }}
         </div>
       </div>
     </div>
@@ -51,19 +49,16 @@ const getImg = (img: string) => {
   }
 
   .project-name {
-    @include box(100px, 100%);
+    @include box(auto, 100%);
     margin-left: 10px;
     padding: 10px 0;
-    text-shadow: 3px 3px 5px #ABABAB;
+    text-shadow: 3px 3px 5px #ababab;
     cursor: pointer;
 
     color: transparent;
     font-family: current, sans-serif;
     letter-spacing: 1px;
-    background: linear-gradient(90deg,
-        #313131,
-        #fff3fc,
-        #313131);
+    background: linear-gradient(90deg, #313131, #fff3fc, #313131);
     -webkit-background-clip: text;
     animation: glow 10s linear infinite;
     transition: 1.5s;
@@ -80,12 +75,13 @@ const getImg = (img: string) => {
     @include box(50px, 100%);
     font-size: 15px;
     color: #909090;
+    padding-left: 10px;
 
     .menu-dropdown {
       @include box(100%, 100%);
       padding: 5px;
       margin-top: 1px;
-      color: #ABABAB;
+      color: #ababab;
       border: 0;
       background-color: rgba(0, 0, 0, 0);
       text-align: center;
@@ -96,12 +92,12 @@ const getImg = (img: string) => {
       &:hover {
         font-weight: bold;
         border-radius: 5px;
-        color: #E8E8E8;
+        color: #e8e8e8;
         text-shadow: 3px 3px 10px #cccccc;
       }
     }
 
-    .menu-dropdown:hover+.dropdown-content {
+    .menu-dropdown:hover + .dropdown-content {
       display: block;
     }
 
@@ -137,10 +133,10 @@ const getImg = (img: string) => {
 
         &:hover {
           font-weight: bold;
-          color: #E8E8E8;
+          color: #e8e8e8;
           text-shadow: 3px 3px 10px #cccccc;
 
-          ~.dropdown-content {
+          ~ .dropdown-content {
             display: block;
           }
         }
@@ -149,9 +145,7 @@ const getImg = (img: string) => {
       .dropdown-item:first-child {
         margin-top: 0;
       }
-
     }
-
   }
 }
 

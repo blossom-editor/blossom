@@ -12,11 +12,9 @@
     </div>
 
     <div class="userinfo-content">
-
-      <!-- 操作按钮 -->
       <div class="userinfo-content-btns">
         <ul>
-          <li @click="() => { toRoute('/articles') }">我的所有文章</li>
+          <li @click="toRoute('/articles')">我的所有文章</li>
           <li v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
             {{ link.NAME }}
           </li>
@@ -27,7 +25,6 @@
       <div class="userinfo-content-charts">
         <ChartHeatmap></ChartHeatmap>
       </div>
-
     </div>
 
     <div class="userinfo-footer">
@@ -36,7 +33,7 @@
       </div>
       <div class="icp">
         <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
-          <img style="height: 14px;width: 14px;" src="@/assets/imgs/common/gong_wang_an_bei_img.png">
+          <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
           {{ blossom.SYS.GONG_WANG_AN_BEI }}
         </div>
         <div>|</div>
@@ -50,19 +47,19 @@
 
 <script setup lang="ts">
 import { toRoute } from '@/router'
-import { onMounted, ref } from "vue"
+import { onMounted, ref } from 'vue'
 import { userinfoApi } from '@/api/blossom'
 import blossom from '@/assets/constants/blossom'
-import ChartHeatmap from "./ChartHeatmap.vue"
+import ChartHeatmap from './ChartHeatmap.vue'
 import SYSTEM from '@/assets/constants/blossom'
 import { toView } from '@/assets/utils/util'
 
 const userinfo = ref({
   avatar: '',
-  nickName: '小贼贼子',
-  remark: 'Java | Js | Ts',
-  articleCount: '200',
-  articleWords: '20000'
+  nickName: '',
+  remark: '',
+  articleCount: '0',
+  articleWords: '0'
 })
 
 const openNew = (url: string) => {
@@ -70,18 +67,16 @@ const openNew = (url: string) => {
 }
 
 onMounted(() => {
-  userinfoApi().then(resp => {
+  userinfoApi().then((resp) => {
     userinfo.value = resp.data
   })
 })
-
 </script>
 
 <style scoped lang="scss">
 .home-userinfo-root {
   @include box(100%, 100%);
   @include flex(column, flex-start, center);
-
 
   .userinfo-desc {
     height: 40%;
@@ -90,11 +85,7 @@ onMounted(() => {
     .avatar {
       img {
         @include box(100px, 100px);
-        box-shadow:
-          -3px -3px 5px #585858,
-          5px 5px 10px 1px #000000,
-          9px 9px 10px 1px #2B2B2B,
-          15px 15px 10px 1px #414141;
+        box-shadow: -3px -3px 5px #585858, 5px 5px 10px 1px #000000, 9px 9px 10px 1px #2b2b2b, 15px 15px 10px 1px #414141;
         border-radius: 10px;
         object-fit: cover;
       }
@@ -144,18 +135,16 @@ onMounted(() => {
           line-height: 25px;
 
           &:hover {
-            color: #F3F3F3;
+            color: #f3f3f3;
             text-shadow: 3px 3px 10px #cccccc;
           }
         }
-
       }
     }
 
     &-charts {
       margin-left: -10px;
     }
-
   }
 
   .userinfo-footer {
@@ -174,6 +163,5 @@ onMounted(() => {
       white-space: pre;
     }
   }
-
 }
 </style>

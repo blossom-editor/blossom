@@ -4,12 +4,8 @@
       <div class="name" :style="{ fontSize: getFontSize(subject.name) }">
         {{ subject.name }}
       </div>
-      <div class="words">
-        <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}
-      </div>
-      <div class="upd-time">
-        <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}
-      </div>
+      <div class="words"><span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}</div>
+      <div class="upd-time"><span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}</div>
       <div class="cover-name" :style="{ background: subject.color }">
         {{ subject.name }}
       </div>
@@ -24,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
-import { ref, onMounted } from "vue"
-import { subjectsApi } from "@/api/blossom";
+import router from '@/router'
+import { ref, onMounted } from 'vue'
+import { subjectsApi } from '@/api/blossom'
 
 onMounted(() => {
   subjects.value = []
-  subjectsApi().then(resp => {
+  subjectsApi().then((resp) => {
     subjects.value = resp.data
   })
 })
@@ -47,7 +43,6 @@ const getFontSize = (name: string) => {
 const toToc = (articleId: number) => {
   router.push({ path: '/articles', query: { articleId: articleId } })
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -66,7 +61,7 @@ const toToc = (articleId: number) => {
     padding: 5px 10px;
     margin: 15px 16px;
     transition: 0.3s;
-    box-shadow: 0 0 12px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
     .iconbl {
@@ -78,16 +73,14 @@ const toToc = (articleId: number) => {
 
     &:hover {
       border: 0;
-      box-shadow:
-        7px 7px 12px rgba(0, 0, 0, .5),
-        -3px -3px 10px rgba(255, 255, 255, .1);
+      box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.5), -3px -3px 10px rgba(255, 255, 255, 0.1);
 
       .iconbl {
         opacity: 1;
       }
 
       .name {
-        text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, .5);
+        text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, 0.5);
       }
 
       .cover,
@@ -95,12 +88,11 @@ const toToc = (articleId: number) => {
         opacity: 1;
       }
 
-
       .button {
         opacity: 1;
         animation-delay: 0s;
         animation-name: shock;
-        animation-duration: .1s;
+        animation-duration: 0.1s;
         animation-iteration-count: 3;
         animation-direction: normal;
         animation-timing-function: linear;
@@ -110,7 +102,7 @@ const toToc = (articleId: number) => {
     .name {
       height: 35px;
       font-weight: 700;
-      color: #CDCDCD;
+      color: #cdcdcd;
       transition: 0.3s;
     }
 
@@ -150,7 +142,7 @@ const toToc = (articleId: number) => {
       position: absolute;
       right: 5px;
       bottom: 8px;
-      color: #CDCDCD;
+      color: #cdcdcd;
       opacity: 0;
       cursor: pointer;
 
