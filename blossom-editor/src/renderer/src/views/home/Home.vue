@@ -107,7 +107,7 @@
     </div>
 
 
-    <bl-row style="position: absolute;bottom: 0;z-index: 1;height: 100px;">
+    <bl-row style="position: absolute;bottom: 0;z-index: 1;height: 70px;">
       <WaveFooter></WaveFooter>
     </bl-row>
   </div>

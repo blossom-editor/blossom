@@ -59,7 +59,6 @@
         <el-radio-group v-model="copyType">
           <el-radio-button label="http">HT</el-radio-button>
           <el-radio-button label="markdown">MD</el-radio-button>
-          <!-- <el-radio-button label="binary">01</el-radio-button> -->
         </el-radio-group>
         <div>
           <el-button type="primary" @click="invokePrintScreen">截图</el-button>
