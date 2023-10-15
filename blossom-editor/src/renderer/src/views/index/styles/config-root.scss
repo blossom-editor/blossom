@@ -1,0 +1,58 @@
+.config-root {
+  @include box(100%, 100%);
+  overflow: scroll;
+  padding-right: 10px;
+  padding-bottom: 150px;
+
+  a {
+    color: var(--el-color-primary);
+  }
+
+  .el-form {
+    max-width: 800px;
+  }
+
+  .config-module-titile {
+    font-size: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--bl-text-color);
+    border-bottom: 1px solid var(--el-border-color);
+    .iconbl {
+      font-size: 25px;
+      margin-right: 10px;
+    }
+  }
+
+  .title {
+    color: var(--el-color-primary);
+    margin-bottom: 10px;
+    font-weight: 700;
+    .version {
+      @include font(11px, 300);
+      padding-left: 10px;
+      color: var(--bl-text-color-light);
+    }
+  }
+
+  .desc {
+    @include font(12px, 300);
+    line-height: 30px;
+    margin-bottom: 30px;
+    color: var(--bl-text-color-light);
+  }
+
+  code {
+    @include themeColor(#909399, #909399);
+    background-color: var(--bl-preview-code-bg-color);
+    border-radius: var(--bl-preview-border-radius);
+    padding: 0px 4px;
+    border-radius: 3px;
+    margin: 0 5px;
+    user-select: text;
+  }
+
+  .conf-tip {
+    color: var(--bl-text-color-light);
+  }
+}

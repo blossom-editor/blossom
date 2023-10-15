@@ -1,6 +1,10 @@
 <template>
-  <div class="config-client-root">
-    <el-form label-position="right" label-width="110px" style="max-width: 800px">
+  <div class="config-root">
+    <div class="title">
+      客户端配置<span class="version">{{ CONFIG.SYS.VERSION }}</span>
+    </div>
+    <div class="desc">Blossom 桌面客户端配置</div>
+    <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="center" class="config-module-titile"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章设置</bl-row>
       <el-form-item label="编辑器字体">
         <el-input v-model="configEditorStyleForm.fontFamily" size="default" @input="changeEditorStyle"></el-input>
@@ -30,17 +34,21 @@
       </el-form-item>
 
       <el-form-item label="显示代码块行数">
-        <el-switch v-model="configEditorStyleForm.isShowPreLineNumber" size="default" style="margin-right: 10px" @change="changeEditorStyle" />
-        <div class="conf-tip">是否在代码块中显示代码行数。</div>
+        <bl-row>
+          <el-switch v-model="configEditorStyleForm.isShowPreLineNumber" size="default" style="margin-right: 10px" @change="changeEditorStyle" />
+        </bl-row>
+        <div class="conf-tip">是否在代码块中显示代码行数，已公开的文章需要修改后重新同步才会生效。</div>
       </el-form-item>
 
       <el-form-item label="专题以特殊样式显示">
-        <el-switch v-model="configViewStyleForm.isShowSubjectStyle" size="default" style="margin-right: 10px" @change="changeViewStyle" />
-        <div class="conf-tip">是否以特殊的样式显示专题。</div>
+        <bl-row>
+          <el-switch v-model="configViewStyleForm.isShowSubjectStyle" size="default" style="margin-right: 10px" @change="changeViewStyle" />
+        </bl-row>
+        <div class="conf-tip">是否在文档列表中以特殊的样式显示专题。</div>
       </el-form-item>
     </el-form>
 
-    <el-form label-position="right" label-width="110px" style="max-width: 800px">
+    <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="center" class="config-module-titile">照片墙设置</bl-row>
       <el-form-item label="图片上传大小限制">
         <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @change="changePicStyle">
@@ -56,6 +64,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import CONFIG from '@renderer/assets/constants/system'
 import { useConfigStore } from '@renderer/stores/config'
 import type { EditorStyle, ViewStyle, PicStyle } from '@renderer/stores/config'
 
@@ -78,39 +87,5 @@ const changePicStyle = () => {
 </script>
 
 <style scoped lang="scss">
-.config-client-root {
-  @include box(100%, 100%);
-  overflow: scroll;
-  padding-right: 10px;
-  padding-bottom: 150px;
-
-  .config-module-titile {
-    font-size: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    color: var(--bl-text-color);
-    border-bottom: 1px solid var(--el-border-color);
-    .iconbl {
-      font-size: 25px;
-      margin-right: 10px;
-    }
-  }
-
-  code {
-    @include themeColor(#909399, #909399);
-    background-color: var(--bl-preview-code-bg-color);
-    border-radius: var(--bl-preview-border-radius);
-    padding: 0px 4px;
-    border-radius: 3px;
-    margin: 0 5px;
-  }
-
-  .conf-tip {
-    color: var(--bl-text-color-light);
-  }
-
-  .el-form {
-    margin-bottom: 100px;
-  }
-}
+@import './styles/config-root.scss';
 </style>

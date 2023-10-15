@@ -82,6 +82,6 @@ import CONFIG from '@renderer/assets/constants/system'
   position: absolute;
   bottom: 0;
   z-index: 1;
-  height: 100px;
+  height: 80px;
 }
 </style>

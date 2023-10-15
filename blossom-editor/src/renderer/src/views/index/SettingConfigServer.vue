@@ -1,17 +1,19 @@
 <template>
-  <div class="config-server-root">
-    <el-form :model="serverParamForm" label-position="right" label-width="110px" style="max-width: 800px">
-      <el-form-item label="">
-        <el-button size="default" @click="refreshParam" type="primary">刷新服务器参数缓存</el-button>
-      </el-form-item>
+  <div class="config-root">
+    <div class="title">
+      服务器配置<span class="version" v-if="isNotBlank(serverParamForm.serverVersion)">{{ 'v' + serverParamForm.serverVersion }}</span>
+    </div>
+    <div class="desc">Blossom 服务器配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
+
+    <el-form :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="网页端地址">
         <el-input size="default" v-model="serverParamForm.WEB_ARTICLE_URL" @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"></el-input>
-        <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code style="">/#/articles?articleId=</code>结尾。</div>
+        <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code>/#/articles?articleId=</code>结尾。</div>
       </el-form-item>
 
       <el-form-item label="备份文件路径">
         <el-input size="default" v-model="serverParamForm.BACKUP_PATH" @change="(cur: any) => updParam('BACKUP_PATH', cur)"></el-input>
-        <div class="conf-tip">如果是 Docker 部署，推荐使用默认路径，如果需要改变路径，请注意路径挂载。</div>
+        <div class="conf-tip">如果通过 Docker 部署，推荐使用默认路径，如果你需要修改路径，请注意路径挂载。</div>
       </el-form-item>
 
       <el-form-item label="编辑记录保存天数">
@@ -24,7 +26,7 @@
             @change="(cur: any) => updParam('ARTICLE_LOG_EXP_DAYS', cur)">
           </el-input-number>
         </bl-row>
-        <div class="conf-tip">文章编辑记录的保存天数。{{ serverParamForm.ARTICLE_LOG_EXP_DAYS }}天前的编辑记录将被删除</div>
+        <div class="conf-tip">文章编辑记录的保存天数。{{ serverParamForm.ARTICLE_LOG_EXP_DAYS }}天前的编辑记录将被删除。</div>
       </el-form-item>
 
       <el-form-item label="备份文件保存天数">
@@ -43,7 +45,10 @@
 
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
-        <div class="conf-tip">和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">文档</a>。修改后点击天气右上角刷新按钮获取最新天气。</div>
+        <div class="conf-tip">
+          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">文档</a
+          >。修改后点击首页天气右上角的刷新按钮<span class="iconbl bl-refresh-smile"></span>获取最新天气。
+        </div>
       </el-form-item>
 
       <el-form-item label="服务器到期时间">
@@ -74,29 +79,6 @@
         <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
     </el-form>
-    <!-- <bl-row class="param-row">
-        <div class="param-title">服务器到期时间:</div>
-        <div class="param-value">{{ userinfo.params.SERVER_MACHINE_EXPIRE }}</div>
-        <el-tag>{{ serverExpire.machine }} 天后到期</el-tag>
-      </bl-row>
-
-      <bl-row class="param-row">
-        <div class="param-title">数据库到期时间:</div>
-        <div class="param-value">{{ userinfo.params.SERVER_DATABASE_EXPIRE }}</div>
-        <el-tag>{{ serverExpire.database }} 天后到期</el-tag>
-      </bl-row>
-
-      <bl-row class="param-row">
-        <div class="param-title">域名到期时间:</div>
-        <div class="param-value">{{ userinfo.params.SERVER_DOMAIN_EXPIRE }}</div>
-        <el-tag>{{ serverExpire.domain }} 天后到期</el-tag>
-      </bl-row>
-
-      <bl-row class="param-row">
-        <div class="param-title">证书到期时间:</div>
-        <div class="param-value">{{ userinfo.params.SERVER_HTTPS_EXPIRE }}</div>
-        <el-tag>{{ serverExpire.https }} 天后到期</el-tag>
-      </bl-row> -->
     <el-input type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
   </div>
 </template>
@@ -107,6 +89,7 @@ import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blossom'
 import { formatJson, getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
+import { isNotBlank } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
@@ -129,7 +112,8 @@ const serverParamForm = ref({
   SERVER_MACHINE_EXPIRE: '',
   SERVER_DATABASE_EXPIRE: '',
   SERVER_DOMAIN_EXPIRE: '',
-  SERVER_HTTPS_EXPIRE: ''
+  SERVER_HTTPS_EXPIRE: '',
+  serverVersion: ''
 })
 
 /**
@@ -178,38 +162,5 @@ const userinfoJson = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.config-server-root {
-  @include box(100%, 100%);
-  overflow: scroll;
-  padding-right: 10px;
-  padding-bottom: 150px;
-
-  .param-row {
-    font-size: 14px;
-    color: #909399;
-    margin-bottom: 10px;
-
-    .param-title {
-      width: 110px;
-      text-align: right;
-    }
-
-    .param-value {
-      padding: 0 10px;
-    }
-  }
-
-  code {
-    @include themeColor(#909399, #909399);
-    background-color: var(--bl-preview-code-bg-color);
-    border-radius: var(--bl-preview-border-radius);
-    padding: 0px 4px;
-    border-radius: 3px;
-    margin: 0 5px;
-  }
-
-  .conf-tip {
-    color: var(--bl-text-color-light);
-  }
-}
+@import './styles/config-root.scss';
 </style>

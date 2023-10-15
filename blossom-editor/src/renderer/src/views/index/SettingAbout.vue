@@ -1,27 +1,21 @@
 <template>
   <div class="about-root">
-    <div class="project-name">
-      Blossom <span style="font-size: 13px; color: var(--bl-text-color-light)">{{ CONFIG.SYS.VERSION }}</span>
-    </div>
-    <bl-row just="center" style="margin-top: 10px; filter: drop-shadow(0 0 3px rgb(184, 184, 184))">
+    <div class="project-name">Blossom</div>
+    <bl-row class="repository" just="center">
       <bl-col @click="toView(CONFIG.SYS.GITHUB_REPO)">
-        <svg style="width: 25px; height: 25px; cursor: pointer" aria-hidden="true">
-          <use xlink:href="#wl-github2"></use>
-        </svg>
-
+        <svg class="github" aria-hidden="true"><use xlink:href="#wl-github2"></use></svg>
         <img
+          class="shields"
           alt="GitHub Repo stars"
-          style="margin-top: 10px"
           src="https://img.shields.io/github/stars/blossom-editor/blossom?logo=github&label=Stars&labelColor=AD8CF2&color=fff&cacheSeconds=60" />
       </bl-col>
 
       <bl-col @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px">
-        <svg style="width: 25px; height: 25px; cursor: pointer" aria-hidden="true">
-          <use xlink:href="#wl-gitee"></use>
-        </svg>
-        <img style="margin-top: 10px" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white" />
+        <svg class="gitee" aria-hidden="true"><use xlink:href="#wl-gitee"></use></svg>
+        <img class="shields" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white" />
       </bl-col>
     </bl-row>
+
     <div class="bl-preview">
       <p class="paragraph">
         Blossom 是一个支持<span class="blod">私有部署</span
@@ -73,11 +67,21 @@
       </p>
     </div>
 
-    <hr />
+    <div class="reference">
+      <div class="blod">三方引用:</div>
+      <ol>
+        <li v-for="ref in references">
+          <bl-row>
+            <span style="width: 130px">{{ ref.name }}</span
+            >: <a :href="ref.url">{{ ref.url }}</a>
+          </bl-row>
+        </li>
+      </ol>
+    </div>
 
     <div class="blod" style="margin: 30px 0 10px 0">开发者列表</div>
     <div class="developer">
-      <bl-row class="item" v-for="dever in developer" width="300px" height="100px">
+      <bl-row class="item" v-for="dever in developer" width="250px" height="70px">
         <div>
           <img :src="dever.avatar" />
         </div>
@@ -90,20 +94,6 @@
           </div>
         </bl-col>
       </bl-row>
-    </div>
-
-    <hr />
-
-    <div class="reference">
-      <div class="blod">三方引用:</div>
-      <ol>
-        <li v-for="ref in references">
-          <bl-row>
-            <span style="width: 130px">{{ ref.name }}</span
-            >: <a :href="ref.url">{{ ref.url }}</a>
-          </bl-row>
-        </li>
-      </ol>
     </div>
   </div>
 </template>
@@ -127,18 +117,33 @@ const developer = [
 ]
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .about-root {
   @include box(100%, 100%);
   padding: 0 30px 130px 30px;
   overflow: scroll;
 
   .project-name {
-    @include font(30px, 500);
+    @include font(50px, 500);
     @include themeColor(#2b2b2b, #e4e4e4);
     @include themeText(2px 2px 5px #878787, 2px 2px 5px #000000);
     width: 100%;
     text-align: center;
+  }
+
+  .repository {
+    margin-top: 10px;
+    @include themeFilter(drop-shadow(0 0 3px rgb(184, 184, 184)), drop-shadow(0 0 3px rgb(5, 5, 5)));
+
+    .github,
+    .gitee {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+    .shields {
+      margin-top: 10px;
+    }
   }
 
   .project-link {
@@ -187,11 +192,11 @@ const developer = [
     .item {
       background-color: var(--bl-bg-color);
       margin: 0 15px 15px 0;
-      padding: 10px;
+      padding: 5px;
       border-radius: 10px;
 
       img {
-        @include box(80px, 80px);
+        @include box(50px, 50px);
         border-radius: 50%;
         margin-right: 10px;
       }
