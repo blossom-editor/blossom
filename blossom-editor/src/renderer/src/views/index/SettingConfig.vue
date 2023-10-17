@@ -1,5 +1,5 @@
 <template>
-  <div class="server-config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用设置...">
+  <div class="server-config-root">
     <el-tabs tab-position="left" type="card" style="height: 100%" class="config-tabs">
       <el-tab-pane label="客户端配置">
         <div class="tab-content"><ConfigClient></ConfigClient></div>
@@ -23,16 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useUserStore } from '@renderer/stores/user'
 import ConfigUserinfo from './SettingConfigUserinfo.vue'
 import ConfigUpdPwd from './SettingConfigUpdPwd.vue'
 import ConfigAddUser from './SettingConfigAddUser.vue'
 import ConfigClient from './SettingConfigClient.vue'
 import ConfigServer from './SettingConfigServer.vue'
-
-const userStore = useUserStore()
-const { auth } = storeToRefs(userStore)
 </script>
 
 <style scoped lang="scss">

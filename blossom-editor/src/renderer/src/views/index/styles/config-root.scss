@@ -1,6 +1,7 @@
 .config-root {
   @include box(100%, 100%);
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 10px;
   padding-bottom: 150px;
 
@@ -10,6 +11,9 @@
 
   .el-form {
     max-width: 800px;
+    :deep(.el-form-item__label) {
+      padding-top: 5px;
+    }
   }
 
   .config-module-titile {
@@ -54,5 +58,9 @@
 
   .conf-tip {
     color: var(--bl-text-color-light);
+    .blod {
+      color: var(--el-color-primary);
+      font-style: italic;
+    }
   }
 }

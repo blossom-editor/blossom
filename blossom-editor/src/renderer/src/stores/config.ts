@@ -40,6 +40,8 @@ export interface EditorStyle {
 export interface PicStyle {
   // 最大上传限制
   maxSize: number
+  // 是否自动添加文件后缀
+  isAddSuffix: boolean
 }
 
 /**

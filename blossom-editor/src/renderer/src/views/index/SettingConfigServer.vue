@@ -1,11 +1,11 @@
 <template>
-  <div class="config-root">
+  <div class="config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用服务端设置...">
     <div class="title">
       服务器配置<span class="version" v-if="isNotBlank(serverParamForm.serverVersion)">{{ 'v' + serverParamForm.serverVersion }}</span>
     </div>
     <div class="desc">Blossom 服务器配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
-    <el-form :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
+    <el-form v-if="auth.status == '已登录'" :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="网页端地址">
         <el-input size="default" v-model="serverParamForm.WEB_ARTICLE_URL" @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"></el-input>
         <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code>/#/articles?articleId=</code>结尾。</div>
@@ -46,8 +46,8 @@
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
         <div class="conf-tip">
-          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">文档</a
-          >。修改后点击首页天气右上角的刷新按钮<span class="iconbl bl-refresh-smile"></span>获取最新天气。
+          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">《文档》</a>。修改后点击首页天气右上角的刷新按钮
+          <span class="iconbl bl-refresh-smile"></span> 获取最新天气。
         </div>
       </el-form-item>
 
@@ -79,7 +79,7 @@
         <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
     </el-form>
-    <el-input type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
+    <el-input v-if="auth.status == '已登录'" type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
   </div>
 </template>
 
@@ -101,7 +101,7 @@ onActivated(() => {
 })
 
 const userStore = useUserStore()
-const { userinfo } = storeToRefs(userStore)
+const { userinfo, auth } = storeToRefs(userStore)
 
 const serverParamForm = ref({
   WEB_ARTICLE_URL: '',
