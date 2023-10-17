@@ -70,14 +70,6 @@
             <version>0.4.20</version>
         </dependency>
 
-        <!-- smart-doc, 需要本地编译, 版本为自定义版本 -->
-        <dependency>
-            <groupId>com.github.shalousun</groupId>
-            <artifactId>smart-doc</artifactId>
-            <version>${smart-doc.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

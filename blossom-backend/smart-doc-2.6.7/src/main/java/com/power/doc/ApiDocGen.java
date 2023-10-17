@@ -1,13 +1,10 @@
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-import cn.hutool.core.lang.Dict;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
+package com.power.doc;
+
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 import cn.hutool.db.ds.DSFactory;
 import cn.hutool.setting.Setting;
-import cn.hutool.setting.yaml.YamlUtil;
 import com.blossom.backend.base.auth.enums.GrantTypeEnum;
 import com.blossom.backend.base.auth.exception.AuthRCode;
 import com.blossom.backend.base.user.UserTypeEnum;
@@ -15,12 +12,9 @@ import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.pojo.RCode;
-import com.blossom.common.base.util.DateUtils;
-import com.blossom.common.base.util.spring.SpringUtil;
 import com.power.doc.builder.HtmlApiDocBuilder;
 import com.power.doc.model.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -307,28 +301,12 @@ public class ApiDocGen {
      * 设置默认日志级别
      */
     static {
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
-        loggerList.forEach(logger -> logger.setLevel(Level.WARN));
-
         System.out.println(SEPARATOR);
-        Dict glob = YamlUtil.loadByPath("application.yml");
-        Dict deve = YamlUtil.loadByPath("config\\application-dev.yml");
-
-        String globalPort = ObjectUtil.isNull(glob.getByPath(SpringUtil.SERVER_PORT)) ? "" : glob.getByPath(SpringUtil.SERVER_PORT).toString();
-        String globalContext = ObjectUtil.isNull(glob.getByPath(SpringUtil.SERVLET_CONTEXT_PATH)) ? "" : glob.getByPath(SpringUtil.SERVLET_CONTEXT_PATH).toString();
-
-        String devePort = ObjectUtil.isNull(deve.getByPath(SpringUtil.SERVER_PORT)) ? globalPort : deve.getByPath(SpringUtil.SERVER_PORT).toString();
-
-        String deveContext = ObjectUtil.isNull(deve.getByPath(SpringUtil.SERVLET_CONTEXT_PATH)) ? globalContext : deve.getByPath(SpringUtil.SERVLET_CONTEXT_PATH).toString();
-
-        IP_DEVE = IP_DEVE + ":" + devePort + (StrUtil.isBlank(deveContext) ? "" : "/" + deveContext);
-
-        PROJECT_NAME = "《Blossom 接口文档》\n　文档版本:" + VERSION + "\n　文档时间:" + DateUtils.now().substring(0, 16);
+        PROJECT_NAME = "《Blossom 接口文档》\n　文档版本:" + VERSION + "\n　文档时间:" + DateUtil.now();
         System.out.println(String.format("准备生成接口文档\n项目:%s \n", PROJECT_NAME));
 
         System.out.println("环境地址:");
-        System.out.println(" - DEV : " + IP_DEVE);
+        System.out.println(" - DEV : " + "127.0.0.1:9999");
 
         System.out.println(SEPARATOR);
 

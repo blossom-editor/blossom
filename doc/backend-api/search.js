@@ -15,19 +15,19 @@ api[0].list.push({
 api[0].list[0].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/login',
+    url: 'http://127.0.0.1/login',
     desc: '登录[OP]',
 });
 api[0].list[0].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/logout',
+    url: 'http://127.0.0.1/logout',
     desc: '用户退出',
 });
 api[0].list[0].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/check',
+    url: 'http://127.0.0.1/check',
     desc: '检查 Token 状态',
 });
 api[0].list.push({
@@ -40,31 +40,31 @@ api[0].list.push({
 api[0].list[1].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sys/alive',
+    url: 'http://127.0.0.1/sys/alive',
     desc: '服务在线检查 [OP]',
 });
 api[0].list[1].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sys/osconfig',
+    url: 'http://127.0.0.1/sys/osconfig',
     desc: '对象存储配置',
 });
 api[0].list[1].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sys/param/list',
+    url: 'http://127.0.0.1/sys/param/list',
     desc: '系统参数列表',
 });
 api[0].list[1].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sys/param/upd',
+    url: 'http://127.0.0.1/sys/param/upd',
     desc: '修改系统参数',
 });
 api[0].list[1].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sys/param/refresh',
+    url: 'http://127.0.0.1/sys/param/refresh',
     desc: '刷新系统配置',
 });
 api[0].list.push({
@@ -77,31 +77,31 @@ api[0].list.push({
 api[0].list[2].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/user/info',
+    url: 'http://127.0.0.1/user/info',
     desc: '用户信息',
 });
 api[0].list[2].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/user/info/open',
+    url: 'http://127.0.0.1/user/info/open',
     desc: '用户信息 [OP]',
 });
 api[0].list[2].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/user/upd',
+    url: 'http://127.0.0.1/user/upd',
     desc: '修改用户',
 });
 api[0].list[2].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/user/upd/pwd',
+    url: 'http://127.0.0.1/user/upd/pwd',
     desc: '修改密码',
 });
 api[0].list[2].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/user/add',
+    url: 'http://127.0.0.1/user/add',
     desc: '新增用户',
 });
 api.push({
@@ -119,13 +119,13 @@ api[1].list.push({
 api[1].list[0].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/doc/trees',
+    url: 'http://127.0.0.1/doc/trees',
     desc: '文档列表',
 });
 api[1].list[0].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/doc/trees/open',
+    url: 'http://127.0.0.1/doc/trees/open',
     desc: '文档列表 [OP]',
 });
 api[1].list.push({
@@ -138,43 +138,43 @@ api[1].list.push({
 api[1].list[1].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/subjects/open',
+    url: 'http://127.0.0.1/folder/subjects/open',
     desc: '查询专题列表 [OP]',
 });
 api[1].list[1].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/subjects',
+    url: 'http://127.0.0.1/folder/subjects',
     desc: '查询专题列表',
 });
 api[1].list[1].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/info',
+    url: 'http://127.0.0.1/folder/info',
     desc: '通过ID查询文件夹',
 });
 api[1].list[1].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/add',
+    url: 'http://127.0.0.1/folder/add',
     desc: '新增或修改文件夹',
 });
 api[1].list[1].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/upd',
+    url: 'http://127.0.0.1/folder/upd',
     desc: '修改文件夹',
 });
 api[1].list[1].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/open',
+    url: 'http://127.0.0.1/folder/open',
     desc: '公开文件夹',
 });
 api[1].list[1].list.push({
     order: '7',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/folder/del',
+    url: 'http://127.0.0.1/folder/del',
     desc: '删除文件夹',
 });
 api[1].list.push({
@@ -187,61 +187,61 @@ api[1].list.push({
 api[1].list[2].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/list',
+    url: 'http://127.0.0.1/article/list',
     desc: '查询列表',
 });
 api[1].list[2].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/info',
+    url: 'http://127.0.0.1/article/info',
     desc: '文章详情 [ID]',
 });
 api[1].list[2].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/add',
+    url: 'http://127.0.0.1/article/add',
     desc: '新增文章',
 });
 api[1].list[2].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/upd',
+    url: 'http://127.0.0.1/article/upd',
     desc: '修改文章基础信息',
 });
 api[1].list[2].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/upd/content',
+    url: 'http://127.0.0.1/article/upd/content',
     desc: '保存正文内容',
 });
 api[1].list[2].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/del',
+    url: 'http://127.0.0.1/article/del',
     desc: '删除文章',
 });
 api[1].list[2].list.push({
     order: '7',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/star',
+    url: 'http://127.0.0.1/article/star',
     desc: '星标文章',
 });
 api[1].list[2].list.push({
     order: '8',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/download',
+    url: 'http://127.0.0.1/article/download',
     desc: '下载文章',
 });
 api[1].list[2].list.push({
     order: '9',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/download/html',
+    url: 'http://127.0.0.1/article/download/html',
     desc: '下载文章 Html',
 });
 api[1].list[2].list.push({
     order: '10',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/import',
+    url: 'http://127.0.0.1/article/import',
     desc: '文章导入',
 });
 api[1].list.push({
@@ -254,25 +254,25 @@ api[1].list.push({
 api[1].list[3].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/open/info',
+    url: 'http://127.0.0.1/article/open/info',
     desc: '查询公开文章 [OP]',
 });
 api[1].list[3].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/open',
+    url: 'http://127.0.0.1/article/open',
     desc: '公开文章',
 });
 api[1].list[3].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/open/sync',
+    url: 'http://127.0.0.1/article/open/sync',
     desc: '同步公开文章',
 });
 api[1].list[3].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/open/qrcode',
+    url: 'http://127.0.0.1/article/open/qrcode',
     desc: '生成公开文章二维码',
 });
 api[1].list.push({
@@ -285,7 +285,7 @@ api[1].list.push({
 api[1].list[4].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/ref/list',
+    url: 'http://127.0.0.1/article/ref/list',
     desc: '文章引用关系',
 });
 api[1].list.push({
@@ -298,13 +298,13 @@ api[1].list.push({
 api[1].list[5].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/log',
+    url: 'http://127.0.0.1/article/log',
     desc: '文章编辑记录',
 });
 api[1].list[5].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/log/content',
+    url: 'http://127.0.0.1/article/log/content',
     desc: '查文章记录内容',
 });
 api[1].list.push({
@@ -317,31 +317,31 @@ api[1].list.push({
 api[1].list[6].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/backup',
+    url: 'http://127.0.0.1/article/backup',
     desc: '执行备份',
 });
 api[1].list[6].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/backup/list',
+    url: 'http://127.0.0.1/article/backup/list',
     desc: '备份记录',
 });
 api[1].list[6].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/backup/download',
+    url: 'http://127.0.0.1/article/backup/download',
     desc: '下载压缩包',
 });
 api[1].list[6].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/backup/download/fragment',
+    url: 'http://127.0.0.1/article/backup/download/fragment',
     desc: 'head 请求获取分片信息 [OP]',
 });
 api[1].list[6].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/backup/download/fragment',
+    url: 'http://127.0.0.1/article/backup/download/fragment',
     desc: '分片下载 [OP]',
 });
 api[1].list.push({
@@ -354,37 +354,37 @@ api[1].list.push({
 api[1].list[7].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/heatmap/open',
+    url: 'http://127.0.0.1/article/stat/heatmap/open',
     desc: '每日编辑热力图 [OP]',
 });
 api[1].list[7].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/heatmap',
+    url: 'http://127.0.0.1/article/stat/heatmap',
     desc: '每日编辑热力图',
 });
 api[1].list[7].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/words/open',
+    url: 'http://127.0.0.1/article/stat/words/open',
     desc: '文章数和文章字数 [OP]',
 });
 api[1].list[7].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/words',
+    url: 'http://127.0.0.1/article/stat/words',
     desc: '文章数和文章字数',
 });
 api[1].list[7].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/line/open',
+    url: 'http://127.0.0.1/article/stat/line/open',
     desc: '文章字数折线图 [OP]',
 });
 api[1].list[7].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/article/stat/line',
+    url: 'http://127.0.0.1/article/stat/line',
     desc: '字数折线图',
 });
 api[1].list.push({
@@ -397,31 +397,31 @@ api[1].list.push({
 api[1].list[8].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/page',
+    url: 'http://127.0.0.1/picture/page',
     desc: '分页列表',
 });
 api[1].list[8].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/info',
+    url: 'http://127.0.0.1/picture/info',
     desc: '查询图片信息',
 });
 api[1].list[8].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/del',
+    url: 'http://127.0.0.1/picture/del',
     desc: '删除图片',
 });
 api[1].list[8].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/star',
+    url: 'http://127.0.0.1/picture/star',
     desc: '星标图片',
 });
 api[1].list[8].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/stat',
+    url: 'http://127.0.0.1/picture/stat',
     desc: '统计图片 [OP]',
 });
 api[1].list.push({
@@ -434,13 +434,13 @@ api[1].list.push({
 api[1].list[9].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/picture/file/upload',
+    url: 'http://127.0.0.1/picture/file/upload',
     desc: '上传文件',
 });
 api[1].list[9].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/pic/{filename}/**',
+    url: 'http://127.0.0.1/pic/{filename}/**',
     desc: '查看图片 [OP]',
 });
 api[1].list.push({
@@ -453,31 +453,31 @@ api[1].list.push({
 api[1].list[10].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/plan/list/day',
+    url: 'http://127.0.0.1/plan/list/day',
     desc: '每日计划',
 });
 api[1].list[10].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/plan/list/daily',
+    url: 'http://127.0.0.1/plan/list/daily',
     desc: '日常计划',
 });
 api[1].list[10].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/plan/add/day',
+    url: 'http://127.0.0.1/plan/add/day',
     desc: '新增每日计划',
 });
 api[1].list[10].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/plan/add/daily',
+    url: 'http://127.0.0.1/plan/add/daily',
     desc: '新增日常计划',
 });
 api[1].list[10].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/plan/del',
+    url: 'http://127.0.0.1/plan/del',
     desc: '删除计划',
 });
 api[1].list.push({
@@ -490,43 +490,43 @@ api[1].list.push({
 api[1].list[11].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/list',
+    url: 'http://127.0.0.1/todo/list',
     desc: '待办事项列表',
 });
 api[1].list[11].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/add/phased',
+    url: 'http://127.0.0.1/todo/add/phased',
     desc: '新增阶段性事项',
 });
 api[1].list[11].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/upd/name',
+    url: 'http://127.0.0.1/todo/upd/name',
     desc: '修改阶段性事项名称',
 });
 api[1].list[11].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/open',
+    url: 'http://127.0.0.1/todo/open',
     desc: '开启阶段性事项',
 });
 api[1].list[11].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/completed',
+    url: 'http://127.0.0.1/todo/completed',
     desc: '完成阶段性事项',
 });
 api[1].list[11].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/stat',
+    url: 'http://127.0.0.1/todo/stat',
     desc: '待办事项列表',
 });
 api[1].list[11].list.push({
     order: '7',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/export',
+    url: 'http://127.0.0.1/todo/export',
     desc: '任务导出',
 });
 api[1].list.push({
@@ -539,61 +539,61 @@ api[1].list.push({
 api[1].list[12].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/list',
+    url: 'http://127.0.0.1/todo/task/list',
     desc: '任务列表',
 });
 api[1].list[12].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/info',
+    url: 'http://127.0.0.1/todo/task/info',
     desc: '任务详情',
 });
 api[1].list[12].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/count',
+    url: 'http://127.0.0.1/todo/task/count',
     desc: '任务数量',
 });
 api[1].list[12].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/stat',
+    url: 'http://127.0.0.1/todo/task/stat',
     desc: '统计',
 });
 api[1].list[12].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/add',
+    url: 'http://127.0.0.1/todo/task/add',
     desc: '新增任务',
 });
 api[1].list[12].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/upd',
+    url: 'http://127.0.0.1/todo/task/upd',
     desc: '修改任务',
 });
 api[1].list[12].list.push({
     order: '7',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/waiting',
+    url: 'http://127.0.0.1/todo/task/waiting',
     desc: '事项移动到待办',
 });
 api[1].list[12].list.push({
     order: '8',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/processing',
+    url: 'http://127.0.0.1/todo/task/processing',
     desc: '事项移动到进行中',
 });
 api[1].list[12].list.push({
     order: '9',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/completed',
+    url: 'http://127.0.0.1/todo/task/completed',
     desc: '事项移动到完成',
 });
 api[1].list[12].list.push({
     order: '10',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/todo/task/del',
+    url: 'http://127.0.0.1/todo/task/del',
     desc: '删除事项',
 });
 api[1].list.push({
@@ -606,25 +606,25 @@ api[1].list.push({
 api[1].list[13].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/note/list',
+    url: 'http://127.0.0.1/note/list',
     desc: '全部列表',
 });
 api[1].list[13].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/note/add',
+    url: 'http://127.0.0.1/note/add',
     desc: '保存',
 });
 api[1].list[13].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/note/del',
+    url: 'http://127.0.0.1/note/del',
     desc: '删除',
 });
 api[1].list[13].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/note/top',
+    url: 'http://127.0.0.1/note/top',
     desc: '置顶/取消置顶',
 });
 api[1].list.push({
@@ -637,19 +637,19 @@ api[1].list.push({
 api[1].list[14].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/web/list',
+    url: 'http://127.0.0.1/web/list',
     desc: '网站列表 [OP]',
 });
 api[1].list[14].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/web/save',
+    url: 'http://127.0.0.1/web/save',
     desc: '保存',
 });
 api[1].list[14].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/web/del',
+    url: 'http://127.0.0.1/web/del',
     desc: '删除',
 });
 api.push({
@@ -667,7 +667,7 @@ api[2].list.push({
 api[2].list[0].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/weather',
+    url: 'http://127.0.0.1/weather',
     desc: '获取天气信息',
 });
 api[2].list.push({
@@ -680,7 +680,7 @@ api[2].list.push({
 api[2].list[1].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/thirdparty/scheduled/weather',
+    url: 'http://127.0.0.1/thirdparty/scheduled/weather',
     desc: '刷新天气缓存',
 });
 api.push({
@@ -698,37 +698,37 @@ api[3].list.push({
 api[3].list[0].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/clusterNode',
+    url: 'http://127.0.0.1/sentinel/clusterNode',
     desc: '资源列表',
 });
 api[3].list[0].list.push({
     order: '2',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/resources',
+    url: 'http://127.0.0.1/sentinel/resources',
     desc: '一天内被请求的资源列表',
 });
 api[3].list[0].list.push({
     order: '3',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/metric',
+    url: 'http://127.0.0.1/sentinel/metric',
     desc: '资源的监控信息',
 });
 api[3].list[0].list.push({
     order: '4',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/metric/line',
+    url: 'http://127.0.0.1/sentinel/metric/line',
     desc: '资源折线图',
 });
 api[3].list[0].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/metric/app',
+    url: 'http://127.0.0.1/sentinel/metric/app',
     desc: '集群过去24小时的总体信息',
 });
 api[3].list[0].list.push({
     order: '6',
     deprecated: 'false',
-    url: 'http://127.0.0.1:9999/sentinel/cnode',
+    url: 'http://127.0.0.1/sentinel/cnode',
     desc: '资源的秒级, 分钟级指标信息',
 });
 api.push({
