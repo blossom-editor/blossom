@@ -1,9 +1,7 @@
 <template>
   <div class="global-home-root">
     <div class="main">
-      <bl-row class="greetings" height="65px">
-        Good {{ now }}.
-      </bl-row>
+      <bl-row class="greetings" height="65px"> Good {{ now }}. </bl-row>
       <!--  -->
       <bl-row align="flex-end" height="250px">
         <div class="image-container">
@@ -16,7 +14,7 @@
         <!-- 天气 -->
         <Weather></Weather>
         <!-- 头像 -->
-        <UserAvatar style="margin-left: 20px;"></UserAvatar>
+        <UserAvatar style="margin-left: 20px"></UserAvatar>
       </bl-row>
 
       <!-- 统计 -->
@@ -32,7 +30,7 @@
             <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
           </bl-col>
           <!-- 统计卡片 -->
-          <bl-col width="200px" style="margin-left: 20px;">
+          <bl-col width="200px" style="margin-left: 20px">
             <bl-row class="container-sub-name">Blossom Statistic</bl-row>
             <StatisticCard></StatisticCard>
           </bl-col>
@@ -49,13 +47,13 @@
         </bl-row>
 
         <!-- 热力图 -->
-        <bl-col class="heatmap-container" width="100%" style="height: 360px;">
+        <bl-col class="heatmap-container" width="100%" style="height: 360px">
           <bl-row class="container-name">编辑热力图</bl-row>
           <bl-row class="container-sub-name">
             每日编辑文章数 (每5分钟更新)
             <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
           </bl-row>
-          <bl-row style="height: calc(100% - 60px - 20px);">
+          <bl-row style="height: calc(100% - 60px - 20px)">
             <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
           </bl-row>
         </bl-col>
@@ -68,8 +66,7 @@
       =======================================================
      -->
     <div class="middle">
-      <div style="height: 45px;">
-      </div>
+      <div style="height: 45px"></div>
 
       <bl-col width="100%" height="270px">
         <bl-row class="container-name">收藏/关注</bl-row>
@@ -91,7 +88,7 @@
         </bl-row> -->
         <bl-row class="container-name">待办事项</bl-row>
         <bl-row class="container-sub-name">Todo List</bl-row>
-        <bl-row style="padding-bottom: 10px;height: calc(100% - 80px);">
+        <bl-row style="padding-bottom: 10px; height: calc(100% - 80px)">
           <TaskProgressSimpleVue></TaskProgressSimpleVue>
         </bl-row>
       </bl-col>
@@ -106,36 +103,35 @@
       <WebCollect></WebCollect>
     </div>
 
-
-    <bl-row style="position: absolute;bottom: 0;z-index: 1;height: 70px;">
+    <bl-row style="position: absolute; bottom: 0; z-index: 1; height: 70px">
       <WaveFooter></WaveFooter>
     </bl-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onActivated } from "vue"
+import { ref, onActivated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 // components
 import Laptop from '@renderer/components/Laptop.vue'
 import DateLine from '@renderer/components/DateLine.vue'
 import WebCollect from '@renderer/components/WebCollect.vue'
-import UserAvatar from "@renderer/components/UserAvatar.vue"
-import Weather from "@renderer/components/Weather.vue"
+import UserAvatar from '@renderer/components/UserAvatar.vue'
+import Weather from '@renderer/components/Weather.vue'
 // charts
-import ChartLineWords from "./ChartLineWords.vue"
-import ChartHeatmap from "./ChartHeatmap.vue"
-import SentinelChartLine from "@renderer/views/statistic/SentinelChartLine.vue"
+import ChartLineWords from './ChartLineWords.vue'
+import ChartHeatmap from './ChartHeatmap.vue'
+import SentinelChartLine from '@renderer/views/statistic/SentinelChartLine.vue'
 // articles
-import ArticleSubjects from "./ArticleSubjects.vue"
-import ArticleStars from "./ArticleStars.vue"
+import ArticleSubjects from './ArticleSubjects.vue'
+import ArticleStars from './ArticleStars.vue'
 import StatisticCard from './StatisticCard.vue'
 // import NoteEditor from '@renderer/views/note/NoteEditor.vue'
-import WaveFooter from "@renderer/components/WaveFooter.vue"
-import TaskProgressSimpleVue from "../todo/TaskProgressSimple.vue"
+import WaveFooter from '@renderer/components/WaveFooter.vue'
+import TaskProgressSimpleVue from '../todo/TaskProgressSimple.vue'
 
-import { nowWhen } from "@renderer/assets/utils/util"
+import { nowWhen } from '@renderer/assets/utils/util'
 
 const userStore = useUserStore()
 const { userinfo } = storeToRefs(userStore)
@@ -161,21 +157,17 @@ const loadSentinlLine = () => {
 }
 
 const now = ref(nowWhen())
-
 </script>
 
 <style scoped lang="scss">
 .global-home-root {
   @include box(100%, 100%);
   @include flex(row, space-between, center);
-  background-image: linear-gradient(to bottom right,
-      var(--bl-html-color),
-      var(--bl-html-color),
-      var(--el-color-primary-light-7));
+  background-image: linear-gradient(to bottom right, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-7));
 
   .container-name {
     @include font(20px, 700);
-    @include themeColor(#5C5C5C, #a3a6ad);
+    @include themeColor(#5c5c5c, #a3a6ad);
     height: 60px;
     min-height: 60px;
     align-items: end !important;
@@ -186,7 +178,7 @@ const now = ref(nowWhen())
     height: 20px;
     min-height: 20px;
     @include font(13px, 300);
-    @include themeColor(#ABABAB, #7E7E7E);
+    @include themeColor(#ababab, #7e7e7e);
     text-shadow: var(--bl-text-shadow);
   }
 
@@ -208,15 +200,9 @@ const now = ref(nowWhen())
 
   $width-main: 910px;
   $width-web: 420px;
-  $width-middle: calc(100% -
-      /* border */
-      #{$border-middle} -
-      /* margin : $margin-web */
-      0px -
-      /* margin : $margin-middle */
-      10px -
-      /* width */
-      #{$width-main} - #{$width-web});
+  $width-middle: calc(
+    100% - /* border */ #{$border-middle} - /* margin : $margin-web */ 0px - /* margin : $margin-middle */ 10px - /* width */ #{$width-main} - #{$width-web}
+  );
 
   .main {
     @include box($width-main, 100%, $width-main, $width-main);
@@ -229,24 +215,24 @@ const now = ref(nowWhen())
 
       .user-name {
         @include font(25px, 700);
-        @include themeColor(#5C5C5C, var(--el-color-primary));
+        @include themeColor(#5c5c5c, var(--el-color-primary));
         text-shadow: var(--bl-text-shadow);
         height: 30px;
       }
 
-      [class="dark"] & {
+      [class='dark'] & {
         filter: brightness(80%);
       }
     }
 
     .greetings {
       @include font(50px, 700);
-      @include themeColor(#5C5C5C, var(--el-color-primary));
+      @include themeColor(#5c5c5c, var(--el-color-primary));
       text-shadow: var(--bl-text-shadow);
     }
 
     .now-time {
-      @include themeColor(#5C5C5C, var(--el-color-primary));
+      @include themeColor(#5c5c5c, var(--el-color-primary));
       height: 20px;
       text-shadow: var(--bl-text-shadow);
       font-size: 12px;
@@ -264,7 +250,6 @@ const now = ref(nowWhen())
       }
     }
   }
-
 
   .middle {
     @include box($width-middle, 100%, $width-middle, $width-middle);
@@ -287,9 +272,8 @@ const now = ref(nowWhen())
     z-index: 2;
   }
 
-
   /** 小于1440时 */
-  @media screen and (max-width:1140px) {
+  @media screen and (max-width: 1140px) {
     .web-container {
       opacity: 0;
     }
@@ -298,7 +282,7 @@ const now = ref(nowWhen())
   // 大于1600时使用以下样式
   @media screen and (min-width: 1600px) {
     .middle {
-      @include themeBorder(1px, #E6E6E6, #171717, 'left');
+      @include themeBorder(1px, #e6e6e6, #171717, 'left');
       // opacity: 1 !important;
       display: block;
       // margin-left: $margin-middle;
@@ -318,20 +302,14 @@ const now = ref(nowWhen())
 
   .gradient-linear {
     --color1: rgba(234, 224, 254, 0.1);
-    --color2: #FFFFFF5A;
+    --color2: #ffffff5a;
 
-    [class="dark"] & {
+    [class='dark'] & {
       --color1: #89991109;
       --color2: #89991114;
     }
 
-    background: linear-gradient(135deg,
-      var(--color1) 25%,
-      var(--color2) 0,
-      var(--color2) 50%,
-      var(--color1) 0,
-      var(--color1) 75%,
-      var(--color2) 0);
+    background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);
     background-size: 60px 60px;
     animation: alwaysToLeftBottom 120s linear infinite;
   }
@@ -342,7 +320,6 @@ const now = ref(nowWhen())
     }
   }
 }
-
 
 ::-webkit-scrollbar {
   width: 4px;
