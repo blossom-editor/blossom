@@ -776,13 +776,6 @@ api[5].list.push({
     desc: '文件夹类型 [FolderTypeEnum]',
     list: []
 })
-api[5].list.push({
-    alias: '系统参数表配置内容',
-    order: '100',
-    link: '系统参数表配置内容',
-    desc: '系统参数表配置内容',
-    list: []
-})
 document.onkeydown = keyDownSearch;
 function keyDownSearch(e) {
     const theEvent = e;

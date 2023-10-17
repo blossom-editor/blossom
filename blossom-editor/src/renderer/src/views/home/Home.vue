@@ -145,7 +145,7 @@ const SentinelChartLineRef = ref()
 const ChartHeatmapRef = ref()
 
 onActivated(() => {
-  now = nowWhen()
+  now.value = nowWhen()
 })
 
 const loadWordLine = () => {
@@ -160,7 +160,7 @@ const loadSentinlLine = () => {
   SentinelChartLineRef.value.reload()
 }
 
-let now: string = nowWhen()
+const now = ref(nowWhen())
 
 </script>
 

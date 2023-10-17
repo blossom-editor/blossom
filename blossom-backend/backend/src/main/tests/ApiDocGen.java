@@ -1,5 +1,3 @@
-package com.blossom.backend.config;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import cn.hutool.core.lang.Dict;
@@ -53,7 +51,7 @@ public class ApiDocGen {
         this.add("blossom-backend/expand-sentinel/expand-sentinel-metric");
     }};
 
-    private static final boolean genDictFromDB = true;
+    private static final boolean genDictFromDB = false;
     private static final String dictDbSetting = "dict-db.setting";
     private static final String dictQuerySQL = "select param_name,param_desc from base_sys_param";
 

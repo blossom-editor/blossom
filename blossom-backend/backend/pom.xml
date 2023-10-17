@@ -75,6 +75,7 @@
             <groupId>com.github.shalousun</groupId>
             <artifactId>smart-doc</artifactId>
             <version>${smart-doc.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
