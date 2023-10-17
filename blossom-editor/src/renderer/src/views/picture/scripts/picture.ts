@@ -1,9 +1,10 @@
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
-import type { UploadProps } from 'element-plus'
+import type { UploadProps, UploadRawFile } from 'element-plus'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
 import { uploadFileApi } from '@renderer/api/blossom'
+import { getFilePrefix, getFileSuffix, getNowTime, randomInt } from '@renderer/assets/utils/util'
 
 const { picStyle } = useConfigStore()
 const { userinfo } = useUserStore()
@@ -45,7 +46,24 @@ export const buildDefaultPicture = (): Picture => {
   }
 }
 
+/**
+ * 图片上传的回调事件
+ */
 export type UploadCallback = (url: string) => void
+
+/**
+ * 判断是否为图片名称增加时间后缀
+ * @param name 图片名称
+ * @returns
+ */
+export const wrapperFilename = (name: string): string => {
+  if (picStyle.isAddSuffix) {
+    let prefix = getFilePrefix(name)
+    let suffix = getFileSuffix(name)
+    return prefix + `_${getNowTime()}_${randomInt(1, 999)}.${suffix}`
+  }
+  return name
+}
 
 /**
  * form 表单上传图片
@@ -60,11 +78,25 @@ export const uploadForm = (file: File, pid: number, callback: UploadCallback) =>
   } else {
     const form = new FormData()
     form.append('file', file)
-    form.append('name', file.name)
+    form.append('filename', wrapperFilename(file.name))
     form.append('pid', pid.toString())
     uploadFileApi(form).then((resp) => {
       callback(resp.data)
     })
+  }
+}
+
+/**
+ * uoload 组件的 data 数据获取
+ * @param rawFile
+ * @param pid
+ * @returns
+ */
+export const uploadDate = (rawFile: UploadRawFile, pid: number, repeatUpload?: boolean = false) => {
+  return {
+    pid: pid,
+    filename: wrapperFilename(rawFile.name),
+    repeatUpload: repeatUpload
   }
 }
 

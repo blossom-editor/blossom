@@ -1,5 +1,6 @@
 <template>
   <div class="picture-upload-root">
+    <!-- :data="{ pid: curFolder?.id, repeatUpload: porps.repeatUpload }" -->
     <el-upload
       name="file"
       list-type="text"
@@ -7,7 +8,7 @@
       multiple
       :disabled="!curFolder || !curFolder?.id"
       :action="serverStore.serverUrl + uploadFileApiUrl"
-      :data="{ pid: curFolder?.id, repeatUpload: porps.repeatUpload }"
+      :data="(f: UploadRawFile) => uploadDate(f, curFolder!.id, porps.repeatUpload)"
       :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
       :show-file-list="true"
       :before-upload="beforeUpload"
@@ -26,11 +27,12 @@
 
 <script setup lang="ts">
 import { inject } from 'vue'
+import { UploadRawFile } from 'element-plus'
 import { uploadFileApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { provideKeyDocInfo } from '@renderer/views/doc/doc'
-import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/scripts/picture'
+import { beforeUpload, onUploadSeccess, onError, uploadDate } from '@renderer/views/picture/scripts/picture'
 
 const porps = defineProps({
   repeatUpload: {

@@ -1,10 +1,18 @@
-<template >
+<template>
   <div class="aside-upload-root">
     <el-tooltip effect="blossomr" placement="right-start" :show-after="1000" :hide-after="0">
       <template #content>提示:<br />从这里上传, 会上传至<br />《🌌 默认文件夹》</template>
-      <el-upload :action="serverStore.serverUrl + uploadFileApiUrl" name="file" :data="{ pid: -1 }"
-        :headers="{ 'Authorization': 'Bearer ' + userStore.auth.token }" :show-file-list="false"
-        :before-upload="beforeUpload" :on-success="onUploadSeccess" :on-error="onError" drag multiple>
+      <el-upload
+        name="file"
+        :action="serverStore.serverUrl + uploadFileApiUrl"
+        :data="(f: UploadRawFile) => uploadDate(f, -1)"
+        :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
+        :on-success="onUploadSeccess"
+        :on-error="onError"
+        drag
+        multiple>
         <upload-filled />
       </el-upload>
     </el-tooltip>
@@ -12,17 +20,17 @@
 </template>
 
 <script setup lang="ts">
+import { UploadRawFile } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { uploadFileApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
-import { beforeUpload, onUploadSeccess, onError } from '@renderer/views/picture/scripts/picture'
+import { beforeUpload, onUploadSeccess, onError, uploadDate } from '@renderer/views/picture/scripts/picture'
 
 //#region ----------------------------------------< panin store >--------------------------------------
 const userStore = useUserStore()
 const serverStore = useServerStore()
 //#endregion
-
 </script>
 
 <style scoped lang="scss">

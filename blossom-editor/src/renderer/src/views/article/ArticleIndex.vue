@@ -110,10 +110,12 @@
           <div class="menu-item" @click="rightMenuCopy"><span class="iconbl bl-copy-line"></span>复制</div>
           <div class="menu-item" @click="rightMenuPaste"><span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴</div>
           <div class="menu-item">
+            <!-- 
+              :data="{ pid: curArticle?.pid }" -->
             <el-upload
               name="file"
               :action="serverStore.serverUrl + uploadFileApiUrl"
-              :data="{ pid: curArticle?.pid }"
+              :data="(f: UploadRawFile) => uploadDate(f, curArticle!.pid)"
               :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
               :show-file-list="false"
               :before-upload="beforeUpload"
@@ -142,7 +144,7 @@
 // vue
 import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { UploadProps } from 'element-plus'
+import type { UploadProps, UploadRawFile } from 'element-plus'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
@@ -164,7 +166,7 @@ import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
-import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm } from '@renderer/views/picture/scripts/picture'
+import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
 import { useResize } from './scripts/editor-preview-resize'
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
@@ -332,7 +334,7 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, file) => {
  * @param file 文件
  */
 const uploadFile = (file: File) => {
-  uploadForm(file, curActiveDoc.value!.pid, (url: string) => {
+  uploadForm(file, curArticle.value!.pid, (url: string) => {
     cmw.insertBlockCommand(`\n![${file.name}](${url})\n`)
   })
 }
