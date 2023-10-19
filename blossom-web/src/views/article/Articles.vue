@@ -100,7 +100,6 @@
               <span class="iconbl bl-a-clock3-line"></span> 修改
               {{ article.syncTime }}
             </div>
-            <div class="toc-subtitle" @click="copyUrl">复制地址：123123</div>
           </div>
           <div class="toc-title">目录</div>
           <div class="toc-content">

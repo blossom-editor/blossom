@@ -92,7 +92,7 @@ export const uploadForm = (file: File, pid: number, callback: UploadCallback) =>
  * @param pid
  * @returns
  */
-export const uploadDate = (rawFile: UploadRawFile, pid: number, repeatUpload?: boolean = false) => {
+export const uploadDate = (rawFile: UploadRawFile, pid: number, repeatUpload: boolean = false) => {
   return {
     pid: pid,
     filename: wrapperFilename(rawFile.name),
