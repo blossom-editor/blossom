@@ -2,7 +2,7 @@
 <img src="./doc/imgs/icon.png" height="200">
 </p>
 <p align="center" style="font-size: 30px;font-weight:500;">
-Blossom 1.7.0
+Blossom 1.7.1
 </p>
 <p align="center">
 <a href="https://www.wangyunf.com/blossom-doc/doc/tryuse">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index">📃 文档</a> | <a href="https://github.com/blossom-editor/blossom/releases">📥 下载</a> 
@@ -10,7 +10,7 @@ Blossom 1.7.0
 
 ---
 
-Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于MIT协议完全开源。
+Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于 MIT 协议完全开源。
 
 <p align="center">
 <img src="./doc/imgs/home_ld_1_4_0.png">
@@ -26,7 +26,7 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 
 1. **不再需要为同步设备数量付费**。
 2. **不再需要为公网访问付费**。
-3. **不再需要为软件付费**,基于MIT协议完全开源
+3. **不再需要为软件付费**,基于 MIT 协议完全开源
 4. **文章与图片都在你的服务器存储**，不需要再使用任何三方图床，不需要购买任何对象存储。
 5. **没有任何私有协议**，基于 Markdown 语法，采用约定格式拓展样式。迁移到其他软件可以正常显示。
 6. **多账号权限**，可以和你的朋友一起使用。或者将自己的生活/工作笔记存放在不同账号中。
@@ -36,13 +36,14 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 10. **支持 Docker / Docker Compose 部署**。
 
 ### 🎁 Blossom 具有以下功能:
+
 1. **文章编辑**：Markdown 文章编写，文章公网访问权限，文章分类管理。
 2. **双链笔记**：内部文章与外部链接引用形成的双链笔记知识网络。
 3. **全量导出**：每日全量备份，备份一键下载。
 4. **网页转换**：将 Markdown 文章转换成网页，一键打包分享。
 5. **番茄时钟**：编辑器包含一个番茄钟功能。。
 6. **图片存储**：按文章目录分类你的图片，或自定义图片目录，图片与文章双向查询。
-7. **自带截图**：(仅windows)，你不再需要使用其他截图工具截图后保存在本地再上传到云端了。
+7. **自带截图**：(仅 windows)，你不再需要使用其他截图工具截图后保存在本地再上传到云端了。
 8. **待办清单**：以 Todo List 的方式管理你的每日事项或阶段性计划。
 9. **计划安排**：阶段性的长期计划，或者日历中的短期计划安排。
 10. **快捷便签**：方便你记录随意的日常信息。
@@ -55,40 +56,46 @@ Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，�
 docker compose -f docker/compose/blossom-mysql8.yaml up -d
 ```
 
-
 # 🌄 更多 Blossom 图片
 
 !["编辑器"](./doc/imgs/editor_intro.png)
+
 <p align="center">编辑器</p>
 
 ---
 
 !["双链笔记"](./doc/imgs/editor_graph.png)
+
 <p align="center">双链笔记</p>
 
 ---
 
 !["照片墙"](./doc/imgs/pic_s_light.png)
+
 <p align="center">照片墙</p>
 
 ---
 
 !["日历计划"](./doc/imgs/todo_l.jpg)
+
 <p align="center">待办事项清单</p>
 
 ---
 
 !["日历计划"](./doc/imgs/plan_s_light.png)
+
 <p align="center">日历计划</p>
 
 ---
 
 !["便签管理"](./doc/imgs/note_s_light.jpg)
+
 <p align="center">便签管理</p>
 
 ---
 
 !["博客"](./doc/imgs/blog_home.jpg)
+
 <p align="center">博客</p>
 
 <p align="center">

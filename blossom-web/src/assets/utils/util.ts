@@ -1,10 +1,10 @@
-import { isNull } from "./obj"
+import { isNull } from './obj'
 
 /**
  * 跳转新开页面
  * @param url 地址
  */
-export const toView = (url:string):void => {
+export const toView = (url: string): void => {
   window.open(url)
 }
 
@@ -20,7 +20,7 @@ export const getNowTimeFormat = (): string => {
   let h = formatNum(now.getHours())
   let min = formatNum(now.getMinutes())
   let s = formatNum(now.getSeconds())
-  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s
 }
 
 /**
@@ -35,7 +35,7 @@ export const secondsToDatetime = (seconds: number | string | Date): string => {
   let h = formatNum(now.getHours())
   let min = formatNum(now.getMinutes())
   let s = formatNum(now.getSeconds())
-  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s;
+  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s
 }
 
 /**
@@ -51,7 +51,7 @@ export const timestampToDatetime = (timestamp: number | string | Date): string =
   let min = formatNum(now.getMinutes())
   let s = formatNum(now.getSeconds())
   let SSS = formatNum(now.getMilliseconds())
-  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s + '.' + SSS;
+  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s + '.' + SSS
 }
 
 const formatNum = (num: string | number) => {
@@ -59,7 +59,7 @@ const formatNum = (num: string | number) => {
     return '0' + num
   }
   return num
-};
+}
 
 /**
  * 格式化JSON字符串
@@ -69,25 +69,25 @@ const formatNum = (num: string | number) => {
  */
 export const formatJson = (msg: string, customRetract?: string): string => {
   // 格式化缩进为2个空格
-  const retract = isNull(customRetract) ? '  ' : customRetract;
-  let rep = '~';
-  let jsonStr = JSON.stringify(msg, null, rep);
-  let str = '';
+  const retract = isNull(customRetract) ? '  ' : customRetract
+  let rep = '~'
+  let jsonStr = JSON.stringify(msg, null, rep)
+  let str = ''
   for (let i = 0; i < jsonStr.length; i++) {
-    let text2 = jsonStr.charAt(i);
+    let text2 = jsonStr.charAt(i)
     if (i > 1) {
-      let text = jsonStr.charAt(i - 1);
+      let text = jsonStr.charAt(i - 1)
       if (rep !== text && rep === text2) {
         // str += '\n'
       }
     }
     str += text2
   }
-  jsonStr = '';
+  jsonStr = ''
   for (let i = 0; i < str.length; i++) {
-    let text = str.charAt(i);
+    let text = str.charAt(i)
     if (rep === text) {
-      jsonStr += retract;
+      jsonStr += retract
     } else {
       jsonStr += text
     }
@@ -95,5 +95,5 @@ export const formatJson = (msg: string, customRetract?: string): string => {
       jsonStr += '\n'
     }
   }
-  return jsonStr;
-};
+  return jsonStr
+}
