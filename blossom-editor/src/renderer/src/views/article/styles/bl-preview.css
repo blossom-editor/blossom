@@ -235,19 +235,19 @@ table container
 
 /* 代码块 */
 .bl-preview pre {
-  padding: 20px 10px 20px 30px;
+  padding: 0 10px 0 30px;
   background-color: var(--bl-preview-pre-bg-color);
   border-radius: var(--bl-preview-border-radius);
   box-shadow: var(--bl-preview-pre-box-shadow);
-  overflow: auto;
   font-size: 13px;
   position: relative;
+  overflow: hidden;
 }
 
 .bl-preview pre .pre-copy {
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   text-align: right;
   z-index: 10;
   color: #5c5c5c;
@@ -270,7 +270,7 @@ table container
   margin: 0;
   padding-left: 0;
   position: absolute;
-  top: 20px;
+  top: 15px;
   left: 3px;
   user-select: none;
 }
@@ -290,10 +290,15 @@ table container
 
 .bl-preview pre code {
   background-color: inherit;
-  padding: 0;
   border-radius: 0;
   margin: 0;
   font-size: 13px;
+
+  height: 100%;
+  width: 100%;
+  display: block;
+  padding: 15px 0 15px 0;
+  overflow: auto;
 }
 
 .bl-preview pre pre code.hljs {
