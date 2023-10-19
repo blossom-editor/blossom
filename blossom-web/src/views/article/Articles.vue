@@ -81,23 +81,26 @@
       </div>
 
       <div class="article">
-        <div class="bl-preview" v-html="article?.html"></div>
+        <div class="bl-preview" v-html="article.html"></div>
       </div>
 
       <div class="toc-container" :style="tocStyle">
         <div class="viewer-toc">
-          <div class="toc-subtitle" style="font-size: 15px">《{{ article?.name }}》</div>
-          <div class="toc-subtitle">
-            <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
-            <span class="iconbl bl-like-line"></span> {{ article?.likes }}
-          </div>
-          <div class="toc-subtitle">
-            <span class="iconbl bl-a-clock3-line"></span> 公开
-            {{ article?.openTime }}
-          </div>
-          <div class="toc-subtitle">
-            <span class="iconbl bl-a-clock3-line"></span> 修改
-            {{ article?.syncTime }}
+          <div v-if="article.id != 0">
+            <div class="toc-subtitle" style="font-size: 15px">《{{ article.name }}》</div>
+            <div class="toc-subtitle">
+              <span class="iconbl bl-pen-line"></span> {{ article.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article.uv }} |
+              <span class="iconbl bl-like-line"></span> {{ article.likes }}
+            </div>
+            <div class="toc-subtitle">
+              <span class="iconbl bl-a-clock3-line"></span> 公开
+              {{ article.openTime }}
+            </div>
+            <div class="toc-subtitle">
+              <span class="iconbl bl-a-clock3-line"></span> 修改
+              {{ article.syncTime }}
+            </div>
+            <div class="toc-subtitle" @click="copyUrl">复制地址：123123</div>
           </div>
           <div class="toc-title">目录</div>
           <div class="toc-content">
@@ -225,9 +228,35 @@ const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
   if (type === 'copyPreCode') {
     let code = document.getElementById(data)
     if (code) {
-      navigator.clipboard.writeText(code.innerText)
+      // navigator.clipboard.writeText(code.innerText)
+      // navigator clipboard 需要https等安全上下文
+      if (navigator.clipboard && window.isSecureContext) {
+        // navigator clipboard 向剪贴板写文本
+        return navigator.clipboard.writeText(code.innerText)
+      } else {
+        // 创建text area
+        let textArea = document.createElement('textarea')
+        textArea.value = code.innerText
+        // 使text area不在viewport，同时设置不可见
+        textArea.style.position = 'absolute'
+        textArea.style.opacity = '0'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        return new Promise<void>((res, rej) => {
+          // 执行复制命令并移除文本框
+          document.execCommand('copy') ? res() : rej()
+          textArea.remove()
+        })
+      }
     }
   }
+}
+
+const copyUrl = () => {
+  console.log(window.location.href)
 }
 
 //#region ----------------------------------------< 响应式样式 >--------------------------------------
@@ -772,18 +801,17 @@ const onresize = () => {
 
         // 代码块
         :deep(pre) {
-          padding: 20px 10px 20px 30px;
+          padding: 0 0 0 30px;
           background-color: #2b2b2b;
-          overflow: auto;
           border-radius: $borderRadius;
           box-shadow: 2px 2px 5px rgb(76, 76, 76);
-          max-height: 1100px;
           position: relative;
+          overflow: hidden;
 
           .pre-copy {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             text-align: right;
             z-index: 10;
             color: #5c5c5c;
@@ -805,7 +833,7 @@ const onresize = () => {
             margin: 0;
             padding-left: 0;
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 3px;
             user-select: none;
             li {
@@ -823,9 +851,14 @@ const onresize = () => {
 
           code {
             background-color: inherit;
-            padding: 0;
             border-radius: 0;
             margin: 0;
+
+            height: 100%;
+            width: 100%;
+            display: block;
+            padding: 15px 0 15px 0;
+            overflow: auto;
           }
 
           pre code.hljs {
