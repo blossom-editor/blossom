@@ -97,17 +97,17 @@
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
         <div :class="['menu-item', curDoc.i < 0 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
-          <span class="iconbl bl-a-fileedit-line"></span>编辑文档
+          <span class="iconbl bl-a-fileedit-line"></span>编辑文件夹
         </div>
         <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('add', curDoc.p)">
-          <span class="iconbl bl-a-fileadd-line"></span>新增<strong>同级</strong>文档
+          <span class="iconbl bl-a-fileadd-line"></span>新增<strong>同级</strong>文件夹
         </div>
         <!-- 只有文件夹才有子文档 -->
         <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('add', curDoc.i)">
-          <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文档
+          <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文件夹
         </div>
         <div :class="['menu-item', curDoc.i < 0 ? 'disabled' : '']" @click="delDoc()">
-          <span class="iconbl bl-a-fileprohibit-line"></span>删除文档
+          <span class="iconbl bl-a-fileprohibit-line"></span>删除文件夹
         </div>
       </div>
     </div>

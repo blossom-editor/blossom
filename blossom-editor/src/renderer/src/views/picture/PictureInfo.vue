@@ -35,7 +35,7 @@
 
           <!--  -->
           <el-form-item label="名称" prop="name">
-            <el-input v-model="docForm.name" style="width:432px" placeholder="文件夹或文章的名称">
+            <el-input v-model="docForm.name" style="width:432px" placeholder="文件夹名称">
               <template #prefix>
                 <el-icon size="15">
                   <Document />
