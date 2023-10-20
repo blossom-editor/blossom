@@ -1,5 +1,5 @@
-import { CmWrapper } from "./codemirror"
-import { simpleMarked } from "./markedjs"
+import { CmWrapper } from './codemirror'
+import { simpleMarked } from './markedjs'
 
 const marginTop = 75
 const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, hr, table, tr, iframe'
@@ -8,7 +8,6 @@ const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, hr, ta
  * 双屏滚动封装
  */
 export class EPScroll {
-
   private _editor: HTMLElement
   private _preview: HTMLElement
   private _cmw: CmWrapper | undefined
@@ -28,8 +27,9 @@ export class EPScroll {
     //   this._editor?.scrollTop)
 
     // 如果在头部附近
-    if (this._editor?.scrollTop < 20) {
-      (this._preview.firstChild as HTMLElement).scrollIntoView()
+    if (this._editor?.scrollTop < 5) {
+      // (this._preview.firstChild as HTMLElement).scrollIntoView()
+      this._preview.scrollTo({ top: 0 })
     }
     // 如果在尾部附近
     else if (this._editor?.clientHeight + this._editor?.scrollTop > this._editor?.scrollHeight - 20) {
