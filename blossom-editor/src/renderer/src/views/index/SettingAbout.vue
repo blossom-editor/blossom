@@ -4,15 +4,15 @@
     <bl-row class="repository" just="center">
       <bl-col @click="toView(CONFIG.SYS.GITHUB_REPO)">
         <svg class="github" aria-hidden="true"><use xlink:href="#wl-github2"></use></svg>
-        <img
+        <!-- <img
           class="shields"
           alt="GitHub Repo stars"
-          src="https://img.shields.io/github/stars/blossom-editor/blossom?logo=github&label=Stars&labelColor=AD8CF2&color=fff&cacheSeconds=60" />
+          src="https://img.shields.io/github/stars/blossom-editor/blossom?logo=github&label=Stars&labelColor=AD8CF2&color=fff&cacheSeconds=60" /> -->
       </bl-col>
 
       <bl-col @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px">
         <svg class="gitee" aria-hidden="true"><use xlink:href="#wl-gitee"></use></svg>
-        <img class="shields" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white" />
+        <!-- <img class="shields" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white" /> -->
       </bl-col>
     </bl-row>
 
