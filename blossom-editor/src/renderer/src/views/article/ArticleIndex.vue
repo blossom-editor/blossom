@@ -218,6 +218,7 @@ watch(
   (_newId: number, _oldId: number) => {
     curDoc.value = undefined
     curActiveDoc.value = undefined
+    curArticle.value = undefined
     setDoc('')
   }
 )
