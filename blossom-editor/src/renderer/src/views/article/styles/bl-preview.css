@@ -235,7 +235,7 @@ table container
 
 /* 代码块 */
 .bl-preview pre {
-  padding: 0 10px 0 30px;
+  padding: 15px 14px 15px 34px;
   background-color: var(--bl-preview-pre-bg-color);
   border-radius: var(--bl-preview-border-radius);
   box-shadow: var(--bl-preview-pre-box-shadow);
@@ -297,7 +297,8 @@ table container
   height: 100%;
   width: 100%;
   display: block;
-  padding: 15px 0 15px 0;
+  /* padding: 15px 0 15px 0; */
+  padding: 0;
   overflow: auto;
 }
 
