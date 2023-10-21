@@ -408,14 +408,17 @@ export class CmWrapper {
       /* 修改之后光标移动到的位置 */
       range: EditorSelection.range(selectFrom, selectTo)
     }
-    editor.dispatch(
-      /**
-       * @param _range 当前选中的位置
-       */
-      editor.state.changeByRange((_range: SelectionRange) => {
-        return changeByRange
-      })
-    )
+    // editor.dispatch(
+    //   /**
+    //    * @param _range 当前选中的位置
+    //    */
+    //   editor.state.changeByRange((_range: SelectionRange) => {
+    //     console.log(_range);
+
+    //     return changeByRange
+    //   })
+    // )
+    editor.dispatch(changeByRange)
   }
   sliceDoc = (from?: number, to?: number): string => {
     return this._editor.state.sliceDoc(from, to)
@@ -615,10 +618,11 @@ export class CmWrapper {
     this.insertBlockCommand(editor, `\n[]()\n`)
   }
   /** 格式化内容, 使用 prettier */
-  private static commandFormatMarkdown = async (editor: EditorView) => {
-    let formatContent = await prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: 'markdown', plugins: [pluginMarkdown] })
-    let maxLen = CmWrapper.getDocLength(editor)
-    CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0)
+  private static commandFormatMarkdown = (editor: EditorView) => {
+    prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: 'markdown', plugins: [pluginMarkdown] }).then((formatContent) => {
+      let maxLen = CmWrapper.getDocLength(editor)
+      CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0)
+    })
   }
   // 实例调用
   insertBlockCommand = (content: string) => {
