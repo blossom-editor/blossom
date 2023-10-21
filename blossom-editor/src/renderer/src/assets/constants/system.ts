@@ -5,7 +5,7 @@ const blossom: any = {
   SYS: {
     NAME: 'Blossom',
     FULL_NAME: 'BLOSSOM-EDITOR',
-    VERSION: 'v1.7.1',
+    VERSION: 'v1.7.2',
 
     //
     DOC: 'https://www.wangyunf.com/blossom-doc/index',

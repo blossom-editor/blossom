@@ -822,11 +822,4 @@ const unbindKeys = () => {
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
-
-.bl-preview {
-}
-
-:deep(.el-loading-spinner) {
-  @extend .bl-loading-spinner;
-}
 </style>
