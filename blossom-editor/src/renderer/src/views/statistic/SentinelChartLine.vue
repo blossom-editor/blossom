@@ -1,6 +1,5 @@
 <template>
-  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量统计, 请稍后..."
-    style="height: 100%;width: 100%;"></div>
+  <div ref="ChartLineMetricRef" v-loading="rqLoading" element-loading-text="正在查询流量统计, 请稍后..." style="height: 100%; width: 100%"></div>
 </template>
 
 <script setup lang="ts">
@@ -18,13 +17,17 @@ echarts.use([TitleComponent, TooltipComponent, LegendComponent, GridComponent, L
 
 const isDark = useDark()
 
-watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
-  renderChart()
-})
+watch(
+  () => isDark.value,
+  (_newValue: any, _oldValue: any) => {
+    renderChart()
+  }
+)
 
 const props = defineProps({
   showTitle: {
-    type: Boolean, default: false
+    type: Boolean,
+    default: false
   }
 })
 
@@ -35,7 +38,7 @@ let chartLineMetric: any
 let chartData = {
   title: '',
   subTitle: '',
-  x: <any>[],// 折线图的X轴
+  x: <any>[], // 折线图的X轴
   success: <any>[],
   avgRt: <any>[],
   maxVisual: 0
@@ -49,7 +52,7 @@ let chartData = {
  * @param cumtomInterval 自定义聚合时间范围
  */
 const getChartLineMetric = (resource: string, interval: string, customInterval: number) => {
-  rqLoading.value = true;
+  rqLoading.value = true
   let params = {
     resource: resource,
     interval: interval,
@@ -58,7 +61,7 @@ const getChartLineMetric = (resource: string, interval: string, customInterval: 
     customInterval: customInterval,
     customIntervalUnit: 'MINUTES'
   }
-  metricLineApi(params).then(resp => {
+  metricLineApi(params).then((resp) => {
     if (props.showTitle) {
       chartData.title = resp.data.title
       chartData.subTitle = resp.data.subTitle
@@ -73,7 +76,7 @@ const getChartLineMetric = (resource: string, interval: string, customInterval: 
       setTimeout(() => {
         rqLoading.value = false
       }, 150)
-    });
+    })
   })
 }
 
@@ -94,7 +97,7 @@ const renderChart = (callback?: any) => {
       ...{
         type: 'category',
         nameGap: 30,
-        data: chartData.x,
+        data: chartData.x
       }
     },
     yAxis: echartTheme.yAxis(),
@@ -109,29 +112,21 @@ const renderChart = (callback?: any) => {
         // alwaysShowContent: true,
         appendToBody: false,
         formatter: (params: any) => {
-          return `
-          <div class="chart-line-sentinel-tooltip">
-            <div class="xaxis-title">${params[0].axisValue}</div>
-            <div class="data" style="color:${params[0].color}">
+          let tooltip = `<div class="chart-line-sentinel-tooltip">
+            <div class="xaxis-title">${params[0].axisValue}</div>`
+          for (let i = 0; i < params.length; i++) {
+            const series = params[i]
+            tooltip += `<div class="data" style="color:${series.color}">
               <div>
                 <span class="iconbl bl-sendmail-line"></span>
-                ${params[0].seriesName}
+                ${series.seriesName}
               </div>
               <span style="font-weight: 700;">
-                ${params[0].data}
+                ${series.data}
               </span>
-            </div>
-            <div class="data" style="color:${params[1].color}">
-              <div>
-                <span class="iconbl bl-a-historicalrecord-line"></span>
-                ${params[1].seriesName}
-              </div>
-              <span style="font-weight: 700;">
-                ${params[1].data}
-              </span>
-            </div>
-          </div>
-          `
+            </div>`
+          }
+          return (tooltip += `</div>`)
         }
       }
     },
@@ -152,8 +147,15 @@ const renderChart = (callback?: any) => {
         },
         areaStyle: {
           color: {
-            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: '#7d7ced' }, { offset: 1, color: '#0066FF00' }]
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#7d7ced' },
+              { offset: 1, color: '#0066FF00' }
+            ]
           }
         }
       },
@@ -177,8 +179,15 @@ const renderChart = (callback?: any) => {
         },
         areaStyle: {
           color: {
-            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [{ offset: 0, color: '#e3a300' }, { offset: 1, color: '#E3A30000' }]
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#e3a300' },
+              { offset: 1, color: '#E3A30000' }
+            ]
           }
         }
       }
@@ -206,7 +215,8 @@ const windowResize = () => {
 }
 
 defineExpose({
-  reload, windowResize
+  reload,
+  windowResize
 })
 </script>
 
@@ -216,15 +226,14 @@ defineExpose({
 }
 </style>
 
-
 <style lang="scss">
 .chart-line-sentinel-tooltip {
   @include box(240px, 80px);
-  @include themeBorder(1px, #C5AEF67F, #899911A0, 'around', 4px);
-  @include themeShadow(3px 3px 10px 1px #EBEBEB, 3px 3px 10px 1px #1A1A1A);
+  @include themeBorder(1px, #c5aef67f, #899911a0, 'around', 4px);
+  @include themeShadow(3px 3px 10px 1px #ebebeb, 3px 3px 10px 1px #1a1a1a);
   position: relative;
   z-index: 9999999;
-  background: #FFFFFF00;
+  background: #ffffff00;
   padding: 10px;
   box-shadow: none;
   backdrop-filter: blur(4px);
