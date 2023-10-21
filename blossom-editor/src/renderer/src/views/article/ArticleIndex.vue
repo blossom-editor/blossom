@@ -160,11 +160,10 @@ import ArticleTreeDocs from './ArticleTreeDocs.vue'
 import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
 import ArticleIndexPlaceholder from './ArticleIndexPlaceholder.vue'
 // ts
+import hotkeys from 'hotkeys-js'
 import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
 import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
-import ShortcutRegistrant from '@renderer/scripts/shortcut-register'
-import hotkeys from 'hotkeys-js'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
 import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
@@ -195,7 +194,6 @@ onMounted(() => {
   window.onHtmlEventDispatch = onHtmlEventDispatch
 })
 onBeforeUnmount(() => {
-  // removeListenerShortcutMap()
   unbindKeys()
   removeListenerEditorRightMenu()
   removeListenerScroll()
@@ -204,12 +202,10 @@ onBeforeUnmount(() => {
 onActivated(() => {
   enterView()
   bindKeys()
-  // addListererShortcutMap()
 })
 onDeactivated(() => {
   exitView()
   unbindKeys()
-  // removeListenerShortcutMap()
 })
 
 //#region ----------------------------------------< panin store >--------------------------------------
@@ -792,25 +788,6 @@ hotkeys.filter = function (_event) {
 }
 
 const bindKeys = () => {
-  // hotkeys('alt+1,alt+2,alt+3,alt+4', (event, handler) => {
-  //   switch (handler.key) {
-  //     case 'alt+1':
-  //       alt_1()
-  //       break
-  //     case 'alt+2':
-  //       alt_2()
-  //       break
-  //     case 'alt+3':
-  //       alt_3()
-  //       break
-  //     case 'alt+4':
-  //       alt_4()
-  //       break
-  //     default:
-  //       alert(event)
-  //   }
-  // })
-
   hotkeys('alt+1, command+1', () => {
     alt_1()
     return false
@@ -835,39 +812,6 @@ const unbindKeys = () => {
   hotkeys.unbind('alt+3, command+3')
   hotkeys.unbind('alt+4, command+4')
 }
-
-// const shortcutRegistrant: ShortcutRegistrant = new ShortcutRegistrant().setDebug(false)
-// const keydown = (evnet: KeyboardEvent) => {
-//   shortcutRegistrant.keydown(evnet)
-// }
-// const keyup = (evnet: KeyboardEvent) => {
-//   shortcutRegistrant.keyup(evnet)
-// }
-
-// /** 注册快捷键 */
-// const addListererShortcutMap = () => {
-//   let altAnd: Map<string, shortcutFunc> = new Map()
-//   altAnd.set('Digit1', alt_1) // Alt + 1: 隐藏菜单
-//   altAnd.set('Digit2', alt_2) // Alt + 2: 隐藏目录
-//   altAnd.set('Digit3', alt_3) // Alt + 3: 隐藏编辑
-//   altAnd.set('Digit4', alt_4) // Alt + 4: 隐藏预览
-//   if (platform() === 'darwin') {
-//     shortcutRegistrant.register('MetaLeft', altAnd)
-//   } else {
-//     shortcutRegistrant.register('AltLeft', altAnd)
-//   }
-//   window.addEventListener('keydown', keydown)
-//   window.addEventListener('keyup', keyup)
-//   window.onblur = () => {
-//     shortcutRegistrant.clearDownCodes()
-//   }
-// }
-
-// /** 删除快捷键 */
-// const removeListenerShortcutMap = () => {
-//   window.removeEventListener('keydown', keydown)
-//   window.removeEventListener('keyup', keyup)
-// }
 
 //#endregion
 </script>
