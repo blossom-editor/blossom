@@ -217,9 +217,8 @@ watch(
   () => userStore.userinfo.id,
   (_newId: number, _oldId: number) => {
     curDoc.value = undefined
-    curActiveDoc.value = undefined
     curArticle.value = undefined
-    setDoc('')
+    setNewState('')
   }
 )
 //#endregion
@@ -358,7 +357,6 @@ const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
 const ArticleTreeDocsRef = ref()
 const curDoc = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 const curArticle = ref<DocInfo>() // 当前选中的文章, 用于在编辑器中展示
-const curActiveDoc = ref<DocInfo>() // 当前激活的文档的 index, 防止在刷新列表时重置选中, 导致需要再次从文档菜单中逐个点击
 // 非绑定数据
 // 文章是否在解析时, 为 true 则正在解析, 为 false 则解析完成
 let articleParseing = false
@@ -383,7 +381,6 @@ provide(provideKeyCurArticleInfo, curArticle)
 const clickCurDoc = async (tree: DocTree) => {
   let doc: DocInfo = treeToInfo(tree)
   curDoc.value = doc
-  curActiveDoc.value = doc // 设置激活的菜单, 用于在刷新后仍然能选中当前的选项
   // 如果选中的是文章, 则查询文章详情, 用于在编辑器中显示以及注入
   if (doc.type == 3) {
     // 重复点击同一个, 不会多次查询
@@ -402,9 +399,9 @@ const clickCurDoc = async (tree: DocTree) => {
         // 初次加载时立即渲染
         immediateParse = true
         if (isBlank(resp.data.markdown)) {
-          setDoc('')
+          setNewState('')
         } else {
-          setDoc(resp.data.markdown)
+          setNewState(resp.data.markdown)
         }
       })
       .finally(() => {
@@ -563,7 +560,7 @@ const initEditor = (_doc?: string) => {
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
  * @param md markdown
  */
-const setDoc = (md: string): void => {
+const setNewState = (md: string): void => {
   cmw.setState(
     CmWrapper.newState(
       () => {

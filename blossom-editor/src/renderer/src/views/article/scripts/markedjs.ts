@@ -439,6 +439,8 @@ const simpleRenderer = {
       } catch (error) {
         return `<div></div>`
       }
+    } else if (language === 'mermaid') {
+      return '<p></p>'
     } else if (language === 'markmap') {
       return `<p><svg></svg></p>`
     }

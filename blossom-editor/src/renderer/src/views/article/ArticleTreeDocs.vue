@@ -3,13 +3,13 @@
   <div class="doc-workbench">
     <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort" ref="ArticleTreeWorkbenchRef"> </ArticleTreeWorkbench>
   </div>
-
+  <!--   -->
   <div
     class="doc-trees-container"
     v-loading="docTreeLoading"
     element-loading-text="正在读取文档..."
-    :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
-    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeDefaultActive">
+    :style="{ fontSize: viewStyle.treeDocsFontSize }">
+    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeActiveArticleId">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <!-- L1无下级 -->
@@ -85,7 +85,7 @@
         </el-sub-menu>
       </div>
     </el-menu>
-    <div v-else class="doc-trees-empty-placeholder">暂无文档，可点击上方 ↑ 添加</div>
+    <div v-else class="doc-trees-placeholder">暂无文档，可点击上方 ↑ 添加</div>
   </div>
 
   <!-- 右键菜单, 添加到 body 下 -->
@@ -187,8 +187,8 @@ import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
 
-const userStore = useUserStore()
-const configStore = useConfigStore()
+const { userinfo } = useUserStore()
+const { viewStyle } = useConfigStore()
 const route = useRoute()
 
 onMounted(() => {
@@ -207,14 +207,11 @@ onBeforeUnmount(() => {
 })
 
 //#region ----------------------------------------< 菜单 >--------------------------------------
-
 const docTreeLoading = ref(true) // 文档菜单的加载动画
 const showSort = ref(false) // 是否显示文档排序
-const docTreeDefaultActive = ref('') // 文档的默认选中项, 用于外部跳转后选中菜单
+const docTreeActiveArticleId = ref('') // 文档的默认选中项, 用于外部跳转后选中菜单
 const docTreeData = ref<DocTree[]>([]) // 文档菜单
-
-// 注入的相关信息
-provide(provideKeyDocTree, docTreeData)
+provide(provideKeyDocTree, docTreeData) // 提供菜单列表依赖注入, 主要用于在详情中选择上级文件夹, 避免二次查询
 
 /**
  * 获取路由参数
@@ -222,7 +219,7 @@ provide(provideKeyDocTree, docTreeData)
 const getRouteQueryParams = () => {
   let articleId = route.query.articleId
   if (isNotNull(articleId)) {
-    docTreeDefaultActive.value = articleId as string
+    docTreeActiveArticleId.value = articleId as string
     let treeParam: any = { ty: 3, i: articleId }
     clickCurDoc(treeParam)
   }
@@ -333,13 +330,13 @@ const openArticleWindow = () => {
  * 使用浏览器打开公开链接, 或复制公开链接
  */
 const createUrl = (type: 'open' | 'copy' | 'link') => {
-  let url: string = userStore.userinfo.params.WEB_ARTICLE_URL + curDoc.value.i
+  let url: string = userinfo.params.WEB_ARTICLE_URL + curDoc.value.i
   if (type == 'open') {
     openExtenal(url)
   } else if (type == 'copy') {
     writeText(url)
   } else if (type == 'link') {
-    url = `[${curDoc.value.n}](${userStore.userinfo.params.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
+    url = `[${curDoc.value.n}](${userinfo.params.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
     writeText(url)
   }
 }
