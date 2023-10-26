@@ -4,15 +4,15 @@
     <Workbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort"></Workbench>
   </div>
 
-  <div class="doc-trees-container" v-loading="docTreeLoading" element-loading-text="正在读取文档..."
+  <div
+    class="doc-trees-container"
+    v-loading="docTreeLoading"
+    element-loading-text="正在读取文档..."
     :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
     <!-- 文件夹 -->
     <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true">
-
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
-
-
         <div v-if="L1.ty == 11" class="menu-divider" />
 
         <!-- L1无下级 -->
@@ -75,8 +75,7 @@
                     <!-- L4 不允许有下级, 只允许4级 -->
                     <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
                       <template #title>
-                        <div class="menu-item-wrapper" @click="clickCurDoc(L4)" style="width: 100%;"
-                          @click.right="handleClickRight(L4, $event)">
+                        <div class="menu-item-wrapper" @click="clickCurDoc(L4)" style="width: 100%" @click.right="handleClickRight(L4, $event)">
                           <PictureTitle :trees="L4" :level="4" />
                         </div>
                       </template>
@@ -114,24 +113,31 @@
   </Teleport>
 
   <!-- 详情的弹框 -->
-  <el-dialog v-model="isShowDocInfoDialog" width="535" top="100px" style="margin-left: 320px;" :append-to-body="true"
-    :destroy-on-close="true" :close-on-click-modal="false" draggable>
-    <PictureInfo ref="PictureInfoRef"></PictureInfo>
+  <el-dialog
+    v-model="isShowDocInfoDialog"
+    width="535"
+    top="100px"
+    style="margin-left: 320px"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
+    <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-import { ref, provide, onActivated, nextTick } from "vue"
+import { ref, provide, onActivated, nextTick } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
-import Workbench from "./PictureTreeWorkbench.vue"
+import Workbench from './PictureTreeWorkbench.vue'
 import { docTreeApi, folderDelApi } from '@renderer/api/blossom'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
 import { isEmpty } from 'lodash'
 import PictureTitle from './PictureTreeTitle.vue'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
-import Notify from "@renderer/scripts/notify"
-import { ElMessageBox } from "element-plus"
+import Notify from '@renderer/scripts/notify'
+import { ElMessageBox } from 'element-plus'
 
 const configStore = useConfigStore()
 
@@ -139,8 +145,8 @@ onActivated(() => {
   getDocTree()
 })
 
-const docTreeLoading = ref(true)       // 文档菜单的加载动画
-const showSort = ref(false)            // 是否显示文档排序    
+const docTreeLoading = ref(true) // 文档菜单的加载动画
+const showSort = ref(false) // 是否显示文档排序
 const docTreeData = ref<DocTree[]>([]) // 文档菜单
 
 // 依赖注入
@@ -152,43 +158,45 @@ provide(provideKeyDocTree, docTreeData)
  * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
  */
 const getDocTree = () => {
-  docTreeLoading.value = true;
-  docTreeApi({ onlyPicture: true }).then(resp => {
-    const docTree: DocTree[] = resp.data
-    // 两种类型的交界位置
-    let lastPicIndex: number = docTree.length - 1
-    // 循环一级文件夹，第一个文章文件夹即是最后一个图片文件夹的位置
-    for (let i = 0; i < docTree.length; i++) {
-      let doc = docTree[i]
-      if (doc.ty === 1) {
-        lastPicIndex = i
-        break
+  docTreeLoading.value = true
+  docTreeApi({ onlyPicture: true })
+    .then((resp) => {
+      const docTree: DocTree[] = resp.data
+      // 两种类型的交界位置
+      let lastPicIndex: number = docTree.length - 1
+      // 循环一级文件夹，第一个文章文件夹即是最后一个图片文件夹的位置
+      for (let i = 0; i < docTree.length; i++) {
+        let doc = docTree[i]
+        if (doc.ty === 1) {
+          lastPicIndex = i
+          break
+        }
       }
-    }
 
-    // 插入分割符
-    docTree.splice(Math.max(lastPicIndex, 1), 0, {
-      i: docTree[0].i - 100000,
-      p: 0,
-      n: '',
-      o: 0,
-      t: [],
-      s: 0,
-      icon: '',
-      ty: 11,
-      star: 0
+      // 插入分割符
+      docTree.splice(Math.max(lastPicIndex, 1), 0, {
+        i: docTree[0].i - 100000,
+        p: 0,
+        n: '',
+        o: 0,
+        t: [],
+        s: 0,
+        icon: '',
+        ty: 11,
+        star: 0
+      })
+
+      docTreeData.value = docTree
+      concatSort(docTreeData.value)
     })
-
-    docTreeData.value = docTree
-    concatSort(docTreeData.value)
-  }).finally(() => {
-    docTreeLoading.value = false
-  })
+    .finally(() => {
+      docTreeLoading.value = false
+    })
 }
 
 /**
  * 在名称中显式排序
- * @param trees 
+ * @param trees
  */
 const concatSort = (trees: DocTree[]) => {
   for (let i = 0; i < trees.length; i++) {
@@ -244,17 +252,18 @@ const removeListenerTreeDocsRightMenu = () => {
 //#endregion
 
 //#region 右键菜单功能
-
 /**
  * 删除文档
  */
 const delDoc = () => {
-  ElMessageBox.confirm(
-    `是否确定删除文件夹: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后将不可恢复！`, {
-    confirmButtonText: '确定删除', cancelButtonText: '我再想想', type: 'info', draggable: true, dangerouslyUseHTMLString: true,
-  }
-  ).then(() => {
-    folderDelApi({ id: curDoc.value.i }).then(_resp => {
+  ElMessageBox.confirm(`是否确定删除文件夹: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后将不可恢复！`, {
+    confirmButtonText: '确定删除',
+    cancelButtonText: '我再想想',
+    type: 'info',
+    draggable: true,
+    dangerouslyUseHTMLString: true
+  }).then(() => {
+    folderDelApi({ id: curDoc.value.i }).then((_resp) => {
       Notify.success(`删除文件夹成功`)
       getDocTree()
     })
@@ -262,9 +271,8 @@ const delDoc = () => {
 }
 
 //#region ----------------------------------------< 新增修改详情弹框 >--------------------------------------
-
 const PictureInfoRef = ref()
-const isShowDocInfoDialog = ref<boolean>(false);
+const isShowDocInfoDialog = ref<boolean>(false)
 
 /**
  * 显示弹框
@@ -283,13 +291,20 @@ const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
   }
   isShowDocInfoDialog.value = true
   if (dialogType === 'add') {
-    nextTick(() => { PictureInfoRef.value.reload(dialogType, undefined, pid) })
+    nextTick(() => {
+      PictureInfoRef.value.reload(dialogType, undefined, pid)
+    })
   }
   if (dialogType === 'upd') {
     nextTick(() => {
       PictureInfoRef.value.reload(dialogType, curDoc.value.i)
     })
   }
+}
+
+const savedCallback = () => {
+  isShowDocInfoDialog.value = false
+  getDocTree()
 }
 
 //#endregion 右键菜单
@@ -299,7 +314,6 @@ const clickCurDoc = (tree: DocTree) => {
 }
 
 const emits = defineEmits(['clickDoc'])
-
 </script>
 
 <style scoped lang="scss">

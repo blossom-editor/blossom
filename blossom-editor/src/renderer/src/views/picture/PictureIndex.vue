@@ -148,8 +148,8 @@ const cardClass = computed(() => {
 })
 
 //#region ----------------------------------------< 当前文件当前文件 >----------------------------
-const curFolder = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 type PageParam = { pageNum: number; pageSize: number; pid: number; name: string; starStatus: number | undefined } // 分页对象类型
+const curFolder = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 // 列表参数
 const picuturePageParam = ref<PageParam>({
   pageNum: 1,
