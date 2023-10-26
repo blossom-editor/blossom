@@ -817,7 +817,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 
 <style lang="scss">
 .quick-tags-container {
-  @include box(100%, 'auto');
+  @include box(100%, auto);
   @include flex(row, flex-start, flex-start);
   align-content: flex-start;
   flex-wrap: wrap;
