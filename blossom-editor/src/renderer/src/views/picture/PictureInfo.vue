@@ -1,10 +1,9 @@
 <template>
   <div class="fora-info-root">
-
     <!-- 标题 -->
     <div class="info-title-wrapper">
       <div class="info-icon">
-        <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px;width: 40px;" aria-hidden="true">
+        <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px; width: 40px" aria-hidden="true">
           <use :xlink:href="'#' + docForm.icon"></use>
         </svg>
       </div>
@@ -13,13 +12,29 @@
 
     <div v-loading="isLoading">
       <div class="info-tags-container">
-        <el-input v-if="inputVisible" ref="InputRef" style="width: 75px;" v-model="inputValue"
-          @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
-        <el-button v-else style="width: 75px;" @click="showInput">
-          + 标签
-        </el-button>
-        <el-tag v-for=" tag  in  docForm?.tags " :key="tag" :disable-transitions="false" @close="handleTagClose(tag)"
-          size="default" closable>
+        <el-popover placement="top-start" :width="490" trigger="click" :show-after="0" :hide-after="0">
+          <template #reference>
+            <el-button>选择标签</el-button>
+          </template>
+          <div class="quick-tags-container">
+            <span
+              v-for="quickTag in quickTags.values()"
+              :key="quickTag.name"
+              :class="['quick-tag', quickTag.selected ? 'selected' : '']"
+              @click="handleQuickTagClick(quickTag)">
+              {{ quickTag.name }}
+            </span>
+          </div>
+        </el-popover>
+        <el-input
+          v-if="inputVisible"
+          ref="InputRef"
+          style="width: 75px"
+          v-model="inputValue"
+          @keyup.enter="handleInputConfirm"
+          @blur="handleInputConfirm" />
+        <el-button v-else style="width: 75px" @click="showInput"> + 标签 </el-button>
+        <el-tag v-for="tag in docForm?.tags" :key="tag" :disable-transitions="false" @close="handleTagClose(tag)" size="default" closable>
           {{ tag }}
         </el-tag>
       </div>
@@ -27,15 +42,25 @@
       <div class="info-form">
         <el-form :inline="true" :model="docForm" :rules="docFormRule" label-width="60px">
           <el-form-item label="上级菜单">
-            <el-tree-select v-model="docForm.pid" :data="docTreeData" style="--el-form-inline-content-width:432px"
-              node-key="i" :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }" :indent="10" :clearable="true"
-              :accordion="true" :show-checkbox="true" :check-strictly="true" placeholder="请选择上级菜单" @clear="clearPid">
+            <el-tree-select
+              v-model="docForm.pid"
+              style="--el-form-inline-content-width: 432px"
+              :data="docTreeData"
+              node-key="i"
+              :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }"
+              :indent="10"
+              :clearable="true"
+              :accordion="true"
+              :show-checkbox="true"
+              :check-strictly="true"
+              placeholder="请选择上级菜单"
+              @clear="clearPid">
             </el-tree-select>
           </el-form-item>
 
           <!--  -->
           <el-form-item label="名称" prop="name">
-            <el-input v-model="docForm.name" style="width:432px" placeholder="文件夹名称">
+            <el-input v-model="docForm.name" style="width: 432px" placeholder="文件夹名称">
               <template #prefix>
                 <el-icon size="15">
                   <Document />
@@ -43,23 +68,21 @@
               </template>
               <template #append>
                 <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
-                  <div style="cursor: pointer;font-size: 15px;" @click="openExtenal('https://www.emojiall.com/zh-hans')">
-                    😉
-                  </div>
+                  <div style="cursor: pointer; font-size: 15px" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
                 </el-tooltip>
               </template>
             </el-input>
           </el-form-item>
 
           <el-form-item label="排序">
-            <el-input-number :min="1" v-model="docForm.sort" style="width:176px" />
+            <el-input-number :min="1" v-model="docForm.sort" style="width: 176px" />
           </el-form-item>
 
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标, wl-">
+            <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标, wl-">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
-                  <div style="cursor: pointer;font-size: 20px;" @click="openNewIconWindow()">
+                  <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>
                     </svg>
@@ -71,15 +94,23 @@
 
           <!--  -->
           <el-form-item label="描述">
-            <el-input type="textarea" v-model="docForm.describes" style="width:432px"
-              :autosize="{ minRows: 4, maxRows: 4 }" resize="none" placeholder="描述下文件夹或文章吧"></el-input>
+            <el-input
+              type="textarea"
+              v-model="docForm.describes"
+              style="width: 432px"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              resize="none"
+              placeholder="描述下文件夹或文章吧"></el-input>
           </el-form-item>
 
           <!--  -->
           <el-form-item label="图片上传目录" prop="storePath">
-            <el-input v-model="docForm.storePath" style="width:432px" placeholder="图片的保存路径, 需在头尾增加 / "
+            <el-input
+              v-model="docForm.storePath"
+              style="width: 432px"
+              placeholder="图片的保存路径, 需在头尾增加 / "
               @change="formatStorePath"></el-input>
-            <div style="font-size: 12px;display: flex;flex-direction: row;align-items: center;">
+            <div style="font-size: 12px; display: flex; flex-direction: row; align-items: center">
               图片将保存到: <bl-tag>{{ storePath }}</bl-tag> 路径下
             </div>
           </el-form-item>
@@ -99,11 +130,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject, computed } from 'vue'
+import { ref, nextTick, inject, computed, toRaw, watch } from 'vue'
 import { ElInput } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document } from '@element-plus/icons-vue'
-import { provideKeyDocTree } from '@renderer/views/doc/doc'
+import { getDocsByPid, provideKeyDocTree } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import { folderInfoApi, folderAddApi, folderUpdApi } from '@renderer/api/blossom'
 import { isNotBlank } from '@renderer/assets/utils/obj'
@@ -118,11 +149,11 @@ const storePath = computed(() => {
 })
 
 // 当前表单的类型, 新增(add), 修改(upd), 详情(info)
-let curDocDialogType: DocDialogType;
+let curDocDialogType: DocDialogType
 // 表单加载项
 const isLoading = ref(false)
 // 当前菜单, 用作上级菜单的树状下拉列表
-const docTreeData = inject<DocTree[]>(provideKeyDocTree) as DocTree[];
+const docTreeData = inject<DocTree[]>(provideKeyDocTree) as DocTree[]
 // 表单
 const docForm = ref<DocInfo>({
   id: 0,
@@ -139,12 +170,8 @@ const docForm = ref<DocInfo>({
   type: 2
 })
 const docFormRule = ref<FormRules<DocInfo>>({
-  storePath: [
-    { required: true, message: '上传目录为必填项', trigger: 'blur' }
-  ],
-  name: [
-    { required: true, message: '名称为必填项', trigger: 'blur' }
-  ]
+  storePath: [{ required: true, message: '上传目录为必填项', trigger: 'blur' }],
+  name: [{ required: true, message: '名称为必填项', trigger: 'blur' }]
 })
 
 /**
@@ -154,14 +181,22 @@ const docFormRule = ref<FormRules<DocInfo>>({
  * @param pid        初始化父级文件夹
  */
 const reload = (dialogType: DocDialogType, id?: number, pid?: number) => {
-  curDocDialogType = dialogType;
-  docForm.value.type = 2;
+  curDocDialogType = dialogType
+  docForm.value.type = 2
   // 只有修改时才查询数据, 新增时不查询
   if (dialogType == 'upd') {
-    const handleResp = (resp: any) => { docForm.value = resp.data; }
-    const handleFinally = () => { setTimeout(() => { isLoading.value = false }, 100) }
-    isLoading.value = true;
-    folderInfoApi({ id: id }).then(resp => handleResp(resp)).finally(handleFinally)
+    const handleResp = (resp: any) => {
+      docForm.value = resp.data
+    }
+    const handleFinally = () => {
+      setTimeout(() => {
+        isLoading.value = false
+      }, 100)
+    }
+    isLoading.value = true
+    folderInfoApi({ id: id })
+      .then((resp) => handleResp(resp))
+      .finally(handleFinally)
   }
 
   if (dialogType == 'add') {
@@ -173,7 +208,7 @@ const reload = (dialogType: DocDialogType, id?: number, pid?: number) => {
 
 /**
  * 检查树状下拉列表中的选项是否被禁用, 文章将被禁用, 即上级菜单不能是文章, 只能是文件夹
- * @param data 
+ * @param data
  */
 const checkSelectTreeIsDisabled = (data: any) => {
   return data.ty !== 2
@@ -182,7 +217,9 @@ const checkSelectTreeIsDisabled = (data: any) => {
 /**
  * 清空上级菜单选项, 清空后的上级菜单为0
  */
-const clearPid = () => { docForm.value.pid = 0 }
+const clearPid = () => {
+  docForm.value.pid = 0
+}
 
 /**
  * 存储地址会影响图片保存路径及文章的备份地址, 为保证正确需要进行较为严格的格式校验
@@ -191,7 +228,7 @@ const formatStorePath = () => {
   if (docForm.value.storePath == undefined || docForm.value.storePath?.length == 0) {
     docForm.value.storePath = '/'
   }
-  let path: string = docForm.value.storePath;
+  let path: string = docForm.value.storePath
   if (!path.startsWith('/')) {
     path = '/' + path
   }
@@ -220,11 +257,21 @@ const saveDoc = () => {
     emits('saved')
   }
   // finally 回调
-  const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
-  if (curDocDialogType == 'add') // 新增文件夹
-    folderAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-  if (curDocDialogType == 'upd') // 修改文件夹
-    folderUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+  const handleFinally = () => {
+    setTimeout(() => {
+      saveLoading.value = false
+    }, 300)
+  }
+  if (curDocDialogType == 'add')
+    // 新增文件夹
+    folderAddApi(docForm.value)
+      .then((resp) => handleResp(resp))
+      .finally(handleFinally)
+  if (curDocDialogType == 'upd')
+    // 修改文件夹
+    folderUpdApi(docForm.value)
+      .then((resp) => handleResp(resp))
+      .finally(handleFinally)
 }
 //#endregion
 
@@ -232,9 +279,48 @@ const saveDoc = () => {
 const inputValue = ref('')
 const inputVisible = ref(false)
 const InputRef = ref<InstanceType<typeof ElInput>>()
+const quickTags = ref<Map<string, QuickTag>>(new Map())
+
+watch(
+  () => docForm.value?.pid,
+  (newVal: number) => {
+    if (newVal === undefined) {
+      docForm.value.pid = 0
+    }
+    if (newVal != undefined) {
+      initQuickTags(newVal)
+    }
+  }
+)
+
+const initQuickTags = (pid: number) => {
+  let docs = getDocsByPid(pid, toRaw(docTreeData.value))
+  let tags = new Set()
+  for (let i = 0; i < docs.length; i++) {
+    const doc = docs[i]
+    for (let j = 0; j < doc.tags.length; j++) {
+      const tag: string = doc.tags[j]
+      if (!tags.has(tag)) {
+        tags.add(tag)
+        quickTags.value.set(tag, { name: tag, selected: docForm.value.tags.includes(tag) })
+      }
+    }
+  }
+}
+
+const handleQuickTagClick = (tag: QuickTag) => {
+  if (tag.selected) {
+    docForm.value?.tags.splice(docForm.value.tags.indexOf(tag.name), 1)
+    quickTags.value.set(tag.name, { name: tag.name, selected: false })
+  } else {
+    docForm.value.tags.push(tag.name)
+    quickTags.value.set(tag.name, { name: tag.name, selected: true })
+  }
+}
 
 const handleTagClose = (tag: string) => {
   docForm.value?.tags.splice(docForm.value.tags.indexOf(tag), 1)
+  quickTags.value.set(tag, { name: tag, selected: false })
 }
 
 const showInput = () => {
@@ -247,6 +333,7 @@ const showInput = () => {
 const handleInputConfirm = () => {
   if (inputValue.value && docForm.value.tags.indexOf(inputValue.value) == -1) {
     docForm.value?.tags.push(inputValue.value)
+    quickTags.value.set(inputValue.value, { name: inputValue.value, selected: true })
   }
   inputVisible.value = false
   inputValue.value = ''
@@ -298,7 +385,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       color: var(--el-border-color);
       text-align: center;
     }
-
   }
 
   .info-img {
@@ -309,8 +395,8 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       @include box(515px, 51px);
       @include flex(column, center, center);
       @include font(12px);
-      @include themeColor(#CACACA, #494949);
-      @include themeBorder(1px, #B0B0B0, #494949, 'around', 5px, dashed);
+      @include themeColor(#cacaca, #494949);
+      @include themeBorder(1px, #b0b0b0, #494949, 'around', 5px, dashed);
     }
 
     img {
@@ -323,7 +409,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
   .article-stat-container {
     @include box(100%, $height-stat);
     @include flex(row, flex-start, center);
-
 
     .stat-details {
       @include box(calc(100% - 80px - 150px), 100%);
@@ -342,7 +427,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
         @include box(35%, 100%);
       }
 
-      &>div {
+      & > div {
         padding-left: 10px;
         @include flex(column, space-around, flex-start);
       }
@@ -380,7 +465,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
           color: var(--el-color-primary);
         }
       }
-
     }
 
     .stat-star,
@@ -405,7 +489,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
     text-align: left;
     overflow-y: scroll;
 
-    &>span,
+    & > span,
     button {
       margin: 3px 3px;
     }

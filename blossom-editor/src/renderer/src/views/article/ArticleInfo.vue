@@ -1,10 +1,9 @@
 <template>
   <div class="article-info-root">
-
     <!-- 标题 -->
     <div class="info-title-wrapper">
       <div class="info-icon">
-        <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px;width: 40px;" aria-hidden="true">
+        <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px; width: 40px" aria-hidden="true">
           <use :xlink:href="'#' + docForm.icon"></use>
         </svg>
       </div>
@@ -41,7 +40,6 @@
 
         <!-- 按钮 -->
         <div class="stat-buttons">
-
           <bl-row just="space-around">
             <el-tooltip content="公开访问 ↑" effect="blossomt" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-cloudupload-line', curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
@@ -51,16 +49,15 @@
             </el-tooltip>
             <el-tooltip effect="blossomt" placement="top" :hide-after="0">
               <template #content>
-                <div style="margin:3px 0;"> {{ curIsFolder ? '文件夹无法同步版本' : '公开文章版本同步' }} </div>
-                <div style="border-top:2px solid #fff;" v-if="diffVersion > 0">
+                <div style="margin: 3px 0">{{ curIsFolder ? '文件夹无法同步版本' : '公开文章版本同步' }}</div>
+                <div style="border-top: 2px solid #fff" v-if="diffVersion > 0">
                   版本差异: {{ diffVersion }} (本地 {{ docForm.version }} / 公开 {{ docForm.openVersion }})<br />
                   同步时间: {{ docForm.syncTime }}<br />
                   修改时间: {{ docForm.updTime }}
                 </div>
               </template>
               <el-badge :value="diffVersion" :is-dot="true" :hidden="diffVersion == 0">
-                <div :class="['iconbl bl-a-cloudrefresh-line', diffVersion == 0 ? 'disabled' : '']" @click="sync">
-                </div>
+                <div :class="['iconbl bl-a-cloudrefresh-line', diffVersion == 0 ? 'disabled' : '']" @click="sync"></div>
               </el-badge>
             </el-tooltip>
           </bl-row>
@@ -68,20 +65,35 @@
 
         <!-- 星标 -->
         <div class="stat-star">
-          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curIsFolder ? 'disabled' : '']" @click="star(1)">
-          </div>
+          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curIsFolder ? 'disabled' : '']" @click="star(1)"></div>
           <div v-else class="iconbl bl-star-fill" @click="star(0)"></div>
         </div>
       </div>
 
       <div class="info-tags-container">
-        <el-input v-if="inputVisible" ref="InputRef" style="width: 75px;" v-model="inputValue"
-          @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
-        <el-button v-else style="width: 75px;" @click="showInput">
-          + 标签
-        </el-button>
-        <el-tag v-for="tag in docForm?.tags" :key="tag" :disable-transitions="false" @close="handleTagClose(tag)"
-          size="default" closable>
+        <el-popover placement="top-start" :width="490" trigger="click" :show-after="0" :hide-after="0">
+          <template #reference>
+            <el-button>选择标签</el-button>
+          </template>
+          <div class="quick-tags-container">
+            <span
+              v-for="quickTag in quickTags.values()"
+              :key="quickTag.name"
+              :class="['quick-tag', quickTag.selected ? 'selected' : '']"
+              @click="handleQuickTagClick(quickTag)">
+              {{ quickTag.name }}
+            </span>
+          </div>
+        </el-popover>
+        <el-input
+          v-if="inputVisible"
+          ref="InputRef"
+          style="width: 75px"
+          v-model="inputValue"
+          @keyup.enter="handleInputConfirm"
+          @blur="handleInputConfirm" />
+        <el-button v-else style="width: 75px" @click="showInput"> + 标签 </el-button>
+        <el-tag v-for="tag in docForm?.tags" :key="tag" :disable-transitions="false" @close="handleTagClose(tag)" size="default" closable>
           {{ tag }}
         </el-tag>
       </div>
@@ -96,15 +108,25 @@
               show-checkbox  : 每个节点前增加一个单选框
               check-strictly : true 为选中子节点不选中父和祖父
              -->
-            <el-tree-select v-model="docForm.pid" :data="docTreeData" style="--el-form-inline-content-width:432px"
-              node-key="i" :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }" :indent="10" :clearable="true"
-              :accordion="true" :show-checkbox="true" :check-strictly="true" placeholder="请选择上级菜单" @clear="clearPid">
+            <el-tree-select
+              style="--el-form-inline-content-width: 432px"
+              v-model="docForm.pid"
+              node-key="i"
+              :data="docTreeData"
+              :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }"
+              :indent="10"
+              :clearable="true"
+              :accordion="true"
+              :show-checkbox="true"
+              :check-strictly="true"
+              placeholder="请选择上级菜单"
+              @clear="pidClear">
             </el-tree-select>
           </el-form-item>
 
           <!--  -->
           <el-form-item label="名称" prop="name">
-            <el-input v-model="docForm.name" style="width:432px" placeholder="文件夹或文章的名称">
+            <el-input v-model="docForm.name" style="width: 432px" placeholder="文件夹或文章的名称">
               <template #prefix>
                 <el-icon size="15">
                   <Document />
@@ -112,9 +134,7 @@
               </template>
               <template #append>
                 <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
-                  <div style="cursor: pointer;font-size: 15px;" @click="openExtenal('https://www.emojiall.com/zh-hans')">
-                    😉
-                  </div>
+                  <div style="cursor: pointer; font-size: 15px" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
                 </el-tooltip>
               </template>
             </el-input>
@@ -122,27 +142,28 @@
 
           <!--  -->
           <el-form-item label="类型">
-            <el-radio-group v-model="docForm.type" style="width:176px" :disabled="curDocDialogType == 'upd'">
+            <el-radio-group v-model="docForm.type" style="width: 176px" :disabled="curDocDialogType == 'upd'">
               <el-radio-button :label="1">文件夹</el-radio-button>
               <el-radio-button :label="3">文章</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序">
-            <el-input-number :min="1" v-model="docForm.sort" style="width:176px" />
+            <el-input-number :min="1" v-model="docForm.sort" style="width: 176px" />
           </el-form-item>
 
           <!--  -->
           <el-form-item label="主色调">
-            <el-input v-model="docForm.color"
+            <el-input
+              v-model="docForm.color"
               :style="{ width: '176px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
               placeholder="主色调">
             </el-input>
           </el-form-item>
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width:176px" placeholder="图标, wl-">
+            <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标, wl-">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
-                  <div style="cursor: pointer;font-size: 20px;" @click="openNewIconWindow()">
+                  <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>
                     </svg>
@@ -154,7 +175,7 @@
 
           <!--  -->
           <el-form-item label="封面">
-            <el-input v-model="docForm.cover" style="width:432px" placeholder="封面图片的访问地址, http://...">
+            <el-input v-model="docForm.cover" style="width: 432px" placeholder="封面图片的访问地址, http://...">
               <template #prefix>
                 <el-icon size="15">
                   <Picture />
@@ -165,15 +186,23 @@
 
           <!--  -->
           <el-form-item label="描述">
-            <el-input type="textarea" v-model="docForm.describes" style="width:432px"
-              :autosize="{ minRows: 4, maxRows: 4 }" resize="none" placeholder="描述下文件夹或文章吧"></el-input>
+            <el-input
+              type="textarea"
+              v-model="docForm.describes"
+              style="width: 432px"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              resize="none"
+              placeholder="描述下文件夹或文章吧"></el-input>
           </el-form-item>
 
           <!--  -->
           <el-form-item label="图片上传目录" prop="storePath" v-if="docForm.type != 3">
-            <el-input v-model="docForm.storePath" style="width:432px" placeholder="图片的保存路径, 需在头尾增加 / "
+            <el-input
+              v-model="docForm.storePath"
+              style="width: 432px"
+              placeholder="图片的保存路径, 需在头尾增加 / "
               @change="formatStorePath"></el-input>
-            <div style="font-size: 12px;display: flex;flex-direction: row;align-items: center;">
+            <div style="font-size: 12px; display: flex; flex-direction: row; align-items: center">
               图片将保存到: <bl-tag>{{ storePath }}</bl-tag> 路径下
             </div>
           </el-form-item>
@@ -192,20 +221,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject, computed, watch } from 'vue'
+import { ref, nextTick, inject, computed, watch, toRaw } from 'vue'
 import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document, Picture } from '@element-plus/icons-vue'
-import { provideKeyDocTree } from '@renderer/views/doc/doc'
+import { provideKeyDocTree, getDocsByPid } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import {
-  folderInfoApi, folderAddApi, folderUpdApi, folderOpenApi,
-  articleInfoApi, articleAddApi, articleUpdApi, articleOpenApi, articleSyncApi, articleStarApi
+  folderInfoApi,
+  folderAddApi,
+  folderUpdApi,
+  folderOpenApi,
+  articleInfoApi,
+  articleAddApi,
+  articleUpdApi,
+  articleOpenApi,
+  articleSyncApi,
+  articleStarApi
 } from '@renderer/api/blossom'
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
-
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
 const userStore = useUserStore()
@@ -215,11 +251,12 @@ const storePath = computed(() => {
 })
 
 // 当前表单的类型, 新增(add), 修改(upd), 详情(info)
-let curDocDialogType: DocDialogType;
+let curDocDialogType: DocDialogType
 // 表单加载项
 const isLoading = ref(false)
 // 当前菜单, 用作上级菜单的树状下拉列表
-const docTreeData = inject<DocTree[]>(provideKeyDocTree) as DocTree[];
+const docTreeData = inject<DocTree[]>(provideKeyDocTree) as DocTree[]
+const DocFormRef = ref<FormInstance>()
 // 表单
 const docForm = ref<DocInfo>({
   id: 0,
@@ -235,43 +272,46 @@ const docForm = ref<DocInfo>({
   storePath: '/',
   type: 3
 })
-
-const DocFormRef = ref<FormInstance>()
 const docFormRule = ref<FormRules<DocInfo>>({
   storePath: [{ required: true, message: '上传目录为必填项', trigger: 'blur' }],
-  name: [{
-    required: true, trigger: 'blur', validator: (_rule: any, value: any, callback: any) => {
-      if (value === '') {
-        callback(new Error('文档名称为必填项'))
-      }
-      const reg = /^\.|[\\\\/:*?\"<>|]/img;
-      if (reg.test(value)) {
-        callback(new Error(`文档名不得包含以下字符 . * " : \\ / ? < > |`))
-      } else {
-        callback()
+  name: [
+    {
+      required: true,
+      trigger: 'blur',
+      validator: (_rule: any, value: any, callback: any) => {
+        if (value === '') {
+          callback(new Error('文档名称为必填项'))
+        }
+        const reg = /^\.|[\\\\/:*?\"<>|]/gim
+        if (reg.test(value)) {
+          callback(new Error(`文档名不得包含以下字符 . * " : \\ / ? < > |`))
+        } else {
+          callback()
+        }
       }
     }
-  }]
+  ]
 })
 
-watch(() => docForm.value.type, (val) => {
-  if (val === 1 && docForm.value.icon === '') {
-    docForm.value.icon = 'wl-folder'
+watch(
+  () => docForm.value.type,
+  (val) => {
+    if (val === 1 && docForm.value.icon === '') {
+      docForm.value.icon = 'wl-folder'
+    }
+    if (val === 3 && docForm.value.icon === 'wl-folder') {
+      docForm.value.icon = ''
+    }
   }
-  if (val === 3 && docForm.value.icon === 'wl-folder') {
-    docForm.value.icon = ''
-  }
-})
+)
 
 /**
  * 计算本地与公开文章的版本差异
  */
 const diffVersion = computed<number>(() => {
-  if (docForm.value.openStatus == 0)
-    return 0;
-  if (docForm.value.version == undefined || docForm.value.openVersion == undefined)
-    return 0
-  return docForm.value.version - docForm.value.openVersion;
+  if (docForm.value.openStatus == 0) return 0
+  if (docForm.value.version == undefined || docForm.value.openVersion == undefined) return 0
+  return docForm.value.version - docForm.value.openVersion
 })
 
 /**
@@ -282,18 +322,28 @@ const diffVersion = computed<number>(() => {
  * @param pid        初始化父级文件夹
  */
 const reload = (dialogType: DocDialogType, id?: number, docType?: DocType, pid?: number) => {
-  curDocDialogType = dialogType;
-  docForm.value.type = docType == undefined ? 3 : docType;
+  curDocDialogType = dialogType
+  docForm.value.type = docType == undefined ? 3 : docType
   // 只有修改时才查询数据, 新增时不查询
   if (dialogType == 'upd') {
-    const handleResp = (resp: any) => { docForm.value = resp.data; }
-    const handleFinally = () => { setTimeout(() => { isLoading.value = false }, 100) }
-    isLoading.value = true;
+    const handleResp = (resp: any) => {
+      docForm.value = resp.data
+    }
+    const handleFinally = () => {
+      setTimeout(() => {
+        isLoading.value = false
+      }, 100)
+    }
+    isLoading.value = true
     if (docType == 1) {
-      folderInfoApi({ id: id }).then(resp => handleResp(resp)).finally(handleFinally)
+      folderInfoApi({ id: id })
+        .then((resp) => handleResp(resp))
+        .finally(handleFinally)
     }
     if (docType == 3) {
-      articleInfoApi({ id: id, showToc: false, showMarkdown: false, showHtml: false }).then(resp => handleResp(resp)).finally(handleFinally)
+      articleInfoApi({ id: id, showToc: false, showMarkdown: false, showHtml: false })
+        .then((resp) => handleResp(resp))
+        .finally(handleFinally)
     }
   }
 
@@ -306,7 +356,7 @@ const reload = (dialogType: DocDialogType, id?: number, docType?: DocType, pid?:
 
 /**
  * 检查树状下拉列表中的选项是否被禁用, 文章将被禁用, 即上级菜单不能是文章, 只能是文件夹
- * @param data 
+ * @param data
  */
 const checkSelectTreeIsDisabled = (data: any) => {
   return data.ty === 3
@@ -315,7 +365,9 @@ const checkSelectTreeIsDisabled = (data: any) => {
 /**
  * 清空上级菜单选项, 清空后的上级菜单为0
  */
-const clearPid = () => { docForm.value.pid = 0 }
+const pidClear = () => {
+  docForm.value.pid = 0
+}
 
 /**
  * 存储地址会影响图片保存路径及文章的备份地址, 为保证正确需要进行较为严格的格式校验
@@ -324,7 +376,7 @@ const formatStorePath = () => {
   if (docForm.value.storePath == undefined || docForm.value.storePath?.length == 0) {
     docForm.value.storePath = '/'
   }
-  let path: string = docForm.value.storePath;
+  let path: string = docForm.value.storePath
   if (!path.startsWith('/')) {
     path = '/' + path
   }
@@ -341,9 +393,15 @@ const formatStorePath = () => {
  * 当前文档是否是文件夹类型(folder/1)
  */
 const curIsFolder = computed<boolean>(() => {
-  if (isNull(docForm)) { return false }
-  if (isNull(docForm.value)) { return false }
-  if (isNull(docForm.value?.type) || docForm.value?.type != 1) { return false }
+  if (isNull(docForm)) {
+    return false
+  }
+  if (isNull(docForm.value)) {
+    return false
+  }
+  if (isNull(docForm.value?.type) || docForm.value?.type != 1) {
+    return false
+  }
   return true
 })
 
@@ -351,9 +409,15 @@ const curIsFolder = computed<boolean>(() => {
  * 当前文档是否是文章类型(article/2)
  */
 const curIsArticle = computed<boolean>(() => {
-  if (isNull(docForm)) { return false }
-  if (isNull(docForm.value)) { return false }
-  if (isNull(docForm.value?.type) || docForm.value?.type != 3) { return false }
+  if (isNull(docForm)) {
+    return false
+  }
+  if (isNull(docForm.value)) {
+    return false
+  }
+  if (isNull(docForm.value?.type) || docForm.value?.type != 3) {
+    return false
+  }
   return true
 })
 
@@ -361,9 +425,15 @@ const curIsArticle = computed<boolean>(() => {
  * 是否star: true:star(1); false:No Star(0)
  */
 const curIsStar = computed<boolean>(() => {
-  if (isNull(docForm)) { return false }
-  if (isNull(docForm.value)) { return false }
-  if (isNull(docForm.value?.starStatus) || docForm.value?.starStatus === 0) { return false }
+  if (isNull(docForm)) {
+    return false
+  }
+  if (isNull(docForm.value)) {
+    return false
+  }
+  if (isNull(docForm.value?.starStatus) || docForm.value?.starStatus === 0) {
+    return false
+  }
   return true
 })
 
@@ -371,8 +441,12 @@ const curIsStar = computed<boolean>(() => {
  * 是否公开: true:公开(1); false:未公开(0)
  */
 const curIsOpen = computed<boolean>(() => {
-  if (isNull(docForm)) { return false }
-  if (isNull(docForm.value)) { return false }
+  if (isNull(docForm)) {
+    return false
+  }
+  if (isNull(docForm.value)) {
+    return false
+  }
   if (isNull(docForm.value?.openStatus) || docForm.value?.openStatus === 0) {
     return false
   }
@@ -385,7 +459,7 @@ const curIsOpen = computed<boolean>(() => {
 
 /**
  * star 文章
- * @param changeStarStatus 
+ * @param changeStarStatus
  */
 const star = (changeStarStatus: number) => {
   if (curIsArticle.value) {
@@ -401,35 +475,32 @@ const star = (changeStarStatus: number) => {
 //#region --------------------------------------------------< 公开 >--------------------------------------------------
 /**
  * 公开文档
- * @param changeStarStatus 
+ * @param changeStarStatus
  */
 const open = (changeOpenStatus: number) => {
-  if (curIsOpen.value && changeOpenStatus == 1)
-    return
-  if (!curIsOpen.value && changeOpenStatus == 0)
-    return
+  if (curIsOpen.value && changeOpenStatus == 1) return
+  if (!curIsOpen.value && changeOpenStatus == 0) return
   ElMessageBox.confirm(
     changeOpenStatus === 0 ? '取消后文章的PV,UV数据不会删除, 是否确认取消公开访问?' : '是否确认允许公开访问?',
     changeOpenStatus === 0 ? '取消公开' : '文档公开',
-    { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning' })
-    .then(() => {
-      if (curIsArticle.value) {
-        articleOpenApi({ id: docForm.value.id, openStatus: changeOpenStatus }).then((_) => {
-          docForm.value.openStatus = changeOpenStatus
-          Notify.success(docForm.value.openStatus === 0 ? '取消公开成功' : '公开成功')
-        })
-      } else if (curIsFolder.value) {
-        folderOpenApi({ id: docForm.value.id, openStatus: changeOpenStatus }).then((_) => {
-          docForm.value.openStatus = changeOpenStatus
-          Notify.success(docForm.value.openStatus === 0 ? '取消公开成功' : '公开成功')
-        })
-      }
-    })
+    { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning' }
+  ).then(() => {
+    if (curIsArticle.value) {
+      articleOpenApi({ id: docForm.value.id, openStatus: changeOpenStatus }).then((_) => {
+        docForm.value.openStatus = changeOpenStatus
+        Notify.success(docForm.value.openStatus === 0 ? '取消公开成功' : '公开成功')
+      })
+    } else if (curIsFolder.value) {
+      folderOpenApi({ id: docForm.value.id, openStatus: changeOpenStatus }).then((_) => {
+        docForm.value.openStatus = changeOpenStatus
+        Notify.success(docForm.value.openStatus === 0 ? '取消公开成功' : '公开成功')
+      })
+    }
+  })
 }
 
 const sync = () => {
-  if (!curIsOpen.value || curIsFolder.value)
-    return
+  if (!curIsOpen.value || curIsFolder.value) return
   articleSyncApi({ id: docForm.value.id }).then((resp) => {
     docForm.value.openVersion = resp.data.openVersion
     docForm.value.syncTime = resp.data.syncTime
@@ -454,32 +525,86 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
         emits('saved', curDocDialogType)
       }
       // finally 回调
-      const handleFinally = () => { setTimeout(() => { saveLoading.value = false; }, 300); }
+      const handleFinally = () => {
+        setTimeout(() => {
+          saveLoading.value = false
+        }, 300)
+      }
       // 新增文件夹
       if (docForm.value.type == 1) {
         if (curDocDialogType == 'add')
-          folderAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-        if (curDocDialogType == 'upd') // 修改文件夹
-          folderUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+          folderAddApi(docForm.value)
+            .then((resp) => handleResp(resp))
+            .finally(handleFinally)
+        if (curDocDialogType == 'upd')
+          // 修改文件夹
+          folderUpdApi(docForm.value)
+            .then((resp) => handleResp(resp))
+            .finally(handleFinally)
       }
       if (docForm.value.type == 3) {
-        if (curDocDialogType == 'add') // 新增文章
-          articleAddApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
-        if (curDocDialogType == 'upd') // 修改文章
-          articleUpdApi(docForm.value).then(resp => handleResp(resp)).finally(handleFinally)
+        if (curDocDialogType == 'add')
+          // 新增文章
+          articleAddApi(docForm.value)
+            .then((resp) => handleResp(resp))
+            .finally(handleFinally)
+        if (curDocDialogType == 'upd')
+          // 修改文章
+          articleUpdApi(docForm.value)
+            .then((resp) => handleResp(resp))
+            .finally(handleFinally)
       }
     }
   })
 }
 //#endregion
 
-//#region --------------------------------------------------< 新增标签 >--------------------------------------------------
+//#region --------------------------------------------------< 标签 >--------------------------------------------------
 const inputValue = ref('')
 const inputVisible = ref(false)
 const InputRef = ref<InstanceType<typeof ElInput>>()
+const quickTags = ref<Map<string, QuickTag>>(new Map())
+
+watch(
+  () => docForm.value?.pid,
+  (newVal: number) => {
+    if (newVal === undefined) {
+      docForm.value.pid = 0
+    }
+    if (newVal != undefined) {
+      initQuickTags(newVal)
+    }
+  }
+)
+
+const initQuickTags = (pid: number) => {
+  let docs = getDocsByPid(pid, toRaw(docTreeData.value))
+  let tags = new Set()
+  for (let i = 0; i < docs.length; i++) {
+    const doc = docs[i]
+    for (let j = 0; j < doc.tags.length; j++) {
+      const tag: string = doc.tags[j]
+      if (!tags.has(tag)) {
+        tags.add(tag)
+        quickTags.value.set(tag, { name: tag, selected: docForm.value.tags.includes(tag) })
+      }
+    }
+  }
+}
+
+const handleQuickTagClick = (tag: QuickTag) => {
+  if (tag.selected) {
+    docForm.value?.tags.splice(docForm.value.tags.indexOf(tag.name), 1)
+    quickTags.value.set(tag.name, { name: tag.name, selected: false })
+  } else {
+    docForm.value.tags.push(tag.name)
+    quickTags.value.set(tag.name, { name: tag.name, selected: true })
+  }
+}
 
 const handleTagClose = (tag: string) => {
   docForm.value?.tags.splice(docForm.value.tags.indexOf(tag), 1)
+  quickTags.value.set(tag, { name: tag, selected: false })
 }
 
 const showInput = () => {
@@ -490,8 +615,10 @@ const showInput = () => {
 }
 
 const handleInputConfirm = () => {
+  // 有便签且未在标签池中
   if (inputValue.value && docForm.value.tags.indexOf(inputValue.value) == -1) {
-    docForm.value?.tags.push(inputValue.value)
+    docForm.value.tags.push(inputValue.value)
+    quickTags.value.set(inputValue.value, { name: inputValue.value, selected: true })
   }
   inputVisible.value = false
   inputValue.value = ''
@@ -546,8 +673,8 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       @include box(515px, 51px);
       @include flex(column, center, center);
       @include font(12px);
-      @include themeColor(#CACACA, #494949);
-      @include themeBorder(1px, #B0B0B0, #494949, 'around', 5px, dashed);
+      @include themeColor(#cacaca, #494949);
+      @include themeBorder(1px, #b0b0b0, #494949, 'around', 5px, dashed);
     }
 
     img {
@@ -560,7 +687,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
   .article-stat-container {
     @include box(100%, $height-stat);
     @include flex(row, flex-start, center);
-
 
     .stat-details {
       @include box(calc(100% - 80px - 150px), 100%);
@@ -579,7 +705,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
         @include box(35%, 100%);
       }
 
-      &>div {
+      & > div {
         padding-left: 10px;
         @include flex(column, space-around, flex-start);
       }
@@ -617,7 +743,6 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
           color: var(--el-color-primary);
         }
       }
-
     }
 
     .stat-star,
@@ -642,7 +767,15 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
     text-align: left;
     overflow-y: scroll;
 
-    &>span,
+    .info-tags-quick-choise {
+      display: inline-block;
+      border: 1px solid var(--el-border-color);
+      padding: 3px 11px;
+      margin: 3px 3px;
+      font-size: 12px;
+    }
+
+    & > span,
     button {
       margin: 3px 3px;
     }
@@ -678,6 +811,38 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
     font-size: 25px;
     margin-left: 5px;
     cursor: pointer;
+  }
+}
+</style>
+
+<style lang="scss">
+.quick-tags-container {
+  @include box(100%, 'auto');
+  @include flex(row, flex-start, flex-start);
+  align-content: flex-start;
+  flex-wrap: wrap;
+
+  .quick-tag {
+    @include font(11px, 300);
+    line-height: 14px;
+    height: 16px;
+    padding: 1px 4px;
+    margin: 3px;
+    border: 1px solid var(--el-border-color);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border 0.3s;
+
+    &:hover {
+      border: 1px solid var(--el-color-primary);
+    }
+  }
+
+  .quick-tag.selected {
+    @include themeShadow(2px 2px 3px 0 #bbbbbb, 1px 2px 10px 1px #0a0a0a);
+    color: var(--bl-html-color);
+    border: 1px solid var(--el-color-primary);
+    background-color: var(--el-color-primary);
   }
 }
 </style>

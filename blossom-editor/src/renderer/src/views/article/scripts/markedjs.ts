@@ -13,8 +13,9 @@ import mermaid from 'mermaid'
 // markmap
 import { Transformer } from 'markmap-lib'
 import { Markmap, deriveOptions } from 'markmap-view'
-import { ArticleReference, getDocInfoFromTrees } from './article'
+import { ArticleReference } from './article'
 import { picCacheWrapper } from '@renderer/views/picture/scripts/picture'
+import { getDocById } from '@renderer/views/doc/doc'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
@@ -406,7 +407,7 @@ export const renderLink = (href: string | null, title: string | null, text: stri
       }
 
       // 从文章列表中获取文章, 如果找到则认为是内部引用, 否则即使是内部引用格式, 也认为是个外部文章.
-      let article = getDocInfoFromTrees(articleId, docTrees)
+      let article = getDocById(articleId, docTrees)
       if (article != undefined) {
         ref.targetId = article.i
         ref.targetName = article.n
