@@ -17,7 +17,8 @@
             <el-button>选择标签</el-button>
           </template>
           <div class="quick-tags-container">
-            <span
+            <span v-if="quickTags.size === 0" class="quick-tags-placeholder">无标签</span>
+            <span v-else
               v-for="quickTag in quickTags.values()"
               :key="quickTag.name"
               :class="['quick-tag', quickTag.selected ? 'selected' : '']"

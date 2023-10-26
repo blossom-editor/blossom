@@ -76,7 +76,9 @@
             <el-button>选择标签</el-button>
           </template>
           <div class="quick-tags-container">
+            <span v-if="quickTags.size === 0" class="quick-tags-placeholder">无标签</span>
             <span
+              v-else
               v-for="quickTag in quickTags.values()"
               :key="quickTag.name"
               :class="['quick-tag', quickTag.selected ? 'selected' : '']"
@@ -821,6 +823,10 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
   @include flex(row, flex-start, flex-start);
   align-content: flex-start;
   flex-wrap: wrap;
+
+  .quick-tags-placeholder {
+    color: var(--bl-text-color-light);
+  }
 
   .quick-tag {
     @include font(11px, 300);
