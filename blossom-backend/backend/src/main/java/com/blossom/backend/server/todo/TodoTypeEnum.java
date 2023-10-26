@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * 待办事项类型
+ *
  * @since 1.4.0
  */
 public enum TodoTypeEnum {
@@ -26,5 +27,14 @@ public enum TodoTypeEnum {
 
     TodoTypeEnum(Integer type) {
         this.type = type;
+    }
+
+    public static TodoTypeEnum getByType(Integer type) {
+        for (TodoTypeEnum value : TodoTypeEnum.values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        return null;
     }
 }

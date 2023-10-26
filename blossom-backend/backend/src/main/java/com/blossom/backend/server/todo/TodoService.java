@@ -3,6 +3,7 @@ package com.blossom.backend.server.todo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.auth.AuthContext;
@@ -53,6 +54,38 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             }
         }
         return res;
+    }
+
+    /**
+     * 获取全部标签
+     *
+     * @param todoType 待办事项类型
+     * @return 标签集合
+     */
+    public Set<String> tags(TodoTypeEnum todoType, String todoId) {
+        List<String> todoIds = new ArrayList<>();
+        if (todoType == TodoTypeEnum.DAY) {
+            Date today = DateUtil.date();
+            for (DateTime dateTime : DateUtils.range(today, DateUtil.offsetDay(today, 7), DateField.DAY_OF_MONTH)) {
+                todoIds.add(DateUtil.formatDate(dateTime));
+            }
+            for (DateTime dateTime : DateUtils.range(DateUtil.offsetDay(today, -31), today, DateField.DAY_OF_MONTH)) {
+                todoIds.add(DateUtil.formatDate(dateTime));
+            }
+        } else {
+            if (StrUtil.isBlank(todoId)) {
+                return new HashSet<>();
+            }
+            todoIds.add(todoId);
+        }
+        TodoEntity query = new TodoEntity();
+        query.setTodoIds(todoIds);
+        List<TodoEntity> todos = baseMapper.listAll(query);
+        Set<String> tags = new HashSet<>();
+        for (TodoEntity todo : todos) {
+            tags.addAll(DocUtil.toTagList(todo.getTaskTags()));
+        }
+        return tags;
     }
 
     /**
@@ -107,6 +140,7 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
 
 
     // region 任务
+
     /**
      * 获取待办任务列表
      *

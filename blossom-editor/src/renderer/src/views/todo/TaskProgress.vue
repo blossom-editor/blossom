@@ -302,8 +302,8 @@ const TaskInfoRef = ref()
 const isShowTaskInfoDialog = ref(false)
 
 /**
- * 显示
- * @param id
+ * 显示任务详情
+ * @param id 任务ID
  */
 const showTaskInfoDialog = (id?: string) => {
   isShowTaskInfoDialog.value = true

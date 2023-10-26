@@ -22,6 +22,22 @@
         </el-form-item>
         <el-form-item label="标签">
           <div class="info-tags-container">
+            <el-popover placement="top-start" :width="262" trigger="click" :show-after="0" :hide-after="0">
+              <template #reference>
+                <el-button>选择标签</el-button>
+              </template>
+              <div class="quick-tags-container">
+                <span v-if="quickTags.size === 0" class="quick-tags-placeholder">无标签</span>
+                <span
+                  v-else
+                  v-for="quickTag in quickTags.values()"
+                  :key="quickTag.name"
+                  :class="['quick-tag', quickTag.selected ? 'selected' : '']"
+                  @click="handleQuickTagClick(quickTag)">
+                  {{ quickTag.name }}
+                </span>
+              </div>
+            </el-popover>
             <el-input
               v-if="isShowTagInput"
               ref="TagInputRef"
@@ -96,8 +112,8 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
 import { ElInput, ElMessageBox, FormInstance, FormRules } from 'element-plus'
-import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
-import { taskInfoApi, addTaskApi, updTaskApi, delTaskApi, countTaskApi } from '@renderer/api/todo'
+import { isBlank, isNotBlank, isNull } from '@renderer/assets/utils/obj'
+import { taskInfoApi, addTaskApi, updTaskApi, delTaskApi, countTaskApi, taskTagsApi } from '@renderer/api/todo'
 import { TaskInfo, TodoType } from './scripts/types'
 import { openExtenal } from '@renderer/assets/utils/electron'
 
@@ -187,8 +203,10 @@ const delTask = () => {
 
 /**
  * 回显数据
- * @param dialogType
- * @param taskId
+ * @param dialogType 弹框的类型
+ * @param taskId 任务的ID
+ * @param todoId 事项的ID [仅新增]
+ * @param todoType 事项的类型 [仅新增]
  */
 const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, todoType?: TodoType) => {
   infoType.value = dialogType
@@ -196,11 +214,13 @@ const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, tod
     taskSaveFormTitle.value = '修改任务'
     taskInfoApi({ id: taskId }).then((resp) => {
       taskSaveForm.value = resp.data
+      initQuickTags(resp.data.todoType, resp.data.todoId)
     })
   } else {
     taskSaveFormTitle.value = '新增任务'
     taskSaveForm.value.todoId = todoId!
     taskSaveForm.value.todoType = todoType!
+    initQuickTags(todoType!, todoId!)
   }
 }
 
@@ -210,9 +230,41 @@ const reload = (dialogType: 'upd' | 'add', taskId?: string, todoId?: string, tod
 const TagInputRef = ref<InstanceType<typeof ElInput>>()
 const tagInputValue = ref('')
 const isShowTagInput = ref(false)
+const quickTags = ref<Map<string, QuickTag>>(new Map())
+
+/**
+ * 初始化标签集合
+ * @param todoType 事项的类型
+ * @param todoId   事项的ID, 为阶段性事项[20]时必填
+ */
+const initQuickTags = (todoType: TodoType, todoId: string) => {
+  taskTagsApi({ todoType: todoType, todoId: todoId }).then((resp) => {
+    if (isNull(resp.data)) {
+      return
+    }
+    for (let i = 0; i < resp.data.length; i++) {
+      const tag = resp.data[i]
+      quickTags.value.set(tag, {
+        name: tag,
+        selected: taskSaveForm.value.taskTags.includes(tag)
+      })
+    }
+  })
+}
+
+const handleQuickTagClick = (tag: QuickTag) => {
+  if (tag.selected) {
+    taskSaveForm.value?.taskTags.splice(taskSaveForm.value.taskTags.indexOf(tag.name), 1)
+    quickTags.value.set(tag.name, { name: tag.name, selected: false })
+  } else {
+    taskSaveForm.value.taskTags.push(tag.name)
+    quickTags.value.set(tag.name, { name: tag.name, selected: true })
+  }
+}
 
 const handleTagClose = (tag: string) => {
   taskSaveForm.value.taskTags.splice(taskSaveForm.value.taskTags.indexOf(tag), 1)
+  quickTags.value.set(tag, { name: tag, selected: false })
 }
 
 const showInput = () => {

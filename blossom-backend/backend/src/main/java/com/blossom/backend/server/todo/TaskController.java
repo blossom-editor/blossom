@@ -2,10 +2,13 @@ package com.blossom.backend.server.todo;
 
 import cn.hutool.core.util.BooleanUtil;
 import com.blossom.backend.server.todo.pojo.*;
+import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 /**
  * 待办事项 [Todo#Task]
@@ -49,6 +52,22 @@ public class TaskController {
     public R<Integer> count(@RequestParam("todoId") String todoId) {
         return R.ok(baseService.count(todoId));
     }
+
+    /**
+     * 标签列表
+     *
+     * @param todoType 待办事项类型 {@link TodoTypeEnum}
+     * @param todoId   待办事项ID, 当待办事项为阶段性事项时传入, 如未传入, 则返回空集合
+     * @apiNote 不会存在重复的标签
+     */
+    @GetMapping("/tags")
+    public R<Set<String>> tags(@RequestParam("todoType") Integer todoType,
+                               @RequestParam(value = "todoId", required = false) String todoId) {
+        TodoTypeEnum todoTypeEnum = TodoTypeEnum.getByType(todoType);
+        XzException404.throwBy(todoType == null, "待办事项类型错误");
+        return R.ok(baseService.tags(todoTypeEnum, todoId));
+    }
+
 
     /**
      * 统计

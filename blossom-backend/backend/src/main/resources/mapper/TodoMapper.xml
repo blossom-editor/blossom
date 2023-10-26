@@ -12,6 +12,7 @@
         task_name,
         task_content,
         task_status,
+        task_tags,
         dead_line,
         start_time,
         end_time,
