@@ -1,3 +1,4 @@
+import Notify from '@renderer/scripts/notify'
 import { isEmpty } from 'lodash'
 import { Ref } from 'vue'
 import type { InjectionKey } from 'vue'
@@ -53,6 +54,22 @@ export const computedDocTitleColor = (level: number) => {
 }
 
 /**
+ * 检查上级层级, 上级层级超过4级时无法保存
+ * @param pid   上级ID
+ * @param trees 树状列表
+ * @returns
+ */
+export const checkLevel = (pid: number, trees: DocTree[]): boolean => {
+  let parents = getPDocsByPid(pid, trees)
+  console.log(parents)
+  if (parents.length >= 4) {
+    Notify.error('最多仅支持4级层级关系', '菜单层级错误')
+    return false
+  }
+  return true
+}
+
+/**
  * 递归从文档树状列表中获取指定ID的文章信息
  *
  * @param articleId 文档ID, 通常是文章ID, 也兼容文件夹ID的获取
@@ -75,13 +92,35 @@ export const getDocById = (articleId: number, trees: DocTree[]): DocTree | undef
 }
 
 /**
+ * 获取指定文档的所有父文档
+ * @param id
+ * @param trees
+ * @returns
+ */
+export const getPDocsByPid = (id: number, trees: DocTree[], result?: DocInfo[]): DocInfo[] => {
+  let target: DocTree | undefined = getDocById(id, trees)
+  if (!target) {
+    return []
+  }
+  if (isEmpty(result)) {
+    result = [treeToInfo(target)]
+  } else {
+    result!.push(treeToInfo(target))
+  }
+  if (target.p !== 0) {
+    getPDocsByPid(target.p, trees, result)
+  }
+  return result!
+}
+
+/**
  * 递归从文档树状列表中获取指定文档ID的子文档
  *
  * @param pid
  * @param trees 文档树状列表
  */
-export const getDocsByPid = (pid: number, trees: DocTree[]): DocInfo[] => {
-  let target: DocTree | undefined = getDocById(pid, trees)
+export const getCDocsByPid = (id: number, trees: DocTree[]): DocInfo[] => {
+  let target: DocTree | undefined = getDocById(id, trees)
   if (!target) {
     return []
   }

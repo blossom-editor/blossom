@@ -14,11 +14,12 @@
       <div class="info-tags-container">
         <el-popover placement="top-start" :width="490" trigger="click" :show-after="0" :hide-after="0">
           <template #reference>
-            <el-button>选择标签</el-button>
+            <el-button><span class="iconbl bl-tally-line"></span></el-button>
           </template>
           <div class="quick-tags-container">
-            <span v-if="quickTags.size === 0" class="quick-tags-placeholder">无标签</span>
-            <span v-else
+            <span v-if="quickTags.size === 0" class="quick-tags-placeholder">所在目录下无标签</span>
+            <span
+              v-else
               v-for="quickTag in quickTags.values()"
               :key="quickTag.name"
               :class="['quick-tag', quickTag.selected ? 'selected' : '']"
@@ -106,14 +107,17 @@
 
           <!--  -->
           <el-form-item label="图片上传目录" prop="storePath">
-            <el-input
-              v-model="docForm.storePath"
-              style="width: 432px"
-              placeholder="图片的保存路径, 需在头尾增加 / "
-              @change="formatStorePath"></el-input>
-            <div style="font-size: 12px; display: flex; flex-direction: row; align-items: center">
-              图片将保存到: <bl-tag>{{ storePath }}</bl-tag> 路径下
-            </div>
+            <el-input v-model="docForm.storePath" style="width: 432px" placeholder="图片的保存路径, 需在头尾增加 / " @change="formatStorePath">
+              <template #append>
+                <el-tooltip effect="blossomt" placement="top" :hide-after="0">
+                  <template #content> 如路径中包含 Emoji、特殊字符、中文时<br />建议您进行充分测试，以确保路径有效 </template>
+                  <div style="cursor: pointer" @click="fillStorePath(docForm.pid)">填充路径</div>
+                </el-tooltip>
+              </template>
+            </el-input>
+            <bl-row width="100%" style="font-size: 12px; overflow-x: scroll; flex-wrap: wrap">
+              <span>图片将保存至: </span><span class="bl-tag">{{ storePath }}</span>
+            </bl-row>
           </el-form-item>
         </el-form>
       </div>
@@ -131,11 +135,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject, computed, toRaw, watch } from 'vue'
+import { ref, nextTick, inject, computed, watch, Ref } from 'vue'
 import { ElInput } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document } from '@element-plus/icons-vue'
-import { getDocsByPid, provideKeyDocTree } from '@renderer/views/doc/doc'
+import { checkLevel, getCDocsByPid, provideKeyDocTree, getDocById } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import { folderInfoApi, folderAddApi, folderUpdApi } from '@renderer/api/blossom'
 import { isNotBlank } from '@renderer/assets/utils/obj'
@@ -146,7 +150,7 @@ import Notify from '@renderer/scripts/notify'
 const userStore = useUserStore()
 // storePath 拼接服务器配置的根目录
 const storePath = computed(() => {
-  return userStore.userinfo.osRes.defaultPath + docForm.value.storePath
+  return userStore.userinfo.osRes.defaultPath + '/U' + userStore.userinfo.id + docForm.value.storePath
 })
 
 // 当前表单的类型, 新增(add), 修改(upd), 详情(info)
@@ -154,7 +158,7 @@ let curDocDialogType: DocDialogType
 // 表单加载项
 const isLoading = ref(false)
 // 当前菜单, 用作上级菜单的树状下拉列表
-const docTreeData = inject<DocTree[]>(provideKeyDocTree) as DocTree[]
+const docTreeData = inject<Ref<DocTree[]>>(provideKeyDocTree)
 // 表单
 const docForm = ref<DocInfo>({
   id: 0,
@@ -186,14 +190,8 @@ const reload = (dialogType: DocDialogType, id?: number, pid?: number) => {
   docForm.value.type = 2
   // 只有修改时才查询数据, 新增时不查询
   if (dialogType == 'upd') {
-    const handleResp = (resp: any) => {
-      docForm.value = resp.data
-    }
-    const handleFinally = () => {
-      setTimeout(() => {
-        isLoading.value = false
-      }, 100)
-    }
+    const handleResp = (resp: any) => (docForm.value = resp.data)
+    const handleFinally = () => setTimeout(() => (isLoading.value = false), 100)
     isLoading.value = true
     folderInfoApi({ id: id })
       .then((resp) => handleResp(resp))
@@ -243,6 +241,23 @@ const formatStorePath = () => {
   docForm.value.storePath = path
 }
 
+const fillStorePath = (id: number, path: string = ''): void => {
+  let doc = getDocById(id, docTreeData!.value)
+  if (!doc) {
+    return
+  }
+  path = doc.n + '/' + path
+  if (doc.p != 0) {
+    fillStorePath(doc.p, path)
+  } else {
+    let docName = ''
+    if (isNotBlank(docForm.value.name)) {
+      docName = docForm.value.name + '/'
+    }
+    docForm.value.storePath = '/' + path + docName
+  }
+}
+
 //#endregion
 
 //#region --------------------------------------------------< 保存表单 >--------------------------------------------------
@@ -252,17 +267,16 @@ const formatStorePath = () => {
 const saveLoading = ref<boolean>(false)
 const saveDoc = () => {
   saveLoading.value = true
+  if (!checkLevel(docForm.value.pid, docTreeData!.value)) {
+    saveLoading.value = false
+    return
+  }
   // then 回调
   const handleResp = (_: any) => {
     Notify.success(curDocDialogType === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
     emits('saved')
   }
-  // finally 回调
-  const handleFinally = () => {
-    setTimeout(() => {
-      saveLoading.value = false
-    }, 300)
-  }
+  const handleFinally = () => setTimeout(() => (saveLoading.value = false), 300)
   if (curDocDialogType == 'add')
     // 新增文件夹
     folderAddApi(docForm.value)
@@ -295,7 +309,7 @@ watch(
 )
 
 const initQuickTags = (pid: number) => {
-  let docs = getDocsByPid(pid, toRaw(docTreeData.value))
+  let docs = getCDocsByPid(pid, docTreeData!.value)
   let tags = new Set()
   for (let i = 0; i < docs.length; i++) {
     const doc = docs[i]
