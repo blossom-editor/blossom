@@ -430,6 +430,7 @@ CREATE TABLE IF NOT EXISTS `blossom_web`  (
                                 PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 292 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '[FS] 网站收藏' ROW_FORMAT = DYNAMIC;
 
+alter table blossom_web modify icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL default '' comment '图标';
 -- ----------------------------
 -- Records of blossom_web
 -- ----------------------------

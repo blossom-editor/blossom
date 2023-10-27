@@ -58,17 +58,19 @@
       <span class="iconbl bl-refresh-smile" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="getWebAll"></span>
       Quick Access
     </bl-row>
-    <div v-for="(collect, index) in data" @click="closeForm">
-      <bl-row just="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
-        {{ collect.title }}
-      </bl-row>
-      <div class="web-collect-content">
-        <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm(web)">
-          <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
-          <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
-            <use :xlink:href="'#' + web.icon"></use>
-          </svg>
-          <div class="web-name">{{ web.name }}</div>
+    <div class="web-item-container">
+      <div v-for="(collect, index) in data" @click="closeForm">
+        <bl-row just="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
+          {{ collect.title }}
+        </bl-row>
+        <div class="web-collect-content">
+          <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm(web)">
+            <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
+            <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
+              <use :xlink:href="'#' + web.icon"></use>
+            </svg>
+            <div class="web-name">{{ web.name }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -142,11 +144,9 @@ const delWeb = () => {
   @include box(100%, 100%);
   @include themeBg(#ffffff00, #1e1e1e75);
   backdrop-filter: blur(4px);
-  padding-left: 10px;
-  overflow: auto;
-  overflow-y: overlay;
 
   .web-collect-title {
+    @include box(100%, 31px);
     @include themeColor(#bdbdbd, #a3a6ad);
     flex-wrap: wrap-reverse;
     align-content: flex-end;
@@ -179,6 +179,12 @@ const delWeb = () => {
     @include flex(row, flex-start, flex-start);
     align-content: flex-start;
     flex-wrap: wrap;
+  }
+
+  .web-item-container {
+    @include box(100%, calc(100% - 31px));
+    overflow-y: overlay;
+    padding: 0 5px;
   }
 
   .web-item {
@@ -241,7 +247,6 @@ const delWeb = () => {
 
     .el-form {
       padding: 10px;
-
       :deep(.el-form-item--small) {
         margin-bottom: 8px;
       }
