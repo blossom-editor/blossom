@@ -14,17 +14,17 @@
               <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
                 <div class="emoji-link" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
               </el-tooltip>
-            </template></el-input
-          >
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item label="内容">
           <el-input type="textarea" :rows="4" v-model="taskSaveForm.taskContent"></el-input>
         </el-form-item>
         <el-form-item label="标签">
           <div class="info-tags-container">
-            <el-popover placement="top-start" :width="262" trigger="click" :show-after="0" :hide-after="0">
+            <el-popover placement="top-start" :width="262" trigger="click" :show-after="0" :hide-after="0" :popper-style="{ marginRight: '10px' }">
               <template #reference>
-                <el-button>选择标签</el-button>
+                <el-button><span class="iconbl bl-tally-line"></span></el-button>
               </template>
               <div class="quick-tags-container">
                 <span v-if="quickTags.size === 0" class="quick-tags-placeholder">无标签</span>

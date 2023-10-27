@@ -1,10 +1,12 @@
 <template>
-  <span class="tag-root" :style="{
-    color: props.color,
-    backgroundColor: props.bgColor,
-    fontSize: props.size + 'px',
-    fontWeight: props.weight
-  }">
+  <span
+    class="tag-root"
+    :style="{
+      color: props.color,
+      backgroundColor: props.bgColor,
+      fontSize: props.size + 'px',
+      fontWeight: props.weight
+    }">
     <!-- {{ !!slots.default }}| -->
     <span v-if="props.icon" :class="['tag-iconbl iconbl', props.icon, !!slots.default ? 'tag-icon-margin' : '']" />
     <span class="tag-content">
@@ -52,7 +54,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .tag-root {
   @include flex(row, center, center);
-  @include themeShadow(2px 2px 3px 0 #BBBBBB, 1px 2px 10px 1px #0A0A0A);
+  @include themeShadow(2px 2px 3px 0 #bbbbbb, 1px 2px 10px 1px #0a0a0a);
   border-radius: 4px;
   padding: 1px 4px;
   margin: 3px;
