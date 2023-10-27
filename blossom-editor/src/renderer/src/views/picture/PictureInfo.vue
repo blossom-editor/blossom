@@ -100,23 +100,23 @@
               type="textarea"
               v-model="docForm.describes"
               style="width: 432px"
-              :autosize="{ minRows: 4, maxRows: 4 }"
+              :autosize="{ minRows: 3, maxRows: 3 }"
               resize="none"
               placeholder="描述下文件夹或文章吧"></el-input>
           </el-form-item>
 
           <!--  -->
-          <el-form-item label="图片上传目录" prop="storePath">
+          <el-form-item label="图片上传目录" prop="storePath" style="margin-bottom: 0">
             <el-input v-model="docForm.storePath" style="width: 432px" placeholder="图片的保存路径, 需在头尾增加 / " @change="formatStorePath">
               <template #append>
-                <el-tooltip effect="blossomt" placement="top" :hide-after="0">
-                  <template #content> 如路径中包含 Emoji、特殊字符、中文时<br />建议您进行充分测试，以确保路径有效 </template>
-                  <div style="cursor: pointer" @click="fillStorePath(docForm.pid)">填充路径</div>
-                </el-tooltip>
+                <div style="cursor: pointer" @click="fillStorePath(docForm.pid)">填充路径</div>
               </template>
             </el-input>
             <bl-row width="100%" style="font-size: 12px; overflow-x: scroll; flex-wrap: wrap">
               <span>图片将保存至: </span><span class="bl-tag">{{ storePath }}</span>
+              <blockquote v-if="showStorePathWarning" class="blockquote-yellow">
+                若路径中包含 Emoji、特殊字符、中文或空格时，建议您在保存后上传图片进行测试，以确保路径有效。
+              </blockquote>
             </bl-row>
           </el-form-item>
         </el-form>
@@ -125,8 +125,7 @@
       <div class="info-footer">
         <div>
           <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc">
-            <span class="iconbl bl-a-filechoose-line" />
-            保存
+            <span class="iconbl bl-a-filechoose-line" />保存
           </el-button>
         </div>
       </div>
@@ -241,6 +240,7 @@ const formatStorePath = () => {
   docForm.value.storePath = path
 }
 
+const showStorePathWarning = ref(false)
 const fillStorePath = (id: number, path: string = ''): void => {
   let doc = getDocById(id, docTreeData!.value)
   if (!doc) {
@@ -255,6 +255,7 @@ const fillStorePath = (id: number, path: string = ''): void => {
       docName = docForm.value.name + '/'
     }
     docForm.value.storePath = '/' + path + docName
+    showStorePathWarning.value = true
   }
 }
 

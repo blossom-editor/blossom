@@ -70,3 +70,10 @@
   border-radius: 4px;
   text-align: left;
 }
+
+.blockquote-yellow {
+  margin: 0;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background-color: var(--bl-preview-blockquote-bg-yellow);
+}
