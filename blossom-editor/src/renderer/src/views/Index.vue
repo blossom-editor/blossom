@@ -16,20 +16,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import router from "@renderer/router";
-import indexAside from './index/IndexAside.vue';
+import { ref, watch, onMounted } from 'vue'
+import router from '@renderer/router'
+import indexAside from './index/IndexAside.vue'
 
-const includeRouter = ref<any>(['settingIndex']);
+const includeRouter = ref<any>(['settingIndex'])
 
-watch(() => router.currentRoute.value, (newRoute) => {
-  if (newRoute.meta.keepAlive && includeRouter.value.indexOf(newRoute.name) === -1) {
-    includeRouter.value.push(newRoute.name)
+watch(
+  () => router.currentRoute.value,
+  (newRoute) => {
+    if (newRoute.meta.keepAlive && includeRouter.value.indexOf(newRoute.name) === -1) {
+      includeRouter.value.push(newRoute.name)
+    }
   }
-}, { immediate: true, deep: true })
+)
 
-onMounted(() => {
-})
+onMounted(() => {})
 </script>
 
 <style scoped lang="scss">
