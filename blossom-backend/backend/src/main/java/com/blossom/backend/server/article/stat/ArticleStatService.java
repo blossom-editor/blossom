@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.draft.ArticleMapper;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
-import com.blossom.backend.server.article.stat.pojo.ArticleHeatmapRes;
-import com.blossom.backend.server.article.stat.pojo.ArticleLineRes;
-import com.blossom.backend.server.article.stat.pojo.ArticleStatEntity;
+import com.blossom.backend.server.article.stat.pojo.*;
 import com.blossom.common.base.util.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +77,39 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
     }
 
     /**
-     * 文章字数统计
+     * 字数统计列表
+     *
+     * @param userId 用户ID
+     * @return 字数统计列表
+     * @since 1.8.0
+     */
+    public List<ArticleWordsRes> wordsList(Long userId) {
+        Date today = DateUtils.date();
+        Date thisMonthEnd = DateUtils.endOfMonth(today);
+        Date before36Month = DateUtils.offsetMonth(thisMonthEnd, -36);
+        String begin = DateUtils.format(before36Month, DateUtils.PATTERN_YYYYMMDD).substring(0, 7) + "-01";
+        String end = DateUtils.format(thisMonthEnd, DateUtils.PATTERN_YYYYMMDD);
+        LambdaQueryWrapper<ArticleStatEntity> where = new LambdaQueryWrapper<>();
+        where.eq(ArticleStatEntity::getUserId, userId).eq(ArticleStatEntity::getType, ArticleStatTypeEnum.ARTICLE_WORDS.getType())
+                .ge(ArticleStatEntity::getStatDate, begin)
+                .le(ArticleStatEntity::getStatDate, end);
+
+        List<ArticleStatEntity> stats = baseMapper.selectList(where);
+        List<ArticleWordsRes> wordsList = new ArrayList<>();
+        for (ArticleStatEntity stat : stats) {
+            ArticleWordsRes res = new ArticleWordsRes();
+            res.setDate(DateUtils.format(stat.getStatDate(), "yyyy-MM"));
+            res.setValue(stat.getStatValue());
+            wordsList.add(res);
+        }
+        return wordsList;
+    }
+
+
+    /**
+     * 文章字数统计, 最多36个月
+     *
+     * @param userId 用户ID
      */
     public ArticleLineRes statArticleWordsByMonth(Long userId) {
         Date today = DateUtils.date();
@@ -118,6 +148,29 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
         return articleMapper.statCount(beginUpdTime, endUpdTime, userId);
     }
 
+    /**
+     * 修改文章字数统计
+     *
+     * @since 1.8.0
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateWords(ArticleWordsSaveReq req, Long userId) {
+        if (CollUtil.isEmpty(req.getWordsList())) {
+            return;
+        }
+        for (ArticleWordsRes words : req.getWordsList()) {
+            this.updByDate(ArticleStatTypeEnum.ARTICLE_WORDS.getType(), words.getDate() + "-01", words.getValue(), userId);
+        }
+    }
+
+    /**
+     * 修改统计信息
+     *
+     * @param type   类型
+     * @param date   日期
+     * @param value  统计
+     * @param userId 用户ID
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updByDate(Integer type, String date, Integer value, Long userId) {
         if (value == null) {

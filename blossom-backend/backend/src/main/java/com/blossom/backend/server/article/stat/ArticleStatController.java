@@ -1,14 +1,18 @@
 package com.blossom.backend.server.article.stat;
 
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
 import com.blossom.backend.server.article.stat.pojo.ArticleHeatmapRes;
 import com.blossom.backend.server.article.stat.pojo.ArticleLineRes;
+import com.blossom.backend.server.article.stat.pojo.ArticleWordsSaveReq;
+import com.blossom.backend.server.article.stat.pojo.ArticleWordsRes;
 import com.blossom.common.base.pojo.R;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -74,6 +78,27 @@ public class ArticleStatController {
     }
 
     /**
+     * 字数统计列表
+     *
+     * @since 1.8.0
+     */
+    @GetMapping("/words/list")
+    public R<List<ArticleWordsRes>> wordsList() {
+        return R.ok(statService.wordsList(AuthContext.getUserId()), ArticleWordsRes.class);
+    }
+
+    /**
+     * 保存字数统计信息
+     *
+     * @since 1.8.0
+     */
+    @PostMapping("/words/save")
+    public R<?> wordsSave(@RequestBody ArticleWordsSaveReq req) {
+        statService.updateWords(req, AuthContext.getUserId());
+        return R.ok();
+    }
+
+    /**
      * 文章字数折线图 [OP]
      *
      * @param userId 博客配置的用户ID
@@ -88,7 +113,9 @@ public class ArticleStatController {
     }
 
     /**
-     * 字数折线图
+     * 近36月字数折线图
+     *
+     * @apiNote 只查询最近36个月统计内容
      */
     @GetMapping("/line")
     public R<ArticleLineRes> line() {

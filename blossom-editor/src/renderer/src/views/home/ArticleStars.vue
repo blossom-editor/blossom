@@ -1,9 +1,7 @@
 <template>
   <el-scrollbar :onresize="false">
     <!-- <div class="article-stars-root"> -->
-    <div v-if="isEmpty(articles)" class="placeholder">
-      无收藏的文章
-    </div>
+    <div v-if="isEmpty(articles)" class="placeholder">无收藏的文章</div>
     <div v-else class="star-item" v-for="article in articles" :key="article.id">
       <div class="counterfoil" @click="toWebview(article)">
         <div class="iconbl bl-a-barcode-line open-barcode" v-if="article.openStatus == 1"></div>
@@ -18,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div style="width: 100%;height: 10px;"></div>
+    <div style="width: 100%; height: 10px"></div>
     <!-- </div> -->
   </el-scrollbar>
 </template>
@@ -27,11 +25,11 @@
 文章收藏
  -->
 <script setup lang="ts">
-import router from "@renderer/router"
+import router from '@renderer/router'
 import { nextTick, onActivated, ref } from 'vue'
-import { articleListApi } from "@renderer/api/blossom"
+import { articleListApi } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
-import { openExtenal } from "@renderer/assets/utils/electron"
+import { openExtenal } from '@renderer/assets/utils/electron'
 import { isEmpty } from 'lodash'
 
 onActivated(() => {
@@ -43,7 +41,7 @@ const articles = ref<any>([])
 
 const getArticleListApi = () => {
   articles.value = []
-  articleListApi({ starStatus: 1 }).then(resp => {
+  articleListApi({ starStatus: 1 }).then((resp) => {
     articles.value = resp.data
   })
 }
@@ -58,9 +56,12 @@ const toWebview = (article: any) => {
   }
 }
 
-const reload = () => { nextTick(() => { getArticleListApi(); }) }
+const reload = () => {
+  nextTick(() => {
+    getArticleListApi()
+  })
+}
 defineExpose({ reload })
-
 </script>
 
 <style scoped lang="scss">
@@ -95,7 +96,7 @@ defineExpose({ reload })
   margin: 10px 10px;
   filter: drop-shadow(2px 2px 2px rgb(180, 180, 180));
 
-  [class="dark"] & {
+  [class='dark'] & {
     filter: drop-shadow(2px 2px 2px rgb(0, 0, 0));
   }
 
@@ -136,7 +137,8 @@ defineExpose({ reload })
     padding: 5px;
 
     &::before {
-      -webkit-mask: radial-gradient(circle at 10px 10px, transparent 10px, #fff 0) 43px -10px / 120%,
+      -webkit-mask:
+        radial-gradient(circle at 10px 10px, transparent 10px, #fff 0) 43px -10px / 120%,
         radial-gradient(circle at 1px 1px, transparent 2px, #fff 0) 51px 0px / 110% 8%;
     }
 
@@ -152,7 +154,7 @@ defineExpose({ reload })
     .bl-shuxingtiaoma {
       @include absolute('', '', -3px, 14px);
       font-size: 22px;
-      transform: rotate(90deg)
+      transform: rotate(90deg);
     }
 
     .bl-tiaoxingma {
@@ -168,7 +170,7 @@ defineExpose({ reload })
     }
   }
 
-  // 
+  //
   .content {
     @include box(157px, 100%);
     right: 0;
@@ -176,7 +178,8 @@ defineExpose({ reload })
     font-size: 12px;
 
     &::before {
-      -webkit-mask: radial-gradient(circle at 10px 10px, transparent 10px, #000 0) -10px -10px / 120%,
+      -webkit-mask:
+        radial-gradient(circle at 10px 10px, transparent 10px, #000 0) -10px -10px / 120%,
         // radial-gradient(circle at 10px 10px, transparent 10px, #fff 0) -10px -10px,
         radial-gradient(circle at 1px 1px, transparent 2px, #000 0) -1px 0px / 110% 8%;
     }

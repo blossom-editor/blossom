@@ -24,8 +24,9 @@
           <!-- 字数图表 -->
           <bl-col width="calc(100% - 200px)">
             <bl-row class="container-sub-name">
-              Article Words
+              The last 36 months
               <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
+              <span class="iconbl bl-statistic-line container-refresh" @click="showWordsInfo"></span>
             </bl-row>
             <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
           </bl-col>
@@ -107,6 +108,17 @@
       <WaveFooter></WaveFooter>
     </bl-row>
   </div>
+
+  <el-dialog
+    v-model="isShowWordsInfoDialog"
+    width="80%"
+    top="100px"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
+    <WordsInfo></WordsInfo>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -130,6 +142,7 @@ import StatisticCard from './StatisticCard.vue'
 // import NoteEditor from '@renderer/views/note/NoteEditor.vue'
 import WaveFooter from '@renderer/components/WaveFooter.vue'
 import TaskProgressSimpleVue from '../todo/TaskProgressSimple.vue'
+import WordsInfo from './WordsInfo.vue'
 
 import { nowWhen } from '@renderer/assets/utils/util'
 
@@ -157,6 +170,14 @@ const loadSentinlLine = () => {
 }
 
 const now = ref(nowWhen())
+
+//#region ----------------------------------------< panin store >--------------------------------------
+const isShowWordsInfoDialog = ref(false)
+
+const showWordsInfo = () => {
+  isShowWordsInfoDialog.value = !isShowWordsInfoDialog.value
+}
+//#endregion
 </script>
 
 <style scoped lang="scss">
