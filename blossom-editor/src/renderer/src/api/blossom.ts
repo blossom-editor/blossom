@@ -218,6 +218,15 @@ export const articleDownloadHtmlApi = (params?: object): Promise<any> => {
 }
 
 /**
+ * 文章字数折线图
+ * @param params
+ * @returns
+ */
+export const articleWordLineApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/article/stat/line', { params })
+}
+
+/**
  * 文章数和文章字数统计
  * @param params
  * @returns
@@ -227,12 +236,19 @@ export const articleWordsApi = (params?: object): Promise<R<any>> => {
 }
 
 /**
- * 文章字数折线图
+ * 文章数和文章字数统计
  * @param params
  * @returns
  */
-export const articleWordLineApi = (params?: object): Promise<R<any>> => {
-  return rq.get<R<any>>('/article/stat/line', { params })
+export const articleWordsListApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/article/stat/words/list', { params })
+}
+
+/**
+ * 保存字数统计信息
+ */
+export const articleWordsSaveApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/article/stat/words/save', data)
 }
 
 /**
