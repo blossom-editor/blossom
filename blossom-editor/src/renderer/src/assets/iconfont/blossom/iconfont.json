@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24342452",
+      "name": "statistical view Combination of figure-line",
+      "font_class": "statistic-line",
+      "unicode": "ea48",
+      "unicode_decimal": 59976
+    },
+    {
       "icon_id": "1845739",
       "name": "窗口还原",
       "font_class": "win-reset",
