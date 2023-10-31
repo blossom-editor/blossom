@@ -514,7 +514,7 @@ const statExpandChange = () => {
 //#endregion
 
 //#region --------------------------------------------------< 二级操作台 >--------------------------------------------------
-const workbencChildStyle = ref({ workbench: { height: '0', display: 'none' }, progress: { height: 'calc(100% - 100px)' } })
+const workbencChildStyle = ref({ workbench: { height: '0', visibility: 'hidden', opacity: 0 }, progress: { height: 'calc(100% - 100px)' } })
 const isShowWorkbenchChild = ref(false)
 const transferForm = ref({ todoId: '', delSource: false })
 const taskIdMap = ref(new Map<string, any>())
@@ -526,9 +526,9 @@ const handleShowBenchwork = () => {
 
 const handleBenchworkStyle = (expand: boolean) => {
   if (expand) {
-    workbencChildStyle.value = { workbench: { height: '48px', display: 'flex' }, progress: { height: 'calc(100% - 100px - 48px)' } }
+    workbencChildStyle.value = { workbench: { height: '48px', visibility: 'visible', opacity: 1 }, progress: { height: 'calc(100% - 100px - 48px)' } }
   } else {
-    workbencChildStyle.value = { workbench: { height: '0', display: 'none' }, progress: { height: 'calc(100% - 100px)' } }
+    workbencChildStyle.value = { workbench: { height: '0', visibility: 'hidden', opacity: 0 }, progress: { height: 'calc(100% - 100px)' } }
   }
 }
 
@@ -541,7 +541,6 @@ const disabledDate = (time: Date) => {
   nextWeek.setTime(nextWeek.getTime() + 3600 * 1000 * 24 * 7)
   const lastMonth = new Date()
   lastMonth.setTime(lastMonth.getTime() - 3600 * 1000 * 24 * 31)
-  const today = new Date()
   return (
     time.getTime() > nextWeek.getTime() ||
     time.getTime() < lastMonth.getTime() ||
