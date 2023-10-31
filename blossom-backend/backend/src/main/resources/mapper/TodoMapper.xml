@@ -36,6 +36,9 @@
             <if test="userId != null">and user_id = #{userId}</if>
             <if test="beginCreTime != null and beginCreTime != ''">and cre_time >= #{beginCreTime}</if>
             <if test="endCreTime != null and endCreTime != ''">and #{endCreTime} >= cre_time</if>
+            <if test="ids != null and ids.size() != 0">and id in
+                <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+            </if>
             <if test="todoIds != null and todoIds.size() != 0">and todo_id in
                 <foreach collection="todoIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </if>
@@ -117,4 +120,11 @@
         from blossom_todo
         where todo_id = #{todoId}
     </select>
+
+    <delete id="delByIds">
+        delete from blossom_todo
+         where user_id = #{userId}
+           and id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </delete>
 </mapper>

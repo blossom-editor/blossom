@@ -17,17 +17,37 @@
         完成
       </bl-row>
     </bl-row>
-    <bl-row just="flex-end" style="padding: 0 10px 0 0; margin-top: 5px">
-      <el-select class="tag-select" v-model="queryTags" multiple collapse-tags collapse-tags-tooltip placeholder="根据标签筛选">
-        <el-option v-for="tag in queryTagOptions" :key="tag" :label="tag" :value="tag"></el-option>
-      </el-select>
-      <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px; margin-right: 10px" />
-      <el-button @click="showExportDialog">导出任务</el-button>
-      <el-checkbox v-model="configViewStyle.todoStatExpand" label="显示统计" border style="margin-left: 10px" @change="statExpandChange" />
+    <bl-row just="space-between" style="padding: 0 10px 0 10px; margin-top: 5px">
+      <div>
+        <el-button v-if="curTodo.todoType == 10" type="primary" @click="handleShowBenchwork" plain>转移事项</el-button>
+      </div>
+      <div>
+        <el-select class="tag-select" v-model="queryTags" multiple collapse-tags collapse-tags-tooltip placeholder="根据标签筛选">
+          <el-option v-for="tag in queryTagOptions" :key="tag" :label="tag" :value="tag"></el-option>
+        </el-select>
+        <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px; margin-right: 10px" />
+        <el-button @click="showExportDialog">导出任务</el-button>
+        <el-checkbox v-model="configViewStyle.todoStatExpand" label="显示统计" border style="margin-left: 10px" @change="statExpandChange" />
+      </div>
     </bl-row>
   </div>
 
-  <div class="progress-container">
+  <bl-row class="task-workbench-child" :style="workbencChildStyle.workbench">
+    <span>将</span>
+    <bl-tag>{{ taskIdMap.size }}</bl-tag>
+    <span style="padding-right: 10px">项待办转移至</span>
+    <el-date-picker
+      v-model="transferForm.todoId"
+      style="width: 125px"
+      type="date"
+      format="YYYY-MM-DD"
+      value-format="YYYY-MM-DD"
+      :disabled-date="disabledDate" />
+    <el-checkbox v-model="transferForm.delSource" label="删除原事项" border style="margin-left: 10px" />
+    <el-button type="primary" @click="transfer" plain style="margin-left: 10px">确认转移</el-button>
+  </bl-row>
+
+  <div class="progress-container" :style="workbencChildStyle.progress">
     <div
       class="waiting"
       @dragenter="onDragenter(WaitDragRef, $event)"
@@ -58,6 +78,9 @@
           @dragend="dragendWait(t, $event)">
           <div v-if="t.todoType == 99" class="divider"></div>
           <div v-else>
+            <bl-row just="center" v-if="isShowWorkbenchChild" class="selection" @click="transferClick(t.id as string)">
+              <div class="iconbl bl-check" v-if="taskIdMap.has(t.id as string)"></div>
+            </bl-row>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -105,6 +128,9 @@
           @dragend="dragendProc(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
+            <bl-row just="center" v-if="isShowWorkbenchChild" class="selection" @click="transferClick(t.id as string)">
+              <div class="iconbl bl-check" v-if="taskIdMap.has(t.id as string)"></div>
+            </bl-row>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -154,6 +180,9 @@
           @dragend="dragendComp(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
           <div v-else>
+            <bl-row just="center" v-if="isShowWorkbenchChild" class="selection" @click="transferClick(t.id as string)">
+              <div class="iconbl bl-check" v-if="taskIdMap.has(t.id as string)"></div>
+            </bl-row>
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
@@ -240,12 +269,13 @@ import type { ViewStyle } from '@renderer/stores/config'
 
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
-import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi } from '@renderer/api/todo'
+import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi, taskTransferApi } from '@renderer/api/todo'
 import { TaskInfo, TaskStatus, TodoType } from './scripts/types'
 import { getDateFormat } from '@renderer/assets/utils/util'
 import { isEmpty } from 'lodash'
 import Notify from '@renderer/scripts/notify'
 import TaskInfoComponent from './TaskInfo.vue'
+import { dayjs, ElMessageBox } from 'element-plus'
 
 onMounted(() => {
   document.addEventListener('dragover', preventDefaultDragover, false)
@@ -375,6 +405,12 @@ const blurTaskContentInput = (task: TaskInfo) => {
  * @param todoType
  */
 const reload = (todoId: string, todoName: string, todoType: TodoType) => {
+  taskIdMap.value.clear()
+  if (todoType === 20) {
+    isShowWorkbenchChild.value = false
+    handleBenchworkStyle(false)
+  }
+
   curTodo.value = { todoId: todoId, todoName: todoName, todoType: todoType }
   queryTags.value = []
   getTasks(todoId)
@@ -477,6 +513,89 @@ const statExpandChange = () => {
 }
 //#endregion
 
+//#region --------------------------------------------------< 二级操作台 >--------------------------------------------------
+const workbencChildStyle = ref({ workbench: { height: '0', display: 'none' }, progress: { height: 'calc(100% - 100px)' } })
+const isShowWorkbenchChild = ref(false)
+const transferForm = ref({ todoId: '', delSource: false })
+const taskIdMap = ref(new Map<string, any>())
+
+const handleShowBenchwork = () => {
+  isShowWorkbenchChild.value = !isShowWorkbenchChild.value
+  handleBenchworkStyle(isShowWorkbenchChild.value)
+}
+
+const handleBenchworkStyle = (expand: boolean) => {
+  if (expand) {
+    workbencChildStyle.value = { workbench: { height: '48px', display: 'flex' }, progress: { height: 'calc(100% - 100px - 48px)' } }
+  } else {
+    workbencChildStyle.value = { workbench: { height: '0', display: 'none' }, progress: { height: 'calc(100% - 100px)' } }
+  }
+}
+
+/**
+ * 判断可转移的日期区间
+ * @param time 日期
+ */
+const disabledDate = (time: Date) => {
+  const nextWeek = new Date()
+  nextWeek.setTime(nextWeek.getTime() + 3600 * 1000 * 24 * 7)
+  const lastMonth = new Date()
+  lastMonth.setTime(lastMonth.getTime() - 3600 * 1000 * 24 * 31)
+  const today = new Date()
+  return (
+    time.getTime() > nextWeek.getTime() ||
+    time.getTime() < lastMonth.getTime() ||
+    dayjs(dayjs(time).format('YYYY-MM-DD')).diff(curTodo.value.todoId, 'day') === 0
+  )
+}
+
+/**
+ * 选中或取消选中
+ * @param taskId 任务ID
+ */
+const transferClick = (taskId: string) => {
+  if (taskIdMap.value.has(taskId)) {
+    taskIdMap.value.delete(taskId)
+  } else {
+    taskIdMap.value.set(taskId, '')
+  }
+}
+
+/**
+ * 转移任务
+ */
+const transfer = () => {
+  if (isBlank(transferForm.value.todoId)) {
+    Notify.warning('请先选择将任务转移至哪一天', '无法转移')
+    return
+  }
+  if (taskIdMap.value.size === 0) {
+    Notify.warning('请先选中需要转移的事项', '无法转移')
+    return
+  }
+  if (transferForm.value.todoId === curTodo.value.todoId) {
+    Notify.warning(`转移日期与原日期不能相同`, '无法转移')
+    return
+  }
+  ElMessageBox.confirm(
+    `是否确认将 ${taskIdMap.value.size} 个任务转移至 ${transferForm.value.todoId} ? ` +
+      (transferForm.value.delSource === true ? '原任务将被删除!' : '原任务仍会保留。'),
+    '是否转移',
+    {
+      confirmButtonText: '我要转移',
+      cancelButtonText: '我再想想',
+      type: 'warning'
+    }
+  ).then(() => {
+    // console.log({ ...transferForm.value, ...{ curTodoId: curTodo.value.todoId, taskIds: Array.from(taskIdMap.value.keys()) } })
+    taskTransferApi({ ...transferForm.value, ...{ curTodoId: curTodo.value.todoId, taskIds: Array.from(taskIdMap.value.keys()) } }).then((resp) => {
+      savedCallback(resp.data)
+      Notify.success(`所选待办事项已转移至 [${transferForm.value.todoId}]`, '转移事项成功')
+    })
+  })
+}
+//#endregion
+
 //#region --------------------------------------------------< 组件拖动 >--------------------------------------------------
 /**
  * 在 mac 中, dragend 事件会在鼠标松开后半秒左右触发, 导致样式出现问题
@@ -507,6 +626,10 @@ img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpa
  * @param e
  */
 const dragStart = (doms: any, e: DragEvent) => {
+  if (isShowWorkbenchChild.value) {
+    e.preventDefault()
+    return
+  }
   e.dataTransfer!.setDragImage(img, 0, 0)
   let ele = e!.target as Element
   let cloneNode = ele.cloneNode(true) as HTMLElement

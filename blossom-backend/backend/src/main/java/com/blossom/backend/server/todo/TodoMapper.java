@@ -78,4 +78,9 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
     List<TodoEntity> statisticTask(@Param("beginCreTime") String beginCreTime,
                                    @Param("endCreTime") String endCreTime,
                                    @Param("userId") Long userId);
+
+    /**
+     * 根据ID集合删除
+     */
+    void delByIds(@Param("ids") List<Long> ids,@Param("userId") Long userId);
 }

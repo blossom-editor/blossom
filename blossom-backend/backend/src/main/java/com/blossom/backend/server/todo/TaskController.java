@@ -139,4 +139,18 @@ public class TaskController {
         baseService.delById(req.getId());
         return R.ok(baseService.listTask(req.getTodoId()));
     }
+
+    /**
+     * 转移事项
+     *
+     * @since 1.8.0
+     */
+    @PostMapping("/transfer")
+    public R<TaskRes> transfer(@RequestBody @Validated TaskTransferReq req) {
+        if (req.getDelSource() == null) {
+            req.setDelSource(false);
+        }
+        baseService.transfer(req);
+        return R.ok(baseService.listTask(req.getCurTodoId()));
+    }
 }

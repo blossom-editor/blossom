@@ -132,4 +132,7 @@ export const taskTagsApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/todo/task/tags', { params })
 }
 
+export const taskTransferApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/todo/task/transfer', data)
+}
 //#endregion

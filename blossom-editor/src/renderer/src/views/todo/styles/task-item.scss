@@ -1,15 +1,31 @@
 .task-item {
   @include box(270px, auto, 270px, 270px);
-  @include themeShadow(0 0 5px #C0C0C0, 0 0 5px #000000);
-  @include themeBg(#F9F9F9, #0F0F0F);
+  @include themeShadow(0 0 5px #c0c0c0, 0 0 5px #000000);
+  @include themeBg(#f9f9f9, #0f0f0f);
   font-weight: 300;
   border-radius: 4px;
   margin-bottom: 15px;
   transition: box-shadow 0.3s;
+  position: relative;
+
+  .selection {
+    @include box(270px, 100%);
+    @include themeBg(#f9f9f9b8, #0f0f0fb8);
+    border-radius: 4px;
+    border: 3px dashed var(--el-border-color);
+    position: absolute;
+    z-index: 3;
+    cursor: pointer;
+
+    .iconbl {
+      color: var(--el-border-color);
+      font-size: 45px;
+    }
+  }
 
   .divider {
-    @include themeColor(#CFCFCF, #545454E0);
-    @include themeBorder(2px, #CFCFCF, #545454E0, 'bottom', 0, dashed);
+    @include themeColor(#cfcfcf, #545454e0);
+    @include themeBorder(2px, #cfcfcf, #545454e0, 'bottom', 0, dashed);
     width: 100%;
     font-size: 12px;
   }
@@ -26,7 +42,7 @@
   }
 
   &:hover {
-    @include themeShadow(0 0 9px #C0C0C0, 0 0 15px #000000);
+    @include themeShadow(0 0 9px #c0c0c0, 0 0 15px #000000);
 
     .task-title {
       .iconbl {
@@ -37,7 +53,7 @@
 
   .task-title {
     @include themeBrightness(100%, 80%);
-    @include themeColor(#4d4d4d, #D8D8D8);
+    @include themeColor(#4d4d4d, #d8d8d8);
     font-size: 14px;
     padding: 5px 10px;
     margin-bottom: 5px;
@@ -45,11 +61,11 @@
     border-top-right-radius: 4px;
     cursor: move;
 
-    &>div {
+    & > div {
       transition: color 0.2s;
 
       &:hover {
-        @include themeColor(#000000, #ECECEC);
+        @include themeColor(#000000, #ececec);
       }
     }
 
@@ -65,7 +81,6 @@
     flex-wrap: wrap;
   }
 
-
   .task-times {
     height: 20px;
     font-size: 13px;
@@ -74,7 +89,7 @@
   }
 
   .dead-line {
-    @include themeColor(#D5002E, #a50024);
+    @include themeColor(#d5002e, #a50024);
   }
 
   .task-content {
@@ -87,7 +102,7 @@
     transition: color 0.2s;
 
     &:hover {
-      @include themeColor(#555555, #A5A5A5);
+      @include themeColor(#555555, #a5a5a5);
     }
   }
 
@@ -101,7 +116,6 @@
       color: var(--bl-text-color-light);
     }
   }
-
 }
 
 .task-item.moving {

@@ -10,6 +10,7 @@ import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.server.todo.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.backend.server.utils.TodoUtil;
+import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.PrimaryKeyUtil;
@@ -299,6 +300,37 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         baseMapper.deleteById(id);
     }
 
+    /**
+     * 转移任务
+     *
+     * @since 1.8.0
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void transfer(TaskTransferReq req) {
+        if (CollUtil.isEmpty(req.getTaskIds())) {
+            return;
+        }
+        if (req.getCurTodoId().equals(req.getTodoId())) {
+            throw new XzException400("转移日期与原日期不能相同");
+        }
+        TodoEntity query = new TodoEntity();
+        query.setIds(req.getTaskIds());
+        query.setUserId(AuthContext.getUserId());
+        List<TodoEntity> tasks = baseMapper.listAll(query);
+        for (TodoEntity task : tasks) {
+            // 任务已经在目前事项中, 则跳过
+            if (task.getTodoId().equals(req.getTodoId())) {
+                continue;
+            }
+            task.setId(null);
+            task.setTodoId(req.getTodoId());
+            task.setTodoName(req.getTodoId());
+            baseMapper.insert(task);
+        }
+        if (req.getDelSource()) {
+            baseMapper.delByIds(req.getTaskIds(), AuthContext.getUserId());
+        }
+    }
     // endregion
 
 

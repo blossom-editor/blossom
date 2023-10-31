@@ -83,6 +83,7 @@ onActivated(() => {
   getTodos()
 })
 
+// 获取的每日待办事项原始数据
 let todoDaysResource: any
 const getTodos = () => {
   todosApi().then((resp) => {
@@ -93,6 +94,12 @@ const getTodos = () => {
   })
 }
 
+/**
+ * 查看指定待办事项
+ * @param todoId 待办事项ID
+ * @param todoName 待办事项名称
+ * @param todoType 待办事项类型
+ */
 const toTask = (todoId: string, todoName: string, todoType: TodoType) => {
   TaskProgressRef.value.reload(todoId, todoName, todoType)
   if (viewStyle.todoStatExpand) {
@@ -103,8 +110,11 @@ const toTask = (todoId: string, todoName: string, todoType: TodoType) => {
 const TaskProgressRef = ref()
 const TodoStatRef = ref()
 const activeName = ref('1')
+// 今天
 const today = ref(getDateFormat())
+//
 const nextWeek = ref(getNextDay(getDateFormat(), 7))
+// 每日待办事项左侧列表
 const todoDays = ref<TodoList[]>([])
 
 /**
@@ -311,13 +321,11 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
     .todo-tasks {
       height: 100%;
-      //@include box(calc(100% - 450px), 100%);
       overflow: hidden;
     }
 
     .todo-stat {
       @include box(450px, 100%);
-      // height: 100%;
       border-left: 1px solid var(--el-border-color);
     }
   }
@@ -342,10 +350,11 @@ const blurPhasedUpdHandle = (todoId: string) => {
     }
   }
 
-  @media screen and (max-width: 1120px) {
+  @media screen and (max-width: 1350px) {
     .todo-main {
       .todo-tasks {
-        @include box(100%, 100%);
+        width: 100% !important;
+        height: 100%;
       }
 
       .todo-stat {

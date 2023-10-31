@@ -99,5 +99,7 @@ public class TodoEntity extends AbstractPOJO implements Serializable {
     @TableField(exist = false)
     private String endCreTime;
     @TableField(exist = false)
+    private List<Long> ids;
+    @TableField(exist = false)
     private List<String> todoIds;
 }
