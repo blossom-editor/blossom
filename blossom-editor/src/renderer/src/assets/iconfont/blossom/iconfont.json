@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11808094",
+      "name": "check",
+      "font_class": "check",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
       "icon_id": "24342452",
       "name": "statistical view Combination of figure-line",
       "font_class": "statistic-line",
