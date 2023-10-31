@@ -26,22 +26,6 @@
         <ChartHeatmap></ChartHeatmap>
       </div>
     </div>
-
-    <div class="userinfo-footer">
-      <div class="about-us">
-        <span>{{ '版本：' + blossom.SYS.VERSION + (isNotBlank(blossom.SYS.EMAIL) ? ' | 邮箱：' + blossom.SYS.EMAIL : '') }}</span>
-      </div>
-      <div class="icp">
-        <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
-          <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
-          {{ blossom.SYS.GONG_WANG_AN_BEI }}
-        </div>
-        <div v-if="isNotBlank(blossom.SYS.GONG_WANG_AN_BEI)">|</div>
-        <div style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
-          {{ blossom.SYS.ICP_BEI_AN_HAO }}
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -49,11 +33,9 @@
 import { toRoute } from '@/router'
 import { onMounted, ref } from 'vue'
 import { userinfoApi } from '@/api/blossom'
-import blossom from '@/assets/constants/blossom'
 import ChartHeatmap from './ChartHeatmap.vue'
 import SYSTEM from '@/assets/constants/blossom'
 import { toView } from '@/assets/utils/util'
-import { isNotBlank } from '@/assets/utils/obj'
 
 const userinfo = ref({
   avatar: '',
@@ -62,10 +44,6 @@ const userinfo = ref({
   articleCount: '0',
   articleWords: '0'
 })
-
-const openNew = (url: string) => {
-  window.open(url)
-}
 
 onMounted(() => {
   userinfoApi().then((resp) => {
@@ -145,23 +123,6 @@ onMounted(() => {
 
     &-charts {
       margin-left: -10px;
-    }
-  }
-
-  .userinfo-footer {
-    @include box(100%, 40px);
-
-    .icp,
-    .about-us {
-      @include flex(row, center, center);
-    }
-
-    div {
-      @include flex(row, center, center);
-      color: #6d6d6d;
-      font-size: 9px;
-      transform: scale(0.8, 0.8);
-      white-space: pre;
     }
   }
 }

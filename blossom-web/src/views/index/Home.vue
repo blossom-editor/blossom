@@ -16,26 +16,47 @@
         </div>
       </div>
     </div>
+    <div class="home-footer">
+      <div class="about-us">
+        <span>{{ blossom.SYS.VERSION + (isNotBlank(blossom.SYS.EMAIL) ? ' | 邮箱：' + blossom.SYS.EMAIL : '') }}</span>
+      </div>
+      <div class="icp">
+        <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
+          <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
+          {{ blossom.SYS.GONG_WANG_AN_BEI }}
+        </div>
+        <div v-if="isNotBlank(blossom.SYS.GONG_WANG_AN_BEI)">|</div>
+        <div style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
+          {{ blossom.SYS.ICP_BEI_AN_HAO }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted } from 'vue'
 import IndexHeader from './IndexHeader.vue'
 import UserInfo from './HomeUserInfo.vue'
-import ChartLineWords from "./ChartLineWords.vue"
-import HomeSubject from "./HomeSubject.vue"
+import ChartLineWords from './ChartLineWords.vue'
+import HomeSubject from './HomeSubject.vue'
+import blossom from '@/assets/constants/blossom'
+import { isNotBlank } from '@/assets/utils/obj'
 
 const ChartLineWordsRef = ref()
 onMounted(() => {
   ChartLineWordsRef.value.reload()
 })
+
+const openNew = (url: string) => {
+  window.open(url)
+}
 </script>
 
 <style scoped lang="scss">
 .blossom-home-root {
   @include box(100%, 100%);
-  @include flex(row, center, center);
+  @include flex(column, center, center);
   box-shadow: 0 0 10px #24272c;
   background-image: linear-gradient(to bottom right, #3e464e, #212121);
   position: relative;
@@ -49,7 +70,7 @@ onMounted(() => {
   }
 
   .home-main {
-    @include box(100%, 100%);
+    @include box(100%, calc(100% - 40px));
     padding-top: 60px;
     @include flex(row, flex-start, center);
 
@@ -72,10 +93,24 @@ onMounted(() => {
     }
   }
 
+  .home-footer {
+    @include box(100%, 40px);
+
+    .icp,
+    .about-us {
+      @include flex(row, center, center);
+    }
+
+    div {
+      @include flex(row, center, center);
+      color: #6d6d6d;
+      font-size: 12px;
+      white-space: pre;
+    }
+  }
 
   @media screen and (max-width: 1100px) {
     .home-main {
-
       .home-main-userinfo {
         width: 100%;
       }
@@ -85,6 +120,5 @@ onMounted(() => {
       }
     }
   }
-
 }
 </style>
