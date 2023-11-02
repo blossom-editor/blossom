@@ -141,8 +141,11 @@
     <Teleport to="body">
       <div v-if="articleReferenceView.show" ref="ArticleViewRef" class="article-view-absolute bl-preview" :style="articleReferenceView.style">
         <div class="content-view bl-preview" v-html="articleReferenceView.html" :style="editorStyle"></div>
-        <bl-row class="workbench">
-          <div @click="openArticleWindow(articleReferenceView.articleId)">新窗口打开</div>
+        <bl-row class="workbench" just="space-between">
+          <div class="btns">
+            <div @click="openArticleWindow(articleReferenceView.articleId)">新窗口打开</div>
+          </div>
+          <div class="infos">{{ articleReferenceView.name }}</div>
         </bl-row>
       </div>
     </Teleport>

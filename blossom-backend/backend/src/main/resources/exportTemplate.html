@@ -2016,7 +2016,7 @@
       }
     }
 
-    function onHtmlEventDispatch(type, data) {
+    function onHtmlEventDispatch(t, _ty, event, type, data) {
       if (type === 'copyPreCode') {
         let code = document.getElementById(data)
         if (code) {

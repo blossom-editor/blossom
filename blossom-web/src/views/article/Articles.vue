@@ -222,8 +222,8 @@ const toScroll = (level: number, content: string) => {
 /**
  * 监听 html 的内联事件
  */
-type HtmlEvent = 'copyPreCode' | ''
-const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
+type ArticleHtmlEvent = 'copyPreCode' | 'showArticleReferenceView'
+const onHtmlEventDispatch = (_t: any, _ty: any, _event: any, type: ArticleHtmlEvent, data: any) => {
   if (type === 'copyPreCode') {
     let code = document.getElementById(data)
     if (code) {
@@ -253,11 +253,6 @@ const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
     }
   }
 }
-
-const copyUrl = () => {
-  console.log(window.location.href)
-}
-
 //#region ----------------------------------------< 响应式样式 >--------------------------------------
 const maskStyle = ref({ display: 'none' })
 const menuShow = ref(false)

@@ -1,5 +1,5 @@
 import { writeText } from '@renderer/assets/utils/electron'
-import { Ref, nextTick, onMounted, onBeforeUnmount, ref } from 'vue'
+import { Ref, nextTick, onMounted, ref } from 'vue'
 import { articleInfoApi } from '@renderer/api/blossom'
 
 type ArticleHtmlEvent = 'copyPreCode' | 'showArticleReferenceView'
@@ -12,6 +12,7 @@ export function useArticleHtmlEvent(articleViewRef: Ref<HTMLElement>) {
     show: false,
     html: '',
     articleId: 0,
+    name: '',
     style: {
       top: '0',
       left: '0',
@@ -20,7 +21,7 @@ export function useArticleHtmlEvent(articleViewRef: Ref<HTMLElement>) {
     }
   })
 
-  function onHtmlEventDispatch(t: any, ty: any, event: any, type: ArticleHtmlEvent, data: any) {
+  function onHtmlEventDispatch(_t: any, _ty: any, event: any, type: ArticleHtmlEvent, data: any) {
     // console.log(type)
     // console.log(t)
     // console.log(ty)
@@ -68,6 +69,7 @@ export function useArticleHtmlEvent(articleViewRef: Ref<HTMLElement>) {
         setTimeout(() => articleViewRef.value.addEventListener('mouseleave', closeView), 100)
         articleInfoApi({ id: data, showToc: false, showMarkdown: false, showHtml: true }).then((resp) => {
           articleReferenceView.value.html = resp.data.html
+          articleReferenceView.value.name = resp.data.name
         })
       })
     }
@@ -77,12 +79,12 @@ export function useArticleHtmlEvent(articleViewRef: Ref<HTMLElement>) {
     window.onHtmlEventDispatch = onHtmlEventDispatch
   })
 
-  onBeforeUnmount(() => {
-    if (articleViewRef.value) {
-      articleViewRef.value.removeEventListener('mouseleave', closeView)
-    }
-    document.body.removeEventListener('click', closeView)
-  })
+  // onBeforeUnmount(() => {
+  //   if (articleViewRef.value) {
+  //     articleViewRef.value.removeEventListener('mouseleave', closeView)
+  //   }
+  //   document.body.removeEventListener('click', closeView)
+  // })
 
   return { articleReferenceView }
 }
