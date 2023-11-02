@@ -1,0 +1,34 @@
+.article-view-absolute {
+  @include themeShadow(0 1px 5px 1px #969696, 0 1px 5px 1px rgb(20, 20, 20));
+  border-radius: 6px;
+  border: 3px solid var(--bl-text-color-light);
+  position: absolute;
+  z-index: 100;
+  overflow: hidden;
+
+  .content-view {
+    @include box(100%, calc(100% - 25px));
+    overflow-y: overlay;
+    overflow-x: hidden;
+    padding: 10px;
+  }
+
+  .workbench {
+    @include box(100%, 25px);
+    @include font(12px, 300);
+    background-color: var(--bl-bg-color);
+    border-top: 1px solid var(--bl-text-color-light);
+    color: var(--bl-text-color);
+    line-height: 25px;
+
+    div {
+      height: 100%;
+      padding: 0 10px;
+      cursor: pointer;
+      border-right: 1px solid var(--bl-text-color-light);
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+}

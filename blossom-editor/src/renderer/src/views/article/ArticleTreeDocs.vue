@@ -301,12 +301,8 @@ const handleClickRightMenu = (doc: DocTree, event: MouseEvent) => {
 }
 
 const closeTreeDocsMenuShow = () => {
-  removeListenerTreeDocsRightMenu()
-  rMenu.value.show = false
-}
-
-const removeListenerTreeDocsRightMenu = () => {
   document.body.removeEventListener('click', closeTreeDocsMenuShow)
+  rMenu.value.show = false
 }
 
 const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 1) => {

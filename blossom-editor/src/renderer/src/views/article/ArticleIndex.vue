@@ -137,6 +137,15 @@
         </div>
       </div>
     </Teleport>
+
+    <Teleport to="body">
+      <div v-if="articleReferenceView.show" ref="ArticleViewRef" class="article-view-absolute bl-preview" :style="articleReferenceView.style">
+        <div class="content-view bl-preview" v-html="articleReferenceView.html" :style="editorStyle"></div>
+        <bl-row class="workbench">
+          <div @click="openArticleWindow(articleReferenceView.articleId)">新窗口打开</div>
+        </bl-row>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -153,7 +162,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@rendere
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
 import { sleep, platform } from '@renderer/assets/utils/util'
-import { openExtenal, writeText, readText } from '@renderer/assets/utils/electron'
+import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
@@ -182,6 +191,7 @@ import marked, {
   renderLink
 } from './scripts/markedjs'
 import { EPScroll } from './scripts/editor-preview-scroll'
+import { useArticleHtmlEvent } from './scripts/article-html-event'
 
 const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
 const EditorStatus = defineAsyncComponent(() => import('./EditorStatus.vue'))
@@ -191,7 +201,7 @@ onMounted(() => {
   initScroll()
   addListenerScroll()
   initAutoSaveInterval()
-  window.onHtmlEventDispatch = onHtmlEventDispatch
+  // window.onHtmlEventDispatch = onHtmlEventDispatch
 })
 onBeforeUnmount(() => {
   unbindKeys()
@@ -341,16 +351,31 @@ const uploadFile = (file: File) => {
 //#endregion
 
 //#region ----------------------------------------< html 事件监听 >----------------------------
-type HtmlEvent = 'copyPreCode' | ''
-const onHtmlEventDispatch = (type: HtmlEvent, data: any) => {
-  if (type === 'copyPreCode') {
-    let code = document.getElementById(data)
-    if (code) {
-      writeText(code.innerText)
-    }
-  }
-}
+const ArticleViewRef = ref()
+const { articleReferenceView } = useArticleHtmlEvent(ArticleViewRef)
 
+const openArticleWindow = (id: number) => {
+  openNewArticleWindow('article_window_' + id, id)
+}
+// type HtmlEvent = 'copyPreCode' | 'showArticleReferenceView'
+// const onHtmlEventDispatch = (t: any, ty: any, e: any, type: HtmlEvent, data: any) => {
+//   console.log(type)
+//   console.log(t)
+//   console.log(ty)
+//   console.log(e)
+
+//   if (type === 'copyPreCode') {
+//     let code = document.getElementById(data)
+//     if (code) {
+//       writeText(code.innerText)
+//     }
+//   } else if (type === 'showArticleReferenceView') {
+//     isShowArticleReferenceView.value = true
+//     e.preventDefault()
+//   }
+// }
+
+// const isShowArticleReferenceView = ref(false)
 //#endregion
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
@@ -818,6 +843,7 @@ const unbindKeys = () => {
 
 <style scoped lang="scss">
 @import './styles/article-index.scss';
+@import './styles/article-view-absolute.scss';
 @import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';

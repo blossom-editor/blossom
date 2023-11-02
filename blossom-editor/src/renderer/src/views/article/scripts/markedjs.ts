@@ -317,7 +317,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
   }
   let lineNumbers = result + '</ol>'
-  return `<pre><code id="${id}" class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy" onclick="onHtmlEventDispatch('copyPreCode','${id}')">${language}</div></pre>`
+  return `<pre><code id="${id}" class="hljs language-${language}">${code}</code>${lineNumbers}<div class="pre-copy" onclick="onHtmlEventDispatch(this,'click',event,'copyPreCode','${id}')">${language}</div></pre>`
 }
 
 /**
@@ -414,7 +414,9 @@ export const renderLink = (href: string | null, title: string | null, text: stri
         ref.type = 11
       }
 
-      link = `<a target="_blank" href=${href} class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》">${text}</a>`
+      // class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》"
+      link = `<a target="_blank" href=${href} class="inner-link"
+      onclick="onHtmlEventDispatch(this,'',event,'showArticleReferenceView','${ref.targetId}')">${text}</a>`
     } else {
       link = `<a target="_blank" href=${href} title=${title} >${text}</a>`
     }
