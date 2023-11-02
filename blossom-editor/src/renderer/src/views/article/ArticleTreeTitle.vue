@@ -4,7 +4,11 @@
       {{ props.trees.s }}
     </bl-tag>
     <div class="doc-name">
-      <svg v-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
+      <img
+        class="menu-icon-img"
+        v-if="isNotBlank(props.trees.icon) && (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https'))"
+        :src="props.trees.icon" />
+      <svg v-else-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
       <div class="name-wrapper">
@@ -89,10 +93,14 @@ $icon-size: 17px;
     flex-wrap: wrap;
     width: 100%;
 
-    .menu-icon {
+    .menu-icon,
+    .menu-icon-img {
       @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
       margin-top: 5px;
       margin-right: 8px;
+    }
+    .menu-icon-img {
+      border-radius: 2px;
     }
 
     .name-wrapper {
@@ -128,10 +136,15 @@ $icon-size: 17px;
     flex-wrap: wrap;
     width: 100%;
 
-    .menu-icon {
+    .menu-icon,
+    .menu-icon-img {
       @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
       margin-top: 5px;
       margin-right: 8px;
+    }
+
+    .menu-icon-img {
+      border-radius: 2px;
     }
 
     .name-wrapper {

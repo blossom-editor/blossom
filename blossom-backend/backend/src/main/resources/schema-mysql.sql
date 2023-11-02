@@ -217,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `blossom_article`  (
                                     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 20153 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '文章，Article' ROW_FORMAT = DYNAMIC;
 
+
 -- ----------------------------
 -- Records of blossom_article
 -- ----------------------------
@@ -327,6 +328,7 @@ CREATE TABLE IF NOT EXISTS `blossom_folder`  (
                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 12035 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '文件夹，Folder' ROW_FORMAT = DYNAMIC;
 
+alter table blossom_folder modify icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL default '' comment '图标';
 -- ----------------------------
 -- Records of blossom_folder
 -- ----------------------------

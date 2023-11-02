@@ -158,11 +158,11 @@
             <el-input
               v-model="docForm.color"
               :style="{ width: '176px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
-              placeholder="主色调">
+              placeholder="主色调 #FFFFFF">
             </el-input>
           </el-form-item>
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标, wl-">
+            <el-input v-model="docForm.icon" style="width: 176px" placeholder="wl-|http|https">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
