@@ -20,6 +20,7 @@ public class APP {
 
     public static void main(String[] args) {
         Tracker.start("APPLICATION_START", TrackerConstants.SPAN_TYPE_APPLICATION_RUN);
+        BaseConstants.checkYml();
         SpringApplication.run(APP.class, args);
         BaseConstants.desc();
         Tracker.end();
