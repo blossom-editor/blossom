@@ -12,12 +12,11 @@ import '@/assets/styles/iconfont/weblogo/iconfont.js'
 
 import BLRow from '@/components/BLRow.vue'
 import BLCol from '@/components/BLCol.vue'
+import BLTag from '@/components/BLTag.vue'
 
-const app = createApp(App);
+const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
-app
-  .component('bl-row', BLRow)
-  .component('bl-col', BLCol)
-app.mount('#app');
+app.component('bl-row', BLRow).component('bl-col', BLCol).component('bl-tag', BLTag)
+app.mount('#app')
