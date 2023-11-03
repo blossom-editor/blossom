@@ -122,6 +122,7 @@ import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
 import IndexHeader from '../index/IndexHeader.vue'
 import 'katex/dist/katex.min.css'
+import { toRoute } from '@/router'
 
 onMounted(() => {
   window.onHtmlEventDispatch = onHtmlEventDispatch
@@ -197,6 +198,9 @@ const clickCurDoc = async (tree: DocTree) => {
   // 如果选中的是文章, 则查询文章详情, 用于在编辑器中显示以及注入
   if (tree.ty == 3) {
     await getCurEditArticle(tree.i)
+    // route.path = 'articles?articleId=1'
+    window.history.replaceState('', '', '#/articles?articleId=' + tree.i)
+    // console.log(route.path);
   }
 }
 
