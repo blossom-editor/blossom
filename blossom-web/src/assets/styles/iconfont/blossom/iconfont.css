@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconbl"; /* Project id 4118609 */
-  src: url('iconfont.woff2?t=1688457329856') format('woff2'),
-       url('iconfont.woff?t=1688457329856') format('woff'),
-       url('iconfont.ttf?t=1688457329856') format('truetype');
+  src: url('iconfont.woff2?t=1698999782697') format('woff2'),
+       url('iconfont.woff?t=1698999782697') format('woff'),
+       url('iconfont.ttf?t=1698999782697') format('truetype');
 }
 
 .iconbl {
@@ -11,6 +11,246 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.bl-check:before {
+  content: "\e6b8";
+}
+
+.bl-statistic-line:before {
+  content: "\ea48";
+}
+
+.bl-win-reset:before {
+  content: "\e602";
+}
+
+.bl-pen:before {
+  content: "\e921";
+}
+
+.bl-computer-line:before {
+  content: "\ea46";
+}
+
+.bl-a-fixedposition-line:before {
+  content: "\ea47";
+}
+
+.bl-a-boxchoice-line:before {
+  content: "\e9d8";
+}
+
+.bl-a-boxdownload-line:before {
+  content: "\ea4a";
+}
+
+.bl-flag-line:before {
+  content: "\ea4b";
+}
+
+.bl-a-flowchart1-line:before {
+  content: "\ea4c";
+}
+
+.bl-a-morecross-line:before {
+  content: "\ea49";
+}
+
+.bl-fanqiezhong:before {
+  content: "\e618";
+}
+
+.bl-file-pdf:before {
+  content: "\e7b8";
+}
+
+.bl-file-markdown:before {
+  content: "\e7b9";
+}
+
+.bl-HTML:before {
+  content: "\e87d";
+}
+
+.bl-archive-line:before {
+  content: "\e60f";
+}
+
+.bl-file-zip-line:before {
+  content: "\e66a";
+}
+
+.bl-file-download-line:before {
+  content: "\e65e";
+}
+
+.bl-file-upload-line:before {
+  content: "\e666";
+}
+
+.bl-folder-download-line:before {
+  content: "\e66b";
+}
+
+.bl-download--line:before {
+  content: "\e701";
+}
+
+.bl-qr-code-line:before {
+  content: "\e719";
+}
+
+.bl-upload--line:before {
+  content: "\e72e";
+}
+
+.bl-a-statisticalviewpiechart2-line:before {
+  content: "\ea2e";
+}
+
+.bl-a-statisticalviewpiechart3-line:before {
+  content: "\ea2f";
+}
+
+.bl-github:before {
+  content: "\e72a";
+}
+
+.bl-a-archivecatalogue-line:before {
+  content: "\e9d6";
+}
+
+.bl-a-labellist-line:before {
+  content: "\ea2d";
+}
+
+.bl-correlation-line:before {
+  content: "\ea25";
+}
+
+.bl-a-relation1-line:before {
+  content: "\ea28";
+}
+
+.bl-a-relation2-line:before {
+  content: "\ea2b";
+}
+
+.bl-a-relation3-line:before {
+  content: "\ea2c";
+}
+
+.bl-a-pageadd-line:before {
+  content: "\ea22";
+}
+
+.bl-a-pagelevel-line:before {
+  content: "\ea23";
+}
+
+.bl-a-templatelist2-line:before {
+  content: "\ea45";
+}
+
+.bl-a-colorpalette-line:before {
+  content: "\ea1b";
+}
+
+.bl-date-line:before {
+  content: "\ea24";
+}
+
+.bl-a-packageadd-line:before {
+  content: "\ea26";
+}
+
+.bl-a-templateadd-line:before {
+  content: "\ea44";
+}
+
+.bl-a-addline-line:before {
+  content: "\e9d4";
+}
+
+.bl-a-leftdirection-line:before {
+  content: "\ea17";
+}
+
+.bl-a-leftdirection-fill:before {
+  content: "\ea18";
+}
+
+.bl-record-line:before {
+  content: "\ea19";
+}
+
+.bl-send-line:before {
+  content: "\ea21";
+}
+
+.bl-a-IDcardfront-line:before {
+  content: "\ea14";
+}
+
+.bl-note-line:before {
+  content: "\ea15";
+}
+
+.bl-reader-line:before {
+  content: "\ea16";
+}
+
+.bl-tiaoxingma:before {
+  content: "\e812";
+}
+
+.bl-a-barcode-line:before {
+  content: "\e9d5";
+}
+
+.bl-folding-line:before {
+  content: "\ea13";
+}
+
+.bl-refresh-smile:before {
+  content: "\e64f";
+}
+
+.bl-sendmail-line:before {
+  content: "\ea20";
+}
+
+.bl-a-historicalrecord-line:before {
+  content: "\ea12";
+}
+
+.bl-books-line:before {
+  content: "\ea10";
+}
+
+.bl-a-cloudstorage-line:before {
+  content: "\ea0f";
+}
+
+.bl-sd-line:before {
+  content: "\ea1a";
+}
+
+.bl-a-texteditorstickup-line:before {
+  content: "\ea43";
+}
+
+.bl-calendar-line:before {
+  content: "\e9db";
+}
+
+.bl-a-folderset-line:before {
+  content: "\ea0e";
+}
+
+.bl-delete-line:before {
+  content: "\e9e1";
 }
 
 .bl-a-online-line:before {
@@ -277,6 +517,10 @@
   content: "\ea99";
 }
 
+.bl-add-line:before {
+  content: "\e9d3";
+}
+
 .bl-a-cloudrefresh-line:before {
   content: "\e9e2";
 }
@@ -399,6 +643,18 @@
 
 .bl-shrink-line:before {
   content: "\ea27";
+}
+
+.bl-subtract-line:before {
+  content: "\ea30";
+}
+
+.bl-box-line:before {
+  content: "\e9d9";
+}
+
+.bl-a-closeline-line:before {
+  content: "\e2ec";
 }
 
 .bl-a-home1-line:before {
