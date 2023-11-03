@@ -9,7 +9,13 @@
       <div class="form">
         <div>
           <span class="info-sub-title">可以修改字数统计折线图的过往统计数据(按月)。</span><br />
-          <span class="info-sub-title">已添加的统计信息只能修改，无法删除。</span>
+          <span class="info-sub-title">已添加的统计信息只能修改，无法删除。</span><br />
+          <bl-row>
+            <el-icon class="up"><CaretTop /></el-icon>
+            <span class="info-sub-title">相较上月字数增加，</span>
+            <el-icon class="down"><CaretBottom /></el-icon>
+            <span class="info-sub-title">相较上月字数减少。</span>
+          </bl-row>
         </div>
         <div style="margin-top: 10px">
           月份：<el-date-picker v-model="wordsDate" type="month" style="width: 166px" placeholder="选择月份" value-format="YYYY-MM" />
@@ -28,18 +34,31 @@
     </div>
     <el-divider style="margin: 0" />
     <div class="words-item-container">
-      <div class="words-item" v-for="data in wordsList?.sort((a, b) => a.date.localeCompare(b.date))">
-        <span :class="[data.date.substring(4) == '-01' ? 'january' : '']">{{ data.date }}</span>
+      <bl-row class="words-item" width="240px" just="space-between" v-for="data in sortWordsList">
+        <!-- 每年一月以特殊颜色标识 -->
+        <span class="date" :class="[data.date.substring(4) == '-01' ? 'january' : '']">
+          {{ data.date }}
+        </span>
+        <span v-if="data.change === 'up'" class="up">
+          <el-icon><CaretTop /></el-icon>
+        </span>
+        <span v-else-if="data.change === 'down'" class="down">
+          <el-icon><CaretBottom /></el-icon>
+        </span>
+        <span v-else class="none">
+          <el-icon><CaretRight /></el-icon>
+        </span>
         <el-input-number v-model="data.value" style="width: 110px" controls-position="right" :step="10000" :min="0"></el-input-number>
         <el-button class="del-btn" text bg style="margin-left: 5px" @click="delWordsDate(data.date)">
           <span class="iconbl bl-delete-line"></span>
         </el-button>
-      </div>
+      </bl-row>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { CaretTop, CaretBottom, CaretRight } from '@element-plus/icons-vue'
 import { ChartLineWordsData, renderChart } from './scripts/chart-line-words'
 import { articleWordsListApi, articleWordsSaveApi } from '@renderer/api/blossom'
 // echarts
@@ -52,6 +71,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { isNull } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
 import { ElMessageBox } from 'element-plus'
+import { isEmpty } from 'lodash'
 
 echarts.use([
   TitleComponent,
@@ -70,13 +90,35 @@ onMounted(() => {
   getWordsList()
 })
 
+const sortWordsList = computed(() => {
+  let sorted: WordsList[] = []
+  if (isEmpty(wordsList.value)) {
+    return []
+  }
+  sorted = wordsList.value!.sort((a, b) => a.date.localeCompare(b.date))
+  for (let i = 0; i < sorted.length; i++) {
+    const w = sorted[i]
+    if (i === 0) {
+      w.change = 'none'
+    } else {
+      if (w.value >= sorted[i - 1].value) {
+        w.change = 'up'
+      } else {
+        w.change = 'down'
+      }
+    }
+  }
+  return sorted
+})
+
 const rqLoading = ref(true)
 const rqloadingText = ref('')
 
+type WordsList = { date: string; value: number; change: 'none' | 'up' | 'down' }
 let chartLine: any
 const ChartLineRef = ref<any>(null)
 const wordsDate = ref('')
-const wordsList = ref<{ date: string; value: number | string }[] | null>([])
+const wordsList = ref<WordsList[] | null>([])
 
 const getWordsList = () => {
   rqLoading.value = true
@@ -104,7 +146,7 @@ const resetWordsList = () => {
  */
 const addWordsDate = () => {
   if (wordsList.value == null) {
-    wordsList.value = [{ date: wordsDate.value, value: 0 }]
+    wordsList.value = [{ date: wordsDate.value, value: 0, change: 'none' }]
     return
   }
   let exist = false
@@ -116,7 +158,7 @@ const addWordsDate = () => {
     }
   }
   if (!exist) {
-    wordsList.value.push({ date: wordsDate.value, value: 0 })
+    wordsList.value.push({ date: wordsDate.value, value: 0, change: 'none' })
   } else {
     Notify.info(`日期 [${wordsDate.value}] 已存在`, '提示')
   }
@@ -244,7 +286,6 @@ const windowResize = () => {
       font-size: 14px;
       padding: 5px 5px;
       border-radius: 4px;
-      transition: box-shadow 0.1s;
 
       .january {
         color: var(--el-color-primary);
@@ -258,15 +299,29 @@ const windowResize = () => {
         }
       }
 
-      & > span {
-        padding-right: 10px;
+      .date {
         font-size: 13px;
+        padding-right: 3px;
       }
 
       .del-btn {
         opacity: 0;
       }
     }
+  }
+
+  .up,
+  .down,
+  .none {
+    padding-right: 3px;
+  }
+
+  .up {
+    color: var(--el-color-success);
+  }
+
+  .down {
+    color: var(--el-color-error);
   }
 }
 </style>
