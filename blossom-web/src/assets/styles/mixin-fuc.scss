@@ -66,3 +66,9 @@
   justify-content: $main;
   align-items: $cross;
 }
+
+@mixin ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
