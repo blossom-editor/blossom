@@ -3,12 +3,12 @@
   <div class="yq-user-info-heatmap" ref="ChartHeatmapRef" />
   <!-- 图表数据切换 -->
   <div class="heatmap-type-choice-btns">
-    <div class="heatmap-type-content">{{ type }}</div>
+    <div class="heatmap-type-content">编辑热力图</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted } from 'vue'
 import { articleHeatmapApi } from '@/api/blossom'
 // echarts
 import * as echarts from 'echarts/core'
@@ -17,10 +17,20 @@ import { HeatmapChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { ScatterChart, EffectScatterChart } from 'echarts/charts'
 import { UniversalTransition } from 'echarts/features'
-echarts.use([TitleComponent, CalendarComponent, TooltipComponent, VisualMapComponent, HeatmapChart, CanvasRenderer, LegendComponent, ScatterChart, EffectScatterChart, UniversalTransition])
+echarts.use([
+  TitleComponent,
+  CalendarComponent,
+  TooltipComponent,
+  VisualMapComponent,
+  HeatmapChart,
+  CanvasRenderer,
+  LegendComponent,
+  ScatterChart,
+  EffectScatterChart,
+  UniversalTransition
+])
 
 const ChartHeatmapRef = ref()
-const type = ref('文章编辑记录')
 let chartHeatmap: any
 let chartData: any = []
 let maxUpdateNum = 0
@@ -35,12 +45,11 @@ const getBlossomHeatmap = () => {
     dateBegin = articleHeatmap.dateBegin
     dateEnd = articleHeatmap.dateEnd
     chartData = articleHeatmap.chartData
-    type.value = '文章编辑记录'
     renderChart()
   }
 
   if (!articleHeatmap.init) {
-    articleHeatmapApi().then(res => {
+    articleHeatmapApi().then((res) => {
       articleHeatmap.init = true
       articleHeatmap.maxUpdateNum = res.data.maxStatValues
       articleHeatmap.dateBegin = res.data.dateBegin
@@ -62,7 +71,7 @@ const renderChart = (callback?: any) => {
       // '#698f14',
       '#494949',
       '#9b9b9b',
-      '#b3b3b3',
+      '#b3b3b3'
       // '#494949',
       // '#835947',
       // '#aa725a',
@@ -76,52 +85,46 @@ const renderChart = (callback?: any) => {
       formatter: (params: any) => {
         let date = params.data[0]
         let num = params.data[1]
-        if (type.value === '文章编辑记录') {
-          return "<div style='text-align: left'>" +
-            date + ' 日 <br/>' +
-            '编辑 [ ' + num + ' ] 篇文章' +
-            "</div>"
-        } else {
-          return "<div style='text-align: left'>" +
-            date + ' 日 <br/>' +
-            '提交 [ ' + num + ' ] 次代码' +
-            "</div>"
-        }
-      },
+        return "<div style='text-align: left'>" + date + ' 日 <br/>' + '编辑 [ ' + num + ' ] 篇文章' + '</div>'
+      }
     },
-    calendar: [{
-      top: 40,
-      bottom: 5,
-      left: 30,
-      right: 30,
-      cellSize: ['auto', 30],
-      range: [dateBegin, dateEnd],
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: '#3F3F3F',
-          width: 2,
-          type: 'solid'
-        }
-      },
-      itemStyle: {
-        color: '#31363a',
-        borderWidth: 1,
-        borderColor: '#3F3F3F'
-      },
-      yearLabel: { show: false },
-      // 月份轴
-      monthLabel: { nameMap: 'ZH', color: '#747375' },
-      // 天份轴
-      dayLabel: { nameMap: 'ZH', firstDay: 1, color: '#747375' }
-    }],
-    visualMap: [{
-      top: 10,
-      left: 300,
-      min: 0,
-      max: maxUpdateNum,
-      show: false
-    }],
+    calendar: [
+      {
+        top: 40,
+        bottom: 5,
+        left: 30,
+        right: 30,
+        cellSize: ['auto', 30],
+        range: [dateBegin, dateEnd],
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#3F3F3F',
+            width: 2,
+            type: 'solid'
+          }
+        },
+        itemStyle: {
+          color: '#31363a',
+          borderWidth: 1,
+          borderColor: '#3F3F3F'
+        },
+        yearLabel: { show: false },
+        // 月份轴
+        monthLabel: { nameMap: 'ZH', color: '#747375' },
+        // 天份轴
+        dayLabel: { nameMap: 'ZH', firstDay: 1, color: '#747375' }
+      }
+    ],
+    visualMap: [
+      {
+        top: 10,
+        left: 300,
+        min: 0,
+        max: maxUpdateNum,
+        show: false
+      }
+    ],
     series: [
       {
         type: 'scatter',
@@ -142,9 +145,14 @@ const renderChart = (callback?: any) => {
         type: 'effectScatter',
         coordinateSystem: 'calendar',
         // 排序后选最多的5个
-        data: chartData === undefined ? 0 : chartData.sort((a: any, b: any) => {
-          return b[1] - a[1]
-        }).slice(0, 5),
+        data:
+          chartData === undefined
+            ? 0
+            : chartData
+                .sort((a: any, b: any) => {
+                  return b[1] - a[1]
+                })
+                .slice(0, 5),
         // 何时显示特效
         showEffectOn: 'render',
         // 涟漪特效的配置
@@ -165,11 +173,9 @@ onMounted(() => {
   chartHeatmap = echarts.init(ChartHeatmapRef.value)
   windowResize()
   getBlossomHeatmap()
-  window.addEventListener("resize", windowResize)
+  window.addEventListener('resize', windowResize)
 })
-
 </script>
-
 
 <style lang="scss">
 // 整体左边距
@@ -192,7 +198,7 @@ $info-margin-left: 130px;
 
   .heatmap-type-choice-btn {
     @include box(30px, 30px);
-    @include border(1px, #3F3F3F, 3px);
+    @include border(1px, #3f3f3f, 3px);
     margin: 0 20px 0 25px;
     padding: 5px 3px;
     transition: box-shadow 0.4s;

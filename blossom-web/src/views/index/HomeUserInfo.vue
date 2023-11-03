@@ -14,7 +14,7 @@
     <div class="userinfo-content">
       <div class="userinfo-content-btns">
         <ul>
-          <li @click="toRoute('/articles')">我的所有文章</li>
+          <li @click="toRoute('/articles')">所有文章 <span class="iconbl bl-sendmail-line"></span></li>
           <li v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
             {{ link.NAME }}
           </li>
@@ -55,10 +55,9 @@ onMounted(() => {
 <style scoped lang="scss">
 .home-userinfo-root {
   @include box(100%, 100%);
-  @include flex(column, flex-start, center);
+  @include flex(column, center, center);
 
   .userinfo-desc {
-    height: 40%;
     @include flex(row, flex-start, flex-end);
 
     .avatar {
@@ -92,7 +91,6 @@ onMounted(() => {
   }
 
   .userinfo-content {
-    height: 60%;
     padding-top: 5px;
     text-align: center;
 

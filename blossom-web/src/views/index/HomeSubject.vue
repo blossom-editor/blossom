@@ -121,6 +121,7 @@ const toToc = (articleId: number) => {
     .cover-name {
       @include box(150px, 17px);
       @include font(12px, 700);
+      line-height: 17px;
       position: absolute;
       top: 15px;
       right: -50px;
@@ -148,7 +149,6 @@ const toToc = (articleId: number) => {
 
       .icon-sendmail-fill {
         font-size: 20px;
-        // opacity: 0;
       }
     }
   }
