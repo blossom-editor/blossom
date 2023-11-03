@@ -26,7 +26,7 @@
             <bl-row class="container-sub-name">
               The last 36 months
               <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
-              <span class="iconbl bl-statistic-line container-refresh" @click="showWordsInfo"></span>
+              <span class="iconbl bl-statistic-line container-operator" @click="showWordsInfo"></span>
             </bl-row>
             <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
           </bl-col>
@@ -212,6 +212,12 @@ const showWordsInfo = () => {
       animation: rotation 10s linear infinite;
       text-shadow: none;
     }
+  }
+
+  .container-operator {
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
   }
 
   $border-middle: 1px;
