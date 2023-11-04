@@ -10,7 +10,7 @@
 
 // placement = bottom
 .el-popper.is-blossomb {
-  @include themeBg(linear-gradient(90deg, #ad8cf2, #7fbeff), linear-gradient(90deg, #899911, #B98B17));
+  @include themeBg(linear-gradient(90deg, #ad8cf2, #7fbeff), linear-gradient(90deg, #899911, #b98b17));
   @include themeText(2px 4px 5px rgba(107, 104, 104, 1), 2px 4px 5px rgb(62, 62, 62));
   @include themeShadow(2px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px rgb(0, 0, 0));
   color: #fff;
@@ -34,11 +34,89 @@
   right: 0;
 }
 
-
 .el-popper.is-light {
   @include themeShadow(3px 3px 10px 1px #848484, 3px 3px 10px 1px #000000);
 
   .keyboard {
     margin-top: 5px;
+  }
+}
+
+.el-popper.el-picker__popper {
+  // 日期范围选择
+  .el-date-picker {
+    width: 260px;
+    .el-date-picker__header {
+      margin: 3px 12px;
+
+      .el-date-picker__header-label {
+        font-size: 14px;
+      }
+    }
+
+    .el-picker-panel__content {
+      width: 230px;
+      margin: 3px 15px;
+
+      th {
+        padding: 0;
+      }
+
+      td {
+        .cell {
+          border-radius: 0;
+        }
+      }
+
+      .el-year-table {
+        td {
+          padding: 7px 0;
+        }
+      }
+
+      .el-month-table {
+        td {
+          padding: 1px 0;
+        }
+      }
+
+      .el-date-table {
+        td {
+          padding: 2px 0;
+        }
+      }
+
+      .current {
+        .el-date-table-cell__text {
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+
+  // 日期范围选择
+  .el-date-range-picker {
+    width: 560px;
+    .el-date-range-picker__content {
+      padding: 5px;
+      .start-date,
+      .end-date {
+        .el-date-table-cell__text {
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+
+.el-popper.el-select__popper {
+  .el-select-dropdown {
+    .el-select-dropdown__list {
+      padding: 3px 0;
+      .el-select-dropdown__item {
+        height: 25px;
+        line-height: 25px;
+      }
+    }
   }
 }
