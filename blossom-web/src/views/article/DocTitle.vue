@@ -8,9 +8,11 @@
       <svg v-else-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
-      <div class="name-wrapper">
-        {{ props.trees.n }}
-      </div>
+      <el-tooltip :content="props.trees.n" placement="top" :show-after="1000" :hide-after="0" :transition="'none'" :offset="2" :persistent="false">
+        <div class="name-wrapper" :style="nameWrapperStyle">
+          {{ props.trees.n }}
+        </div>
+      </el-tooltip>
       <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>
   </div>
@@ -26,6 +28,12 @@ import BLTag from '@/components/BLTag.vue'
 
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} }
+})
+
+const nameWrapperStyle = computed(() => {
+  return {
+    maxWidth: isNotBlank(props.trees.icon) ? 'calc(100% - 25px)' : '100%'
+  }
 })
 
 /**
@@ -62,8 +70,6 @@ $icon-size: 17px;
 
 .doc-title {
   @include flex(row, flex-start, flex-start);
-  max-width: calc(100% - 15px);
-  min-width: calc(100% - 15px);
   width: 100%;
   padding-bottom: 1px;
   position: relative;
@@ -88,14 +94,7 @@ $icon-size: 17px;
 
     .name-wrapper {
       @include ellipsis();
-      max-width: calc(100% - 25px);
     }
-  }
-
-  .sort {
-    position: absolute;
-    right: -15px;
-    top: 2px;
   }
 }
 
@@ -133,7 +132,6 @@ $icon-size: 17px;
 
   .doc-name {
     @include flex(row, flex-start, flex-start);
-    color: var(--el-color-primary);
     align-content: flex-start;
     flex-wrap: wrap;
     width: 100%;
@@ -154,11 +152,6 @@ $icon-size: 17px;
       max-width: calc(100% - 25px);
       min-width: calc(100% - 25px);
     }
-  }
-
-  .sort {
-    position: absolute;
-    right: -15px;
   }
 }
 </style>
