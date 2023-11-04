@@ -10,19 +10,26 @@
           <span class="iconbl bl-a-addline-line" @click="handleShowPlanAddDialog(data.day)"></span>
         </div>
         <div class="plan-group">
-          <div v-for="plan, index in planDays[data.day + ' 00:00:00']" :key="plan.id">
-            <el-popover placement="right" popper-class="plan-popover" :width="200" trigger="click" :hide-after="0"
-              :disabled="plan.id < 0" :persistent="false">
+          <div v-for="(plan, index) in planDays[data.day + ' 00:00:00']" :key="plan.id">
+            <el-popover
+              placement="right"
+              popper-class="plan-popover"
+              :width="200"
+              trigger="click"
+              :hide-after="0"
+              :disabled="plan.id < 0"
+              :persistent="false">
               <!-- 触发元素 -->
               <template #reference>
-                <div :class="'plan-line ' + plan.color + ' ' + plan.position + ' ' + plan.hl"
-                  :style="{ top: (index) * 28 + 'px' }" @mouseenter="handleMouseenter(data.day, plan.groupId)"
+                <div
+                  :class="'plan-line ' + plan.color + ' ' + plan.position + ' ' + plan.hl"
+                  :style="{ top: index * 28 + 'px' }"
+                  @mouseenter="handleMouseenter(data.day, plan.groupId)"
                   @mouseleave="handleMouseleave(data.day, plan.groupId)">
                   <div v-if="plan.position == 'head' || plan.position == 'all'" class="plan-title">
                     {{ plan.title }}
                   </div>
-                  <div v-if="plan.position == 'tail' || plan.position == 'all'" class="iconbl bl-delete-line"
-                    @click="delDay(plan.groupId)"></div>
+                  <div v-if="plan.position == 'tail' || plan.position == 'all'" class="iconbl bl-delete-line" @click="delDay(plan.groupId)"></div>
                 </div>
               </template>
 
@@ -46,8 +53,15 @@
     </el-calendar>
   </div>
 
-  <el-dialog v-model="isShowPlanAddDialog" width="400" top="60px" style="margin-left: 300px;" :append-to-body="true"
-    :destroy-on-close="false" :close-on-click-modal="true" draggable>
+  <el-dialog
+    v-model="isShowPlanAddDialog"
+    width="400"
+    top="60px"
+    style="margin-left: 300px"
+    :append-to-body="true"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+    draggable>
     <PlanDayInfo ref="PlanDayInfoRef" @saved="savedCallback"></PlanDayInfo>
   </el-dialog>
 </template>
@@ -72,16 +86,19 @@ const planDays = ref({})
 // 上次点击选择的月份, 不同月份时才查询接口
 let lastMonth: string = ''
 
-watch(() => selectDay.value, (data) => {
-  getPlanAll(timestampToDatetime(data).substring(0, 7))
-})
+watch(
+  () => selectDay.value,
+  (data) => {
+    getPlanAll(timestampToDatetime(data).substring(0, 7))
+  }
+)
 
 const getPlanAll = (month: string, force: boolean = false) => {
   if (!force && month == lastMonth) {
-    return;
+    return
   }
   lastMonth = month
-  planListDayApi({ month: month }).then(resp => {
+  planListDayApi({ month: month }).then((resp) => {
     planDays.value = resp.data
   })
 }
@@ -94,7 +111,6 @@ const handleShowPlanAddDialog = (ymd: string) => {
   nextTick(() => {
     PlanDayInfoRef.value.setPlanDate(ymd)
   })
-
 }
 
 const savedCallback = () => {
@@ -103,7 +119,7 @@ const savedCallback = () => {
 }
 
 const delDay = (groupId: number) => {
-  planDelApi({ groupId: groupId }).then(_resp => {
+  planDelApi({ groupId: groupId }).then((_resp) => {
     getPlanAll(lastMonth, true)
   })
 }
@@ -125,23 +141,22 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
     let hasNext = false
     let thisDayPlans = planDays.value[nextDate + ' 00:00:00']
     if (isNull(thisDayPlans)) {
-      break;
+      break
     }
     for (let i = 0; i < thisDayPlans.length; i++) {
       let plan = thisDayPlans[i]
       if (plan.groupId == groupId) {
         plan.hl = hlClassName
         hasNext = true
-        break;
+        break
       }
     }
     if (!hasNext) {
-      break;
+      break
     }
     nextDate = getNextDay(nextDate, next)
   }
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -157,7 +172,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 
   .bl-calendar {
     @include box(calc(100% - 250px), 100%);
-    @include themeShadow(0 0 5px #D7D7D7, 0 0 5px #000000);
+    @include themeShadow(0 0 5px #d7d7d7, 0 0 5px #000000);
     --el-calendar-border: 1px solid var(--el-border-color);
     // border: var(--el-calendar-border);
     z-index: 1;
@@ -173,7 +188,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
     :deep(.el-calendar__header) {
       @include box(100%, 50px);
       @include font(13px, 300);
-      color: #8A8A8A;
+      color: #8a8a8a;
       border: 0;
     }
 
@@ -192,7 +207,8 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
           th {
             border-bottom: var(--el-calendar-border);
 
-            &:last-child {}
+            &:last-child {
+            }
           }
         }
 
@@ -200,7 +216,6 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
           @include box(100%, calc(100% - 45px));
 
           tr {
-
             td.prev,
             td.next {
               .date-title {
@@ -265,7 +280,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 
                   .iconbl {
                     opacity: 0;
-                    transition: 0.3s
+                    transition: 0.3s;
                   }
                 }
 
@@ -351,7 +366,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 }
 </style>
 
-<style lang=scss>
+<style lang="scss">
 @import url('./PlanColor.scss');
 
 .plan-popover {

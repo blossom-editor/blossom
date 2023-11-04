@@ -6,12 +6,27 @@
       </div>
       <div class="task-collapse">
         <el-collapse v-model="activeName" accordion>
-          <el-collapse-item title="每日待办事项" name="1">
-            <div v-for="taskday in todoDays" class="task-day" @click="toTask(taskday.todoId, taskday.todoName, taskday.todoType)">
-              {{ taskday.todoName }}
-              <bl-tag v-if="taskday.taskCount > 0">{{ taskday.taskCount }}</bl-tag>
-              <bl-tag v-if="taskday.today">今日</bl-tag>
-            </div>
+          <el-collapse-item title="每日待办事项" name="1" class="collapse-item">
+            <el-calendar ref="CalendarRef" class="task-day-calendar" v-model="selectDay">
+              <template #header="{ date }">
+                <bl-row just="space-between" class="header" style="margin: 8px 10px">
+                  <div class="month">{{ date.split(' ')[2] }}{{ date.split(' ')[3] }}</div>
+                  <el-button-group>
+                    <el-button text bg @click="selectDate('prev-month')">上月</el-button>
+                    <el-button text bg @click="selectDate('today')">今日</el-button>
+                    <el-button text bg @click="selectDate('next-month')">下月</el-button>
+                  </el-button-group>
+                </bl-row>
+              </template>
+              <template #date-cell="{ data }">
+                <div class="cell-wrapper" @click="toTask(data.day, data.day, 10)">
+                  <div class="day">{{ data.day.split('-')[2] }}</div>
+                  <div v-if="getCount(data.day) > 0">
+                    <bl-tag>{{ getCount(data.day) }}</bl-tag>
+                  </div>
+                </div>
+              </template>
+            </el-calendar>
           </el-collapse-item>
 
           <!--  -->
@@ -62,12 +77,12 @@
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-
-import { nextTick, onActivated, onMounted, ref } from 'vue'
+import { nextTick, onActivated, onMounted, ref, watch } from 'vue'
+import type { CalendarDateType, CalendarInstance } from 'element-plus'
 import { TodoList, TodoType } from './scripts/types'
 import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
 import { isNotBlank } from '@renderer/assets/utils/obj'
-import { getNextDay, getDateFormat } from '@renderer/assets/utils/util'
+import { getDateFormat } from '@renderer/assets/utils/util'
 import TaskProgress from './TaskProgress.vue'
 import TodoStat from './TodoStat.vue'
 
@@ -83,15 +98,53 @@ onActivated(() => {
   getTodos()
 })
 
+//#region ----------------------------------------< 日历 >--------------------------------------
+
+const selectDay = ref()
+const CalendarRef = ref<CalendarInstance>()
+const selectDate = (val: CalendarDateType) => {
+  if (!CalendarRef.value) return
+  CalendarRef.value.selectDate(val)
+}
+
+watch(
+  () => selectDay.value,
+  (_date) => {
+    // getPlanAll(timestampToDatetime(data).substring(0, 7))
+  }
+)
+
+//#endregion
+
 // 获取的每日待办事项原始数据
-let todoDaysResource: any
+const TaskProgressRef = ref()
+const TodoStatRef = ref()
+const activeName = ref('1')
+const todoDayMaps = ref<Map<string, TodoList>>(new Map())
 const getTodos = () => {
   todosApi().then((resp) => {
-    todoDaysResource = resp.data.todoDays
+    todoDayMaps.value.clear()
+    for (let key in resp.data.todoDays) {
+      let todo = resp.data.todoDays[key] as TodoList
+      todoDayMaps.value.set(key, {
+        todoId: todo.todoId,
+        todoName: todo.todoName,
+        todoStatus: 1,
+        todoType: 10,
+        today: false,
+        taskCount: todo.taskCount > 0 ? todo.taskCount : 0,
+        updTodoName: false
+      })
+    }
     todoPhased.value = resp.data.taskPhased
     todoPhasedClose.value = resp.data.taskPhasedClose
-    initTaskDays()
   })
+}
+
+const getCount = (day: string): number => {
+  if (!todoDayMaps.value) return 0
+  if (!todoDayMaps.value.get(day)) return 0
+  return todoDayMaps.value.get(day)!.taskCount
 }
 
 /**
@@ -105,48 +158,6 @@ const toTask = (todoId: string, todoName: string, todoType: TodoType) => {
   if (viewStyle.todoStatExpand) {
     TodoStatRef.value.reload(todoId)
   }
-}
-
-const TaskProgressRef = ref()
-const TodoStatRef = ref()
-const activeName = ref('1')
-// 今天
-const today = ref(getDateFormat())
-//
-const nextWeek = ref(getNextDay(getDateFormat(), 7))
-// 每日待办事项左侧列表
-const todoDays = ref<TodoList[]>([])
-
-/**
- * 获取前31天及后7天的日期
- */
-const initTaskDays = () => {
-  today.value = getDateFormat()
-  nextWeek.value = getNextDay(getDateFormat(), 7)
-  let days: TodoList[] = []
-
-  let addDay = (day: string) => {
-    let resource = todoDaysResource[day]
-    days.push({
-      todoId: day,
-      todoName: day,
-      todoStatus: 1,
-      todoType: 10,
-      today: day === today.value,
-      taskCount: resource ? resource.taskCount : 0,
-      updTodoName: false
-    })
-  }
-  // 往后7天
-  for (let index = 0; index < 7; index++) {
-    addDay(getNextDay(nextWeek.value, index * -1))
-  }
-
-  // // 往前1个月
-  for (let index = 0; index < 31; index++) {
-    addDay(getNextDay(today.value, index * -1))
-  }
-  todoDays.value = days
 }
 
 //#region --------------------------------------------------< 阶段性事项 >--------------------------------------------------
@@ -255,13 +266,52 @@ const blurPhasedUpdHandle = (todoId: string) => {
             inset -1px 3px 5px #dfdfdf,
             inset -1px -3px 5px #dfdfdf;
           height: calc(100% - #{$item-height});
-          overflow-y: scroll;
+          overflow-y: auto;
           padding: 0 10px 0 20px;
 
           [class='dark'] & {
             box-shadow:
               inset -1px 3px 5px #000,
               inset -1px -3px 5px #000;
+          }
+        }
+        .collapse-item {
+          :deep(.el-collapse-item__content) {
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .task-day-calendar {
+      background-color: transparent;
+      :deep(.el-calendar__header) {
+        padding: 0;
+      }
+
+      :deep(.el-calendar__body) {
+        padding: 0;
+        th {
+          padding: 6px 0;
+        }
+        .el-calendar-table__row {
+          .prev,
+          .current,
+          .next {
+            .el-calendar-day {
+              padding: 0;
+              height: 50px;
+              .cell-wrapper {
+                @include box(100%, 100%);
+                .day {
+                  @include font(14px, 300);
+                  text-align: center;
+                }
+              }
+            }
+            &:last-child {
+              border-right: none;
+            }
           }
         }
       }

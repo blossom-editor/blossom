@@ -1,7 +1,7 @@
 /**
  * 事项类型
- * 1: 每日待办事项
- * 2: 阶段性事项
+ * 10: 每日待办事项
+ * 20: 阶段性事项
  * 99: 中午12点分割线
  */
 export type TodoType = 10 | 20 | 99
@@ -23,33 +23,33 @@ export type TaskStatus = 'WAITING' | 'PROCESSING' | 'COMPLETED'
  * 事项 todo 列表
  */
 export interface TodoList {
-  id?: string,
+  id?: string
   /**
    * type = 1 时, todoId 为日期
    * type = 2 时, todoId 为雪花ID
    */
-  todoId: string,
+  todoId: string
   /**
    * type = 1 时, todoName 为日期
    * type = 2 时, todoName 为标题
    */
-  todoName: string,
+  todoName: string
   /**
    * 是否修改名称
    */
-  updTodoName: boolean,
+  updTodoName: boolean
   /**
    * 事项状态
    */
-  todoStatus: TodoStatus,
+  todoStatus: TodoStatus
   /**
    * 事项类型
    */
-  todoType: TodoType,
+  todoType: TodoType
   /**
    * 是否当天, 用于 type = 1
    */
-  today: boolean,
+  today: boolean
   /**
    * 任务数量
    */
@@ -60,25 +60,25 @@ export interface TodoList {
  * 任务 task
  */
 export interface TaskInfo {
-  id?: string,
-  todoId: string,
-  todoName: string,
-  todoType: TodoType,
-  taskName: string,
-  taskContent: string,
-  taskTags: string[],
-  deadLine: string,
-  creTime: string,
-  startTime?: string,
-  endTime?: string,
+  id?: string
+  todoId: string
+  todoName: string
+  todoType: TodoType
+  taskName: string
+  taskContent: string
+  taskTags: string[]
+  deadLine: string
+  creTime: string
+  startTime?: string
+  endTime?: string
   /**
    * 处理百分比, 0 ~ 100
    */
-  process: number,
-  color: string,
-  taskStatus: TaskStatus,
+  process: number
+  color: string
+  taskStatus: TaskStatus
 
-  // 
-  updTaskName: boolean,
+  //
+  updTaskName: boolean
   updTaskContent: boolean
 }
