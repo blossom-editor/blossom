@@ -11,11 +11,9 @@
       <svg v-else-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
-      <el-tooltip :content="props.trees.n" placement="top" :show-after="1000" :hide-after="0" :transition="'none'" :offset="2" :persistent="false">
-        <div class="name-wrapper" :style="nameWrapperStyle">
-          {{ props.trees.n }}
-        </div>
-      </el-tooltip>
+      <div class="name-wrapper" :style="nameWrapperStyle">
+        {{ props.trees.n }}
+      </div>
       <bl-tag v-if="props.trees.o === 1 && props.trees.ty != 3" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>

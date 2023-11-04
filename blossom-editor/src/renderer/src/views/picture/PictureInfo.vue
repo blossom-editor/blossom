@@ -3,7 +3,11 @@
     <!-- 标题 -->
     <div class="info-title-wrapper">
       <div class="info-icon">
-        <svg v-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px; width: 40px" aria-hidden="true">
+        <img
+          style="height: 40px; width: 40px"
+          v-if="docForm != undefined && isNotBlank(docForm.icon) && (docForm.icon!.startsWith('http') || docForm.icon!.startsWith('https'))"
+          :src="docForm.icon" />
+        <svg v-else-if="docForm != undefined && isNotBlank(docForm.icon)" style="height: 40px; width: 40px" aria-hidden="true">
           <use :xlink:href="'#' + docForm.icon"></use>
         </svg>
       </div>

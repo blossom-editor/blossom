@@ -1,14 +1,14 @@
 <template>
   <el-scrollbar>
-    <div v-if="isEmpty(subjects)" class="placeholder">
-      无专题内容
-    </div>
-    <div class="subject-item" v-for="subject in  subjects " :key="subject.name"
-      :style="{ '--bl-subject-color1': subject.color + '70' }" @click="toToc(subject.tocId)">
-
+    <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
+    <div
+      class="subject-item"
+      v-for="subject in subjects"
+      :key="subject.name"
+      :style="{ '--bl-subject-color1': subject.color + '70' }"
+      @click="toToc(subject.tocId)">
       <!-- 进度条 -->
-      <div class="progress"
-        :style="{ 'background': subject.color + '40', width: subject.subjectWords / maxWords * 100 + '%' }"></div>
+      <div class="progress" :style="{ background: subject.color + '40', width: (subject.subjectWords / maxWords) * 100 + '%' }"></div>
 
       <!-- 名称 -->
       <div class="seal">
@@ -18,35 +18,35 @@
       <div class="inner"></div>
 
       <!-- 图标 -->
+      <img
+        class="menu-icon-img"
+        v-if="isNotBlank(subject.icon) && (subject.icon.startsWith('http') || subject.icon.startsWith('https'))"
+        :src="subject.icon" />
       <svg class="icon subject-icon" aria-hidden="true">
         <use :xlink:href="'#' + subject.icon"></use>
       </svg>
 
       <!-- 字数 -->
       <bl-row class="infos" just="space-between">
-        <div>
-          <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}
-        </div>
+        <div><span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}</div>
       </bl-row>
 
       <!-- 日期 -->
       <bl-row class="infos" just="space-between">
-        <div>
-          <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}
-        </div>
+        <div><span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}</div>
       </bl-row>
     </div>
 
-    <div style="width: 100%;height: 5px;"></div>
+    <div style="width: 100%; height: 5px"></div>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import router from "@renderer/router"
-import { ref, onActivated } from "vue"
-import { subjectsApi } from "@renderer/api/blossom"
+import router from '@renderer/router'
+import { ref, onActivated } from 'vue'
+import { subjectsApi } from '@renderer/api/blossom'
 import { isEmpty } from 'lodash'
-import { isNull } from "@renderer/assets/utils/obj"
+import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
 
 onActivated(() => {
@@ -57,12 +57,14 @@ let maxWords = 0
 const subjects = ref<any>([])
 
 const getSubjects = () => {
-  subjectsApi().then(resp => {
+  subjectsApi().then((resp) => {
     subjects.value = resp.data
     if (!isEmpty(resp.data)) {
-      maxWords = resp.data.sort((a: any, b: any) => {
-        return b.subjectWords - a.subjectWords
-      }).slice(0, 1)[0].subjectWords
+      maxWords = resp.data
+        .sort((a: any, b: any) => {
+          return b.subjectWords - a.subjectWords
+        })
+        .slice(0, 1)[0].subjectWords
     }
   })
 }
@@ -74,7 +76,6 @@ const toToc = (articleId: number) => {
   }
   router.push({ path: '/articleIndex', query: { articleId: articleId } })
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -118,8 +119,10 @@ $width-item: 210px;
   @include flex(column, flex-start, flex-start);
   @include box($width-item, 90px, $width-item, $width-item);
   @include themeShadow(3px 3px 5px 1px rgba(88, 88, 88, 0.3), 3px 3px 5px 1px rgba(0, 0, 0, 1));
-  @include themeBg(linear-gradient(155deg, #ffffff00 0%, #F0F0F0 60%, var(--bl-subject-color1) 100%),
-    linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%));
+  @include themeBg(
+    linear-gradient(155deg, #ffffff00 0%, #f0f0f0 60%, var(--bl-subject-color1) 100%),
+    linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%)
+  );
   border-radius: 5px;
   margin: 15px 10px;
   transition: 0.3s;
@@ -137,8 +140,10 @@ $width-item: 210px;
       transform: translateY(-30px);
       @include themeShadow(0 3px 15px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
 
-      [class="dark"] & {
-        text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, .5);
+      [class='dark'] & {
+        text-shadow:
+          5px 5px 15px #000,
+          -3px -3px 10px rgba(255, 255, 255, 0.5);
       }
     }
 
@@ -157,7 +162,7 @@ $width-item: 210px;
     @include flex(row, space-between, center);
     @include box($width-item, 40px);
     @include font(14px, 500);
-    @include themeColor(#636363, #CDCDCD);
+    @include themeColor(#636363, #cdcdcd);
     @include themeShadow(0 3px 10px rgb(144, 144, 144), 0 3px 5px rgb(37, 37, 37));
     padding: 5px 10px;
     border-bottom-left-radius: 30px;
@@ -178,7 +183,8 @@ $width-item: 210px;
     opacity: 0;
   }
 
-  .subject-icon {
+  .subject-icon,
+  .menu-icon-img {
     @include box(55px, 55px);
     @include absolute('', 2px, 8px, '');
     @include themeFilter(drop-shadow(0 0 3px rgb(62, 62, 62)), drop-shadow(0 0 3px #000000));
@@ -187,7 +193,7 @@ $width-item: 210px;
   .infos {
     @include box(100%, 25px);
     @include font(11px, 300);
-    @include themeColor(#595959, #8D8D8D);
+    @include themeColor(#595959, #8d8d8d);
     padding: 5px 10px;
 
     .iconbl {

@@ -12,11 +12,9 @@
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
 
-      <el-tooltip :content="props.trees.n" placement="top" :show-after="1000" :hide-after="0" :transition="'none'" :offset="2" :persistent="false">
-        <div class="name-wrapper" :style="nameWrapperStyle">
-          {{ props.trees.n }}
-        </div>
-      </el-tooltip>
+      <div class="name-wrapper" :style="nameWrapperStyle">
+        {{ props.trees.n }}
+      </div>
       <!-- 如果专题是公开的, 则单独显示公开标签 -->
       <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
