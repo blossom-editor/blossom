@@ -168,9 +168,11 @@ import { sleep, platform } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
+// import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
-import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
 import ArticleIndexPlaceholder from './ArticleIndexPlaceholder.vue'
+import EditorTools from './EditorTools.vue'
+// import EditorStatus from './EditorStatus.vue'
 // ts
 import hotkeys from 'hotkeys-js'
 import Notify from '@renderer/scripts/notify'
@@ -196,7 +198,8 @@ import marked, {
 import { EPScroll } from './scripts/editor-preview-scroll'
 import { useArticleHtmlEvent } from './scripts/article-html-event'
 
-const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
+const PictureViewerInfo = defineAsyncComponent(() => import('@renderer/views/picture/PictureViewerInfo.vue'))
+// const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
 const EditorStatus = defineAsyncComponent(() => import('./EditorStatus.vue'))
 
 onMounted(() => {
@@ -360,25 +363,6 @@ const { articleReferenceView } = useArticleHtmlEvent(ArticleViewRef)
 const openArticleWindow = (id: number) => {
   openNewArticleWindow('article_window_' + id, id)
 }
-// type HtmlEvent = 'copyPreCode' | 'showArticleReferenceView'
-// const onHtmlEventDispatch = (t: any, ty: any, e: any, type: HtmlEvent, data: any) => {
-//   console.log(type)
-//   console.log(t)
-//   console.log(ty)
-//   console.log(e)
-
-//   if (type === 'copyPreCode') {
-//     let code = document.getElementById(data)
-//     if (code) {
-//       writeText(code.innerText)
-//     }
-//   } else if (type === 'showArticleReferenceView') {
-//     isShowArticleReferenceView.value = true
-//     e.preventDefault()
-//   }
-// }
-
-// const isShowArticleReferenceView = ref(false)
 //#endregion
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
