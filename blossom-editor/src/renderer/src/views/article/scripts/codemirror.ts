@@ -298,7 +298,6 @@ export class CmWrapper {
         }),
         EditorView.domEventHandlers({
           drop(event: DragEvent) {
-            console.log(event)
             uploadFileCallback(event)
             return
           },

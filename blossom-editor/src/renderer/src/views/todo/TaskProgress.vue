@@ -586,7 +586,6 @@ const transfer = () => {
       type: 'warning'
     }
   ).then(() => {
-    // console.log({ ...transferForm.value, ...{ curTodoId: curTodo.value.todoId, taskIds: Array.from(taskIdMap.value.keys()) } })
     taskTransferApi({ ...transferForm.value, ...{ curTodoId: curTodo.value.todoId, taskIds: Array.from(taskIdMap.value.keys()) } }).then((resp) => {
       savedCallback(resp.data)
       Notify.success(`所选待办事项已转移至 [${transferForm.value.todoId}]`, '转移事项成功')
