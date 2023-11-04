@@ -61,7 +61,6 @@ export const computedDocTitleColor = (level: number) => {
  */
 export const checkLevel = (pid: number, trees: DocTree[]): boolean => {
   let parents = getPDocsByPid(pid, trees)
-  console.log(parents)
   if (parents.length >= 4) {
     Notify.error('最多仅支持4级层级关系', '菜单层级错误')
     return false
