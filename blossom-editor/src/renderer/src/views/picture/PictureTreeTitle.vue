@@ -110,7 +110,7 @@ $icon-size: 17px;
 
   .sort {
     position: absolute;
-    right: -15px;
+    right: 0;
     top: 2px;
   }
 }
