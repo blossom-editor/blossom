@@ -1,12 +1,9 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-row just="flex-end" align="flex-end">
-      <div v-show="curFolder !== undefined" style="font-size: 12px; text-align: right; color: var(--bl-text-color-light)">
-        <span>《{{ curFolder?.name }}》</span>
-        <br />
-        <span style="font-size: 9px; padding-right: 5px">{{ curFolder?.id }}</span>
-      </div>
-    </bl-row>
+    <bl-col class="workbench-name" just="flex-start" align="flex-end" height="46px" v-show="curFolder !== undefined">
+      <span>《{{ curFolder?.name }}》</span>
+      <span style="font-size: 9px; padding-right: 5px">{{ curFolder?.id }}</span>
+    </bl-col>
 
     <!--  -->
     <bl-row just="flex-end" align="flex-end">

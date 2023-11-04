@@ -1,12 +1,9 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-row just="flex-end" align="flex-end">
-      <div v-show="curDoc !== undefined" style="font-size: 12px; text-align: right; color: var(--bl-text-color)">
-        <span>《{{ curDoc?.name }}》</span>
-        <br />
-        <span style="font-size: 9px; padding-right: 5px">{{ curDoc?.id }}</span>
-      </div>
-    </bl-row>
+    <bl-col class="workbench-name" just="flex-start" align="flex-end" height="46px" v-show="curDoc !== undefined">
+      <span>《{{ curDoc?.name }}》</span>
+      <span style="font-size: 9px; padding-right: 5px">{{ curDoc?.id }}</span>
+    </bl-col>
     <bl-row class="wb-page-container">
       <Transition name="wbpage-one">
         <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 1">

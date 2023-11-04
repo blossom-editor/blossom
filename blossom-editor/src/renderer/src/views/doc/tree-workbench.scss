@@ -3,6 +3,14 @@
   @include flex(column, flex-end, flex-end);
   border-bottom: 1px solid var(--el-border-color);
 
+  .workbench-name {
+    color: var(--bl-text-color);
+    font-size: 12px;
+    text-align: right;
+    overflow: overlay;
+    padding-right: 5px;
+  }
+
   .workbench-page {
     @include themeColor(#909399, #535353);
     padding: 5px;
