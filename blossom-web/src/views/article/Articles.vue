@@ -168,7 +168,7 @@ const article = ref<DocInfo>({
   openStatus: 0,
   type: 3,
   html: `<div style="color:#E3E3E3;width:100%;height:300px;display:flex;justify-content: center;
-    align-items: center;font-size:25px;">请在左侧菜单中选择一篇文章</div>`
+    align-items: center;font-size:25px;">请在左侧菜单选择文章</div>`
 })
 const tocList = ref<any>([])
 const defaultOpeneds = ref<string[]>([])

@@ -314,6 +314,7 @@ const windowResize = () => {
   .down,
   .none {
     padding-right: 3px;
+    margin-top: 3px;
   }
 
   .up {
