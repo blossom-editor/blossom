@@ -12,6 +12,18 @@
   --el-color-primary-light-8: rgba(173, 140, 242, 0.2);
   --el-color-primary-light-9: rgba(173, 140, 242, 0.1);
 
+  /* --el-color-primary: rgb(64, 158, 255);
+  --el-color-primary-dark-2: rgba(64, 158, 255, 0.8);
+  --el-color-primary-light-1: rgba(64, 158, 255, 0.9);
+  --el-color-primary-light-2: rgba(64, 158, 255, 0.8);
+  --el-color-primary-light-3: rgba(64, 158, 255, 0.7);
+  --el-color-primary-light-4: rgba(64, 158, 255, 0.6);
+  --el-color-primary-light-5: rgba(64, 158, 255, 0.5);
+  --el-color-primary-light-6: rgba(64, 158, 255, 0.4);
+  --el-color-primary-light-7: rgba(64, 158, 255, 0.3);
+  --el-color-primary-light-8: rgba(64, 158, 255, 0.2);
+  --el-color-primary-light-9: rgba(64, 158, 255, 0.1); */
+
   --el-color-success: #67c23a;
   --el-color-success-light-3: #95d475;
   --el-color-success-light-5: #b3e19d;
@@ -73,7 +85,8 @@
 html.dark {
   /* 数字越大, 颜色越淡 */
   --el-color-primary: #899911;
-  --el-color-primary-dark-2: rgba(165, 184, 20, 1);
+  --el-color-primary-dark: rgb(136, 154, 2);
+  --el-color-primary-dark-2: rgba(165, 184, 20, 0.8);
   --el-color-primary-light-1: rgba(165, 184, 20, 0.9);
   --el-color-primary-light-2: rgba(165, 184, 20, 0.8);
   --el-color-primary-light-3: rgba(165, 184, 20, 0.7);
@@ -82,6 +95,18 @@ html.dark {
   --el-color-primary-light-7: rgba(165, 184, 20, 0.3);
   --el-color-primary-light-8: rgba(165, 184, 20, 0.2);
   --el-color-primary-light-9: rgba(165, 184, 20, 0.2);
+
+  /* --el-color-primary: rgb(173, 146, 49);
+  --el-color-primary-dark-2: rgba(173, 146, 49, 0.8);
+  --el-color-primary-light-1: rgba(173, 146, 49, 0.9);
+  --el-color-primary-light-2: rgba(173, 146, 49, 0.8);
+  --el-color-primary-light-3: rgba(173, 146, 49, 0.7);
+  --el-color-primary-light-4: rgba(173, 146, 49, 0.6);
+  --el-color-primary-light-5: rgba(173, 146, 49, 0.5);
+  --el-color-primary-light-6: rgba(173, 146, 49, 0.4);
+  --el-color-primary-light-7: rgba(173, 146, 49, 0.3);
+  --el-color-primary-light-8: rgba(173, 146, 49, 0.2);
+  --el-color-primary-light-9: rgba(173, 146, 49, 0.1); */
 
   --el-color-danger: rgb(215, 68, 68);
   --el-color-danger-light-3: rgba(215, 68, 68, 0.7);
@@ -206,8 +231,8 @@ html.dark {
   --bl-editor-ci-color: #ba7300;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: #7843e9;
-  --bl-editor-c7-color: #7843e9;
+  --bl-editor-c5-color: var(--el-color-primary);
+  --bl-editor-c7-color: var(--el-color-primary);
   --bl-editor-c7-bg-color: #00000000;
 
   /* ======================================= */
@@ -278,8 +303,8 @@ html.dark {
   --bl-editor-ci-color: #ffc66d;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: #6b7711;
-  --bl-editor-c7-color: #6b7711;
+  --bl-editor-c5-color: var(--el-color-primary);
+  --bl-editor-c7-color: var(--el-color-primary);
   --bl-editor-c7-bg-color: #00000000;
   /* ======================================= */
 

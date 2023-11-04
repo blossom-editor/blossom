@@ -66,7 +66,7 @@
     </div>
 
     <!-- 后天 -->
-    <div class="dayaftert hover-dark">
+    <div class="day-after hover-dark">
       <div class="weather-title">
         <span>Tomorrow</span>
         <span>After</span>
@@ -300,7 +300,7 @@ const refreshWeatherTask = () => {
 
   .today,
   .tomorrow,
-  .dayaftert {
+  .day-after {
     @include box(100px, 200px);
     transition:
       box-shadow 0.3s,
@@ -331,8 +331,8 @@ const refreshWeatherTask = () => {
     background-color: var(--el-color-primary-light-5);
   }
 
-  .dayaftert {
-    background-color: var(--el-color-primary-light-6);
+  .day-after {
+    background-color: var(--el-color-primary-light-7);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
   }

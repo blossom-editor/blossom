@@ -2,10 +2,8 @@
   <div>
     <div class="statistic-article-root">
       <div class="statistic">
-        <div class="main-stat"><span style="font-size: 20px;">A</span>{{ formartNumber(article.articleCount) }}</div>
-        <div class="sub-stat">
-          <span class="iconbl bl-pen-line"></span> Words {{ formartNumber(article.articleWords) }}
-        </div>
+        <div class="main-stat"><span style="font-size: 20px">A</span>{{ formartNumber(article.articleCount) }}</div>
+        <div class="sub-stat"><span class="iconbl bl-pen-line"></span> Words {{ formartNumber(article.articleWords) }}</div>
       </div>
       <div class="iconbl bl-a-texteditorhighlightcolor-line icon"></div>
       <div class="iconbl bl-a-texteditorhighlightcolor-line icon-shadow"></div>
@@ -13,10 +11,8 @@
 
     <div class="statistic-picture-root">
       <div class="statistic">
-        <div class="main-stat"><span style="font-size: 20px;">P</span>{{ formartNumber(picture.pictureCount) }}</div>
-        <div class="sub-stat">
-          <span class="iconbl bl-a-cloudstorage-line"></span> Size {{ formatFileSize(picture.pictureSize) }}
-        </div>
+        <div class="main-stat"><span style="font-size: 20px">P</span>{{ formartNumber(picture.pictureCount) }}</div>
+        <div class="sub-stat"><span class="iconbl bl-a-cloudstorage-line"></span> Size {{ formatFileSize(picture.pictureSize) }}</div>
       </div>
       <div class="iconbl bl-image--line icon"></div>
       <div class="iconbl bl-image--line icon-shadow"></div>
@@ -25,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { articleWordsApi, pictureStatApi } from '@renderer/api/blossom';
+import { articleWordsApi, pictureStatApi } from '@renderer/api/blossom'
 import { onActivated, ref } from 'vue'
 import { formatFileSize, formartNumber } from '@renderer/assets/utils/util'
 
@@ -33,13 +29,13 @@ let article = ref({ articleCount: 0, articleWords: 0 })
 let picture = ref({ pictureCount: 0, pictureSize: 0 })
 
 const getArticleWords = () => {
-  articleWordsApi().then(resp => {
+  articleWordsApi().then((resp) => {
     article.value = resp.data
   })
 }
 
 const getPictureStat = () => {
-  pictureStatApi().then(resp => {
+  pictureStatApi().then((resp) => {
     picture.value = resp.data
   })
 }
@@ -48,7 +44,6 @@ onActivated(() => {
   getArticleWords()
   getPictureStat()
 })
-
 </script>
 
 <style scoped lang="scss">
@@ -111,7 +106,7 @@ onActivated(() => {
 
   .icon-shadow {
     @include font(100px, 500);
-    @include themeColor(#ded1fa, #545c1a);
+    color: var(--el-color-primary-light-5);
     position: absolute;
     right: -30px;
     bottom: 0px;
@@ -119,7 +114,5 @@ onActivated(() => {
     transition: 0.3s;
     filter: blur(3px);
   }
-
-
 }
 </style>

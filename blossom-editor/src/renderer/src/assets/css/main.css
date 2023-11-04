@@ -11,7 +11,6 @@ body {
   user-select: none;
 }
 
-
 img {
   pointer-events: none;
 }
@@ -51,7 +50,7 @@ img {
   border-radius: 3px;
   /* 滑块的背景色 */
   /* background-color: #cdcdcd; */
-  background-color: var(--el-color-primary-light-7);
+  background-color: var(--el-color-primary-light-8);
   transition: 0.3s;
 }
 
@@ -64,9 +63,7 @@ img {
 ::-webkit-scrollbar-corner {
   background: transparent;
   /* background-color: var(--el-color-info-light-9); */
-  ;
 }
-
 
 ::selection {
   background: var(--el-color-primary-light-7) !important;
