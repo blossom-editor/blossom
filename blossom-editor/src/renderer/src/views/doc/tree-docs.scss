@@ -38,6 +38,7 @@
     // ------------------- item 的样式
     // 菜单每个 item 的高度
     --el-menu-item-height: 25px;
+    --el-transition-duration: 0.1s;
     // item 的 字体大小
     // --el-menu-item-font-size: inherit;
     // --el-font-size-base: inherit;
@@ -47,10 +48,6 @@
       height: 15px;
       border-bottom: 1px solid var(--el-border-color);
       margin-bottom: 15px;
-    }
-
-    :deep(.el-menu) {
-      transition: 0.1s !important;
     }
 
     :deep(.el-sub-menu) {
@@ -75,6 +72,7 @@
 
     :deep(.el-menu-item) {
       --el-menu-hover-bg-color: #ffffff00 !important;
+      // --el-transition-duration: 0s;
       font-weight: 300;
       color: var(--bl-text-doctree-color);
       height: auto;
@@ -84,7 +82,11 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      transition: 0.1s;
+      // transition:
+      //   border-color var(--el-transition-duration),
+      //   background-color var(--el-transition-duration),
+      //   color var(--el-transition-duration);
+      transition: none;
     }
 
     :deep(.el-menu-item.is-active) {
