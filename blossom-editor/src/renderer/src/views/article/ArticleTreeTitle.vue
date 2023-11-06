@@ -1,6 +1,6 @@
 <template>
   <div :class="[viewStyle.isShowSubjectStyle ? (props.trees.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor" style="padding: 0 2px">
+    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
       {{ props.trees.s }}
     </bl-tag>
     <div class="doc-name">
@@ -17,7 +17,10 @@
       <bl-tag v-if="props.trees.o === 1 && props.trees.ty != 3" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>
-    <div v-for="(line, index) in tagLins" :key="line" :class="[line]" :style="{ left: -1 * (index + 1) * 5 + 'px' }"></div>
+    <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
+    <div v-if="level >= 3" class="folder-level-line" style="left: -30px"></div>
+    <div v-if="level >= 4" class="folder-level-line" style="left: -40px"></div>
+    <div v-for="(line, index) in tagLins" :key="line" :class="[line]" :style="{ left: -1 * (index + 1.5) * 4 + 'px' }"></div>
   </div>
 </template>
 
@@ -116,9 +119,16 @@ $icon-size: 17px;
 
   .sort {
     position: absolute;
+    padding: 0 2px;
     right: 0px;
     top: 2px;
     z-index: 10;
+  }
+
+  .folder-level-line {
+    @include box(1px, 100%);
+    background-color: var(--el-border-color);
+    position: absolute;
   }
 }
 
@@ -163,6 +173,13 @@ $icon-size: 17px;
   .sort {
     position: absolute;
     right: -15px;
+  }
+
+  .folder-level-line {
+    @include box(1px, calc(100% + 15px));
+    background-color: var(--el-border-color);
+    position: absolute;
+    top: -5px;
   }
 }
 
