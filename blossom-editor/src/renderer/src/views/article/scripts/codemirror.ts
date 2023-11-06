@@ -56,14 +56,17 @@ export const cwTheme: any = {
   '.cm-lineNumbers': {
     width: '40px'
   },
+  '.cm-scroller': {
+    overflow: 'overlay'
+  },
   '.cm-foldGutter': {
     // paddingRight: '3px'
   },
   '.cm-content': {
     whiteSpace: 'break-spaces',
     wordWrap: 'break-word',
+    // overflow: 'auto',
     width: 'calc(100% - 55px)',
-    overflow: 'auto',
     padding: '0',
     caretColor: '#707070'
   },
@@ -165,7 +168,7 @@ export class CmWrapper {
     return this._editor
   }
 
-  /**™™
+  /**
    * 创建 EditorState
    *
    * @param updateCallback 编辑器内容变动时的回调

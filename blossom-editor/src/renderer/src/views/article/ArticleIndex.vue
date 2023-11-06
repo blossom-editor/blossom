@@ -59,11 +59,10 @@
         <div v-if="!curArticle" class="ep-placeholder">
           <ArticleIndexPlaceholder></ArticleIndexPlaceholder>
         </div>
-        <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
-        <el-backtop target=".editor-codemirror" :right="50" :bottom="70">
+        <el-backtop target=".bl-preview" :right="50" :bottom="70" @click="scrollTopReset">
           <div class="iconbl bl-send-line backtop"></div>
         </el-backtop>
       </div>
@@ -240,7 +239,6 @@ watch(
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
-const GutterHolderRef = ref() // editor gutter holder
 const EditorRef = ref() // editor
 const ResizeDividerRef = ref() // editor&preview resize dom
 const PreviewRef = ref() // html 预览
@@ -264,20 +262,17 @@ let previewFullScreen = false // 是否全屏展开预览
 let editorFullScreen = false // 是否全屏展开编辑
 const changeEditorPreviewStyle = () => {
   if (previewFullScreen) {
-    GutterHolderRef.value.style.width = '0px'
     EditorRef.value.style.width = '0px'
     PreviewRef.value.style.width = '100%'
     PreviewRef.value.style.padding = '10px 20px 0 20px'
     return
   }
   if (editorFullScreen) {
-    GutterHolderRef.value.style.width = '50px'
     EditorRef.value.style.width = 'calc(100% - 6px)'
     PreviewRef.value.style.width = '0'
     PreviewRef.value.style.padding = '0'
     return
   }
-  GutterHolderRef.value.style.width = '50px'
   EditorRef.value.style.width = '50%'
   PreviewRef.value.style.width = '50%'
   PreviewRef.value.style.padding = '10px 20px 0 20px'
@@ -312,9 +307,7 @@ const tempInput = (value: string) => {
 const enterView = () => {
   autoSave()
   initTempTextarea()
-  if (scrollWrapper) {
-    scrollWrapper.scrollTopLast()
-  }
+  scrollTopLast()
 }
 /**
  * 退出页面时, 保存文章
@@ -588,10 +581,8 @@ const setNewState = (md: string): void => {
       md
     )
   )
-  if (scrollWrapper) {
-    scrollWrapper.scrollTopReset()
-  }
   parse()
+  // scrollTopReset()
 }
 
 //#endregion
@@ -705,20 +696,34 @@ useDraggable(TocRef, TocTitleRef)
 
 //#region ----------------------------------------< 双屏滚动  >----------------------------------------
 let scrollWrapper: EPScroll
+let cmScroller: HTMLElement
 const initScroll = () => {
-  scrollWrapper = new EPScroll(EditorRef.value, PreviewRef.value, cmw)
+  cmScroller = document.getElementsByClassName('cm-scroller')[0] as HTMLElement
+  scrollWrapper = new EPScroll(cmScroller, PreviewRef.value, cmw)
 }
 
 const scroll = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
   scrollWrapper.sycnScroll(event, source, lineno, colno, error)
 }
 
+const scrollTopReset = () => {
+  if (scrollWrapper) {
+    scrollWrapper.scrollTopReset()
+  }
+}
+
+const scrollTopLast = () => {
+  if (scrollWrapper) {
+    scrollWrapper.scrollTopLast()
+  }
+}
+
 const addListenerScroll = () => {
-  EditorRef.value?.addEventListener('scroll', scroll)
+  cmScroller.addEventListener('scroll', scroll)
 }
 
 const removeListenerScroll = () => {
-  EditorRef.value?.removeEventListener('scroll', scroll)
+  cmScroller.removeEventListener('scroll', scroll)
 }
 //#endregion
 

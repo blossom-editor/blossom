@@ -23,7 +23,7 @@ export class EPScroll {
   /**
    * 保存编辑器滚动条的最后位置
    */
-  private _scrollTop: number
+  private _scrollTop: number = 0
 
   constructor(editor: HTMLElement, previre: HTMLElement, cmw: CmWrapper | undefined) {
     this._editor = editor
@@ -38,7 +38,7 @@ export class EPScroll {
 
   public scrollTopReset() {
     this._scrollTop = 0
-    this._editor.scrollTo({ top: this._scrollTop })
+    this._editor.scrollTo({ top: 0 })
   }
 
   public scrollTopLast() {
@@ -52,10 +52,10 @@ export class EPScroll {
     // console.log(this._editor?.scrollHeight,
     //   this._editor?.clientHeight,
     //   this._editor?.scrollTop)
+
     this._scrollTop = this._editor.scrollTop
     // 如果在头部附近
     if (this._editor.scrollTop < 5) {
-      // (this._preview.firstChild as HTMLElement).scrollIntoView()
       this._preview.scrollTo({ top: 0 })
     }
     // 如果在尾部附近
