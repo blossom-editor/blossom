@@ -62,6 +62,7 @@
         font-size: inherit;
 
         .el-sub-menu__icon-arrow {
+          color: var(--bl-text-color-light);
           right: calc(230px - var(--el-menu-level) * 10px);
           font-size: 12px;
           width: 0.8em;
@@ -94,8 +95,8 @@
       background: linear-gradient(
         90deg,
         var(--bl-html-color) 0%,
-        var(--el-color-primary-light-5) 40%,
-        var(--el-color-primary-light-5) 60%,
+        var(--el-color-primary-light-7) 40%,
+        var(--el-color-primary-light-7) 60%,
         var(--bl-html-color) 100%
       );
       color: #ffffff;
