@@ -47,7 +47,7 @@ img {
 
 /* 定义滑块 内阴影+圆角 */
 ::-webkit-scrollbar-thumb {
-  border-radius: 3px;
+  border-radius: 2px;
   /* 滑块的背景色 */
   /* background-color: #cdcdcd; */
   background-color: var(--el-color-primary-light-8);
