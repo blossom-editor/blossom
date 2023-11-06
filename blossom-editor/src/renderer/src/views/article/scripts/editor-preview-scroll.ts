@@ -8,14 +8,41 @@ const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, hr, ta
  * 双屏滚动封装
  */
 export class EPScroll {
+  /**
+   * 编辑器
+   */
   private _editor: HTMLElement
+  /**
+   * 预览
+   */
   private _preview: HTMLElement
+  /**
+   * codemirror 封装
+   */
   private _cmw: CmWrapper | undefined
+  /**
+   * 保存编辑器滚动条的最后位置
+   */
+  private _scrollTop: number
 
   constructor(editor: HTMLElement, previre: HTMLElement, cmw: CmWrapper | undefined) {
     this._editor = editor
     this._preview = previre
     this._cmw = cmw
+    this._scrollTop = 0
+  }
+
+  public get scrollTop() {
+    return this._scrollTop
+  }
+
+  public scrollTopReset() {
+    this._scrollTop = 0
+    this._editor.scrollTo({ top: this._scrollTop })
+  }
+
+  public scrollTopLast() {
+    this._editor.scrollTo({ top: this._scrollTop })
   }
 
   public sycnScroll(_event: Event | string, _source?: string, _lineno?: number, _colno?: number, _error?: Error): any {
@@ -25,14 +52,14 @@ export class EPScroll {
     // console.log(this._editor?.scrollHeight,
     //   this._editor?.clientHeight,
     //   this._editor?.scrollTop)
-
+    this._scrollTop = this._editor.scrollTop
     // 如果在头部附近
-    if (this._editor?.scrollTop < 5) {
+    if (this._editor.scrollTop < 5) {
       // (this._preview.firstChild as HTMLElement).scrollIntoView()
       this._preview.scrollTo({ top: 0 })
     }
     // 如果在尾部附近
-    else if (this._editor?.clientHeight + this._editor?.scrollTop > this._editor?.scrollHeight - 20) {
+    else if (this._editor.clientHeight + this._editor.scrollTop > this._editor.scrollHeight - 20) {
       this._preview.scrollTop = this._preview.scrollHeight
     }
     // 其他

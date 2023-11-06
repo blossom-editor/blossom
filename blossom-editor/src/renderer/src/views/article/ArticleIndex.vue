@@ -312,6 +312,9 @@ const tempInput = (value: string) => {
 const enterView = () => {
   autoSave()
   initTempTextarea()
+  if (scrollWrapper) {
+    scrollWrapper.scrollTopLast()
+  }
 }
 /**
  * 退出页面时, 保存文章
@@ -585,6 +588,9 @@ const setNewState = (md: string): void => {
       md
     )
   )
+  if (scrollWrapper) {
+    scrollWrapper.scrollTopReset()
+  }
   parse()
 }
 
