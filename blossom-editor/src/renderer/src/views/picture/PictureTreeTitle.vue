@@ -19,6 +19,9 @@
       <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </span>
+    <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
+    <div v-if="level >= 3" class="folder-level-line" style="left: -30px"></div>
+    <div v-if="level >= 4" class="folder-level-line" style="left: -40px"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -69,11 +72,6 @@ const tags = computed(() => {
 <style scoped lang="scss">
 $icon-size: 17px;
 
-// .menu-icon {
-//   @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-//   margin-right: 9px;
-// }
-
 .doc-title {
   @include flex(row, flex-start, flex-start);
   // max-width: calc(100% - 15px);
@@ -113,25 +111,11 @@ $icon-size: 17px;
     right: 0;
     top: 2px;
   }
-}
 
-.open-line,
-.star-line {
-  position: absolute;
-  width: 2px;
-  height: 60%;
-  top: 20%;
-  border-radius: 20px;
-  font-size: 10px;
-}
-
-.open-line {
-  left: -5px;
-  background: #79c20c71;
-}
-
-.star-line {
-  left: -10px;
-  background: rgb(237, 204, 11);
+  .folder-level-line {
+    @include box(1px, 100%);
+    background-color: var(--el-border-color);
+    position: absolute;
+  }
 }
 </style>
