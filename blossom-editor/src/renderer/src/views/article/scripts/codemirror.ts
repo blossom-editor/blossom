@@ -57,7 +57,8 @@ export const cwTheme: any = {
     width: '40px'
   },
   '.cm-scroller': {
-    overflow: 'overlay'
+    overflow: 'overlay',
+    outline: 'none'
   },
   '.cm-foldGutter': {
     // paddingRight: '3px'
