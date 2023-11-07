@@ -4,6 +4,7 @@
       客户端配置<span class="version">{{ CONFIG.SYS.VERSION }}</span>
     </div>
     <div class="desc">Blossom 桌面客户端配置</div>
+
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="center" class="config-module-titile"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章设置</bl-row>
       <el-form-item label="编辑器字体">
@@ -49,7 +50,7 @@
     </el-form>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
-      <bl-row just="center" class="config-module-titile">照片墙设置</bl-row>
+      <bl-row just="center" class="config-module-titile"><span class="iconbl bl-picture-line"></span>照片墙设置</bl-row>
       <el-form-item label="图片上传大小限制">
         <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @change="changePicStyle">
           <template #append>单位 MB</template>
@@ -71,6 +72,14 @@
         </div>
       </el-form-item>
     </el-form>
+
+    <el-form label-position="right" label-width="130px" style="max-width: 800px">
+      <bl-row just="center" class="config-module-titile"><span class="iconbl bl-apps-line"></span>其他</bl-row>
+      <el-form-item label="开发者工具">
+        <el-button @click="openDevTools"><span class="iconbl bl-bug-line" @click="openDevTools"></span></el-button>
+      </el-form-item>
+    </el-form>
+    
   </div>
 </template>
 
@@ -79,6 +88,7 @@ import { ref } from 'vue'
 import CONFIG from '@renderer/assets/constants/system'
 import { useConfigStore } from '@renderer/stores/config'
 import type { EditorStyle, ViewStyle, PicStyle } from '@renderer/stores/config'
+import { openDevTools } from '@renderer/assets/utils/electron'
 
 const configStore = useConfigStore()
 const configEditorStyleForm = ref<EditorStyle>(configStore.editorStyle)
