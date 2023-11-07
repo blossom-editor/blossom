@@ -378,14 +378,26 @@ api[1].list[7].list.push({
 api[1].list[7].list.push({
     order: '5',
     deprecated: 'false',
-    url: 'http://127.0.0.1/article/stat/line/open',
-    desc: '文章字数折线图 [OP]',
+    url: 'http://127.0.0.1/article/stat/words/list',
+    desc: '字数统计列表',
 });
 api[1].list[7].list.push({
     order: '6',
     deprecated: 'false',
+    url: 'http://127.0.0.1/article/stat/words/save',
+    desc: '保存字数统计信息',
+});
+api[1].list[7].list.push({
+    order: '7',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/stat/line/open',
+    desc: '文章字数折线图 [OP]',
+});
+api[1].list[7].list.push({
+    order: '8',
+    deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/line',
-    desc: '字数折线图',
+    desc: '近36月字数折线图',
 });
 api[1].list.push({
     alias: 'PictureController',
@@ -557,44 +569,56 @@ api[1].list[12].list.push({
 api[1].list[12].list.push({
     order: '4',
     deprecated: 'false',
+    url: 'http://127.0.0.1/todo/task/tags',
+    desc: '标签列表',
+});
+api[1].list[12].list.push({
+    order: '5',
+    deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/stat',
     desc: '统计',
 });
 api[1].list[12].list.push({
-    order: '5',
+    order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/add',
     desc: '新增任务',
 });
 api[1].list[12].list.push({
-    order: '6',
+    order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/upd',
     desc: '修改任务',
 });
 api[1].list[12].list.push({
-    order: '7',
+    order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/waiting',
     desc: '事项移动到待办',
 });
 api[1].list[12].list.push({
-    order: '8',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/processing',
     desc: '事项移动到进行中',
 });
 api[1].list[12].list.push({
-    order: '9',
+    order: '10',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/completed',
     desc: '事项移动到完成',
 });
 api[1].list[12].list.push({
-    order: '10',
+    order: '11',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/del',
     desc: '删除事项',
+});
+api[1].list[12].list.push({
+    order: '12',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/todo/task/transfer',
+    desc: '转移事项',
 });
 api[1].list.push({
     alias: 'NoteController',
@@ -774,6 +798,13 @@ api[5].list.push({
     order: '5',
     link: '文件夹类型_[foldertypeenum]',
     desc: '文件夹类型 [FolderTypeEnum]',
+    list: []
+})
+api[5].list.push({
+    alias: '系统参数表配置内容',
+    order: '100',
+    link: '系统参数表配置内容',
+    desc: '系统参数表配置内容',
     list: []
 })
 document.onkeydown = keyDownSearch;

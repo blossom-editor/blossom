@@ -14,11 +14,11 @@
 
     <groupId>com.blossom</groupId>
     <artifactId>blossom-backend</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.8.0-SNAPSHOT</version>
 
     <!-- 版本控制 -->
     <properties>
-        <revision>1.7.0-SNAPSHOT</revision>
+        <revision>1.8.0-SNAPSHOT</revision>
 
         <!-- 编译设置 -->
         <java.version>1.8</java.version>

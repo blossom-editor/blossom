@@ -34,7 +34,7 @@ import java.util.List;
 public class ApiDocGen {
 
     private static String IP_DEVE = "http://127.0.0.1";
-    private static String VERSION = "v1.7.0";
+    private static String VERSION = "v1.8.0";
 
     private static final List<String> sourceCodePath = new ArrayList<String>() {{
         this.add("blossom-backend/common/common-base");
@@ -45,7 +45,7 @@ public class ApiDocGen {
         this.add("blossom-backend/expand-sentinel/expand-sentinel-metric");
     }};
 
-    private static final boolean genDictFromDB = false;
+    private static final boolean genDictFromDB = true;
     private static final String dictDbSetting = "dict-db.setting";
     private static final String dictQuerySQL = "select param_name,param_desc from base_sys_param";
 

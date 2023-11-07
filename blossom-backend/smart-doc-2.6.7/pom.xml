@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.blossom</groupId>
             <artifactId>backend</artifactId>
-            <version>1.7.0-SNAPSHOT</version>
+            <version>1.8.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
