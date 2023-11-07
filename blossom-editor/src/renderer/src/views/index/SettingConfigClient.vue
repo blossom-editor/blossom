@@ -6,7 +6,7 @@
     <div class="desc">Blossom 桌面客户端配置</div>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
-      <bl-row just="center" class="config-module-titile"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章设置</bl-row>
+      <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章设置</bl-row>
       <el-form-item label="编辑器字体">
         <el-input v-model="configEditorStyleForm.fontFamily" size="default" @input="changeEditorStyle"></el-input>
         <div class="conf-tip">
@@ -26,7 +26,7 @@
         <el-input v-model="configViewStyleForm.treeDocsFontSize" size="default" @input="changeViewStyle">
           <template #append>单位 px</template>
         </el-input>
-        <div class="conf-tip">会影响编辑器，照片墙中左侧树状菜单的字体大小。</div>
+        <div class="conf-tip">会影响文章、照片墙功能中左侧树状菜单的字体大小。</div>
       </el-form-item>
 
       <el-form-item label="代码块默认语言">
@@ -50,13 +50,11 @@
     </el-form>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
-      <bl-row just="center" class="config-module-titile"><span class="iconbl bl-picture-line"></span>照片墙设置</bl-row>
+      <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-picture-line"></span>照片墙设置</bl-row>
       <el-form-item label="图片上传大小限制">
-        <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @change="changePicStyle">
-          <template #append>单位 MB</template>
-        </el-input-number>
+        <el-input-number v-model="configPicStyleForm.maxSize" :min="0" controls-position="right" size="default" @change="changePicStyle" />
         <div class="conf-tip">
-          只控制客户端的上传文件大小限制，并不会影响服务器，在客户端限制上传大小会有更好的体验，推荐与服务端相同，单位<code>MB</code>。
+          控制客户端上传文件时的大小限制检查，单位<code>MB</code>。该配置仅作用于客户端，并不会影响服务器的文件大小限制，在客户端进行大小限制会有更好的体验，通常推荐与服务端相同。
           <span class="blod">注意：服务端控制需要在修改服务端参数，详情可见</span>
           <a href="https://www.wangyunf.com/blossom-doc/doc/backend-properties" target="_blank">《文档》</a>。
         </div>
@@ -74,12 +72,14 @@
     </el-form>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
-      <bl-row just="center" class="config-module-titile"><span class="iconbl bl-apps-line"></span>其他</bl-row>
+      <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-apps-line"></span>其他</bl-row>
       <el-form-item label="开发者工具">
-        <el-button @click="openDevTools"><span class="iconbl bl-bug-line" @click="openDevTools"></span></el-button>
+        <bl-row>
+          <el-button @click="openDevTools"><span class="iconbl bl-bug-line" @click="openDevTools"></span></el-button>
+        </bl-row>
+        <div class="conf-tip">打开开发者工具。</div>
       </el-form-item>
     </el-form>
-    
   </div>
 </template>
 
