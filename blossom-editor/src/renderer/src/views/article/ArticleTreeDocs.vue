@@ -168,7 +168,7 @@
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
-import { ref, onActivated, provide, onBeforeUnmount, nextTick, onMounted } from 'vue'
+import { ref, onActivated, provide, onBeforeUnmount, nextTick } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleDownloadHtmlApi, docTreeApi } from '@renderer/api/blossom'
@@ -190,11 +190,6 @@ import ArticleImport from './ArticleImport.vue'
 const { userinfo } = useUserStore()
 const { viewStyle } = useConfigStore()
 const route = useRoute()
-
-onMounted(() => {
-  getDocTree(false, false, false)
-  getRouteQueryParams()
-})
 
 onActivated(() => {
   getDocTree(false, false, false)
@@ -231,18 +226,14 @@ const getRouteQueryParams = () => {
  * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
  */
 const getDocTree = (isOnlyOpen: boolean, isOnlySubject: boolean, isOnlyStar: boolean) => {
-  editorLoadingTimeout = setTimeout(() => (docTreeLoading.value = true), 100)
+  startLoading()
   docTreeApi({ onlyPicture: false, onlyOpen: isOnlyOpen, onlySubject: isOnlySubject, onlyStar: isOnlyStar })
     .then((resp) => {
       docTreeData.value = resp.data
       concatSort(docTreeData.value)
+      endLoading()
     })
-    .finally(() => {
-      if (editorLoadingTimeout) {
-        clearTimeout(editorLoadingTimeout)
-      }
-      docTreeLoading.value = false
-    })
+    .finally(() => endLoading())
 }
 
 /**
@@ -268,6 +259,25 @@ const getDocTreeData = (): DocTree[] => {
 const handleShowSort = () => {
   showSort.value = !showSort.value
   concatSort(docTreeData.value)
+}
+
+/**
+ * 开始加载
+ */
+const startLoading = () => {
+  if (!editorLoadingTimeout) {
+    editorLoadingTimeout = setTimeout(() => (docTreeLoading.value = true), 100)
+  }
+}
+
+/**
+ * 结束加载
+ */
+const endLoading = () => {
+  if (editorLoadingTimeout) {
+    clearTimeout(editorLoadingTimeout)
+  }
+  docTreeLoading.value = false
 }
 
 //#endregion
