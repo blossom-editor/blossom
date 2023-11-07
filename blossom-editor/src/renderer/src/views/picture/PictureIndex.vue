@@ -342,10 +342,6 @@ const deletePicture = (pic: Picture) => {
 @import './styles/picture-index.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
 
-:deep(.el-loading-spinner) {
-  @extend .bl-loading-spinner;
-}
-
 .replace-upload-switch {
   --el-switch-off-color: var(--el-color-primary-light-7);
   height: 24px;

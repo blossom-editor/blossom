@@ -145,6 +145,7 @@ onActivated(() => {
   getDocTree()
 })
 
+let editorLoadingTimeout: NodeJS.Timeout
 const docTreeLoading = ref(true) // 文档菜单的加载动画
 const showSort = ref(false) // 是否显示文档排序
 const docTreeData = ref<DocTree[]>([]) // 文档菜单
@@ -158,7 +159,7 @@ provide(provideKeyDocTree, docTreeData)
  * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
  */
 const getDocTree = () => {
-  docTreeLoading.value = true
+  editorLoadingTimeout = setTimeout(() => (docTreeLoading.value = true), 100)
   docTreeApi({ onlyPicture: true })
     .then((resp) => {
       const docTree: DocTree[] = resp.data
@@ -190,6 +191,9 @@ const getDocTree = () => {
       concatSort(docTreeData.value)
     })
     .finally(() => {
+      if (editorLoadingTimeout) {
+        clearTimeout(editorLoadingTimeout)
+      }
       docTreeLoading.value = false
     })
 }

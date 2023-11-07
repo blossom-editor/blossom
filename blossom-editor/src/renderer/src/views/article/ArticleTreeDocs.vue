@@ -207,6 +207,7 @@ onBeforeUnmount(() => {
 })
 
 //#region ----------------------------------------< 菜单 >--------------------------------------
+let editorLoadingTimeout: NodeJS.Timeout
 const docTreeLoading = ref(true) // 文档菜单的加载动画
 const showSort = ref(false) // 是否显示文档排序
 const docTreeActiveArticleId = ref('') // 文档的默认选中项, 用于外部跳转后选中菜单
@@ -230,13 +231,16 @@ const getRouteQueryParams = () => {
  * 2. 在 workbench 中点击按钮调用, 每个按钮是单选的
  */
 const getDocTree = (isOnlyOpen: boolean, isOnlySubject: boolean, isOnlyStar: boolean) => {
-  docTreeLoading.value = true
+  editorLoadingTimeout = setTimeout(() => (docTreeLoading.value = true), 100)
   docTreeApi({ onlyPicture: false, onlyOpen: isOnlyOpen, onlySubject: isOnlySubject, onlyStar: isOnlyStar })
     .then((resp) => {
       docTreeData.value = resp.data
       concatSort(docTreeData.value)
     })
     .finally(() => {
+      if (editorLoadingTimeout) {
+        clearTimeout(editorLoadingTimeout)
+      }
       docTreeLoading.value = false
     })
 }
