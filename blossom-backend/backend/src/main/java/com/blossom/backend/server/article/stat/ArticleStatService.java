@@ -92,7 +92,8 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
         LambdaQueryWrapper<ArticleStatEntity> where = new LambdaQueryWrapper<>();
         where.eq(ArticleStatEntity::getUserId, userId).eq(ArticleStatEntity::getType, ArticleStatTypeEnum.ARTICLE_WORDS.getType())
                 .ge(ArticleStatEntity::getStatDate, begin)
-                .le(ArticleStatEntity::getStatDate, end);
+                .le(ArticleStatEntity::getStatDate, end)
+                .orderByAsc(ArticleStatEntity::getStatDate);
 
         List<ArticleStatEntity> stats = baseMapper.selectList(where);
         List<ArticleWordsRes> wordsList = new ArrayList<>();
@@ -122,7 +123,8 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
         LambdaQueryWrapper<ArticleStatEntity> where = new LambdaQueryWrapper<>();
         where.eq(ArticleStatEntity::getUserId, userId).eq(ArticleStatEntity::getType, ArticleStatTypeEnum.ARTICLE_WORDS.getType())
                 .ge(ArticleStatEntity::getStatDate, begin)
-                .le(ArticleStatEntity::getStatDate, end);
+                .le(ArticleStatEntity::getStatDate, end)
+                .orderByAsc(ArticleStatEntity::getStatDate);
 
         List<ArticleStatEntity> stats = baseMapper.selectList(where);
 
