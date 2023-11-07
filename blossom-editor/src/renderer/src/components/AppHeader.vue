@@ -1,25 +1,20 @@
 <template>
   <div class="app-header-root">
-    <div v-if="platform() === 'windows'" @click="openDevTools">
+    <div v-if="platform() === 'windows'">
       <img v-if="isDark" class="logo-img" src="@renderer/assets/imgs/blossom_logo_dark.png" />
       <img v-else class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
     </div>
-    <div class="drag">
-    </div>
+    <div class="drag"></div>
     <div class="window-workbench">
-
-      <el-tooltip content="查看图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
-        :auto-close="2000">
+      <el-tooltip content="查看图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>
 
-      <el-tooltip content="显示网页收藏" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
-        :auto-close="2000">
+      <el-tooltip content="显示网页收藏" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
       </el-tooltip>
 
-      <el-tooltip content="最佳窗口大小" effect="blossomt" placement="top" :show-after="1000" :hide-after="0"
-        :auto-close="2000">
+      <el-tooltip content="最佳窗口大小" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-computer-line" @click="setBestSize"></div>
       </el-tooltip>
 
@@ -38,12 +33,12 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { toRoute } from '@renderer/router'
 import { useDark } from '@vueuse/core'
-import { openDevTools, windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
+import { windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
 import { platform } from '@renderer/assets/utils/util'
 
 onMounted(() => {
-  window.addEventListener("resize", handleResize)
+  window.addEventListener('resize', handleResize)
 })
 
 onUnmounted(() => {
@@ -67,7 +62,6 @@ const isFullScreen = ref(checkFullScreen())
 const handleResize = () => {
   isFullScreen.value = checkFullScreen()
 }
-
 </script>
 
 <style lang="scss">
@@ -122,7 +116,6 @@ const handleResize = () => {
 
   .el-drawer__header {
     margin-bottom: 0;
-
   }
 
   .el-drawer__body {
