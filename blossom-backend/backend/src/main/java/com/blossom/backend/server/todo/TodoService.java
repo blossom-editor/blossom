@@ -61,9 +61,11 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
      * 获取全部标签
      *
      * @param todoType 待办事项类型
+     * @param todoId   待办事项ID
+     * @param userId   用户ID
      * @return 标签集合
      */
-    public Set<String> tags(TodoTypeEnum todoType, String todoId) {
+    public Set<String> tags(TodoTypeEnum todoType, String todoId, Long userId) {
         List<String> todoIds = new ArrayList<>();
         if (todoType == TodoTypeEnum.DAY) {
             Date today = DateUtil.date();
@@ -79,9 +81,10 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             }
             todoIds.add(todoId);
         }
-        TodoEntity query = new TodoEntity();
-        query.setTodoIds(todoIds);
-        List<TodoEntity> todos = baseMapper.listAll(query);
+        TodoEntity where = new TodoEntity();
+        where.setTodoIds(todoIds);
+        where.setUserId(userId);
+        List<TodoEntity> todos = baseMapper.listAll(where);
         Set<String> tags = new HashSet<>();
         for (TodoEntity todo : todos) {
             tags.addAll(DocUtil.toTagList(todo.getTaskTags()));

@@ -1,6 +1,7 @@
 package com.blossom.backend.server.todo;
 
 import cn.hutool.core.util.BooleanUtil;
+import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.server.todo.pojo.*;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
@@ -65,7 +66,7 @@ public class TaskController {
                                @RequestParam(value = "todoId", required = false) String todoId) {
         TodoTypeEnum todoTypeEnum = TodoTypeEnum.getByType(todoType);
         XzException404.throwBy(todoType == null, "待办事项类型错误");
-        return R.ok(baseService.tags(todoTypeEnum, todoId));
+        return R.ok(baseService.tags(todoTypeEnum, todoId, AuthContext.getUserId()));
     }
 
 
