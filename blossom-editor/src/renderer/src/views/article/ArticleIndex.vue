@@ -22,7 +22,6 @@
       class="editor-container"
       :style="{ width: docEditorStyle.editor }"
       v-loading="editorLoading"
-      element-loading-spinner="1"
       element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
         <EditorTools
@@ -364,9 +363,12 @@ const openArticleWindow = (id: number) => {
 //#endregion
 
 //#region ----------------------------------------< 文档列表与当前文章 >----------------------------
+const editorLoading = ref(false) // eidtor loading
 const ArticleTreeDocsRef = ref()
 const curDoc = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
 const curArticle = ref<DocInfo>() // 当前选中的文章, 用于在编辑器中展示
+// 自定保存间隔, 5分钟不编辑则自动保存
+const authSaveMs = 5 * 60 * 1000
 // 非绑定数据
 // 文章是否在解析时, 为 true 则正在解析, 为 false 则解析完成
 let articleParseing = false
@@ -374,9 +376,10 @@ let articleParseing = false
 let articleChanged = false
 // 上次保存时间
 let lastSaveTime: number = new Date().getTime()
+// 自动保存定时器
 let autoSaveInterval: NodeJS.Timer
+// 文章加载延迟遮罩
 let editorLoadingTimeout: NodeJS.Timeout
-const authSaveMs = 5 * 60 * 1000
 
 provide(provideKeyDocInfo, curDoc)
 provide(provideKeyCurArticleInfo, curArticle)
@@ -398,9 +401,7 @@ const clickCurDoc = async (tree: DocTree) => {
     if (curIsArticle() && curArticle.value!.id == doc.id) {
       return
     }
-    editorLoadingTimeout = setTimeout(() => {
-      editorLoading.value = true
-    }, 100)
+    editorLoadingTimeout = setTimeout(() => (editorLoading.value = true), 100)
     await saveCurArticleContent(true)
     clearTocAndImg()
     await articleInfoApi({ id: doc.id, showToc: false, showMarkdown: true, showHtml: false })
@@ -514,7 +515,6 @@ const curIsArticle = (): boolean => {
 //#endregion
 
 //#region ----------------------------------------< codemirror/editor >----------------------------
-const editorLoading = ref(false) // eidtor loading
 let cmw: CmWrapper // codemirror editor wrapper
 
 /**
