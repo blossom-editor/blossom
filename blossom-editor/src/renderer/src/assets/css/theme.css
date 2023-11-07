@@ -204,6 +204,7 @@ html.dark {
   --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(0, 0, 0);
 }
 
+/* ================================= 编辑器与预览样式 ================================== */
 :root {
   /*  */
   --bl-editor-color: #707070;
@@ -288,7 +289,7 @@ html.dark {
 }
 
 html.dark {
-  --bl-editor-color: #9f9f9f;
+  --bl-editor-color: #a9a9a9;
   --bl-editor-bg-color: #1e1e1e;
 
   --bl-editor-gutters-color: #676767;
@@ -309,8 +310,8 @@ html.dark {
   --bl-editor-ci-color: #ffc66d;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: var(--el-color-primary);
-  --bl-editor-c7-color: var(--el-color-primary);
+  --bl-editor-c5-color: var(--el-color-primary-light-3);
+  --bl-editor-c7-color: var(--el-color-primary-light-3);
   --bl-editor-c7-bg-color: #00000000;
   /* ======================================= */
 
