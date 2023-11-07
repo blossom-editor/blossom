@@ -537,15 +537,7 @@ const handleBenchworkStyle = (expand: boolean) => {
  * @param time 日期
  */
 const disabledDate = (time: Date) => {
-  const nextWeek = new Date()
-  nextWeek.setTime(nextWeek.getTime() + 3600 * 1000 * 24 * 7)
-  const lastMonth = new Date()
-  lastMonth.setTime(lastMonth.getTime() - 3600 * 1000 * 24 * 31)
-  return (
-    time.getTime() > nextWeek.getTime() ||
-    time.getTime() < lastMonth.getTime() ||
-    dayjs(dayjs(time).format('YYYY-MM-DD')).diff(curTodo.value.todoId, 'day') === 0
-  )
+  return dayjs(dayjs(time).format('YYYY-MM-DD')).diff(curTodo.value.todoId, 'day') === 0
 }
 
 /**
