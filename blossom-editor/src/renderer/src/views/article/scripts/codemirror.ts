@@ -47,6 +47,7 @@ export const cwTheme: any = {
   '.cm-gutters': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     borderColor: 'var(--bl-editor-gutters-border-color)',
+    color: 'var(--bl-editor-gutters-color)',
     fontSize: '12px'
   },
   '.cm-activeLineGutter': {
