@@ -331,6 +331,7 @@ export class CmWrapper {
    */
   setState = (state: EditorState) => {
     this._editor.setState(state)
+    CmWrapper.insert(this._editor, 0, 0, '', 0, 0)
   }
 
   //#region ============================================================ codemirror 方法封装 ============================================================
@@ -409,7 +410,7 @@ export class CmWrapper {
       /* 创建变更的内容, 可以是个数组, 说明同时修改多个部分 */
       changes: [{ from: istFrom, to: istTo, insert: content }],
       /* 修改之后光标移动到的位置 */
-      range: EditorSelection.range(selectFrom, selectTo)
+      selection: EditorSelection.create([EditorSelection.range(selectFrom, selectTo)])
     }
     // editor.dispatch(
     //   /**
@@ -417,7 +418,6 @@ export class CmWrapper {
     //    */
     //   editor.state.changeByRange((_range: SelectionRange) => {
     //     console.log(_range);
-
     //     return changeByRange
     //   })
     // )
@@ -533,170 +533,87 @@ export class CmWrapper {
    * @param editor 编辑器
    * @param content 插入的内容
    */
-  static insertBlockCommand = (editor: EditorView, content: string) => {
-    editor.dispatch(editor.state.replaceSelection(content))
-  }
+  static insertBlockCommand = (editor: EditorView, content: string) => editor.dispatch(editor.state.replaceSelection(content))
   /** 选中内容加粗 */
-  private static commandBold = (editor: EditorView) => {
+  private static commandBold = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '**')))
-  }
   /** 选中内容斜体 */
-  private static commandItalic = (editor: EditorView) => {
+  private static commandItalic = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '*')))
-  }
   /** 选中内容增加删除线 */
-  private static commandStrike = (editor: EditorView) => {
+  private static commandStrike = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '~~')))
-  }
   /** 选择内容设置为行内代码块 */
-  private static commandCode = (editor: EditorView) => {
+  private static commandCode = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceInlineCommand(editor, range, '`')))
-  }
   /** 选择内容设置为上标 */
-  private static commandSup = (editor: EditorView) => {
+  private static commandSup = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sup>', '</sup>')))
-  }
   /** 选择内容设置为下标 */
-  private static commandSub = (editor: EditorView) => {
+  private static commandSub = (editor: EditorView) =>
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => this.replaceDifInlineCommand(editor, range, '<sub>', '</sub>')))
-  }
   /** 在当前位置增加表格 */
-  private static commandTable = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
-  }
+  private static commandTable = (editor: EditorView) => this.insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
   /** 在当前位置增加多行代码块 */
-  private static commandPre = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n\`\`\`${editorStyle.defaultPreLanguage}\n\n\`\`\`\n`)
-  }
+  private static commandPre = (editor: EditorView) => this.insertBlockCommand(editor, `\n\`\`\`${editorStyle.defaultPreLanguage}\n\n\`\`\`\n`)
   /** 在当前位置增加单选框 */
-  private static commandCheckBox = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n- [ ] \n`)
-  }
+  private static commandCheckBox = (editor: EditorView) => this.insertBlockCommand(editor, `\n- [ ] \n`)
   /** 在当前位置增加分割线 */
-  private static commandSeparator = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n---\n`)
-  }
+  private static commandSeparator = (editor: EditorView) => this.insertBlockCommand(editor, `\n---\n`)
   /** 在当前位置增加引用 */
-  private static commandQuote = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n>\n>\n`)
-  }
+  private static commandQuote = (editor: EditorView) => this.insertBlockCommand(editor, `\n>\n>\n`)
   /** 在当前位置增加引用 black */
-  private static commandQuoteBlack = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##black##\n> ⚫\n`)
-  }
+  private static commandQuoteBlack = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##black##\n> ⚫\n`)
   /** 在当前位置增加引用 green */
-  private static commandQuoteGreen = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##green##\n> 🟢\n`)
-  }
+  private static commandQuoteGreen = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##green##\n> 🟢\n`)
   /** 在当前位置增加引用 yellow */
-  private static commandQuoteYellow = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##yellow##\n> 🟡\n`)
-  }
+  private static commandQuoteYellow = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##yellow##\n> 🟡\n`)
   /** 在当前位置增加引用 red */
-  private static commandQuoteRed = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##red##\n> 🔴\n`)
-  }
+  private static commandQuoteRed = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##red##\n> 🔴\n`)
   /** 在当前位置增加引用 blue */
-  private static commandQuoteBlue = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##blue##\n> 🔵\n`)
-  }
+  private static commandQuoteBlue = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##blue##\n> 🔵\n`)
   /** 在当前位置增加引用 */
-  private static commandQuotePurple = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n> ##purple##\n> 🟣\n`)
-  }
+  private static commandQuotePurple = (editor: EditorView) => this.insertBlockCommand(editor, `\n> ##purple##\n> 🟣\n`)
   /** 在当前位置增加无序列表 */
-  private static commandUnordered = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n- \n`)
-  }
+  private static commandUnordered = (editor: EditorView) => this.insertBlockCommand(editor, `\n- \n`)
   /** 在当前位置增加有序列表 */
-  private static commandOrdered = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n1. \n`)
-  }
+  private static commandOrdered = (editor: EditorView) => this.insertBlockCommand(editor, `\n1. \n`)
   /** 在当前位置增加图片 */
-  private static commandImg = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n![]()\n`)
-  }
+  private static commandImg = (editor: EditorView) => this.insertBlockCommand(editor, `\n![]()\n`)
   /** 在当前位置增加链接 */
-  private static commandLink = (editor: EditorView) => {
-    this.insertBlockCommand(editor, `\n[]()\n`)
-  }
+  private static commandLink = (editor: EditorView) => this.insertBlockCommand(editor, `\n[]()\n`)
   /** 格式化内容, 使用 prettier */
   private static commandFormatMarkdown = (editor: EditorView) => {
     prettier.format(CmWrapper.getDocString(editor), { semi: false, parser: 'markdown', plugins: [pluginMarkdown] }).then((formatContent) => {
       let maxLen = CmWrapper.getDocLength(editor)
-      CmWrapper.insert(editor, 0, maxLen, formatContent, 0, 0)
+      let position = editor.state.selection.main.from
+      CmWrapper.insert(editor, 0, maxLen, formatContent, position, position)
     })
   }
   // 实例调用
-  insertBlockCommand = (content: string) => {
-    CmWrapper.insertBlockCommand(this._editor, content)
-  }
-  commandBold = () => {
-    CmWrapper.commandBold(this._editor)
-  }
-  commandItalic = () => {
-    CmWrapper.commandItalic(this._editor)
-  }
-  commandStrike = () => {
-    CmWrapper.commandStrike(this._editor)
-  }
-  commandCode = () => {
-    CmWrapper.commandCode(this._editor)
-  }
-  commandSup = () => {
-    CmWrapper.commandSup(this._editor)
-  }
-  commandSub = () => {
-    CmWrapper.commandSub(this._editor)
-  }
-  commandTable = () => {
-    CmWrapper.commandTable(this._editor)
-  }
-  commandPre = () => {
-    CmWrapper.commandPre(this._editor)
-  }
-  commandCheckBox = () => {
-    CmWrapper.commandCheckBox(this._editor)
-  }
-  commandSeparator = () => {
-    CmWrapper.commandSeparator(this._editor)
-  }
-  commandQuote = () => {
-    CmWrapper.commandQuote(this._editor)
-  }
-  commandQuoteBlack = () => {
-    CmWrapper.commandQuoteBlack(this._editor)
-  }
-  commandQuoteGreen = () => {
-    CmWrapper.commandQuoteGreen(this._editor)
-  }
-  commandQuoteYellow = () => {
-    CmWrapper.commandQuoteYellow(this._editor)
-  }
-  commandQuoteRed = () => {
-    CmWrapper.commandQuoteRed(this._editor)
-  }
-  commandQuoteBlue = () => {
-    CmWrapper.commandQuoteBlue(this._editor)
-  }
-  commandQuotePurple = () => {
-    CmWrapper.commandQuotePurple(this._editor)
-  }
-  commandUnordered = () => {
-    CmWrapper.commandUnordered(this._editor)
-  }
-  commandOrdered = () => {
-    CmWrapper.commandOrdered(this._editor)
-  }
-  commandImg = () => {
-    CmWrapper.commandImg(this._editor)
-  }
-  commandLink = () => {
-    CmWrapper.commandLink(this._editor)
-  }
-  commandFormatMarkdown = async () => {
-    CmWrapper.commandFormatMarkdown(this._editor)
-  }
+  insertBlockCommand = (content: string) => CmWrapper.insertBlockCommand(this._editor, content)
+  commandBold = () => CmWrapper.commandBold(this._editor)
+  commandItalic = () => CmWrapper.commandItalic(this._editor)
+  commandStrike = () => CmWrapper.commandStrike(this._editor)
+  commandCode = () => CmWrapper.commandCode(this._editor)
+  commandSup = () => CmWrapper.commandSup(this._editor)
+  commandSub = () => CmWrapper.commandSub(this._editor)
+  commandTable = () => CmWrapper.commandTable(this._editor)
+  commandPre = () => CmWrapper.commandPre(this._editor)
+  commandCheckBox = () => CmWrapper.commandCheckBox(this._editor)
+  commandSeparator = () => CmWrapper.commandSeparator(this._editor)
+  commandQuote = () => CmWrapper.commandQuote(this._editor)
+  commandQuoteBlack = () => CmWrapper.commandQuoteBlack(this._editor)
+  commandQuoteGreen = () => CmWrapper.commandQuoteGreen(this._editor)
+  commandQuoteYellow = () => CmWrapper.commandQuoteYellow(this._editor)
+  commandQuoteRed = () => CmWrapper.commandQuoteRed(this._editor)
+  commandQuoteBlue = () => CmWrapper.commandQuoteBlue(this._editor)
+  commandQuotePurple = () => CmWrapper.commandQuotePurple(this._editor)
+  commandUnordered = () => CmWrapper.commandUnordered(this._editor)
+  commandOrdered = () => CmWrapper.commandOrdered(this._editor)
+  commandImg = () => CmWrapper.commandImg(this._editor)
+  commandLink = () => CmWrapper.commandLink(this._editor)
+  commandFormatMarkdown = async () => CmWrapper.commandFormatMarkdown(this._editor)
   //#endregion
 }
 
