@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5173186",
+      "name": "heat-map",
+      "font_class": "heat-map",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "7359577",
+      "name": "Heatmap",
+      "font_class": "Heatmap",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "26928173",
+      "name": "heatmap",
+      "font_class": "heatmap",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "11808094",
       "name": "check",
       "font_class": "check",
