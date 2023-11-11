@@ -46,10 +46,10 @@
         <div class="stat-buttons">
           <bl-row just="space-around">
             <el-tooltip content="公开访问 ↑" effect="light" placement="top" :hide-after="0">
-              <div :class="['iconbl bl-a-cloudupload-line', curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
+              <div :class="['iconbl bl-a-cloudupload-line', curDocDialogType == 'add' || curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
             </el-tooltip>
             <el-tooltip content="关闭公开 ↓" effect="light" placement="top" :hide-after="0">
-              <div :class="['iconbl bl-a-clouddownload-line', !curIsOpen ? 'disabled' : '']" @click="open(0)"></div>
+              <div :class="['iconbl bl-a-clouddownload-line', curDocDialogType == 'add' || !curIsOpen ? 'disabled' : '']" @click="open(0)"></div>
             </el-tooltip>
             <el-tooltip effect="light" placement="top" :hide-after="0">
               <template #content>
@@ -69,7 +69,7 @@
 
         <!-- 星标 -->
         <div class="stat-star">
-          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curIsFolder ? 'disabled' : '']" @click="star(1)"></div>
+          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curDocDialogType == 'add' || curIsFolder ? 'disabled' : '']" @click="star(1)"></div>
           <div v-else class="iconbl bl-star-fill" @click="star(0)"></div>
         </div>
       </div>
@@ -260,7 +260,7 @@ const storePath = computed(() => {
 })
 
 // 当前表单的类型, 新增(add), 修改(upd), 详情(info)
-let curDocDialogType: DocDialogType
+const curDocDialogType = ref<DocDialogType>()
 // 表单加载项
 const isLoading = ref(false)
 // 当前菜单, 用作上级菜单的树状下拉列表
@@ -331,7 +331,7 @@ const diffVersion = computed<number>(() => {
  * @param pid        初始化父级文件夹
  */
 const reload = (dialogType: DocDialogType, id?: number, docType?: DocType, pid?: number) => {
-  curDocDialogType = dialogType
+  curDocDialogType.value = dialogType
   docForm.value.type = docType == undefined ? 3 : docType
   // 只有修改时才查询数据, 新增时不查询
   if (dialogType == 'upd') {
@@ -552,29 +552,29 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
         return
       }
       const handleResp = (_: any) => {
-        Notify.success(curDocDialogType === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
-        emits('saved', curDocDialogType)
+        Notify.success(curDocDialogType.value === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
+        emits('saved', curDocDialogType.value)
       }
       const handleFinally = () => setTimeout(() => (saveLoading.value = false), 300)
       // 新增文件夹
       if (docForm.value.type == 1) {
-        if (curDocDialogType == 'add')
+        if (curDocDialogType.value == 'add')
           folderAddApi(docForm.value)
             .then((resp) => handleResp(resp))
             .finally(handleFinally)
-        if (curDocDialogType == 'upd')
+        if (curDocDialogType.value == 'upd')
           // 修改文件夹
           folderUpdApi(docForm.value)
             .then((resp) => handleResp(resp))
             .finally(handleFinally)
       }
       if (docForm.value.type == 3) {
-        if (curDocDialogType == 'add')
+        if (curDocDialogType.value == 'add')
           // 新增文章
           articleAddApi(docForm.value)
             .then((resp) => handleResp(resp))
             .finally(handleFinally)
-        if (curDocDialogType == 'upd')
+        if (curDocDialogType.value == 'upd')
           // 修改文章
           articleUpdApi(docForm.value)
             .then((resp) => handleResp(resp))
@@ -774,7 +774,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
     .stat-star,
     .stat-buttons {
       .disabled {
-        cursor: not-allowed;
+        pointer-events: none;
         color: var(--el-color-info-light-5);
 
         &:hover {
