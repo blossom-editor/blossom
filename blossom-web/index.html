@@ -1,113 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer" />
-  <title>Blossom</title>
-  <style>
-    * {
-      font-family: 'ubuntu mono', 'Consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-      box-sizing: border-box;
-    }
-
-    html,
-    body,
-    #app {
-      width: 100%;
-      height: 100%;
-      margin: 0px;
-      padding: 0px;
-    }
-
-    @-webkit-keyframes rotation {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Blossom</title>
+    <style>
+      * {
+        font-family: 'ubuntu mono', 'Consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+        /* font-family: 'Consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif; */
+        box-sizing: border-box;
       }
 
-      100% {
-        transform: rotate(360deg);
+      html,
+      body,
+      #app {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
       }
-    }
 
-    .index-html-loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(to bottom right, #3e464e, #212121);
-      z-index: 999999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+      @-webkit-keyframes rotation {
+        0% {
+          transform: rotate(0deg);
+        }
 
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-    .index-html-loading-title {
-      color: #FFF;
-      font-size: 19px;
-      width: 300px;
-      text-align: center;
-      top: 60%;
-      opacity: 1;
-      line-height: 30px;
-      z-index: 9999999999999;
-      margin-left: 0;
-    }
+      .index-html-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to bottom right, #3e464e, #212121);
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-    .index-html-loading-title span {
-      font-weight: normal;
-      font-style: italic;
-      font-size: 15px;
-      color: #FFF;
-      opacity: 0.5;
-    }
+      .index-html-loading-div {
+        width: 120px;
+        height: 100px;
+        max-width: 100px;
+        max-height: 100px;
+        min-width: 100px;
+        min-height: 100px;
 
-    .index-html-loading-div {
-      width: 120px;
-      height: 100px;
-      max-width: 100px;
-      max-height: 100px;
-      min-width: 100px;
-      min-height: 100px;
+        border: 10px solid #ffffff;
+        border-radius: 50%;
+        display: inline-block;
+        animation: rotation 4s linear infinite;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-      border: 10px solid #ffffff;
-      border-radius: 50%;
-      display: inline-block;
-      animation: rotation 4s linear infinite;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
+      .index-html-loading-div::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 63px;
+        height: 63px;
+        border-radius: 50%;
+        border: 8px solid transparent;
+        border-bottom-color: #835947;
+      }
+    </style>
+  </head>
 
-    .index-html-loading-div::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 63px;
-      height: 63px;
-      border-radius: 50%;
-      border: 8px solid transparent;
-      border-bottom-color: #835947
-    }
-  </style>
-</head>
-
-<body>
-  <div id="app">
-    <div class="index-html-loading">
-      <div class="index-html-loading-div"></div>
-      <div class="index-html-loading-title">
-        正在进入 Blossom...
+  <body>
+    <div id="app">
+      <div class="index-html-loading">
+        <div class="index-html-loading-div"></div>
       </div>
+      <script type="module" src="/src/main.ts"></script>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </div>
-</body>
-
+  </body>
 </html>

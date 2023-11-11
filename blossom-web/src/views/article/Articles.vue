@@ -126,9 +126,13 @@ import { toRoute } from '@/router'
 
 onMounted(() => {
   window.onHtmlEventDispatch = onHtmlEventDispatch
+  getRouteQueryParams()
+  window.addEventListener('resize', onresize)
+  initStyle()
 })
 
 onActivated(() => {
+  console.log(123123123)
   getRouteQueryParams()
   window.addEventListener('resize', onresize)
   initStyle()
@@ -396,7 +400,7 @@ const onresize = () => {
         font-weight: 200;
         padding-right: 0;
         border: 0;
-        overflow-y: scroll;
+        overflow-y: overlay;
         // padding-right: 6px;
         // 基础的 padding
         --el-menu-base-level-padding: 25px;
@@ -999,6 +1003,10 @@ const onresize = () => {
         padding-top: 10px;
         z-index: 9999;
         overflow: hidden;
+
+        // .doc-trees {
+        //   overflow: overlay;
+        // }
       }
 
       .article {

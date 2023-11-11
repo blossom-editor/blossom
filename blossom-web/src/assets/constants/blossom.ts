@@ -22,6 +22,7 @@ const blossom: any = {
     LOC: 'http://127.0.0.1:9999/',
     // 将该值填写为你的后台访问地址, 与 blossom 客户端登录页面填写的地址相同
     PRD: 'https://www.wangyunf.com/bl/',
+    // PRD: 'http://127.0.0.1:9999/',
     // 将该值填写你开放为博客的用户ID
     USER_ID: 1
   },
@@ -39,6 +40,21 @@ const blossom: any = {
     //   // 请将 logo 放入到 src/assets/imgs/linklogo/
     //   LOGO: 'luban.png'
     // }
+    {
+      NAME: '我的个人主页',
+      URL: 'https://www.wangyunf.com',
+      LOGO: 'luban.png'
+    },
+    {
+      NAME: 'Blossom 双链笔记软件',
+      URL: 'https://www.wangyunf.com/blossom-doc/index',
+      LOGO: 'blossom_logo.png'
+    },
+    {
+      NAME: 'GuardCat 服务监控解决方案',
+      URL: 'https://www.wangyunf.com/view/#/home',
+      LOGO: 'guardcat_logo.jpg'
+    }
   ]
 }
 

@@ -1,8 +1,14 @@
-import axios from "axios"
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
+import axios from 'axios'
+import { toRoute } from '@/router'
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { ElNotification } from 'element-plus'
+import { Local } from '@/assets/utils/storage'
+import { isNotNull } from '@/assets/utils/obj'
+import pinia from '@/stores/store-config'
+import { storeKey as authKey, useUserStore } from '@/stores/user'
 import SYSTEM from '@/assets/constants/blossom'
-import { ElNotification } from "element-plus"
-import { isNotNull } from "@/assets/utils/obj"
+
+const userStore = useUserStore(pinia)
 
 export class Request {
   /** axios 实例 */
@@ -11,122 +17,135 @@ export class Request {
   baseConfig: AxiosRequestConfig = {
     baseURL: SYSTEM.DOMAIN.PRD,
     timeout: 60000
-  };
+  }
   /**
    * 构造方法中会设置拦截器逻辑，配置文件为可选项
    * @param config 配置文件内容，为可选项
    */
   constructor(config?: AxiosRequestConfig) {
-    this.instance = axios.create(Object.assign(this.baseConfig, config));
+    this.instance = axios.create(Object.assign(this.baseConfig, config))
     /**
      * 请求拦截
      */
     this.instance.interceptors.request.use(
       (config: AxiosRequestConfig): any => {
-        return {
-          ...config,
-          headers: {
-            "Blossom-User-Id": SYSTEM.DOMAIN.USER_ID
+        let token: string = ''
+        let tokenCache = Local.get(authKey)
+        if (isNotNull(tokenCache) && isNotNull(tokenCache.token)) {
+          token = tokenCache.token
+        }
+        console.log(config.url, 'token: ' + tokenCache.token)
+        config.headers = {
+          ...config.headers,
+          ...{
+            'Blossom-User-Id': SYSTEM.DOMAIN.USER_ID,
+            Authorization: 'Bearer ' + token
           }
         }
+        return config
+        // return {
+        //   ...config,
+        //   headers: {
+        //     'Blossom-User-Id': SYSTEM.DOMAIN.USER_ID,
+        //     Authorization: 'Bearer ' + token
+        //   }
+        // }
       },
       (err: any) => Promise.reject(err)
-    );
+    )
     /**
      * 响应拦截
      */
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
-        const status = res.status;
+        const status = res.status
         if (status !== 200) {
-          Promise.reject(res);
+          Promise.reject(res)
         }
         // 本次响应是否正确
-        let isSuccess = false;
+        let isSuccess = false
         // 返回文件流的, 可能没有JSON返回体, 但如果接口报错还是有返回体的
         if (res.config.responseType === 'blob' || res.headers['content-type'] === 'application/force-download') {
           if (isNotNull(res.data.code)) {
             if (!isSuccessRCode(res.data.code)) {
-              isSuccess = false;
+              isSuccess = false
             }
           } else {
-            isSuccess = true;
+            isSuccess = true
           }
         }
         // 响应码为正确的直接返回
         if (isSuccessRCode(res.data.code)) {
-          isSuccess = true;
+          isSuccess = true
         }
 
         if (isSuccess) {
-          return res.data;
-        }
-        /*
-         * 授权被拦截, 则需要退回登录页请求 
-         */
-        else if (res.data.code === 'AUTH-40101') {
-          ElNotification({ message: res.data.msg, type: "error", position: 'bottom-right', title: '请求错误' });
-          return Promise.reject(res);
-        }
-        /*
-         * 其他接口报错, 直接拒绝并提示错误信息 
-         */
-        else {
-          let errorResponse = res.data;
-          errorResponse['url'] = res.config.url;
+          return res.data
+        } else if (res.data.code === 'AUTH-40101') {
+          /* 授权被拦截, 则需要退回登录页请求 */
+          console.log('授权失败, 重置登录状态')
+          userStore.reset()
+          toRoute('/home')
+          return Promise.reject(res)
+        } else {
+          /*
+           * 其他接口报错, 直接拒绝并提示错误信息
+           */
+          let errorResponse = res.data
+          errorResponse['url'] = res.config.url
           // 其他情况拒绝
-          ElNotification({ message: res.data.msg, type: "error", position: 'bottom-right', title: '请求错误' });
-          return Promise.reject(res);
+          ElNotification({ message: res.data.msg, type: 'error', position: 'bottom-right', title: '请求错误' })
+          return Promise.reject(res)
         }
         // 直接返回res，当然你也可以只返回res.data
-        return res;
+        return res
       },
       (err: any) => {
-        let errorMsg = err.message;
-        let code = err.code;
-        if (code === "ERR_NETWORK") {
-          errorMsg = "网络错误,请检查您的网络是否通畅";
+        let errorMsg = err.message
+        let code = err.code
+        if (code === 'ERR_NETWORK') {
+          errorMsg = '网络错误,请检查您的网络是否通畅'
         }
         // 字符串和变量拼接：请求失败(${err.response.status})
-        ElNotification({ message: errorMsg, type: "error", position: 'bottom-right', title: '请求错误' });
-        return Promise.reject(err);
+        ElNotification({ message: errorMsg, type: 'error', position: 'bottom-right', title: '请求错误' })
+        return Promise.reject(err)
       }
-    );
+    )
   }
 
   // 定义请求方法
   public request(config: AxiosRequestConfig): Promise<any> {
-    return this.instance.request(config);
+    return this.instance.request(config)
   }
 
   public get<T>(url: string, params?: object): Promise<R<T>> {
-    return this.instance.get(url, params);
+    return this.instance.get(url, params)
   }
 
   public post<T>(url: string, data?: object, config?: object): Promise<R<T>> {
-    return this.instance.post(url, data, config);
+    return this.instance.post(url, data, config)
   }
 
   public delete<T>(url: string, params?: object): Promise<R<T>> {
-    return this.instance.delete(url, params);
+    return this.instance.delete(url, params)
   }
 }
 
 export interface R<T = any> {
-  ok: boolean;
-  code: number;
-  msg: string;
-  traceId: string,
-  data?: T;
-};
+  ok: boolean
+  code: number
+  msg: string
+  traceId: string
+  data?: T
+}
 
 /**
  * 判断接口响应码是否正确
  * @param code 接口响应码
- * @returns 
+ * @returns
  */
 const isSuccessRCode = (code: string | number): boolean => {
-  return code === 0 || code === '0' || code === 20000 || code === '20000';
+  return code === 0 || code === '0' || code === 20000 || code === '20000'
 }
 
-export const defaultRequest = new Request();
+export const defaultRequest = new Request()

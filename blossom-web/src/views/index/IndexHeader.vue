@@ -1,24 +1,65 @@
 <template>
   <div :class="['blossom-header-root', props.bg ? 'blossom-header-bg' : '']">
-    <div class="blossom-logo" @click="toRoute('/home')">
-      <img src="@/assets/imgs/blossom/blossom_logo.png" />
-    </div>
-    <div class="project-name" @click="toRoute('/home')">{{ SYSTEM.SYS.NAME }}</div>
-    <div v-if="SYSTEM.LINKS != undefined && SYSTEM.LINKS.length > 0" class="more-menu">
-      <button class="menu-dropdown">更多</button>
-      <div class="dropdown-content">
-        <div class="dropdown-item" v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
-          <img :src="getImg(link.LOGO)" style="width: 25px" />{{ link.NAME }}
-        </div>
+    <bl-row class="head-row" width="auto" height="100%">
+      <div class="blossom-logo" @click="toLogin">
+        <img src="@/assets/imgs/blossom/blossom_logo.png" />
       </div>
-    </div>
+      <div class="project-name" @click="toRoute('/home')">{{ SYSTEM.SYS.NAME }}</div>
+    </bl-row>
+
+    <bl-row class="head-row" width="auto" height="100%">
+      <el-popover
+        popper-class="popper-dark"
+        placement="bottom-start"
+        trigger="click"
+        :show-arrow="false"
+        :hide-after="0"
+        :offset="-5"
+        transition="el-zoom-in-top">
+        <template #reference>
+          <div v-show="SYSTEM.LINKS != undefined && SYSTEM.LINKS.length > 0" class="popper-target">更多</div>
+        </template>
+        <div class="popper-content">
+          <div class="item" v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
+            <img :src="getImg(link.LOGO)" style="width: 25px" />{{ link.NAME }}
+          </div>
+        </div>
+      </el-popover>
+      <el-popover
+        popper-class="popper-dark"
+        placement="bottom-start"
+        trigger="click"
+        :show-arrow="false"
+        :hide-after="0"
+        :offset="-5"
+        transition="el-zoom-in-top">
+        <template #reference>
+          <div v-show="userStore.auth && userStore.auth.status === '已登录'" class="popper-target">
+            <span class="iconbl bl-apps-line"></span>
+          </div>
+        </template>
+        <div class="popper-content">
+          <div class="item"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章列表</div>
+          <div class="item"><span class="iconbl bl-calendar-line"></span>日历计划</div>
+          <div class="item"><span class="iconbl bl-a-labellist-line"></span>待办事项</div>
+          <div class="item"><span class="iconbl bl-note-line"></span>便签</div>
+          <div class="item-divider"></div>
+          <div class="item" @click="handlLogout"><span class="iconbl bl-logout-circle-line"></span>退出登录</div>
+        </div>
+      </el-popover>
+    </bl-row>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { toRoute } from '@/router'
-import SYSTEM from '@/assets/constants/blossom'
 import { toView } from '@/assets/utils/util'
+import { useUserStore } from '@/stores/user'
+import { logout } from '@/scripts/auth'
+import SYSTEM from '@/assets/constants/blossom'
+
+const userStore = useUserStore()
 
 const props = defineProps({
   bg: {
@@ -30,14 +71,40 @@ const props = defineProps({
 const getImg = (img: string) => {
   return new URL(`../../assets/imgs/linklogo/${img}`, import.meta.url).href
 }
+
+let recount: NodeJS.Timeout | undefined
+const tryLoginCount = ref(0)
+
+const toLogin = () => {
+  tryLoginCount.value += 1
+  if (!recount) {
+    recount = setTimeout(() => {
+      tryLoginCount.value = 0
+      clearTimeout(recount)
+      recount = undefined
+    }, 5000)
+  }
+  if (tryLoginCount.value === 7) {
+    toRoute('/login')
+  }
+}
+
+const handlLogout = () => {
+  logout()
+  toRoute('/home')
+}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .blossom-header-root {
   @include box(100%, 60px);
-  @include flex(row, flex-start, center);
+  @include flex(row, space-between, center);
   padding: 10px 10px;
   z-index: 2003;
+
+  .head-row {
+    line-height: 40px;
+  }
 
   .blossom-logo {
     @include box(40px, 40px);
@@ -51,7 +118,6 @@ const getImg = (img: string) => {
   .project-name {
     @include box(auto, 100%);
     margin-left: 10px;
-    padding: 10px 0;
     text-shadow: 3px 3px 5px #ababab;
     cursor: pointer;
 
@@ -70,82 +136,50 @@ const getImg = (img: string) => {
       }
     }
   }
+}
 
-  .more-menu {
-    @include box(50px, 100%);
-    font-size: 15px;
-    color: #909090;
-    padding-left: 10px;
+.popper-target {
+  height: 100%;
+  font-size: 15px;
+  color: #909090;
+  padding: 0 10px;
+  text-shadow: 3px 3px 5px #000;
 
-    .menu-dropdown {
-      @include box(100%, 100%);
-      padding: 5px;
-      margin-top: 1px;
-      color: #ababab;
-      border: 0;
-      background-color: rgba(0, 0, 0, 0);
-      text-align: center;
-      overflow: hidden;
-      transition: 0.3s;
-      cursor: pointer;
+  .iconbl {
+    font-size: 18px;
+  }
+}
 
-      &:hover {
-        font-weight: bold;
-        border-radius: 5px;
-        color: #e8e8e8;
-        text-shadow: 3px 3px 10px #cccccc;
-      }
+.popper-content {
+  .item {
+    @include flex(row, flex-start, center);
+    padding: 0 10px;
+    color: #aeaeae;
+    border-radius: 5px;
+    transition: 0.3s;
+    white-space: pre-line;
+    cursor: pointer;
+
+    img {
+      margin: 5px 10px 5px 0;
     }
 
-    .menu-dropdown:hover + .dropdown-content {
-      display: block;
+    .iconbl {
+      font-size: 20px;
+      margin-right: 10px;
     }
 
-    /* 为下拉内容设置样式（默认隐藏）*/
-    .dropdown-content {
-      @include flex(column, flex-start, flex-start);
-      min-width: 160px;
-      display: none;
-      position: absolute;
-      top: 50px;
-      padding: 5px 0 10px 0;
-      border-radius: 5px;
-      box-shadow: 5px 5px 10px 0px rgb(25, 25, 25);
-      background-color: #353b40;
-      transition: 0.3s;
-      z-index: 1;
-
-      &:hover {
-        display: block;
-      }
-
-      .dropdown-item {
-        @include flex(row, flex-start, center);
-        padding: 7px 15px 7px 10px;
-        border-radius: 5px;
-        transition: 0.3s;
-        white-space: pre-line;
-        cursor: pointer;
-
-        img {
-          margin-right: 5px;
-        }
-
-        &:hover {
-          font-weight: bold;
-          color: #e8e8e8;
-          text-shadow: 3px 3px 10px #cccccc;
-
-          ~ .dropdown-content {
-            display: block;
-          }
-        }
-      }
-
-      .dropdown-item:first-child {
-        margin-top: 0;
-      }
+    &:hover {
+      font-weight: bold;
+      color: #e8e8e8;
+      text-shadow: 3px 3px 10px #cccccc;
     }
+  }
+
+  .item-divider {
+    border-top: 1px solid #5c5c5c;
+    margin-top: 5px;
+    padding-bottom: 5px;
   }
 }
 
