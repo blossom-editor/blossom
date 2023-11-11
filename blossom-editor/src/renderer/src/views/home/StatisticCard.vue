@@ -59,15 +59,13 @@ onActivated(() => {
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  transition: 0.3s;
+  transition: box-shadow 0.3s;
 
   &:hover {
     @include themeShadow(2px 3px 7px 0 rgba(58, 47, 47, 0.5), 3px 3px 10px 0 rgba(0, 0, 0, 1));
 
     .icon-shadow {
-      @include font(150px, 500);
-      right: -30px;
-      bottom: -30px;
+      transform: translateX(-20px) translateY(10px) scale(150%);
     }
   }
 
@@ -111,7 +109,7 @@ onActivated(() => {
     right: -30px;
     bottom: 0px;
     z-index: 1;
-    transition: 0.3s;
+    transition: transform 0.3s;
     filter: blur(3px);
   }
 }

@@ -6,6 +6,7 @@
 import { ref, onMounted, nextTick, watch } from 'vue'
 import { metricLineApi } from '@renderer/api/sentinel'
 import { useDark } from '@vueuse/core'
+import { getPrimaryColor } from '@renderer/scripts/global-theme'
 // echarts
 import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import * as echarts from 'echarts/core'
@@ -13,6 +14,7 @@ import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from
 import { LineChart } from 'echarts/charts'
 import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
+
 echarts.use([TitleComponent, TooltipComponent, LegendComponent, GridComponent, LineChart, CanvasRenderer, UniversalTransition])
 
 const isDark = useDark()
@@ -80,8 +82,8 @@ const getChartLineMetric = (resource: string, interval: string, customInterval: 
   })
 }
 
-const renderChart = (callback?: any) => {
-  let dark: boolean = isDark.value
+const renderChart = async (callback?: any) => {
+  let primaryColor = getPrimaryColor()
   chartLineMetric.setOption({
     grid: { top: 30, left: 40, right: 15, bottom: 35 },
     title: {
@@ -112,7 +114,7 @@ const renderChart = (callback?: any) => {
         // alwaysShowContent: true,
         appendToBody: false,
         formatter: (params: any) => {
-          let tooltip = `<div class="chart-line-sentinel-tooltip">
+          let tooltip = `<div class="chart-line-word-tooltip" style="width:240px;height:80px">
             <div class="xaxis-title">${params[0].axisValue}</div>`
           for (let i = 0; i < params.length; i++) {
             const series = params[i]
@@ -140,10 +142,13 @@ const renderChart = (callback?: any) => {
         data: chartData.success,
         lineStyle: {
           width: 2,
-          color: '#7d7ced',
-          shadowColor: dark ? '#000000' : '#7d7ced',
+          color: primaryColor.color,
+          shadowColor: isDark.value ? '#000000' : primaryColor.color,
           shadowOffsetY: 5,
           shadowBlur: 10
+        },
+        itemStyle: {
+          color: primaryColor.color
         },
         areaStyle: {
           color: {
@@ -153,8 +158,8 @@ const renderChart = (callback?: any) => {
             x2: 0,
             y2: 1,
             colorStops: [
-              { offset: 0, color: '#7d7ced' },
-              { offset: 1, color: '#0066FF00' }
+              { offset: 0, color: primaryColor.color },
+              { offset: 1, color: primaryColor.color9 }
             ]
           }
         }
@@ -170,7 +175,7 @@ const renderChart = (callback?: any) => {
         lineStyle: {
           width: 2,
           color: '#e3a300',
-          shadowColor: dark ? '#000000' : '#e3a300',
+          shadowColor: isDark.value ? '#000000' : '#e3a300',
           shadowOffsetY: 5,
           shadowBlur: 10
         },
@@ -223,38 +228,5 @@ defineExpose({
 <style scoped lang="scss">
 .chart-resource-histogram-root {
   @include box(100%, 100%);
-}
-</style>
-
-<style lang="scss">
-.chart-line-sentinel-tooltip {
-  @include box(240px, 80px);
-  @include themeBorder(1px, #c5aef67f, #899911a0, 'around', 4px);
-  @include themeShadow(3px 3px 10px 1px #ebebeb, 3px 3px 10px 1px #1a1a1a);
-  position: relative;
-  z-index: 9999999;
-  background: #ffffff00;
-  padding: 10px;
-  box-shadow: none;
-  backdrop-filter: blur(4px);
-
-  .xaxis-title {
-    @include font(15px, 700);
-    color: var(--el-color-primary);
-  }
-
-  .data {
-    @include flex(row, space-between, center);
-    @include font(13px, 300);
-  }
-
-  &::before {
-    @include box(100%, 100%);
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
 }
 </style>

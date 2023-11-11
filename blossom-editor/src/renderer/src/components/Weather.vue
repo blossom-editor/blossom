@@ -2,7 +2,7 @@
   <div class="weather-root">
     <bl-row class="location" just="flex-end">
       {{ weather.location.name }}
-      <el-tooltip effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="3000">
+      <el-tooltip placement="top" effect="light" :show-after="1000" :hide-after="0" :auto-close="3000">
         <span class="iconbl bl-refresh-smile container-refresh" @click="refresh"></span>
         <template #content>
           刷新天气信息
@@ -81,16 +81,6 @@
         <span>{{ weather.daily[2].textDay }}</span>
       </div>
     </div>
-
-    <!-- 遮罩 -->
-    <div class="weather-mask" v-show="maskVisible" @click="getWeather">
-      <div :class="weatherResult === 'LOADING' ? 'big-text masking' : 'big-text'">
-        <div :class="weatherResult === 'LOADING' ? 'big-text masking' : 'big-text'">
-          {{ weatherResult === 'LOADING' ? '正在查询天气' : '获取天气失败' }}
-        </div>
-      </div>
-      <div class="small-text">点击刷新</div>
-    </div>
   </div>
 </template>
 
@@ -109,9 +99,6 @@ onActivated(() => {
 
 const userStore = useUserStore()
 
-const maskVisible = ref(false)
-const weatherResult = ref('LOADING')
-
 const getImgUrl = (name: string) => {
   return new URL(`../assets/imgs/weather/${name}.png`, import.meta.url).href
 }
@@ -126,11 +113,7 @@ const weather = ref({
     temp: '0',
     text: '晴'
   },
-  hourly: [
-    {
-      text: '0'
-    }
-  ],
+  hourly: [{ text: '0' }],
   daily: [
     { iconValueDay: '#wt-qing', img: getImgUrl('qing-s'), tempMin: '0', tempMax: '0', textDay: '晴' },
     { iconValueDay: '#wt-qing', img: getImgUrl('qing-s'), tempMin: '0', tempMax: '0', textDay: '晴' },
@@ -139,20 +122,17 @@ const weather = ref({
 })
 
 const getWeather = () => {
-  weatherResult.value = 'LOADING'
-  setTimeout(() => {
-    getAll({ location: userStore.userinfo.location }).then((resp) => {
-      if (resp.data.now) {
-        resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
-      }
-      if (resp.data.daily) {
-        resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
-        resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay.replaceAll('#wt-', '') + '-s')
-        resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay.replaceAll('#wt-', '') + '-s')
-      }
-      weather.value = { ...weather.value, ...resp.data }
-    })
-  }, 0)
+  getAll({ location: userStore.userinfo.location }).then((resp) => {
+    if (resp.data.now) {
+      resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+    }
+    if (resp.data.daily) {
+      resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
+      resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay.replaceAll('#wt-', '') + '-s')
+      resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay.replaceAll('#wt-', '') + '-s')
+    }
+    weather.value = { ...weather.value, ...resp.data }
+  })
 }
 
 const refresh = () => {
@@ -171,7 +151,7 @@ const refreshWeatherTask = () => {
 .weather-root {
   @include flex(row, center, flex-end);
   @include font(15px, 500, 'jellee');
-  @include themeColor(#ffffff, #d8d8d8); // width: 100%;
+  @include themeColor(#ffffff, #d8d8d8);
   @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 4px rgba(39, 39, 39, 0.5));
   min-height: 250px;
   max-height: 250px;

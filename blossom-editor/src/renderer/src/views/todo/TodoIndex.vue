@@ -386,7 +386,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
     [class='dark'] & {
       --color1: #1e1e1e;
-      --color2: #4a4a4a03;
+      --color2: #a5a5a503;
     }
 
     background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);

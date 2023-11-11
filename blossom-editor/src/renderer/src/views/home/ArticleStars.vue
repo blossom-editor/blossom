@@ -1,6 +1,5 @@
 <template>
-  <el-scrollbar :onresize="false">
-    <!-- <div class="article-stars-root"> -->
+  <div class="article-stars-root">
     <div v-if="isEmpty(articles)" class="placeholder">无收藏的文章</div>
     <div v-else class="star-item" v-for="article in articles" :key="article.id">
       <div class="counterfoil" @click="toWebview(article)">
@@ -16,14 +15,9 @@
         </div>
       </div>
     </div>
-    <div style="width: 100%; height: 10px"></div>
-    <!-- </div> -->
-  </el-scrollbar>
+  </div>
 </template>
 
-<!-- 
-文章收藏
- -->
 <script setup lang="ts">
 import router from '@renderer/router'
 import { nextTick, onActivated, ref } from 'vue'
@@ -65,24 +59,13 @@ defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">
-.el-scrollbar {
-  width: 100%;
-  --el-scrollbar-opacity: 1;
-  --el-scrollbar-hover-opacity: 1;
-  --el-scrollbar-bg-color: var(--el-color-primary-light-8);
-  --el-scrollbar-hover-bg-color: var(--el-color-primary-light-6);
-
-  :deep(.el-scrollbar__bar) {
-    width: 5px;
-    right: 0px;
-  }
-
-  :deep(.el-scrollbar__view) {
-    @include box(100%, 100%);
-    @include flex(row, flex-start, flex-start);
-    flex-wrap: wrap;
-    align-content: flex-start;
-  }
+.article-stars-root {
+  @include box(100%, 100%);
+  @include flex(row, flex-start, flex-start);
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: hidden;
+  overflow-y: overlay;
 }
 
 .placeholder {
@@ -92,13 +75,9 @@ defineExpose({ reload })
 
 .star-item {
   @include box(210px, 70px, 210px, 210px);
+  @include themeFilter(drop-shadow(2px 2px 2px rgb(180, 180, 180)), drop-shadow(2px 2px 2px rgb(0, 0, 0)));
   position: relative;
   margin: 10px 10px;
-  filter: drop-shadow(2px 2px 2px rgb(180, 180, 180));
-
-  [class='dark'] & {
-    filter: drop-shadow(2px 2px 2px rgb(0, 0, 0));
-  }
 
   &:hover {
     .counterfoil {
@@ -114,19 +93,19 @@ defineExpose({ reload })
   .content {
     @include flex(row, center, center);
     @include absolute(0);
-    color: #fff;
+    @include themeColor(#ffffff, #C9C9C9);
     transition: 0.3s;
-    cursor: pointer;
     z-index: 2;
+    cursor: pointer;
 
     &::before {
       @include box(100%, 100%);
       @include absolute('', 0, '', 0);
+      @include themeBg(var(--el-color-primary-light-3), var(--el-color-primary-light-5));
       content: '';
-      background: var(--el-color-primary-light-3);
       border-radius: 10px;
-      -webkit-mask-composite: source-in;
       mask-composite: source-in;
+      -webkit-mask-composite: source-in;
       z-index: -1;
     }
   }
@@ -180,7 +159,6 @@ defineExpose({ reload })
     &::before {
       -webkit-mask:
         radial-gradient(circle at 10px 10px, transparent 10px, #000 0) -10px -10px / 120%,
-        // radial-gradient(circle at 10px 10px, transparent 10px, #fff 0) -10px -10px,
         radial-gradient(circle at 1px 1px, transparent 2px, #000 0) -1px 0px / 110% 8%;
     }
 

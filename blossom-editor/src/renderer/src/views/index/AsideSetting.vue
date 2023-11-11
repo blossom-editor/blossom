@@ -1,6 +1,6 @@
 <template>
   <div class="index-setting-root">
-    <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon" :inactive-icon="Sunny" />
+    <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon" :inactive-icon="Sunny" @change="changeTheme" />
     <el-button-group>
       <el-button class="setting-button" type="primary" :icon="Setting" @click="toSetting" />
       <el-button class="setting-button" type="primary" :icon="Crop" @click="handlePrintScreenUpload()" />
@@ -72,7 +72,6 @@
 <script setup lang="ts">
 import { toLogin } from '@renderer/router'
 import { onMounted, ref } from 'vue'
-import { useDark } from '@vueuse/core'
 import { Sunny, Moon, Setting, Crop } from '@element-plus/icons-vue'
 import { docTreeApi, uploadFileApi } from '@renderer/api/blossom'
 import { handleUploadSeccess, handleUploadError } from '@renderer/views/picture/scripts/picture'
@@ -80,19 +79,16 @@ import { isEmpty } from 'lodash'
 import { printScreen, readImageToDataUrl, readImageToPNG, writeText } from '@renderer/assets/utils/electron'
 import { isBlank } from '@renderer/assets/utils/obj'
 import { getNowTime, platform } from '@renderer/assets/utils/util'
+import { isDark, changeTheme } from '@renderer/scripts/global-theme'
 import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
   printscreenAfter()
 })
 
-const isDark = useDark()
-
 const toSetting = () => {
   toLogin()
 }
-
-//#endregion
 
 //#region ----------------------------------------< 截屏 >----------------------------------------
 const isShowPrintScreenUpload = ref<boolean>(false)

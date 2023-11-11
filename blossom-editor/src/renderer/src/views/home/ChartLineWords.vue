@@ -38,7 +38,7 @@ onMounted(() => {
 
 watch(
   () => isDark.value,
-  (_newValue: any, _oldValue: any) => {
+  () => {
     renderChart(chartLine, chartData)
   }
 )
@@ -52,7 +52,6 @@ const getWords = () => {
   rqLoading.value = true
   articleWordLineApi().then((resp) => {
     chartData = resp.data
-
     renderChart(
       chartLine,
       chartData,
@@ -82,9 +81,9 @@ defineExpose({ reload, windowResize })
 
 <style lang="scss">
 .chart-line-word-tooltip {
-  @include box(130px, 60px);
-  @include themeBorder(1px, #c5aef67f, #899911a0, 'around', 4px);
   @include themeShadow(3px 3px 10px 1px #ebebeb, 3px 3px 10px 1px #1a1a1a);
+  border: 1px solid var(--el-color-primary-light-5);
+  border-radius: 4px;
   position: relative;
   z-index: 9999999;
   background: #ffffff00;

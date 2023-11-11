@@ -92,7 +92,8 @@ export const cwTheme: any = {
     backgroundColor: 'var(--bl-editor-active-line-gutter-bg-color)'
   },
   '.ͼ5': {
-    color: 'var(--bl-editor-c5-color)',
+    // color: 'var(--bl-editor-c5-color)',
+    color: 'var(--el-color-primary)',
     fontWeight: '700'
   },
   '.ͼ6': {
@@ -101,7 +102,9 @@ export const cwTheme: any = {
   },
   '.ͼ7': {
     backgroundColor: 'var(--bl-editor-c7-bg-color)',
-    color: 'var(--bl-editor-c7-color)'
+    // color: 'var(--bl-editor-c7-color)'
+    // backgroundColor: 'var(--el-color-primary)',
+    color: 'var(--el-color-primary)'
   },
   '.ͼc': {
     color: 'var(--bl-editor-cc-color)'

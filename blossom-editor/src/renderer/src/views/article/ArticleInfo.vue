@@ -45,13 +45,13 @@
         <!-- 按钮 -->
         <div class="stat-buttons">
           <bl-row just="space-around">
-            <el-tooltip content="公开访问 ↑" effect="blossomt" placement="top" :hide-after="0">
+            <el-tooltip content="公开访问 ↑" effect="light" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-cloudupload-line', curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
             </el-tooltip>
-            <el-tooltip content="关闭公开 ↓" effect="blossomt" placement="top" :hide-after="0">
+            <el-tooltip content="关闭公开 ↓" effect="light" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-clouddownload-line', !curIsOpen ? 'disabled' : '']" @click="open(0)"></div>
             </el-tooltip>
-            <el-tooltip effect="blossomt" placement="top" :hide-after="0">
+            <el-tooltip effect="light" placement="top" :hide-after="0">
               <template #content>
                 <div style="margin: 3px 0">{{ curIsFolder ? '文件夹无法同步版本' : '公开文章版本同步' }}</div>
                 <div style="border-top: 2px solid #fff" v-if="diffVersion > 0">
@@ -139,7 +139,7 @@
                 </el-icon>
               </template>
               <template #append>
-                <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
+                <el-tooltip content="查看 Emoji" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 15px" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
                 </el-tooltip>
               </template>
@@ -168,7 +168,7 @@
           <el-form-item label="图标">
             <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标或图片地址">
               <template #append>
-                <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
+                <el-tooltip content="查看所有图标" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>
@@ -683,7 +683,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       width: calc(100% - 50px - 50px);
       height: 100%;
       padding-top: 10px;
-      color: var(--el-color-primary);
+      color: var(--bl-text-title-color);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

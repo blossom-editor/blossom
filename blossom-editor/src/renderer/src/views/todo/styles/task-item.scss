@@ -1,11 +1,11 @@
 .task-item {
   @include box(270px, auto, 270px, 270px);
-  @include themeShadow(0 0 5px #c0c0c0, 0 0 5px #000000);
-  @include themeBg(#f9f9f9, #0f0f0f);
+  @include themeShadow(0 0 5px #c0c0c0, 0 0 3px #000000);
+  @include themeBg(#f9f9f9, #141414);
   font-weight: 300;
   border-radius: 4px;
   margin-bottom: 15px;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.1s;
   position: relative;
 
   .selection {
@@ -42,7 +42,7 @@
   }
 
   &:hover {
-    @include themeShadow(0 0 9px #c0c0c0, 0 0 15px #000000);
+    @include themeShadow(0 0 9px #c0c0c0, 0 0 10px #000000);
 
     .task-title {
       .iconbl {

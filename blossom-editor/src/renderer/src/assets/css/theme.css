@@ -12,18 +12,6 @@
   --el-color-primary-light-8: rgba(173, 140, 242, 0.2);
   --el-color-primary-light-9: rgba(173, 140, 242, 0.1);
 
-  /* --el-color-primary: rgb(64, 158, 255);
-  --el-color-primary-dark-2: rgba(64, 158, 255, 0.8);
-  --el-color-primary-light-1: rgba(64, 158, 255, 0.9);
-  --el-color-primary-light-2: rgba(64, 158, 255, 0.8);
-  --el-color-primary-light-3: rgba(64, 158, 255, 0.7);
-  --el-color-primary-light-4: rgba(64, 158, 255, 0.6);
-  --el-color-primary-light-5: rgba(64, 158, 255, 0.5);
-  --el-color-primary-light-6: rgba(64, 158, 255, 0.4);
-  --el-color-primary-light-7: rgba(64, 158, 255, 0.3);
-  --el-color-primary-light-8: rgba(64, 158, 255, 0.2);
-  --el-color-primary-light-9: rgba(64, 158, 255, 0.1); */
-
   --el-color-success: #67c23a;
   --el-color-success-light-3: #95d475;
   --el-color-success-light-5: #b3e19d;
@@ -84,7 +72,7 @@
 
 html.dark {
   /* 数字越大, 颜色越淡 */
-  --el-color-primary: #899911;
+  --el-color-primary: rgb(137, 153, 17);
   --el-color-primary-dark: rgb(136, 154, 2);
   --el-color-primary-dark-2: rgba(165, 184, 20, 0.8);
   --el-color-primary-light-1: rgba(165, 184, 20, 0.9);
@@ -95,18 +83,6 @@ html.dark {
   --el-color-primary-light-7: rgba(165, 184, 20, 0.3);
   --el-color-primary-light-8: rgba(165, 184, 20, 0.2);
   --el-color-primary-light-9: rgba(165, 184, 20, 0.2);
-
-  /* --el-color-primary: rgb(173, 146, 49);
-  --el-color-primary-dark-2: rgba(173, 146, 49, 0.8);
-  --el-color-primary-light-1: rgba(173, 146, 49, 0.9);
-  --el-color-primary-light-2: rgba(173, 146, 49, 0.8);
-  --el-color-primary-light-3: rgba(173, 146, 49, 0.7);
-  --el-color-primary-light-4: rgba(173, 146, 49, 0.6);
-  --el-color-primary-light-5: rgba(173, 146, 49, 0.5);
-  --el-color-primary-light-6: rgba(173, 146, 49, 0.4);
-  --el-color-primary-light-7: rgba(173, 146, 49, 0.3);
-  --el-color-primary-light-8: rgba(173, 146, 49, 0.2);
-  --el-color-primary-light-9: rgba(173, 146, 49, 0.1); */
 
   --el-color-danger: rgb(215, 68, 68);
   --el-color-danger-light-3: rgba(215, 68, 68, 0.7);
@@ -150,6 +126,7 @@ html.dark {
   --bl-bg-color: #f1f1f1;
   /* ================================= text styles =================================*/
   --bl-text-doctree-color: #909399;
+  --bl-text-title-color: #727272;
   /* primary color */
   --bl-text-color: #606266;
   /* lighter than primary color */
@@ -167,12 +144,14 @@ html.dark {
 
   /* ================================= iconbl ================================== */
   --bl-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
-
   --bl-subject-color1: #040eff;
 
   /* ================================= 弹框样式 =================================*/
   --bl-dialog-bg-color: #fafafa;
   --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
+
+  --bl-scroll-color: #f2f2f2;
+  --bl-scroll-color-hover: #d2d2d2;
 }
 
 html.dark {
@@ -182,6 +161,7 @@ html.dark {
   --bl-bg-color: #333434;
   /* ================================= text styles =================================*/
   --bl-text-doctree-color: #b9b9b9;
+  --bl-text-title-color: #a3a6ad;
   /* primary color */
   --bl-text-color: #a8a8a8;
   /* lighter than primary color */
@@ -202,6 +182,9 @@ html.dark {
   /* ================================= 弹框样式 =================================*/
   --bl-dialog-bg-color: #2d2d2d;
   --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(0, 0, 0);
+
+  --bl-scroll-color: #2e2e2e;
+  --bl-scroll-color-hover: #545454;
 }
 
 /* ================================= 编辑器与预览样式 ================================== */
@@ -251,6 +234,8 @@ html.dark {
   --bl-preview-h1-bg-color: #eaeaea;
   --bl-preview-h1-box-shadow: 3px 3px 5px 1px #a8a8a8;
   --bl-preview-h1-text-shadow: 3px 3px 3px rgb(148, 148, 148);
+
+  --bl-preview-hr-color: #f5f5f5;
 
   /* 表格 */
   --bl-preview-table-border-color: #939393;
@@ -324,6 +309,8 @@ html.dark {
   --bl-preview-h1-bg-color: #545454;
   --bl-preview-h1-box-shadow: 3px 3px 5px 1px #000000;
   --bl-preview-h1-text-shadow: 3px 3px 3px #000000;
+
+  --bl-preview-hr-color: #525252;
 
   --bl-preview-table-border-color: #525252;
   --bl-preview-table-thead-bg-color: #454545;

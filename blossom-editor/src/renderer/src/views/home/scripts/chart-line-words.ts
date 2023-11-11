@@ -1,8 +1,6 @@
-import { useDark } from '@vueuse/core'
 import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import { formartNumber } from '@renderer/assets/utils/util'
-
-const isDark = useDark()
+import { getPrimaryColor } from '@renderer/scripts/global-theme'
 
 export type ChartLineWordsData = {
   statDates: any[]
@@ -15,8 +13,8 @@ export type ChartLineWordsData = {
  * @param chartData 图表数据
  * @param callback 渲染后回调
  */
-export const renderChart = (chart: any, chartData: ChartLineWordsData, callback?: any) => {
-  let dark: boolean = isDark.value
+export const renderChart = async (chart: any, chartData: ChartLineWordsData, callback?: any) => {
+  let primaryColor = getPrimaryColor()
   chart.setOption({
     grid: { top: 30, left: 60, right: 20, bottom: 35 },
     legend: {
@@ -31,17 +29,14 @@ export const renderChart = (chart: any, chartData: ChartLineWordsData, callback?
         backgroundColor: 'none',
         extraCssText: 'box-shadow: none;',
         padding: 0,
-        // alwaysShowContent: true,
         appendToBody: false,
         formatter: (params: any) => {
           return `
           <div class="chart-line-word-tooltip">
             <div class="xaxis-title">${params[0].axisValue}</div>
             <div class="data">
-              <div>
-                <span class="iconbl bl-pen-line"></span>
-                ${formartNumber(params[0].data)}
-              </div>
+              <span class="iconbl bl-pen-line"></span>
+              <span style="padding-left:10px;">Words: ${formartNumber(params[0].data)}</span>
             </div>
           </div>
           `
@@ -69,8 +64,8 @@ export const renderChart = (chart: any, chartData: ChartLineWordsData, callback?
         lineStyle: {
           width: 3,
           cap: 'round',
-          color: dark ? '#899911' : '#ad8cf2',
-          shadowColor: dark ? '#000000' : '#cebdf0',
+          color: primaryColor.color,
+          shadowColor: primaryColor.color5,
           shadowOffsetY: 5,
           shadowBlur: 10
         },
@@ -85,11 +80,12 @@ export const renderChart = (chart: any, chartData: ChartLineWordsData, callback?
             x2: 0,
             y2: 0.5,
             colorStops: [
-              { offset: 0, color: dark ? '#899911B3' : '#CEBDF0AD' },
-              { offset: 1, color: dark ? '#00000000' : '#FFFFFF3E' }
+              { offset: 0, color: primaryColor.color5 },
+              { offset: 0.5, color: primaryColor.color9 },
+              { offset: 1, color: 'transparent' }
             ]
           },
-          shadowColor: dark ? '#666666' : '#CEBDF0AD',
+          shadowColor: '#00000000',
           shadowOffsetY: 5,
           shadowBlur: 10
         }

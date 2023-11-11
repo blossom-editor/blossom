@@ -6,8 +6,7 @@
     <div class="aside-item-container">
       <!-- 模块菜单 -->
       <div class="aside-item item-menu-container">
-        <div v-for="menu in menus" :key="menu.name" :class="['item-menu iconbl', menu.icon, isActive(menu.path)]"
-          @click="toRoute(menu)">
+        <div v-for="menu in menus" :key="menu.name" :class="['item-menu iconbl', menu.icon, isActive(menu.path)]" @click="toRoute(menu)">
           <span>{{ menu.name }}</span>
         </div>
       </div>
@@ -22,38 +21,50 @@
       </div>
     </div>
   </div>
+  <Teleport to="body">
+    <ThemeSetting v-if="themeStrore.isShow"></ThemeSetting>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import router from '@renderer/router'
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useThemeStore } from '@renderer/stores/theme'
 import { useUserStore, AuthStatus } from '@renderer/stores/user'
 import { ElNotification } from 'element-plus'
 import user from './AsideUser.vue'
 import upload from './AsideUpload.vue'
 import setting from './AsideSetting.vue'
 import logo from '@renderer/components/Logo.vue'
+import ThemeSetting from './setting/ThemeSetting.vue'
 
-//#region ----------------------------------------< panin store >--------------------------------------
+const themeStrore = useThemeStore()
 const userStore = useUserStore()
 const { auth } = storeToRefs(userStore)
 
-interface AsideMenu { login: boolean, name: string, path: string, icon: string }
+interface AsideMenu {
+  login: boolean
+  name: string
+  path: string
+  icon: string
+}
 const menus = ref<AsideMenu[]>([
   { login: true, name: 'Home', path: '/home', icon: 'bl-a-home1-line' },
   { login: true, name: 'Editor', path: '/articleIndex', icon: 'bl-a-texteditorhighlightcolor-line' },
   { login: true, name: 'Pic', path: '/pictureIndex', icon: 'bl-picture-line' },
   { login: true, name: 'Todo', path: '/todoIndex', icon: 'bl-a-labellist-line' },
   { login: true, name: 'Plan', path: '/planIndex', icon: 'bl-calendar-line' },
-  { login: true, name: 'Note', path: '/noteIndex', icon: 'bl-note-line' },
+  { login: true, name: 'Note', path: '/noteIndex', icon: 'bl-note-line' }
 ])
 
-const activeMenuPath = ref<string>('home');
+const activeMenuPath = ref<string>('home')
 
-watch(() => router.currentRoute.value, (newRoute) => {
-  activeMenuPath.value = newRoute.path
-},
+watch(
+  () => router.currentRoute.value,
+  (newRoute) => {
+    activeMenuPath.value = newRoute.path
+  },
   { immediate: true }
 )
 
@@ -70,7 +81,7 @@ const toRoute = (menu: AsideMenu) => {
     })
     return
   }
-  activeMenuPath.value = menu.path;
+  activeMenuPath.value = menu.path
   router.push(menu.path)
 }
 
@@ -84,7 +95,6 @@ const isActive = (path: string): string => {
 const isLogin = () => {
   return auth.value.status === AuthStatus.Succ
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -117,7 +127,7 @@ $height-menu: calc(100% - #{$height-upload} - #{$height-user} - #{$height-settin
     .item-menu-container {
       @include box(100%, $height-menu);
       @include flex(column, flex-start, center);
-      @include themeColor(#909399, #A3A6AD);
+      @include themeColor(#909399, #a3a6ad);
       padding-top: 5px;
       border-top-right-radius: 10px;
 
@@ -170,10 +180,8 @@ $height-menu: calc(100% - #{$height-upload} - #{$height-user} - #{$height-settin
     }
   }
 
-
   :deep(.el-divider) {
     margin: 0;
   }
-
 }
 </style>

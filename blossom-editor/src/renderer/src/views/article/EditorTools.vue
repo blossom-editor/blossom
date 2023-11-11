@@ -406,7 +406,7 @@ const stop = () => {
 
   .tomato-bell {
     @include box(100%, 100%);
-    @include themeBg(#b593fdc7, #354f00);
+    background-color: var(--el-color-primary-light-5);
     transform: translateX(100%);
     position: absolute;
     right: 0;
@@ -441,7 +441,6 @@ const stop = () => {
 
     .divider {
       @include box(2px, 60%);
-      @include themeBg(#ad8cf280, #1c1c1c);
       padding: 0;
       border: 0;
     }

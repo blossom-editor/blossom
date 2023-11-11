@@ -11,18 +11,16 @@
           <div class="user-name">{{ userinfo.nickName }}</div>
           <Laptop></Laptop>
         </div>
-        <!-- 天气 -->
         <Weather></Weather>
-        <!-- 头像 -->
         <UserAvatar style="margin-left: 20px"></UserAvatar>
       </bl-row>
 
       <!-- 统计 -->
-      <el-scrollbar height="calc(100% - 315px)" wrap-style="padding-right:20px">
+      <div class="chart-container">
         <bl-row class="container-name">字数统计</bl-row>
-        <bl-row width="100%" height="270px">
+        <bl-row height="270px">
           <!-- 字数图表 -->
-          <bl-col width="calc(100% - 200px)">
+          <bl-col width="670px">
             <bl-row class="container-sub-name">
               The last 36 months
               <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
@@ -31,7 +29,7 @@
             <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
           </bl-col>
           <!-- 统计卡片 -->
-          <bl-col width="200px" style="margin-left: 20px">
+          <bl-col width="200px">
             <bl-row class="container-sub-name">Blossom Statistic</bl-row>
             <StatisticCard></StatisticCard>
           </bl-col>
@@ -48,17 +46,15 @@
         </bl-row>
 
         <!-- 热力图 -->
-        <bl-col class="heatmap-container" width="100%" style="height: 360px">
-          <bl-row class="container-name">编辑热力图</bl-row>
-          <bl-row class="container-sub-name">
-            每日编辑文章数 (每5分钟更新)
-            <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
-          </bl-row>
-          <bl-row style="height: calc(100% - 60px - 20px)">
-            <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
-          </bl-row>
-        </bl-col>
-      </el-scrollbar>
+        <bl-row class="container-name">编辑热力图</bl-row>
+        <bl-row class="container-sub-name">
+          每日编辑文章数 (每5分钟更新)
+          <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
+        </bl-row>
+        <bl-row width="870px" height="270px">
+          <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
+        </bl-row>
+      </div>
     </div>
 
     <!-- 
@@ -82,11 +78,6 @@
       </bl-col>
 
       <bl-col width="100%" height="calc(100% - 45px - 270px - 330px)">
-        <!-- <bl-row class="container-name">便签</bl-row>
-        <bl-row class="container-sub-name">记录瞬间的灵感 (Ctrl+Enter 快速保存)</bl-row>
-        <bl-row style="padding:20px 10px 30px 10px;height: calc(100% - 80px);text-align: right;">
-          <NoteEditor></NoteEditor>
-        </bl-row> -->
         <bl-row class="container-name">待办事项</bl-row>
         <bl-row class="container-sub-name">Todo List</bl-row>
         <bl-row style="padding-bottom: 10px; height: calc(100% - 80px)">
@@ -103,10 +94,6 @@
     <div class="web-container gradient-linear">
       <WebCollect></WebCollect>
     </div>
-
-    <bl-row style="position: absolute; bottom: 0; z-index: 1; height: 70px">
-      <WaveFooter></WaveFooter>
-    </bl-row>
   </div>
 
   <el-dialog
@@ -139,8 +126,6 @@ import SentinelChartLine from '@renderer/views/statistic/SentinelChartLine.vue'
 import ArticleSubjects from './ArticleSubjects.vue'
 import ArticleStars from './ArticleStars.vue'
 import StatisticCard from './StatisticCard.vue'
-// import NoteEditor from '@renderer/views/note/NoteEditor.vue'
-import WaveFooter from '@renderer/components/WaveFooter.vue'
 import TaskProgressSimpleVue from '../todo/TaskProgressSimple.vue'
 import WordsInfo from './WordsInfo.vue'
 
@@ -184,7 +169,7 @@ const showWordsInfo = () => {
 .global-home-root {
   @include box(100%, 100%);
   @include flex(row, space-between, center);
-  background-image: linear-gradient(to bottom right, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-7));
+  // background-image: linear-gradient(to bottom right, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-7));
 
   .container-name {
     @include font(20px, 700);
@@ -233,22 +218,19 @@ const showWordsInfo = () => {
 
   .main {
     @include box($width-main, 100%, $width-main, $width-main);
-    padding: 0 0 10px 20px;
+    padding: 0 5px 10px 20px;
     z-index: 2;
 
     // 笔记本图片等
     .image-container {
       @include box(200px, 100%);
+      @include themeBrightness(100%, 80%);
 
       .user-name {
         @include font(25px, 700);
         @include themeColor(#5c5c5c, var(--el-color-primary));
         text-shadow: var(--bl-text-shadow);
         height: 30px;
-      }
-
-      [class='dark'] & {
-        filter: brightness(80%);
       }
     }
 
@@ -265,24 +247,16 @@ const showWordsInfo = () => {
       font-size: 12px;
     }
 
-    .el-scrollbar {
-      --el-scrollbar-opacity: 1;
-      --el-scrollbar-hover-opacity: 1;
-      --el-scrollbar-bg-color: var(--el-color-primary-light-8);
-      --el-scrollbar-hover-bg-color: var(--el-color-primary-light-6);
-
-      :deep(.el-scrollbar__bar) {
-        width: 5px;
-        right: 3px;
-      }
+    .chart-container {
+      @include box(100%, calc(100% - 315px));
+      overflow-x: hidden;
+      overflow-y: overlay;
     }
   }
 
   .middle {
     @include box($width-middle, 100%, $width-middle, $width-middle);
     position: relative;
-    transition: 0.2s;
-    // opacity: 0;
     display: none;
     z-index: 2;
   }
@@ -306,13 +280,10 @@ const showWordsInfo = () => {
     }
   }
 
-  // 大于1600时使用以下样式
   @media screen and (min-width: 1600px) {
     .middle {
       @include themeBorder(1px, #e6e6e6, #171717, 'left');
-      // opacity: 1 !important;
       display: block;
-      // margin-left: $margin-middle;
       padding: 0 10px 10px 20px;
     }
   }
@@ -328,12 +299,12 @@ const showWordsInfo = () => {
   }
 
   .gradient-linear {
-    --color1: rgba(234, 224, 254, 0.1);
+    --color1: #f6f6f6;
     --color2: #ffffff5a;
 
     [class='dark'] & {
-      --color1: #89991109;
-      --color2: #89991114;
+      --color1: #151515c1;
+      --color2: #00000014;
     }
 
     background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);
@@ -351,5 +322,15 @@ const showWordsInfo = () => {
 ::-webkit-scrollbar {
   width: 4px;
   height: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bl-scroll-color);
+  width: 4px;
+  height: 3px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: var(--bl-scroll-color-hover);
+  }
 }
 </style>

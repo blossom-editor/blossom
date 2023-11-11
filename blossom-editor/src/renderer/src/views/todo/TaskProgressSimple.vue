@@ -1,34 +1,31 @@
 <template>
   <div class="task-progress-simple-root">
     <div class="todo-select">
-      <el-select style="width: 170px;" placeholder="点击选择显示阶段性事项" v-model="choiseTodoId" @change="changeChoiseTodoId">
+      <el-select style="width: 170px" placeholder="点击选择显示阶段性事项" v-model="choiseTodoId" @change="changeChoiseTodoId">
         <el-option v-for="op in todoOptions" :key="op.value" :label="op.label" :value="op.value"></el-option>
       </el-select>
     </div>
     <div v-if="countTotal > 0" class="task-workbench">
       <bl-row class="bars">
-        <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }">
-        </div>
-        <div v-if="countProc != 0" class="processing"
-          :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }">
-        </div>
-        <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }">
-        </div>
-        <div v-if="countTotal == 0" class="completed" style="width:calc(100% - 6px)"></div>
+        <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
+        <div v-if="countProc != 0" class="processing" :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
+        <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
+        <div v-if="countTotal == 0" class="completed" style="width: calc(100% - 6px)"></div>
       </bl-row>
-      <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px;">
+      <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px">
         <div class="task-name">{{ curTodo.todoName }}</div>
         <bl-row width="200px" class="bars-legend">
-          <div class="waiting"></div>待办
-          <div class="processing"></div>进行中
-          <div class="completed"></div>完成
+          <div class="waiting"></div>
+          待办
+          <div class="processing"></div>
+          进行中
+          <div class="completed"></div>
+          完成
         </bl-row>
       </bl-row>
     </div>
 
-    <div v-if="countTotal == 0" class="placeholder">
-      无待办事项
-    </div>
+    <div v-if="countTotal == 0" class="placeholder">无待办事项</div>
 
     <div class="progress-container">
       <div class="waiting">
@@ -48,7 +45,6 @@
           </div>
         </div>
       </div>
-
 
       <div class="processing">
         <div class="tasks-container">
@@ -111,7 +107,7 @@ onActivated(() => {
 const DAY_TODO_ID = 'day_todo_id'
 const HOME_CHOISE_TODO_ID = 'blossom-home-choise-todo-id'
 const choiseTodoId = ref('')
-const todoOptions = ref<{ label: string, value: string }[]>([])
+const todoOptions = ref<{ label: string; value: string }[]>([])
 
 const initChoiseTodoId = () => {
   let todoId = Local.get(HOME_CHOISE_TODO_ID)
@@ -128,14 +124,14 @@ const changeChoiseTodoId = (value: string) => {
 }
 
 const getTodos = () => {
-  todosApi().then(resp => {
+  todosApi().then((resp) => {
     let options = [{ label: '今日待办', value: DAY_TODO_ID }]
     resp.data.taskPhased.forEach((todo: { todoName: string; todoId: string }) => {
       options.push({
         label: todo.todoName,
         value: todo.todoId
       })
-    });
+    })
     todoOptions.value = options
     getTasks()
   })
@@ -147,8 +143,8 @@ const taskWait = ref<TaskInfo[]>([])
 const taskProc = ref<TaskInfo[]>([])
 const taskComp = ref<TaskInfo[]>([])
 const countWait = computed<number>(() => taskWait.value.length)
-const countProc = computed<number>(() => taskProc.value.filter(t => t.todoType != 99).length)
-const countComp = computed<number>(() => taskComp.value.filter(t => t.todoType != 99).length)
+const countProc = computed<number>(() => taskProc.value.filter((t) => t.todoType != 99).length)
+const countComp = computed<number>(() => taskComp.value.filter((t) => t.todoType != 99).length)
 const countTotal = computed(() => countWait.value + countProc.value + countComp.value)
 
 const getTasks = () => {
@@ -159,7 +155,7 @@ const getTasks = () => {
     todoId = choiseTodoId.value
   }
 
-  tasksApi({ todoId: todoId }).then(resp => {
+  tasksApi({ todoId: todoId }).then((resp) => {
     taskWait.value = resp.data.waiting
     taskProc.value = resp.data.processing
     taskComp.value = resp.data.completed
@@ -189,7 +185,7 @@ const getTasks = () => {
       --el-input-bg-color: transparent;
 
       .el-input__inner {
-        color: #ABABAB;
+        color: #ababab;
       }
     }
   }
@@ -210,7 +206,6 @@ const getTasks = () => {
     .waiting,
     .processing,
     .completed {
-      width: 240px;
       min-width: 240px;
       max-width: 240px;
       padding: 0;
@@ -221,9 +216,7 @@ const getTasks = () => {
         overflow-x: hidden;
 
         .task-item {
-          @include themeBg(linear-gradient(155deg, #ffffff00 0%, #FFFFFF84 60%, var(--el-color-primary-light-9) 100%),
-            linear-gradient(155deg, var(--bl-html-color) 0%, #00000015 60%, rgba(165, 184, 20, 0.1) 100%));
-          width: 210px;
+          background-color: linear-gradient(155deg, #ffffff00 0%, #ffffff84 60%, var(--el-color-primary-light-9) 100%);
           min-width: 210px;
           max-width: 210px;
           margin: 10px 20px;
@@ -240,7 +233,7 @@ const getTasks = () => {
     }
   }
 
-  @media screen and (max-height:1100px) {
+  @media screen and (max-height: 1100px) {
     .task-workbench {
       display: none;
     }

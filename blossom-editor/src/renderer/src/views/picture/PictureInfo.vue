@@ -73,7 +73,7 @@
                 </el-icon>
               </template>
               <template #append>
-                <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
+                <el-tooltip content="查看 Emoji" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 15px" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
                 </el-tooltip>
               </template>
@@ -87,7 +87,7 @@
           <el-form-item label="图标">
             <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标或图片地址">
               <template #append>
-                <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
+                <el-tooltip content="查看所有图标" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>
@@ -392,7 +392,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       width: calc(100% - 50px - 50px);
       height: 100%;
       padding-top: 10px;
-      color: var(--el-color-primary);
+      color: var(--bl-text-title-color);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

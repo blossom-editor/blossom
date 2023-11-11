@@ -27,9 +27,6 @@ import BLCol from '@renderer/components/BLCol.vue'
 const app = createApp(App)
 app.use(pinia)
 app.use(router)
-app
-  .component('bl-tag', BLTag)
-  .component('bl-row', BLRow)
-  .component('bl-col', BLCol)
+app.component('bl-tag', BLTag).component('bl-row', BLRow).component('bl-col', BLCol)
 
 app.mount('#app')

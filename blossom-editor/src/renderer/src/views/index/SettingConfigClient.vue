@@ -79,6 +79,12 @@
         </bl-row>
         <div class="conf-tip">打开开发者工具。</div>
       </el-form-item>
+      <el-form-item label="主题设置">
+        <bl-row>
+          <el-button @click="themeStrore.show()">设置</el-button>
+        </bl-row>
+        <div class="conf-tip">设置日间/夜间主题颜色。</div>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -89,7 +95,9 @@ import CONFIG from '@renderer/assets/constants/system'
 import { useConfigStore } from '@renderer/stores/config'
 import type { EditorStyle, ViewStyle, PicStyle } from '@renderer/stores/config'
 import { openDevTools } from '@renderer/assets/utils/electron'
+import { useThemeStore } from '@renderer/stores/theme'
 
+const themeStrore = useThemeStore()
 const configStore = useConfigStore()
 const configEditorStyleForm = ref<EditorStyle>(configStore.editorStyle)
 const configViewStyleForm = ref<ViewStyle>(configStore.viewStyle)

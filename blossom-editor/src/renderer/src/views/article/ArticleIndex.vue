@@ -18,11 +18,7 @@
     </div>
 
     <!-- editor -->
-    <div
-      class="editor-container"
-      :style="{ width: docEditorStyle.editor }"
-      v-loading="editorLoading"
-      element-loading-text="正在读取文章内容...">
+    <div class="editor-container" :style="{ width: docEditorStyle.editor }" v-loading="editorLoading" element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
         <EditorTools
           @save="saveCurArticleContent()"
@@ -73,7 +69,7 @@
       <div :class="['bl-preview-toc-absolute', tocsExpand ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
         <div class="toc-title" ref="TocTitleRef">
           目录
-          <span style="font-size: 10px">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
+          <span v-show="tocsExpand" style="font-size: 10px">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
         </div>
         <div class="toc-content" v-show="tocsExpand">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
@@ -82,7 +78,7 @@
         </div>
         <div class="img-title">
           引用图片
-          <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+          <el-tooltip effect="light" placement="right" :hide-after="0">
             <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
             <span class="iconbl bl-refresh-line" @click="refreshCache"></span>
           </el-tooltip>

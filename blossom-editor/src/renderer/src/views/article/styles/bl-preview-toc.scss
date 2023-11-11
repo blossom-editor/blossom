@@ -199,3 +199,16 @@
     }
   }
 }
+
+.bl-preview-toc-absolute.is-expand-open {
+  @include box(310px, auto);
+}
+
+.bl-preview-toc-absolute.is-expand-close {
+  @include box(50px, 40px);
+  // .toc-title {
+  //   span {
+  //     display: none;
+  //   }
+  // }
+}

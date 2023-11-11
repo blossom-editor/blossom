@@ -30,7 +30,7 @@
           </div>
 
           <div class="radio">
-            <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+            <el-tooltip effect="light" placement="right" :hide-after="0">
               <template #content> 开启重复上传后<br />重名的图片将会被覆盖 </template>
               <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
             </el-tooltip>
@@ -45,7 +45,7 @@
           </div>
 
           <div class="cache-clear">
-            <el-tooltip effect="blossomr" placement="right" :hide-after="0">
+            <el-tooltip effect="light" placement="right" :hide-after="0">
               <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
               <div>清空图片缓存<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
             </el-tooltip>

@@ -7,7 +7,7 @@
     <bl-row class="wb-page-container">
       <Transition name="wbpage-one">
         <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 1">
-          <el-tooltip effect="blossomb" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip effect="light" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
             <template #content>
               显示排序<br />
@@ -21,31 +21,31 @@
               </bl-row>
             </template>
           </el-tooltip>
-          <el-tooltip content="只显示公开" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="只显示公开" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div v-if="props.showOpen">
               <div v-if="onlyOpen" class="iconbl bl-cloud-fill" @click="changeOnlyOpen()"></div>
               <div v-else class="iconbl bl-cloud-line" @click="changeOnlyOpen()"></div>
             </div>
           </el-tooltip>
-          <el-tooltip content="只显示专题" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="只显示专题" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div v-if="props.showSubject">
               <div v-if="onlySubject" class="iconbl bl-a-lowerrightpage-fill" @click="changeOnlySubject()"></div>
               <div v-else class="iconbl bl-a-lowerrightpage-line" @click="changeOnlySubject()"></div>
             </div>
           </el-tooltip>
-          <el-tooltip content="只显示 Star 文章" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="只显示 Star 文章" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div v-if="props.showStar">
               <div v-if="onlyStars" class="iconbl bl-star-fill" @click="changeOnlyStar()"></div>
               <div v-else class="iconbl bl-star-line" @click="changeOnlyStar()"></div>
             </div>
           </el-tooltip>
-          <el-tooltip content="刷新列表" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="刷新列表" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
           </el-tooltip>
-          <el-tooltip content="新增文件夹或文档" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="新增文件夹或文档" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
           </el-tooltip>
-          <el-tooltip content="文章引用网络" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="文章引用网络" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-correlation-line" @click="openArticleReferenceWindow()"></div>
           </el-tooltip>
         </bl-row>
@@ -53,7 +53,7 @@
 
       <Transition name="wbpage-two">
         <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 2">
-          <el-tooltip content="查看备份记录" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+          <el-tooltip content="查看备份记录" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-a-cloudstorage-line" @click="handleShowBackupDialog"></div>
           </el-tooltip>
         </bl-row>

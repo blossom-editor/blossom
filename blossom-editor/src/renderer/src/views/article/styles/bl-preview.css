@@ -100,7 +100,7 @@ h6 {
 }
 
 .bl-preview hr {
-  border-color: var(--el-color-primary-light-7);
+  border-color: var(--bl-preview-hr-color);
 }
 
 /* 表格 */

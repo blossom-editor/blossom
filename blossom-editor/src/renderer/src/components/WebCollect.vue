@@ -16,7 +16,7 @@
           <el-form-item label="网站图标">
             <el-input v-model="webForm.icon" placeholder="wl-">
               <template #append>
-                <el-tooltip content="查看所有图标" effect="blossomt" placement="top" :hide-after="0">
+                <el-tooltip content="查看所有图标" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#wl-yanfa"></use>

@@ -14,7 +14,6 @@
       <div class="name-wrapper" :style="nameWrapperStyle">
         {{ props.trees.n }}
       </div>
-      <bl-tag v-if="props.trees.o === 1 && props.trees.ty != 3" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>
     <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
@@ -56,13 +55,16 @@ const tags = computed(() => {
   let icons: any = []
   props.trees.t?.forEach((tag) => {
     if (tag === 'subject') {
-      icons.unshift({ content: '专题', bgColor: 'salmon', icon: 'bl-a-lowerrightpage-line' })
+      icons.unshift({ content: '专题', bgColor: 'var(--bl-tag-color-subject)', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
-      icons.push({ content: 'TOC', bgColor: '#7274fa' })
+      icons.push({ content: 'TOC', bgColor: 'var(--bl-tag-color-toc)' })
     } else {
       icons.push({ content: tag })
     }
   })
+  if (props.trees.o === 1 && props.trees.ty != 3) {
+    icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+  }
   return icons
 })
 
@@ -87,8 +89,6 @@ $icon-size: 17px;
 
 .doc-title {
   @include flex(row, flex-start, flex-start);
-  // max-width: calc(100% - 15px);
-  // min-width: calc(100% - 15px);
   width: 100%;
   padding-bottom: 1px;
   position: relative;
@@ -135,8 +135,8 @@ $icon-size: 17px;
 // 专题样式, 包括边框和文字样式
 .subject-title {
   @include flex(row, flex-start, flex-start);
-  @include themeShadow(2px 2px 10px 1px #fad7d7, 1px 2px 10px 1px #0a0a0a);
-  @include themeBg(linear-gradient(135deg, #fad7d7, #fae7e7, #ffffff), linear-gradient(135deg, #594a23, #453d28, #33302b));
+  @include themeShadow(2px 2px 10px 1px var(--el-color-primary-light-8), 2px 2px 10px 1px #131313);
+  background: linear-gradient(135deg, var(--el-color-primary-light-7), var(--el-color-primary-light-8), var(--bl-html-color));
   max-width: calc(100% - 15px);
   min-width: calc(100% - 15px);
   padding: 2px 5px;

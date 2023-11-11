@@ -336,7 +336,7 @@ const helpMeLogin = () => {
   }
 
   .btn-login {
-    background: radial-gradient(circle, #f796c0 0%, #76aef1 100%);
+    background: radial-gradient(circle, #ba8a10b1 0%, var(--el-color-primary) 70%, var(--el-color-primary) 100%);
     line-height: 42px;
     padding: 0;
     border: none;
@@ -345,10 +345,6 @@ const helpMeLogin = () => {
       7px 7px 20px 0px rgba(0, 0, 0, 0.1),
       4px 4px 5px 0px rgba(0, 0, 0, 0.1);
     transition: background 2s;
-
-    [class='dark'] & {
-      background: radial-gradient(circle, #ba8a10 0%, #6f7c0d 100%);
-    }
 
     &:before,
     &:after {

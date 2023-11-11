@@ -39,7 +39,7 @@ import CONFIG from '@renderer/assets/constants/system'
 <style scoped lang="scss">
 .setting-index-root {
   @include box(100%, 100%);
-  background-image: linear-gradient(135deg, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-5));
+  background-image: linear-gradient(145deg, var(--bl-html-color) 0%, var(--bl-html-color) 55%, var(--el-color-primary-light-5));
   padding: 50px 0 0 50px;
   z-index: 2;
 

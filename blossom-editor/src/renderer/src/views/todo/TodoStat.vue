@@ -7,7 +7,7 @@
         <TodoChartCompleted ref="TodoChartCompletedRef"></TodoChartCompleted>
       </div>
 
-      <div class="title" style="margin-top: 20px;">所有任务</div>
+      <div class="title" style="margin-top: 20px">所有任务</div>
       <div class="sub-title">All Tasks Statistic</div>
 
       <bl-row class="item-row" just="space-around">
@@ -35,7 +35,6 @@
           <span class="icon-shadow iconbl bl-a-boxdownload-line"></span>
         </div>
       </bl-row>
-
     </div>
 
     <div class="phared-details">
@@ -45,12 +44,11 @@
       <div class="row">最早开始: {{ todoStat.firstStartTime }}</div>
       <div class="row">最后完成: {{ todoStat.lastEndTime }}</div>
 
-      <bl-row v-if="todoStat.todoType == 20" class="row" just="space-between" style="margin-top: 10px;">
+      <bl-row v-if="todoStat.todoType == 20" class="row" just="space-between" style="margin-top: 10px">
         <el-button v-if="todoStat.todoStatus == 2" text bg @click="openTodo">重启事项</el-button>
         <el-button v-if="todoStat.todoStatus == 1" type="success" text bg @click="completedTodo">完成事项</el-button>
       </bl-row>
     </div>
-
   </div>
 </template>
 
@@ -68,7 +66,7 @@ onActivated(() => {
 })
 
 const getTaskStat = () => {
-  taskStatApi().then(resp => {
+  taskStatApi().then((resp) => {
     taskStat.value = {
       waiting: resp.data.waiting,
       processing: resp.data.processing,
@@ -84,17 +82,17 @@ const taskStat = ref({
   waiting: 0,
   processing: 0,
   completed: 0,
-  total: 0,
+  total: 0
 })
 
 const openTodo = () => {
-  openTodoApi({ todoId: todoStat.value.todoId }).then(_resp => {
+  openTodoApi({ todoId: todoStat.value.todoId }).then((_resp) => {
     emits('refreshTodo')
   })
 }
 
 const completedTodo = () => {
-  completedTodoApi({ todoId: todoStat.value.todoId }).then(_resp => {
+  completedTodoApi({ todoId: todoStat.value.todoId }).then((_resp) => {
     emits('refreshTodo')
   })
 }
@@ -110,7 +108,7 @@ const todoStat = ref({
 })
 
 const reload = (todoId: string) => {
-  todoStatApi({ todoId: todoId }).then(resp => {
+  todoStatApi({ todoId: todoId }).then((resp) => {
     todoStat.value = resp.data
   })
 }
@@ -120,5 +118,5 @@ const emits = defineEmits(['refreshTodo'])
 </script>
 
 <style scoped lang="scss">
-@import './styles/todo-stat.scss'
+@import './styles/todo-stat.scss';
 </style>

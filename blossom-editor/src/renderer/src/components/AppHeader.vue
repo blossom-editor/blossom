@@ -6,15 +6,15 @@
     </div>
     <div class="drag"></div>
     <div class="window-workbench">
-      <el-tooltip content="查看图标" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="查看图标" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>
 
-      <el-tooltip content="显示网页收藏" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="显示网页收藏" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
       </el-tooltip>
 
-      <el-tooltip content="最佳窗口大小" effect="blossomt" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="最佳窗口大小" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-computer-line" @click="setBestSize"></div>
       </el-tooltip>
 

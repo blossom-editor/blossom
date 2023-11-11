@@ -39,6 +39,7 @@
     // 菜单每个 item 的高度
     --el-menu-item-height: 25px;
     --el-transition-duration: 0.1s;
+    --el-menu-hover-bg-color: #0000000b;
     // item 的 字体大小
     // --el-menu-item-font-size: inherit;
     // --el-font-size-base: inherit;
@@ -71,9 +72,7 @@
       }
     }
 
-    :deep(.el-menu-item) {
-      --el-menu-hover-bg-color: #ffffff00 !important;
-      // --el-transition-duration: 0s;
+    .el-menu-item {
       font-weight: 300;
       color: var(--bl-text-doctree-color);
       height: auto;

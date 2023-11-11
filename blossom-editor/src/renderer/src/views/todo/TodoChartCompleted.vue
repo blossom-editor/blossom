@@ -1,21 +1,32 @@
 <template>
   <div class="chart-line-completed-root" v-loading="rqLoading" element-loading-text="正在查询事项完成率, 请稍后...">
-    <div style="width: 100%;height: 100%;" ref="ChartLineLogRef" />
+    <div style="width: 100%; height: 100%" ref="ChartLineLogRef" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from "vue"
+import { ref, onMounted, watch, nextTick } from 'vue'
 import { useDark } from '@vueuse/core'
 import { formartNumber } from '@renderer/assets/utils/util'
 import * as echartTheme from '@renderer/assets/styles/chartTheme'
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts/core'
 import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
 import { UniversalTransition } from 'echarts/features'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
-echarts.use([TitleComponent, TooltipComponent, LegendComponent, LabelLayout, GridComponent, LegendComponent, LineChart, CanvasRenderer, UniversalTransition])
+import { getPrimaryColor } from '@renderer/scripts/global-theme'
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  LabelLayout,
+  GridComponent,
+  LegendComponent,
+  LineChart,
+  CanvasRenderer,
+  UniversalTransition
+])
 
 const isDark = useDark()
 
@@ -24,20 +35,23 @@ onMounted(() => {
   windowResize()
 })
 
-watch(() => isDark.value, (_newValue: any, _oldValue: any) => {
-  renderChart()
-})
+watch(
+  () => isDark.value,
+  (_newValue: any, _oldValue: any) => {
+    renderChart()
+  }
+)
 
 const ChartLineLogRef = ref<any>(null)
 const rqLoading = ref<boolean>(true)
-let chartLineLog: any;
+let chartLineLog: any
 let chartData: any = {
   statDates: [],
   statRates: []
 }
 
-const renderChart = (callback?: any) => {
-  let dark: boolean = isDark.value
+const renderChart = async (callback?: any) => {
+  let primaryColor = getPrimaryColor()
   chartLineLog.setOption({
     grid: { top: 20, left: 35, right: 10, bottom: 50 },
     legend: {
@@ -88,9 +102,9 @@ const renderChart = (callback?: any) => {
           }
         },
         axisLabel: {
-          rotate: 40,
+          rotate: 40
         },
-        data: chartData.statDates,
+        data: chartData.statDates
       }
     },
     yAxis: {
@@ -100,7 +114,7 @@ const renderChart = (callback?: any) => {
           lineStyle: {
             color: isDark.value ? '#2B2B2B' : '#EDEDED'
           }
-        },
+        }
       }
     },
     series: [
@@ -112,24 +126,29 @@ const renderChart = (callback?: any) => {
         showSymbol: false,
         data: chartData.statRates,
         lineStyle: {
-          width: 2, cap: 'round',
-          color: dark ? '#899911' : '#ad8cf2',
-          shadowColor: dark ? '#000000' : '#cebdf0',
+          width: 2,
+          cap: 'round',
+          color: primaryColor.color,
+          shadowColor: primaryColor.color5,
           shadowOffsetY: 5,
           shadowBlur: 10
         },
         itemStyle: {
-          color: '#CDCDCD',
+          color: '#CDCDCD'
         },
         areaStyle: {
           color: {
-            type: 'linear', x: 0, y: 0, x2: 0, y2: 0.5,
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 0.5,
             colorStops: [
-              { offset: 0, color: dark ? '#899911B3' : '#CEBDF0AD' },
-              { offset: 1, color: dark ? '#00000000' : '#FFFFFF3E' }
+              { offset: 0, color: primaryColor.color5 },
+              { offset: 0.5, color: primaryColor.color9 }
             ]
           },
-          shadowColor: dark ? '#666666' : '#CEBDF0AD',
+          shadowColor: '#00000000',
           shadowOffsetY: 5,
           shadowBlur: 10
         }
@@ -137,7 +156,7 @@ const renderChart = (callback?: any) => {
     ]
   })
   if (callback !== undefined) {
-    callback;
+    callback
   }
 }
 
@@ -149,9 +168,10 @@ const reload = (dates: any, rates: any) => {
     rqLoading.value = false
   })
 }
-const windowResize = () => { chartLineLog.resize(); }
+const windowResize = () => {
+  chartLineLog.resize()
+}
 defineExpose({ reload, windowResize })
-
 </script>
 
 <style scoped lang="scss">

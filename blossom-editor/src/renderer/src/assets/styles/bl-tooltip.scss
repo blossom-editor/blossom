@@ -35,7 +35,8 @@
 }
 
 .el-popper.is-light {
-  @include themeShadow(3px 3px 10px 1px #848484, 3px 3px 10px 1px #000000);
+  @include themeShadow(1px 3px 10px #dedede, 1px 3px 10px #000000);
+  color: var(--bl-text-doctree-color);
 
   .keyboard {
     margin-top: 5px;

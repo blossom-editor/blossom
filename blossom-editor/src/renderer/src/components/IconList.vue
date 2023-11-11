@@ -83,13 +83,9 @@ const imgs = shallowRef<any[]>([
   getImg('note/pin.png'),
   getImg('note/plane.png'),
   // pe
-  getImg('pe/headset-dark.png'),
   getImg('pe/headset.png'),
-  getImg('pe/laptop-dark.png'),
-  getImg('pe/laptop.png'),
   getImg('pe/phone.png'),
-  getImg('pe/sound-dark.png'),
-  getImg('pe/watch-dark.png'),
+  getImg('pe/sound.png'),
   getImg('pe/watch.png'),
   // plant
   getImg('plant/02.png'),

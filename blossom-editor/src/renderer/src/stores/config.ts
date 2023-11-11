@@ -15,7 +15,7 @@ export interface ViewStyle {
   // 展开收起待办事项的统计
   todoStatExpand: boolean
   // 是否显示专题样式
-  isShowSubjectStyle: BluetoothLEScanOptions
+  isShowSubjectStyle: boolean
 }
 
 /**
@@ -84,7 +84,10 @@ export const useConfigStore = defineStore('configStore', {
       ...{
         treeDocsFontSize: '14px',
         todoStatExpand: true,
-        isShowSubjectStyle: true
+        isShowSubjectStyle: true,
+        todoWaitColor: '#d22d3b6b',
+        todoProcessingColor: '#fba85f6b',
+        todoCompletedColor: '#9974fe6b'
       },
       ...Local.get(VIEW_STYLE_KEY)
     },

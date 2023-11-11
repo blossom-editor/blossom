@@ -10,15 +10,15 @@
   }
 
   .waiting {
-    background-color: #fe63706b;
+    background-color: var(--bl-todo-wait-color);
   }
 
   .processing {
-    background-color: #fba85f6b;
+    background-color: var(--bl-todo-proc-color);
   }
 
   .completed {
-    background-color: #9974fe6b;
+    background-color: var(--bl-todo-comp-color);
   }
 
   .bars {

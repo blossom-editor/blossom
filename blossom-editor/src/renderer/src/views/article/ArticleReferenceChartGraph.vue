@@ -7,23 +7,23 @@
           <el-button type="primary" @click="getArticleRefList(false)">含外网文章</el-button>
         </el-button-group>
       </bl-row>
-      <bl-row style="margin-top: 10px;">
+      <bl-row style="margin-top: 10px">
         <el-checkbox v-model="showOutsideName" border @change="getArticleRefList(false)">显示外网文章名称</el-checkbox>
       </bl-row>
-      <bl-row class="title" just="center">
-        文章引用网络
-      </bl-row>
+      <bl-row class="title" just="center"> 文章引用网络 </bl-row>
       <bl-row just="center">
         <bl-col class="symbol" just="center">
-          <div class="inside"></div> 内部文章<br /><span>({{ stat.inside }}篇)</span>
+          <div class="inside"></div>
+          内部文章<br /><span>({{ stat.inside }}篇)</span>
         </bl-col>
         <bl-col class="symbol" just="center">
-          <div class="outside"></div> 外网文章<br /><span>({{ stat.outside }}篇)</span>
+          <div class="outside"></div>
+          外网文章<br /><span>({{ stat.outside }}篇)</span>
         </bl-col>
       </bl-row>
     </div>
     <div class="desc">
-      <div style="margin-bottom: 0;">说明:</div>
+      <div style="margin-bottom: 0">说明:</div>
       <ol>
         <li>如果文章没有任何引用, 则不会出现在引用网络中.</li>
         <li>文章名称必须唯一, 相同链接如果有不同的名称, 则会以其中一条为准.</li>
@@ -37,9 +37,9 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onMounted, onUnmounted } from "vue"
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useDark } from '@vueuse/core'
-import { articleRefListApi } from "@renderer/api/blossom"
+import { articleRefListApi } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 
 // echarts
@@ -48,11 +48,12 @@ import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/compo
 import { GraphChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
+import { getPrimaryColor } from '@renderer/scripts/global-theme'
 echarts.use([TitleComponent, TooltipComponent, LegendComponent, GraphChart, CanvasRenderer])
 
 const isDark = useDark()
 
-const route = useRoute();
+const route = useRoute()
 const userStore = useUserStore()
 
 // -------------------- data
@@ -67,15 +68,15 @@ let stat = ref({
   outside: 0
 })
 
-
 let inside = { itemStyle: {}, label: {} }
 let outside = { itemStyle: {}, label: {} }
 const changeStyle = () => {
+  let primaryColor = getPrimaryColor()
   // 节点数量统计
   stat.value = { inside: 0, outside: 0 }
   inside = {
     itemStyle: {
-      color: isDark.value ? '#614E8A' : '#ad8cf2'
+      color: primaryColor.color
     },
     label: {
       color: isDark.value ? '#BABABA' : '#000000',
@@ -88,15 +89,16 @@ const changeStyle = () => {
       color: isDark.value ? '#624B0087' : '#FDC81A87'
     },
     label: {
-      show: showOutsideName.value, color: isDark.value ? '#808080' : '#B5B5B5',
+      show: showOutsideName.value,
+      color: isDark.value ? '#808080' : '#B5B5B5'
     }
   }
 }
 
 /**
  * 获取文章内容
- * @param onlyInner 
- * @param articleId 
+ * @param onlyInner
+ * @param articleId
  */
 const getArticleRefList = (onlyInner: boolean) => {
   changeStyle()
@@ -106,7 +108,7 @@ const getArticleRefList = (onlyInner: boolean) => {
   } else {
     param = { onlyInner: onlyInner }
   }
-  articleRefListApi(param).then(resp => {
+  articleRefListApi(param).then((resp) => {
     nodes = resp.data.nodes.map((node: any) => {
       if (node.artType == 11) {
         node.itemStyle = inside.itemStyle
@@ -164,7 +166,9 @@ const renderChart = () => {
         if (!params.data.inner) {
           url = `<div>地址: <a target="_blank" href="${params.data.artUrl}">${params.data.artUrl}</a></div>`
         } else {
-          url = `<div>地址: <a target="_blank" href="${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}">${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}</a></div>`
+          url = `<div>地址: <a target="_blank" href="${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}">${
+            userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId
+          }</a></div>`
         }
         return `<div class="chart-graph-article-ref-tooltip">
           <div class="title">${params.data.name}</div>
@@ -179,7 +183,8 @@ const renderChart = () => {
       {
         type: 'graph',
         layout: 'force',
-        top: 100, bottom: 100,
+        top: 100,
+        bottom: 100,
         draggable: false,
         symbolSize: 15,
         animation: true,
@@ -200,7 +205,7 @@ const renderChart = () => {
         },
         labelLayout: {
           // 标签重叠时进行遮盖
-          hideOverlap: true,
+          hideOverlap: true
         },
         // itemStyle: {
         //   shadowColor: '#000000',
@@ -238,7 +243,7 @@ const renderChart = () => {
           // blurScope: 'series',
           lineStyle: {
             width: 5
-          },
+          }
           // label: { show: true },
           // edgeLabel: { show: false },
         },
@@ -246,31 +251,34 @@ const renderChart = () => {
           itemStyle: { opacity: 0.1 },
           lineStyle: { opacity: 0.1 },
           label: { show: false },
-          edgeLabel: { show: false },
+          edgeLabel: { show: false }
         },
         data: nodes,
         links: links,
-        categories: nodes.length > 0 ? nodes.map((item: any) => {
-          return item.name
-        }) : ''
+        categories:
+          nodes.length > 0
+            ? nodes.map((item: any) => {
+                return item.name
+              })
+            : ''
       }
     ]
-  });
+  })
 }
 
 const init = () => {
-  chartGraph = echarts.init(ChartGraphRef.value);
+  chartGraph = echarts.init(ChartGraphRef.value)
 }
 
 /**
  * 防抖
  */
-let debounceTimeout: NodeJS.Timeout | undefined;
+let debounceTimeout: NodeJS.Timeout | undefined
 function debounce(fn: () => void, time = 500) {
   if (debounceTimeout != undefined) {
-    clearTimeout(debounceTimeout);
+    clearTimeout(debounceTimeout)
   }
-  debounceTimeout = setTimeout(fn, time);
+  debounceTimeout = setTimeout(fn, time)
 }
 
 const windowResize = () => {
@@ -284,14 +292,12 @@ onMounted(() => {
   windowResize()
   articleId = route.query.articleId as string
   getArticleRefList(true)
-  window.addEventListener("resize", windowResize)
+  window.addEventListener('resize', windowResize)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', windowResize)
 })
-
-
 </script>
 
 <style scoped lang="scss">
@@ -328,9 +334,8 @@ onUnmounted(() => {
     }
 
     .inside {
-      background-color: #ad8cf2;
+      background-color: var(--el-color-primary);
     }
-
 
     .outside {
       background-color: #fdc81a;
@@ -357,16 +362,13 @@ onUnmounted(() => {
     z-index: 99;
   }
 
-
-
   .app-relation-graph-chart {
     @include box(100%, 100%);
   }
-
 }
 </style>
 
-<style lang=scss>
+<style lang="scss">
 .chart-graph-article-ref-tooltip {
   max-width: 400px;
   word-break: break-all;
@@ -376,7 +378,7 @@ onUnmounted(() => {
   border: 1px solid var(--el-color-primary-light-5);
 
   .title {
-    @include font(15px, 700);
+    @include font(15px, 300);
     border-bottom: 1px solid var(--el-color-primary-light-5);
     padding: 10px;
     overflow: hidden;

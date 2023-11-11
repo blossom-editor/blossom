@@ -1,15 +1,15 @@
 <template>
   <div class="index-user-root">
     <img v-if="userinfo.avatar != ''" class="avatar-img" :src="userinfo.avatar" />
-    <img v-else class="avatar-img" src="@renderer/assets/imgs/default_user_avatar.jpg">
+    <img v-else class="avatar-img" src="@renderer/assets/imgs/default_user_avatar.jpg" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
-const userStore = useUserStore();
-const { userinfo } = storeToRefs(userStore);
+const userStore = useUserStore()
+const { userinfo } = storeToRefs(userStore)
 </script>
 
 <style scoped lang="scss">

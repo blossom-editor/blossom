@@ -1,23 +1,17 @@
 <template>
-  <el-scrollbar>
+  <div class="home-subject-root">
     <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
     <div
-      class="subject-item"
       v-for="subject in subjects"
+      class="subject-item"
       :key="subject.name"
       :style="{ '--bl-subject-color1': subject.color + '70' }"
       @click="toToc(subject.tocId)">
-      <!-- 进度条 -->
       <div class="progress" :style="{ background: subject.color + '40', width: (subject.subjectWords / maxWords) * 100 + '%' }"></div>
 
-      <!-- 名称 -->
-      <div class="seal">
-        <span>{{ subject.name }}</span>
-      </div>
+      <div class="seal">{{ subject.name }}</div>
 
       <div class="inner"></div>
-
-      <!-- 图标 -->
       <img
         class="menu-icon-img"
         v-if="isNotBlank(subject.icon) && (subject.icon.startsWith('http') || subject.icon.startsWith('https'))"
@@ -26,19 +20,11 @@
         <use :xlink:href="'#' + subject.icon"></use>
       </svg>
 
-      <!-- 字数 -->
-      <bl-row class="infos" just="space-between">
-        <div><span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }}</div>
-      </bl-row>
-
-      <!-- 日期 -->
-      <bl-row class="infos" just="space-between">
-        <div><span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }}</div>
-      </bl-row>
+      <bl-row class="infos"> <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }} </bl-row>
+      <bl-row class="infos"> <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }} </bl-row>
     </div>
-
     <div style="width: 100%; height: 5px"></div>
-  </el-scrollbar>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -79,34 +65,14 @@ const toToc = (articleId: number) => {
 </script>
 
 <style scoped lang="scss">
-.el-scrollbar {
-  width: 100%;
-  --el-scrollbar-opacity: 1;
-  --el-scrollbar-hover-opacity: 1;
-  --el-scrollbar-bg-color: var(--el-color-primary-light-8);
-  --el-scrollbar-hover-bg-color: var(--el-color-primary-light-6);
-
-  :deep(.el-scrollbar__bar) {
-    width: 5px;
-    right: 0px;
-  }
-
-  :deep(.el-scrollbar__view) {
-    @include box(100%, 100%);
-    @include flex(row, flex-start, flex-start);
-    flex-wrap: wrap;
-    align-content: flex-start;
-  }
+.home-subject-root {
+  @include box(100%, 100%);
+  @include flex(row, flex-start, flex-start);
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: hidden;
+  overflow-y: overlay;
 }
-
-// .home-subject-root {
-//   @include box(100%, 100%);
-//   @include flex(row, flex-start, flex-start);
-//   flex-wrap: wrap;
-//   align-content: flex-start;
-//   overflow: auto;
-//   overflow-y: overlay;
-// }
 
 .placeholder {
   padding: 20px 0 0 20px;
@@ -118,33 +84,23 @@ $width-item: 210px;
 .subject-item {
   @include flex(column, flex-start, flex-start);
   @include box($width-item, 90px, $width-item, $width-item);
-  @include themeShadow(3px 3px 5px 1px rgba(88, 88, 88, 0.3), 3px 3px 5px 1px rgba(0, 0, 0, 1));
+  @include themeShadow(0 3px 5px 0 #cacaca, 0 3px 3px #000000);
   @include themeBg(
-    linear-gradient(155deg, #ffffff00 0%, #f0f0f0 60%, var(--bl-subject-color1) 100%),
-    linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 60%, var(--bl-subject-color1) 100%)
+    linear-gradient(155deg, #ffffff00 0%, #f0f0f0 80%, var(--bl-subject-color1) 100%),
+    linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 80%, var(--bl-subject-color1) 100%)
   );
-  border-radius: 5px;
   margin: 15px 10px;
-  transition: 0.3s;
+  border-radius: 4px;
+  transition: transform 0.3s;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
   z-index: 1;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
-    @include themeShadow(3px 3px 5px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
-
     .seal {
-      text-shadow: 3px 3px 5px rgba(0, 0, 0, 1);
       transform: translateY(-30px);
-      @include themeShadow(0 3px 15px 1px rgb(116, 116, 116), 3px 3px 5px 1px rgba(0, 0, 0, 1));
-
-      [class='dark'] & {
-        text-shadow:
-          5px 5px 15px #000,
-          -3px -3px 10px rgba(255, 255, 255, 0.5);
-      }
     }
 
     .inner {
@@ -155,31 +111,30 @@ $width-item: 210px;
   .progress {
     @include box($width-item, 2px);
     @include absolute(0, '', '', 0);
-    z-index: 3;
+    z-index: 5;
   }
 
   .seal {
-    @include flex(row, space-between, center);
     @include box($width-item, 40px);
-    @include font(14px, 500);
-    @include themeColor(#636363, #cdcdcd);
-    @include themeShadow(0 3px 10px rgb(144, 144, 144), 0 3px 5px rgb(37, 37, 37));
-    padding: 5px 10px;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    text-shadow: 2px 2px 5px rgb(54, 54, 54);
+    @include font(14px, 300);
+    @include themeColor(#3e3e3e, #b3b3b3);
+    @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
+    line-height: 40px;
+    padding: 0 10px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
     backdrop-filter: blur(5px);
-    transition: 0.3s;
-    z-index: 2;
+    transition: transform 0.3s;
+    z-index: 4;
   }
 
   .inner {
-    @include box(calc(#{$width-item} - 30px), 25px);
+    @include box(180px, 25px);
     @include absolute(1px, '', '', 15px);
+    @include themeShadow(inset 0 3px 10px rgb(84, 84, 84), inset 0 3px 10px rgb(0, 0, 0));
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
-    @include themeShadow(inset 0 3px 10px rgb(84, 84, 84), inset 0 3px 10px rgb(0, 0, 0));
-    transition: 1.5s;
+    transition: opacity 1.5s;
     opacity: 0;
   }
 

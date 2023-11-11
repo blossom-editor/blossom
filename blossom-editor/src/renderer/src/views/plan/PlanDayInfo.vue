@@ -41,7 +41,7 @@
               </el-icon>
             </template>
             <template #append>
-              <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
+              <el-tooltip content="查看 Emoji" effect="light" placement="top" :hide-after="0">
                 <div style="cursor: pointer;font-size: 15px;" @click="openExtenal('https://www.emojiall.com/zh-hans')">
                   😉
                 </div>

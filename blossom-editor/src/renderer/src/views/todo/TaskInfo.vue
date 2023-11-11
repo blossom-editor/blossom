@@ -11,7 +11,7 @@
         <el-form-item label="标题" prop="taskName">
           <el-input v-model="taskSaveForm.taskName">
             <template #append>
-              <el-tooltip content="查看 Emoji" effect="blossomt" placement="top" :hide-after="0">
+              <el-tooltip content="查看 Emoji" effect="light" placement="top" :hide-after="0">
                 <div class="emoji-link" @click="openExtenal('https://www.emojiall.com/zh-hans')">😉</div>
               </el-tooltip>
             </template>
@@ -85,7 +85,7 @@
               'rgba(0, 0, 0, 0.65)'
             ]" />
 
-          <el-tooltip content="颜色搭配参考" effect="blossomt" placement="top" :hide-after="0">
+          <el-tooltip content="颜色搭配参考" effect="light" placement="top" :hide-after="0">
             <a
               href="https://colorhunt.co/"
               target="_blank"

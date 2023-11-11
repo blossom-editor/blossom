@@ -15,8 +15,6 @@
       <div class="name-wrapper" :style="nameWrapperStyle">
         {{ props.trees.n }}
       </div>
-      <!-- 如果专题是公开的, 则单独显示公开标签 -->
-      <bl-tag v-if="props.trees.o === 1 && isSubjectDoc" style="margin-top: 5px" :bg-color="'#7AC20C'" :icon="'bl-cloud-line'"></bl-tag>
       <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </span>
     <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
@@ -37,10 +35,6 @@ const props = defineProps({
   level: { type: Number, required: true }
 })
 
-const isSubjectDoc = computed(() => {
-  return props.trees.t?.includes('subject')
-})
-
 const levelColor = computed(() => {
   return computedDocTitleColor(props.level)
 })
@@ -58,13 +52,16 @@ const tags = computed(() => {
   let icons: any = []
   props.trees.t?.forEach((tag) => {
     if (tag === 'subject') {
-      icons.unshift({ content: '专题', bgColor: 'salmon', icon: 'bl-a-lowerrightpage-line' })
+      icons.unshift({ content: '专题', bgColor: 'var(--bl-tag-color-subject)', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag === 'toc') {
-      icons.push({ content: 'TOC', bgColor: '#7274fa' })
+      icons.push({ content: 'TOC', bgColor: 'var(--bl-tag-color-toc)' })
     } else {
       icons.push({ content: tag })
     }
   })
+  if (props.trees.o === 1 && props.trees.ty != 3) {
+    icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+  }
   return icons
 })
 </script>

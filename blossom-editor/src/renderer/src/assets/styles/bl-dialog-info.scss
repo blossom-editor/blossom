@@ -8,7 +8,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-footer});
   @include font(16px);
   border-bottom: 1px solid var(--el-border-color);
   padding-left: 10px;
-  color: var(--el-color-primary);
+  color: var(--bl-text-title-color);
   text-shadow: var(--bl-text-shadow);
 
   .iconbl {
