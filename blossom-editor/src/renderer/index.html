@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="referrer" content="no-referrer" />
-  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' ;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="referrer" content="no-referrer" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' ;
     script-src 'self' 'unsafe-inline';
     style-src 'self' 'unsafe-inline';
     media-src *;
@@ -13,162 +14,198 @@
     connect-src *;
     frame-src *;
     " />
-  <!-- 加载动画 -->
-  <style>
-    html,
-    body,
-    #app {
-      width: 100%;
-      height: 100%;
-      margin: 0px;
-      padding: 0px;
-    }
-
-    .html-loading {
-      justify-content: center;
-      align-items: center;
-      -webkit-app-region: drag;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(to bottom right, #a59aca, #5f479a);
-      z-index: 999999;
-      display: flex;
-    }
-
-
-    .html-loading-title {
-      font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-      width: 200px;
-      top: 60%;
-      font-size: 18px;
-      line-height: 30px;
-      margin-left: 40px;
-      color: #FFF;
-      text-align: center;
-      opacity: 1;
-      z-index: 9999999999999;
-      text-align: left;
-    }
-
-    .html-loading-version {
-      font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-      font-size: 15px;
-      color: #FFF;
-      opacity: 0.5;
-      position: absolute;
-      right: 15px;
-      bottom: 10px;
-    }
-
-    .loading {
-      width: 96px;
-      height: 96px;
-      display: inline-block;
-      position: relative;
-      transform: rotate(45deg);
-    }
-
-    .loading::before {
-      content: '';
-      width: 48px;
-      height: 48px;
-      position: absolute;
-      left: 0;
-      top: -48px;
-      animation: animloader59 4s ease infinite;
-    }
-
-    .loading::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 48px;
-      height: 48px;
-      background: rgba(255, 255, 255, 0.85);
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-      animation: animloader56 2s ease infinite;
-    }
-
-    @keyframes animloader56 {
-      0% {
-        transform: translate(0, 0) rotateX(0) rotateY(0)
+    <!-- 加载动画 -->
+    <style>
+      html,
+      body,
+      #app {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
       }
 
-      25% {
-        transform: translate(100%, 0) rotateX(0) rotateY(180deg)
+      .html-loading {
+        justify-content: center;
+        align-items: center;
+        -webkit-app-region: drag;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to bottom right, #a59aca, #5f479a);
+        /* background-image: linear-gradient(135deg, #bdc3c7, #2c3e50); */
+        /* background-image: linear-gradient(135deg, #bbd2c5, #536976, #292e49); */
+        z-index: 999999;
+        display: flex;
       }
 
-      50% {
-        transform: translate(100%, 100%) rotateX(-180deg) rotateY(180deg)
+      .html-loading-title {
+        font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+        width: 200px;
+        top: 60%;
+        font-size: 18px;
+        line-height: 30px;
+        margin-left: 40px;
+        color: #fff;
+        text-align: center;
+        opacity: 1;
+        z-index: 9999999999999;
+        text-align: left;
       }
 
-      75% {
-        transform: translate(0, 100%) rotateX(-180deg) rotateY(360deg)
+      .html-loading-version {
+        font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+        font-size: 15px;
+        color: #fff;
+        opacity: 0.5;
+        position: absolute;
+        right: 15px;
+        bottom: 10px;
       }
 
-      100% {
-        transform: translate(0, 0) rotateX(0) rotateY(360deg)
-      }
-    }
-
-    @keyframes animloader59 {
-      0% {
-        box-shadow: 0 48px rgba(255, 255, 255, 0), 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0)
+      .loading {
+        width: 96px;
+        height: 96px;
+        display: inline-block;
+        position: relative;
+        transform: rotate(45deg);
       }
 
-      12% {
-        box-shadow: 0 48px rgba(255, 255, 255, 1), 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0)
+      .loading::before {
+        content: '';
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        left: 0;
+        top: -48px;
+        animation: animloader59 4s ease infinite;
       }
 
-      25% {
-        box-shadow: 0 48px rgba(255, 255, 255, 1), 48px 48px rgba(255, 255, 255, 1), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0)
+      .loading::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        animation: animloader56 2s ease infinite;
       }
 
-      37% {
-        box-shadow: 0 48px rgba(255, 255, 255, 1), 48px 48px rgba(255, 255, 255, 1), 48px 96px rgba(255, 255, 255, 1), 0px 96px rgba(255, 255, 255, 0)
+      @keyframes animloader56 {
+        0% {
+          transform: translate(0, 0) rotateX(0) rotateY(0);
+        }
+
+        25% {
+          transform: translate(100%, 0) rotateX(0) rotateY(180deg);
+        }
+
+        50% {
+          transform: translate(100%, 100%) rotateX(-180deg) rotateY(180deg);
+        }
+
+        75% {
+          transform: translate(0, 100%) rotateX(-180deg) rotateY(360deg);
+        }
+
+        100% {
+          transform: translate(0, 0) rotateX(0) rotateY(360deg);
+        }
       }
 
-      50% {
-        box-shadow: 0 48px rgba(255, 255, 255, 1), 48px 48px rgba(255, 255, 255, 1), 48px 96px rgba(255, 255, 255, 1), 0px 96px rgba(255, 255, 255, 1)
-      }
+      @keyframes animloader59 {
+        0% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 0),
+            48px 48px rgba(255, 255, 255, 0),
+            48px 96px rgba(255, 255, 255, 0),
+            0px 96px rgba(255, 255, 255, 0);
+        }
 
-      62% {
-        box-shadow: 0 48px rgba(255, 255, 255, 0), 48px 48px rgba(255, 255, 255, 1), 48px 96px rgba(255, 255, 255, 1), 0px 96px rgba(255, 255, 255, 1)
-      }
+        12% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 1),
+            48px 48px rgba(255, 255, 255, 0),
+            48px 96px rgba(255, 255, 255, 0),
+            0px 96px rgba(255, 255, 255, 0);
+        }
 
-      75% {
-        box-shadow: 0 48px rgba(255, 255, 255, 0), 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 1), 0px 96px rgba(255, 255, 255, 1)
-      }
+        25% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 1),
+            48px 48px rgba(255, 255, 255, 1),
+            48px 96px rgba(255, 255, 255, 0),
+            0px 96px rgba(255, 255, 255, 0);
+        }
 
-      87% {
-        box-shadow: 0 48px rgba(255, 255, 255, 0), 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 1)
-      }
+        37% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 1),
+            48px 48px rgba(255, 255, 255, 1),
+            48px 96px rgba(255, 255, 255, 1),
+            0px 96px rgba(255, 255, 255, 0);
+        }
 
-      100% {
-        box-shadow: 0 48px rgba(255, 255, 255, 0), 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0)
-      }
-    }
-  </style>
-</head>
+        50% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 1),
+            48px 48px rgba(255, 255, 255, 1),
+            48px 96px rgba(255, 255, 255, 1),
+            0px 96px rgba(255, 255, 255, 1);
+        }
 
-<body>
-  <div id="app">
-    <!-- 首页加载正常运行在这里 -->
-    <div class="html-loading">
-      <div class="loading"></div>
-      <div class="html-loading-title">
-        <span style="font-size: 40px;font-weight: 700;">Blossom</span>
-        <br>
-        <span style="font-size: 13px;">加载中...</span>
+        62% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 0),
+            48px 48px rgba(255, 255, 255, 1),
+            48px 96px rgba(255, 255, 255, 1),
+            0px 96px rgba(255, 255, 255, 1);
+        }
+
+        75% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 0),
+            48px 48px rgba(255, 255, 255, 0),
+            48px 96px rgba(255, 255, 255, 1),
+            0px 96px rgba(255, 255, 255, 1);
+        }
+
+        87% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 0),
+            48px 48px rgba(255, 255, 255, 0),
+            48px 96px rgba(255, 255, 255, 0),
+            0px 96px rgba(255, 255, 255, 1);
+        }
+
+        100% {
+          box-shadow:
+            0 48px rgba(255, 255, 255, 0),
+            48px 48px rgba(255, 255, 255, 0),
+            48px 96px rgba(255, 255, 255, 0),
+            0px 96px rgba(255, 255, 255, 0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 首页加载正常运行在这里 -->
+      <div class="html-loading">
+        <div class="loading"></div>
+        <div class="html-loading-title">
+          <span style="font-size: 40px; font-weight: 700">Blossom</span>
+          <br />
+          <span style="font-size: 13px">加载中...</span>
+        </div>
+        <div class="html-loading-version">V1.8.1</div>
       </div>
-      <div class="html-loading-version">V1.8.0</div>
+      <script type="module" src="/src/main.ts"></script>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </div>
-</body>
-
+  </body>
 </html>
