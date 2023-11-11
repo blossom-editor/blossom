@@ -39,24 +39,8 @@ const markmapOptions = deriveOptions({
  * mermaid 配置
  */
 mermaid.initialize({
-  theme: 'base',
   startOnLoad: false,
-  securityLevel: 'loose',
-  themeVariables: {
-    fontFamily: 'inherit',
-    // 主要配色
-    primaryColor: '#cfbef1',
-    primaryTextColor: '#606266',
-    primaryBorderColor: '#A67AFF',
-    // 第二颜色
-    secondaryColor: '#efc75e',
-    secondaryTextColor: '#606266',
-    // 第三颜色
-    tertiaryColor: '#C4DFFF',
-    tertiaryTextColor: '#606266',
-    // 连线的颜色
-    lineColor: '#A0A0A0'
-  }
+  securityLevel: 'loose'
 })
 mermaid.parseError = (_err, _hash) => {}
 
