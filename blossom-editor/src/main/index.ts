@@ -174,6 +174,12 @@ const initTray = () => {
  * 新的窗口
  * =========================================================================================================================
  */
+/**
+ * article: 新窗口
+ * wlIcon: weblogo 图标窗口
+ * articleReference: 文章引用网络
+ * articleLog: 文章编辑记录
+ */
 type WindowType = 'article' | 'wlIcon' | 'articleReference' | 'articleLog'
 const newWindowMaps = new Map<string, BrowserWindow | undefined>()
 
@@ -191,48 +197,25 @@ function createNewWindow(windowType: WindowType, title: string, id?: number) {
     newWindow.show()
     return
   }
+  let path: string = ''
   newWindow = buildWindow(title)
-  console.log('窗口ID', newWindow.id)
 
-  /**
-   * 新文章窗口
-   */
   if (windowType === 'article') {
-    // HMR for renderer base on electron-vite cli. Load the remote URL for development or the local html file for production.
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleViewWindow?articleId=' + id)
-    } else {
-      // https://www.electronjs.org/zh/docs/latest/api/browser-window#winloadfilefilepath-options
-      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleViewWindow?articleId=' + id })
-    }
+    path = '/articleViewWindow?articleId=' + id
   } else if (windowType === 'wlIcon') {
-    /**
-     * 图标窗口
-     */
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/iconListIndexWindow')
-    } else {
-      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/iconListIndexWindow' })
-    }
+    path = '/iconListIndexWindow'
   } else if (windowType === 'articleReference') {
-    /**
-     * 文章引用网络窗口
-     */
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleReferenceWindow?articleId=' + id)
-    } else {
-      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleReferenceWindow?articleId=' + id })
-    }
+    path = '/articleReferenceWindow?articleId=' + id
   } else if (windowType === 'articleLog') {
-    /**
-     * 文章编辑记录
-     */
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#/articleHistory?articleId=' + id)
-    } else {
-      newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: '/articleHistory?articleId=' + id })
-    }
+    path = '/articleHistory?articleId=' + id
   }
+
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/#' + path)
+  } else {
+    newWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: path })
+  }
+
   // 开发环境自动打开控制台
   openDevToos(newWindow)
   initOnWindow(newWindow)
