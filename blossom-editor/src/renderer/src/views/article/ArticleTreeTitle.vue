@@ -124,12 +124,16 @@ $icon-size: 17px;
     top: 2px;
     z-index: 10;
   }
-
   .folder-level-line {
     @include box(1px, 100%);
-    background-color: var(--el-border-color);
-    position: absolute;
   }
+}
+
+.folder-level-line {
+  background-color: var(--el-border-color);
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 // 专题样式, 包括边框和文字样式
@@ -177,8 +181,6 @@ $icon-size: 17px;
 
   .folder-level-line {
     @include box(1px, calc(100% + 15px));
-    background-color: var(--el-border-color);
-    position: absolute;
     top: -5px;
   }
 }

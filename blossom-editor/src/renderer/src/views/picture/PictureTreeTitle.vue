@@ -71,8 +71,6 @@ $icon-size: 17px;
 
 .doc-title {
   @include flex(row, flex-start, flex-start);
-  // max-width: calc(100% - 15px);
-  // min-width: calc(100% - 15px);
   width: 100%;
   padding-bottom: 1px;
   position: relative;
@@ -99,7 +97,6 @@ $icon-size: 17px;
 
     .name-wrapper {
       @include ellipsis();
-      // max-width: calc(100% - 25px);
     }
   }
 
@@ -113,6 +110,8 @@ $icon-size: 17px;
     @include box(1px, 100%);
     background-color: var(--el-border-color);
     position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s;
   }
 }
 </style>

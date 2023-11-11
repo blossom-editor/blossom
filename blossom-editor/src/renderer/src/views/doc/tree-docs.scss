@@ -6,6 +6,11 @@
   @include box(100%, calc(100% - 90px));
   // 图片文档菜单中需要有 padding-top
   padding-top: 8px;
+  &:hover {
+    :deep(.folder-level-line) {
+      opacity: 1;
+    }
+  }
 
   * {
     font-size: inherit;
