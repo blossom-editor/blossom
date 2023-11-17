@@ -28,46 +28,60 @@
           <div v-for="L1 in docTreeData" :key="L1.i" class="menu-level-one">
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
-                <DocTitle :trees="L1" @click-doc="clickCurDoc" />
+                <div class="menu-item-wrapper" @click="clickCurDoc(L1)">
+                  <DocTitle :trees="L1" :level="1" />
+                </div>
               </template>
             </el-menu-item>
 
             <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L1.i">
               <template #title>
-                <DocTitle :trees="L1" @click-doc="clickCurDoc" style="font-size: 15px" />
+                <div class="menu-item-wrapper">
+                  <DocTitle :trees="L1" :level="1" style="font-size: 15px" />
+                </div>
               </template>
 
               <!-- ================================================ L2 ================================================ -->
               <div v-for="L2 in L1.children" :key="L2.i">
                 <el-menu-item v-if="isEmpty(L2.children)" :index="L2.i">
                   <template #title>
-                    <DocTitle :trees="L2" @click-doc="clickCurDoc" />
+                    <div class="menu-item-wrapper" @click="clickCurDoc(L2)">
+                      <DocTitle :trees="L2" :level="2" />
+                    </div>
                   </template>
                 </el-menu-item>
 
                 <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L2.i">
                   <template #title>
-                    <DocTitle :trees="L2" @click-doc="clickCurDoc" />
+                    <div class="menu-item-wrapper">
+                      <DocTitle :trees="L2" :level="2" />
+                    </div>
                   </template>
 
                   <!-- ================================================ L3 ================================================ -->
                   <div v-for="L3 in L2.children" :key="L3.i">
                     <el-menu-item v-if="isEmpty(L3.children)" :index="L3.i">
                       <template #title>
-                        <DocTitle :trees="L3" @click-doc="clickCurDoc" />
+                        <div class="menu-item-wrapper" @click="clickCurDoc(L3)">
+                          <DocTitle :trees="L3" :level="3" />
+                        </div>
                       </template>
                     </el-menu-item>
 
                     <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
                       <template #title>
-                        <DocTitle :trees="L3" @click-doc="clickCurDoc" />
+                        <div class="menu-item-wrapper">
+                          <DocTitle :trees="L3" :level="3" />
+                        </div>
                       </template>
 
                       <!-- ================================================ L4 ================================================ -->
                       <div v-for="L4 in L3.children" :key="L4.i">
                         <el-menu-item v-if="isEmpty(L4.children)" :index="L4.i">
                           <template #title>
-                            <DocTitle :trees="L4" @click-doc="clickCurDoc" />
+                            <div class="menu-item-wrapper" @click="clickCurDoc(L4)">
+                              <DocTitle :trees="L4" :level="4" />
+                            </div>
                           </template>
                         </el-menu-item>
                       </div>
@@ -117,12 +131,14 @@
 import { useRoute } from 'vue-router'
 import { ref, onActivated, onUnmounted, onMounted } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { articleInfoOpenApi, docTreeApi } from '@/api/blossom'
+import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '@/api/blossom'
+import { useUserStore } from '@/stores/user'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
 import IndexHeader from '../index/IndexHeader.vue'
 import 'katex/dist/katex.min.css'
-import { toRoute } from '@/router'
+
+const userStore = useUserStore()
 
 onMounted(() => {
   window.onHtmlEventDispatch = onHtmlEventDispatch
@@ -186,16 +202,23 @@ const getDocTree = () => {
   docTreeLoading.value = true
   docTreeData.value = []
   defaultOpeneds.value = []
-  docTreeApi({ onlyOpen: true })
-    .then((resp) => {
-      docTreeData.value = resp.data
-      docTreeData.value.forEach((l1: DocTree) => {
-        defaultOpeneds.value.push(l1.i.toString())
-      })
+
+  const then = (resp: any) => {
+    docTreeData.value = resp.data
+    docTreeData.value.forEach((l1: DocTree) => {
+      defaultOpeneds.value.push(l1.i.toString())
     })
-    .finally(() => {
-      docTreeLoading.value = false
-    })
+  }
+
+  if (userStore.isLogin) {
+    docTreeApi()
+      .then((resp) => then(resp))
+      .finally(() => (docTreeLoading.value = false))
+  } else {
+    docTreeOpenApi()
+      .then((resp) => then(resp))
+      .finally(() => (docTreeLoading.value = false))
+  }
 }
 
 const clickCurDoc = async (tree: DocTree) => {
@@ -210,13 +233,16 @@ const clickCurDoc = async (tree: DocTree) => {
  * 如果点击的是文章, 则查询文章信息和正文, 并在编辑器中显示.
  */
 const getCurEditArticle = async (id: number) => {
-  await articleInfoOpenApi({ id: id, showToc: true, showMarkdown: false, showHtml: true })
-    .then((resp) => {
-      if (isNull(resp.data)) return
-      article.value = resp.data
-      tocList.value = JSON.parse(resp.data.toc)
-    })
-    .finally(() => {})
+  const then = (resp: any) => {
+    if (isNull(resp.data)) return
+    article.value = resp.data
+    tocList.value = JSON.parse(resp.data.toc)
+  }
+  if (userStore.isLogin) {
+    await articleInfoApi({ id: id, showToc: true, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
+  } else {
+    await articleInfoOpenApi({ id: id, showToc: true, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
+  }
 }
 
 const toScroll = (level: number, content: string) => {
@@ -384,15 +410,24 @@ const onresize = () => {
       border-right: 1px solid var(--el-border-color);
       font-weight: 200;
       transition: 0.1s;
+      &:hover {
+        :deep(.folder-level-line) {
+          opacity: 1;
+        }
+      }
 
       .menu-level-one {
-        margin-top: 10px;
+        margin-top: 8px;
         border-bottom: 1px solid #f0f0f0;
-        padding-bottom: 10px;
+        padding-bottom: 8px;
 
         &:first-child {
           margin-top: 0px;
         }
+      }
+
+      .menu-item-wrapper {
+        width: 100%;
       }
 
       .doc-trees {
@@ -400,7 +435,7 @@ const onresize = () => {
         font-weight: 200;
         padding-right: 0;
         border: 0;
-        overflow-y: overlay;
+        overflow-y: scroll;
         // padding-right: 6px;
         // 基础的 padding
         --el-menu-base-level-padding: 25px;
@@ -433,8 +468,8 @@ const onresize = () => {
             border-radius: 5px;
 
             .el-sub-menu__icon-arrow {
-              right: calc(220px - var(--el-menu-level) * 10px);
-              font-size: 12px;
+              right: calc(220px - var(--el-menu-level) * 14px);
+              color: #b3b3b3;
               width: 0.8em;
               height: 0.8em;
             }
@@ -566,7 +601,7 @@ const onresize = () => {
       width: 1260px;
       max-width: 1260px;
       overflow-y: overlay;
-      padding: 0 20px;
+      padding: 0 30px;
 
       .bl-preview {
         $borderRadius: 4px;
@@ -1010,7 +1045,7 @@ const onresize = () => {
       }
 
       .article {
-        padding: 0 20px;
+        padding: 0 10px;
         overflow-x: hidden;
 
         .bl-preview {

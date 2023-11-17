@@ -29,46 +29,14 @@ import { ref } from 'vue'
 import { toRoute } from '@/router'
 import { login } from '@/scripts/auth'
 
-// const userStore = useUserStore()
-// const { auth, userinfo } = storeToRefs(userStore)
 const formLogin = ref({
   username: '',
   password: ''
 })
 
-const logingIn = ref(false)
-
 const handleLogin = () => {
   login(formLogin.value.username, formLogin.value.password)
 }
-
-// const login = async () => {
-//   if (logingIn.value) {
-//     return
-//   }
-//   logingIn.value = true
-//   auth.value.status = AuthStatus.Loging
-//   await loginApi({ username: formLogin.value.username, password: formLogin.value.password, clientId: 'blossom', grantType: 'password' })
-//     .then((resp: any) => {
-//       auth.value = { token: resp.data.token, status: AuthStatus.Succ }
-//       Local.set(storeKey, auth)
-//       getUserinfo()
-//       toRoute('/home')
-//     })
-//     .catch((_e) => {
-//       userStore.reset()
-//       // 登录失败的状态需要特别更改
-//       auth.value = { token: '', status: AuthStatus.Fail }
-//     })
-//     .finally(() => (logingIn.value = false))
-// }
-
-// const getUserinfo = () => {
-//   userinfoApi().then((resp) => {
-//     userinfo.value = resp.data
-//     Local.set(userinfoKey, resp.data)
-//   })
-// }
 </script>
 
 <style scoped lang="scss">

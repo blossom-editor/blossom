@@ -39,9 +39,11 @@
           </div>
         </template>
         <div class="popper-content">
-          <div class="item"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章列表</div>
-          <div class="item"><span class="iconbl bl-calendar-line"></span>日历计划</div>
-          <div class="item"><span class="iconbl bl-a-labellist-line"></span>待办事项</div>
+          <div class="item" @click="toRoute('/home')"><span class="iconbl bl-a-home1-line"></span>首页</div>
+          <div class="item-divider"></div>
+          <div class="item" @click="toRoute('/articles')"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章列表</div>
+          <div class="item" @click="toRoute('/todo')"><span class="iconbl bl-a-labellist-line"></span>待办事项</div>
+          <div class="item" @click="toRoute('/plan')"><span class="iconbl bl-calendar-line"></span>日历计划</div>
           <div class="item"><span class="iconbl bl-note-line"></span>便签</div>
           <div class="item-divider"></div>
           <div class="item" @click="handlLogout"><span class="iconbl bl-logout-circle-line"></span>退出登录</div>
@@ -144,6 +146,12 @@ const handlLogout = () => {
   color: #909090;
   padding: 0 10px;
   text-shadow: 3px 3px 5px #000;
+  user-select: none;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #fff3fc;
+  }
 
   .iconbl {
     font-size: 18px;
@@ -158,6 +166,7 @@ const handlLogout = () => {
     border-radius: 5px;
     transition: 0.3s;
     white-space: pre-line;
+    text-shadow: 3px 3px 5px #1d1d1d;
     cursor: pointer;
 
     img {
@@ -171,8 +180,8 @@ const handlLogout = () => {
 
     &:hover {
       font-weight: bold;
-      color: #e8e8e8;
-      text-shadow: 3px 3px 10px #cccccc;
+      color: #fff3fc;
+      // text-shadow: 3px 3px 10px #cccccc;
     }
   }
 

@@ -47,6 +47,14 @@ export const useUserStore = defineStore('userStore', {
     auth: Local.get(storeKey) || initAuth(),
     userinfo: Local.get(userinfoKey) || initUserinfo()
   }),
+  getters: {
+    isLogin: (state): boolean => {
+      if (!state.auth) {
+        return false
+      }
+      return state.auth.status === AuthStatus.Succ
+    }
+  },
   actions: {
     //   /**
     //    * 根据用户名密码登录

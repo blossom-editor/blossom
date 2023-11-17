@@ -1,5 +1,5 @@
 <template>
-  <span
+  <div
     class="tag-root"
     :style="{
       color: props.color,
@@ -7,12 +7,9 @@
       fontSize: props.size + 'px',
       fontWeight: props.weight
     }">
-    <!-- {{ !!slots.default }}| -->
     <span v-if="props.icon" :class="['tag-iconfont iconbl', props.icon, !!slots.default ? 'tag-icon-margin' : '']" />
-    <span class="tag-content">
-      <slot />
-    </span>
-  </span>
+    <span class="tag-content"><slot /></span>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -56,15 +53,16 @@ const props = defineProps({
   @include flex(row, center, center);
   box-shadow: 2px 2px 3px 0 #999999;
   border-radius: 4px;
-  padding: 1px 4px;
+  padding: 0px 4px;
   margin: 3px;
   height: 15px;
   min-height: 15px;
   max-height: 15px;
   text-align: center;
+  width: auto;
 
   .tag-iconfont {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .tag-icon-margin {
@@ -72,8 +70,10 @@ const props = defineProps({
   }
 
   .tag-content {
+    font-size: inherit;
+    font-weight: inherit;
     line-height: 12px;
-    transform: scale(0.9);
+    white-space: nowrap;
   }
 }
 </style>

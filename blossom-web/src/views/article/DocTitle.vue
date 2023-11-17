@@ -1,5 +1,5 @@
 <template>
-  <div :class="['doc-title', props.trees.t?.includes('subject') ? 'subject-title' : '']" @click="handlClick">
+  <div :class="['doc-title']">
     <div class="doc-name">
       <img
         class="menu-icon-img"
@@ -8,13 +8,18 @@
       <svg v-else-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
-      <el-tooltip :content="props.trees.n" placement="top" :show-after="1000" :hide-after="0" :transition="'none'" :offset="2" :persistent="false">
-        <div class="name-wrapper" :style="nameWrapperStyle">
-          {{ props.trees.n }}
-        </div>
-      </el-tooltip>
+      <div class="name-wrapper" :style="nameWrapperStyle">
+        {{ props.trees.n }}
+      </div>
       <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
     </div>
+    <div v-if="level === 2" class="folder-level-line" style="left: -26px"></div>
+    <div v-if="level === 3" class="folder-level-line" style="left: -36px"></div>
+    <div v-if="level === 3" class="folder-level-line" style="left: -22px"></div>
+    <!--  -->
+    <div v-if="level === 4" class="folder-level-line" style="left: -46px"></div>
+    <div v-if="level === 4" class="folder-level-line" style="left: -32px"></div>
+    <div v-if="level === 4" class="folder-level-line" style="left: -18px"></div>
   </div>
 </template>
 
@@ -22,12 +27,12 @@
 import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@/assets/utils/obj'
-import BLTag from '@/components/BLTag.vue'
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
 const props = defineProps({
-  trees: { type: Object as PropType<DocTree>, default: {} }
+  trees: { type: Object as PropType<DocTree>, default: {} },
+  level: { type: Number, required: true }
 })
 
 const nameWrapperStyle = computed(() => {
@@ -53,16 +58,7 @@ const tags = computed(() => {
   return icons
 })
 
-/**
- * 点击文档菜单标题后的回调
- */
-const handlClick = () => {
-  emits('clickDoc', props.trees)
-}
-
 //#endregion
-
-const emits = defineEmits(['clickDoc'])
 </script>
 
 <style scoped lang="scss">
@@ -96,33 +92,33 @@ $icon-size: 17px;
       @include ellipsis();
     }
   }
+
+  .sort {
+    position: absolute;
+    padding: 0 2px;
+    right: 0px;
+    top: 2px;
+    z-index: 10;
+  }
+  .folder-level-line {
+    height: 100%;
+  }
 }
 
-// 专题样式, 包括边框和文字样式
-.subject-title {
-  position: relative;
-  padding: 2px 5px;
-  margin: 5px 0 10px 0;
-  border-radius: 4px;
-  box-shadow: 1px 1px 5px #a2a2a2;
-  background: linear-gradient(135deg, #ffffff, #f0f0f0, #cacaca);
-
-  .doc-name {
-    min-width: 145px;
-    max-width: 145px;
-    color: #4a545e;
-    text-shadow: 2px 2px 3px #9393939d;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+.folder-level-line {
+  width: 1.5px;
+  background-color: var(--el-border-color);
+  box-sizing: border-box;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 // 专题样式, 包括边框和文字样式
 .subject-title {
   @include flex(row, flex-start, flex-start);
-  box-shadow: 1px 1px 5px #a2a2a2;
   background: linear-gradient(135deg, #ffffff, #f0f0f0, #cacaca);
+  box-shadow: 1px 1px 5px #a2a2a2;
   max-width: calc(100% - 15px);
   min-width: calc(100% - 15px);
   padding: 2px 5px;
@@ -132,6 +128,7 @@ $icon-size: 17px;
 
   .doc-name {
     @include flex(row, flex-start, flex-start);
+    color: var(--el-color-primary);
     align-content: flex-start;
     flex-wrap: wrap;
     width: 100%;
@@ -152,6 +149,16 @@ $icon-size: 17px;
       max-width: calc(100% - 25px);
       min-width: calc(100% - 25px);
     }
+  }
+
+  .sort {
+    position: absolute;
+    right: -15px;
+  }
+
+  .folder-level-line {
+    height: calc(100% + 25px);
+    top: -5px;
   }
 }
 </style>
