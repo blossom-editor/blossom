@@ -5,7 +5,9 @@
   font-style: normal;
 }
 
+@import './element/drawer';
 @import './element/popper';
 @import './element/menu';
+@import './element/message';
 @import './mixin-fuc';
 @import './iconfont';

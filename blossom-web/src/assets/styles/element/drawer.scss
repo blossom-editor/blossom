@@ -1,0 +1,13 @@
+.el-drawer {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  .el-drawer__header {
+    margin-bottom: 20px;
+  }
+
+  .el-drawer__body {
+    padding: 0 30px 0 30px;
+    position: relative;
+  }
+}

@@ -1,7 +1,7 @@
-* {
+/* * {
   font-family: 'ubuntu mono', 'Consolas', 'Monaco', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   box-sizing: border-box;
-}
+} */
 
 html,
 body {
@@ -9,6 +9,7 @@ body {
   height: 100%;
   box-sizing: border-box;
   background-color: var(--bl-html-color);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
