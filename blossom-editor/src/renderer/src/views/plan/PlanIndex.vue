@@ -89,6 +89,7 @@ import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@renderer/as
 import { isNull, isBlank } from '@renderer/assets/utils/obj'
 import PlanDaily from './PlanDaily.vue'
 import PlanDayInfo from './PlanDayInfo.vue'
+import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
   getPlanAll(getDateTimeFormat().substring(0, 7))
@@ -176,9 +177,6 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 //#endregion
 
 //#region ----------------------------------------< 修改 >-------------------------------------
-/**
- * 任务名称失去焦点, 保存数据
- */
 const blurPlanTitleInput = (plan: any) => {
   planUpdDayApi({ groupId: plan.groupId, title: plan.title, content: plan.content }).then((_resp) => {
     getPlanAll(lastMonth, true)
@@ -194,9 +192,6 @@ const showPlanTitleInput = (plan: any) => {
   })
 }
 
-/**
- * 任务名称失去焦点, 保存数据
- */
 const blurPlanContentInput = (plan: any) => {
   planUpdDayApi({ groupId: plan.groupId, title: plan.title, content: plan.content }).then((_resp) => {
     getPlanAll(lastMonth, true)
