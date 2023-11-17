@@ -54,7 +54,48 @@ export const timestampToDatetime = (timestamp: number | string | Date): string =
   return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s + '.' + SSS
 }
 
-const formatNum = (num: string | number) => {
+/**
+ * 获取当前时间的 yyyy-MM-dd HH:mm:ss
+ * @returns {string}
+ */
+export const getDateTimeFormat = (): string => {
+  const now = new Date()
+  let y = now.getFullYear()
+  let m = formatNum(now.getMonth() + 1)
+  let d = formatNum(now.getDate())
+  let h = formatNum(now.getHours())
+  let min = formatNum(now.getMinutes())
+  let s = formatNum(now.getSeconds())
+  return '' + y + '-' + m + '-' + d + ' ' + h + ':' + min + ':' + s
+}
+
+/**
+ * 获取下一天
+ * @param date
+ * @param next
+ * @param format
+ * @returns
+ */
+export const getNextDay = (date: string, next: number = 1, format = '{y}-{m}-{d}'): string => {
+  if (!date) {
+    return '日期错误'
+  }
+  date = date.match(/\d+/g)!.join('-') // 格式为2022年09月19日处理
+  const nextDay = new Date(date)
+  nextDay.setDate(nextDay.getDate() + next)
+
+  const formatObj: any = {
+    y: nextDay.getFullYear(),
+    m: nextDay.getMonth() + 1,
+    d: nextDay.getDate()
+  }
+  return format.replace(/{([ymd])+}/g, (_result, key) => {
+    const value = formatObj[key]
+    return value.toString().padStart(2, '0')
+  })
+}
+
+const formatNum = (num: number) => {
   if (num < 10) {
     return '0' + num
   }

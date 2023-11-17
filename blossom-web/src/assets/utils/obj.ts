@@ -8,25 +8,24 @@ export const isNull = (val: any): boolean => {
 
   // 控制
   if (val == null || val === 'undefined' || val === undefined || val === '') {
-    return true;
+    return true
   }
 
   // 数组
   if (Array.isArray(val) && val.length === 0) {
-    return true;
+    return true
   }
 
   // 对象, 但无字段
   if (val instanceof Object && JSON.stringify(val) === '{}') {
-    return true;
+    return true
   }
-  return false;
+  return false
 }
 
 export const isNotNull = (val: any): boolean => {
-  return !isNull(val);
+  return !isNull(val)
 }
-
 
 export const isBlank = (str: string | undefined | null): boolean => {
   if (str === undefined) {
@@ -57,8 +56,8 @@ export const isEmpty = (val: any): boolean => {
   }
 
   if (val.length == 0) {
-    return true;
+    return true
   }
 
-  return false;
+  return false
 }
