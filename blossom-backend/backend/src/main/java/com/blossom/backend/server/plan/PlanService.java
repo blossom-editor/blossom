@@ -60,7 +60,7 @@ public class PlanService extends ServiceImpl<PlanMapper, PlanEntity> {
     }
 
     /**
-     * 新增日常计划
+     * 新增每日计划
      */
     public void addDay(PlanDayAddReq req) {
         List<PlanEntity> plans = new ArrayList<>();
@@ -102,6 +102,21 @@ public class PlanService extends ServiceImpl<PlanMapper, PlanEntity> {
     }
 
     /**
+     * 修改每日计划
+     * <p>只能修改标题和内容, 如果是修改日期等信息需要重新新增
+     *
+     * @since 1.9.0
+     */
+    public void updDay(PlanDayUpdReq req) {
+        PlanEntity upd = new PlanEntity();
+        upd.setGroupId(req.getGroupId());
+        upd.setTitle(req.getTitle());
+        upd.setContent(req.getContent());
+        upd.setUserId(req.getUserId());
+        baseMapper.updByGroupId(upd);
+    }
+
+    /**
      * 新增日常计划
      */
     public void addDaily(PlanDailyAddReq req) {
@@ -115,7 +130,7 @@ public class PlanService extends ServiceImpl<PlanMapper, PlanEntity> {
      * 删除计划
      */
     public void del(PlanDelReq req) {
-        baseMapper.del(req.getId(), req.getGroupId());
+        baseMapper.delById(req.getId(), req.getGroupId());
     }
 
 }

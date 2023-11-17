@@ -28,9 +28,10 @@ public interface PlanMapper extends BaseMapper<PlanEntity> {
     void insertList(@Param("plans") List<PlanEntity> plans);
 
     /**
-     * 根据ID修改
+     * 根据分组ID修改
+     * @since 1.9.0
      */
-    void updById(PlanEntity entity);
+    void updByGroupId(PlanEntity entity);
 
     /**
      * 删除计划
@@ -38,5 +39,5 @@ public interface PlanMapper extends BaseMapper<PlanEntity> {
      * @param id      计划ID
      * @param groupId 计划分组ID
      */
-    void del(@Param("id") Long id, @Param("groupId") Long groupId);
+    void delById(@Param("id") Long id, @Param("groupId") Long groupId);
 }

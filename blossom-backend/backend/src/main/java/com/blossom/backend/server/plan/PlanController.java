@@ -15,8 +15,8 @@ import java.util.Map;
 /**
  * 计划 [Plan]
  *
- * @order 30
  * @author xzzz
+ * @order 30
  */
 @Slf4j
 @RestController
@@ -51,6 +51,19 @@ public class PlanController {
     public R<?> day(@Validated @RequestBody PlanDayAddReq req) {
         req.setUserId(AuthContext.getUserId());
         baseService.addDay(req);
+        return R.ok();
+    }
+
+    /**
+     * 修改每日计划
+     * <p>只能修改标题和内容, 如果是修改日期等信息需要重新新增
+     *
+     * @since 1.9.0
+     */
+    @PostMapping("/upd/day")
+    public R<?> updDay(@Validated @RequestBody PlanDayUpdReq req) {
+        req.setUserId(AuthContext.getUserId());
+        baseService.updDay(req);
         return R.ok();
     }
 
