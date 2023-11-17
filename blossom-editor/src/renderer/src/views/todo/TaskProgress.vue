@@ -99,7 +99,9 @@
               v-model="t.taskContent"
               @blur="blurTaskContentInput(t)"
               :id="'task-content-input-' + t.id"></el-input>
-            <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
+            <div v-else :class="[isBlank(t.taskContent) ? 'task-content-placeholder' : 'task-content']" @dblclick="showTaskContentInput(t)">
+              {{ t.taskContent }}
+            </div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
         </div>
@@ -150,7 +152,9 @@
               v-model="t.taskContent"
               @blur="blurTaskContentInput(t)"
               :id="'task-content-input-' + t.id"></el-input>
-            <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
+            <div v-else :class="[isBlank(t.taskContent) ? 'task-content-placeholder' : 'task-content']" @dblclick="showTaskContentInput(t)">
+              {{ t.taskContent }}
+            </div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
         </div>
@@ -203,7 +207,9 @@
               v-model="t.taskContent"
               @blur="blurTaskContentInput(t)"
               :id="'task-content-input-' + t.id"></el-input>
-            <div class="task-content" v-else @dblclick="showTaskContentInput(t)">{{ t.taskContent }}</div>
+            <div v-else :class="[isBlank(t.taskContent) ? 'task-content-placeholder' : 'task-content']" @dblclick="showTaskContentInput(t)">
+              {{ t.taskContent }}
+            </div>
             <el-progress v-if="t.process > 0" :percentage="t.process" :color="t.color" />
           </div>
         </div>

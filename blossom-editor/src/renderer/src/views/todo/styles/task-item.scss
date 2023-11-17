@@ -61,6 +61,10 @@
     border-top-right-radius: 4px;
     cursor: move;
 
+    .el-input {
+      --el-input-bg-color: var(--bl-html-color) !important;
+    }
+
     & > div {
       transition: color 0.2s;
 
@@ -92,6 +96,18 @@
     @include themeColor(#d5002e, #a50024);
   }
 
+  .task-content-placeholder {
+    height: 10px;
+    width: 250px;
+    margin: 0 10px 10px 10px;
+    transition: background 0.3s;
+    border-radius: 3px;
+    cursor: cell;
+    &:hover {
+      @include themeBg(#e6e6e6, #242424);
+    }
+  }
+
   .task-content {
     padding: 5px 10px;
     font-size: 13px;
@@ -100,6 +116,7 @@
     word-wrap: break-word;
     overflow: auto;
     transition: color 0.2s;
+    cursor: cell;
 
     &:hover {
       @include themeColor(#555555, #a5a5a5);
