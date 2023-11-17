@@ -15,8 +15,11 @@ export const userinfoApi = (params?: object): Promise<R<any>> => {
  * @param params
  * @returns
  */
-export const docTreeApi = (params?: object): Promise<R<any>> => {
+export const docTreeOpenApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/doc/trees/open', { params })
+}
+export const docTreeApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/doc/trees', { params })
 }
 
 /**
@@ -55,4 +58,8 @@ export const articleWordLineApi = (params?: object): Promise<R<any>> => {
  */
 export const articleInfoOpenApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/article/open/info', { params })
+}
+
+export const articleInfoApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/article/info', { params })
 }
