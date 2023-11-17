@@ -18,7 +18,7 @@ public class NoteSaveReq extends AbstractPOJO {
     /**
      * 便签内容
      */
-    @NotBlank(message = "便签内容为必填项")
+    @NotBlank(message = "不能保存空的便签")
     private String content;
 
 }

@@ -20,4 +20,12 @@ public interface NoteMapper extends BaseMapper<NoteEntity> {
      * @param top 是否置顶
      */
     void top(@Param("id") Long id, @Param("top") Integer top);
+
+    /**
+     * 根据ID修改
+     *
+     * @param id ID
+     * @param userId 用户ID
+     */
+    void updById(@Param("id") Long id, @Param("userId") Long userId, @Param("content") String content);
 }

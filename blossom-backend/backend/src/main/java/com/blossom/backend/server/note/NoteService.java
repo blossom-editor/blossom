@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.note.pojo.NoteEntity;
 import com.blossom.backend.server.note.pojo.NoteTopReq;
+import com.blossom.backend.server.note.pojo.NoteUpdReq;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,14 @@ public class NoteService extends ServiceImpl<NoteMapper, NoteEntity> {
     public Integer top(NoteTopReq note) {
         baseMapper.top(note.getId(), note.getTop());
         return note.getTop();
+    }
+
+    /**
+     * 修改便签
+     *
+     * @since 1.9.0
+     */
+    public void updById(NoteUpdReq req) {
+        baseMapper.updById(req.getId(), req.getUserId(), req.getContent());
     }
 }

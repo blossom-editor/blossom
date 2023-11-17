@@ -5,6 +5,7 @@ import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.server.note.pojo.NoteEntity;
 import com.blossom.backend.server.note.pojo.NoteSaveReq;
 import com.blossom.backend.server.note.pojo.NoteTopReq;
+import com.blossom.backend.server.note.pojo.NoteUpdReq;
 import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
@@ -37,13 +38,23 @@ public class NoteController extends ServiceImpl<NoteMapper, NoteEntity> {
     }
 
     /**
-     * 保存
+     * 新增
      */
     @PostMapping("/add")
     public R<?> add(@Validated @RequestBody NoteSaveReq note) {
         NoteEntity entity = note.to(NoteEntity.class);
         entity.setUserId(AuthContext.getUserId());
         baseService.save(entity);
+        return R.ok();
+    }
+
+    /**
+     * 修改
+     */
+    @PostMapping("/upd")
+    public R<?> upd(@Validated @RequestBody NoteUpdReq note) {
+        note.setUserId(AuthContext.getUserId());
+        baseService.updById(note);
         return R.ok();
     }
 

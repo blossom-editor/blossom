@@ -16,4 +16,10 @@
         where id = #{id}
     </update>
 
+    <update id="updById">
+        update blossom_note
+           set content = #{content}
+         where id = #{id}
+           and user_id = #{userId}
+    </update>
 </mapper>
