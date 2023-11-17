@@ -34,7 +34,14 @@
         <div class="note-workbench">
           {{ note.creTime }}
         </div>
-        <div class="content">
+        <el-input
+          v-if="note.updContent"
+          type="textarea"
+          v-model="note.content"
+          :id="'note-content-input-' + note.id"
+          :rows="17"
+          @blur="blurNoteInput(note)"></el-input>
+        <div class="content" v-else @dblclick="showNoteInput(note)">
           {{ note.content }}
         </div>
       </section>
@@ -43,9 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { CopyDocument } from '@element-plus/icons-vue'
-import { noteAllApi, noteDelApi, noteTopApi } from '@renderer/api/note'
+import { noteAllApi, noteUpdApi, noteDelApi, noteTopApi } from '@renderer/api/note'
 import NoteEditor from '@renderer/views/note/NoteEditor.vue'
 import { TempTextareaKey } from '@renderer/views/article/scripts/article'
 import { Local } from '@renderer/assets/utils/storage'
@@ -85,6 +92,23 @@ const del = (id: number) => {
   })
 }
 
+/**
+ * 任务名称失去焦点, 保存数据
+ */
+const blurNoteInput = (note: any) => {
+  noteUpdApi({ id: note.id, content: note.content }).then((_resp) => {
+    note.updContent = false
+  })
+}
+
+const showNoteInput = (note: any) => {
+  note.updContent = true
+  nextTick(() => {
+    let ele = document.getElementById('note-content-input-' + note.id)
+    if (ele) ele.focus()
+  })
+}
+
 const notes = ref<any>([])
 </script>
 
@@ -120,7 +144,7 @@ const notes = ref<any>([])
       position: relative;
       @include box(250px, 354px);
       font-size: 1.3rem;
-      color: #c2c2c2;
+      color: #8a8a8a;
       background-image: linear-gradient(to bottom, #fff calc(1em - 1px), #efefef calc(1em - 1px), #efefef 1em, #fff 1em);
       background-position: 0% 1em;
       background-size: 100% 1em;
@@ -190,6 +214,10 @@ const notes = ref<any>([])
         background-color: #ffffffdc;
         padding: 3px 5px;
       }
+      .el-textarea {
+        // background-color: transparent;
+        --el-input-bg-color: #00000000 !important;
+      }
 
       .content {
         @include box(100%, calc(100% - 42px));
@@ -203,6 +231,7 @@ const notes = ref<any>([])
         overflow: auto;
         overflow-y: overlay;
         user-select: text;
+        cursor: cell;
       }
     }
 

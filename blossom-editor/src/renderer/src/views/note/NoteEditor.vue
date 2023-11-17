@@ -1,16 +1,16 @@
 <template>
   <div class="note-editor-root">
-    <div v-if="props.send" :class="['send', sendStart ? 'send-start' : '']" @click="sendAnimation">
-      <img src="@renderer/assets/imgs/note/plane.png" class="plant">
+    <div v-if="props.send" :class="['send', sendStart ? 'send-start' : '']" @click="saveNote">
+      <img src="@renderer/assets/imgs/note/plane.png" class="plant" />
     </div>
     <section class="blokken">
-      <div class="textarea-placeholder">
-        日期:{{ getDateZh() }}
-      </div>
+      <div class="textarea-placeholder">日期:{{ getDateZh() }}</div>
       <textarea @keyup.ctrl.enter="saveNote" v-model="noteContent"></textarea>
-      <img :class="['note-img', props.alwaysShowPlant ? 'note-img-always' : '']"
-        style="z-index: 40;right: 15px;bottom: 10px;width: 90px;height: 90px;" src="@renderer/assets/imgs/plant/08.png">
-      <img :class="['note-img', props.alwaysShowPlant ? 'note-img-always' : '']" src="@renderer/assets/imgs/plant/02.png">
+      <img
+        :class="['note-img', props.alwaysShowPlant ? 'note-img-always' : '']"
+        style="z-index: 40; right: 15px; bottom: 10px; width: 90px; height: 90px"
+        src="@renderer/assets/imgs/plant/08.png" />
+      <img :class="['note-img', props.alwaysShowPlant ? 'note-img-always' : '']" src="@renderer/assets/imgs/plant/02.png" />
     </section>
   </div>
 </template>
@@ -39,7 +39,7 @@ const saveNote = () => {
     Notify.info('不能保存空的便签')
     return
   }
-  noteAddApi({ content: noteContent.value }).then(_resp => {
+  noteAddApi({ content: noteContent.value }).then((_resp) => {
     emits('saved')
     noteContent.value = ''
   })
@@ -51,7 +51,9 @@ const saveNote = () => {
 const sendStart = ref<boolean>(false)
 const sendAnimation = () => {
   sendStart.value = true
-  setTimeout(() => { sendStart.value = false }, (1000))
+  setTimeout(() => {
+    sendStart.value = false
+  }, 1000)
 }
 
 const emits = defineEmits(['saved'])
@@ -88,7 +90,7 @@ const emits = defineEmits(['saved'])
     }
   }
 
-  @media screen and (max-height:1050px) {
+  @media screen and (max-height: 1050px) {
     .blokken {
       .note-img {
         opacity: 0;
@@ -111,8 +113,8 @@ const emits = defineEmits(['saved'])
       @include box(100%, 42px);
       @include absolute(0, 0);
       @include font(14px, 500);
-      color: #C2C2C2;
-      background-color: #FFFFFFDC;
+      color: #c2c2c2;
+      background-color: #ffffffdc;
       text-align: right;
       padding: 0 10px;
     }
@@ -143,7 +145,7 @@ const emits = defineEmits(['saved'])
 
     &:before,
     &:after {
-      content: "";
+      content: '';
       @include absolute(0, '', '', 0);
       @include box(100%, 100%);
       background-color: #fff;
@@ -160,6 +162,5 @@ const emits = defineEmits(['saved'])
       z-index: -2;
     }
   }
-
 }
 </style>

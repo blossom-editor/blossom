@@ -9,6 +9,10 @@ export const noteAddApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/note/add", data);
 }
 
+export const noteUpdApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/note/upd', data)
+}
+
 export const noteDelApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>("/note/del", data);
 }
