@@ -36,14 +36,30 @@
               <!-- 弹出框内容 -->
               <bl-col class="plan-popover-inner">
                 <div :class="['plan-popover-title', plan.color]">
-                  {{ plan.title }}
+                  <el-input
+                    v-if="plan.updTitle"
+                    type="textarea"
+                    v-model="plan.title"
+                    :id="'plan-title-input-' + plan.id"
+                    :rows="2"
+                    @blur="blurPlanTitleInput(plan)"></el-input>
+                  <div v-else @dblclick="showPlanTitleInput(plan)">{{ plan.title }}</div>
                 </div>
                 <div class="plan-popover-time">
                   <div><span class="iconbl bl-date-line"></span> {{ data.day }}</div>
                   <span class="iconbl bl-a-clock3-line"></span> {{ plan.planStartTime }} - {{ plan.planEndTime }}
                 </div>
                 <div class="plan-popover-content">
-                  {{ plan.content }}
+                  <el-input
+                    v-if="plan.updContent"
+                    type="textarea"
+                    v-model="plan.content"
+                    :id="'plan-content-input-' + plan.id"
+                    :rows="5"
+                    @blur="blurPlanContentInput(plan)"></el-input>
+                  <div v-else :class="[isBlank(plan.content) ? 'content-placeholder' : '']" @dblclick="showPlanContentInput(plan)">
+                    {{ plan.content }}
+                  </div>
                 </div>
               </bl-col>
             </el-popover>
@@ -68,9 +84,9 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
-import { planListDayApi, planDelApi } from '@renderer/api/plan'
+import { planListDayApi, planUpdDayApi, planDelApi } from '@renderer/api/plan'
 import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@renderer/assets/utils/util'
-import { isNull } from '@renderer/assets/utils/obj'
+import { isNull, isBlank } from '@renderer/assets/utils/obj'
 import PlanDaily from './PlanDaily.vue'
 import PlanDayInfo from './PlanDayInfo.vue'
 
@@ -123,7 +139,6 @@ const delDay = (groupId: number) => {
     getPlanAll(lastMonth, true)
   })
 }
-//#endregion
 
 const handleMouseenter = (date: string, groupId: number) => {
   handleHlByGroupId(date, groupId, 1, 'hl')
@@ -157,6 +172,46 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
     nextDate = getNextDay(nextDate, next)
   }
 }
+
+//#endregion
+
+//#region ----------------------------------------< 修改 >-------------------------------------
+/**
+ * 任务名称失去焦点, 保存数据
+ */
+const blurPlanTitleInput = (plan: any) => {
+  planUpdDayApi({ groupId: plan.groupId, title: plan.title, content: plan.content }).then((_resp) => {
+    getPlanAll(lastMonth, true)
+    plan.updTitle = false
+  })
+}
+
+const showPlanTitleInput = (plan: any) => {
+  plan.updTitle = true
+  nextTick(() => {
+    let ele = document.getElementById('plan-title-input-' + plan.id)
+    if (ele) ele.focus()
+  })
+}
+
+/**
+ * 任务名称失去焦点, 保存数据
+ */
+const blurPlanContentInput = (plan: any) => {
+  planUpdDayApi({ groupId: plan.groupId, title: plan.title, content: plan.content }).then((_resp) => {
+    getPlanAll(lastMonth, true)
+    plan.updContent = false
+  })
+}
+
+const showPlanContentInput = (plan: any) => {
+  plan.updContent = true
+  nextTick(() => {
+    let ele = document.getElementById('plan-content-input-' + plan.id)
+    if (ele) ele.focus()
+  })
+}
+//#endregion
 </script>
 
 <style scoped lang="scss">
@@ -372,6 +427,7 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
 .plan-popover {
   --el-popover-padding: 0 !important;
   border: 0 !important;
+  width: 250px !important;
 
   .plan-popover-inner {
     @include themeBrightness();
@@ -387,6 +443,9 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
       color: #fff;
+      .el-textarea {
+        --el-input-bg-color: var(--bl-html-color) !important;
+      }
     }
 
     .plan-popover-time {
@@ -400,6 +459,21 @@ const handleHlByGroupId = (date: string, groupId: number, next: number = 1 | -1,
       text-align: left;
       padding: 0 10px 10px;
       white-space: pre-wrap;
+      transition: color 0.3s;
+      cursor: cell;
+      &:hover {
+        @include themeColor(#000, #fff);
+      }
+
+      .content-placeholder {
+        height: 10px;
+        transition: background 0.3s;
+        border-radius: 5px;
+        cursor: cell;
+        &:hover {
+          @include themeBg(#f5f5f5, #1a1a1a);
+        }
+      }
     }
   }
 }
