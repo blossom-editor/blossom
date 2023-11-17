@@ -1,7 +1,7 @@
 <template>
   <div class="todo-stat-root">
     <div class="stat-global">
-      <div class="title">近30日完成率%</div>
+      <div class="title">近30日完成率% <span class="iconbl bl-refresh-smile" style="cursor: pointer" @click="getTaskStat"></span></div>
       <div class="sub-title">Last 30 days completion rate</div>
       <div class="chart-line-completed">
         <TodoChartCompleted ref="TodoChartCompletedRef"></TodoChartCompleted>
