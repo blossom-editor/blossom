@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24341192",
+      "name": "box subtract-line",
+      "font_class": "a-boxsubtract-line",
+      "unicode": "ea4d",
+      "unicode_decimal": 59981
+    },
+    {
+      "icon_id": "24341208",
+      "name": "box addition-line",
+      "font_class": "a-boxaddition-line",
+      "unicode": "ea4e",
+      "unicode_decimal": 59982
+    },
+    {
       "icon_id": "5173186",
       "name": "heat-map",
       "font_class": "heat-map",
@@ -81,20 +95,6 @@
       "font_class": "a-boxdownload-line",
       "unicode": "ea4a",
       "unicode_decimal": 59978
-    },
-    {
-      "icon_id": "24341693",
-      "name": "flag-line",
-      "font_class": "flag-line",
-      "unicode": "ea4b",
-      "unicode_decimal": 59979
-    },
-    {
-      "icon_id": "24341703",
-      "name": "flow chart 1-line",
-      "font_class": "a-flowchart1-line",
-      "unicode": "ea4c",
-      "unicode_decimal": 59980
     },
     {
       "icon_id": "24341988",
