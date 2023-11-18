@@ -121,10 +121,19 @@
         where todo_id = #{todoId}
     </select>
 
+    <select id="statisticTaskCount" resultType="com.blossom.backend.server.todo.pojo.TodoEntity">
+        select min(task_status) as task_status,
+               count(*) as task_count
+          from blossom_todo
+         where user_id = #{userId}
+      group by task_status
+    </select>
+
     <delete id="delByIds">
         delete from blossom_todo
          where user_id = #{userId}
            and id in
         <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </delete>
+
 </mapper>

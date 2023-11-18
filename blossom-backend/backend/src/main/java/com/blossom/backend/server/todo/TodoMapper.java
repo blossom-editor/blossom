@@ -80,7 +80,14 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
                                    @Param("userId") Long userId);
 
     /**
+     * 统计所有待办事项数量
+     *
+     * @param userId 用户ID
+     */
+    List<TodoEntity> statisticTaskCount(@Param("userId") Long userId);
+
+    /**
      * 根据ID集合删除
      */
-    void delByIds(@Param("ids") List<Long> ids,@Param("userId") Long userId);
+    void delByIds(@Param("ids") List<Long> ids, @Param("userId") Long userId);
 }

@@ -32,6 +32,7 @@ public class TaskUpdReq extends AbstractPOJO {
     /**
      * 任务名称
      */
+    @NotBlank(message = "待办任务标题为必填项")
     private String taskName;
     /**
      * 任务内容

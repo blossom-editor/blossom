@@ -359,7 +359,6 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             dateMap.put(date, todos);
         }
 
-
         List<String> dates = new ArrayList<>();
         List<Long> rates = new ArrayList<>();
 
@@ -384,13 +383,23 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             }
         }
 
-        TaskStatisticRes res = new TaskStatisticRes();
+        TaskStatisticRes res = TaskStatisticRes.build();
         res.setDates(dates);
         res.setRates(rates);
-        res.setTotal((long) all.size());
-        res.setWaiting(all.stream().filter(t -> t.getTaskStatus().equals(TaskStatusEnum.WAITING.name())).count());
-        res.setProcessing(all.stream().filter(t -> t.getTaskStatus().equals(TaskStatusEnum.PROCESSING.name())).count());
-        res.setCompleted(all.stream().filter(t -> t.getTaskStatus().equals(TaskStatusEnum.COMPLETED.name())).count());
+
+        List<TodoEntity> counts = baseMapper.statisticTaskCount(AuthContext.getUserId());
+        for (TodoEntity count : counts) {
+            if (count.getTaskStatus().equals(TaskStatusEnum.WAITING.name())) {
+                res.setWaiting(count.getTaskCount());
+            }
+            if (count.getTaskStatus().equals(TaskStatusEnum.PROCESSING.name())) {
+                res.setProcessing(count.getTaskCount());
+            }
+            if (count.getTaskStatus().equals(TaskStatusEnum.COMPLETED.name())) {
+                res.setCompleted(count.getTaskCount());
+            }
+        }
+        res.setTotal(res.getWaiting() + res.getProcessing() + res.getCompleted());
         return res;
     }
 

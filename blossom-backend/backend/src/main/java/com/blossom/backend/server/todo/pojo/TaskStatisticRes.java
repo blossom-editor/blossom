@@ -23,28 +23,28 @@ public class TaskStatisticRes {
     /**
      * 待完成数
      */
-    private Long waiting;
+    private Integer waiting;
     /**
      * 进行中数
      */
-    private Long processing;
+    private Integer processing;
     /**
      * 完成数
      */
-    private Long completed;
+    private Integer completed;
     /**
      * 总数
      */
-    private Long total;
+    private Integer total;
 
     public static TaskStatisticRes build() {
         TaskStatisticRes res = new TaskStatisticRes();
         res.setDates(new ArrayList<>());
         res.setRates(new ArrayList<>());
-        res.setWaiting(0L);
-        res.setProcessing(0L);
-        res.setCompleted(0L);
-        res.setTotal(0L);
+        res.setWaiting(0);
+        res.setProcessing(0);
+        res.setCompleted(0);
+        res.setTotal(0);
         return res;
     }
 }
