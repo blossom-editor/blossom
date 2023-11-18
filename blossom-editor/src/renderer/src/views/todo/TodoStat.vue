@@ -14,12 +14,12 @@
         <div class="stat-item waiting">
           <div class="label">未开始</div>
           <div class="value">{{ taskStat.waiting }}</div>
-          <span class="icon-shadow iconbl bl-flag-line"></span>
+          <span class="icon-shadow iconbl bl-a-boxsubtract-line"></span>
         </div>
         <div class="stat-item progress">
           <div class="label">进行中</div>
           <div class="value">{{ taskStat.processing }}</div>
-          <span class="icon-shadow iconbl bl-a-flowchart1-line"></span>
+          <span class="icon-shadow iconbl bl-a-boxaddition-line"></span>
         </div>
       </bl-row>
 

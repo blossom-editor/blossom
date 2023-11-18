@@ -140,6 +140,10 @@
         text-align: center;
         display: none;
         z-index: 2;
+
+        div {
+          pointer-events: none;
+        }
       }
 
       .drag-container.enter {
@@ -149,6 +153,13 @@
         font-weight: 300;
         border-radius: 10px;
         border: 3px solid var(--el-color-primary);
+
+        .iconbl {
+          display: inherit;
+          margin-top: 40px;
+          font-size: 90px;
+          color: #e4e4e4;
+        }
       }
     }
   }

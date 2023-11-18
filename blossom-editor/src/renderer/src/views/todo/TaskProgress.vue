@@ -63,7 +63,10 @@
         <span>Waiting</span><span>{{ countWait }}</span>
       </div>
       <div class="tasks-container">
-        <div class="drag-container" ref="WaitDragRef">将任务设置为未开始</div>
+        <div class="drag-container" ref="WaitDragRef">
+          <div>将任务设置为未开始</div>
+          <div class="iconbl bl-a-boxsubtract-line"></div>
+        </div>
 
         <div v-if="countTotal == 0" class="task-tip">
           在待办列表右侧点击<span class="add-icon iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>添加任务
@@ -84,7 +87,7 @@
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" text></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
@@ -119,7 +122,10 @@
         <span>Processing</span><span>{{ countProc }}</span>
       </div>
       <div class="tasks-container">
-        <div class="drag-container" ref="ProcDragRef">将任务设置为进行中</div>
+        <div class="drag-container" ref="ProcDragRef">
+          <div>将任务设置为进行中</div>
+          <div class="iconbl bl-a-boxaddition-line"></div>
+        </div>
         <!--  -->
         <div
           v-for="t in taskProcComputed"
@@ -136,7 +142,7 @@
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" text></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
@@ -173,7 +179,10 @@
         <span>Completed</span><span>{{ countComp }}</span>
       </div>
       <div class="tasks-container">
-        <div class="drag-container" ref="CompDragRef">将任务设置为完成</div>
+        <div class="drag-container" ref="CompDragRef">
+          <div>将任务设置为完成</div>
+          <div class="iconbl bl-a-boxchoice-line"></div>
+        </div>
         <!--  -->
         <div
           v-for="t in taskCompComputed"
@@ -190,7 +199,7 @@
             <bl-row class="task-title" just="space-between" :style="{ backgroundColor: getColor(t.color) }">
               <el-input v-if="t.updTaskName" v-model="t.taskName" :id="'task-name-input-' + t.id" @blur="blurTaskNameInput(t)"></el-input>
               <div v-else @dblclick="showTaskNameInput(t)">{{ t.taskName }}</div>
-              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" :color="t.color"></el-button>
+              <el-button class="iconbl bl-pen" @click="showTaskInfoDialog(t.id)" text></el-button>
             </bl-row>
 
             <div v-if="showAnyTime" class="task-times">创建于: {{ t.creTime }}</div>
@@ -381,8 +390,9 @@ const showTaskNameInput = (task: TaskInfo) => {
  * 任务名称失去焦点, 保存数据
  */
 const blurTaskNameInput = (task: TaskInfo) => {
-  updTaskApi({ id: task.id, todoId: task.todoId, taskName: task.taskName })
-  task.updTaskName = false
+  updTaskApi({ id: task.id, todoId: task.todoId, taskName: task.taskName }).then(() => {
+    task.updTaskName = false
+  })
 }
 
 const showTaskContentInput = (task: TaskInfo) => {
@@ -399,8 +409,9 @@ const showTaskContentInput = (task: TaskInfo) => {
  * 任务内容失去焦点, 保存数据
  */
 const blurTaskContentInput = (task: TaskInfo) => {
-  updTaskApi({ id: task.id, todoId: task.todoId, taskContent: task.taskContent })
-  task.updTaskContent = false
+  updTaskApi({ id: task.id, todoId: task.todoId, taskContent: task.taskContent }).then(() => {
+    task.updTaskContent = false
+  })
 }
 
 /**
