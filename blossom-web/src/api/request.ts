@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toRoute } from '@/router'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { Local } from '@/assets/utils/storage'
 import { isNotNull } from '@/assets/utils/obj'
 import pinia from '@/stores/store-config'
@@ -43,13 +43,6 @@ export class Request {
           }
         }
         return config
-        // return {
-        //   ...config,
-        //   headers: {
-        //     'Blossom-User-Id': SYSTEM.DOMAIN.USER_ID,
-        //     Authorization: 'Bearer ' + token
-        //   }
-        // }
       },
       (err: any) => Promise.reject(err)
     )
@@ -94,7 +87,7 @@ export class Request {
           let errorResponse = res.data
           errorResponse['url'] = res.config.url
           // 其他情况拒绝
-          ElNotification({ message: res.data.msg, type: 'error', position: 'bottom-right', title: '请求错误' })
+          ElMessage({ message: res.data.msg, duration: 9999 })
           return Promise.reject(res)
         }
         // 直接返回res，当然你也可以只返回res.data
@@ -107,7 +100,7 @@ export class Request {
           errorMsg = '网络错误,请检查您的网络是否通畅'
         }
         // 字符串和变量拼接：请求失败(${err.response.status})
-        ElNotification({ message: errorMsg, type: 'error', position: 'bottom-right', title: '请求错误' })
+        ElMessage({ message: errorMsg })
         return Promise.reject(err)
       }
     )
