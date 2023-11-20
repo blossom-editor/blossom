@@ -1,5 +1,6 @@
 <template>
-  <div class="index-root">
+  <div class="index-root" :style="{ backgroundImage: isHome ? 'linear-gradient(to bottom right, #3e464e, #212121)' : '' }">
+    <IndexHeader :bg="!isHome"></IndexHeader>
     <div class="main">
       <router-view v-slot="{ Component }">
         <keep-alive :include="[includeRouter]">
@@ -11,23 +12,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import router from '@/router'
 import { checkToken } from '@/scripts/auth'
+import IndexHeader from './index/IndexHeader.vue'
+import type { RouteRecordName } from 'vue-router'
 
-const includeRouter = ref<any>(['home'])
+const includeRouter = ref<any>(['Home'])
 
 onMounted(() => {
   checkToken()
 })
 
+const curRoute = ref<RouteRecordName>('Home')
+
+const isHome = computed(() => {
+  return curRoute.value === 'Home'
+})
+
 watch(
   () => router.currentRoute.value,
   (newRoute) => {
+    if (newRoute.name) {
+      curRoute.value = newRoute.name
+    }
+    console.log('name: ', newRoute.name)
+
     if (newRoute.meta.keepAlive && includeRouter.value.indexOf(newRoute.name) === -1) {
       includeRouter.value.push(newRoute.name)
     }
-  }
+  },
+  { immediate: true }
 )
 
 onMounted(() => {})
@@ -37,13 +52,10 @@ onMounted(() => {})
   @include box(100%, 100%);
   position: relative;
 
-  .header {
-    @include box(100%, 40px);
-    height: 40px;
-  }
-
   .main {
-    @include box(100%, 100%);
+    @include box(100%, calc(100% - 60px));
+    padding-top: 10px;
+    overflow: hidden;
   }
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="blossom-home-root">
-    <div class="home-header">
+    <!-- <div class="home-header">
       <IndexHeader></IndexHeader>
-    </div>
+    </div> -->
     <div class="home-main">
       <div class="home-main-userinfo">
         <UserInfo></UserInfo>
@@ -57,8 +57,8 @@ const openNew = (url: string) => {
 .blossom-home-root {
   @include box(100%, 100%);
   @include flex(column, center, center);
-  box-shadow: 0 0 10px #24272c;
-  background-image: linear-gradient(to bottom right, #3e464e, #212121);
+  // box-shadow: 0 0 10px #24272c;
+  // background-image: linear-gradient(to bottom right, #3e464e, #212121);
   position: relative;
   overflow: hidden;
 

@@ -44,7 +44,7 @@
           <div class="item" @click="toRoute('/articles')"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章列表</div>
           <div class="item" @click="toRoute('/todo')"><span class="iconbl bl-a-labellist-line"></span>待办事项</div>
           <div class="item" @click="toRoute('/plan')"><span class="iconbl bl-calendar-line"></span>日历计划</div>
-          <div class="item"><span class="iconbl bl-note-line"></span>便签</div>
+          <div class="item" @click="toRoute('/note')"><span class="iconbl bl-note-line"></span>便签</div>
           <div class="item-divider"></div>
           <div class="item" @click="handlLogout"><span class="iconbl bl-logout-circle-line"></span>退出登录</div>
         </div>
@@ -181,7 +181,6 @@ const handlLogout = () => {
     &:hover {
       font-weight: bold;
       color: #fff3fc;
-      // text-shadow: 3px 3px 10px #cccccc;
     }
   }
 
