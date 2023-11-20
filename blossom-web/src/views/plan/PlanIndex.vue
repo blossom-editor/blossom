@@ -1,9 +1,5 @@
 <template>
-  <div class="plan-index-root">
-    <div class="header">
-      <IndexHeader :bg="true"></IndexHeader>
-    </div>
-
+  <div class="plan-root">
     <bl-row just="space-between" class="workbench" height="45px">
       <div class="month">{{ calendarDate.getMonth() + 1 }}月</div>
       <el-button-group size="small">
@@ -12,68 +8,70 @@
         <el-button @click="selectDate('next-month')">下月</el-button>
       </el-button-group>
     </bl-row>
-    <el-calendar class="bl-calendar" v-model="calendarDate" ref="CalendarRef">
+    <el-calendar class="plan-calendar" v-model="calendarDate" ref="CalendarRef">
       <template #header="{ date }"><div></div></template>
       <template #date-cell="{ data }">
         <div class="date-title">
           <span>{{ data.day.split('-').slice(2).join('-') }}</span>
-          <span class="iconbl bl-a-addline-line" @click="handleShowPlanAddDialog(data.day)"></span>
         </div>
         <div class="plan-group">
-          <div v-for="(plan, index) in planDays[data.day + ' 00:00:00']" :key="plan.id">
-            <el-popover
-              placement="right"
-              popper-class="plan-popover"
-              :width="200"
-              trigger="click"
-              :hide-after="0"
-              :disabled="plan.id < 0"
-              :persistent="false">
-              <!-- 触发元素 -->
-              <template #reference>
-                <div :class="'plan-line ' + plan.color + ' ' + plan.position + ' ' + plan.hl" :style="{ top: index * 21 + 'px' }">
-                  <div v-if="plan.position == 'head' || plan.position == 'all'" class="plan-title">
-                    {{ plan.title }}
-                  </div>
-                </div>
-              </template>
-
-              <!-- 弹出框内容 -->
-              <bl-col class="plan-popover-inner">
-                <div :class="['plan-popover-title', plan.color]">
-                  {{ plan.title }}
-                </div>
-                <div class="plan-popover-time">
-                  <div><span class="iconbl bl-date-line"></span> {{ data.day }}</div>
-                  <span class="iconbl bl-a-clock3-line"></span> {{ plan.planStartTime }} - {{ plan.planEndTime }}
-                </div>
-                <div class="plan-popover-content">
-                  {{ plan.content }}
-                </div>
-              </bl-col>
-            </el-popover>
+          <div v-for="(plan, index) in planDays[data.day + ' 00:00:00']" :key="plan.id" @click="showUpdForm(plan)">
+            <div :class="'plan-line ' + plan.color + ' ' + plan.position + ' ' + plan.hl" :style="{ top: index * 21 + 'px' }">
+              <div v-if="plan.position == 'head' || plan.position == 'all'" class="plan-title">
+                {{ plan.title }}
+              </div>
+            </div>
           </div>
         </div>
       </template>
     </el-calendar>
+    <!--  -->
+    <div class="plan-add" @click="showAddForm"><span class="iconbl bl-a-addline-line"></span></div>
   </div>
+
+  <!-- 新增页面 -->
+  <el-drawer v-model="isShowAddForm" direction="btt" :with-header="true" :destroy-on-close="true" size="470px">
+    <PlanDayInfo ref="PlanDayInfoRef" @saved="savedCallback"></PlanDayInfo>
+  </el-drawer>
+
+  <!-- 修改页面 -->
+  <el-drawer v-model="isShowUpdForm" direction="btt" :with-header="true" :destroy-on-close="true" size="270px">
+    <div class="detail">
+      <el-input size="small" style="width: calc(100% - 30px); margin-bottom: 18px" v-model="curPlan.title" placeholder="计划 标题">
+        <template #prefix>
+          <el-icon size="15">
+            <Document />
+          </el-icon>
+        </template>
+      </el-input>
+      <el-input size="small" type="textarea" placeholder="Todo 内容" v-model="curPlan.content" resize="none" :rows="4"></el-input>
+      <div class="times">
+        <bl-row style="margin-bottom: 5px"> <span class="iconbl bl-date-line"></span> {{ curPlan.planDate.substring(0, 10) }} </bl-row>
+        <bl-row> <span class="iconbl bl-a-clock3-line"></span> {{ curPlan.planStartTime }} - {{ curPlan.planEndTime }} </bl-row>
+      </div>
+      <bl-row class="btns" just="center">
+        <el-button-group style="width: 100%">
+          <el-button color="#474747" @click="delPlan" style="width: 50%"><i class="iconbl bl-delete-line"></i>删 除</el-button>
+          <el-button color="#474747" @click="updPlan" style="width: 50%"><i class="iconbl bl-a-texteditorsave-line"></i>保 存</el-button>
+        </el-button-group>
+      </bl-row>
+    </div>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue'
-import type { CalendarDateType, CalendarInstance } from 'element-plus'
-import { planListDayApi, planDelApi } from '@/api/plan'
-import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@/assets/utils/util'
-import IndexHeader from '@/views/index/IndexHeader.vue'
+import { onMounted, ref, watch } from 'vue'
+import { Document } from '@element-plus/icons-vue'
+import { ElMessageBox, type CalendarDateType, type CalendarInstance } from 'element-plus'
+import { planListDayApi, planDelApi, planUpdDayApi } from '@/api/plan'
+import { getDateTimeFormat, timestampToDatetime } from '@/assets/utils/util'
+import PlanDayInfo from './PlanDayInfo.vue'
 
 onMounted(() => {
   getPlanAll(getDateTimeFormat().substring(0, 7))
 })
 
-const PlanDayInfoRef = ref()
-// 计划列表
 const planDays = ref<any>({})
-// 上次点击选择的月份, 不同月份时才查询接口
 let lastMonth: string = ''
 
 const calendarDate = ref<Date>(new Date())
@@ -100,52 +98,62 @@ const getPlanAll = (month: string, force: boolean = false) => {
   })
 }
 
-//#region ----------------------------------------< 新增删除 >-------------------------------------
-const isShowPlanAddDialog = ref(false)
-
-const handleShowPlanAddDialog = (ymd: string) => {
-  isShowPlanAddDialog.value = true
-  nextTick(() => {
-    PlanDayInfoRef.value.setPlanDate(ymd)
-  })
+//#region ----------------------------------------< 增删改 >-------------------------------------
+const PlanDayInfoRef = ref()
+const isShowAddForm = ref(false)
+const showAddForm = () => {
+  isShowAddForm.value = true
 }
 
 const savedCallback = () => {
   getPlanAll(lastMonth, true)
-  isShowPlanAddDialog.value = false
+  isShowAddForm.value = false
 }
 
-const delDay = (groupId: number) => {
-  planDelApi({ groupId: groupId }).then((_resp) => {
+const isShowUpdForm = ref(false)
+const curPlan = ref({ groupId: '', title: '', content: '', planDate: '', planStartTime: '', planEndTime: '' })
+const showUpdForm = (plan: any) => {
+  isShowUpdForm.value = true
+  curPlan.value = plan
+}
+
+const updPlan = () => {
+  planUpdDayApi(curPlan.value).then((resp) => {
     getPlanAll(lastMonth, true)
+    isShowUpdForm.value = false
+  })
+}
+
+const delPlan = () => {
+  ElMessageBox.confirm('是否确定删除该任务', '删除任务', {
+    confirmButtonText: '我要删除',
+    cancelButtonText: '取消'
+  }).then(() => {
+    planDelApi({ groupId: curPlan.value.groupId }).then((_resp) => {
+      getPlanAll(lastMonth, true)
+      isShowUpdForm.value = false
+    })
   })
 }
 //#endregion
 </script>
 
 <style scoped lang="scss">
-.plan-index-root {
+.plan-root {
   @include box(100%, 100%);
   @include flex(column, flex-start, center);
   overflow: hidden;
-
-  .header {
-    @include box(100%, 60px);
-  }
-  .workbench,
-  .bl-calendar {
-    max-width: 900px;
-  }
+  position: relative;
 
   .workbench {
-    padding: 10px 10px;
+    padding: 0 10px 10px 10px;
 
     :deep(.el-button, .el-radio-button__inner) {
       padding: 8px 10px;
     }
   }
 
-  .bl-calendar {
+  .plan-calendar {
     --el-calendar-border: 1px solid var(--el-border-color);
     overflow: hidden;
     flex: 1;
@@ -215,7 +223,8 @@ const delDay = (groupId: number) => {
               border-right: 0;
               border-left: 0;
               border-top: 0;
-              overflow: scroll;
+              overflow-y: scroll;
+              overflow-x: hidden;
               padding: 0;
 
               &:last-child {
@@ -320,42 +329,49 @@ const delDay = (groupId: number) => {
       }
     }
   }
-}
-</style>
 
-<style lang="scss">
+  .plan-add {
+    @include flex(row, center, center);
+    @include box(40px, 40px);
+    border-radius: 50%;
+    background-color: #7b7b7b4c;
+    box-shadow: 3px 3px 5px #bababa;
+    position: absolute;
+    right: 10px;
+    bottom: 5%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--el-color-primary-light-7);
+    }
+
+    .iconbl {
+      color: #7b7b7ba9;
+      font-size: 20px;
+    }
+  }
+}
 @import url('./PlanColor.scss');
 
-.plan-popover {
-  --el-popover-padding: 0 !important;
-  border: 0 !important;
-  width: 170px !important;
+.detail {
+  @include flex(column, flex-start, flex-start);
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 30px;
 
-  .plan-popover-inner {
+  .times {
+    margin-top: 18px;
+    margin-bottom: 18px;
+    color: #949494;
     .iconbl {
-      font-size: 13px;
+      margin-right: 10px;
     }
+  }
 
-    .plan-popover-title {
-      @include font(15px, 500);
-      width: 100%;
-      padding: 10px;
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      color: #fff;
-    }
-
-    .plan-popover-time {
-      width: 100%;
-      padding: 5px 10px;
-      text-align: left;
-    }
-
-    .plan-popover-content {
-      width: 100%;
-      text-align: left;
-      padding: 0 10px 10px;
-      white-space: pre-wrap;
+  .btns {
+    .iconbl {
+      margin-right: 15px;
     }
   }
 }
