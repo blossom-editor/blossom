@@ -1,9 +1,5 @@
 <template>
   <div class="articles-root">
-    <div class="header">
-      <IndexHeader :bg="true"></IndexHeader>
-    </div>
-
     <div class="mask" :style="maskStyle" @click="closeAll"></div>
 
     <div class="headmenu">
@@ -135,7 +131,6 @@ import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '
 import { useUserStore } from '@/stores/user'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
-import IndexHeader from '../index/IndexHeader.vue'
 import 'katex/dist/katex.min.css'
 
 const userStore = useUserStore()
@@ -375,15 +370,11 @@ const onresize = () => {
   background: #ffffff;
   position: relative;
 
-  .header {
-    @include box(100vw, 60px);
-  }
-
   .mask {
     position: absolute;
-    @include box(100%, 100%);
+    @include box(100%, calc(100% + 10px));
     left: 0;
-    top: 0;
+    top: -10px;
     z-index: 9998;
     background-color: #00000067;
   }
@@ -400,7 +391,7 @@ const onresize = () => {
   }
 
   .main {
-    @include box(100%, calc(100% - 60px));
+    @include box(100%, 100%);
     @include flex(row, center, center);
     padding: 10px;
     overflow: hidden;
@@ -1019,13 +1010,14 @@ const onresize = () => {
   // 屏幕宽度在 1100 以内时使用以下样式
   @media screen and (max-width: 1100px) {
     .headmenu {
-      @include box(100vw, 50px);
+      @include box(100vw, 40px);
       @include flex(row, space-between, center);
       border-bottom: 1px solid #e2e2e2;
+      padding-bottom: 10px;
     }
 
     .main {
-      @include box(100%, calc(100% - 60px - 50px));
+      @include box(100%, calc(100% - 40px));
       padding: 0;
 
       .menu {
