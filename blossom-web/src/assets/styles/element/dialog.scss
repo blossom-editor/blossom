@@ -1,0 +1,9 @@
+.el-dialog {
+  --el-dialog-border-radius: 10px !important;
+  --el-dialog-padding-primary: 10px !important;
+  --el-dialog-box-shadow: var(--bl-dialog-box-shadow) !important;
+
+  .el-dialog__headerbtn {
+    top: -5px;
+  }
+}
