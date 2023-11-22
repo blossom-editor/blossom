@@ -89,7 +89,6 @@ import { getDateTimeFormat, getNextDay, timestampToDatetime } from '@renderer/as
 import { isNull, isBlank } from '@renderer/assets/utils/obj'
 import PlanDaily from './PlanDaily.vue'
 import PlanDayInfo from './PlanDayInfo.vue'
-import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
   getPlanAll(getDateTimeFormat().substring(0, 7))
