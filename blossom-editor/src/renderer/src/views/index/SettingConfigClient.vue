@@ -56,7 +56,7 @@
         <div class="conf-tip">
           控制客户端上传文件时的大小限制检查，单位<code>MB</code>。该配置仅作用于客户端，并不会影响服务器的文件大小限制，在客户端进行大小限制会有更好的体验，通常推荐与服务端相同。
           <span class="blod">注意：服务端控制需要在修改服务端参数，详情可见</span>
-          <a href="https://www.wangyunf.com/blossom-doc/doc/backend-properties" target="_blank">《文档》</a>。
+          <a href="https://www.wangyunf.com/blossom-doc/guide/deploy/backend-props.html" target="_blank">《文档》</a>。
         </div>
       </el-form-item>
 

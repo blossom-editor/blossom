@@ -2,7 +2,7 @@
 
 Blossom 笔记软件的博客工程
 
-[博客页面的使用文档](https://www.wangyunf.com/blossom-doc/doc/blog)
+[博客页面的使用文档](https://www.wangyunf.com/blossom-doc/guide/deploy/blog.html)
 
 ![](./doc/imgs/blog_home.jpg "Blossom 首页")
 

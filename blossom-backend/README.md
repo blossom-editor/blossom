@@ -2,7 +2,7 @@
 
 Blossom 笔记软件的后台服务
 
-[Blossom 后台部署文档](https://www.wangyunf.com/blossom-doc/doc/backend)
+[Blossom 后台部署文档](https://www.wangyunf.com/blossom-doc/guide/deploy/backend.html)
 
 # 模块说明
 

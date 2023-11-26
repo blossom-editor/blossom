@@ -46,7 +46,7 @@
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
         <div class="conf-tip">
-          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/doc/hefeng">《文档》</a>。修改后点击首页天气右上角的刷新按钮
+          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/guide/hefeng.html">《文档》</a>。修改后点击首页天气右上角的刷新按钮
           <span class="iconbl bl-refresh-smile"></span> 获取最新天气。
         </div>
       </el-form-item>

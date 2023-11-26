@@ -1,11 +1,11 @@
 <p align="center">
-<img src="./doc/imgs/icon.png" height="200">
+<img src="./doc/imgs/blossom.png" height="200">
 </p>
 <p align="center" style="font-size: 30px;font-weight:500;">
 Blossom 1.8.1
 </p>
 <p align="center">
-<a href="https://www.wangyunf.com/blossom-doc/doc/tryuse">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index">📃 文档</a> | <a href="https://github.com/blossom-editor/blossom/releases">📥 下载</a> 
+<a href="https://www.wangyunf.com/blossom-doc/guide/tryuse.html">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 文档</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 下载</a> 
 </p>
 
 ---
@@ -13,12 +13,12 @@ Blossom 1.8.1
 Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于 MIT 协议完全开源。
 
 <p align="center">
-<img src="./doc/imgs/home_ld_1_4_0.png">
+<img src="./doc/imgs/home_light_and_dark.png">
 </p>
 
-- 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/doc/tryuse)，我们提供了一个试用账号帮你体验该应用。
-- 使用 [Docker / Docker Compose](https://www.wangyunf.com/blossom-doc/doc/backend) 进行部署。
-- 阅读[文档](https://www.wangyunf.com/blossom-doc/index)来查看更多使用细节。
+- 你可以先进行[试用](https://www.wangyunf.com/blossom-doc/guide/tryuse.html)，我们提供了一个试用账号帮你体验该应用。
+- 使用 [Docker / Docker Compose](https://www.wangyunf.com/blossom-doc/guide/deploy/backend-docker.html) 进行部署。
+- 阅读[文档](https://www.wangyunf.com/blossom-doc/index.html)来查看更多使用细节。
 
 ---
 
@@ -77,7 +77,7 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 ---
 
-!["日历计划"](./doc/imgs/todo_l.jpg)
+!["日历计划"](./doc/imgs/todo_l.png)
 
 <p align="center">待办事项清单</p>
 
@@ -89,13 +89,13 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 ---
 
-!["便签管理"](./doc/imgs/note_s_light.jpg)
+!["便签管理"](./doc/imgs/note_s_light.png)
 
 <p align="center">便签管理</p>
 
 ---
 
-!["博客"](./doc/imgs/blog_home.jpg)
+!["博客"](./doc/imgs/blog_home.png)
 
 <p align="center">博客</p>
 
