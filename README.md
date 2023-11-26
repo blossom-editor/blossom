@@ -10,7 +10,7 @@ Blossom 1.8.1
 
 ---
 
-Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步，且基于 MIT 协议完全开源。
+Blossom 是一个支持**私有部署**的**云端存储双链笔记软件**，你可以将你所有的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步。
 
 <p align="center">
 <img src="./doc/imgs/home_light_and_dark.png">
@@ -59,49 +59,49 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 # 🌄 更多 Blossom 图片
 
-!["编辑器"](./doc/imgs/editor_intro.png)
+!["编辑器"](./doc/imgs/article.png)
 
 <p align="center">编辑器</p>
 
 ---
 
-!["双链笔记"](./doc/imgs/editor_graph.png)
+!["双链笔记"](./doc/imgs/article_reference.png)
 
 <p align="center">双链笔记</p>
 
 ---
 
-!["照片墙"](./doc/imgs/pic_s_light.png)
+!["照片墙"](./doc/imgs/picture.png)
 
 <p align="center">照片墙</p>
 
 ---
 
-!["日历计划"](./doc/imgs/todo_l.png)
+!["日历计划"](./doc/imgs/todo.png)
 
 <p align="center">待办事项清单</p>
 
 ---
 
-!["日历计划"](./doc/imgs/plan_s_light.png)
+!["日历计划"](./doc/imgs/plan.png)
 
 <p align="center">日历计划</p>
 
 ---
 
-!["便签管理"](./doc/imgs/note_s_light.png)
+!["便签管理"](./doc/imgs/note.png)
 
 <p align="center">便签管理</p>
 
 ---
 
-!["博客"](./doc/imgs/blog_home.png)
+!["博客"](./doc/imgs/blog_home_pc.png)
 
 <p align="center">博客</p>
 
 <p align="center">
 <img src="./doc/imgs/blog_home_m.png" height="700">
-<img src="./doc/imgs/home_article_m.png" height="700" style="margin-left: 30px">
+<img src="./doc/imgs/blog_article.png" height="700" style="margin-left: 30px">
 </p>
 <p align="center">博客移动端</p>
 
