@@ -5,6 +5,7 @@ import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
@@ -52,6 +53,7 @@ public class ArticleController {
     private final ArticleOpenService openService;
     private final FolderService folderService;
     private final UserService userService;
+    private final ArticleTempVisitService tempVisitService;
 
     /**
      * 查询列表
@@ -104,6 +106,7 @@ public class ArticleController {
 
         return R.ok(res);
     }
+
 
     /**
      * 新增文章
@@ -208,7 +211,6 @@ public class ArticleController {
         }
     }
 
-
     /**
      * 文章导入
      *
@@ -234,5 +236,33 @@ public class ArticleController {
             e.printStackTrace();
         }
         return R.ok();
+    }
+
+    /**
+     * 创建文章的临时访问缓存
+     *
+     * @param id 文章ID
+     * @return 临时访问Key
+     * @since 1.9.0
+     */
+    @GetMapping("/temp/key")
+    public R<String> createTempVisitKey(@RequestParam("id") Long id) {
+        return R.ok(tempVisitService.create(id, AuthContext.getUserId()));
+    }
+
+    /**
+     * 临时查看文章
+     *
+     * @param s 临时访问 Key
+     * @since 1.9.0
+     */
+    @AuthIgnore
+    @GetMapping("/temp/h")
+    public String content(@RequestParam("k") String s, HttpServletResponse resp) {
+        ArticleTempVisitService.TempVisit visit = tempVisitService.get(s);
+        XzException404.throwBy(ObjUtil.isNull(visit), "文章不存在或您无权限查看");
+        ArticleEntity article = baseService.selectById(visit.getArticleId(), false, false, true);
+        resp.setContentType("text/html");
+        return ArticleUtil.toHtml(article, userService.selectById(visit.getUserId()));
     }
 }

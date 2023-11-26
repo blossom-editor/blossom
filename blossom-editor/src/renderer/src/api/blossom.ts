@@ -374,6 +374,16 @@ export const articleBackupDownloadFragmentApi = (data: object, range: string): P
   return rq.post('/article/backup/download/fragment', data, config)
 }
 
+/**
+ * 获取临时访问链接的 key
+ * @param params {id:id}
+ * @returns
+ */
+export const articleTempKey = (params?: object): Promise<any> => {
+  return rq.get('/article/temp/key', { params })
+}
+
+export const articleTempH = '/article/temp/h?k='
 //#endregion
 
 //#region ====================================================< picture >===================================================

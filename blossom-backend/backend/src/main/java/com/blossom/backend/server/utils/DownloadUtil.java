@@ -20,12 +20,12 @@ public class DownloadUtil {
     public static void forceDownload(HttpServletResponse response,
                                      BufferedInputStream bis,
                                      String filename) throws IOException {
-        OutputStream os = response.getOutputStream();
         // 设置强制下载不打开
         response.setContentType("application/force-download");
         // 将请求头暴露给前端
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
         response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename);
+        OutputStream os = response.getOutputStream();
         byte[] buffer = new byte[1024];
         int i = bis.read(buffer);
         while (i != -1) {
