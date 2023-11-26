@@ -66,14 +66,10 @@
       <div style="height: 45px"></div>
 
       <bl-col width="100%" height="270px">
-        <bl-row class="container-name">收藏/关注</bl-row>
-        <bl-row class="container-sub-name">Article Star ⭐</bl-row>
         <ArticleStars></ArticleStars>
       </bl-col>
 
       <bl-col width="100%" height="330px">
-        <bl-row class="container-name">专题</bl-row>
-        <bl-row class="container-sub-name">Article Subjects</bl-row>
         <ArticleSubjects></ArticleSubjects>
       </bl-col>
 
@@ -166,44 +162,10 @@ const showWordsInfo = () => {
 </script>
 
 <style scoped lang="scss">
+@import './styles/container.scss';
 .global-home-root {
   @include box(100%, 100%);
   @include flex(row, space-between, center);
-  // background-image: linear-gradient(to bottom right, var(--bl-html-color), var(--bl-html-color), var(--el-color-primary-light-7));
-
-  .container-name {
-    @include font(20px, 700);
-    @include themeColor(#5c5c5c, #a3a6ad);
-    height: 60px;
-    min-height: 60px;
-    align-items: end !important;
-    text-shadow: var(--bl-text-shadow);
-  }
-
-  .container-sub-name {
-    height: 20px;
-    min-height: 20px;
-    @include font(13px, 300);
-    @include themeColor(#ababab, #7e7e7e);
-    text-shadow: var(--bl-text-shadow);
-  }
-
-  .container-refresh {
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-
-    &:hover {
-      animation: rotation 10s linear infinite;
-      text-shadow: none;
-    }
-  }
-
-  .container-operator {
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-  }
 
   $border-middle: 1px;
 
@@ -316,21 +278,6 @@ const showWordsInfo = () => {
     to {
       background-position: 300%;
     }
-  }
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--bl-scroll-color);
-  width: 4px;
-  height: 3px;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: var(--bl-scroll-color-hover);
   }
 }
 </style>

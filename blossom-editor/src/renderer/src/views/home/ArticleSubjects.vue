@@ -1,9 +1,15 @@
 <template>
+  <bl-row class="container-name">专题</bl-row>
+  <bl-row class="container-sub-name" just="space-between">
+    <span>Article Subjects</span>
+    <span v-if="configViewStyle.isHomeSubjectCard" class="iconbl bl-array-line container-operator" @click="showSubjectCard(false)" />
+    <span v-else class="iconbl bl-article-line container-operator" @click="showSubjectCard(true)" />
+  </bl-row>
   <div class="home-subject-root">
     <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
     <div
       v-for="subject in subjects"
-      class="subject-item"
+      :class="[configViewStyle.isHomeSubjectCard ? 'subject-card' : 'subject-list']"
       :key="subject.name"
       :style="{ '--bl-subject-color1': subject.color + '70' }"
       @click="toToc(subject.tocId)">
@@ -16,12 +22,12 @@
         class="menu-icon-img"
         v-if="isNotBlank(subject.icon) && (subject.icon.startsWith('http') || subject.icon.startsWith('https'))"
         :src="subject.icon" />
-      <svg class="icon subject-icon" aria-hidden="true">
+      <svg v-else class="icon subject-icon" aria-hidden="true">
         <use :xlink:href="'#' + subject.icon"></use>
       </svg>
 
-      <bl-row class="infos"> <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }} </bl-row>
-      <bl-row class="infos"> <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }} </bl-row>
+      <bl-row class="infos words"> <span class="iconbl bl-pen-line"></span>{{ subject.subjectWords }} </bl-row>
+      <bl-row class="infos time"> <span class="iconbl bl-a-clock3-line"></span>{{ subject.subjectUpdTime }} </bl-row>
     </div>
     <div style="width: 100%; height: 5px"></div>
   </div>
@@ -30,10 +36,15 @@
 <script setup lang="ts">
 import router from '@renderer/router'
 import { ref, onActivated } from 'vue'
+import { useConfigStore } from '@renderer/stores/config'
+import type { ViewStyle } from '@renderer/stores/config'
 import { subjectsApi } from '@renderer/api/blossom'
 import { isEmpty } from 'lodash'
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
+
+const configStore = useConfigStore()
+const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
 
 onActivated(() => {
   getSubjects()
@@ -55,6 +66,11 @@ const getSubjects = () => {
   })
 }
 
+const showSubjectCard = (isCard: boolean) => {
+  configViewStyle.value.isHomeSubjectCard = isCard
+  configStore.setViewStyle(configViewStyle.value)
+}
+
 const toToc = (articleId: number) => {
   if (isNull(articleId)) {
     Notify.info('该专题无目录, 请先在专题下添加一篇含有 [TOC] 标签的文章', '提示')
@@ -65,6 +81,7 @@ const toToc = (articleId: number) => {
 </script>
 
 <style scoped lang="scss">
+@import './styles/container.scss';
 .home-subject-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);
@@ -81,7 +98,7 @@ const toToc = (articleId: number) => {
 
 $width-item: 210px;
 
-.subject-item {
+.subject-card {
   @include flex(column, flex-start, flex-start);
   @include box($width-item, 90px, $width-item, $width-item);
   @include themeShadow(0 3px 5px 0 #cacaca, 0 3px 3px #000000);
@@ -119,6 +136,7 @@ $width-item: 210px;
     @include font(14px, 300);
     @include themeColor(#3e3e3e, #b3b3b3);
     @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
+    @include ellipsis();
     line-height: 40px;
     padding: 0 10px;
     border-bottom-left-radius: 20px;
@@ -160,6 +178,65 @@ $width-item: 210px;
     .bl-sendmail-fill {
       font-size: 15px;
     }
+  }
+}
+
+.subject-list {
+  @include flex(row, flex-start, flex-start);
+  width: $width-item;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  position: relative;
+  padding: 3px;
+  margin: 15px 10px 0 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    @include themeBg(#f5f5f5, #171717);
+
+    .content {
+      .name {
+        color: var(--bl-text-color);
+      }
+    }
+  }
+
+  .seal {
+    @include ellipsis();
+    width: 100%;
+    padding-left: 40px;
+    font-size: 13px;
+    color: var(--bl-text-color-light);
+  }
+
+  .words {
+    width: 100%;
+    font-size: 10px;
+    padding-left: 40px;
+    color: var(--bl-text-color-light);
+
+    .iconbl {
+      font-size: 12px;
+      padding-right: 3px;
+    }
+  }
+
+  .subject-icon,
+  .menu-icon-img {
+    @include box(25px, 25px);
+    @include absolute(6px, '', '', 10px);
+    @include themeFilter(drop-shadow(0 0 2px rgb(135, 135, 135)), drop-shadow(0 0 2px #000000));
+  }
+  .menu-icon-img {
+    border-radius: 4px;
+  }
+
+  .time,
+  .progress,
+  .inner {
+    display: none;
   }
 }
 </style>

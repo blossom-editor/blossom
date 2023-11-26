@@ -16,6 +16,10 @@ export interface ViewStyle {
   todoStatExpand: boolean
   // 是否显示专题样式
   isShowSubjectStyle: boolean
+  // 是否在首页显示收藏卡片
+  isHomeStarCard: boolean
+  // 是否在首页显示专题卡片
+  isHomeSubjectCard: boolean
 }
 
 /**
@@ -85,9 +89,8 @@ export const useConfigStore = defineStore('configStore', {
         treeDocsFontSize: '14px',
         todoStatExpand: true,
         isShowSubjectStyle: true,
-        todoWaitColor: '#d22d3b6b',
-        todoProcessingColor: '#fba85f6b',
-        todoCompletedColor: '#9974fe6b'
+        isHomeStarCard: true,
+        isHomeSubjectCard: true
       },
       ...Local.get(VIEW_STYLE_KEY)
     },

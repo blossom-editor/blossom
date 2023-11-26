@@ -1,0 +1,59 @@
+.container-name {
+  @include font(20px, 700);
+  @include themeColor(#5c5c5c, #a3a6ad);
+  height: 60px;
+  min-height: 60px;
+  align-items: end !important;
+  text-shadow: var(--bl-text-shadow);
+}
+
+.container-sub-name {
+  height: 20px;
+  min-height: 20px;
+  @include font(13px, 300);
+  @include themeColor(#ababab, #7e7e7e);
+  text-shadow: var(--bl-text-shadow);
+
+  .bl-statistic-line {
+    font-size: 20px;
+  }
+  .bl-array-line {
+    font-size: 17px;
+    padding-bottom: 10px;
+  }
+  .bl-article-line {
+    font-size: 17px;
+    padding-bottom: 10px;
+  }
+}
+
+.container-refresh {
+  font-size: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+
+  &:hover {
+    animation: rotation 10s linear infinite;
+    text-shadow: none;
+  }
+}
+
+.container-operator {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bl-scroll-color);
+  width: 4px;
+  height: 3px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: var(--bl-scroll-color-hover);
+  }
+}

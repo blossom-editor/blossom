@@ -1,7 +1,13 @@
 <template>
+  <bl-row class="container-name">收藏/关注</bl-row>
+  <bl-row class="container-sub-name" just="space-between">
+    Article Star
+    <span v-if="configViewStyle.isHomeStarCard" class="iconbl bl-array-line container-operator" @click="showStarCard(false)" />
+    <span v-else class="iconbl bl-article-line container-operator" @click="showStarCard(true)" />
+  </bl-row>
   <div class="article-stars-root">
     <div v-if="isEmpty(articles)" class="placeholder">无收藏的文章</div>
-    <div v-else class="star-item" v-for="article in articles" :key="article.id">
+    <div v-else v-for="article in articles" :class="[configViewStyle.isHomeStarCard ? 'star-card' : 'star-list']" :key="article.id">
       <div class="counterfoil" @click="toWebview(article)">
         <div class="iconbl bl-a-barcode-line open-barcode" v-if="article.openStatus == 1"></div>
         <div class="iconbl bl-a-linkspread-line"></div>
@@ -21,10 +27,15 @@
 <script setup lang="ts">
 import router from '@renderer/router'
 import { nextTick, onActivated, ref } from 'vue'
+import { useConfigStore } from '@renderer/stores/config'
+import type { ViewStyle } from '@renderer/stores/config'
 import { articleListApi } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import { isEmpty } from 'lodash'
+
+const configStore = useConfigStore()
+const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
 
 onActivated(() => {
   getArticleListApi()
@@ -50,6 +61,11 @@ const toWebview = (article: any) => {
   }
 }
 
+const showStarCard = (card: boolean) => {
+  configViewStyle.value.isHomeStarCard = card
+  configStore.setViewStyle(configViewStyle.value)
+}
+
 const reload = () => {
   nextTick(() => {
     getArticleListApi()
@@ -59,6 +75,7 @@ defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">
+@import './styles/container.scss';
 .article-stars-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);
@@ -66,6 +83,7 @@ defineExpose({ reload })
   align-content: flex-start;
   overflow: hidden;
   overflow-y: overlay;
+  padding-top: 10px;
 }
 
 .placeholder {
@@ -73,7 +91,7 @@ defineExpose({ reload })
   color: var(--bl-text-color-light);
 }
 
-.star-item {
+.star-card {
   @include box(210px, 70px, 210px, 210px);
   @include themeFilter(drop-shadow(2px 2px 2px rgb(180, 180, 180)), drop-shadow(2px 2px 2px rgb(0, 0, 0)));
   position: relative;
@@ -93,7 +111,7 @@ defineExpose({ reload })
   .content {
     @include flex(row, center, center);
     @include absolute(0);
-    @include themeColor(#ffffff, #C9C9C9);
+    @include themeColor(#ffffff, #c9c9c9);
     transition: 0.3s;
     z-index: 2;
     cursor: pointer;
@@ -173,6 +191,49 @@ defineExpose({ reload })
       @include absolute('', '', 2px, 12px);
       border-top: 1px dashed #f1f1f1;
       padding-top: 4px;
+    }
+  }
+}
+
+.star-list {
+  width: 210px;
+  max-width: 210px;
+  margin: 5px 10px 0px 10px;
+  padding: 2px 3px 2px 10px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+
+  // background-color: #f2f2f2;
+
+  &:hover {
+    @include themeBg(#f5f5f5, #171717);
+
+    .content {
+      .name {
+        color: var(--bl-text-color);
+      }
+    }
+  }
+
+  .counterfoil {
+    display: none;
+  }
+
+  .content {
+    @include box(100%, 100%);
+    @include flex(column, flex-start, flex-start);
+
+    .name {
+      @include ellipsis();
+      width: 100%;
+      font-size: 13px;
+      color: var(--bl-text-color-light);
+      transition: color 0.2s;
+    }
+
+    .infos {
+      display: none;
     }
   }
 }
