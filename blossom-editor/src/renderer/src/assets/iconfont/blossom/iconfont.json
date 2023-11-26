@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1440897",
+      "name": "老访客",
+      "font_class": "visit",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
       "icon_id": "24341192",
       "name": "box subtract-line",
       "font_class": "a-boxsubtract-line",
@@ -69,20 +76,6 @@
       "unicode_decimal": 59681
     },
     {
-      "icon_id": "24341450",
-      "name": "computer-line",
-      "font_class": "computer-line",
-      "unicode": "ea46",
-      "unicode_decimal": 59974
-    },
-    {
-      "icon_id": "24341646",
-      "name": "fixed position-line",
-      "font_class": "a-fixedposition-line",
-      "unicode": "ea47",
-      "unicode_decimal": 59975
-    },
-    {
       "icon_id": "24341217",
       "name": "box choice-line",
       "font_class": "a-boxchoice-line",
@@ -97,25 +90,11 @@
       "unicode_decimal": 59978
     },
     {
-      "icon_id": "24341988",
-      "name": "more 1-line",
-      "font_class": "a-morecross-line",
-      "unicode": "ea49",
-      "unicode_decimal": 59977
-    },
-    {
       "icon_id": "23655473",
       "name": "番茄钟",
       "font_class": "fanqiezhong",
       "unicode": "e618",
       "unicode_decimal": 58904
-    },
-    {
-      "icon_id": "4766472",
-      "name": "file-pdf",
-      "font_class": "file-pdf",
-      "unicode": "e7b8",
-      "unicode_decimal": 59320
     },
     {
       "icon_id": "4766474",
@@ -354,13 +333,6 @@
       "font_class": "reader-line",
       "unicode": "ea16",
       "unicode_decimal": 59926
-    },
-    {
-      "icon_id": "12568844",
-      "name": "条形码",
-      "font_class": "tiaoxingma",
-      "unicode": "e812",
-      "unicode_decimal": 59410
     },
     {
       "icon_id": "24341130",

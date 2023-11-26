@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconbl"; /* Project id 4118609 */
-  src: url('iconfont.woff2?t=1700243815597') format('woff2'),
-       url('iconfont.woff?t=1700243815597') format('woff'),
-       url('iconfont.ttf?t=1700243815597') format('truetype');
+  src: url('iconfont.woff2?t=1700981716798') format('woff2'),
+       url('iconfont.woff?t=1700981716798') format('woff'),
+       url('iconfont.ttf?t=1700981716798') format('truetype');
 }
 
 .iconbl {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.bl-visit:before {
+  content: "\e637";
 }
 
 .bl-a-boxsubtract-line:before {
@@ -49,14 +53,6 @@
   content: "\e921";
 }
 
-.bl-computer-line:before {
-  content: "\ea46";
-}
-
-.bl-a-fixedposition-line:before {
-  content: "\ea47";
-}
-
 .bl-a-boxchoice-line:before {
   content: "\e9d8";
 }
@@ -65,16 +61,8 @@
   content: "\ea4a";
 }
 
-.bl-a-morecross-line:before {
-  content: "\ea49";
-}
-
 .bl-fanqiezhong:before {
   content: "\e618";
-}
-
-.bl-file-pdf:before {
-  content: "\e7b8";
 }
 
 .bl-file-markdown:before {
@@ -211,10 +199,6 @@
 
 .bl-reader-line:before {
   content: "\ea16";
-}
-
-.bl-tiaoxingma:before {
-  content: "\e812";
 }
 
 .bl-a-barcode-line:before {
