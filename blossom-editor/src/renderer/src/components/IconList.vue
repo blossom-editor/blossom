@@ -3,7 +3,7 @@
     <div class="icon-desc">
       <h2>Blossom 图标</h2>
       {{ iconDesc }}
-      <div v-show="activeTab === 'weblogo'" style="padding: 10px 0">
+      <div v-show="activeTab === 'weblogo' || activeTab === 'blossom'" style="padding: 10px 0">
         <el-input v-model="iconSearch" size="large" style="width: 300px" placeholder="查询图标"></el-input>
       </div>
     </div>
@@ -22,7 +22,7 @@
       <el-tab-pane label="单色图标" name="blossom">
         <div class="icon-container">
           <div
-            v-for="icon in blossom"
+            v-for="icon in filterBlossomIcon"
             :class="['iconbl icon-item', 'bl-' + icon.font_class]"
             :key="icon.icon_id"
             @click="copyIcon('bl-' + icon.font_class)">
@@ -112,6 +112,15 @@ const iconSearch = ref('')
 
 const filterWebLogo = computed(() => {
   return weblogo.value.filter((icon: any) => {
+    if (isNull(iconSearch.value)) {
+      return true
+    }
+    return icon.font_class.toLowerCase().includes(iconSearch.value.toLowerCase())
+  })
+})
+
+const filterBlossomIcon = computed(() => {
+  return blossom.value.filter((icon: any) => {
     if (isNull(iconSearch.value)) {
       return true
     }
