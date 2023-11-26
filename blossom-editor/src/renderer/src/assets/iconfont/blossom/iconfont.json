@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24341113",
+      "name": "array-line",
+      "font_class": "array-line",
+      "unicode": "e9d7",
+      "unicode_decimal": 59863
+    },
+    {
+      "icon_id": "24341119",
+      "name": "article-line",
+      "font_class": "article-line",
+      "unicode": "ea47",
+      "unicode_decimal": 59975
+    },
+    {
       "icon_id": "1440897",
       "name": "老访客",
       "font_class": "visit",
@@ -74,6 +88,13 @@
       "font_class": "pen",
       "unicode": "e921",
       "unicode_decimal": 59681
+    },
+    {
+      "icon_id": "24341450",
+      "name": "computer-line",
+      "font_class": "computer-line",
+      "unicode": "ea46",
+      "unicode_decimal": 59974
     },
     {
       "icon_id": "24341217",
