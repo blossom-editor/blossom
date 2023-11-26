@@ -102,12 +102,13 @@
         <div @click="handleShowDocInfoDialog('add', curDoc.p)"><span class="iconbl bl-a-fileadd-line"></span>新增同级文档</div>
         <div v-if="curDoc.ty != 3" @click="handleShowDocInfoDialog('add', curDoc.i)"><span class="iconbl bl-a-fileadd-fill"></span>新增子级文档</div>
         <div @click="delDoc()"><span class="iconbl bl-a-fileprohibit-line"></span>删除文档</div>
-        <div v-if="curDoc.ty === 3" @click="createUrl('link')"><span class="iconbl bl-correlation-line"></span>复制引用</div>
+        <div v-if="curDoc.ty === 3" @click="createUrl('link')"><span class="iconbl bl-correlation-line"></span>复制双链引用</div>
         <div v-if="curDoc.ty != 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
         <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
-        <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口打开</div>
-        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>浏览器打开</div>
+        <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口查看</div>
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>网页端查看</div>
+        <!-- 导出及二级菜单 -->
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
@@ -118,9 +119,16 @@
             <div @click="articleBackup('HTML')"><span class="iconbl bl-HTML"></span>导出为本地 HTML</div>
           </div>
         </div>
-        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-a-linkspread-line"></span>复制链接</div>
+        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 2)">
+          <span class="iconbl bl-a-rightsmallline-line"></span>
+          <span class="iconbl bl-a-linkspread-line"></span>复制链接
+          <div class="menu-content-level2" :style="rMenuLevel2">
+            <div @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制网页端链接</div>
+            <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>复制临时访问链接</div>
+          </div>
+        </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog()">
-          <span class="iconbl bl-qr-code-line"></span>查看二维码
+          <span class="iconbl bl-qr-code-line"></span>网页端二维码
         </div>
       </div>
     </div>
@@ -166,6 +174,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { useServerStore } from '@renderer/stores/server'
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
 import { ref, onActivated, provide, onBeforeUnmount, nextTick } from 'vue'
@@ -176,7 +185,15 @@ import { isNotNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
 import { provideKeyDocTree } from '@renderer/views/doc/doc'
 import { grammar } from './scripts/markedjs'
-import { folderDelApi, articleDownloadApi, articleSyncApi, articleDelApi, articleBackupApi } from '@renderer/api/blossom'
+import {
+  folderDelApi,
+  articleDownloadApi,
+  articleSyncApi,
+  articleDelApi,
+  articleBackupApi,
+  articleTempKey,
+  articleTempH
+} from '@renderer/api/blossom'
 import { openExtenal, writeText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
 
@@ -187,6 +204,7 @@ import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
 
+const server = useServerStore()
 const { userinfo } = useUserStore()
 const { viewStyle } = useConfigStore()
 const route = useRoute()
@@ -319,6 +337,11 @@ const closeTreeDocsMenuShow = () => {
   rMenu.value.show = false
 }
 
+/**
+ * 显示右键二级菜单
+ * @param event
+ * @param childMenuCount 二级菜单的个数, 用于处理二级菜单显示位置
+ */
 const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 1) => {
   const domHeight = 30 * childMenuCount + 10
   if (document.body.clientHeight - event.clientY <= domHeight) {
@@ -338,16 +361,26 @@ const openArticleWindow = () => {
 
 /**
  * 使用浏览器打开公开链接, 或复制公开链接
+ * @param type:
+ *  open      : 网页端查看
+ *  copy      : 复制网页端链接
+ *  link      : 复制双链引用
+ *  tempVisit : 临时访问链接
  */
-const createUrl = (type: 'open' | 'copy' | 'link') => {
+const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit') => {
   let url: string = userinfo.params.WEB_ARTICLE_URL + curDoc.value.i
-  if (type == 'open') {
+  if (type === 'open') {
     openExtenal(url)
-  } else if (type == 'copy') {
+  } else if (type === 'copy') {
     writeText(url)
-  } else if (type == 'link') {
+  } else if (type === 'link') {
     url = `[${curDoc.value.n}](${userinfo.params.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
     writeText(url)
+  } else if (type === 'tempVisit') {
+    // console.log(server.serverUrl)
+    articleTempKey({ id: curDoc.value.i }).then((resp) => {
+      writeText(server.serverUrl + articleTempH + resp.data)
+    })
   }
 }
 
