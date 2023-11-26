@@ -1419,7 +1419,7 @@
       .toc > h4:hover,
       .toc > h5:hover,
       .toc > h6:hover {
-          color: #7843E9
+          color: #3b3b3b
       }
 
       .toc-h1 {
@@ -1446,7 +1446,8 @@
       .toc-h6 {
           padding-left: 50px
       }
-  </style><!--blossom styles-->
+  </style>
+  <!--blossom styles-->
   <style type="text/css">
       :root {
           --bl-editor-color: #707070;
@@ -1551,7 +1552,6 @@
 
       * {
           box-sizing: border-box;
-          font-family: 'consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
       }
 
       ::-webkit-scrollbar {
@@ -1585,13 +1585,12 @@
       .bl-preview {
           color: var(--bl-preview-color);
           background-color: var(--bl-preview-bg-color);
-          line-height: 20px;
+          line-height: 23px;
+          font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
       }
 
       .bl-preview * {
           user-select: text;
-          font-size: inherit;
-          font-family: inherit;
       }
 
       .bl-preview a {
@@ -1680,7 +1679,7 @@
       }
 
       .bl-preview hr {
-          border-color: #bfa1ff97;
+          border-color: #f4f4f4;
       }
 
       .bl-preview table {
@@ -1797,9 +1796,10 @@
 
       .bl-preview code {
           background-color: var(--bl-preview-code-bg-color);
-          padding: 0px 4px;
+          padding: 0 4px;
           border-radius: 3px;
-          margin: 0 5px
+          margin: 0 5px;
+          font-family: 'Consolas', 'Menlo', serif !important;
       }
 
       .bl-preview pre {
@@ -1810,6 +1810,7 @@
           box-shadow: var(--bl-preview-pre-box-shadow);
           font-size: 13px;
           position: relative;
+          font-family: 'Consolas', 'Menlo', serif !important;
       }
 
       .bl-preview pre .pre-copy {
@@ -1875,7 +1876,8 @@
 
       .hljs {
           color: #a9b7c6;
-          background: var(--bl-preview-pre-bg-color)
+          background: var(--bl-preview-pre-bg-color);
+          font-family: inherit;
       }
 
       .hljs::selection,
@@ -2023,7 +2025,29 @@
       if (type === 'copyPreCode') {
         let code = document.getElementById(data)
         if (code) {
-          navigator.clipboard.writeText(code.innerText)
+          // navigator.clipboard.writeText(code.innerText)
+          // navigator clipboard 需要https等安全上下文
+          if (navigator.clipboard && window.isSecureContext) {
+            // navigator clipboard 向剪贴板写文本
+            return navigator.clipboard.writeText(code.innerText)
+          } else {
+            // 创建text area
+            let textArea = document.createElement('textarea')
+            textArea.value = code.innerText
+            // 使text area不在viewport，同时设置不可见
+            textArea.style.position = 'absolute'
+            textArea.style.opacity = '0'
+            textArea.style.left = '-999999px'
+            textArea.style.top = '-999999px'
+            document.body.appendChild(textArea)
+            textArea.focus()
+            textArea.select()
+            return new Promise((res, rej) => {
+              // 执行复制命令并移除文本框
+              document.execCommand('copy') ? res() : rej()
+              textArea.remove()
+            })
+          }
         }
       }
     }
