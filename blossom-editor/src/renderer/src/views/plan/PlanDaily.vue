@@ -11,7 +11,7 @@
             </span>
           </bl-col>
           <bl-col width="70px">
-            <img :src="daily.img">
+            <img :src="daily.img" />
           </bl-col>
           <div class="del"></div>
           <span class="iconbl bl-a-closeline-line" @click="delDaily(daily.id)"></span>
@@ -24,14 +24,20 @@
     </bl-col>
   </div>
 
-  <el-dialog v-model="isShowPlanAddDialog" width="400" top="60px" style="margin-left: 300px;" :append-to-body="true"
-    :destroy-on-close="false" :close-on-click-modal="true" draggable>
+  <el-dialog
+    v-model="isShowPlanAddDialog"
+    width="400"
+    top="60px"
+    style="margin-left: 300px"
+    :append-to-body="true"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+    draggable>
     <PlanDailyInfo @saved="savedCallback"></PlanDailyInfo>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-
 import { onMounted, ref } from 'vue'
 import { planListDailyApi, planDelApi } from '@renderer/api/plan'
 import { isNull } from '@renderer/assets/utils/obj'
@@ -41,12 +47,19 @@ onMounted(() => {
   getPlanDaily()
 })
 
-interface PlanDaily { id: number, planStartTime: string, planEndTime: string, content: string, img: string, current: boolean }
+interface PlanDaily {
+  id: number
+  planStartTime: string
+  planEndTime: string
+  content: string
+  img: string
+  current: boolean
+}
 const dailys = ref<PlanDaily[]>([])
 
 const getPlanDaily = () => {
-  planListDailyApi().then(resp => {
-    dailys.value = resp.data.map(plan => {
+  planListDailyApi().then((resp) => {
+    dailys.value = resp.data.map((plan) => {
       if (isNull(plan.img)) {
         plan.img = getImg('cat-smile.png')
       } else if (!(plan.img as string).startsWith('http')) {
@@ -74,12 +87,11 @@ const savedCallback = () => {
 }
 
 const delDaily = (id: number) => {
-  planDelApi({ id: id }).then(_resp => {
+  planDelApi({ id: id }).then((_resp) => {
     getPlanDaily()
   })
 }
 //#endregion
-
 </script>
 
 <style scoped lang="scss">
@@ -97,7 +109,7 @@ const delDaily = (id: number) => {
       font-weight: 300;
       padding-right: 20px;
       text-align: right;
-      color: #8A8A8A;
+      color: #8a8a8a;
     }
 
     .daily,
@@ -109,18 +121,16 @@ const delDaily = (id: number) => {
       overflow: hidden;
 
       &:hover {
-        @include themeShadow(3px 3px 8px 1px #9E9E9E, 3px 3px 8px 1px #000000);
+        @include themeShadow(3px 3px 8px 1px #9e9e9e, 3px 3px 8px 1px #000000);
       }
     }
 
-
     .daily {
       @include box(205px, 100px, 205px, 205px, 100px, 100px);
-      @include themeShadow(2px 2px 8px 1px #DADADA, 2px 2px 8px 1px #121212);
+      @include themeShadow(2px 2px 8px 1px #dadada, 2px 2px 8px 1px #121212);
       position: relative;
 
       &:hover {
-
         .del,
         .bl-a-closeline-line {
           opacity: 1;
@@ -135,7 +145,7 @@ const delDaily = (id: number) => {
       .content {
         @include font(13px, 300);
         padding-left: 5px;
-        color: #8A8A8A;
+        color: #8a8a8a;
         text-align: left;
         white-space: normal;
         word-wrap: break-word;
@@ -173,7 +183,7 @@ const delDaily = (id: number) => {
     }
 
     .current {
-      @include themeShadow(2px 2px 8px 1px #9E9E9E, 2px 2px 8px 1px #000000);
+      @include themeShadow(2px 2px 8px 1px #9e9e9e, 2px 2px 8px 1px #000000);
       background-color: var(--el-color-primary);
 
       .time,
@@ -184,12 +194,11 @@ const delDaily = (id: number) => {
 
     .add-daily {
       @include box(205px, 50px, 205px, 205px, 50px, 50px);
-      @include themeShadow(2px 2px 8px 1px #ECECEC, 2px 2px 8px 1px #121212);
-      border: 1px dashed #9E9E9E;
-      color: #9E9E9E;
+      @include themeShadow(2px 2px 8px 1px #ececec, 2px 2px 8px 1px #121212);
+      border: 1px dashed #9e9e9e;
+      color: #9e9e9e;
       cursor: pointer;
     }
-
   }
 }
 </style>
