@@ -2,7 +2,7 @@
   <div :class="['blossom-header-root', props.bg ? 'blossom-header-bg' : '']">
     <bl-row class="head-row" width="auto" height="100%">
       <div class="blossom-logo" @click="toLogin">
-        <img src="@/assets/imgs/blossom/blossom_logo.png" />
+        <img :src="logo" :style="SYSTEM.THEME.LOGO_STYLE" />
       </div>
       <div class="project-name" @click="toRoute('/home')">{{ SYSTEM.SYS.NAME }}</div>
     </bl-row>
@@ -69,6 +69,8 @@ const props = defineProps({
     default: false
   }
 })
+
+const logo = new URL(`../../assets/imgs/logo/${SYSTEM.SYS.LOGO}`, import.meta.url).href
 
 const getImg = (img: string) => {
   return new URL(`../../assets/imgs/linklogo/${img}`, import.meta.url).href
@@ -171,6 +173,7 @@ const handlLogout = () => {
 
     img {
       margin: 5px 10px 5px 0;
+      border-radius: 50%;
     }
 
     .iconbl {

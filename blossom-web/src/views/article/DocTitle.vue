@@ -1,5 +1,5 @@
 <template>
-  <div :class="['doc-title']">
+  <div :class="titleClass">
     <div class="doc-name">
       <img
         class="menu-icon-img"
@@ -27,6 +27,7 @@
 import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@/assets/utils/obj'
+import SYSTEM from '@/assets/constants/blossom'
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
@@ -56,6 +57,18 @@ const tags = computed(() => {
     }
   })
   return icons
+})
+
+const titleClass = computed(() => {
+  if (!SYSTEM.THEME.SUBJECT_TITLE) {
+    return 'doc-title'
+  }
+
+  if (props.trees.t.includes('subject')) {
+    return 'subject-title'
+  }
+
+  return 'doc-title'
 })
 
 //#endregion

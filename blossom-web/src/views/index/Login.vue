@@ -2,9 +2,9 @@
   <div class="login-root">
     <div class="login-form">
       <bl-col just="center" class="logo" height="auto">
-        <img src="@/assets/imgs/blossom/blossom_logo.png" />
+        <img :src="logo" :style="SYSTEM.THEME.LOGO_STYLE" />
         <br />
-        <bl-row class="title" just="center">Blossom</bl-row>
+        <bl-row class="title" just="center">{{ SYSTEM.SYS.NAME }}</bl-row>
       </bl-col>
       <el-input class="login-input" size="default" v-model="formLogin.username">
         <template #prepend>用户名</template>
@@ -22,17 +22,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { storeToRefs } from 'pinia'
-// import { AuthStatus, storeKey, userinfoKey, useUserStore } from '@/stores/user'
-// import { loginApi, userinfoApi } from '@/api/auth'
-// import { Local } from '@/assets/utils/storage'
 import { toRoute } from '@/router'
 import { login } from '@/scripts/auth'
+import SYSTEM from '@/assets/constants/blossom'
 
-const formLogin = ref({
-  username: '',
-  password: ''
-})
+const logo = new URL(`../../assets/imgs/logo/${SYSTEM.SYS.LOGO}`, import.meta.url).href
+
+const formLogin = ref({ username: '', password: '' })
 
 const handleLogin = () => {
   login(formLogin.value.username, formLogin.value.password)
