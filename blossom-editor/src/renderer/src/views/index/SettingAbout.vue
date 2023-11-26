@@ -4,15 +4,10 @@
     <bl-row class="repository" just="center">
       <bl-col @click="toView(CONFIG.SYS.GITHUB_REPO)">
         <svg class="github" aria-hidden="true"><use xlink:href="#wl-github2"></use></svg>
-        <!-- <img
-          class="shields"
-          alt="GitHub Repo stars"
-          src="https://img.shields.io/github/stars/blossom-editor/blossom?logo=github&label=Stars&labelColor=AD8CF2&color=fff&cacheSeconds=60" /> -->
       </bl-col>
 
       <bl-col @click="toView(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px">
         <svg class="gitee" aria-hidden="true"><use xlink:href="#wl-gitee"></use></svg>
-        <!-- <img class="shields" src="https://gitee.com/blossom-editor/blossom/badge/star.svg?theme=white" /> -->
       </bl-col>
     </bl-row>
 
@@ -72,7 +67,7 @@
       <ol>
         <li v-for="ref in references">
           <bl-row>
-            <span style="width: 130px">{{ ref.name }}</span
+            <span style="width: 180px">{{ ref.name }}</span
             >: <a :href="ref.url">{{ ref.url }}</a>
           </bl-row>
         </li>
@@ -104,7 +99,7 @@ import { toView } from '@renderer/assets/utils/util'
 
 const references = [
   { name: '基础icon(作者:宗伟)', url: 'https://www.iconfont.cn/collections/detail?cid=35578' },
-  { name: 'Fluentui-Emoji', url: 'https://github.com/microsoft/fluentui-emoji' },
+  { name: 'Microsoft Fluentui Emoji', url: 'https://github.com/microsoft/fluentui-emoji' },
   { name: 'JetBrains Mono', url: 'https://www.jetbrains.com/lp/mono/' }
 ]
 

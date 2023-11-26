@@ -21,7 +21,7 @@ import type { RouteRecordName } from 'vue-router'
 const includeRouter = ref<any>(['Home'])
 
 onMounted(() => {
-  checkToken()
+  // checkToken()
 })
 
 const curRoute = ref<RouteRecordName>('Home')
@@ -36,8 +36,6 @@ watch(
     if (newRoute.name) {
       curRoute.value = newRoute.name
     }
-    console.log('name: ', newRoute.name)
-
     if (newRoute.meta.keepAlive && includeRouter.value.indexOf(newRoute.name) === -1) {
       includeRouter.value.push(newRoute.name)
     }
