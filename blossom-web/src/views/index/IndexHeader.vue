@@ -179,7 +179,6 @@ const handlLogout = () => {
     }
 
     &:hover {
-      font-weight: bold;
       color: #fff3fc;
     }
   }
