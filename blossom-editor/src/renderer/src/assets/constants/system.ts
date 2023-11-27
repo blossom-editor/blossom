@@ -1,4 +1,4 @@
-const blossom: any = {
+const blossom = {
   /**
    * 基础配置
    */
@@ -14,6 +14,13 @@ const blossom: any = {
     GITHUB_RELEASE: 'https://github.com/blossom-editor/blossom/releases',
     GITEE_REPO: 'https://gitee.com/blossom-editor/blossom'
   },
+
+  // 试用地址和账号
+  TRY_USE: {
+    serverUrl: 'https://www.wangyunf.com/bl',
+    username: 'blos',
+    password: 'blos'
+  }
 }
 
 export default blossom

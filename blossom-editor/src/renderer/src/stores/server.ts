@@ -1,12 +1,14 @@
-import { defineStore } from 'pinia';
-import { Local } from '@renderer/assets/utils/storage';
+import { defineStore } from 'pinia'
+import { Local } from '@renderer/assets/utils/storage'
+import SYSTEM from '@renderer/assets/constants/system'
 
-export const storeKey = 'serverUrl';
-export const usernameKey = 'username';
+const isDemo = import.meta.env.MODE === 'tryuse'
 
+export const storeKey = 'serverUrl'
+export const usernameKey = 'username'
 
 const initServerUrl = () => {
-  const defaultUrl = 'http://127.0.0.1:9999'
+  const defaultUrl = isDemo ? SYSTEM.TRY_USE.serverUrl : ''
   Local.set(storeKey, defaultUrl)
   return defaultUrl
 }
@@ -14,7 +16,7 @@ const initServerUrl = () => {
 export const useServerStore = defineStore('serverStore', {
   state: () => ({
     serverUrl: Local.get(storeKey) || initServerUrl(),
-    serverUsername: Local.get(usernameKey) || '',
+    serverUsername: Local.get(usernameKey) || ''
   }),
   actions: {
     async setServerUrl(url: string) {
@@ -26,4 +28,4 @@ export const useServerStore = defineStore('serverStore', {
       Local.set(usernameKey, username)
     }
   }
-});
+})
