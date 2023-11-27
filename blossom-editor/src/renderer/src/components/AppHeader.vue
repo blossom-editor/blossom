@@ -1,8 +1,7 @@
 <template>
   <div class="app-header-root">
-    <div v-if="platform() === 'windows'">
-      <img v-if="isDark" class="logo-img" src="@renderer/assets/imgs/blossom_logo_dark.png" />
-      <img v-else class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
+    <div v-if="isWindows()">
+      <img class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
     </div>
     <div class="drag"></div>
     <div class="window-workbench">
@@ -15,12 +14,12 @@
       </el-tooltip>
 
       <el-tooltip content="最佳窗口大小" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-        <div class="iconbl bl-computer-line" @click="setBestSize"></div>
+        <div v-if="isElectron()" class="iconbl bl-computer-line" @click="setBestSize"></div>
       </el-tooltip>
 
-      <div v-if="platform() === 'windows'" class="iconbl bl-subtract-line" @click="windowMin"></div>
-      <div v-if="platform() === 'windows'" :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
-      <div v-if="platform() === 'windows'" class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
+      <div v-if="isElectron() && isWindows()" class="iconbl bl-subtract-line" @click="windowMin"></div>
+      <div v-if="isElectron() && isWindows()" :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
+      <div v-if="isElectron() && isWindows()" class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
     </div>
   </div>
 
@@ -32,10 +31,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { toRoute } from '@renderer/router'
-import { useDark } from '@vueuse/core'
 import { windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
-import { platform } from '@renderer/assets/utils/util'
+import { isWindows, isElectron } from '@renderer/assets/utils/util'
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
@@ -55,7 +53,6 @@ const checkFullScreen = () => {
   return false
 }
 
-const isDark = useDark()
 const isShowWebDrawer = ref(false)
 const isFullScreen = ref(checkFullScreen())
 
@@ -87,7 +84,6 @@ const handleResize = () => {
     @include box($width-workbench, 100%);
     @include flex(row, flex-end, center);
     color: var(--el-color-primary);
-    // border-bottom: 1px solid var(--el-border-color);
 
     div {
       @include box(40px, 100%);

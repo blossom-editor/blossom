@@ -107,7 +107,8 @@
 
         <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
         <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口查看</div>
-        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>网页端查看</div>
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
+        <div v-if="curDoc.ty === 3" @click="createUrl('tempVisit', true)"><span class="iconbl bl-visit"></span>浏览器临时访问</div>
         <!-- 导出及二级菜单 -->
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
           <span class="iconbl bl-a-rightsmallline-line"></span>
@@ -308,11 +309,12 @@ const ArticleDocTreeRightMenuRef = ref()
 const ArticleTreeWorkbenchRef = ref()
 
 /**
- * 显示有检查菜单
+ * 显示右键菜单
  * @param doc 文档
  * @param event 事件
  */
 const handleClickRightMenu = (doc: DocTree, event: MouseEvent) => {
+  event.preventDefault()
   if (!doc) {
     return
   }
@@ -345,7 +347,7 @@ const closeTreeDocsMenuShow = () => {
 const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 1) => {
   const domHeight = 30 * childMenuCount + 10
   if (document.body.clientHeight - event.clientY <= domHeight) {
-    rMenuLevel2.value.top = domHeight * -1 + 20 + 'px'
+    rMenuLevel2.value.top = domHeight * -1 + 30 + 'px'
   } else {
     rMenuLevel2.value.top = '0px'
   }
@@ -366,8 +368,9 @@ const openArticleWindow = () => {
  *  copy      : 复制网页端链接
  *  link      : 复制双链引用
  *  tempVisit : 临时访问链接
+ * @param open: 生成链接后是否直接打开
  */
-const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit') => {
+const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean = false) => {
   let url: string = userinfo.params.WEB_ARTICLE_URL + curDoc.value.i
   if (type === 'open') {
     openExtenal(url)
@@ -379,7 +382,11 @@ const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit') => {
   } else if (type === 'tempVisit') {
     // console.log(server.serverUrl)
     articleTempKey({ id: curDoc.value.i }).then((resp) => {
-      writeText(server.serverUrl + articleTempH + resp.data)
+      url = server.serverUrl + articleTempH + resp.data
+      writeText(url)
+      if (open) {
+        openExtenal(url)
+      }
     })
   }
 }

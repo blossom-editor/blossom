@@ -39,7 +39,7 @@ router.addRoute(
   }
 )
 
-router.addRoute({ path: '/articleViewWindow', name: 'articleViewWindow', component: ArticleViewWindow, meta: { keepAlive: true } })
+router.addRoute({ path: '/articleViewWindow', name: 'ArticleViewWindow', component: ArticleViewWindow, meta: { keepAlive: true } })
 router.addRoute({ path: '/iconListIndexWindow', name: 'IconListIndexWindow', component: IconListIndex, meta: { keepAlive: true } })
 router.addRoute({ path: '/articleReferenceWindow', name: 'ArticleReferenceWindow', component: ArticleReference, meta: { keepAlive: true } })
 router.addRoute({ path: '/articleHistory', name: 'ArticleHistory', component: ArticleHistory, meta: { keepAlive: true } })

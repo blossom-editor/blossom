@@ -31,7 +31,6 @@
     font-weight: 200;
     border: 0;
     overflow-y: overlay;
-    // overflow-y: scroll;
     // 基础的 padding
     --el-menu-base-level-padding: 25px;
     // 每级别的的缩进
@@ -69,7 +68,7 @@
 
         .el-sub-menu__icon-arrow {
           color: var(--bl-text-color-light);
-          right: calc(230px - var(--el-menu-level) * 10px);
+          left: calc(10px + (var(--el-menu-level) * 10px));
           font-size: 12px;
           width: 0.8em;
           height: 0.8em;

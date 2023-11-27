@@ -78,11 +78,12 @@ import { handleUploadSeccess, handleUploadError } from '@renderer/views/picture/
 import { isEmpty } from 'lodash'
 import { printScreen, readImageToDataUrl, readImageToPNG, writeText } from '@renderer/assets/utils/electron'
 import { isBlank } from '@renderer/assets/utils/obj'
-import { getNowTime, platform } from '@renderer/assets/utils/util'
+import { getNowTime, isMacOS, isElectron } from '@renderer/assets/utils/util'
 import { isDark, changeTheme } from '@renderer/scripts/global-theme'
 import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
+  console.log(`blossom => 是否 Electron 运行环境：${isElectron()}`)
   printscreenAfter()
 })
 
@@ -109,7 +110,7 @@ const copyType = ref('markdown')
  * @param isShow 是否显示, 传入否时, 将会根据当前状态取反, 否则设置为 isShow
  */
 const handlePrintScreenUpload = (isShow?: boolean) => {
-  if (platform() !== 'windows') {
+  if (isMacOS() || !isElectron()) {
     Notify.warning('您所在的平台暂不支持截图功能', '抱歉')
     return
   }
@@ -160,15 +161,17 @@ const invokePrintScreen = () => {
  * 截图后处理
  */
 const printscreenAfter = () => {
-  //@ts-ignore
-  window.electronAPI.printScreenAfter((_event: any, psCode: any): void => {
-    if (psCode == 1) {
-      handlePrintScreenUpload(true)
-      setTimeout(() => {
-        printScreenImgUrl.value = readImageToDataUrl()
-      }, 0)
-    }
-  })
+  if (isElectron()) {
+    //@ts-ignore
+    window.electronAPI.printScreenAfter((_event: any, psCode: any): void => {
+      if (psCode == 1) {
+        handlePrintScreenUpload(true)
+        setTimeout(() => {
+          printScreenImgUrl.value = readImageToDataUrl()
+        }, 0)
+      }
+    })
+  }
 }
 
 /**
@@ -178,7 +181,7 @@ const printscreenUpload = () => {
   const buffer = readImageToPNG()
   const blob = new Blob([buffer])
   const formData = new FormData()
-  let filename
+  let filename: string | Blob
   if (isBlank(printScreenName.value)) {
     filename = `PRINTSCREEN_${getNowTime()}.png`
   } else {

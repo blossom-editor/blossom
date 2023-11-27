@@ -311,6 +311,38 @@ export const platform = (): 'windows' | 'darwin' => {
   return 'windows'
 }
 
+export const isWindows = () => {
+  return platform() === 'windows'
+}
+
+export const isMacOS = () => {
+  return platform() === 'darwin'
+}
+
+/**
+ * 判断是否 electron
+ * https://github.com/cheton/is-electron/tree/master
+ * @returns true / false
+ */
+export const isElectron = () => {
+  // Renderer process
+  if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
+    return true
+  }
+
+  // Main process
+  if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!process.versions.electron) {
+    return true
+  }
+
+  // Detect the user agent when the `nodeIntegration` option is set to false
+  if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+    return true
+  }
+
+  return false
+}
+
 const images = ['.jpeg', '.jpg', '.gif', '.png', '.apng', '.bmp', '.pic', '.svg', '.tif', '.tiff', '.webp', '.jfif', '.ico']
 
 /**

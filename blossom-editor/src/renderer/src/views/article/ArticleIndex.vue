@@ -69,7 +69,7 @@
       <div :class="['bl-preview-toc-absolute', tocsExpand ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
         <div class="toc-title" ref="TocTitleRef">
           目录
-          <span v-show="tocsExpand" style="font-size: 10px">({{ platform() === 'darwin' ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
+          <span v-show="tocsExpand" style="font-size: 10px">({{ isMacOS() ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
         </div>
         <div class="toc-content" v-show="tocsExpand">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
@@ -99,8 +99,8 @@
         class="editor-right-menu"
         :style="{ left: editorRightMenu.clientX + 'px', top: editorRightMenu.clientY + 'px' }">
         <div class="menu-content">
-          <div class="menu-item" @click="rightMenuCopy"><span class="iconbl bl-copy-line"></span>复制</div>
-          <div class="menu-item" @click="rightMenuPaste"><span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴</div>
+          <div v-if="isElectron()" class="menu-item" @click="rightMenuCopy"><span class="iconbl bl-copy-line"></span>复制</div>
+          <div v-if="isElectron()" class="menu-item" @click="rightMenuPaste"><span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴</div>
           <div class="menu-item">
             <!-- 
               :data="{ pid: curArticle?.pid }" -->
@@ -156,7 +156,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@rendere
 // utils
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
-import { sleep, platform } from '@renderer/assets/utils/util'
+import { sleep, isMacOS, isElectron } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
@@ -727,6 +727,7 @@ const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rightMenuHeight = 215
 
 const handleEditorClickRight = (event: MouseEvent) => {
+  event.preventDefault()
   editorRightMenu.value = { show: false, clientX: 0, clientY: 0 }
   let y = event.clientY
   if (document.body.clientHeight - event.clientY < rightMenuHeight) {

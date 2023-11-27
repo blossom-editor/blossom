@@ -54,7 +54,7 @@
 
     <bl-row just="flex-end" class="web-collect-title">
       <span class="title-remind" style="">右键点击卡片修改</span>
-      <span class="iconbl bl-add-line" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="showForm()"></span>
+      <span class="iconbl bl-add-line" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="showForm($event)"></span>
       <span class="iconbl bl-refresh-smile" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="getWebAll"></span>
       Quick Access
     </bl-row>
@@ -64,7 +64,7 @@
           {{ collect.title }}
         </bl-row>
         <div class="web-collect-content">
-          <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm(web)">
+          <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm($event, web)">
             <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
             <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
               <use :xlink:href="'#' + web.icon"></use>
@@ -106,7 +106,8 @@ const getWebAll = () => {
 
 const webForm = ref<any>({})
 const saveFormStyle = ref<any>({})
-const showForm = (updWeb?: any) => {
+const showForm = (event: MouseEvent, updWeb?: any) => {
+  event.preventDefault()
   saveFormStyle.value = { display: 'block' }
   if (isNotNull(updWeb)) {
     Object.assign(webForm.value, updWeb)

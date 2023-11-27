@@ -96,7 +96,7 @@
               </template>
               <div class="item iconbl bl-problem-line"></div>
             </el-tooltip>
-            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)" @click.right="copyMarkdownUrl(pic.url, pic.name)"></div>
+            <div class="item iconbl bl-copy-line" @click="copyUrl(pic.url)" @click.right="copyMarkdownUrl(pic.url, pic.name, $event)"></div>
             <div class="item iconbl bl-a-clouddownload-line" @click="download(pic.url)"></div>
             <div v-if="pic.starStatus == 0" class="item iconbl bl-star-line" @click="starPicture(pic)"></div>
             <div v-else-if="pic.starStatus == 1" class="item iconbl bl-star-fill" @click="starPicture(pic)"></div>
@@ -277,7 +277,8 @@ const copyUrl = (url: string) => {
   ElMessage.info({ message: '已复制链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }
 
-const copyMarkdownUrl = (url: string, picName: string) => {
+const copyMarkdownUrl = (url: string, picName: string, event: MouseEvent) => {
+  event.preventDefault()
   writeText(`![${picName}](${url})`)
   ElMessage.info({ message: '已复制 MD 格式链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }

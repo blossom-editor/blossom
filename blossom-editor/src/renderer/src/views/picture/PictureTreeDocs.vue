@@ -229,6 +229,7 @@ const rMenuHeight = 151 // 固定的菜单高度, 每次增加右键菜单项时
  * @param event 事件
  */
 const handleClickRight = (doc: DocTree, event: MouseEvent) => {
+  event.preventDefault()
   if (!doc) {
     return
   }
