@@ -19,6 +19,12 @@
 import { ref, watch, onMounted } from 'vue'
 import router from '@renderer/router'
 import indexAside from './index/IndexAside.vue'
+import { isElectron } from '@renderer/assets/utils/util'
+
+onMounted(() => {
+  console.log(`blossom => 是否 Electron 容器：${isElectron()}`)
+  console.log(`blossom => 当前运行环境：${import.meta.env.MODE}`)
+})
 
 const includeRouter = ref<any>(['settingIndex'])
 
@@ -30,8 +36,6 @@ watch(
     }
   }
 )
-
-onMounted(() => {})
 </script>
 
 <style scoped lang="scss">
