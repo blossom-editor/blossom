@@ -83,7 +83,6 @@ import { isDark, changeTheme } from '@renderer/scripts/global-theme'
 import Notify from '@renderer/scripts/notify'
 
 onMounted(() => {
-  console.log(`blossom => 是否 Electron 运行环境：${isElectron()}`)
   printscreenAfter()
 })
 

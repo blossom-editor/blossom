@@ -84,7 +84,6 @@ export class Request {
           return data
         } else if (data.code === 'AUTH-40101') {
           /* 授权被拦截, 则需要退回登录页请求 */
-          console.log('授权失败, 重置登录状态')
           userStore.reset()
           toLogin()
           return Promise.reject(res)
