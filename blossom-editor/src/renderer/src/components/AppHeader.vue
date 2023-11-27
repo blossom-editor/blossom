@@ -5,6 +5,8 @@
     </div>
     <div class="drag"></div>
     <div class="window-workbench">
+      <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
+
       <el-tooltip content="查看图标" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
         <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>
@@ -23,7 +25,7 @@
     </div>
   </div>
 
-  <el-drawer class="web-collect-drawer" size="420" v-model="isShowWebDrawer">
+  <el-drawer class="web-collect-drawer" size="420" v-model="isShowWebDrawer"> 
     <WebCollect></WebCollect>
   </el-drawer>
 </template>
@@ -34,6 +36,9 @@ import { toRoute } from '@renderer/router'
 import { windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
 import { isWindows, isElectron } from '@renderer/assets/utils/util'
+import { useThemeStore } from '@renderer/stores/theme'
+
+const themeStrore = useThemeStore()
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
@@ -67,7 +72,7 @@ const handleResize = () => {
   @include flex(row, space-between, center);
 
   $width-img: 30px;
-  $width-workbench: 160px;
+  $width-workbench: 180px;
   $width-drag: calc(100% - #{$width-img} - #{$width-workbench});
 
   .logo-img {
