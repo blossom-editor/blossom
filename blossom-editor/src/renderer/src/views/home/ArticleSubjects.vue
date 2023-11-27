@@ -99,7 +99,7 @@ const toToc = (articleId: number) => {
 $width-item: 210px;
 
 .subject-card {
-  @include flex(column, flex-start, flex-start);
+  @include flex(column, flex-end, flex-start);
   @include box($width-item, 90px, $width-item, $width-item);
   @include themeShadow(0 3px 5px 0 #cacaca, 0 3px 3px #000000);
   @include themeBg(
@@ -135,13 +135,13 @@ $width-item: 210px;
     @include box($width-item, 40px);
     @include font(14px, 300);
     @include themeColor(#3e3e3e, #b3b3b3);
+    @include themeBg(#ffffffe1, #151515D2);
     @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
     @include ellipsis();
     line-height: 40px;
     padding: 0 10px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    backdrop-filter: blur(5px);
     transition: transform 0.3s;
     z-index: 4;
   }
@@ -152,7 +152,7 @@ $width-item: 210px;
     @include themeShadow(inset 0 3px 10px rgb(84, 84, 84), inset 0 3px 10px rgb(0, 0, 0));
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
-    transition: opacity 1.5s;
+    transition: opacity 1s;
     opacity: 0;
   }
 
