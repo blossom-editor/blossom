@@ -16,18 +16,19 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
+    envDir: resolve('src/env'),
     plugins: [
       vue(),
       visualizer({
         emitFile: false,
-        filename: "stats.html",
+        filename: 'stats.html'
       }),
       // ElementPlus 按需引入的插件
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver()]
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver()]
       })
     ],
     resolve: {
@@ -42,7 +43,7 @@ export default defineConfig({
            * 如果引入多个文件，可以使用
            * '@import "@/assets/scss/globalVariable1.scss";@import"@/assets/scss/globalVariable2.scss";'
            */
-          additionalData: '@import "@renderer/assets/styles/config.scss";',
+          additionalData: '@import "@renderer/assets/styles/config.scss";'
         }
       }
     },
@@ -55,7 +56,7 @@ export default defineConfig({
           //@ts-ignore
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+              return id.toString().split('node_modules/')[1].split('/')[0].toString()
             }
           }
         }
