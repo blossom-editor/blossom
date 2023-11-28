@@ -37,6 +37,18 @@ public class PropertiesCheckListener implements ApplicationListener<ApplicationE
                 get(env, "project.iaas.blos.domain"),
                 get(env, "project.iaas.blos.default-path")
         );
+
+        String defaultPath = get(env, "project.iaas.blos.default-path");
+
+        if (StrUtil.isBlank(defaultPath)) {
+            log.error("【配置错误】你需要填写图片的默认存储地址 project.iaas.blos.default-path");
+            throw new IllegalArgumentException("你需要填写图片的默认存储地址 project.iaas.blos.default-path");
+        }
+
+        if ("/".equals(defaultPath)) {
+            log.error("【配置错误】图片的默认存储地址(project.iaas.blos.default-path)不能是根目录 \"/\"");
+            throw new IllegalArgumentException("图片的默认存储地址(project.iaas.blos.default-path)不能是根目录 \"/\"");
+        }
     }
 
     private String get(ConfigurableEnvironment env, String prop) {
