@@ -109,7 +109,6 @@ defineExpose({ reload })
 
   .counterfoil,
   .content {
-    @include flex(row, center, center);
     @include absolute(0);
     @include themeColor(#ffffff, #c9c9c9);
     transition: 0.3s;
@@ -130,6 +129,7 @@ defineExpose({ reload })
 
   // 左侧存根
   .counterfoil {
+    @include flex(row, center, center);
     @include box(53px, 100%);
     padding: 5px;
 
@@ -169,6 +169,7 @@ defineExpose({ reload })
 
   //
   .content {
+    @include flex(row, center, center);
     @include box(157px, 100%);
     right: 0;
     padding: 5px 5px 5px 10px;
@@ -181,7 +182,14 @@ defineExpose({ reload })
     }
 
     .name {
-      @include box(100%, calc(100% - 12px));
+      @include box(140px, 45px);
+      @include absolute(10px, '', '', 12px);
+      line-height: 15px;
+      word-break: break-all;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
 
     .infos {
@@ -203,8 +211,6 @@ defineExpose({ reload })
   border-radius: 3px;
   transition: background-color 0.2s;
   cursor: pointer;
-
-  // background-color: #f2f2f2;
 
   &:hover {
     @include themeBg(#f5f5f5, #171717);
