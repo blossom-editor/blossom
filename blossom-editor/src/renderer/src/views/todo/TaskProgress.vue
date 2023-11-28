@@ -409,7 +409,7 @@ const showTaskContentInput = (task: TaskInfo) => {
  * 任务内容失去焦点, 保存数据
  */
 const blurTaskContentInput = (task: TaskInfo) => {
-  updTaskApi({ id: task.id, todoId: task.todoId, taskContent: task.taskContent }).then(() => {
+  updTaskApi({ id: task.id, todoId: task.todoId, taskName: task.taskName, taskContent: task.taskContent }).then(() => {
     task.updTaskContent = false
   })
 }
