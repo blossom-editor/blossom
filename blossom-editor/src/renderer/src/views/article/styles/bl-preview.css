@@ -242,7 +242,6 @@ table container
   background-color: var(--bl-preview-pre-bg-color);
   border-radius: var(--bl-preview-border-radius);
   box-shadow: var(--bl-preview-pre-box-shadow);
-  font-size: 13px;
   position: relative;
   overflow: hidden;
 }
@@ -295,7 +294,6 @@ table container
   background-color: inherit;
   border-radius: 0;
   margin: 0;
-  font-size: 13px;
 
   height: 100%;
   width: 100%;
