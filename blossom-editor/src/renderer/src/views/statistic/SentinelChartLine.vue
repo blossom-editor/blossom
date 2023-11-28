@@ -33,7 +33,6 @@ const props = defineProps({
   }
 })
 
-// -------------------- ref
 const rqLoading = ref<boolean>(true)
 const ChartLineMetricRef = ref<any>(null)
 let chartLineMetric: any
@@ -46,7 +45,6 @@ let chartData = {
   maxVisual: 0
 }
 
-// -------------------- methods
 /**
  * 查询指标数据
  * @param resource 资源

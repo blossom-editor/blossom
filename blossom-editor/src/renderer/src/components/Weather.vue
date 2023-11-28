@@ -85,17 +85,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onActivated } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 import { getAll, refreshApi } from '@renderer/api/weather'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
-onMounted(() => {
-  refreshWeatherTask()
-})
-
-onActivated(() => {
-  getWeather()
-})
+useLifecycle(
+  () => {
+    refreshWeatherTask()
+    getWeather()
+  },
+  () => {
+    getWeather()
+  }
+)
 
 const userStore = useUserStore()
 

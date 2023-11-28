@@ -22,8 +22,20 @@
 
 <script setup lang="ts">
 import { articleWordsApi, pictureStatApi } from '@renderer/api/blossom'
-import { onActivated, ref } from 'vue'
+import { ref } from 'vue'
 import { formatFileSize, formartNumber } from '@renderer/assets/utils/util'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
+
+useLifecycle(
+  () => {
+    getArticleWords()
+    getPictureStat()
+  },
+  () => {
+    getArticleWords()
+    getPictureStat()
+  }
+)
 
 let article = ref({ articleCount: 0, articleWords: 0 })
 let picture = ref({ pictureCount: 0, pictureSize: 0 })
@@ -39,11 +51,6 @@ const getPictureStat = () => {
     picture.value = resp.data
   })
 }
-
-onActivated(() => {
-  getArticleWords()
-  getPictureStat()
-})
 </script>
 
 <style scoped lang="scss">
