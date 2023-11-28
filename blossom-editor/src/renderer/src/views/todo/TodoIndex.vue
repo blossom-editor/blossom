@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-import { nextTick, onActivated, onMounted, ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import type { CalendarDateType, CalendarInstance } from 'element-plus'
 import { TodoList, TodoType } from './scripts/types'
 import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
@@ -85,18 +85,20 @@ import { isNotBlank } from '@renderer/assets/utils/obj'
 import { getDateFormat } from '@renderer/assets/utils/util'
 import TaskProgress from './TaskProgress.vue'
 import TodoStat from './TodoStat.vue'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const { viewStyle } = useConfigStore()
 
-onMounted(() => {
-  getTodos()
-  let today = getDateFormat()
-  toTask(today, today, 10)
-})
-
-onActivated(() => {
-  getTodos()
-})
+useLifecycle(
+  () => {
+    getTodos()
+    let today = getDateFormat()
+    toTask(today, today, 10)
+  },
+  () => {
+    getTodos()
+  }
+)
 
 //#region ----------------------------------------< 日历 >--------------------------------------
 

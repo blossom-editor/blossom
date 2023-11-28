@@ -78,19 +78,17 @@
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { webAllApi, webSaveApi, webDelApi } from '@renderer/api/web'
 import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
-onMounted(() => {
-  getWebAll()
-})
-
-onActivated(() => {
-  getWebAll()
-})
+useLifecycle(
+  () => getWebAll(),
+  () => getWebAll()
+)
 
 const data = ref<any>([])
 const getWebAll = () => {

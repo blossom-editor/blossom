@@ -193,13 +193,18 @@ import { useArticleHtmlEvent } from './scripts/article-html-event'
 const PictureViewerInfo = defineAsyncComponent(() => import('@renderer/views/picture/PictureViewerInfo.vue'))
 // const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
 const EditorStatus = defineAsyncComponent(() => import('./EditorStatus.vue'))
+let isMounted = false
 
 onMounted(() => {
   initEditor()
   initScroll()
   addListenerScroll()
   initAutoSaveInterval()
-  // window.onHtmlEventDispatch = onHtmlEventDispatch
+  if (!isMounted) {
+    console.log('onMounted')
+    enterView()
+    bindKeys()
+  }
 })
 onBeforeUnmount(() => {
   unbindKeys()
@@ -208,8 +213,12 @@ onBeforeUnmount(() => {
   distoryAutoSaveInterval()
 })
 onActivated(() => {
-  enterView()
-  bindKeys()
+  if (isMounted) {
+    console.log('onActivated')
+    enterView()
+    bindKeys()
+  }
+  isMounted = true
 })
 onDeactivated(() => {
   exitView()
@@ -724,7 +733,7 @@ const removeListenerScroll = () => {
 
 //#region ----------------------------------------< 编辑器右键 >----------------------------------------
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-const rightMenuHeight = 215
+const rightMenuHeight = isElectron() ? 215 : 155
 
 const handleEditorClickRight = (event: MouseEvent) => {
   event.preventDefault()

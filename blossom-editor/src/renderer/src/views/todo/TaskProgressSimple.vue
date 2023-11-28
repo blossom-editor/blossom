@@ -87,22 +87,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { todosApi, tasksApi } from '@renderer/api/todo'
 import { TaskInfo } from './scripts/types'
 import { isEmpty } from 'lodash'
 import { getDateFormat } from '@renderer/assets/utils/util'
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank } from '@renderer/assets/utils/obj'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
-onMounted(() => {
-  initChoiseTodoId()
-  getTodos()
-})
-
-onActivated(() => {
-  getTodos()
-})
+useLifecycle(
+  () => {
+    initChoiseTodoId()
+    getTodos()
+  },
+  () => getTodos()
+)
 
 const DAY_TODO_ID = 'day_todo_id'
 const HOME_CHOISE_TODO_ID = 'blossom-home-choise-todo-id'

@@ -35,20 +35,22 @@
 
 <script setup lang="ts">
 import router from '@renderer/router'
-import { ref, onActivated } from 'vue'
+import { ref } from 'vue'
 import { useConfigStore } from '@renderer/stores/config'
 import type { ViewStyle } from '@renderer/stores/config'
 import { subjectsApi } from '@renderer/api/blossom'
 import { isEmpty } from 'lodash'
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const configStore = useConfigStore()
 const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
 
-onActivated(() => {
-  getSubjects()
-})
+useLifecycle(
+  () => getSubjects(),
+  () => getSubjects()
+)
 
 let maxWords = 0
 const subjects = ref<any>([])
@@ -135,7 +137,7 @@ $width-item: 210px;
     @include box($width-item, 40px);
     @include font(14px, 300);
     @include themeColor(#3e3e3e, #b3b3b3);
-    @include themeBg(#ffffffe1, #151515D2);
+    @include themeBg(#ffffffe1, #151515d2);
     @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
     @include ellipsis();
     line-height: 40px;

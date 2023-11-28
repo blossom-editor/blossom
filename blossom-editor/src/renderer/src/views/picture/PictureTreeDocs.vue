@@ -128,7 +128,7 @@
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-import { ref, provide, onActivated, nextTick } from 'vue'
+import { ref, provide, nextTick } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import Workbench from './PictureTreeWorkbench.vue'
 import { docTreeApi, folderDelApi } from '@renderer/api/blossom'
@@ -138,12 +138,14 @@ import PictureTitle from './PictureTreeTitle.vue'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 import Notify from '@renderer/scripts/notify'
 import { ElMessageBox } from 'element-plus'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const configStore = useConfigStore()
 
-onActivated(() => {
-  getDocTree()
-})
+useLifecycle(
+  () => getDocTree(),
+  () => getDocTree()
+)
 
 let editorLoadingTimeout: NodeJS.Timeout
 const docTreeLoading = ref(true) // 文档菜单的加载动画

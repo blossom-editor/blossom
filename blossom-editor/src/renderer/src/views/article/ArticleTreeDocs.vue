@@ -178,7 +178,7 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@renderer/stores/server'
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
-import { ref, onActivated, provide, onBeforeUnmount, nextTick } from 'vue'
+import { ref, provide, onBeforeUnmount, nextTick } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleDownloadHtmlApi, docTreeApi } from '@renderer/api/blossom'
@@ -204,16 +204,23 @@ import ArticleTreeWorkbench from './ArticleTreeWorkbench.vue'
 import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const server = useServerStore()
 const { userinfo } = useUserStore()
 const { viewStyle } = useConfigStore()
 const route = useRoute()
 
-onActivated(() => {
-  getDocTree(false, false, false)
-  getRouteQueryParams()
-})
+useLifecycle(
+  () => {
+    getDocTree(false, false, false)
+    getRouteQueryParams()
+  },
+  () => {
+    getDocTree(false, false, false)
+    getRouteQueryParams()
+  }
+)
 
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', closeTreeDocsMenuShow)

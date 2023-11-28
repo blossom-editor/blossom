@@ -26,20 +26,21 @@
 
 <script setup lang="ts">
 import router from '@renderer/router'
-import { nextTick, onActivated, ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useConfigStore } from '@renderer/stores/config'
 import type { ViewStyle } from '@renderer/stores/config'
 import { articleListApi } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import { isEmpty } from 'lodash'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const configStore = useConfigStore()
 const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
-
-onActivated(() => {
-  getArticleListApi()
-})
+useLifecycle(
+  () => getArticleListApi(),
+  () => getArticleListApi()
+)
 
 const userStore = useUserStore()
 const articles = ref<any>([])

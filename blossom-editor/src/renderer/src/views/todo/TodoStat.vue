@@ -53,17 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { todoStatApi, taskStatApi, completedTodoApi, openTodoApi } from '@renderer/api/todo'
 import TodoChartCompleted from './TodoChartCompleted.vue'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 
-onMounted(() => {
-  getTaskStat()
-})
-
-onActivated(() => {
-  getTaskStat()
-})
+useLifecycle(
+  () => getTaskStat(),
+  () => getTaskStat()
+)
 
 const getTaskStat = () => {
   taskStatApi().then((resp) => {
