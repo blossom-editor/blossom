@@ -124,12 +124,12 @@
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-a-linkspread-line"></span>复制链接
           <div class="menu-content-level2" :style="rMenuLevel2">
-            <div @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制网页端链接</div>
+            <div v-if="curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制博客链接</div>
             <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>复制临时访问链接</div>
           </div>
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog()">
-          <span class="iconbl bl-qr-code-line"></span>网页端二维码
+          <span class="iconbl bl-qr-code-line"></span>博客二维码
         </div>
       </div>
     </div>
