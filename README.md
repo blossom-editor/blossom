@@ -1,9 +1,6 @@
 <p align="center">
 <img src="./doc/imgs/blossom_name.png" height="auto">
 </p>
-<!-- <p align="center" style="font-size: 30px;font-weight:500;">
-Blossom 1.8.1
-</p> -->
 <p align="center">
 <a href="https://www.wangyunf.com/blossom-demo/#/settingindex">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 文档</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 下载</a> 
 </p>
