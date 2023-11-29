@@ -244,6 +244,18 @@ api[1].list[2].list.push({
     url: 'http://127.0.0.1/article/import',
     desc: '文章导入',
 });
+api[1].list[2].list.push({
+    order: '11',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/temp/key',
+    desc: '创建文章的临时访问缓存',
+});
+api[1].list[2].list.push({
+    order: '12',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/temp/h',
+    desc: '临时查看文章',
+});
 api[1].list.push({
     alias: 'ArticleOpenController',
     order: '4',
@@ -483,11 +495,17 @@ api[1].list[10].list.push({
 api[1].list[10].list.push({
     order: '4',
     deprecated: 'false',
+    url: 'http://127.0.0.1/plan/upd/day',
+    desc: '修改每日计划  &lt;p&gt;只能修改标题和内容, 如果是修改日期等信息需要重新新增',
+});
+api[1].list[10].list.push({
+    order: '5',
+    deprecated: 'false',
     url: 'http://127.0.0.1/plan/add/daily',
     desc: '新增日常计划',
 });
 api[1].list[10].list.push({
-    order: '5',
+    order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/del',
     desc: '删除计划',
@@ -637,16 +655,22 @@ api[1].list[13].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/add',
-    desc: '保存',
+    desc: '新增',
 });
 api[1].list[13].list.push({
     order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/note/upd',
+    desc: '修改',
+});
+api[1].list[13].list.push({
+    order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/del',
     desc: '删除',
 });
 api[1].list[13].list.push({
-    order: '4',
+    order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/top',
     desc: '置顶/取消置顶',
