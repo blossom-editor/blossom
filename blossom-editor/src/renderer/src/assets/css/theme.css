@@ -1,6 +1,6 @@
 :root {
   /* 数字越大, 颜色越淡 */
-  --el-color-primary: #ad8cf2;
+  /* --el-color-primary: #ad8cf2;
   --el-color-primary-dark-2: rgba(173, 140, 242, 0.8);
   --el-color-primary-light-1: rgba(173, 140, 242, 0.9);
   --el-color-primary-light-2: rgba(173, 140, 242, 0.8);
@@ -10,7 +10,19 @@
   --el-color-primary-light-6: rgba(173, 140, 242, 0.4);
   --el-color-primary-light-7: rgba(173, 140, 242, 0.3);
   --el-color-primary-light-8: rgba(173, 140, 242, 0.2);
-  --el-color-primary-light-9: rgba(173, 140, 242, 0.1);
+  --el-color-primary-light-9: rgba(173, 140, 242, 0.1); */
+  --el-color-primary: rgb(119, 150, 73);
+  --el-color-primary-dark: rgb(119, 150, 73);
+  --el-color-primary-dark-2: rgba(119, 150, 73, 0.8);
+  --el-color-primary-light-1: rgba(119, 150, 73, 0.9);
+  --el-color-primary-light-2: rgba(119, 150, 73, 0.8);
+  --el-color-primary-light-3: rgba(119, 150, 73, 0.7);
+  --el-color-primary-light-4: rgba(119, 150, 73, 0.6);
+  --el-color-primary-light-5: rgba(119, 150, 73, 0.5);
+  --el-color-primary-light-6: rgba(119, 150, 73, 0.4);
+  --el-color-primary-light-7: rgba(119, 150, 73, 0.3);
+  --el-color-primary-light-8: rgba(119, 150, 73, 0.2);
+  --el-color-primary-light-9: rgba(119, 150, 73, 0.1);
 
   --el-color-success: #67c23a;
   --el-color-success-light-3: #95d475;

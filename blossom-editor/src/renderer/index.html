@@ -16,6 +16,9 @@
     " />
     <!-- 加载动画 -->
     <style>
+      :root {
+        --index-loading-color: #859e6052;
+      }
       html,
       body,
       #app {
@@ -26,43 +29,166 @@
       }
 
       .html-loading {
-        justify-content: center;
-        align-items: center;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
         -webkit-app-region: drag;
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(to bottom right, #a59aca, #5f479a);
+        /* background-image: linear-gradient(to bottom right, #a59aca, #5f479a); */
         /* background-image: linear-gradient(135deg, #bdc3c7, #2c3e50); */
         /* background-image: linear-gradient(135deg, #bbd2c5, #536976, #292e49); */
+        background-image: linear-gradient(135deg, #fff, #fff, #f5f5f5);
+        background-color: #fff;
         z-index: 999999;
+      }
+
+      .html-loading .header {
+        width: 100%;
+        height: 30px;
         display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .html-loading .header .logo {
+        width: 18px;
+        height: 18px;
+        margin: 0 6px;
+        border-radius: 50%;
+        background-color: #f5f5f5;
+      }
+      .html-loading .header .operator {
+        width: 180px;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .html-loading .header .operator .item {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+      }
+
+      .html-loading .main {
+        width: 100%;
+        height: calc(100% - 30px);
+        display: flex;
+        flex-direction: row;
+      }
+
+      .html-loading .aside {
+        width: 62px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .html-loading .aside .logo {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding-bottom: 5px;
+      }
+      .html-loading .aside .logo .img {
+        width: 44px;
+        height: 48px;
+        margin: 7px 7px 5px 7px;
+        background-color: #f5f5f5;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .html-loading .aside .logo .title {
+        font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+        width: 100%;
+        font-size: 12px;
+        font-weight: 700;
+        color: #f5f5f5;
+        text-align: center;
+      }
+
+      .html-loading .aside-operator {
+        height: calc(100% - 80px);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        border-top-right-radius: 10px;
+        background-color: #ededed;
+        box-shadow: 2px 3px 7px 2px rgba(49, 49, 49, 0.2);
+      }
+      .html-loading .aside-operator .menu {
+        height: calc(100% - 100px - 65px - 68px);
+        padding-top: 5px;
+      }
+      .html-loading .aside-operator .menu .item {
+        width: 40px;
+        height: 45px;
+        margin-top: 11px;
+        border-radius: 10px;
+        background-color: #e6e6e6;
+        overflow: hidden;
+      }
+      .html-loading .aside-operator .avatar {
+        width: 52px;
+        height: 52px;
+        margin: 0 1px 5px 0;
+        border-radius: 10px;
+        background-color: #e6e6e6;
+        overflow: hidden;
+      }
+      .html-loading .aside-operator .upload {
+        width: 48px;
+        height: 100px;
+        margin: 0 1px 5px 0;
+        border-radius: 10px;
+        background-color: #e6e6e6;
+        overflow: hidden;
+      }
+      .html-loading .aside-operator .setting {
+        width: 100%;
+        height: 65px;
+        background-color: #e6e6e6;
+        overflow: hidden;
+      }
+
+      .html-loading .loading-container {
+        width: calc(100% - 62px);
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
       }
 
       .html-loading-title {
         font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
         width: 200px;
-        top: 60%;
         font-size: 18px;
         line-height: 30px;
         margin-left: 40px;
-        color: #fff;
-        text-align: center;
-        opacity: 1;
-        z-index: 9999999999999;
+        text-shadow: 3px 3px 5px rgba(49, 49, 49, 0.3);
         text-align: left;
+        color: #859e60;
+        z-index: 9999999999999;
       }
 
       .html-loading-version {
         font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-        font-size: 15px;
-        color: #fff;
-        opacity: 0.5;
+        font-size: 13px;
+        color: #656565;
         position: absolute;
-        right: 15px;
+        right: 10px;
         bottom: 10px;
+        opacity: 0.5;
       }
 
       .loading {
@@ -90,8 +216,9 @@
         top: 0;
         width: 48px;
         height: 48px;
-        background: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        /* background: rgba(255, 255, 255, 0.85); */
+        background: #859e60;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         animation: animloader56 2s ease infinite;
       }
 
@@ -128,7 +255,7 @@
 
         12% {
           box-shadow:
-            0 48px rgba(255, 255, 255, 1),
+            0 48px var(--index-loading-color),
             48px 48px rgba(255, 255, 255, 0),
             48px 96px rgba(255, 255, 255, 0),
             0px 96px rgba(255, 255, 255, 0);
@@ -136,42 +263,42 @@
 
         25% {
           box-shadow:
-            0 48px rgba(255, 255, 255, 1),
-            48px 48px rgba(255, 255, 255, 1),
+            0 48px var(--index-loading-color),
+            48px 48px var(--index-loading-color),
             48px 96px rgba(255, 255, 255, 0),
             0px 96px rgba(255, 255, 255, 0);
         }
 
         37% {
           box-shadow:
-            0 48px rgba(255, 255, 255, 1),
-            48px 48px rgba(255, 255, 255, 1),
-            48px 96px rgba(255, 255, 255, 1),
+            0 48px var(--index-loading-color),
+            48px 48px var(--index-loading-color),
+            48px 96px var(--index-loading-color),
             0px 96px rgba(255, 255, 255, 0);
         }
 
         50% {
           box-shadow:
-            0 48px rgba(255, 255, 255, 1),
-            48px 48px rgba(255, 255, 255, 1),
-            48px 96px rgba(255, 255, 255, 1),
-            0px 96px rgba(255, 255, 255, 1);
+            0 48px var(--index-loading-color),
+            48px 48px var(--index-loading-color),
+            48px 96px var(--index-loading-color),
+            0px 96px var(--index-loading-color);
         }
 
         62% {
           box-shadow:
             0 48px rgba(255, 255, 255, 0),
-            48px 48px rgba(255, 255, 255, 1),
-            48px 96px rgba(255, 255, 255, 1),
-            0px 96px rgba(255, 255, 255, 1);
+            48px 48px var(--index-loading-color),
+            48px 96px var(--index-loading-color),
+            0px 96px var(--index-loading-color);
         }
 
         75% {
           box-shadow:
             0 48px rgba(255, 255, 255, 0),
             48px 48px rgba(255, 255, 255, 0),
-            48px 96px rgba(255, 255, 255, 1),
-            0px 96px rgba(255, 255, 255, 1);
+            48px 96px var(--index-loading-color),
+            0px 96px var(--index-loading-color);
         }
 
         87% {
@@ -179,7 +306,7 @@
             0 48px rgba(255, 255, 255, 0),
             48px 48px rgba(255, 255, 255, 0),
             48px 96px rgba(255, 255, 255, 0),
-            0px 96px rgba(255, 255, 255, 1);
+            0px 96px var(--index-loading-color);
         }
 
         100% {
@@ -190,6 +317,32 @@
             0px 96px rgba(255, 255, 255, 0);
         }
       }
+
+      .html-loading .aside .logo .img::after,
+      .html-loading .aside-operator .avatar::after,
+      .html-loading .aside-operator .upload::after,
+      .html-loading .aside-operator .setting::after,
+      .html-loading .aside-operator .menu .item::after {
+        /* 内容区域空状态时追加骨架屏样式 */
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform: translateX(-100%);
+        background: linear-gradient(90deg, transparent, rgba(225, 225, 225, 0.753), transparent);
+        animation: skeleton 1.5s infinite;
+      }
+
+      .html-loading .aside .logo .img::after {
+        background: linear-gradient(90deg, transparent, #ededed, transparent);
+      }
+
+      @keyframes skeleton {
+        /* 骨架屏的动画 */
+        100% {
+          transform: translateX(100%);
+        }
+      }
     </style>
   </head>
 
@@ -197,13 +350,48 @@
     <div id="app">
       <!-- 首页加载正常运行在这里 -->
       <div class="html-loading">
-        <div class="loading"></div>
-        <div class="html-loading-title">
-          <span style="font-size: 40px; font-weight: 700">Blossom</span>
-          <br />
-          <span style="font-size: 13px">加载中...</span>
+        <div class="header">
+          <div class="logo"></div>
+          <div class="operator">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+          </div>
         </div>
-        <div class="html-loading-version">V1.8.1</div>
+        <div class="main">
+          <div class="aside">
+            <div class="logo">
+              <div class="img"></div>
+              <div class="title">Blossom</div>
+            </div>
+            <div class="aside-operator">
+              <div class="menu">
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+                <div class="item"></div>
+              </div>
+              <div class="avatar"></div>
+              <div class="upload"></div>
+              <div class="setting"></div>
+            </div>
+          </div>
+          <div class="loading-container">
+            <div class="loading"></div>
+            <div class="html-loading-title">
+              <span style="font-size: 40px; font-weight: 700; letter-spacing: 2px">Blossom</span>
+              <br />
+              <span style="font-size: 13px">加载中...</span>
+            </div>
+            <div class="html-loading-version">Blossom | v1.9.0</div>
+          </div>
+        </div>
       </div>
       <script type="module" src="/src/main.ts"></script>
     </div>

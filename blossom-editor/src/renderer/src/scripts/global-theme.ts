@@ -6,24 +6,24 @@ const THEME_LIGHT_KEY = 'theme_light'
 const THEME_DARK_KEY = 'theme_dark'
 
 const DEFAULT_LIGHT = {
-  '--el-color-primary': '#AD8CF2',
-  '--el-color-primary-dark': 'rgba(173, 140, 242, 0.8)',
-  '--el-color-primary-dark-2': 'rgba(173, 140, 242, 0.8)',
-  '--el-color-primary-light-1': 'rgba(173, 140, 242, 0.9)',
-  '--el-color-primary-light-2': 'rgba(173, 140, 242, 0.8)',
-  '--el-color-primary-light-3': 'rgba(173, 140, 242, 0.7)',
-  '--el-color-primary-light-4': 'rgba(173, 140, 242, 0.6)',
-  '--el-color-primary-light-5': 'rgba(173, 140, 242, 0.5)',
-  '--el-color-primary-light-6': 'rgba(173, 140, 242, 0.4)',
-  '--el-color-primary-light-7': 'rgba(173, 140, 242, 0.3)',
-  '--el-color-primary-light-8': 'rgba(173, 140, 242, 0.2)',
-  '--el-color-primary-light-9': 'rgba(173, 140, 242, 0.1)',
-  '--bl-tag-color-open': '#7AC20C',
-  '--bl-tag-color-subject': '#FA8072',
-  '--bl-tag-color-toc': '#7274FA',
-  '--bl-todo-wait-color': '#d22d3b6b',
-  '--bl-todo-proc-color': '#fba85f6b',
-  '--bl-todo-comp-color': '#9974fe6b'
+  '--el-color-primary': 'rgb(119, 150, 73)',
+  '--el-color-primary-dark': 'rgba(119, 150, 73, 0.8)',
+  '--el-color-primary-dark-2': 'rgba(119, 150, 73, 0.8)',
+  '--el-color-primary-light-1': 'rgba(119, 150, 73, 0.9)',
+  '--el-color-primary-light-2': 'rgba(119, 150, 73, 0.8)',
+  '--el-color-primary-light-3': 'rgba(119, 150, 73, 0.7)',
+  '--el-color-primary-light-4': 'rgba(119, 150, 73, 0.6)',
+  '--el-color-primary-light-5': 'rgba(119, 150, 73, 0.5)',
+  '--el-color-primary-light-6': 'rgba(119, 150, 73, 0.4)',
+  '--el-color-primary-light-7': 'rgba(119, 150, 73, 0.3)',
+  '--el-color-primary-light-8': 'rgba(119, 150, 73, 0.2)',
+  '--el-color-primary-light-9': 'rgba(119, 150, 73, 0.1)',
+  '--bl-tag-color-open': '#A9BC8E',
+  '--bl-tag-color-subject': '#89A85A',
+  '--bl-tag-color-toc': '#C5C5C5',
+  '--bl-todo-wait-color': '#C7D0D6',
+  '--bl-todo-proc-color': '#ecd452',
+  '--bl-todo-comp-color': '#c0d695'
 }
 
 const DEFAULT_DARK = {
@@ -39,12 +39,12 @@ const DEFAULT_DARK = {
   '--el-color-primary-light-7': 'rgba(165, 184, 20, 0.3)',
   '--el-color-primary-light-8': 'rgba(165, 184, 20, 0.2)',
   '--el-color-primary-light-9': 'rgba(165, 184, 20, 0.1)',
-  '--bl-tag-color-open': '#7AC20C',
-  '--bl-tag-color-subject': '#FA8072',
-  '--bl-tag-color-toc': '#7274FA',
-  '--bl-todo-wait-color': '#d22d3b6b',
+  '--bl-tag-color-open': '#476716',
+  '--bl-tag-color-subject': '#D9B049',
+  '--bl-tag-color-toc': '#8E8C8E',
+  '--bl-todo-wait-color': '#505050A5',
   '--bl-todo-proc-color': '#fba85f6b',
-  '--bl-todo-comp-color': '#9974fe6b'
+  '--bl-todo-comp-color': '#476716'
 }
 
 const isDark = useDark()
