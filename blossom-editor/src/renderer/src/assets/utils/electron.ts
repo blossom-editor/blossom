@@ -140,17 +140,33 @@ export const writeText = (text: string): void => {
   if (isElectron()) {
     window.electronAPI.writeText(text, 'clipboard')
   } else {
-    const type = 'text/plain'
-    const blob = new Blob([text], { type })
-    const data = [new ClipboardItem({ [type]: blob })]
-    navigator.clipboard.write(data).then(
-      () => {
-        console.log('write success')
-      },
-      () => {
-        console.log('write failure ')
-      }
-    )
+    if (navigator.clipboard && window.isSecureContext) {
+      const type = 'text/plain'
+      const blob = new Blob([text], { type })
+      const data = [new ClipboardItem({ [type]: blob })]
+      navigator.clipboard.write(data).then(
+        () => {
+          console.log('write success')
+        },
+        () => {
+          console.log('write failure ')
+        }
+      )
+    } else {
+      let textArea = document.createElement('textarea')
+      textArea.value = text
+      textArea.style.position = 'absolute'
+      textArea.style.opacity = '0'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      return new Promise<void>((res, rej) => {
+        document.execCommand('copy') ? res() : rej()
+        textArea.remove()
+      })
+    }
   }
 }
 
