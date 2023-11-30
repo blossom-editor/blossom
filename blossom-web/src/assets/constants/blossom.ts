@@ -51,7 +51,7 @@ const blossom = {
     //   URL: 'https://www.wangyunf.com',
     //   LOGO: 'luban.png'
     // }
-  ]
+  ] as any[]
 }
 
 export default blossom
