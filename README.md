@@ -59,9 +59,9 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 <br/>
 
-# 赞助 Blossom
+# 🤝 赞助 Blossom
 
-Blossom 是一个 MIT 协议开源的笔记软件。MIT 是一个非常宽松的协议，意味着你可以随意使用该应用，修改源代码，或者通过该应用进行商业活动。**Blossom 不会向你收取任何的费用，你可以永久免费使用！**
+**Blossom 不会向你收取任何的费用，你可以永久免费使用！**
 
 但开源软件的收益目前很难维持生活，并且项目设计，开发，测试需要大量的时间和精力，如果你愿意赞助我的工作，将非常有助于该项目的成长，并激励我长期持续下去！
 
@@ -70,6 +70,8 @@ Blossom 是一个 MIT 协议开源的笔记软件。MIT 是一个非常宽松的
 | 赞助者 / Sponsors    | 赞助者 / Sponsors |
 | :------------------- | :---------------- |
 | i just walked away🏃 |                   |
+
+---
 
 <h4 align="center">你可以通过以下几种方式赞助 Blossom。</h4>
 
