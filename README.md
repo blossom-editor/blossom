@@ -55,4 +55,76 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 加入群聊进行沟通，反馈问题。
 
-<img src="./doc/imgs/qq.png" height="350">
+<img src="./doc/imgs/qq.png" height="250">
+
+<br/>
+
+# 赞助 Blossom
+
+Blossom 是一个 MIT 协议开源的笔记软件。MIT 是一个非常宽松的协议，意味着你可以随意使用该应用，修改源代码，或者通过该应用进行商业活动。**Blossom 不会向你收取任何的费用，你可以永久免费使用！**
+
+但开源软件的收益目前很难维持生活，并且项目设计，开发，测试需要大量的时间和精力，如果你愿意赞助我的工作，将非常有助于该项目的成长，并激励我长期持续下去！
+
+**感谢每一个位赞助者对 Blossom 的大力支持，Blossom 因为你们变得更好。**
+
+| 赞助者 / Sponsors    | 赞助者 / Sponsors |
+| :------------------- | :---------------- |
+| i just walked away🏃 |                   |
+
+<h4 align="center">你可以通过以下几种方式赞助 Blossom。</h4>
+
+<p align="center">
+<img src="./doc/imgs/sponsors/wechat.png" height="400">
+<img src="./doc/imgs/sponsors/ali.png" height="400">
+<img src="./doc/imgs/sponsors/aifadian.png" height="400">
+</p>
+
+<br/>
+
+# 更多图片
+
+!["编辑器"](./doc/imgs/article.png)
+
+<p align="center">编辑器</p>
+
+---
+
+!["双链笔记"](./doc/imgs/article_reference.png)
+
+<p align="center">双链笔记</p>
+
+---
+
+!["照片墙"](./doc/imgs/picture.png)
+
+<p align="center">照片墙</p>
+
+---
+
+!["日历计划"](./doc/imgs/todo.png)
+
+<p align="center">待办事项清单</p>
+
+---
+
+!["日历计划"](./doc/imgs/plan.png)
+
+<p align="center">日历计划</p>
+
+---
+
+!["便签管理"](./doc/imgs/note.png)
+
+<p align="center">便签管理</p>
+
+---
+
+!["博客"](./doc/imgs/blog_home_pc.png)
+
+<p align="center">博客</p>
+
+<p align="center">
+<img src="./doc/imgs/blog_home_m.png" height="600">
+<img src="./doc/imgs/blog_article.png" height="600" style="margin-left: 30px">
+</p>
+<p align="center">博客移动端</p>
