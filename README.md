@@ -69,7 +69,7 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 | 赞助者 / Sponsors    | 赞助者 / Sponsors |
 | :------------------- | :---------------- |
-| i just walked away🏃 |                   |
+| i just walked away🏃 | KalyanYang        |
 
 ---
 
