@@ -142,12 +142,18 @@ export const renderBlockquote = (quote: string) => {
   if (quote.startsWith('<p>[!NOTE]')) {
     clazz = 'bl-blockquote-blue'
     finalQuote = quote.replaceAll('<p>[!NOTE]', '<p>')
+  } else if (quote.startsWith('<p>[!TIP]')) {
+    clazz = 'bl-blockquote-blue'
+    finalQuote = quote.replaceAll('<p>[!TIP]', '<p>')
   } else if (quote.startsWith('<p>[!IMPORTANT]')) {
     clazz = 'bl-blockquote-purple'
     finalQuote = quote.replaceAll('<p>[!IMPORTANT]', '<p>')
   } else if (quote.startsWith('<p>[!WARNING]')) {
     clazz = 'bl-blockquote-yellow'
     finalQuote = quote.replaceAll('<p>[!WARNING]', '<p>')
+  } else if (quote.startsWith('<p>[!CAUTION]')) {
+    clazz = 'bl-blockquote-red'
+    finalQuote = quote.replaceAll('<p>[!CAUTION]', '<p>')
   }
 
   // else if (quote.startsWith('<p>[!TIP]')) {
