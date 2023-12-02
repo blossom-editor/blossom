@@ -8,6 +8,8 @@ declare interface DocTree {
   p: number
   /** name */
   n: string
+  /** 是否修改名称 */
+  updn: boolean
   /** open: 0:否;1:是; */
   o: number
   /** 版本有差异, 公开文章才会有此项 */
