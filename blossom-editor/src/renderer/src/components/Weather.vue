@@ -17,7 +17,7 @@
       <div class="weather-title"></div>
       <div class="weather-body">
         <img :src="weather.now.img" style="width: 190px; height: 190px" />
-        <!-- <img src="@renderer/assets/imgs/weather/feng.png" style="width: 190px;height: 190px;"> -->
+        <!-- <img src="@renderer/assets/imgs/weather/qing-moon.png" style="width: 190px;height: 190px;"> -->
         <div class="temp-wrapper">
           <!-- 温度 -->
           <span class="now-temp">
@@ -127,7 +127,14 @@ const weather = ref({
 const getWeather = () => {
   getAll({ location: userStore.userinfo.location }).then((resp) => {
     if (resp.data.now) {
-      resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+      if (resp.data.now.iconValue === '#wt-qing') {
+        let nowHours = new Date().getHours()
+        if (nowHours < 7 || nowHours > 19) {
+          resp.data.now.img = getImgUrl('qing-moon')
+        } else {
+          resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+        }
+      }
     }
     if (resp.data.daily) {
       resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
@@ -266,7 +273,7 @@ const refreshWeatherTask = () => {
 
     &-temp {
       @include flex(row, center, center);
-      @include font(65px, 900);
+      @include font(60px, 900);
       height: 100%;
     }
 
