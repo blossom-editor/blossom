@@ -233,17 +233,24 @@ export const formatFileSize = (size: number): string => {
 /**
  * 将数字转为千分位的字符串
  * @param param
- * @returns
+ * @returns 返回字符串
  */
 export const formartNumber = (param: number): string => {
-  let num: string = (param || 0).toString(),
-    result: string = ''
+  let num: string = (param || 0).toString()
+  let result: string = ''
+  let isNegative = param < 0
+  if (isNegative) {
+    num = num.substring(1)
+  }
   while (num.length > 3) {
     result = ',' + num.slice(-3) + result
     num = num.slice(0, num.length - 3)
   }
   if (num) {
     result = num + result
+  }
+  if (isNegative) {
+    return '-' + result
   }
   return result
 }
