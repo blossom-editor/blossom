@@ -9,7 +9,7 @@
     v-loading="docTreeLoading"
     element-loading-text="正在读取文档..."
     :style="{ fontSize: viewStyle.treeDocsFontSize }">
-    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeActiveArticleId">
+    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeActiveArticleId" @open="openMenu">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <!-- L1无下级 -->
@@ -279,6 +279,10 @@ const getDocTreeData = (): DocTree[] => {
   return docTreeData.value
 }
 
+const openMenu = (index: string) => {
+  docTreeActiveArticleId.value = index
+}
+
 /**
  * 是否显示
  */
@@ -309,7 +313,7 @@ const endLoading = () => {
 //#endregion
 
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
-const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
+const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0, updn: false })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rMenuLevel2 = ref<RightMenuLevel2>({ top: '0px' })
 const ArticleDocTreeRightMenuRef = ref()
