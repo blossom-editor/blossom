@@ -1,10 +1,14 @@
 import * as echartTheme from '@renderer/assets/styles/chartTheme'
 import { formartNumber } from '@renderer/assets/utils/util'
 import { getPrimaryColor } from '@renderer/scripts/global-theme'
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 export type ChartLineWordsData = {
   statDates: any[]
   statValues: any[]
+  statValuesSameMonth: any[]
 }
 
 /**
@@ -19,7 +23,11 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
     grid: { top: 30, left: 60, right: 20, bottom: 35 },
     legend: {
       ...echartTheme.legend(),
-      ...{ top: 15, left: 65 }
+      ...{
+        top: 15,
+        left: 65,
+        selected: { Words: true, 'The Same Month': false }
+      }
     },
     tooltip: {
       ...echartTheme.tooltip(),
@@ -31,15 +39,30 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
         padding: 0,
         appendToBody: false,
         formatter: (params: any) => {
-          return `
-          <div class="chart-line-word-tooltip">
-            <div class="xaxis-title">${params[0].axisValue}</div>
-            <div class="data">
-              <span class="iconbl bl-pen-line"></span>
-              <span style="padding-left:10px;">Words: ${formartNumber(params[0].data)}</span>
-            </div>
-          </div>
-          `
+          let tooltip = `<div class="chart-line-word-tooltip" style="width:240px;height:80px">
+            <div class="xaxis-title">${params[0].axisValue}</div>`
+          for (let i = 0; i < params.length; i++) {
+            const series = params[i]
+            tooltip += `<div class="data" style="color:${series.color}">
+              <div>
+                <span class="iconbl bl-pen-line"></span>
+                ${series.seriesName}
+              </div>
+              <span style="font-weight: 700;">
+                ${formartNumber(series.data)}
+              </span>
+            </div>`
+          }
+          return (tooltip += `</div>`)
+          // return `
+          // <div class="chart-line-word-tooltip">
+          //   <div class="xaxis-title">${params[0].axisValue}</div>
+          //   <div class="data">
+          //     <span class="iconbl bl-pen-line"></span>
+          //     <span style="padding-left:10px;">Words: ${formartNumber(params[0].data)}</span>
+          //   </div>
+          // </div>
+          // `
         }
       }
     },
@@ -70,7 +93,7 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
           shadowBlur: 10
         },
         itemStyle: {
-          color: '#CDCDCD'
+          color: primaryColor.color
         },
         areaStyle: {
           color: {
@@ -88,6 +111,38 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
           shadowColor: '#00000000',
           shadowOffsetY: 5,
           shadowBlur: 10
+        }
+      },
+      {
+        z: 2,
+        name: 'The Same Month',
+        type: 'line',
+        sampling: 'lttb',
+        smooth: true, // 平滑曲线
+        showSymbol: false,
+        data: chartData.statValuesSameMonth,
+        lineStyle: {
+          width: 2,
+          color: '#e3a300',
+          shadowColor: isDark.value ? '#000000' : '#e3a300',
+          shadowOffsetY: 5,
+          shadowBlur: 10
+        },
+        itemStyle: {
+          color: '#e3a300'
+        },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#e3a300' },
+              { offset: 1, color: '#E3A30000' }
+            ]
+          }
         }
       }
     ]
