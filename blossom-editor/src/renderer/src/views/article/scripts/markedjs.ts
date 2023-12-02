@@ -2,6 +2,7 @@ import { useConfigStore } from '@renderer/stores/config'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html, randomInt, sleep } from '@renderer/assets/utils/util'
 import { marked, Marked } from 'marked'
+import markedKatex from 'marked-katex-extension'
 // highlight
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
@@ -53,16 +54,23 @@ export const singleDollar = /^\$+([^\$\n]+?)\$+/
 export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
 export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
 
+const options = {
+  throwOnError: false
+}
+
 /**
  * markedjs 配置
  */
-marked.use({
-  async: true,
-  pedantic: false,
-  gfm: true,
-  mangle: false,
-  headerIds: false
-})
+marked.use(
+  {
+    async: true,
+    pedantic: false,
+    gfm: true,
+    mangle: false,
+    headerIds: false
+  },
+  markedKatex(options)
+)
 
 let hljsConfig = {
   langPrefix: 'hljs language-',

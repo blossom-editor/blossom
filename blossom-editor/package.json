@@ -45,6 +45,7 @@
     "katex": "^0.16.8",
     "marked": "^7.0.4",
     "marked-highlight": "^2.0.4",
+    "marked-katex-extension": "^4.0.5",
     "markmap-lib": "^0.15.4",
     "markmap-view": "^0.15.4",
     "mermaid": "^10.4.0",
