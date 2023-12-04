@@ -6,6 +6,7 @@ import { insertTab, indentLess } from '@codemirror/commands'
 import { markdown as cmmd } from '@codemirror/lang-markdown'
 import { languages } from '@codemirror/language-data'
 import { EditorSelection, SelectionRange } from '@codemirror/state'
+import { search } from '@codemirror/search'
 
 import * as prettier from 'prettier/standalone'
 import pluginMarkdown from 'prettier/plugins/markdown'
@@ -27,6 +28,9 @@ export const cwTheme: any = {
   '.cm-panels': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     color: 'var(--el-color-primary)'
+  },
+  '.cm-panels-top': {
+    'z-index': '999'
   },
   '.cm-panels-bottom': {
     borderColor: 'var(--el-border-color)'
@@ -188,6 +192,7 @@ export class CmWrapper {
       extensions: [
         EditorState.phrases.of(zhCNPhrases),
         basicSetup,
+        search({ top: true }),
         cmmd({ codeLanguages: languages }),
         EditorView.theme(cwTheme),
         keymap.of([
