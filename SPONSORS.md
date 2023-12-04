@@ -4,4 +4,4 @@
 
 | 赞助者 / Sponsors    | 赞助者 / Sponsors | 赞助者 / Sponsors | 赞助者 / Sponsors |
 | :------------------- | :---------------- | :---------------- | :---------------- |
-| i just walked away🏃 | KalyanYang        | dsx               |                   |
+| i just walked away🏃 | KalyanYang        | dsx               | 熊猫不是猫        |
