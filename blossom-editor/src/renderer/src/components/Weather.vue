@@ -126,6 +126,8 @@ const weather = ref({
 
 const getWeather = () => {
   getAll({ location: userStore.userinfo.location }).then((resp) => {
+    console.log(123)
+
     if (resp.data.now) {
       if (resp.data.now.iconValue === '#wt-qing') {
         let nowHours = new Date().getHours()
@@ -134,6 +136,8 @@ const getWeather = () => {
         } else {
           resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
         }
+      } else {
+        resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
       }
     }
     if (resp.data.daily) {
