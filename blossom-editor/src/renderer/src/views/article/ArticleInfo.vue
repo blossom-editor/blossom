@@ -154,7 +154,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="排序">
-            <el-input-number :min="1" v-model="docForm.sort" style="width: 176px" />
+            <el-input-number v-model="docForm.sort" style="width: 176px" />
           </el-form-item>
 
           <!--  -->
