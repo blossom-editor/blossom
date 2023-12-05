@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24341867",
+      "name": "left-line",
+      "font_class": "left-line",
+      "unicode": "ea49",
+      "unicode_decimal": 59977
+    },
+    {
       "icon_id": "24341113",
       "name": "array-line",
       "font_class": "array-line",
@@ -914,6 +921,13 @@
       "font_class": "a-cloudrefresh-line",
       "unicode": "e9e2",
       "unicode_decimal": 59874
+    },
+    {
+      "icon_id": "24342229",
+      "name": "right-line",
+      "font_class": "right-line",
+      "unicode": "ec14",
+      "unicode_decimal": 60436
     },
     {
       "icon_id": "24342536",
