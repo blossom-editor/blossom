@@ -30,7 +30,8 @@ export const cwTheme: any = {
     color: 'var(--el-color-primary)'
   },
   '.cm-panels-top': {
-    'z-index': '999'
+    'z-index': '999',
+    borderColor: 'var(--el-border-color)'
   },
   '.cm-panels-bottom': {
     borderColor: 'var(--el-border-color)'

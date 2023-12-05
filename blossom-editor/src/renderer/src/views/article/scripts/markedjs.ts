@@ -54,8 +54,11 @@ export const singleDollar = /^\$+([^\$\n]+?)\$+/
 export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
 export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
 
-const options = {
-  throwOnError: false
+const katexOptions = {
+  throwOnError: false,
+  displayMode: true,
+  // 生成 katex-mathml 时会出现错误, mathml 绝对定位没有定到 katex-display 元素, 而是找到上级导致页面出现错误
+  output: 'html'
 }
 
 /**
@@ -69,7 +72,7 @@ marked.use(
     mangle: false,
     headerIds: false
   },
-  markedKatex(options)
+  markedKatex(katexOptions)
 )
 
 let hljsConfig = {
@@ -425,7 +428,7 @@ export const renderLink = (href: string | null, title: string | null, text: stri
 //#endregion
 
 //#region ----------------------------------------< simpleMarked >--------------------------------------
-const simpleMarked = new Marked({ mangle: false, headerIds: false })
+const simpleMarked = new Marked({ mangle: false, headerIds: false }, markedKatex(katexOptions))
 simpleMarked.use(markedHighlight(hljsConfig))
 
 const simpleRenderer = {

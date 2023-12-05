@@ -731,6 +731,33 @@ const removeListenerScroll = () => {
 }
 //#endregion
 
+//#region ----------------------------------------< 双屏滚动2  >----------------------------------------
+// let CmEditorRef
+// let scrollWrapper: EPScroll
+// const initScroll = () => {
+//   CmEditorRef = document.getElementsByClassName('cm-scroller')[0]
+//   scrollWrapper = new EPScroll(CmEditorRef, PreviewRef.value, cmw)
+// }
+
+// const scroll = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
+//   scrollWrapper.sycnScroll(event, source, lineno, colno, error)
+// }
+
+// const scrollTopLast = () => {
+//   if (scrollWrapper) {
+//     scrollWrapper.scrollTopLast()
+//   }
+// }
+
+// const addListenerScroll = () => {
+//   CmEditorRef.addEventListener('scroll', scroll)
+// }
+
+// const removeListenerScroll = () => {
+//   CmEditorRef.removeEventListener('scroll', scroll)
+// }
+//#endregion
+
 //#region ----------------------------------------< 编辑器右键 >----------------------------------------
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rightMenuHeight = isElectron() ? 215 : 155
