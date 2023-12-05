@@ -9,7 +9,7 @@
     <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
     <div
       v-for="subject in subjects"
-      :class="[configViewStyle.isHomeSubjectCard ? 'subject-card' : 'subject-list']"
+      :class="[configViewStyle.isHomeSubjectCard ? 'subject-card' : 'subject-list', configViewStyle.webCollectExpand ? '' : 'close']"
       :key="subject.name"
       :style="{ '--bl-subject-color1': subject.color + '70' }"
       @click="toToc(subject.tocId)">
@@ -183,6 +183,10 @@ $width-item: 210px;
   }
 }
 
+.subject-card.close {
+  margin: 15px 5px;
+}
+
 .subject-list {
   @include flex(row, flex-start, flex-start);
   width: $width-item;
@@ -240,5 +244,9 @@ $width-item: 210px;
   .inner {
     display: none;
   }
+}
+
+.subject-list.close {
+  margin: 15px 5px 0 5px;
 }
 </style>

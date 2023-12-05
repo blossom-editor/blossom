@@ -210,16 +210,14 @@ const delWordsDate = (date: string) => {
 
 const render = () => {
   windowResize()
-
   if (isNull(wordsList.value)) {
     return
   }
-
   let chartDate: ChartLineWordsData = {
     statDates: [],
-    statValues: []
+    statValues: [],
+    statValuesSameMonth: []
   }
-
   wordsList
     .value!.sort((a, b) => a.date.localeCompare(b.date))
     .forEach((e) => {

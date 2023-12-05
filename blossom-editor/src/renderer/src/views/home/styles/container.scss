@@ -8,10 +8,10 @@
 }
 
 .container-sub-name {
-  height: 20px;
-  min-height: 20px;
   @include font(13px, 300);
   @include themeColor(#ababab, #7e7e7e);
+  height: 20px;
+  min-height: 20px;
   text-shadow: var(--bl-text-shadow);
 
   .bl-statistic-line {

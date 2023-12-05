@@ -141,8 +141,7 @@ const delWeb = () => {
 <style scoped lang="scss">
 .web-collect-root {
   @include box(100%, 100%);
-  @include themeBg(#ffffff00, #1e1e1e75);
-  backdrop-filter: blur(4px);
+  // backdrop-filter: blur(4px);
 
   .web-collect-title {
     @include box(100%, 31px);

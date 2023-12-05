@@ -62,7 +62,10 @@
       middle
       =======================================================
      -->
-    <div class="middle">
+    <div
+      :class="['middle', viewStyle.webCollectExpand ? 'expand' : 'fold']"
+      :style="{ width: viewStyle.webCollectExpand ? 'calc(100% - 1px - 0px - 10px - 910px - 420px)' : 'calc(100% - 1px - 0px - 10px - 910px)' }">
+      <div v-if="!viewStyle.webCollectExpand" class="web-show iconbl bl-left-line" @click="expand"></div>
       <div style="height: 45px"></div>
 
       <bl-col width="100%" height="270px">
@@ -87,7 +90,10 @@
       right
       =======================================================
      -->
-    <div class="web-container gradient-linear">
+    <div
+      :class="['web-container gradient-linear', viewStyle.webCollectExpand ? 'expand' : 'fold']"
+      :style="{ width: viewStyle.webCollectExpand ? '420px' : '0px', opacity: viewStyle.webCollectExpand ? 1 : 0 }">
+      <div v-if="viewStyle.webCollectExpand" class="web-hide iconbl bl-right-line" @click="fold"></div>
       <WebCollect></WebCollect>
     </div>
   </div>
@@ -108,6 +114,7 @@
 import { ref, onActivated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
+import { useConfigStore } from '@renderer/stores/config'
 // components
 import Laptop from '@renderer/components/Laptop.vue'
 import DateLine from '@renderer/components/DateLine.vue'
@@ -134,29 +141,29 @@ const ChartLineWordsRef = ref()
 const SentinelChartLineRef = ref()
 const ChartHeatmapRef = ref()
 
-onActivated(() => {
-  now.value = nowWhen()
-})
-
-const loadWordLine = () => {
-  ChartLineWordsRef.value.reload()
-}
-
-const loadArticleHeapmap = () => {
-  ChartHeatmapRef.value.reload()
-}
-
-const loadSentinlLine = () => {
-  SentinelChartLineRef.value.reload()
-}
-
+onActivated(() => (now.value = nowWhen()))
+const loadWordLine = () => ChartLineWordsRef.value.reload()
+const loadArticleHeapmap = () => ChartHeatmapRef.value.reload()
+const loadSentinlLine = () => SentinelChartLineRef.value.reload()
 const now = ref(nowWhen())
-
-//#region ----------------------------------------< panin store >--------------------------------------
+//#region ----------------------------------------< 字数编辑 >--------------------------------------
 const isShowWordsInfoDialog = ref(false)
 
 const showWordsInfo = () => {
   isShowWordsInfoDialog.value = !isShowWordsInfoDialog.value
+}
+//#endregion
+
+//#region ----------------------------------------< 网页收藏 >--------------------------------------
+const config = useConfigStore()
+const { viewStyle } = config
+const expand = () => {
+  viewStyle.webCollectExpand = true
+  config.setViewStyle(viewStyle)
+}
+const fold = () => {
+  viewStyle.webCollectExpand = false
+  config.setViewStyle(viewStyle)
 }
 //#endregion
 </script>
@@ -174,9 +181,7 @@ const showWordsInfo = () => {
 
   $width-main: 910px;
   $width-web: 420px;
-  $width-middle: calc(
-    100% - /* border */ #{$border-middle} - /* margin : $margin-web */ 0px - /* margin : $margin-middle */ 10px - /* width */ #{$width-main} - #{$width-web}
-  );
+  $width-middle: calc(100% - #{$border-middle} - 0px - 10px - #{$width-main} - #{$width-web});
 
   .main {
     @include box($width-main, 100%, $width-main, $width-main);
@@ -217,7 +222,8 @@ const showWordsInfo = () => {
   }
 
   .middle {
-    @include box($width-middle, 100%, $width-middle, $width-middle);
+    // @include box($width-middle, 100%, $width-middle, $width-middle);
+    height: 100%;
     position: relative;
     display: none;
     z-index: 2;
@@ -225,7 +231,8 @@ const showWordsInfo = () => {
 
   .web-container {
     @include flex(column, space-between, center);
-    @include box($width-web, calc(100% - 60px));
+    // @include box($width-web, calc(100% - 60px));
+    height: calc(100% - 60px);
     margin: $margin-web;
     position: relative;
     border-top-left-radius: 10px;
@@ -235,15 +242,50 @@ const showWordsInfo = () => {
     z-index: 2;
   }
 
-  /** 小于1440时 */
-  @media screen and (max-width: 1140px) {
-    .web-container {
-      opacity: 0;
+  .web-show,
+  .web-hide {
+    @include themeColor(#ababab, #7e7e7e);
+    text-shadow: var(--bl-text-shadow);
+    position: absolute;
+    font-size: 20px;
+    z-index: 2;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--el-color-primary);
     }
   }
 
+  .web-show {
+    right: 0;
+    top: 30px;
+  }
+
+  .web-hide {
+    left: 10px;
+    top: 10px;
+    z-index: 99;
+  }
+
+  /** 小于1440时 */
+  @media screen and (max-width: 1140px) {
+    .web-container {
+      opacity: 0 !important;
+    }
+  }
+
+  @media screen and (min-width: 1140px) {
+    .middle:not(.expand) {
+      @include themeBorder(1px, #e6e6e6, #171717, 'left');
+      display: block;
+      padding: 0 10px 10px 20px;
+    }
+  }
+
+  // 大于1600时显示 middle
   @media screen and (min-width: 1600px) {
-    .middle {
+    .middle:not(.fold) {
       @include themeBorder(1px, #e6e6e6, #171717, 'left');
       display: block;
       padding: 0 10px 10px 20px;
@@ -261,12 +303,12 @@ const showWordsInfo = () => {
   }
 
   .gradient-linear {
-    --color1: #f6f6f6;
-    --color2: #ffffff5a;
+    --color1: #ffffff;
+    --color2: #9a9a9a08;
 
     [class='dark'] & {
-      --color1: #151515c1;
-      --color2: #00000014;
+      --color1: #1e1e1e;
+      --color2: #a5a5a507;
     }
 
     background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);

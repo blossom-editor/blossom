@@ -7,7 +7,11 @@
   </bl-row>
   <div class="article-stars-root">
     <div v-if="isEmpty(articles)" class="placeholder">无收藏的文章</div>
-    <div v-else v-for="article in articles" :class="[configViewStyle.isHomeStarCard ? 'star-card' : 'star-list']" :key="article.id">
+    <div
+      v-else
+      v-for="article in articles"
+      :key="article.id"
+      :class="[configViewStyle.isHomeStarCard ? 'star-card' : 'star-list', configViewStyle.webCollectExpand ? '' : 'close']">
       <div class="counterfoil" @click="toWebview(article)">
         <div class="iconbl bl-a-barcode-line open-barcode" v-if="article.openStatus == 1"></div>
         <div class="iconbl bl-a-linkspread-line"></div>
@@ -204,6 +208,10 @@ defineExpose({ reload })
   }
 }
 
+.star-card.close {
+  margin: 10px 5px;
+}
+
 .star-list {
   width: 210px;
   max-width: 210px;
@@ -243,5 +251,9 @@ defineExpose({ reload })
       display: none;
     }
   }
+}
+
+.star-list.close {
+  margin: 5px 5px 0px 5px;
 }
 </style>

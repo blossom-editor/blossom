@@ -14,6 +14,8 @@ export interface ViewStyle {
   treeDocsFontSize: string
   // 展开收起待办事项的统计
   todoStatExpand: boolean
+  // 展开收起首页网页收藏
+  webCollectExpand: boolean
   // 是否显示专题样式
   isShowSubjectStyle: boolean
   // 是否在首页显示收藏卡片
@@ -88,6 +90,7 @@ export const useConfigStore = defineStore('configStore', {
       ...{
         treeDocsFontSize: '14px',
         todoStatExpand: true,
+        webCollectExpand: true,
         isShowSubjectStyle: true,
         isHomeStarCard: true,
         isHomeSubjectCard: true
