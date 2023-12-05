@@ -159,15 +159,20 @@ const save = async (formEl: FormInstance | undefined) => {
       taskSaveForm.value.color = ''
     }
     if (valid) {
+      saveLoading.value = true
       if (isNotBlank(taskSaveForm.value.id)) {
         let datas = { ...taskSaveForm.value, ...{ returnTasks: true } }
-        updTaskApi(datas).then((resp) => {
-          emits('saved', resp.data)
-        })
+        updTaskApi(datas)
+          .then((resp) => {
+            emits('saved', resp.data)
+          })
+          .catch(() => (saveLoading.value = false))
       } else {
-        addTaskApi(taskSaveForm.value).then((resp) => {
-          emits('saved', resp.data)
-        })
+        addTaskApi(taskSaveForm.value)
+          .then((resp) => {
+            emits('saved', resp.data)
+          })
+          .catch(() => (saveLoading.value = false))
       }
     }
   })

@@ -75,7 +75,9 @@
 
     <div class="info-footer">
       <div></div>
-      <el-button size="default" type="primary" @click="saveDaily(DailyFormRef)"> <span class="iconbl bl-a-pageadd-line" />保存 </el-button>
+      <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDaily(DailyFormRef)">
+        <span class="iconbl bl-a-pageadd-line" />保存
+      </el-button>
     </div>
   </div>
 </template>
@@ -90,13 +92,6 @@ const getImg = (img: string): string => {
   return new URL(`../../assets/imgs/plan/${img}`, import.meta.url).href
 }
 
-// const imgPreview = computed(() => {
-//   if (dailyForm.value.img.startsWith('http')) {
-//     return dailyForm.value.img
-//   }
-//   return getImg(dailyForm.value.img)
-// })
-
 interface DailyForm {
   content: string
   planStartTime: string
@@ -104,6 +99,7 @@ interface DailyForm {
   img: string
   imgPreview: string
 }
+const saveLoading = ref(false)
 const DailyFormRef = ref<FormInstance>()
 const dailyForm = ref<DailyForm>({
   content: '',
@@ -122,9 +118,12 @@ const saveDaily = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, _fields) => {
     if (valid) {
-      planAddDailyApi(dailyForm.value).then((_resp) => {
-        emits('saved')
-      })
+      saveLoading.value = true
+      planAddDailyApi(dailyForm.value)
+        .then((_resp) => {
+          emits('saved')
+        })
+        .catch(() => (saveLoading.value = false))
     }
   })
 }
