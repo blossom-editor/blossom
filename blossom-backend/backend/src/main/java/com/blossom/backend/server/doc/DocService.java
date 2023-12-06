@@ -1,23 +1,25 @@
 package com.blossom.backend.server.doc;
 
 import cn.hutool.core.collection.CollUtil;
-import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
 import com.blossom.backend.server.doc.pojo.DocTreeReq;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.folder.FolderService;
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.backend.server.folder.pojo.FolderQueryReq;
 import com.blossom.backend.server.picture.PictureService;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.backend.server.utils.PictureUtil;
 import com.blossom.common.base.enums.YesNo;
+import com.blossom.common.base.util.SortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -67,21 +69,25 @@ public class DocService {
          * 只查询有图片的文件夹, 包含有图片的文章文件夹
          * =============================================================================================== */
         else if (req.getOnlyPicture()) {
-            // 1. 默认的图片文件夹
-            all.addAll(CollUtil.newArrayList(PictureUtil.getDefaultFolder(req.getUserId())));
-
-            // 2. 所有图片文件夹
+            // 1. 所有图片文件夹
             FolderQueryReq folder = req.to(FolderQueryReq.class);
             folder.setType(FolderTypeEnum.PICTURE.getType());
             List<DocTreeRes> picFolder = folderService.listTree(folder);
             all.addAll(picFolder);
 
-            // 3. 有图片的图片或文章文件夹
+            // 2. 有图片的图片或文章文件夹
             List<Long> pids = pictureService.listDistinctPid(req.getUserId());
             if (CollUtil.isNotEmpty(pids)) {
                 List<DocTreeRes> articleTopFolder = folderService.recursiveToParentTree(pids);
                 all.addAll(articleTopFolder);
             }
+
+            Optional<DocTreeRes> min = all.stream().min((f1, f2) -> SortUtil.intSort.compare(f1.getS(), f2.getS()));
+            DocTreeRes defaultFolder = PictureUtil.getDefaultFolder(req.getUserId());
+            min.ifPresent(docTreeRes -> defaultFolder.setS(docTreeRes.getS() - 1));
+
+            // 3. 默认的图片文件夹
+            all.addAll(CollUtil.newArrayList(defaultFolder));
         }
         /* ===============================================================================================
          * 只查询公开的的文章和文章文件夹
@@ -155,7 +161,7 @@ public class DocService {
             all.addAll(articles);
         }
 
-        return DocUtil.treeWrap(all.stream().distinct().collect(Collectors.toList()));
+        return DocUtil.treeWrap(all.stream().distinct().collect(Collectors.toList()), req.getOnlyPicture());
     }
 
 }

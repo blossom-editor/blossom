@@ -37,7 +37,7 @@ public class FolderUpdReq extends AbstractPOJO implements Serializable {
     private List<String> tags;
     /** 排序 */
     @NotNull(message = "排序为必填项")
-    @Min(value = 0, message = "排序不能小于0")
+    // @Min(value = 0, message = "排序不能小于0")
     private Integer sort;
     /** 封面图片 */
     private String cover;

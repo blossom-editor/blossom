@@ -46,7 +46,7 @@ public class FolderAddReq extends AbstractPOJO {
      * 排序
      */
     @NotNull(message = "排序为必填项")
-    @Min(value = 1, message = "排序不能小于0")
+    // @Min(value = 1, message = "文件夹的排序不能小于0")
     private Integer sort;
     /**
      * 封面图片

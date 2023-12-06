@@ -7,6 +7,7 @@ import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.common.base.enums.YesNo;
+import com.blossom.common.base.util.SortUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,21 +29,25 @@ public class DocUtil {
     /**
      * 将菜单列表构造成树状
      *
-     * @param list 菜单列表
+     * @param list        菜单列表
+     * @param onlyPicture 是否图片文件夹, 如果是图片文件夹一级菜单优先按类型排序
      * @return 树状菜单对象
      */
-    public static List<DocTreeRes> treeWrap(List<DocTreeRes> list) {
+    public static List<DocTreeRes> treeWrap(List<DocTreeRes> list, boolean onlyPicture) {
         final List<DocTreeRes> allList = list;
         //查询根菜单
         List<DocTreeRes> rootLevel =
                 allList.stream()
                         .filter(p -> p.getP().equals(ROOT_FOLDER_ID))
-//                        .sorted(Comparator.comparing(DocTreeRes::getS))
+                        .sorted(Comparator.comparing(DocTreeRes::getS))
                         .sorted((d1, d2) -> {
-                            if (d2.getTy().equals(d1.getTy())) {
-                                return d1.getS() - d2.getS();
+                            if (onlyPicture) {
+                                if (d2.getTy().equals(d1.getTy())) {
+                                    return d1.getS() - d2.getS();
+                                }
+                                return d2.getTy() - d1.getTy();
                             }
-                            return d2.getTy() - d1.getTy();
+                            return SortUtil.intSort.compare(d1.getS(), d2.getS());
                         })
                         .collect(Collectors.toList());
         rootLevel.parallelStream().forEach(item -> setChild(item, allList));
