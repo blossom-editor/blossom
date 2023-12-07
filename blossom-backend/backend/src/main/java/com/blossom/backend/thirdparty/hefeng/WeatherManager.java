@@ -23,6 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 天气查询
+ * <p>cURL 查询方式:
+ * <pre>{@code
+ * curl -L -X GET --compressed 'https://geoapi.qweather.com/v2/city/lookup?location=101100101&key='
+ * }</pre>
+ *
+ *
  * @author : xzzz
  */
 @Component

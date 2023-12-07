@@ -143,6 +143,21 @@ public class ArticleController {
     }
 
     /**
+     * 保存正文内容
+     */
+    @PostMapping("/upd/content")
+    public R<ArticleUpdContentRes> updateContent(@Validated @RequestBody ArticleUpdContentReq content) {
+        ArticleEntity upd = content.to(ArticleEntity.class);
+        upd.setReferences(content.getReferences());
+        upd.setUserId(AuthContext.getUserId());
+        int words = baseService.updateContentById(upd);
+        ArticleUpdContentRes res = new ArticleUpdContentRes();
+        res.setWords(words);
+        res.setUpdTime(DateUtils.date());
+        return R.ok(res);
+    }
+
+    /**
      * 修改文章名称
      *
      * @param name 文章名称
@@ -156,18 +171,24 @@ public class ArticleController {
     }
 
     /**
-     * 保存正文内容
+     * 为文章快速增加/删除标签
+     *
+     * @since 1.10.0
      */
-    @PostMapping("/upd/content")
-    public R<ArticleUpdContentRes> updateContent(@Validated @RequestBody ArticleUpdContentReq content) {
-        ArticleEntity upd = content.to(ArticleEntity.class);
-        upd.setReferences(content.getReferences());
-        upd.setUserId(AuthContext.getUserId());
-        int words = baseService.updateContentById(upd);
-        ArticleUpdContentRes res = new ArticleUpdContentRes();
-        res.setWords(words);
-        res.setUpdTime(DateUtils.date());
-        return R.ok(res);
+    @PostMapping("/upd/tag")
+    public R<List<String>> updTag(@Validated @RequestBody ArticleUpdTagReq req) {
+        ArticleEntity info = baseService.selectById(req.getId(), false, false, false);
+        List<String> tags = DocUtil.toTagList(info.getTags());
+        if (tags.contains(req.getTag().toLowerCase()) || tags.contains(req.getTag().toUpperCase())) {
+            tags.remove(req.getTag().toLowerCase());
+            tags.remove(req.getTag().toUpperCase());
+        } else {
+            tags.add(req.getTag());
+        }
+        ArticleEntity article = req.to(ArticleEntity.class);
+        article.setTags(DocUtil.toTagStr(tags));
+        baseService.update(article);
+        return R.ok(tags);
     }
 
     /**

@@ -641,6 +641,12 @@ const showInput = () => {
 }
 
 const handleInputConfirm = () => {
+  if (inputValue.value && inputValue.value.toLocaleLowerCase() === 'subject') {
+    inputValue.value = 'subject'
+  }
+  if (inputValue.value && inputValue.value.toLocaleLowerCase() === 'toc') {
+    inputValue.value = 'toc'
+  }
   // 有便签且未在标签池中
   if (inputValue.value && docForm.value.tags.indexOf(inputValue.value) == -1) {
     docForm.value.tags.push(inputValue.value)

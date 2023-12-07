@@ -100,6 +100,15 @@ export const folderUpdNameApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * 快捷增加标签
+ * @param data
+ * @returns
+ */
+export const folderUpdTagApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/folder/upd/tag', data)
+}
+
+/**
  * 删除文件夹
  * @param data
  * @returns
@@ -199,6 +208,19 @@ export const articleUpdContentApi = (data?: object): Promise<R<any>> => {
 export const articleUpdNameApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>('/article/upd/name', data)
 }
+
+/**
+ * 快捷增加标签
+ * @param data {
+ *  id: curDoc.value?.id,
+ *  tag: string
+ * }
+ * @returns
+ */
+export const articleUpdTagApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/article/upd/tag', data)
+}
+
 
 /**
  * 删除文章

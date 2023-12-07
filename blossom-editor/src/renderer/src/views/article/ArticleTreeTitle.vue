@@ -1,5 +1,5 @@
 <template>
-  <div :class="[viewStyle.isShowSubjectStyle ? (props.trees.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
+  <div :class="[viewStyle.isShowSubjectStyle ? (isSubject ? 'subject-title' : 'doc-title') : 'doc-title']">
     <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
       {{ props.trees.s }}
     </bl-tag>
@@ -57,14 +57,21 @@ const nameWrapperStyle = computed(() => {
 })
 
 /**
+ * 是否是专题
+ */
+const isSubject = computed(() => {
+  return props.trees.t?.includes('subject')
+})
+
+/**
  * 计算标签, 并返回便签对象集合
  */
 const tags = computed(() => {
   let icons: any = []
   props.trees.t?.forEach((tag) => {
-    if (tag === 'subject') {
+    if (tag.toLocaleLowerCase() === 'subject') {
       icons.unshift({ content: '专题', bgColor: 'var(--bl-tag-color-subject)', icon: 'bl-a-lowerrightpage-line' })
-    } else if (tag === 'toc') {
+    } else if (tag.toLocaleLowerCase() === 'toc') {
       icons.push({ content: 'TOC', bgColor: 'var(--bl-tag-color-toc)' })
     } else {
       icons.push({ content: tag })

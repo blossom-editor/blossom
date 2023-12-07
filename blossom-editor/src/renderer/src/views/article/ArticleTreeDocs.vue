@@ -121,6 +121,19 @@
             <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
             <div v-if="curDoc.star === 0 && curDoc.ty === 3" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
             <div v-if="curDoc.star === 1 && curDoc.ty === 3" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏</div>
+            <div v-if="curDoc.ty === 3 && !curDoc.t.includes('toc')" @click="addArticleTag('toc')">
+              <span class="iconbl bl-list-ordered"></span>设为专题目录
+            </div>
+            <div v-if="curDoc.ty === 3 && curDoc.t.includes('toc')" @click="addArticleTag('toc')">
+              <span class="iconbl bl-list-ordered"></span>取消专题目录
+            </div>
+
+            <div v-if="curDoc.ty !== 3 && !curDoc.t.includes('subject')" @click="addFolderTag('subject')">
+              <span class="iconbl bl-a-lowerrightpage-line"></span>设为专题
+            </div>
+            <div v-if="curDoc.ty !== 3 && curDoc.t.includes('subject')" @click="addFolderTag('subject')">
+              <span class="iconbl bl-a-lowerrightpage-line"></span>取消专题
+            </div>
           </div>
         </div>
 
@@ -204,7 +217,17 @@ import { ref, provide, onBeforeUnmount, nextTick, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import type { MenuInstance } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { articleAddApi, articleDownloadHtmlApi, articleOpenApi, articleStarApi, docTreeApi, folderAddApi, folderOpenApi } from '@renderer/api/blossom'
+import {
+  articleAddApi,
+  articleUpdTagApi,
+  articleDownloadHtmlApi,
+  articleOpenApi,
+  articleStarApi,
+  docTreeApi,
+  folderAddApi,
+  folderUpdTagApi,
+  folderOpenApi
+} from '@renderer/api/blossom'
 import { isNotNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
 import { checkLevel, provideKeyDocTree } from '@renderer/views/doc/doc'
@@ -627,6 +650,20 @@ const star = (starStatus: 0 | 1) => {
     Notify.success(starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
   })
 }
+
+/** 设为专题目录 */
+const addArticleTag = (tag: string) => {
+  articleUpdTagApi({ id: curDoc.value.i, tag: tag }).then((resp) => {
+    curDoc.value.t = resp.data
+  })
+}
+
+/** 设为专题 */
+const addFolderTag = (tag: string) => {
+  folderUpdTagApi({ id: curDoc.value.i, tag: tag }).then((resp) => {
+    curDoc.value.t = resp.data
+  })
+}
 //#endregion
 
 //#region ----------------------------------------< 二维码 >--------------------------------------
@@ -686,12 +723,15 @@ const savedCallback = (_dialogType: DocDialogType) => {
 
 //#endregion
 
-//#region 导出
+//#region ----------------------------------------< 导入文章 >--------------------------------------
 
 const ArticleImportRef = ref()
 const isShowArticleImportDialog = ref<boolean>(false)
 
 const handleShowArticleImportDialog = () => {
+  if (!checkLevel(curDoc.value.i, docTreeData.value)) {
+    return
+  }
   isShowArticleImportDialog.value = true
 }
 

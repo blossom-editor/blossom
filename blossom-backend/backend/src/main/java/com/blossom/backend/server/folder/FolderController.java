@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
+import com.blossom.backend.server.article.draft.pojo.ArticleUpdTagReq;
 import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
@@ -109,6 +110,27 @@ public class FolderController {
         FolderEntity folder = req.to(FolderEntity.class);
         baseService.update(folder);
         return R.ok();
+    }
+
+    /**
+     * 为文件夹快速增加/删除标签
+     *
+     * @since 1.10.0
+     */
+    @PostMapping("/upd/tag")
+    public R<List<String>> updTag(@Validated @RequestBody ArticleUpdTagReq req) {
+        FolderEntity info = baseService.selectById(req.getId());
+        List<String> tags = DocUtil.toTagList(info.getTags());
+        if (tags.contains(req.getTag().toLowerCase()) || tags.contains(req.getTag().toUpperCase())) {
+            tags.remove(req.getTag().toLowerCase());
+            tags.remove(req.getTag().toUpperCase());
+        } else {
+            tags.add(req.getTag());
+        }
+        FolderEntity folder = req.to(FolderEntity.class);
+        folder.setTags(DocUtil.toTagStr(tags));
+        baseService.update(folder);
+        return R.ok(tags);
     }
 
     /**
