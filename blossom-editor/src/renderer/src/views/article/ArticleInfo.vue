@@ -48,7 +48,7 @@
             <el-tooltip content="公开访问 ↑" effect="light" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-cloudupload-line', curDocDialogType == 'add' || curIsOpen ? 'disabled' : '']" @click="open(1)"></div>
             </el-tooltip>
-            <el-tooltip content="关闭公开 ↓" effect="light" placement="top" :hide-after="0">
+            <el-tooltip content="取消公开 ↓" effect="light" placement="top" :hide-after="0">
               <div :class="['iconbl bl-a-clouddownload-line', curDocDialogType == 'add' || !curIsOpen ? 'disabled' : '']" @click="open(0)"></div>
             </el-tooltip>
             <el-tooltip effect="light" placement="top" :hide-after="0">

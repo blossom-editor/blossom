@@ -75,4 +75,10 @@ public class FolderAddReq extends AbstractPOJO {
     @Min(value = 1, message = "文件夹类型必须为[1/2]")
     @Max(value = 2, message = "文件夹类型必须为[1/2]")
     private Integer type;
+    /**
+     * 是否新增到尾部, 将忽略传入的 sort, 使用最大 sort
+     *
+     * @since 1.10.0
+     */
+    private Boolean addToLast;
 }

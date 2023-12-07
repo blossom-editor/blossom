@@ -9,7 +9,7 @@ declare interface DocTree {
   /** name */
   n: string
   /** 是否修改名称 */
-  updn: boolean
+  updn?: boolean
   /** open: 0:否;1:是; */
   o: number
   /** 版本有差异, 公开文章才会有此项 */
@@ -22,7 +22,7 @@ declare interface DocTree {
   icon: string
   /** 文档类型: 1:文章文件夹|2:图片文件夹|3:文章; */
   ty: DocType
-  /** 是否 star */
+  /** 是否 star: 0:否;1:是; */
   star: number
   /** 是否显示排序 */
   showSort?: boolean

@@ -131,9 +131,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * 新增
      */
     @Transactional(rollbackFor = Exception.class)
-    public Long insert(ArticleEntity req) {
+    public ArticleEntity insert(ArticleEntity req) {
         baseMapper.insert(req);
-        return req.getId();
+        return req;
     }
 
     /**
@@ -214,4 +214,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         }
         baseMapper.uvAndPv(id, 1, uv);
     }
+
+
+
 }

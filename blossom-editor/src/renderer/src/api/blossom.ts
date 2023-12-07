@@ -91,6 +91,15 @@ export const folderUpdApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * 修改文件夹
+ * @param data
+ * @returns
+ */
+export const folderUpdNameApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/folder/upd/name', data)
+}
+
+/**
  * 删除文件夹
  * @param data
  * @returns
@@ -177,6 +186,18 @@ export const articleUpdApi = (data?: object): Promise<R<any>> => {
  */
 export const articleUpdContentApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>('/article/upd/content', data)
+}
+
+/**
+ * 修改文章名称
+ * @param data {
+ *  id: curDoc.value?.id,
+ *  name: curDoc.value.name
+ * }
+ * @returns
+ */
+export const articleUpdNameApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/article/upd/name', data)
 }
 
 /**

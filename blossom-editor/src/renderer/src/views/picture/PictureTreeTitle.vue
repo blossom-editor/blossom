@@ -6,13 +6,20 @@
     <span class="doc-name">
       <img
         class="menu-icon-img"
-        v-if="isNotBlank(props.trees.icon) && (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https'))"
+        v-if="isNotBlank(props.trees.icon) && (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https')) && !props.trees.updn"
         :src="props.trees.icon" />
-      <svg v-else-if="isNotBlank(props.trees.icon)" class="icon menu-icon" aria-hidden="true">
+      <svg v-else-if="isNotBlank(props.trees.icon) && !props.trees.updn" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
 
-      <div class="name-wrapper" :style="nameWrapperStyle">
+      <el-input
+        v-if="$props.trees?.updn"
+        v-model="$props.trees.n"
+        :id="'article-doc-name-' + props.trees.i"
+        @blur="blurArticleNameInput"
+        @keyup.enter="blurArticleNameInput"
+        style="width: 95%"></el-input>
+      <div v-else class="name-wrapper" :style="nameWrapperStyle">
         {{ props.trees.n }}
       </div>
       <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
@@ -27,6 +34,7 @@ import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { computedDocTitleColor } from '@renderer/views/doc/doc'
+import { folderUpdNameApi } from '@renderer/api/blossom'
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
@@ -64,6 +72,15 @@ const tags = computed(() => {
   }
   return icons
 })
+
+/**
+ * 重命名文章
+ */
+const blurArticleNameInput = () => {
+  folderUpdNameApi({ id: props.trees.i, name: props.trees.n }).then((_resp) => {
+    props.trees.updn = false
+  })
+}
 </script>
 
 <style scoped lang="scss">

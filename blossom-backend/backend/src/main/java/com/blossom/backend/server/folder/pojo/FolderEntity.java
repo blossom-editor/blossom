@@ -1,6 +1,8 @@
 package com.blossom.backend.server.folder.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
@@ -25,6 +27,7 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     /**
      * id
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 父id

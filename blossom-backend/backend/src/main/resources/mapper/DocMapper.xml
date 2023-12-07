@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.doc.DocMapper">
+    <!-- 根据 pid 查询最小排序 -->
+    <select id="selectMaxSortByPid" resultType="java.lang.Integer">
+        select IFNULL(max(h.sort), 0)
+        from (
+             select sort from blossom_article where pid = #{pid}
+              union
+             select sort from blossom_folder where pid = #{pid}
+        ) h;
+    </select>
+</mapper>

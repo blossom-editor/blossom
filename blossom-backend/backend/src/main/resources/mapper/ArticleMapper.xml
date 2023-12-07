@@ -109,5 +109,4 @@
             </if>
         where id = #{articleId}
     </update>
-
 </mapper>

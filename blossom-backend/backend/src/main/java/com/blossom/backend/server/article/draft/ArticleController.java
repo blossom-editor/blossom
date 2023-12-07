@@ -2,6 +2,7 @@ package com.blossom.backend.server.article.draft;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.net.URLEncodeUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.AuthContext;
@@ -10,6 +11,7 @@ import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
+import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
@@ -54,6 +56,7 @@ public class ArticleController {
     private final FolderService folderService;
     private final UserService userService;
     private final ArticleTempVisitService tempVisitService;
+    private final DocService docService;
 
     /**
      * 查询列表
@@ -115,10 +118,14 @@ public class ArticleController {
      * @return 保存结果
      */
     @PostMapping("/add")
-    public R<Long> insert(@Validated @RequestBody ArticleAddReq req) {
+    public R<ArticleEntity> insert(@Validated @RequestBody ArticleAddReq req) {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
         article.setUserId(AuthContext.getUserId());
+        // 如果新增到顶部, 获取最小的
+        if (BooleanUtil.isTrue(req.getAddToLast())) {
+            article.setSort(docService.selectMinSortByPid(req.getPid()) + 1);
+        }
         return R.ok(baseService.insert(article));
     }
 
@@ -133,6 +140,19 @@ public class ArticleController {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
         return R.ok(baseService.update(article));
+    }
+
+    /**
+     * 修改文章名称
+     *
+     * @param name 文章名称
+     * @since 1.10.0
+     */
+    @PostMapping("/upd/name")
+    public R<?> updName(@Validated @RequestBody ArticleUpdNameReq name) {
+        ArticleEntity article = name.to(ArticleEntity.class);
+        baseService.update(article);
+        return R.ok();
     }
 
     /**

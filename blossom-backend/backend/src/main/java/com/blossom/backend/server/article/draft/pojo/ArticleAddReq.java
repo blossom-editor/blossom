@@ -56,4 +56,10 @@ public class ArticleAddReq extends AbstractPOJO implements Serializable {
      * 颜色
      */
     private String color;
+    /**
+     * 是否新增到尾部, 将忽略传入的 sort, 使用最大 sort
+     *
+     * @since 1.10.0
+     */
+    private Boolean addToLast;
 }

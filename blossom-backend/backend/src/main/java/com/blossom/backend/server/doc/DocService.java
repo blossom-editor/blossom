@@ -34,6 +34,9 @@ public class DocService {
     private PictureService pictureService;
 
     @Autowired
+    private DocMapper baseMapper;
+
+    @Autowired
     public void setFolderService(FolderService folderService) {
         this.folderService = folderService;
     }
@@ -162,6 +165,17 @@ public class DocService {
         }
 
         return DocUtil.treeWrap(all.stream().distinct().collect(Collectors.toList()), req.getOnlyPicture());
+    }
+
+    /**
+     * 根据PID获取最大排序
+     *
+     * @param pid pid
+     * @return 最大排序
+     * @since 1.10.0
+     */
+    public int selectMinSortByPid(Long pid) {
+        return baseMapper.selectMaxSortByPid(pid);
     }
 
 }

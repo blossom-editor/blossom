@@ -167,7 +167,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * <p>2. 文件夹类型一经创建, 无法修改.
      */
     @Transactional(rollbackFor = Exception.class)
-    public Long insert(FolderEntity folder) {
+    public FolderEntity insert(FolderEntity folder) {
         // 如果是
         if (StrUtil.isBlank(folder.getStorePath()) || "/".equals(folder.getStorePath())) {
             FolderEntity parentFolder = this.selectById(folder.getPid());
@@ -179,7 +179,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             }
         }
         baseMapper.insert(folder);
-        return folder.getId();
+        return folder;
     }
 
     /**

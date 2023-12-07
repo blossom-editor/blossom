@@ -9,7 +9,13 @@
     v-loading="docTreeLoading"
     element-loading-text="正在读取文档..."
     :style="{ fontSize: viewStyle.treeDocsFontSize }">
-    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true" :default-active="docTreeActiveArticleId" @open="openMenu">
+    <el-menu
+      v-if="!isEmpty(docTreeData)"
+      ref="DocTreeRef"
+      class="doc-trees"
+      :unique-opened="true"
+      :default-active="docTreeActiveArticleId"
+      @open="openMenu">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <!-- L1无下级 -->
@@ -97,18 +103,31 @@
       ref="ArticleDocTreeRightMenuRef">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
-        <div @click="handleShowDocInfoDialog('upd')"><span class="iconbl bl-a-fileedit-line"></span>编辑文档</div>
-        <div @click="syncDoc()"><span class="iconbl bl-a-cloudrefresh-line"></span>同步文档</div>
-        <div @click="handleShowDocInfoDialog('add', curDoc.p)"><span class="iconbl bl-a-fileadd-line"></span>新增同级文档</div>
-        <div v-if="curDoc.ty != 3" @click="handleShowDocInfoDialog('add', curDoc.i)"><span class="iconbl bl-a-fileadd-fill"></span>新增子级文档</div>
-        <div @click="delDoc()"><span class="iconbl bl-a-fileprohibit-line"></span>删除文档</div>
+        <div @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
+        <div @click="handleShowDocInfoDialog('upd')"><span class="iconbl bl-a-fileedit-line"></span>编辑详情</div>
+        <div v-if="curDoc.ty === 3" @click="syncDoc()"><span class="iconbl bl-a-cloudrefresh-line"></span>同步文章</div>
+        <!-- <div v-if="curDoc.ty != 3" @click="handleShowDocInfoDialog('add', curDoc.i)"><span class="iconbl bl-a-fileadd-fill"></span>新增子级文档</div> -->
+        <div v-if="curDoc.ty !== 3" @click="addFolder"><span class="iconbl bl-a-fileadd-line"></span>新增文件夹</div>
+        <div v-if="curDoc.ty !== 3" @click="addArticle"><span class="iconbl bl-a-fileadd-fill"></span>新增笔记</div>
         <div v-if="curDoc.ty === 3" @click="createUrl('link')"><span class="iconbl bl-correlation-line"></span>复制双链引用</div>
-        <div v-if="curDoc.ty != 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
+        <div v-if="curDoc.ty !== 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
-        <div class="menu-item-divider" v-if="curDoc.ty === 3"></div>
+        <!-- 更多二级菜单 -->
+        <div @mouseenter="handleHoverRightMenuLevel2($event, 2)">
+          <span class="iconbl bl-a-rightsmallline-line"></span>
+          <span class="iconbl bl-apps-line"></span>更多
+          <div class="menu-content-level2" :style="rMenuLevel2">
+            <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开</div>
+            <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
+            <div v-if="curDoc.star === 0 && curDoc.ty === 3" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
+            <div v-if="curDoc.star === 1 && curDoc.ty === 3" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏</div>
+          </div>
+        </div>
+
+        <div v-if="curDoc.ty === 3" class="menu-item-divider"></div>
         <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口查看</div>
-        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
         <div v-if="curDoc.ty === 3" @click="createUrl('tempVisit', true)"><span class="iconbl bl-visit"></span>浏览器临时访问</div>
+
         <!-- 导出及二级菜单 -->
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
           <span class="iconbl bl-a-rightsmallline-line"></span>
@@ -128,9 +147,12 @@
             <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>复制临时访问链接</div>
           </div>
         </div>
+        <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog()">
           <span class="iconbl bl-qr-code-line"></span>博客二维码
         </div>
+        <div class="menu-item-divider"></div>
+        <div @click="delDoc()"><span class="iconbl bl-a-fileprohibit-line"></span>删除{{ curDocType }}</div>
       </div>
     </div>
   </Teleport>
@@ -178,13 +200,14 @@ import { useRoute } from 'vue-router'
 import { useServerStore } from '@renderer/stores/server'
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
-import { ref, provide, onBeforeUnmount, nextTick } from 'vue'
+import { ref, provide, onBeforeUnmount, nextTick, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
+import type { MenuInstance } from 'element-plus'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { articleDownloadHtmlApi, docTreeApi } from '@renderer/api/blossom'
+import { articleAddApi, articleDownloadHtmlApi, articleOpenApi, articleStarApi, docTreeApi, folderAddApi, folderOpenApi } from '@renderer/api/blossom'
 import { isNotNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
-import { provideKeyDocTree } from '@renderer/views/doc/doc'
+import { checkLevel, provideKeyDocTree } from '@renderer/views/doc/doc'
 import { grammar } from './scripts/markedjs'
 import {
   folderDelApi,
@@ -229,6 +252,7 @@ onBeforeUnmount(() => {
 
 //#region ----------------------------------------< 菜单 >--------------------------------------
 let editorLoadingTimeout: NodeJS.Timeout
+const DocTreeRef = ref<MenuInstance>()
 const docTreeLoading = ref(true) // 文档菜单的加载动画
 const showSort = ref(false) // 是否显示文档排序
 const docTreeActiveArticleId = ref('') // 文档的默认选中项, 用于外部跳转后选中菜单
@@ -318,6 +342,13 @@ const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rMenuLevel2 = ref<RightMenuLevel2>({ top: '0px' })
 const ArticleDocTreeRightMenuRef = ref()
 const ArticleTreeWorkbenchRef = ref()
+const curDocType = computed(() => {
+  if (curDoc.value.ty === 1 || curDoc.value.ty === 2) {
+    return '文件夹'
+  } else {
+    return '文章'
+  }
+})
 
 /**
  * 显示右键菜单
@@ -364,9 +395,16 @@ const handleHoverRightMenuLevel2 = (event: MouseEvent, childMenuCount: number = 
   }
 }
 
-/**
- * 打开新页面, 文件夹(curDoc.value.ty == 1)无法使用新页面打开
- */
+/** 重命名文章 */
+const rename = () => {
+  curDoc.value.updn = true
+  nextTick(() => {
+    let ele = document.getElementById('article-doc-name-' + curDoc.value.i)
+    if (ele) ele.focus()
+  })
+}
+
+/** 打开新页面, 文件夹(curDoc.value.ty == 1)无法使用新页面打开 */
 const openArticleWindow = () => {
   if (curDoc.value.ty === 1) return
   openNewArticleWindow(curDoc.value.n, curDoc.value.i)
@@ -402,9 +440,7 @@ const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean =
   }
 }
 
-/**
- * 下载文章
- */
+/** 下载文章 */
 const articleDownload = () => {
   articleDownloadApi({ id: curDoc.value.i }).then((resp) => {
     let filename: string = resp.headers.get('content-disposition')
@@ -424,9 +460,7 @@ const articleDownload = () => {
   })
 }
 
-/**
- * 下载HTML文章
- */
+/** 下载HTML文章 */
 const articleDownloadHtml = () => {
   articleDownloadHtmlApi({ id: curDoc.value.i }).then((resp) => {
     let filename: string = resp.headers.get('content-disposition')
@@ -469,9 +503,7 @@ const articleBackup = (type: 'MARKDOWN' | 'HTML') => {
   })
 }
 
-/**
- * 同步文档
- */
+/** 同步文档 */
 const syncDoc = () => {
   articleSyncApi({ id: curDoc.value.i }).then((_resp) => {
     Notify.success('同步成功')
@@ -479,9 +511,7 @@ const syncDoc = () => {
   })
 }
 
-/**
- * 删除文档
- */
+/** 删除文档 */
 const delDoc = () => {
   let type = curDoc.value.ty === 3 ? '文章' : '文件夹'
   ElMessageBox.confirm(`是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后将不可恢复！`, {
@@ -505,6 +535,98 @@ const delDoc = () => {
   })
 }
 
+/** 在末尾新增文件夹 */
+const addFolder = () => {
+  if (!checkLevel(curDoc.value.i, docTreeData.value)) {
+    return
+  }
+  // 将文件夹新增至尾部
+  folderAddApi({ pid: curDoc.value.i, name: '新文件夹', storePath: '/', type: 1, icon: 'wl-folder', sort: 0, addToLast: true }).then((resp) => {
+    let doc: DocTree = {
+      i: resp.data.id,
+      p: resp.data.pid,
+      n: resp.data.name,
+      updn: true,
+      s: resp.data.sort,
+      icon: resp.data.icon,
+      o: 0,
+      t: [],
+      ty: 1,
+      star: 0,
+      showSort: curDoc.value.showSort
+    }
+    if (isEmpty(curDoc.value.children)) {
+      curDoc.value.children = [doc]
+    } else {
+      curDoc.value.children!.push(doc)
+    }
+    nextTick(() => {
+      DocTreeRef.value!.open(curDoc.value.i.toString())
+      nextTick(() => {
+        let ele = document.getElementById('article-doc-name-' + doc.i)
+        if (ele) ele.focus()
+      })
+    })
+  })
+}
+
+/** 在末尾新增文章 */
+const addArticle = () => {
+  if (!checkLevel(curDoc.value.i, docTreeData.value)) {
+    return
+  }
+  // 将文章新增至尾部
+  articleAddApi({ pid: curDoc.value.i, name: '新文章', addToLast: true }).then((resp) => {
+    let doc: DocTree = {
+      i: resp.data.id,
+      p: resp.data.pid,
+      n: resp.data.name,
+      updn: true,
+      o: 0,
+      t: [],
+      s: resp.data.sort,
+      icon: '',
+      ty: 3,
+      star: 0,
+      showSort: curDoc.value.showSort
+    }
+    if (isEmpty(curDoc.value.children)) {
+      curDoc.value.children = [doc]
+    } else {
+      curDoc.value.children!.push(doc)
+    }
+    nextTick(() => {
+      DocTreeRef.value!.open(curDoc.value.i.toString())
+      nextTick(() => {
+        let ele = document.getElementById('article-doc-name-' + doc.i)
+        if (ele) ele.focus()
+      })
+    })
+  })
+}
+
+/** 公开/取消公开 */
+const open = (openStatus: 0 | 1) => {
+  if (curDoc.value.ty === 3) {
+    articleOpenApi({ id: curDoc.value.i, openStatus: openStatus }).then((_) => {
+      curDoc.value.o = openStatus
+      Notify.success(openStatus === 0 ? '取消公开成功' : '公开成功')
+    })
+  } else {
+    folderOpenApi({ id: curDoc.value.i, openStatus: openStatus }).then((_) => {
+      curDoc.value.o = openStatus
+      Notify.success(openStatus === 0 ? '取消公开成功' : '公开成功')
+    })
+  }
+}
+
+/** 收藏/取消收藏 */
+const star = (starStatus: 0 | 1) => {
+  articleStarApi({ id: curDoc.value.i, starStatus: starStatus }).then(() => {
+    curDoc.value.star = starStatus
+    Notify.success(starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
+  })
+}
 //#endregion
 
 //#region ----------------------------------------< 二维码 >--------------------------------------

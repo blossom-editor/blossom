@@ -10,7 +10,7 @@
     element-loading-text="正在读取文档..."
     :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
     <!-- 文件夹 -->
-    <el-menu v-if="!isEmpty(docTreeData)" class="doc-trees" :unique-opened="true">
+    <el-menu v-if="!isEmpty(docTreeData)" ref="DocTreeRef" class="doc-trees" :unique-opened="true">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <div v-if="L1.ty == 11" class="menu-divider" />
@@ -95,17 +95,15 @@
     <div v-if="rMenu.show" class="doc-tree-right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
-        <div :class="['menu-item', curDoc.i < 0 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
-          <span class="iconbl bl-a-fileedit-line"></span>编辑文件夹
+        <div class="menu-item" @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
+        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
+          <span class="iconbl bl-a-fileedit-line"></span>编辑详情
         </div>
-        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('add', curDoc.p)">
-          <span class="iconbl bl-a-fileadd-line"></span>新增<strong>同级</strong>文件夹
+        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="addFolder">
+          <span class="iconbl bl-a-fileadd-line"></span>新增文件夹
         </div>
-        <!-- 只有文件夹才有子文档 -->
-        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('add', curDoc.i)">
-          <span class="iconbl bl-a-fileadd-fill"></span>新增<strong>子级</strong>文件夹
-        </div>
-        <div :class="['menu-item', curDoc.i < 0 ? 'disabled' : '']" @click="delDoc()">
+        <div class="menu-item-divider"></div>
+        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="delDoc()">
           <span class="iconbl bl-a-fileprohibit-line"></span>删除文件夹
         </div>
       </div>
@@ -131,13 +129,13 @@ import { useConfigStore } from '@renderer/stores/config'
 import { ref, provide, nextTick } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import Workbench from './PictureTreeWorkbench.vue'
-import { docTreeApi, folderDelApi } from '@renderer/api/blossom'
-import { provideKeyDocTree } from '@renderer/views/doc/doc'
+import { docTreeApi, folderAddApi, folderDelApi } from '@renderer/api/blossom'
+import { checkLevel, provideKeyDocTree } from '@renderer/views/doc/doc'
 import { isEmpty } from 'lodash'
 import PictureTitle from './PictureTreeTitle.vue'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 import Notify from '@renderer/scripts/notify'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, MenuInstance } from 'element-plus'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const configStore = useConfigStore()
@@ -148,11 +146,10 @@ useLifecycle(
 )
 
 let editorLoadingTimeout: NodeJS.Timeout
+const DocTreeRef = ref<MenuInstance>()
 const docTreeLoading = ref(true) // 文档菜单的加载动画
 const showSort = ref(false) // 是否显示文档排序
 const docTreeData = ref<DocTree[]>([]) // 文档菜单
-
-// 依赖注入
 provide(provideKeyDocTree, docTreeData)
 
 /**
@@ -273,6 +270,50 @@ const delDoc = () => {
     folderDelApi({ id: curDoc.value.i }).then((_resp) => {
       Notify.success(`删除文件夹成功`)
       getDocTree()
+    })
+  })
+}
+
+/** 重命名文章 */
+const rename = () => {
+  curDoc.value.updn = true
+  nextTick(() => {
+    let ele = document.getElementById('article-doc-name-' + curDoc.value.i)
+    if (ele) ele.focus()
+  })
+}
+
+/** 在末尾新增文件夹 */
+const addFolder = () => {
+  if (!checkLevel(curDoc.value.i, docTreeData.value)) {
+    return
+  }
+  // 将文件夹新增至尾部
+  folderAddApi({ pid: curDoc.value.i, name: '新文件夹', storePath: '/', type: 2, icon: 'wl-folder', sort: 0, addToLast: true }).then((resp) => {
+    let doc: DocTree = {
+      i: resp.data.id,
+      p: resp.data.pid,
+      n: resp.data.name,
+      updn: true,
+      s: resp.data.sort,
+      icon: resp.data.icon,
+      o: 0,
+      t: [],
+      ty: 2,
+      star: 0,
+      showSort: curDoc.value.showSort
+    }
+    if (isEmpty(curDoc.value.children)) {
+      curDoc.value.children = [doc]
+    } else {
+      curDoc.value.children!.push(doc)
+    }
+    nextTick(() => {
+      DocTreeRef.value!.open(curDoc.value.i.toString())
+      nextTick(() => {
+        let ele = document.getElementById('article-doc-name-' + doc.i)
+        if (ele) ele.focus()
+      })
     })
   })
 }

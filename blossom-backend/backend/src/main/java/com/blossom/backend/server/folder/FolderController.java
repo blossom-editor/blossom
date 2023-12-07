@@ -1,14 +1,16 @@
 package com.blossom.backend.server.folder;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
+import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,7 @@ import java.util.List;
 @RequestMapping("/folder")
 public class FolderController {
     private final FolderService baseService;
+    private final DocService docService;
 
     /**
      * 查询专题列表 [OP]
@@ -73,10 +76,14 @@ public class FolderController {
      * @param req 文件夹对象
      */
     @PostMapping("/add")
-    public R<Long> insert(@Validated @RequestBody FolderAddReq req) {
+    public R<FolderEntity> insert(@Validated @RequestBody FolderAddReq req) {
         FolderEntity folder = req.to(FolderEntity.class);
         folder.setTags(DocUtil.toTagStr(req.getTags()));
         folder.setUserId(AuthContext.getUserId());
+        // 如果新增到顶部, 获取最小的
+        if (BooleanUtil.isTrue(req.getAddToLast())) {
+            folder.setSort(docService.selectMinSortByPid(req.getPid()) + 1);
+        }
         return R.ok(baseService.insert(folder));
     }
 
@@ -90,6 +97,18 @@ public class FolderController {
         FolderEntity folder = req.to(FolderEntity.class);
         folder.setTags(DocUtil.toTagStr(req.getTags()));
         return R.ok(baseService.update(folder));
+    }
+
+    /**
+     * 修改文件夹
+     *
+     * @param req 文件夹对象
+     */
+    @PostMapping("/upd/name")
+    public R<?> updateName(@Validated @RequestBody FolderUpdNameReq req) {
+        FolderEntity folder = req.to(FolderEntity.class);
+        baseService.update(folder);
+        return R.ok();
     }
 
     /**
