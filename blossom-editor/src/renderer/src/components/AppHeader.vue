@@ -1,8 +1,5 @@
 <template>
   <div class="app-header-root">
-    <div v-if="isWindows()">
-      <img class="logo-img" src="@renderer/assets/imgs/blossom_logo.png" />
-    </div>
     <div class="drag"></div>
     <div class="window-workbench">
       <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
@@ -19,13 +16,15 @@
         <div v-if="isElectron()" class="iconbl bl-computer-line" @click="setBestSize"></div>
       </el-tooltip>
 
+      <div class="divider"></div>
+
       <div v-if="isElectron() && isWindows()" class="iconbl bl-subtract-line" @click="windowMin"></div>
       <div v-if="isElectron() && isWindows()" :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
       <div v-if="isElectron() && isWindows()" class="close iconbl bl-a-closeline-line" @click="windowHide"></div>
     </div>
   </div>
 
-  <el-drawer class="web-collect-drawer" size="420" v-model="isShowWebDrawer"> 
+  <el-drawer class="web-collect-drawer" size="420" v-model="isShowWebDrawer">
     <WebCollect></WebCollect>
   </el-drawer>
 </template>
@@ -66,19 +65,13 @@ const handleResize = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-header-root {
   @include box(100%, 100%);
   @include flex(row, space-between, center);
 
-  $width-img: 30px;
-  $width-workbench: 180px;
-  $width-drag: calc(100% - #{$width-img} - #{$width-workbench});
-
-  .logo-img {
-    @include box(18px, 18px);
-    margin: 0 6px;
-  }
+  $width-workbench: 220px;
+  $width-drag: calc(100% - #{$width-workbench});
 
   .drag {
     @include box($width-drag, 100%);
@@ -102,6 +95,14 @@ const handleResize = () => {
       }
     }
 
+    .divider {
+      width: 20px;
+      cursor: auto;
+      &:hover {
+        background-color: #00000000;
+      }
+    }
+
     .close {
       &:hover {
         background-color: var(--el-color-danger);
@@ -113,8 +114,6 @@ const handleResize = () => {
 
 <style>
 .web-collect-drawer {
-  /* background-color: #FFFFFFD1; */
-
   .el-drawer__header {
     margin-bottom: 0;
   }
