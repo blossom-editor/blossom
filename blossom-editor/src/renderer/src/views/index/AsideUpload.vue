@@ -5,7 +5,7 @@
       <el-upload
         name="file"
         :action="serverStore.serverUrl + uploadFileApiUrl"
-        :data="(f: UploadRawFile) => uploadDate(f, -1)"
+        :data="(f: UploadRawFile) => uploadDate(f, '-1')"
         :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
         :show-file-list="false"
         :before-upload="beforeUpload"

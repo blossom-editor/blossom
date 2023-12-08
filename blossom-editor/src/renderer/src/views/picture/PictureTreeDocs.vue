@@ -175,8 +175,8 @@ const getDocTree = () => {
 
       // 插入分割符
       docTree.splice(Math.max(lastPicIndex, 1), 0, {
-        i: docTree[0].i - 100000,
-        p: 0,
+        i: (Number(docTree[0].i) - 100000).toString(),
+        p: '0',
         n: '',
         o: 0,
         t: [],
@@ -218,7 +218,7 @@ const handleShowSort = () => {
 }
 
 //#region ----------------------------------------< 右键菜单 >--------------------------------------
-const curDoc = ref<DocTree>({ i: 0, p: 0, n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
+const curDoc = ref<DocTree>({ i: '0', p: '0', n: '选择菜单', o: 0, t: [], s: 0, icon: '', ty: 1, star: 0 })
 const rMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 const rMenuHeight = 151 // 固定的菜单高度, 每次增加右键菜单项时需要修改该值
 
@@ -328,7 +328,7 @@ const isShowDocInfoDialog = ref<boolean>(false)
  * @param pid 父级ID, 新增同级或子集文档时使用
  */
 const handleShowDocInfoDialog = (dialogType: DocDialogType, pid?: number) => {
-  if (curDoc.value.i < 0) {
+  if (Number(curDoc.value.i) < 0) {
     Notify.info('当前文档为系统默认文档, 无法操作', '操作无效')
     return
   }

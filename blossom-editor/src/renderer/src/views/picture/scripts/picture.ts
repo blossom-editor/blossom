@@ -14,16 +14,17 @@ const { userinfo } = useUserStore()
  */
 export interface Picture {
   creTime: string
-  id: string | number
+  id: string
   name: string
   pathName: string
-  pid: string | number
+  pid: string
   size: number
   sourceName: string
   starStatus: number
   url: string
   articleNames: string
   delTime: number
+  checked: boolean
 }
 
 /**
@@ -32,8 +33,8 @@ export interface Picture {
  */
 export const buildDefaultPicture = (): Picture => {
   return {
-    id: 0,
-    pid: 0,
+    id: '0',
+    pid: '0',
     sourceName: '',
     starStatus: 0,
     name: '',
@@ -42,7 +43,8 @@ export const buildDefaultPicture = (): Picture => {
     creTime: '',
     url: '',
     articleNames: '',
-    delTime: 0
+    delTime: 0,
+    checked: false
   }
 }
 
@@ -72,14 +74,14 @@ export const wrapperFilename = (name: string): string => {
  * @param callback 上传回调
  * @returns 返回文件路径
  */
-export const uploadForm = (file: File, pid: number, callback: UploadCallback) => {
+export const uploadForm = (file: File, pid: string, callback: UploadCallback) => {
   if (file.size / 1024 / 1024 > picStyle.maxSize) {
     Notify.error(`文件大小不能超过 ${picStyle.maxSize}MB!`, '上传失败')
   } else {
     const form = new FormData()
     form.append('file', file)
     form.append('filename', wrapperFilename(file.name))
-    form.append('pid', pid.toString())
+    form.append('pid', pid)
     uploadFileApi(form).then((resp) => {
       callback(resp.data)
     })
@@ -92,7 +94,7 @@ export const uploadForm = (file: File, pid: number, callback: UploadCallback) =>
  * @param pid
  * @returns
  */
-export const uploadDate = (rawFile: UploadRawFile, pid: number, repeatUpload: boolean = false) => {
+export const uploadDate = (rawFile: UploadRawFile, pid: string, repeatUpload: boolean = false) => {
   return {
     pid: pid,
     filename: wrapperFilename(rawFile.name),

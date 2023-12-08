@@ -13,60 +13,93 @@
 
     <!-- editor -->
     <div class="picture-container">
-      <div class="picutre-workbench">
-        <div class="workbench-group">
-          <div class="star">
-            <div v-if="picuturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus"></div>
-            <div v-else class="iconbl bl-star-fill" @click="changeStarStatus"></div>
+      <!-- 工作台 -->
+      <div class="picutre-workbench" :style="workbencStyle.workbench1">
+        <div class="workbenchs">
+          <div class="workbench-level1">
+            <div class="star">
+              <div v-if="picuturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus"></div>
+              <div v-else class="iconbl bl-star-fill" @click="changeStarStatus"></div>
+            </div>
+
+            <!-- 显式收藏 -->
+            <div class="radio">
+              <div>卡片大小</div>
+              <el-radio-group v-model="cardSize">
+                <el-radio-button label="mini">小</el-radio-button>
+                <el-radio-button label="large">大</el-radio-button>
+              </el-radio-group>
+            </div>
+
+            <div class="radio">
+              <el-tooltip effect="light" placement="right" :hide-after="0">
+                <template #content> 开启重复上传后<br />重名的图片将会被覆盖 </template>
+                <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
+              </el-tooltip>
+              <el-switch
+                width="70"
+                class="replace-upload-switch"
+                inline-prompt
+                size="large"
+                v-model="isReplaceUpload"
+                active-text="开启"
+                inactive-text="关闭" />
+            </div>
+
+            <div class="cache-clear">
+              <el-tooltip effect="light" placement="right" :hide-after="0">
+                <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
+                <el-button @click="picCacheRefresh">清空图片缓存</el-button>
+              </el-tooltip>
+            </div>
+
+            <div class="cache-clear">
+              <el-button type="primary" plain @click="handleBenchworkStyle">多选</el-button>
+            </div>
           </div>
 
-          <!-- 显式收藏 -->
-          <div class="radio">
-            <div>卡片大小</div>
-            <el-radio-group v-model="cardSize">
-              <el-radio-button label="mini">小</el-radio-button>
-              <el-radio-button label="large">大</el-radio-button>
-            </el-radio-group>
-          </div>
-
-          <div class="radio">
-            <el-tooltip effect="light" placement="right" :hide-after="0">
-              <template #content> 开启重复上传后<br />重名的图片将会被覆盖 </template>
-              <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
-            </el-tooltip>
-            <el-switch
-              width="70"
-              class="replace-upload-switch"
-              inline-prompt
-              size="large"
-              v-model="isReplaceUpload"
-              active-text="开启"
-              inactive-text="关闭" />
-          </div>
-
-          <div class="cache-clear">
-            <el-tooltip effect="light" placement="right" :hide-after="0">
-              <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
-              <div>清空图片缓存<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
-            </el-tooltip>
-            <el-button @click="picCacheRefresh">清空图片缓存</el-button>
+          <div class="workbench-level2" :style="workbencStyle.workbench2">
+            <div>
+              <el-button @click="checkedAll">选择全部</el-button>
+              <el-button @click="uncheckAll">取消全选</el-button>
+              <el-button type="primary" plain @click="updPidBatch">将选中转移至</el-button>
+              <el-button type="primary" plain @click="delBatch">删除已选中</el-button>
+            </div>
           </div>
         </div>
 
-        <div class="workbench-group">
-          <div class="statistic">
-            <div>《{{ curFolder?.name }}》</div>
-            <div>{{ pictureStat.cur.picCount }} P / {{ pictureStat.cur.picSize }}</div>
-          </div>
-          <div class="statistic">
-            <div>图片总览</div>
-            <div>{{ pictureStat.global.picCount }} P / {{ pictureStat.global.picSize }}</div>
-          </div>
+        <div class="statistic">
+          <bl-row just="flex-end" class="stat">
+            <div>文件总览:</div>
+            <div class="pics">{{ pictureStat.global.picCount }} P</div>
+            <span class="divider">/</span>
+            <div class="size">{{ pictureStat.global.picSize }}</div>
+          </bl-row>
+          <bl-row just="flex-end" class="stat">
+            <div>{{ curFolder?.name }}:</div>
+            <div class="pics">{{ pictureStat.cur.picCount }} P</div>
+            <span class="divider">/</span>
+            <div class="size">{{ pictureStat.cur.picSize }}</div>
+          </bl-row>
+          <bl-row just="flex-end" class="item" :style="workbencStyle.workbench2">
+            <span>已选择</span> <bl-tag>{{ picChecks.size }}</bl-tag> <span>个文件</span>
+          </bl-row>
         </div>
       </div>
 
-      <div class="picture-card-container">
+      <div class="picture-card-container" :style="workbencStyle.cards">
         <div :class="['picture-card', cardClass]" v-for="pic in picturePages">
+          <el-checkbox
+            v-show="isExpandWorkbench"
+            class="picture-card-check"
+            size="large"
+            v-model="pic.checked"
+            @change="
+              (check: boolean) => {
+                picCheckChange(check, pic.id)
+              }
+            "></el-checkbox>
+
           <div v-if="pic.delTime" class="img-deleted">
             {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
           </div>
@@ -148,18 +181,10 @@ const cardClass = computed(() => {
 })
 
 //#region ----------------------------------------< 当前文件当前文件 >----------------------------
-type PageParam = { pageNum: number; pageSize: number; pid: number; name: string; starStatus: number | undefined } // 分页对象类型
+type PageParam = { pageNum: number; pageSize: number; pid: string; name: string; starStatus: number | undefined } // 分页对象类型
 const curFolder = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
-// 列表参数
-const picuturePageParam = ref<PageParam>({
-  pageNum: 1,
-  pageSize: 10,
-  pid: 0,
-  name: '',
-  starStatus: undefined
-})
-// 图片列表
-const picturePages = ref<Picture[]>([])
+const picuturePageParam = ref<PageParam>({ pageNum: 1, pageSize: 10, pid: '0', name: '', starStatus: undefined }) // 列表参数
+const picturePages = ref<Picture[]>([]) // 图片列表
 const pictureStat = ref<any>({
   cur: { picCount: 0, picSize: '0 MB' },
   global: { picCount: 0, picSize: '0 MB' }
@@ -177,7 +202,7 @@ const curIsFolder = () => {
   return true
 }
 
-const getPictureStat = (pid?: number) => {
+const getPictureStat = (pid?: string) => {
   pictureStatApi({ pid: pid }).then((resp) => {
     if (isNotNull(pid)) {
       pictureStat.value.cur.picCount = resp.data.pictureCount
@@ -234,7 +259,7 @@ const changeStarStatus = () => {
   }
   if (curIsFolder()) {
     picuturePageParam.value.pageNum = 1
-    picuturePageParam.value.pid = curFolder.value?.id as number
+    picuturePageParam.value.pid = curFolder.value!.id
     picturePageApi(picuturePageParam.value).then((resp) => {
       picturePages.value = resp.data.datas
     })
@@ -243,7 +268,7 @@ const changeStarStatus = () => {
 
 //#endregion
 
-//#region ----------------------------------------< 图片卡片操作 >------------------------------------------
+//#region ----------------------------------------< 图片卡片操作 >--------------------------------
 const PictureViewerInfoRef = ref()
 
 const showPicInfo = (url: string) => {
@@ -335,6 +360,71 @@ const deletePicture = (pic: Picture) => {
       })
   })
 }
+
+//#endregion
+
+//#region ----------------------------------------< 二级操作台 >----------------------------------
+const workbencStyle = ref({
+  workbench1: { height: '50px' },
+  workbench2: { height: '0', visibility: 'hidden', opacity: 0 },
+  cards: { height: 'calc(100% - 50px)' }
+})
+const isExpandWorkbench = ref(false)
+
+const handleBenchworkStyle = () => {
+  isExpandWorkbench.value = !isExpandWorkbench.value
+  if (isExpandWorkbench.value) {
+    // 展开
+    workbencStyle.value = {
+      workbench1: { height: '85px' },
+      workbench2: { height: '35px', visibility: 'visible', opacity: 1 },
+      cards: { height: 'calc(100% - 85px)' }
+    }
+  } else {
+    // 收起
+    workbencStyle.value = {
+      workbench1: { height: '50px' },
+      workbench2: { height: '0', visibility: 'hidden', opacity: 0 },
+      cards: { height: 'calc(100% - 50px)' }
+    }
+  }
+}
+
+const picChecks = ref<Set<string>>(new Set())
+
+/** 选中全部图片 */
+const checkedAll = () => {
+  picturePages.value.forEach((ele) => {
+    ele.checked = true
+    picChecks.value.add(ele.id)
+  })
+}
+
+/** 取消选中的图片 */
+const uncheckAll = () => {
+  picturePages.value.forEach((ele) => {
+    ele.checked = false
+    picChecks.value.delete(ele.id)
+  })
+}
+
+/** 图片选中 */
+const picCheckChange = (check: boolean, id: string) => {
+  console.log(check, id)
+  if (check) {
+    picChecks.value.add(id)
+  } else {
+    picChecks.value.delete(id)
+  }
+}
+
+/** 修改图片的归属 */
+const updPidBatch = () => {
+  let ids: string[] = Array.from(picChecks.value)
+  console.log(ids)
+}
+
+const delBatch = () => {}
 
 //#endregion
 </script>

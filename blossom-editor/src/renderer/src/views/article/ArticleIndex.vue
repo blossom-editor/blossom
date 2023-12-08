@@ -362,7 +362,7 @@ const uploadFile = (file: File) => {
 const ArticleViewRef = ref()
 const { articleReferenceView } = useArticleHtmlEvent(ArticleViewRef)
 
-const openArticleWindow = (id: number) => {
+const openArticleWindow = (id: string) => {
   openNewArticleWindow('article_window_' + id, id)
 }
 //#endregion
@@ -624,7 +624,7 @@ const renderer = {
     return renderHeading(text, level)
   },
   image(href: string | null, _title: string | null, text: string): string {
-    articleImg.value.push({ targetId: 0, targetName: text, targetUrl: href as string, type: 10 })
+    articleImg.value.push({ targetId: '0', targetName: text, targetUrl: href as string, type: 10 })
     return renderImage(href, _title, text)
   },
   link(href: string | null, title: string | null, text: string): string {

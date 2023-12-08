@@ -268,8 +268,8 @@ const docTreeData = inject<Ref<DocTree[]>>(provideKeyDocTree)
 const DocFormRef = ref<FormInstance>()
 // 表单
 const docForm = ref<DocInfo>({
-  id: 0,
-  pid: 0,
+  id: '0',
+  pid: '0',
   name: '',
   icon: '',
   tags: [],
@@ -330,7 +330,7 @@ const diffVersion = computed<number>(() => {
  * @param docType    文档类型: 1:文件夹; 2:文档;
  * @param pid        初始化父级文件夹
  */
-const reload = (dialogType: DocDialogType, id?: number, docType?: DocType, pid?: number) => {
+const reload = (dialogType: DocDialogType, id?: number, docType?: DocType, pid?: string) => {
   curDocDialogType.value = dialogType
   docForm.value.type = docType == undefined ? 3 : docType
   // 只有修改时才查询数据, 新增时不查询
@@ -375,7 +375,7 @@ const checkSelectTreeIsDisabled = (data: any) => {
  * 清空上级菜单选项, 清空后的上级菜单为0
  */
 const pidClear = () => {
-  docForm.value.pid = 0
+  docForm.value.pid = '0'
 }
 
 /**
@@ -399,13 +399,13 @@ const formatStorePath = () => {
 }
 
 const showStorePathWarning = ref(false)
-const fillStorePath = (id: number, path: string = ''): void => {
+const fillStorePath = (id: string, path: string = ''): void => {
   let doc = getDocById(id, docTreeData!.value)
   if (!doc) {
     return
   }
   path = doc.n + '/' + path
-  if (doc.p != 0) {
+  if (doc.p !== '0') {
     fillStorePath(doc.p, path)
   } else {
     let docName = ''
@@ -593,9 +593,9 @@ const quickTags = ref<Map<string, QuickTag>>(new Map())
 
 watch(
   () => docForm.value?.pid,
-  (newVal: number) => {
+  (newVal: string) => {
     if (newVal === undefined) {
-      docForm.value.pid = 0
+      docForm.value.pid = '0'
     }
     if (newVal != undefined) {
       initQuickTags(newVal)
@@ -603,7 +603,7 @@ watch(
   }
 )
 
-const initQuickTags = (pid: number) => {
+const initQuickTags = (pid: string) => {
   let docs = getCDocsByPid(pid, docTreeData!.value)
   let tags = new Set()
   for (let i = 0; i < docs.length; i++) {

@@ -394,7 +394,7 @@ export const renderImage = (href: string | null, title: string | null, text: str
  */
 export const renderLink = (href: string | null, title: string | null, text: string, docTrees: DocTree[]) => {
   let link: string
-  let ref: ArticleReference = { targetId: 0, targetName: text, targetUrl: href as string, type: 21 }
+  let ref: ArticleReference = { targetId: '0', targetName: text, targetUrl: href as string, type: 21 }
   if (isBlank(title)) {
     link = `<a target="_blank" href=${href} target="_blank">${text}</a>`
   } else {
@@ -408,7 +408,7 @@ export const renderLink = (href: string | null, title: string | null, text: stri
       }
 
       // 从文章列表中获取文章, 如果找到则认为是内部引用, 否则即使是内部引用格式, 也认为是个外部文章.
-      let article = getDocById(articleId, docTrees)
+      let article = getDocById(articleId.toString(), docTrees)
       if (article != undefined) {
         ref.targetId = article.i
         ref.targetName = article.n

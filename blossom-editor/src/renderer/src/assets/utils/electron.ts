@@ -43,7 +43,7 @@ export const setUserinfo = (userinfo: any) => {
  * @param articleName 文章名称
  * @param articleId 文章ID
  */
-export const openNewArticleWindow = (articleName: string, articleId: number) => {
+export const openNewArticleWindow = (articleName: string, articleId: string) => {
   if (isElectron()) {
     window.electronAPI.openNewArticleWindow({ name: articleName, id: articleId })
   } else {

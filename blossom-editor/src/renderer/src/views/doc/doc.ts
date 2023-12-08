@@ -18,7 +18,7 @@ export const provideKeyCurArticleInfo = Symbol() as InjectionKey<Ref<DocInfo | u
 export const treeToInfo = (tree: DocTree): DocInfo => {
   return {
     id: tree.i,
-    pid: 0,
+    pid: '0',
     name: tree.n,
     tags: tree.t,
     sort: 1,
@@ -59,7 +59,7 @@ export const computedDocTitleColor = (level: number) => {
  * @param trees 树状列表
  * @returns
  */
-export const checkLevel = (pid: number, trees: DocTree[]): boolean => {
+export const checkLevel = (pid: string, trees: DocTree[]): boolean => {
   let parents = getPDocsByPid(pid, trees)
   if (parents.length >= 4) {
     Notify.error('最多仅支持4级层级关系', '菜单层级错误')
@@ -74,7 +74,7 @@ export const checkLevel = (pid: number, trees: DocTree[]): boolean => {
  * @param articleId 文档ID, 通常是文章ID, 也兼容文件夹ID的获取
  * @param trees 文档树状列表
  */
-export const getDocById = (articleId: number, trees: DocTree[]): DocTree | undefined => {
+export const getDocById = (articleId: string, trees: DocTree[]): DocTree | undefined => {
   let target: DocTree | undefined
   for (let i = 0; i < trees.length; i++) {
     let tree = trees[i]
@@ -96,7 +96,7 @@ export const getDocById = (articleId: number, trees: DocTree[]): DocTree | undef
  * @param trees
  * @returns
  */
-export const getPDocsByPid = (id: number, trees: DocTree[], result?: DocInfo[]): DocInfo[] => {
+export const getPDocsByPid = (id: string, trees: DocTree[], result?: DocInfo[]): DocInfo[] => {
   let target: DocTree | undefined = getDocById(id, trees)
   if (!target) {
     return []
@@ -106,7 +106,7 @@ export const getPDocsByPid = (id: number, trees: DocTree[], result?: DocInfo[]):
   } else {
     result!.push(treeToInfo(target))
   }
-  if (target.p !== 0) {
+  if (target.p !== '0') {
     getPDocsByPid(target.p, trees, result)
   }
   return result!
@@ -118,7 +118,7 @@ export const getPDocsByPid = (id: number, trees: DocTree[], result?: DocInfo[]):
  * @param pid
  * @param trees 文档树状列表
  */
-export const getCDocsByPid = (id: number, trees: DocTree[]): DocInfo[] => {
+export const getCDocsByPid = (id: string, trees: DocTree[]): DocInfo[] => {
   let target: DocTree | undefined = getDocById(id, trees)
   if (!target) {
     return []

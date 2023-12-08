@@ -21,7 +21,7 @@ export interface ArticleReference {
    * if type === 10 | 21, targetId is 0
    * else targetId is articleId
    */
-  targetId: number
+  targetId: string
   /**
    * Target name
    *

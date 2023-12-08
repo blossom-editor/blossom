@@ -2,6 +2,8 @@ import router from '@renderer/router'
 
 // 全局根页面
 import Index from '@renderer/views/Index.vue'
+import SettingIndex from '@renderer/views/index/SettingIndex.vue'
+
 import Home from '@renderer/views/home/Home.vue'
 import ArticleIndex from '@renderer/views/article/ArticleIndex.vue'
 import PictureIndex from '@renderer/views/picture/PictureIndex.vue'
@@ -9,7 +11,14 @@ import TodoIndex from '@renderer/views/todo/TodoIndex.vue'
 import NoteIndex from '@renderer/views/note/NoteIndex.vue'
 import PlanIndex from '@renderer/views/plan/PlanIndex.vue'
 import IconListIndex from '@renderer/components/IconList.vue'
-import SettingIndex from '@renderer/views/index/SettingIndex.vue'
+
+// const Home = () => import('@renderer/views/home/Home.vue')
+// const ArticleIndex = () => import('@renderer/views/article/ArticleIndex.vue')
+// const PictureIndex = () => import('@renderer/views/picture/PictureIndex.vue')
+// const TodoIndex = () => import('@renderer/views/todo/TodoIndex.vue')
+// const NoteIndex = () => import('@renderer/views/note/NoteIndex.vue')
+// const PlanIndex = () => import('@renderer/views/plan/PlanIndex.vue')
+// const IconListIndex = () => import('@renderer/components/IconList.vue')
 
 // 新窗口页面
 import ArticleViewWindow from '@renderer/views/article/ArticleViewWindow.vue'
@@ -18,26 +27,27 @@ import ArticleHistory from '@renderer/views/article/ArticleHistory.vue'
 import ThemeSettingVue from '@renderer/views/index/setting/ThemeSetting.vue'
 
 router.addRoute({
-  path: '/', redirect: '/settingIndex'
+  path: '/',
+  redirect: '/settingIndex'
 })
 
-router.addRoute(
-  {
-    path: '/', name: 'Index', component: Index, meta: { keepAlive: true },
-    children: [
-      { path: '/home', name: 'Home', component: Home, meta: { keepAlive: true } },
-      { path: '/settingIndex', name: 'SettingIndex', component: SettingIndex, meta: { keepAlive: false } },
-      // 功能页面
-      { path: '/articleIndex', name: 'ArticleIndex', component: ArticleIndex, meta: { keepAlive: true } },
-      { path: '/pictureIndex', name: 'PictureIndex', component: PictureIndex, meta: { keepAlive: true } },
-      { path: '/todoIndex', name: 'TodoIndex', component: TodoIndex, meta: { keepAlive: true } },
-      { path: '/noteIndex', name: 'NoteIndex', component: NoteIndex, meta: { keepAlive: false } },
-      { path: '/planIndex', name: 'PlanIndex', component: PlanIndex, meta: { keepAlive: false } },
-      { path: '/iconListIndex', name: 'IconListIndex', component: IconListIndex, meta: { keepAlive: false } },
-
-    ]
-  }
-)
+router.addRoute({
+  path: '/',
+  name: 'Index',
+  component: Index,
+  meta: { keepAlive: true },
+  children: [
+    { path: '/home', name: 'Home', component: Home, meta: { keepAlive: true } },
+    { path: '/settingIndex', name: 'SettingIndex', component: SettingIndex, meta: { keepAlive: false } },
+    // 功能页面
+    { path: '/articleIndex', name: 'ArticleIndex', component: ArticleIndex, meta: { keepAlive: true } },
+    { path: '/pictureIndex', name: 'PictureIndex', component: PictureIndex, meta: { keepAlive: true } },
+    { path: '/todoIndex', name: 'TodoIndex', component: TodoIndex, meta: { keepAlive: true } },
+    { path: '/noteIndex', name: 'NoteIndex', component: NoteIndex, meta: { keepAlive: false } },
+    { path: '/planIndex', name: 'PlanIndex', component: PlanIndex, meta: { keepAlive: false } },
+    { path: '/iconListIndex', name: 'IconListIndex', component: IconListIndex, meta: { keepAlive: false } }
+  ]
+})
 
 router.addRoute({ path: '/articleViewWindow', name: 'ArticleViewWindow', component: ArticleViewWindow, meta: { keepAlive: true } })
 router.addRoute({ path: '/iconListIndexWindow', name: 'IconListIndexWindow', component: IconListIndex, meta: { keepAlive: true } })

@@ -11,7 +11,7 @@ export function useArticleHtmlEvent(articleViewRef: Ref<HTMLElement>) {
   const articleReferenceView = ref({
     show: false,
     html: '',
-    articleId: 0,
+    articleId: '0',
     name: '',
     style: {
       top: '0',

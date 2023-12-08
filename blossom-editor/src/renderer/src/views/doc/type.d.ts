@@ -3,9 +3,9 @@
  */
 declare interface DocTree {
   /** id */
-  i: number
+  i: string
   /** pid */
-  p: number
+  p: string
   /** name */
   n: string
   /** 是否修改名称 */
@@ -34,8 +34,8 @@ declare interface DocTree {
  * 文章详情
  */
 declare interface DocInfo {
-  id: number
-  pid: number
+  id: string
+  pid: string
   name: string
   icon?: string
   tags: string[]

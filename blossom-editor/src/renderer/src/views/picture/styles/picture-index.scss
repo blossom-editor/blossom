@@ -59,32 +59,39 @@
     // 图片列表的控制按钮
     .picutre-workbench {
       @include flex(row, space-between, center);
-      @include box(calc(100% - 20px), 50px);
       @include themeShadow(0 3px 10px 1px #d3d3d3, 0 3px 10px 1px #000);
+      width: calc(100% - 20px);
       margin: 5px 10px 10px 10px;
-      padding: 5px;
+      padding: 0px 10px;
       border-radius: 5px;
+      transition: height 0.1s;
+      overflow-y: hidden;
+      overflow-x: auto;
 
-      .workbench-group {
-        height: 100%;
-        @include flex(row, flex-start, center);
+      &::-webkit-scrollbar {
+        height: 3px;
       }
 
-      :deep(.el-upload) {
-        width: 150px;
-        --el-upload-dragger-padding-horizontal: 20px;
-        --el-upload-dragger-padding-vertical: 3px;
-        --el-fill-color-blank: var(--el-color-primary-light-9);
-        --el-border-color: var(--el-color-primary-light-3);
-        color: var(--el-color-primary-light-5);
+      .workbenchs {
+        @include flex(column, center, center);
+        height: 100%;
+      }
 
-        .el-upload-dragger {
-          padding: 8px;
-        }
+      .workbench-level1 {
+        @include flex(row, space-between, flex-end);
+        width: 100%;
+      }
 
-        :hover {
-          color: var(--el-color-primary);
-        }
+      .workbench-level2 {
+        @include flex(row, space-between, center);
+        width: 100%;
+        transition:
+          height 0.1s,
+          opacity 0.1s;
+      }
+
+      .radio {
+        min-width: 70px;
       }
 
       .radio,
@@ -106,29 +113,43 @@
       }
 
       .statistic {
-        @include themeBg(#f3f3f3, #2b2b2b);
+        @include flex(column, flex-start, flex-end);
+        width: max-content;
         height: 100%;
-        border-radius: 5px;
-        padding: 2px 0;
 
-        div {
-          padding: 0 10px;
-
-          &:first-child {
-            font-size: 14px;
-            @include themeBorder(1px, #cdcdcd, #6d6d6d, 'bottom');
-          }
-
-          &:last-child {
-            font-size: 13px;
-          }
+        .stat {
+          height: 25px;
+        }
+        .item {
+          transition:
+            height 0.1s,
+            opacity 0.1s;
+        }
+        .divider {
+          padding: 0 5px;
+        }
+        .pics {
+          min-width: 40px;
+          text-align: right;
+        }
+        .size {
+          min-width: 55px;
+          text-align: right;
+        }
+        .pic-check-num {
         }
       }
     }
 
+    .picutre-workbench-child {
+      transition: all 0.1s ease;
+      padding-left: 10px;
+      font-size: 12px;
+    }
+
     .picture-card-container {
-      @include box(100%, calc(100% - 50px));
       @include flex(row, flex-start, flex-start);
+      width: 100%;
       align-content: flex-start;
       flex-wrap: wrap;
       padding: 10px 20px;
@@ -147,6 +168,24 @@
 
           .picuter-card-workbench {
             opacity: 1;
+          }
+        }
+
+        .picture-card-check {
+          position: absolute;
+          height: auto;
+          right: 10px;
+          top: 10px;
+
+          :deep(.el-checkbox__inner) {
+            height: 20px;
+            width: 20px;
+            &::after {
+              border-width: 2px;
+              height: 13px;
+              left: 7px;
+              top: 0;
+            }
           }
         }
 
@@ -181,7 +220,6 @@
         }
 
         .img-error {
-        
         }
 
         .img-deleted {
