@@ -1,0 +1,36 @@
+.editor-status-root[data-v-14c9d11d] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--bl-editor-color);
+  background-color: var(--bl-editor-gutters-bg-color);
+}
+.editor-status-root .status-item-container[data-v-14c9d11d] {
+  overflow-x: overlay;
+  white-space: nowrap;
+}
+.editor-status-root .status-item-container > div[data-v-14c9d11d] {
+  height: 100%;
+  padding: 0 5px;
+  cursor: pointer;
+}
+.editor-status-root .status-item-container > div .iconbl[data-v-14c9d11d] {
+  padding-right: 4px;
+}
+.editor-status-root .status-item-container > div[data-v-14c9d11d]:hover {
+  background-color: var(--bl-editor-bg-color);
+}
+.editor-status-root .tag-root[data-v-14c9d11d] {
+  cursor: pointer;
+}
+.editor-status-root div[data-v-14c9d11d] {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}

@@ -49,6 +49,8 @@ project:
         multi-place-login: true # 客户端是否允许多地登录
     white-list: # 白名单
       - /sentinel/**
+      - /editor/**
+      - /blog/**
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Cache/Redis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   cache: # 缓存
     names-config: # 缓存键超时时间配置
