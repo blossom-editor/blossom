@@ -219,7 +219,7 @@ export const formatJson = (msg: string, customRetract?: string): string => {
  * @returns
  */
 export const formatFileSize = (size: number): string => {
-  if (!size) return ''
+  if (!size) return '0MB'
 
   var num = 1024.0 //byte
 

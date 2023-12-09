@@ -750,7 +750,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       .iconbl {
         padding: 5px;
         font-size: 60px;
-        text-shadow: var(--bl-iconbl-text-shadow);
+        text-shadow: var(--bl-text-shadow);
         transition: 0.3s;
         cursor: pointer;
 
@@ -764,7 +764,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
       @include box(150px, 100%);
       padding: 5px;
       color: var(--el-color-primary-light-5);
-      text-shadow: var(--bl-iconbl-text-shadow);
+      text-shadow: var(--bl-text-shadow);
 
       .iconbl {
         cursor: pointer;

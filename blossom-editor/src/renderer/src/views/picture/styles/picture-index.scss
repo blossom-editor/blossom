@@ -36,7 +36,7 @@
       .iconbl {
         padding: 5px;
         font-size: 30px;
-        text-shadow: var(--bl-iconbl-text-shadow);
+        text-shadow: var(--bl-text-shadow);
         transition: 0.3s;
         cursor: pointer;
       }
@@ -59,7 +59,7 @@
     // 图片列表的控制按钮
     .picutre-workbench {
       @include flex(row, space-between, center);
-      @include themeShadow(0 3px 10px 1px #d3d3d3, 0 3px 10px 1px #000);
+      @include themeShadow(0 3px 8px #d3d3d3, 0 2px 8px 1px #000);
       width: calc(100% - 20px);
       margin: 5px 10px 10px 10px;
       padding: 0px 10px;
@@ -113,31 +113,8 @@
       }
 
       .statistic {
-        @include flex(column, flex-start, flex-end);
-        width: max-content;
         height: 100%;
-
-        .stat {
-          height: 25px;
-        }
-        .item {
-          transition:
-            height 0.1s,
-            opacity 0.1s;
-        }
-        .divider {
-          padding: 0 5px;
-        }
-        .pics {
-          min-width: 40px;
-          text-align: right;
-        }
-        .size {
-          min-width: 55px;
-          text-align: right;
-        }
-        .pic-check-num {
-        }
+        width: max-content;
       }
     }
 
@@ -285,6 +262,45 @@
       .picuter-card-next {
         @include box(100%, 50px);
         text-align: center;
+      }
+    }
+
+    .picture-status {
+      @include flex(row, space-between, center);
+      @include box(100%, 28px);
+      @include font(10px, 500);
+      position: absolute;
+      bottom: 0;
+      color: var(--bl-editor-color);
+      border-top: 1px solid var(--el-border-color);
+      background-color: var(--bl-editor-gutters-bg-color);
+
+      .status-item-container {
+        height: 100%;
+        overflow-x: overlay;
+        white-space: nowrap;
+
+        & > div {
+          height: 100%;
+          padding: 0 5px;
+          cursor: pointer;
+
+          .iconbl {
+            padding-right: 4px;
+          }
+
+          &:hover {
+            background-color: var(--bl-editor-bg-color);
+          }
+        }
+      }
+
+      .tag-root {
+        cursor: pointer;
+      }
+
+      div {
+        @include flex(row, flex-start, center);
       }
     }
   }

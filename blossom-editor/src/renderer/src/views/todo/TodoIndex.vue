@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, ref } from 'vue'
 import type { CalendarDateType, CalendarInstance } from 'element-plus'
 import { TodoList, TodoType } from './scripts/types'
 import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
@@ -108,13 +108,6 @@ const selectDate = (val: CalendarDateType) => {
   if (!CalendarRef.value) return
   CalendarRef.value.selectDate(val)
 }
-
-watch(
-  () => selectDay.value,
-  (_date) => {
-    // getPlanAll(timestampToDatetime(data).substring(0, 7))
-  }
-)
 
 //#endregion
 
@@ -273,8 +266,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
           [class='dark'] & {
             box-shadow:
-              inset -1px 3px 5px #000,
-              inset -1px -3px 5px #000;
+              inset -1px 3px 5px #0f0f0f,
+              inset -1px -3px 5px #0f0f0f;
           }
         }
         .collapse-item {
@@ -383,15 +376,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
   }
 
   .gradient-linear {
-    --color1: #ffffff;
-    --color2: #9a9a9a05;
-
-    [class='dark'] & {
-      --color1: #1e1e1e;
-      --color2: #a5a5a503;
-    }
-
-    background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);
+    background: var(--backgound-linear-gradient);
     background-size: 60px 60px;
     animation: alwaysToLeftBottom 320s linear infinite;
   }

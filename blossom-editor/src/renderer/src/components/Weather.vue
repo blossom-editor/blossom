@@ -178,6 +178,7 @@ const refreshWeatherTask = () => {
     @include font(12px, 300);
     @include absolute(30px, 10px, '', '');
     color: var(--bl-text-color-light);
+    text-shadow: var(--bl-text-shadow-light);
 
     @keyframes rotation {
       0% {

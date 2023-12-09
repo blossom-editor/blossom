@@ -54,11 +54,11 @@
             </div>
 
             <div class="cache-clear">
-              <el-button type="primary" plain @click="handleBenchworkStyle">多选</el-button>
+              <el-button type="primary" plain @click="handleBenchworkStyle">批量管理</el-button>
             </div>
           </div>
-
-          <div class="workbench-level2" :style="workbencStyle.workbench2">
+          <!-- @ts-ignore -->
+          <div class="workbench-level2" :style="workbencStyle.workbench2 as StyleValue">
             <div>
               <el-button @click="checkedAll">选择全部</el-button>
               <el-button @click="uncheckAll">取消全选</el-button>
@@ -69,21 +69,9 @@
         </div>
 
         <div class="statistic">
-          <bl-row just="flex-end" class="stat">
-            <div>文件总览:</div>
-            <div class="pics">{{ pictureStat.global.picCount }} P</div>
-            <span class="divider">/</span>
-            <div class="size">{{ pictureStat.global.picSize }}</div>
-          </bl-row>
-          <bl-row just="flex-end" class="stat">
-            <div>{{ curFolder?.name }}:</div>
-            <div class="pics">{{ pictureStat.cur.picCount }} P</div>
-            <span class="divider">/</span>
-            <div class="size">{{ pictureStat.cur.picSize }}</div>
-          </bl-row>
-          <bl-row just="flex-end" class="item" :style="workbencStyle.workbench2">
-            <span>已选择</span> <bl-tag>{{ picChecks.size }}</bl-tag> <span>个文件</span>
-          </bl-row>
+          <bl-col just="center" :style="{ ...workbencStyle.workbench2, ...{ height: '100%' } }">
+            <div style="font-size: 30px; font-weight: 300; font-style: italic; padding: 0 10px">{{ picChecks.size }}</div>
+          </bl-col>
         </div>
       </div>
 
@@ -98,7 +86,8 @@
               (check: boolean) => {
                 picCheckChange(check, pic.id)
               }
-            "></el-checkbox>
+            ">
+          </el-checkbox>
 
           <div v-if="pic.delTime" class="img-deleted">
             {{ pic.delTime == 2 ? '已删除' : pic.delTime == 1 ? '删除中' : '无法查看' }}
@@ -141,6 +130,15 @@
           <el-button type="info" plain style="width: 100px" @click="nextPage">下一页</el-button>
         </div>
       </div>
+      <div class="picture-status">
+        <bl-row width="calc(100% - 240px)" height="100%" class="status-item-container">
+          <div>{{ curFolder?.name }}: {{ pictureStat.cur.picCount }} P / {{ pictureStat.cur.picSize }}</div>
+          <div>存储路径: {{ storePath }}</div>
+        </bl-row>
+        <div class="status-item-container">
+          <div>文件总览: {{ pictureStat.global.picCount }} P / {{ pictureStat.global.picSize }}</div>
+        </div>
+      </div>
     </div>
 
     <PictureViewerInfo ref="PictureViewerInfoRef"></PictureViewerInfo>
@@ -148,7 +146,8 @@
 </template>
 <script setup lang="ts">
 // vue
-import { ref, provide, computed, onActivated } from 'vue'
+import { ref, provide, computed, onActivated, StyleValue } from 'vue'
+import { useUserStore } from '@renderer/stores/user'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { CopyDocument } from '@element-plus/icons-vue'
 import { picturePageApi, pictureStarApi, pictureDelApi, pictureStatApi } from '@renderer/api/blossom'
@@ -164,6 +163,8 @@ import PictureTreeDocs from './PictureTreeDocs.vue'
 import PictureUpload from './PictureUpload.vue'
 import PictureViewerInfo from './PictureViewerInfo.vue'
 import errorImg from '@renderer/assets/imgs/img_error.png'
+
+const userStore = useUserStore()
 
 onActivated(() => {
   getPictureStat()
@@ -192,6 +193,14 @@ const pictureStat = ref<any>({
 // 依赖注入
 provide(provideKeyDocInfo, curFolder)
 
+// storePath 拼接服务器配置的根目录
+const storePath = computed(() => {
+  if (curFolder.value && curFolder.value.storePath) {
+    return userStore.userinfo.osRes.defaultPath + '/U' + userStore.userinfo.id + curFolder.value.storePath
+  }
+  return userStore.userinfo.osRes.defaultPath + '/U' + userStore.userinfo.id
+})
+
 const curIsFolder = () => {
   if (isNull(curFolder)) {
     return false
@@ -219,6 +228,7 @@ const getPictureStat = (pid?: string) => {
  * @param tree
  */
 const clickCurFolder = (tree: DocTree) => {
+  picChecks.value.clear()
   curFolder.value = treeToInfo(tree)
   picuturePageParam.value.pageNum = 1
   picuturePageParam.value.pid = curFolder.value.id
@@ -367,7 +377,7 @@ const deletePicture = (pic: Picture) => {
 const workbencStyle = ref({
   workbench1: { height: '50px' },
   workbench2: { height: '0', visibility: 'hidden', opacity: 0 },
-  cards: { height: 'calc(100% - 50px)' }
+  cards: { height: 'calc(100% - 50px - 28px - 15px)' }
 })
 const isExpandWorkbench = ref(false)
 
@@ -378,18 +388,19 @@ const handleBenchworkStyle = () => {
     workbencStyle.value = {
       workbench1: { height: '85px' },
       workbench2: { height: '35px', visibility: 'visible', opacity: 1 },
-      cards: { height: 'calc(100% - 85px)' }
+      cards: { height: 'calc(100% - 85px - 28px - 15px)' }
     }
   } else {
     // 收起
     workbencStyle.value = {
       workbench1: { height: '50px' },
       workbench2: { height: '0', visibility: 'hidden', opacity: 0 },
-      cards: { height: 'calc(100% - 50px)' }
+      cards: { height: 'calc(100% - 50px - 28px - 15px)' }
     }
   }
 }
 
+// 图片多选
 const picChecks = ref<Set<string>>(new Set())
 
 /** 选中全部图片 */

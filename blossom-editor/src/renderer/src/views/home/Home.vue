@@ -91,7 +91,11 @@
       =======================================================
      -->
     <div
-      :class="['web-container gradient-linear', viewStyle.webCollectExpand ? 'expand' : 'fold']"
+      :class="[
+        'web-container gradient-linear',
+        viewStyle.webCollectExpand ? 'expand' : 'fold',
+        viewStyle.isGlobalShadow ? 'web-container-heavy' : 'web-container-light'
+      ]"
       :style="{ width: viewStyle.webCollectExpand ? '420px' : '0px', opacity: viewStyle.webCollectExpand ? 1 : 0 }">
       <div v-if="viewStyle.webCollectExpand" class="web-hide iconbl bl-right-line" @click="fold"></div>
       <WebCollect></WebCollect>
@@ -204,7 +208,7 @@ const fold = () => {
     .greetings {
       @include font(50px, 700);
       @include themeColor(#5c5c5c, var(--el-color-primary));
-      text-shadow: var(--bl-text-shadow);
+      @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 5px rgb(0, 0, 0));
     }
 
     .now-time {
@@ -222,7 +226,6 @@ const fold = () => {
   }
 
   .middle {
-    // @include box($width-middle, 100%, $width-middle, $width-middle);
     height: 100%;
     position: relative;
     display: none;
@@ -231,15 +234,23 @@ const fold = () => {
 
   .web-container {
     @include flex(column, space-between, center);
-    // @include box($width-web, calc(100% - 60px));
     height: calc(100% - 60px);
     margin: $margin-web;
     position: relative;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    box-shadow: var(--bl-box-shadow);
     overflow: hidden;
     z-index: 2;
+    background: #1c1c1c;
+  }
+
+  .web-container-heavy {
+    border: 1px solid #00000000;
+    box-shadow: var(--bl-box-shadow);
+  }
+
+  .web-container-light {
+    @include themeBorder(1px, #e6e6e6, #171717);
   }
 
   .web-show,
@@ -249,8 +260,8 @@ const fold = () => {
     position: absolute;
     font-size: 20px;
     z-index: 2;
-    cursor: pointer;
     transition: color 0.2s;
+    cursor: pointer;
 
     &:hover {
       color: var(--el-color-primary);
@@ -303,15 +314,7 @@ const fold = () => {
   }
 
   .gradient-linear {
-    --color1: #ffffff;
-    --color2: #9a9a9a08;
-
-    [class='dark'] & {
-      --color1: #1e1e1e;
-      --color2: #a5a5a507;
-    }
-
-    background: linear-gradient(135deg, var(--color1) 25%, var(--color2) 0, var(--color2) 50%, var(--color1) 0, var(--color1) 75%, var(--color2) 0);
+    background: var(--backgound-linear-gradient);
     background-size: 60px 60px;
     animation: alwaysToLeftBottom 120s linear infinite;
   }

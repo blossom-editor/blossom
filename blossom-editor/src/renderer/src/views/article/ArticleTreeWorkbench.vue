@@ -60,10 +60,10 @@
       </Transition>
 
       <bl-col width="25px" just="end" class="workbench-page" style="position: absolute; right: 0">
-        <el-icon size="13px" class="up" @click="toWorkbenchPage(1)">
+        <el-icon size="13px" :class="['up', viewStyle.isGlobalShadow ? 'icon-shadow' : '']" @click="toWorkbenchPage(1)">
           <ArrowUp />
         </el-icon>
-        <el-icon size="13px" class="down" @click="toWorkbenchPage(2)">
+        <el-icon size="13px" :class="['down', viewStyle.isGlobalShadow ? 'icon-shadow' : '']" @click="toWorkbenchPage(2)">
           <ArrowDown />
         </el-icon>
       </bl-col>
@@ -101,8 +101,12 @@ import { ref, nextTick, inject } from 'vue'
 import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 import { provideKeyDocInfo, TitleColor } from '@renderer/views/doc/doc'
 import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
+import { useConfigStore } from '@renderer/stores/config'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleBackup from './ArticleBackup.vue'
+
+const configStore = useConfigStore()
+const { viewStyle } = configStore
 
 const props = defineProps({
   showOpen: {

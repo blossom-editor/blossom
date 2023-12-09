@@ -48,13 +48,13 @@ watch(
 
   .logo-img {
     @include box(60px, 60px);
-    @include themeFilter(drop-shadow(2px 2px 3px #a7a7a7), drop-shadow(0 0 3px #000000));
+    filter: var(--bl-drop-shadow-star);
     padding: 5px;
   }
 
   .project-name {
     @include font(12px, 700);
-    @include themeText(3px 3px 5px #979797, 3px 3px 5px #000000);
+    text-shadow: var(--bl-text-shadow);
     width: 100%;
     color: var(--el-color-primary);
     text-align: center;

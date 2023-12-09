@@ -98,7 +98,7 @@ defineExpose({ reload })
 
 .star-card {
   @include box(210px, 70px, 210px, 210px);
-  @include themeFilter(drop-shadow(2px 2px 2px rgb(180, 180, 180)), drop-shadow(2px 2px 2px rgb(0, 0, 0)));
+  filter: var(--bl-drop-shadow-star);
   position: relative;
   margin: 10px 10px;
 

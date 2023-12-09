@@ -28,18 +28,21 @@
     .el-icon {
       @include box(15px, 15px);
       @include themeBg(#f1f1f1, #333434);
-      @include themeShadow(0 0 3px #aeaeae, 0 0 3px rgb(0, 0, 0));
       cursor: pointer;
 
       &:hover {
         @include themeBg(#eaeaea, #000);
       }
     }
+
+    .icon-shadow {
+      @include themeShadow(0 0 3px #aeaeae, 0 0 3px rgb(0, 0, 0));
+    }
   }
 
   .iconbl {
     @include themeColor(#909399, #969696);
-    text-shadow: var(--bl-iconbl-text-shadow);
+    text-shadow: var(--bl-text-shadow);
     font-size: 25px;
     padding: 3px 2px;
     transition: 0.3s;
@@ -84,7 +87,7 @@
     }
   }
 
-  //  star 图标
+  // star 图标
   .bl-star-fill {
     color: rgb(237, 204, 11);
     @include themeText(0px 5px 5px rgba(237, 204, 11, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
@@ -113,6 +116,7 @@
   }
 
   .bl-correlation-line {
+    @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 5px rgb(0, 0, 0));
     color: var(--el-color-primary) !important;
     font-size: 40px;
     padding-bottom: 0px;

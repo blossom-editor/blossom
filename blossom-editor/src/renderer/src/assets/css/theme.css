@@ -132,21 +132,18 @@ html.dark {
 /* ================================= 自定义颜色 ================================== */
 
 :root {
-  /* html color */
   --bl-html-color: #ffffff;
-  /* background color */
   --bl-bg-color: #f1f1f1;
   /* ================================= text styles =================================*/
   --bl-text-doctree-color: #909399;
   --bl-text-title-color: #727272;
   /* primary color */
   --bl-text-color: #606266;
-  /* lighter than primary color */
+  /* 更贴近背景色的字体颜色 */
   --bl-text-color-light: #b7b7b7;
-  /* text shadow */
-  --bl-text-shadow: 2px 3px 4px rgba(107, 104, 104, 0.5);
 
   --bl-box-shadow: 3px 3px 10px 3px rgba(107, 104, 104, 0.3);
+  --bl-box-shadow-hover: 0 0 5px rgba(172, 172, 172, 0.7);
 
   /* ================================= switch custom colors ================================== */
   --bl-switch-action-color: #ffffff;
@@ -154,42 +151,37 @@ html.dark {
   --bl-switch-text-color: #ffffff;
   --bl-switch-text-color-checked: #ffffff;
 
-  /* ================================= iconbl ================================== */
-  --bl-iconbl-text-shadow: 2px 3px 5px rgba(107, 104, 104, 0.4);
-  --bl-subject-color1: #040eff;
-
   /* ================================= 弹框样式 =================================*/
   --bl-dialog-bg-color: #fafafa;
-  --bl-dialog-box-shadow: 3px 3px 10px 2px rgba(58, 47, 47, 0.5);
+  --bl-dialog-box-shadow: 1px 1px 8px rgba(58, 47, 47, 0.5);
 
   --bl-scroll-color: #f2f2f2;
   --bl-scroll-color-hover: #d2d2d2;
+
+  --linear-gradient-c1: #ffffff;
+  --linear-gradient-c2: #9a9a9a05;
 }
 
 html.dark {
-  /* html color */
   --bl-html-color: #1e1e1e;
-  /* background color */
   --bl-bg-color: #333434;
+
   /* ================================= text styles =================================*/
   --bl-text-doctree-color: #b9b9b9;
   --bl-text-title-color: #a3a6ad;
   /* primary color */
   --bl-text-color: #a8a8a8;
-  /* lighter than primary color */
+  /* 更贴近背景色的字体颜色 */
   --bl-text-color-light: #747474;
-  /* text shadow */
-  --bl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
 
-  /*  */
   --bl-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+  --bl-box-shadow-hover: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+
   /* ================================= switch custom colors ================================== */
   --bl-switch-action-color: rgb(58, 58, 58);
   --bl-switch-action-color-checked: #ffffff;
   --bl-switch-text-color: var(--el-color-primary);
   --bl-switch-text-color-checked: #ffffff;
-  /* ================================= iconbl ================================== */
-  --bl-iconbl-text-shadow: 2px 3px 5px rgb(0, 0, 0);
 
   /* ================================= 弹框样式 =================================*/
   --bl-dialog-bg-color: #2d2d2d;
@@ -197,6 +189,9 @@ html.dark {
 
   --bl-scroll-color: #2e2e2e;
   --bl-scroll-color-hover: #545454;
+
+  --linear-gradient-c1: #1e1e1e;
+  --linear-gradient-c2: #a5a5a503;
 }
 
 /* ================================= 编辑器与预览样式 ================================== */

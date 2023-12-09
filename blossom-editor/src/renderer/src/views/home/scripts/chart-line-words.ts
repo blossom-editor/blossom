@@ -54,15 +54,6 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
             </div>`
           }
           return (tooltip += `</div>`)
-          // return `
-          // <div class="chart-line-word-tooltip">
-          //   <div class="xaxis-title">${params[0].axisValue}</div>
-          //   <div class="data">
-          //     <span class="iconbl bl-pen-line"></span>
-          //     <span style="padding-left:10px;">Words: ${formartNumber(params[0].data)}</span>
-          //   </div>
-          // </div>
-          // `
         }
       }
     },
@@ -86,9 +77,8 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
         data: chartData.statValues,
         lineStyle: {
           width: 3,
-          cap: 'round',
           color: primaryColor.color,
-          shadowColor: primaryColor.color5,
+          shadowColor: isDark.value ? '#000000' : primaryColor.color,
           shadowOffsetY: 5,
           shadowBlur: 10
         },

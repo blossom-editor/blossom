@@ -28,6 +28,8 @@ declare interface DocTree {
   showSort?: boolean
   /** 子集 */
   children?: DocTree[]
+  /** 存储路径 */
+  sp?: string
 }
 
 /**

@@ -1,7 +1,5 @@
 .task-item {
   @include box(270px, auto, 270px, 270px);
-  @include themeShadow(0 0 5px #c0c0c0, 0 0 3px #000000);
-  @include themeBg(#f9f9f9, #141414);
   font-weight: 300;
   border-radius: 4px;
   margin-bottom: 15px;
@@ -35,6 +33,7 @@
     background-color: transparent;
     box-shadow: none;
     pointer-events: none;
+    border: none;
 
     &:hover {
       box-shadow: none;
@@ -133,6 +132,21 @@
       color: var(--bl-text-color-light);
     }
   }
+}
+
+.task-item-normal {
+  @include themeShadow(0 0 5px #c0c0c0, 0 0 3px #000000);
+  @include themeBg(#f9f9f9, #141414);
+}
+
+.task-item-heavy {
+  @include themeShadow(0 0 5px #c0c0c0, 0 0 3px #000000);
+  @include themeBg(#f9f9f9, #141414);
+  border: 1px solid #00000000;
+}
+
+.task-item-light {
+  border: 1px solid var(--el-border-color);
 }
 
 .task-item.moving {

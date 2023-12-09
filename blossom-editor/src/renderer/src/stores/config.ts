@@ -22,6 +22,10 @@ export interface ViewStyle {
   isHomeStarCard: boolean
   // 是否在首页显示专题卡片
   isHomeSubjectCard: boolean
+  // 是否开启全局阴影, 在 ThemeSetting.vue#changeGlobalShadow 中设置
+  isGlobalShadow: boolean
+  // 是否开启阶梯动画, 在 ThemeSetting.vue#changeGlobalGradientLinear 中设置
+  isGlobalGradientLinear
 }
 
 /**
@@ -93,7 +97,9 @@ export const useConfigStore = defineStore('configStore', {
         webCollectExpand: true,
         isShowSubjectStyle: true,
         isHomeStarCard: true,
-        isHomeSubjectCard: true
+        isHomeSubjectCard: true,
+        isGlobalShadow: true,
+        isGlobalGradientLinear: true
       },
       ...Local.get(VIEW_STYLE_KEY)
     },
@@ -108,8 +114,8 @@ export const useConfigStore = defineStore('configStore', {
       this.editorStyle = editorStyle
       Local.set(EDITOR_STYLE_KEY, this.editorStyle)
     },
-    setViewStyle(viewStyle: ViewStyle) {
-      this.viewStyle = viewStyle
+    setViewStyle(_viewStyle: ViewStyle) {
+      // this.viewStyle = viewStyle
       Local.set(VIEW_STYLE_KEY, this.viewStyle)
     },
     setPicStyle(picStyle: PicStyle) {

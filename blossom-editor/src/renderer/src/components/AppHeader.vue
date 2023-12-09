@@ -114,6 +114,7 @@ const handleResize = () => {
 
 <style>
 .web-collect-drawer {
+  --el-drawer-bg-color: var(--bl-html-color);
   .el-drawer__header {
     margin-bottom: 0;
   }

@@ -1,9 +1,18 @@
 <template>
   <div class="task-workbench">
     <bl-row class="bars">
-      <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
-      <div v-if="countProc != 0" class="processing" :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
-      <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
+      <div
+        v-if="countWait != 0"
+        :class="['waiting', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+        :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
+      <div
+        v-if="countProc != 0"
+        :class="['processing', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+        :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
+      <div
+        v-if="countComp != 0"
+        :class="['completed', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+        :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
       <div v-if="countTotal == 0" class="completed" style="width: calc(100% - 6px)"></div>
     </bl-row>
     <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px">
@@ -27,7 +36,7 @@
         </el-select>
         <el-checkbox v-model="showAnyTime" label="显示时间" border style="margin-left: 10px; margin-right: 10px" />
         <el-button @click="showExportDialog">导出任务</el-button>
-        <el-checkbox v-model="configViewStyle.todoStatExpand" label="显示统计" border style="margin-left: 10px" @change="statExpandChange" />
+        <el-checkbox v-model="viewStyle.todoStatExpand" label="显示统计" border style="margin-left: 10px" @change="statExpandChange" />
       </div>
     </bl-row>
   </div>
@@ -76,7 +85,7 @@
           v-for="t in taskWaitComputed"
           :key="t.id"
           draggable="true"
-          class="task-item"
+          class="task-item task-item-normal"
           @dragstart="dragStart([ProcDragRef, CompDragRef], $event)"
           @dragend="dragendWait(t, $event)">
           <div v-if="t.todoType == 99" class="divider"></div>
@@ -130,7 +139,7 @@
         <div
           v-for="t in taskProcComputed"
           :key="t.id"
-          class="task-item"
+          class="task-item task-item-normal"
           draggable="true"
           @dragstart="dragStart([WaitDragRef, CompDragRef], $event)"
           @dragend="dragendProc(t, $event)">
@@ -188,7 +197,7 @@
           v-for="t in taskCompComputed"
           :key="t.id"
           draggable="true"
-          class="task-item"
+          class="task-item task-item-normal"
           @dragstart="dragStart([WaitDragRef, ProcDragRef], $event)"
           @dragend="dragendComp(t, $event)">
           <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
@@ -280,8 +289,6 @@
 
 <script setup lang="ts">
 import { useConfigStore } from '@renderer/stores/config'
-import type { ViewStyle } from '@renderer/stores/config'
-
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi, taskTransferApi } from '@renderer/api/todo'
@@ -438,7 +445,7 @@ const reload = (todoId: string, todoName: string, todoType: TodoType) => {
 //#region --------------------------------------------------< 顶部操作台 >--------------------------------------------------
 
 const configStore = useConfigStore()
-const configViewStyle = ref<ViewStyle>(configStore.viewStyle)
+const { viewStyle } = configStore
 
 const queryTagOptions = computed(() => {
   let tags = new Set()
@@ -526,7 +533,7 @@ const download = () => {
 }
 
 const statExpandChange = () => {
-  configStore.setViewStyle(configViewStyle.value)
+  configStore.setViewStyle(viewStyle)
 }
 //#endregion
 

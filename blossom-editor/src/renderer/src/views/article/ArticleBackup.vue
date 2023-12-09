@@ -1,51 +1,41 @@
 <template>
   <div class="article-backup-root">
-
     <!-- 标题 -->
     <div class="info-title">
-      <div class="iconbl bl-a-cloudstorage-line"></div>文章全量备份记录
+      <div class="iconbl bl-a-cloudstorage-line"></div>
+      文章全量备份记录
     </div>
 
     <div class="content">
       <div class="workbench">
-        <el-button @click="getBackupList">
-          <span class="iconbl bl-refresh-line" style="margin-right: 7px;"></span>刷新
-        </el-button>
+        <el-button @click="getBackupList"> <span class="iconbl bl-refresh-line" style="margin-right: 7px"></span>刷新 </el-button>
         <el-tooltip content="将文章以 Markdown 格式进行备份" :hide-after="0">
           <el-button @click="backupNow('MARKDOWN', 'NO')">
-            <span class="iconbl bl-file-markdown" style="margin-right: 7px;"></span>备份 Markdown
+            <span class="iconbl bl-file-markdown" style="margin-right: 7px"></span>备份 Markdown
           </el-button>
         </el-tooltip>
         <el-tooltip content="将文章以 Markdown 格式进行备份，同时备份所有图片" :hide-after="0">
           <el-button @click="backupNow('MARKDOWN', 'YES')">
-            <span class="iconbl bl-file-markdown" style="margin-right: 7px;"></span>备份本地 Markdown
+            <span class="iconbl bl-file-markdown" style="margin-right: 7px"></span>备份本地 Markdown
           </el-button>
         </el-tooltip>
 
         <el-tooltip content="将文章以 Html 格式进行备份" :hide-after="0">
-          <el-button @click="backupNow('HTML', 'NO')">
-            <span class="iconbl bl-HTML" style="margin-right: 7px;"></span>备份 Html
-          </el-button>
+          <el-button @click="backupNow('HTML', 'NO')"> <span class="iconbl bl-HTML" style="margin-right: 7px"></span>备份 Html </el-button>
         </el-tooltip>
 
         <el-tooltip content="将文章以 Html 格式进行备份，同时备份所有图片" :hide-after="0">
-          <el-button @click="backupNow('HTML', 'YES')">
-            <span class="iconbl bl-HTML" style="margin-right: 7px;"></span>备份本地 Html
-          </el-button>
+          <el-button @click="backupNow('HTML', 'YES')"> <span class="iconbl bl-HTML" style="margin-right: 7px"></span>备份本地 Html </el-button>
         </el-tooltip>
         <el-button @click="cancelDownload" type="danger" plain>
-          <span class="iconbl bl-a-closeline-line" style="margin-right: 7px;"></span>取消下载
+          <span class="iconbl bl-a-closeline-line" style="margin-right: 7px"></span>取消下载
         </el-button>
-        <div class="backup-tip">
-          服务器将于每日早上 7 点备份 Markdown 数据。
-        </div>
+        <div class="backup-tip">服务器将于每日早上 7 点备份 Markdown 数据。</div>
         <div class="backup-tip">
           <!-- 当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。 -->
-          <el-progress :text-inside="true" :stroke-width="20" :percentage="downloadProgress" striped striped-flow
-            :duration="200" />
+          <el-progress :text-inside="true" :stroke-width="20" :percentage="downloadProgress" striped striped-flow :duration="200" />
         </div>
       </div>
-
 
       <div class="bak-container">
         <div v-for="bak in backupList" :key="bak.filename" class="bak-item">
@@ -57,8 +47,9 @@
           <div>
             <span class="desc">{{ bak.desc }}</span>
           </div>
-          <el-button class="download-btn" text bg style="margin-left: 5px;" @click="downloadFragment(bak)"><span
-              class="iconbl bl-folder-download-line"></span></el-button>
+          <el-button class="download-btn" text bg style="margin-left: 5px" @click="downloadFragment(bak)"
+            ><span class="iconbl bl-folder-download-line"></span
+          ></el-button>
         </div>
       </div>
     </div>
@@ -79,7 +70,7 @@ onMounted(() => {
 const backupList = ref<BackupFile[]>()
 
 const getBackupList = () => {
-  articleBackupListApi().then(resp => {
+  articleBackupListApi().then((resp) => {
     backupList.value = resp.data?.map((bak) => {
       let desc = ''
       let type = bak.filename.charAt(1)
@@ -102,7 +93,7 @@ const getBackupList = () => {
 }
 
 const backupNow = (type: 'MARKDOWN' | 'HTML', toLocal: 'YES' | 'NO') => {
-  articleBackupApi({ type: type, toLocal: toLocal }).then(_ => {
+  articleBackupApi({ type: type, toLocal: toLocal }).then((_) => {
     Notify.info('后台正在备份中, 请稍后刷新列表查看最新备份', '备份中')
   })
 }
@@ -114,10 +105,10 @@ const fragmentSize = 32768
 const downloadFragment = async (file: BackupFile) => {
   const filename = file.filename + '.zip'
 
-  let start = 0;
-  let end = fragmentSize - 1;
-  let fileSize = 0;
-  let all: any[] = [];
+  let start = 0
+  let end = fragmentSize - 1
+  let fileSize = 0
+  let all: any[] = []
   downloadProgress.value = 0
   downloadState = 'LOADING'
 
@@ -125,19 +116,19 @@ const downloadFragment = async (file: BackupFile) => {
   fileSize = headResp.headers.get('Content-Length')
   const fragmentCount = Math.ceil(fileSize / fragmentSize)
   if (fileSize < fragmentCount) {
-    end = fileSize - 1;
+    end = fileSize - 1
   }
 
   for (let i = 0; i < fragmentCount; i++) {
-    const range = `bytes=${start}-${end}`;
-    const resp = await articleBackupDownloadFragmentApi({ filename: filename }, range);
+    const range = `bytes=${start}-${end}`
+    const resp = await articleBackupDownloadFragmentApi({ filename: filename }, range)
     all.push(resp.data)
-    start = end + 1;
-    end = Math.min(end + fragmentSize, fileSize - 1);
+    start = end + 1
+    end = Math.min(end + fragmentSize, fileSize - 1)
     downloadProgress.value = Math.round((end / fileSize) * 100)
     //@ts-ignore
     if (downloadState == 'CANCEL') {
-      break;
+      break
     }
   }
 
@@ -151,8 +142,8 @@ const downloadFragment = async (file: BackupFile) => {
   let a: HTMLAnchorElement = document.createElement('a')
   let blob: Blob = new Blob(all, { type: 'application/octet-stream' })
   let objectUrl = URL.createObjectURL(blob)
-  a.setAttribute("href", objectUrl)
-  a.setAttribute("download", filename)
+  a.setAttribute('href', objectUrl)
+  a.setAttribute('download', filename)
   a.click()
   URL.revokeObjectURL(a.href)
   a.remove()
@@ -162,12 +153,10 @@ const downloadFragment = async (file: BackupFile) => {
 const cancelDownload = async () => {
   downloadState = 'CANCEL'
 }
-
 </script>
 
 <style scoped lang="scss">
 @import '@renderer/assets/styles/bl-dialog-info';
-
 
 .article-backup-root {
   border-radius: 10px;
@@ -216,7 +205,7 @@ const cancelDownload = async () => {
         position: relative;
 
         &:hover {
-          box-shadow: var(--bl-box-shadow);
+          box-shadow: var(--bl-box-shadow-hover);
 
           .download-btn {
             opacity: 1;
@@ -232,13 +221,11 @@ const cancelDownload = async () => {
           font-size: 13px;
         }
 
-
         .size,
         .desc {
           font-size: 12px;
           color: var(--bl-text-color-light);
         }
-
 
         .download-btn {
           position: absolute;
@@ -249,6 +236,5 @@ const cancelDownload = async () => {
       }
     }
   }
-
 }
 </style>

@@ -103,11 +103,11 @@ $width-item: 210px;
 .subject-card {
   @include flex(column, flex-end, flex-start);
   @include box($width-item, 90px, $width-item, $width-item);
-  @include themeShadow(0 3px 5px 0 #cacaca, 0 3px 3px #000000);
   @include themeBg(
     linear-gradient(155deg, #ffffff00 0%, #f0f0f0 80%, var(--bl-subject-color1) 100%),
     linear-gradient(155deg, var(--bl-html-color) 0%, var(--el-color-primary-light-9) 80%, var(--bl-subject-color1) 100%)
   );
+  box-shadow: var(--bl-box-shadow-subject);
   margin: 15px 10px;
   border-radius: 4px;
   transition: transform 0.3s;

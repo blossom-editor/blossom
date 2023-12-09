@@ -1,36 +1,46 @@
 <template>
-  <div ref="AvatorWrapperRef" class="avator-wrapper" @mouseleave="mouseLevel" @mouseenter="mouseEnter($event)"
-    @mousemove="mouseMove($event)">
-    <img v-if="userinfo.avatar != ''" ref="AcatorInnerRef" class="avatar-img" :src="userinfo.avatar"
+  <div ref="AvatorWrapperRef" class="avator-wrapper" @mouseleave="mouseLevel" @mouseenter="mouseEnter($event)" @mousemove="mouseMove($event)">
+    <img
+      v-if="userinfo.avatar != ''"
+      ref="AcatorInnerRef"
+      :class="['avatar-img', viewStyle.isGlobalShadow ? 'img-shadow' : '']"
+      :src="userinfo.avatar"
       :style="innerStyle" />
-    <img v-else class="avatar-img" ref="AcatorInnerRef" src="@renderer/assets/imgs/default_user_avatar.jpg"
-      :style="innerStyle">
+    <img
+      v-else
+      :class="['avatar-img', viewStyle.isGlobalShadow ? 'img-shadow' : '']"
+      ref="AcatorInnerRef"
+      src="@renderer/assets/imgs/default_user_avatar.jpg"
+      :style="innerStyle" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { storeToRefs } from 'pinia'
+import { onMounted, ref } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
+import { useConfigStore } from '@renderer/stores/config'
+import { storeToRefs } from 'pinia'
 
+const configStore = useConfigStore()
 const userStore = useUserStore()
 const { userinfo } = storeToRefs(userStore)
+const { viewStyle } = configStore
 
 onMounted(() => {
-  mouse.setOrigin(AvatorWrapperRef.value);
+  mouse.setOrigin(AvatorWrapperRef.value)
 })
 
 const innerStyle = ref<any>({})
 const AvatorWrapperRef = ref()
 const AcatorInnerRef = ref()
-var counter = 0;
-var updateRate = 10;
+var counter = 0
+var updateRate = 10
 
 const isTimeToUpdate = () => {
-  return counter++ % updateRate === 0;
-};
+  return counter++ % updateRate === 0
+}
 
-// Mouse 
+// Mouse
 const mouse = {
   // 该值越大, 图片变形越大
   rotateBase: 2,
@@ -44,8 +54,8 @@ const mouse = {
    */
   updatePosition: function (event: any) {
     var e = event || window.event
-    this.x = e.offsetX - this.centerX;
-    this.y = (e.offsetY - this.centerY) * -1;
+    this.x = e.offsetX - this.centerX
+    this.y = (e.offsetY - this.centerY) * -1
   },
   setOrigin: function (e?: any) {
     /**
@@ -55,43 +65,45 @@ const mouse = {
      * offsetWidth wrapperr 的宽度, 包含 border 和 padding
      * offsetWidth wrapperr 的高度, 包含 border 和 padding
      */
-    this.centerX = Math.floor(e.offsetWidth / 2);
-    this.centerY = Math.floor(e.offsetHeight / 2);
+    this.centerX = Math.floor(e.offsetWidth / 2)
+    this.centerY = Math.floor(e.offsetHeight / 2)
   },
-  show: function () { return '(' + this.x + ', ' + this.y + ')'; }
+  show: function () {
+    return '(' + this.x + ', ' + this.y + ')'
+  }
 }
 
 const mouseEnter = (event: any) => {
-  update(event);
+  update(event)
 }
 
 const mouseLevel = () => {
-  innerStyle.value = {};
+  innerStyle.value = {}
 }
 
 const mouseMove = (event: any) => {
   if (isTimeToUpdate()) {
-    update(event);
+    update(event)
   }
 }
 
 const update = (event: any) => {
-  mouse.updatePosition(event);
+  mouse.updatePosition(event)
   updateTransformStyle(
     ((mouse.y / AcatorInnerRef.value.offsetHeight) * mouse.rotateBase).toFixed(2),
     ((mouse.x / AcatorInnerRef.value.offsetWidth) * mouse.rotateBase).toFixed(2)
-  );
-};
+  )
+}
 
 /**
- * 修改 
- * @param x 
- * @param y 
+ * 修改
+ * @param x
+ * @param y
  */
 const updateTransformStyle = (x: string, y: string) => {
-  var style = "rotateX(" + x + "deg) rotateY(" + y + "deg)";
-  innerStyle.value.transform = style;
-};
+  var style = 'rotateX(' + x + 'deg) rotateY(' + y + 'deg)'
+  innerStyle.value.transform = style
+}
 </script>
 
 <style scoped lang="scss">
@@ -104,12 +116,11 @@ const updateTransformStyle = (x: string, y: string) => {
     @include themeBrightness();
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, .3);
-    transition: 0.2s;
+    transition: transform 0.2s;
+  }
 
-    &:hover {
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, .6);
-    }
+  .img-shadow {
+    box-shadow: var(--bl-box-shadow);
   }
 }
 </style>

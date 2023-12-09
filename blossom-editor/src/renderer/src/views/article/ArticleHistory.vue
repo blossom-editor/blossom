@@ -116,7 +116,7 @@ onMounted(() => {
         }
 
         &:hover {
-          box-shadow: var(--bl-box-shadow);
+          box-shadow: var(--bl-box-shadow-hover);
         }
       }
     }

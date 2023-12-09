@@ -7,10 +7,19 @@
     </div>
     <div v-if="countTotal > 0" class="task-workbench">
       <bl-row class="bars">
-        <div v-if="countWait != 0" class="waiting" :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
-        <div v-if="countProc != 0" class="processing" :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
-        <div v-if="countComp != 0" class="completed" :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
-        <div v-if="countTotal == 0" class="completed" style="width: calc(100% - 6px)"></div>
+        <div
+          v-if="countWait != 0"
+          :class="['waiting', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+          :style="{ width: `calc(${(countWait / countTotal) * 100}% - 6px)` }"></div>
+        <div
+          v-if="countProc != 0"
+          :class="['processing', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+          :style="{ width: `calc(${(countProc / countTotal) * 100}% - 6px)` }"></div>
+        <div
+          v-if="countComp != 0"
+          :class="['completed', viewStyle.isGlobalShadow ? '' : 'bar-light']"
+          :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
+        <div v-if="countTotal == 0" :class="['completed', viewStyle.isGlobalShadow ? '' : '']" style="width: calc(100% - 6px)"></div>
       </bl-row>
       <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px">
         <div class="task-name">{{ curTodo.todoName }}</div>
@@ -30,7 +39,7 @@
     <div class="progress-container">
       <div class="waiting">
         <div class="tasks-container">
-          <div v-for="t in taskWait" :key="t.id" class="task-item">
+          <div v-for="t in taskWait" :key="t.id" :class="['task-item', viewStyle.isGlobalShadow ? 'task-item-heavy' : 'task-item-light']">
             <div v-if="t.todoType == 99" class="divider"></div>
             <div v-else>
               <bl-row class="task-title" just="space-between">
@@ -48,7 +57,7 @@
 
       <div class="processing">
         <div class="tasks-container">
-          <div v-for="t in taskProc" :key="t.id" class="task-item">
+          <div v-for="t in taskProc" :key="t.id" :class="['task-item', viewStyle.isGlobalShadow ? 'task-item-heavy' : 'task-item-light']">
             <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
             <div v-else>
               <bl-row class="task-title" just="space-between">
@@ -67,7 +76,7 @@
       <!--  -->
       <div class="completed">
         <div class="tasks-container">
-          <div v-for="t in taskComp" :key="t.id" class="task-item">
+          <div v-for="t in taskComp" :key="t.id" :class="['task-item', viewStyle.isGlobalShadow ? 'task-item-heavy' : 'task-item-light']">
             <div v-if="t.todoType == 99" class="divider">中午 12:00</div>
             <div v-else>
               <bl-row class="task-title" just="space-between">
@@ -95,7 +104,10 @@ import { getDateFormat } from '@renderer/assets/utils/util'
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank } from '@renderer/assets/utils/obj'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
+import { useConfigStore } from '@renderer/stores/config'
 
+const configStore = useConfigStore()
+const { viewStyle } = configStore
 useLifecycle(
   () => {
     initChoiseTodoId()

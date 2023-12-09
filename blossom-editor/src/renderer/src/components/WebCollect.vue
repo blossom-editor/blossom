@@ -64,7 +64,12 @@
           {{ collect.title }}
         </bl-row>
         <div class="web-collect-content">
-          <div class="web-item" v-for="web in collect.webs" :key="web.name" @click="openExtenal(web.url)" @contextmenu="showForm($event, web)">
+          <div
+            :class="['web-item', viewStyle.isGlobalShadow ? 'web-item-heavy' : 'web-item-light']"
+            v-for="web in collect.webs"
+            :key="web.name"
+            @click="openExtenal(web.url)"
+            @contextmenu="showForm($event, web)">
             <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
             <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
               <use :xlink:href="'#' + web.icon"></use>
@@ -84,6 +89,10 @@ import { webAllApi, webSaveApi, webDelApi } from '@renderer/api/web'
 import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
+import { useConfigStore } from '@renderer/stores/config'
+
+const configStore = useConfigStore()
+const { viewStyle } = configStore
 
 useLifecycle(
   () => getWebAll(),
@@ -141,7 +150,6 @@ const delWeb = () => {
 <style scoped lang="scss">
 .web-collect-root {
   @include box(100%, 100%);
-  // backdrop-filter: blur(4px);
 
   .web-collect-title {
     @include box(100%, 31px);
@@ -190,28 +198,39 @@ const delWeb = () => {
     @include box(80px, 110px);
     @include themeBrightness(100%, 80%);
     padding: 15px 10px 10px 10px;
-    transition: 0.3s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
     border-radius: 10px;
     cursor: pointer;
 
     img,
     svg {
-      @include themeFilter(drop-shadow(0 0 3px rgb(151, 151, 151)), drop-shadow(0 0 3px #000000));
-    }
-
-    &:hover {
-      transform: translateY(-5px);
-      @include themeShadow(0 3px 5px 0 rgb(190, 190, 190), 0 3px 5px 0 rgba(0, 0, 0, 1));
+      filter: var(--bl-drop-shadow-star);
     }
 
     .web-name {
       @include box(100%, 32px);
       @include themeColor(#a5a5a5, #929292);
-      @include themeText(2px 2px 4px rgba(107, 104, 104, 0.7), 2px 3px 5px rgb(0, 0, 0));
+      text-shadow: var(--bl-text-shadow);
       text-align: center;
       font-size: 11px;
       overflow: hidden;
       white-space: normal;
+    }
+  }
+
+  .web-item-heavy {
+    &:hover {
+      @include themeShadow(0 3px 5px 0 rgb(190, 190, 190), 0 3px 5px 0 rgba(0, 0, 0, 1));
+      transform: translateY(-5px);
+    }
+  }
+
+  .web-item-light {
+    transition: background-color 0.2s;
+    &:hover {
+      @include themeBg(#f5f5f5, #171717);
     }
   }
 

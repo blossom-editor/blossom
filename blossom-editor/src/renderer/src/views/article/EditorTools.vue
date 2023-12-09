@@ -398,7 +398,7 @@ const stop = () => {
 <style scoped lang="scss">
 .editor-tools-root {
   @include box(calc(100% - 20px), 35px);
-  @include themeShadow(0 1px 5px 1px #d3d3d3, 0 1px 5px 1px rgb(20, 20, 20));
+  @include themeShadow(0 1px 4px 1px #d3d3d3, 0 1px 4px 1px rgb(20, 20, 20));
   margin: 5px 10px 10px 10px;
   border-radius: 5px;
   position: relative;

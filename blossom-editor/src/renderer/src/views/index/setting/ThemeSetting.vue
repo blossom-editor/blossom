@@ -52,6 +52,21 @@
               <div class="name">{{ preset.name }}</div>
             </div>
           </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">增强阴影效果</div>
+            </div>
+            <el-switch v-model="viewStyle.isGlobalShadow" size="default" @change="changeGlobalShadow" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">开启梯度动画</div>
+            </div>
+            <el-switch v-model="viewStyle.isGlobalGradientLinear" size="default" @change="changeGlobalGradientLinear" />
+          </bl-row>
+
           <bl-col class="desc" align="flex-end">
             <div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div>
             <div>
@@ -96,6 +111,13 @@
             <el-input v-model="themeLight['--bl-tag-color-toc']" @input="(v: string) => setStyle('--bl-tag-color-toc', v, false)"></el-input>
             <el-divider direction="vertical" />
             <el-input v-model="themeDark['--bl-tag-color-toc']" @input="(v: string) => setStyle('--bl-tag-color-toc', v, true)"></el-input>
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">开启专题特殊样式</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowSubjectStyle" size="default" @change="changeSubjectStype" />
           </bl-row>
         </el-tab-pane>
         <!--  
@@ -151,10 +173,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useConfigStore } from '@renderer/stores/config'
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import { useDraggable } from '@renderer/scripts/draggable'
 import { useThemeStore } from '@renderer/stores/theme'
-import { isDark, getTheme, changeTheme, setPrimaryColor, setStyleItem } from '@renderer/scripts/global-theme'
+import { isDark, getTheme, changeTheme, setPrimaryColor, setStyleItem, setStyleItemObj, resetStyleItems } from '@renderer/scripts/global-theme'
+
+const config = useConfigStore()
+const { viewStyle } = config
 
 //#region 主题设置
 
@@ -193,6 +219,47 @@ const changePrimaryColor = (color: string, themeDark: boolean) => {
   setPrimaryColor(color, themeDark)
 }
 
+/**
+ * 设置全局阴影
+ * @param open
+ */
+const changeGlobalShadow = (open: boolean) => {
+  if (open) {
+    resetStyleItems(['--bl-text-shadow', '--bl-text-shadow-light', '--bl-box-shadow-subject', '--bl-drop-shadow-star'], true)
+    resetStyleItems(['--bl-text-shadow', '--bl-text-shadow-light', '--bl-box-shadow-subject', '--bl-drop-shadow-star'], false)
+  } else {
+    let style = {
+      '--bl-text-shadow': 'none',
+      '--bl-text-shadow-light': 'none',
+      '--bl-box-shadow-subject': 'none',
+      '--bl-drop-shadow-star': 'none'
+    }
+    setStyleItemObj(style, true)
+    setStyleItemObj(style, false)
+  }
+  config.setViewStyle(viewStyle)
+}
+
+/**
+ * 设置阶梯动画
+ * @param open
+ */
+const changeGlobalGradientLinear = (open: boolean) => {
+  if (open) {
+    resetStyleItems(['--backgound-linear-gradient'], true)
+    resetStyleItems(['--backgound-linear-gradient'], false)
+  } else {
+    let style = { '--backgound-linear-gradient': 'none' }
+    setStyleItemObj(style, true)
+    setStyleItemObj(style, false)
+  }
+  config.setViewStyle(viewStyle)
+}
+
+const changeSubjectStype = () => {
+  config.setViewStyle(viewStyle)
+}
+
 //#endregion
 
 //#region 文档设置
@@ -211,7 +278,7 @@ const setStyle = (name: string, value: string, themeDark: boolean) => {
 .theme-setting-root {
   @include box(440px, auto);
   background-color: var(--bl-dialog-bg-color);
-  box-shadow: var(--bl-box-shadow);
+  box-shadow: var(--bl-dialog-box-shadow);
   border-radius: 8px;
   position: absolute;
   right: 100px;
@@ -288,6 +355,7 @@ const setStyle = (name: string, value: string, themeDark: boolean) => {
     .desc {
       @include font(13px, 300);
       color: var(--bl-text-color);
+      margin-top: 30px;
       div {
         margin-bottom: 3px;
       }
@@ -306,6 +374,9 @@ const setStyle = (name: string, value: string, themeDark: boolean) => {
     }
     .el-input {
       width: 80px;
+    }
+    .el-switch {
+      height: 24px;
     }
   }
 }

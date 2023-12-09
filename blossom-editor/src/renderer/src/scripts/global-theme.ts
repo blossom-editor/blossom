@@ -1,9 +1,11 @@
+import { StyleHTMLAttributes } from 'vue'
 import { useDark } from '@vueuse/core'
 import { Local } from '@renderer/assets/utils/storage'
 import Notify from './notify'
 
 const THEME_LIGHT_KEY = 'theme_light'
 const THEME_DARK_KEY = 'theme_dark'
+const THEME_STYLE_TAG_ID = 'blossom-theme-css'
 
 const DEFAULT_LIGHT = {
   '--el-color-primary': 'rgb(119, 150, 73)',
@@ -23,7 +25,13 @@ const DEFAULT_LIGHT = {
   '--bl-tag-color-toc': '#C5C5C5',
   '--bl-todo-wait-color': '#C7D0D6',
   '--bl-todo-proc-color': '#ecd452',
-  '--bl-todo-comp-color': '#c0d695'
+  '--bl-todo-comp-color': '#c0d695',
+  '--bl-text-shadow': '2px 3px 4px rgba(107, 104, 104, 0.5)',
+  '--bl-text-shadow-light': '2px 3px 4px rgba(107, 104, 104, 0.4)',
+  '--bl-box-shadow-subject': '0 3px 5px 0 #cacaca',
+  '--bl-drop-shadow-star': 'drop-shadow(2px 2px 2px rgb(180, 180, 180))',
+  '--backgound-linear-gradient':
+    'linear-gradient(135deg,var(--linear-gradient-c1) 25%,var(--linear-gradient-c2) 0,var(--linear-gradient-c2) 50%,var(--linear-gradient-c1) 0,var(--linear-gradient-c1) 75%,var(--linear-gradient-c2) 0)'
 }
 
 const DEFAULT_DARK = {
@@ -44,7 +52,13 @@ const DEFAULT_DARK = {
   '--bl-tag-color-toc': '#8E8C8E',
   '--bl-todo-wait-color': '#505050A5',
   '--bl-todo-proc-color': '#fba85f6b',
-  '--bl-todo-comp-color': '#476716'
+  '--bl-todo-comp-color': '#476716',
+  '--bl-text-shadow': '2px 3px 5px rgb(0, 0, 0)',
+  '--bl-text-shadow-light': '2px 3px 4px rgba(39, 39, 39, 0.5)',
+  '--bl-box-shadow-subject': '0 3px 3px #000000',
+  '--bl-drop-shadow-star': ' drop-shadow(2px 2px 2px rgb(0, 0, 0))',
+  '--backgound-linear-gradient':
+    'linear-gradient(135deg,var(--linear-gradient-c1) 25%,var(--linear-gradient-c2) 0,var(--linear-gradient-c2) 50%,var(--linear-gradient-c1) 0,var(--linear-gradient-c1) 75%,var(--linear-gradient-c2) 0)'
 }
 
 const isDark = useDark()
@@ -65,10 +79,9 @@ const primaryColor = {
   color9: ''
 }
 
-const body = document.getElementsByTagName('body')[0]
-
 /**
  * 从 localStorage 获取全部样式
+ *
  * @param themeDark
  */
 const getTheme = (themeDark: boolean) => {
@@ -79,6 +92,7 @@ const getTheme = (themeDark: boolean) => {
 }
 /**
  * 合并样式, 并保存到 locaLstorage
+ *
  * @param style
  * @param themeDark
  */
@@ -88,13 +102,13 @@ const setTheme = (style: any, themeDark: boolean) => {
     Local.set(THEME_DARK_KEY, { ...theme, ...style })
   } else {
     let theme = Local.get(THEME_LIGHT_KEY)
-    console.log({ ...theme, ...style })
     Local.set(THEME_LIGHT_KEY, { ...theme, ...style })
   }
 }
 
 /**
  * 根据主题模式变更主题色
+ *
  * @param themeDark 主题模式 true:夜间模式 false:日间模式
  */
 const changeTheme = async (themeDark: boolean) => {
@@ -103,8 +117,27 @@ const changeTheme = async (themeDark: boolean) => {
   for (const key in colors) {
     text += `${key}:${colors[key]};`
   }
-  // 1. 相关的所有样式颜色设置到 body 下
-  body.style.cssText = text
+
+  if (themeDark) {
+    text = `:root.dark {${text}}`
+  } else {
+    text = `:root {${text}}`
+  }
+
+  // 1. 新建 style 标签, 设置到 head 默认覆盖全局样式
+  let themeStyleTag: HTMLElement | StyleHTMLAttributes | null = document.getElementById('blossom-theme-css')
+  if (themeStyleTag) {
+    themeStyleTag.innerHTML = text
+  } else {
+    themeStyleTag = document.createElement('style') as unknown as StyleHTMLAttributes
+    themeStyleTag.type = 'text/css'
+    themeStyleTag.id = THEME_STYLE_TAG_ID
+    themeStyleTag.innerHTML = text
+    document
+      .getElementsByTagName('head')
+      .item(0)!
+      .appendChild(themeStyleTag as Node)
+  }
 
   // 2. 设置到变量中, 用于无法通过 css var 设置的样式中, 例如 echart
   primaryColor.color = colors['--el-color-primary']
@@ -137,7 +170,8 @@ const getPrimaryColor = () => {
 
 /**
  * 设置主题色
- * @param rgb 主题颜色: rgb
+ *
+ * @param rgb       主题颜色: rgb
  * @param themeDark 主题模式 true:夜间模式 false:日间模式
  */
 const setPrimaryColor = (rgb: string, themeDark: boolean) => {
@@ -165,18 +199,53 @@ const setPrimaryColor = (rgb: string, themeDark: boolean) => {
 }
 
 /**
- * 设置主题中某个的值, 用于单个设置
- * @param name
- * @param value
- * @param themeDark
+ * 设置主题中的单个值
+ *
+ * @param name      样式的名称, 例如 --el-color-primary
+ * @param value     样式值
+ * @param themeDark 主题模式 true:夜间模式 false:日间模式
  */
 const setStyleItem = (name: string, value: string, themeDark: boolean) => {
   let item = {}
   item[name.toString()] = value
   setTheme(item, themeDark)
   if (themeDark === isDark.value) {
-    body.style.setProperty(name, value)
+    changeTheme(themeDark)
   }
 }
 
-export { isDark, getTheme, changeTheme, getPrimaryColor, setPrimaryColor, setStyleItem }
+/**
+ * 设置主题中的多个值
+ *
+ * @param obj       样式对象
+ * @param themeDark 主题模式 true:夜间模式 false:日间模式
+ */
+const setStyleItemObj = (styleObj: any, themeDark: boolean) => {
+  setTheme(styleObj, themeDark)
+  if (themeDark === isDark.value) {
+    changeTheme(themeDark)
+  }
+}
+
+/**
+ * 重置主题中的多个值
+ *
+ * @param names     一个或多个
+ * @param themeDark 主题模式 true:夜间模式 false:日间模式
+ */
+const resetStyleItems = (names: string[], themeDark: boolean) => {
+  if (names.length === 0) {
+    return
+  }
+  const DEFAULT_THEME = themeDark ? DEFAULT_DARK : DEFAULT_LIGHT
+  let item = {}
+  names.forEach((name) => {
+    item[name] = DEFAULT_THEME[name]
+  })
+  setTheme(item, themeDark)
+  if (themeDark === isDark.value) {
+    changeTheme(themeDark)
+  }
+}
+
+export { isDark, getTheme, changeTheme, getPrimaryColor, setPrimaryColor, setStyleItem, setStyleItemObj, resetStyleItems }

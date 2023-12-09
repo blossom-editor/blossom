@@ -96,6 +96,7 @@ const imgs = shallowRef<any[]>([
   getImg('weather/feng.png'),
   getImg('weather/qing-s.png'),
   getImg('weather/qing.png'),
+  getImg('weather/qing-moon.png'),
   getImg('weather/wu-s.png'),
   getImg('weather/wu.png'),
   getImg('weather/xue-s.png'),

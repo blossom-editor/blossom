@@ -291,7 +291,7 @@ const windowResize = () => {
       }
 
       &:hover {
-        box-shadow: var(--bl-box-shadow);
+        box-shadow: var(--bl-box-shadow-hover);
         .del-btn {
           opacity: 1;
         }

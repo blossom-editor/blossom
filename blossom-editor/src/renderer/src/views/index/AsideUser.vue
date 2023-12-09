@@ -26,14 +26,10 @@ const { userinfo } = storeToRefs(userStore)
 
   .avatar-img {
     @include box(50px, 50px);
-    @include themeShadow(2px 4px 7px 2px rgba(49, 49, 49, 0.4), 2px 4px 7px 2px rgb(0, 0, 0));
+    @include themeShadow(2px 4px 7px rgba(49, 49, 49, 0.4), 2px 2px 5px rgb(0, 0, 0));
     @include themeBorder(2px, var(--el-color-primary), var(--el-color-primary-light-5), 'around', 5px);
     @include themeBrightness();
     object-fit: cover;
   }
-}
-
-.user-detail-popover {
-  background-color: var(--el-color-primary-light-5);
 }
 </style>
