@@ -9,6 +9,7 @@ lerna-debug.log*
 stats.html
 
 node_modules
+target
 .DS_Store
 dist
 dist-ssr

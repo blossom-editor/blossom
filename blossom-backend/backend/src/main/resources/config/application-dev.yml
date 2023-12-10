@@ -51,6 +51,7 @@ project:
       - /sentinel/**
       - /editor/**
       - /blog/**
+      - /assets/**
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Cache/Redis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   cache: # 缓存
     names-config: # 缓存键超时时间配置
@@ -76,3 +77,6 @@ project:
       domain: "http://localhost:9999/pic/"
       # 请以 / 开头, / 结尾, 简短的路径在文章中有更好的显示效果, 过长一定程度会使文章内容混乱
       default-path: "/home/bl/img/"
+server:
+  servlet:
+    context-path: /dev

@@ -16,6 +16,12 @@ export default defineConfig({
   base: './',
   server: {
     host: "0.0.0.0",
+    // 开发环境代理
+    proxy: {
+      '/dev': {
+        target:'http://127.0.0.1:9999/',
+      },
+    },
     port: 5174,
     //vue3 vite配置热更新不用手动刷新
     hmr: true
