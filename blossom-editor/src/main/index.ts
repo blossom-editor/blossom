@@ -90,7 +90,7 @@ const buildWindow = (_title: string): BrowserWindow => {
   let win = new BrowserWindow({
     show: true,
     width: 1400,
-    height: 1000,
+    height: 1022,
     minWidth: 972,
     minHeight: 700,
     icon: icon,
@@ -294,7 +294,7 @@ const initOnFocusedWindow = (): void => {
    * 将窗口大小设置为最佳显示效果
    */
   ipcMain.on('set-best-size', () => {
-    BrowserWindow.getFocusedWindow()?.setSize(1905, 1020)
+    BrowserWindow.getFocusedWindow()?.setSize(1905, 1022)
   })
 }
 

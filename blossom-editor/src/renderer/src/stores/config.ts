@@ -92,7 +92,7 @@ export const useConfigStore = defineStore('configStore', {
     // 样式配置
     viewStyle: {
       ...{
-        treeDocsFontSize: '14px',
+        treeDocsFontSize: '13px',
         todoStatExpand: true,
         webCollectExpand: true,
         isShowSubjectStyle: true,

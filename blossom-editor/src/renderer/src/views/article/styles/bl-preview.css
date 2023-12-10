@@ -319,14 +319,14 @@ table container
   Version: 2021.09.0
 */
 .hljs {
-  color: #a9b7c6;
+  color: var(--bl-preview-pre-text-color);
   background: var(--bl-preview-pre-bg-color);
 }
 
 .hljs ::selection,
 .hljs::selection {
   background-color: #323232;
-  color: #a9b7c6;
+  color: var(--bl-preview-pre-text-color);
 }
 
 .hljs-comment {
@@ -340,7 +340,7 @@ table container
 .hljs-operator,
 .hljs-punctuation,
 .hljs-subst {
-  color: #a9b7c6;
+  color: var(--bl-preview-pre-text-color);
 }
 
 .hljs-operator {
