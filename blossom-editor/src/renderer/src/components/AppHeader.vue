@@ -1,6 +1,6 @@
 <template>
   <div class="app-header-root">
-    <div class="drag"></div>
+    <div class="drag">{{ tryuseComment }}</div>
     <div class="window-workbench">
       <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
 
@@ -30,12 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { toRoute } from '@renderer/router'
+import { useThemeStore } from '@renderer/stores/theme'
 import { windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import WebCollect from './WebCollect.vue'
 import { isWindows, isElectron } from '@renderer/assets/utils/util'
-import { useThemeStore } from '@renderer/stores/theme'
+import { isTryuse } from '@renderer/scripts/env'
+import SYSTEM from '@renderer/assets/constants/system'
 
 const themeStrore = useThemeStore()
 
@@ -45,6 +47,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
+})
+
+const tryuseComment = computed(() => {
+  if (isTryuse()) {
+    return `试用版本(${SYSTEM.SYS.VERSION})为最新的开发版本，包含当前正式版中没有的功能。`
+  }
+  return ``
 })
 
 /**
@@ -74,8 +83,13 @@ const handleResize = () => {
   $width-drag: calc(100% - #{$width-workbench});
 
   .drag {
+    @include flex(row, flex-start, center);
     @include box($width-drag, 100%);
+    @include font(12px, 300);
+    color: var(--bl-text-color-light);
     -webkit-app-region: drag;
+    font-style: italic;
+    padding-left: 10px;
   }
 
   .window-workbench {
