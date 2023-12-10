@@ -8,14 +8,14 @@
 
     <div class="content">
       <bl-row class="workbench">
-        <el-button @click="getBackupList"> <span class="iconbl bl-refresh-line" style="margin-right: 7px"></span>刷新 </el-button>
-        <el-input style="width: 150px; margin-left: 10px" placeholder="查询文章"></el-input>
+        <el-button @click="getBackupList"> <span class="iconbl bl-refresh-line" style="margin-right: 7px"></span>刷新</el-button>
+        <el-input style="width: 150px; margin-left: 10px" placeholder="搜索文章名" v-model="recycleSearch"></el-input>
         <div class="tips">回收站只保存 {{ userinfo.params.ARTICLE_RECYCLE_EXP_DAYS }} 天内的文章。</div>
       </bl-row>
 
       <div class="recycle-container">
-        <div v-if="recycleList.length == 0" class="tips">回收站内无内容...</div>
-        <div v-else v-for="recycle in recycleList" :key="recycle.id" class="recycle-item">
+        <div v-if="isEmpty(recycleList)" class="tips">回收站内无内容...</div>
+        <div v-else v-for="recycle in recycsFilter" :key="recycle.id" class="recycle-item">
           <div class="name">{{ recycle.name }}</div>
           <div class="size">{{ recycle.delTime }}|{{ remainingDays(recycle.delTime) }}天后删除</div>
           <el-button class="restore-btn" @click="restore(recycle.id)"><span class="iconbl bl-a-cloudupload-line"></span></el-button>
@@ -27,21 +27,31 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 import { articleRecycleListApi, articleRecycleRestoreApi } from '@renderer/api/blossom'
+import { isNull } from '@renderer/assets/utils/obj'
+import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
 
 const userStore = useUserStore()
 const { userinfo } = userStore
-
 const deadLine = dayjs(new Date()).subtract(Number(userinfo.params.ARTICLE_RECYCLE_EXP_DAYS), 'day').toDate()
 
 onMounted(() => {
   getBackupList()
 })
 
+const recycleSearch = ref('')
 const recycleList = ref<any[]>([])
+const recycsFilter = computed(() => {
+  return recycleList.value.filter((r: any) => {
+    if (isNull(recycleSearch.value)) {
+      return true
+    }
+    return r.name.toLowerCase().includes(recycleSearch.value.toLowerCase())
+  })
+})
 
 const remainingDays = (day: string) => {
   return dayjs(day).diff(deadLine, 'day')
