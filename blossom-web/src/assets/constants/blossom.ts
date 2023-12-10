@@ -34,7 +34,7 @@ const blossom = {
    */
   DOMAIN: {
     // 将该值填写为你的后台访问地址, 与 blossom 客户端登录页面填写的地址相同
-    PRD: 'https://www.wangyunf.com/bl/',
+    PRD: import.meta.env.VITE_BLOSSOM_BASE_URI,
     // 将该值填写你开放为博客的用户ID
     USER_ID: 1
   },
