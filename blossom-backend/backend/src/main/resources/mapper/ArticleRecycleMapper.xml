@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.article.recycle.ArticleRecycleMapper">
+    <!-- 文章保存进回收站 -->
+    <insert id="save">
+        insert into blossom_article_recycle (
+            select id,
+                   pid,
+                   name,
+                   icon,
+                   tags,
+                   sort,
+                   cover,
+                   describes,
+                   pv,
+                   uv,
+                   likes,
+                   words,
+                   version,
+                   color,
+                   markdown,
+                   cre_time,
+                   cre_time,
+                   now(),
+                   user_id
+              from blossom_article
+             where id = #{id}
+        );
+    </insert>
+
+    <select id="listAll" resultType="com.blossom.backend.server.article.recycle.pojo.ArticleRecycleEntity">
+        select id,
+               name,
+               del_time
+          from blossom_article_recycle
+         where user_id = #{userId}
+    </select>
+
+    <!--  -->
+    <insert id="restore">
+        INSERT INTO blossom_article (
+            select id,
+                   #{pid},
+                   name,
+                   icon,
+                   tags,
+                   sort,
+                   cover,
+                   describes,
+                   0,
+                   0,
+                   0,
+                   pv,
+                   uv,
+                   likes,
+                   words,
+                   version,
+                   color,
+                   '',
+                   markdown,
+                   '',
+                   cre_time,
+                   now(),
+                   user_id
+              from blossom_article_recycle
+             where id = #{id})
+    </insert>
+</mapper>

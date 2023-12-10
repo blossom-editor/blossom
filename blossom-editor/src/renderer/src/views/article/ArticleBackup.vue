@@ -30,8 +30,8 @@
         <el-button @click="cancelDownload" type="danger" plain>
           <span class="iconbl bl-a-closeline-line" style="margin-right: 7px"></span>取消下载
         </el-button>
-        <div class="backup-tip">服务器将于每日早上 7 点备份 Markdown 数据。</div>
-        <div class="backup-tip">
+        <div class="tips">服务器将于每日早上 7 点备份 Markdown 数据。</div>
+        <div class="tips">
           <!-- 当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。 -->
           <el-progress :text-inside="true" :stroke-width="20" :percentage="downloadProgress" striped striped-flow :duration="200" />
         </div>
@@ -171,10 +171,9 @@ const cancelDownload = async () => {
       border-bottom: 1px solid var(--el-border-color);
       margin-bottom: 10px;
 
-      .backup-tip {
+      .tips {
+        @include font(12px, 300);
         margin-top: 10px;
-        font-size: 12px;
-        color: var(--bl-text-color-light);
 
         :deep(.el-progress-bar__outer) {
           border-radius: 5px;

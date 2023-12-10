@@ -221,7 +221,6 @@ export const articleUpdTagApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>('/article/upd/tag', data)
 }
 
-
 /**
  * 删除文章
  * @param data {id:文章ID}
@@ -426,7 +425,26 @@ export const articleTempKey = (params?: object): Promise<any> => {
   return rq.get('/article/temp/key', { params })
 }
 
+/**
+ * 文章临时访问链接
+ */
 export const articleTempH = '/article/temp/h?k='
+
+/**
+ * 文章回收站列表
+ * @returns
+ */
+export const articleRecycleListApi = (): Promise<any> => {
+  return rq.get('/article/recycle/list')
+}
+
+/**
+ * 文章回收站列表
+ * @returns
+ */
+export const articleRecycleRestoreApi = (data?: object): Promise<any> => {
+  return rq.post('/article/recycle/restore', data)
+}
 //#endregion
 
 //#region ====================================================< picture >===================================================

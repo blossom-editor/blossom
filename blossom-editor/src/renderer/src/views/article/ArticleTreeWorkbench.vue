@@ -53,6 +53,9 @@
 
       <Transition name="wbpage-two">
         <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 2">
+          <el-tooltip content="查看回收站" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+            <div class="iconbl bl-delete-line" @click="handleShowRecycleDialog"></div>
+          </el-tooltip>
           <el-tooltip content="查看备份记录" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-a-cloudstorage-line" @click="handleShowBackupDialog"></div>
           </el-tooltip>
@@ -94,6 +97,19 @@
     draggable>
     <ArticleBackup ref="ArticleBackupRef"></ArticleBackup>
   </el-dialog>
+
+  <el-dialog
+    class="backup-dialog"
+    v-model="isShowRecycleDialog"
+    width="80%"
+    top="100px"
+    style="height: 80%"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
+    <ArticleRecycle ref="ArticleRecycleRef"></ArticleRecycle>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -104,6 +120,7 @@ import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
 import { useConfigStore } from '@renderer/stores/config'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleBackup from './ArticleBackup.vue'
+import ArticleRecycle from './ArticleRecycle.vue'
 
 const configStore = useConfigStore()
 const { viewStyle } = configStore
@@ -204,7 +221,15 @@ const isShowBackupDialog = ref<boolean>(false)
 const handleShowBackupDialog = () => {
   isShowBackupDialog.value = true
 }
+//#endregion
 
+//#region 备份记录
+const ArticleRecycleRef = ref()
+const isShowRecycleDialog = ref<boolean>(false)
+
+const handleShowRecycleDialog = () => {
+  isShowRecycleDialog.value = true
+}
 //#endregion
 
 const emits = defineEmits(['refreshDocTree', 'show-sort'])

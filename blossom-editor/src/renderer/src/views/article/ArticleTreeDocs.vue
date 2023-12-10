@@ -537,7 +537,7 @@ const syncDoc = () => {
 /** 删除文档 */
 const delDoc = () => {
   let type = curDoc.value.ty === 3 ? '文章' : '文件夹'
-  ElMessageBox.confirm(`是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后将不可恢复！`, {
+  ElMessageBox.confirm(`是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后的文章可在回收站中查看。`, {
     confirmButtonText: '确定删除',
     cancelButtonText: '我再想想',
     type: 'info',

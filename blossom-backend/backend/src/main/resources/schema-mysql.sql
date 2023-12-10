@@ -41,6 +41,17 @@ SELECT 3,
                   FROM base_sys_param
                   WHERE id = 3);
 INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
+SELECT 4,
+       'ARTICLE_RECYCLE_EXP_DAYS',
+       '45',
+       '文章回收站过期天数, 超过该天数将被删除',
+       1,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1
+                  FROM base_sys_param
+                  WHERE id = 4);
+INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
 SELECT 11,
        'HEFENG_KEY',
        '',
@@ -237,6 +248,33 @@ CREATE TABLE IF NOT EXISTS `blossom_article_log`  (
 -- ----------------------------
 -- Records of blossom_article_log
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for blossom_article_log
+-- since 1.10.0
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `blossom_article_recycle` (
+                                           `id` bigint NOT NULL COMMENT 'ID',
+                                           `pid` bigint NOT NULL COMMENT '文件夹ID',
+                                           `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '文章名称',
+                                           `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '文章图标',
+                                           `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '标签集合',
+                                           `sort` int NOT NULL DEFAULT '1' COMMENT '排序',
+                                           `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '封面',
+                                           `describes` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '描述',
+                                           `pv` int NOT NULL DEFAULT '0' COMMENT '页面的查看数',
+                                           `uv` int NOT NULL DEFAULT '0' COMMENT '独立的访问次数,每日IP重置',
+                                           `likes` int NOT NULL DEFAULT '0' COMMENT '点赞数',
+                                           `words` int NOT NULL DEFAULT '0' COMMENT '文章字数',
+                                           `version` int NOT NULL DEFAULT '0' COMMENT '版本',
+                                           `color` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '颜色',
+                                           `markdown` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT 'Markdown 内容',
+                                           `cre_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                           `upd_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+                                           `del_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '删除时间',
+                                           `user_id` bigint NOT NULL DEFAULT '1' COMMENT '用户ID',
+                                           PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='文章回收站';
 
 -- ----------------------------
 -- Table structure for blossom_article_open

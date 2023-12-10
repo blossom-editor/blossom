@@ -20,6 +20,11 @@ public enum ParamEnum {
     ARTICLE_LOG_EXP_DAYS(false,0),
 
     /**
+     * 文章回收站过期天数
+     */
+    ARTICLE_RECYCLE_EXP_DAYS(false,0),
+
+    /**
      * 和风天气KEY
      */
     HEFENG_KEY(true,20),

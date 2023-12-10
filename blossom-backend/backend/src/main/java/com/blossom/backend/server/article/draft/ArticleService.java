@@ -2,7 +2,6 @@ package com.blossom.backend.server.article.draft;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.TagEnum;
@@ -10,12 +9,12 @@ import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
 import com.blossom.backend.server.article.log.ArticleLogService;
 import com.blossom.backend.server.article.open.ArticleOpenMapper;
+import com.blossom.backend.server.article.recycle.ArticleRecycleMapper;
 import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.article.view.ArticleViewService;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
-import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +37,16 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     private ArticleViewService viewService;
     private ArticleLogService logService;
     private ArticleOpenMapper openMapper;
+    private ArticleRecycleMapper recycleMapper;
 
     @Autowired
     public void setReferenceService(ArticleReferenceService referenceService) {
         this.referenceService = referenceService;
+    }
+
+    @Autowired
+    public void setRecycleMapper(ArticleRecycleMapper recycleMapper) {
+        this.recycleMapper = recycleMapper;
     }
 
     @Autowired
@@ -62,7 +67,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     /**
      * 获取指定ID的正文内容
      *
-     * @param ids ID集合
+     * @param ids         ID集合
      * @param contentType 正文类型 MARKDOWN/HTML
      * @return 内容
      */
@@ -173,12 +178,17 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * <p>2. 删除公开文章</p>
      *
      * @param id 文章ID
+     * @since 1.10.0 删除时不校验文章内容, 被删除的文章会进入回收站, 可在回收站中查询
      */
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        ArticleEntity article = selectById(id, false, true, true);;
+        ArticleEntity article = selectById(id, false, true, true);
         XzException404.throwBy(ObjUtil.isNull(article), "文章不存在");
+        /*
+        @since 1.10.0
         XzException400.throwBy(StrUtil.isNotBlank(article.getMarkdown()), "文章内容不为空, 请清空内容后再删除.");
+         */
+        recycleMapper.save(article.getId());
         // 删除文章
         baseMapper.deleteById(id);
         // 删除公开文章
@@ -214,7 +224,6 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         }
         baseMapper.uvAndPv(id, 1, uv);
     }
-
 
 
 }

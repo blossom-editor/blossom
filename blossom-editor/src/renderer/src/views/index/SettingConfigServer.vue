@@ -29,6 +29,18 @@
         <div class="conf-tip">文章编辑记录的保存天数。{{ serverParamForm.ARTICLE_LOG_EXP_DAYS }}天前的编辑记录将被删除。</div>
       </el-form-item>
 
+      <el-form-item label="文章回收站保存天数">
+        <bl-row>
+          <el-input-number
+            size="default"
+            controls-position="right"
+            :min="1"
+            v-model="serverParamForm.ARTICLE_RECYCLE_EXP_DAYS"
+            @change="(cur: any) => updParam('ARTICLE_RECYCLE_EXP_DAYS', cur)"></el-input-number>
+        </bl-row>
+        <div class="conf-tip">文章回收站过期天数。{{ serverParamForm.ARTICLE_RECYCLE_EXP_DAYS }}天前的记录将被删除。</div>
+      </el-form-item>
+
       <el-form-item label="备份文件保存天数">
         <bl-row>
           <el-input-number
@@ -46,8 +58,8 @@
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
         <div class="conf-tip">
-          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/guide/hefeng.html">《文档》</a>。修改后点击首页天气右上角的刷新按钮
-          <span class="iconbl bl-refresh-smile"></span> 获取最新天气。
+          和风天气的 API KEY，申请方式请查看<a href="https://www.wangyunf.com/blossom-doc/guide/hefeng.html">《文档》</a
+          >。修改后点击首页天气右上角的刷新按钮 <span class="iconbl bl-refresh-smile"></span> 获取最新天气。
         </div>
       </el-form-item>
 
@@ -107,6 +119,7 @@ const serverParamForm = ref({
   WEB_ARTICLE_URL: '',
   BACKUP_PATH: '',
   ARTICLE_LOG_EXP_DAYS: '',
+  ARTICLE_RECYCLE_EXP_DAYS: '',
   BACKUP_EXP_DAYS: '',
   HEFENG_KEY: '',
   SERVER_MACHINE_EXPIRE: '',
