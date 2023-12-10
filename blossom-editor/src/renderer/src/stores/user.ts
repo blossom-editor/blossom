@@ -44,20 +44,21 @@ const initUserinfo = () => {
     articleCount: 0,
     articleWords: 0,
     osRes: {
-      osType: "",
-      bucketName: "",
-      domain: "",
-      defaultPath: ""
+      osType: '',
+      bucketName: '',
+      domain: '',
+      defaultPath: ''
     },
     params: {
-      'WEB_ARTICLE_URL': '',
-      'BACKUP_PATH': '',
-      'BACKUP_EXP_DAYS': '',
-      'ARTICLE_LOG_EXP_DAYS': '',
-      'SERVER_MACHINE_EXPIRE': '',
-      'SERVER_DATABASE_EXPIRE': '',
-      'SERVER_HTTPS_EXPIRE': '',
-      'SERVER_DOMAIN_EXPIRE': '',
+      WEB_ARTICLE_URL: '',
+      BACKUP_PATH: '',
+      BACKUP_EXP_DAYS: '',
+      ARTICLE_LOG_EXP_DAYS: '',
+      ARTICLE_RECYCLE_EXP_DAYS: '',
+      SERVER_MACHINE_EXPIRE: '',
+      SERVER_DATABASE_EXPIRE: '',
+      SERVER_HTTPS_EXPIRE: '',
+      SERVER_DOMAIN_EXPIRE: ''
     }
   }
   Local.set(userinfoKey, userinfo)
@@ -84,23 +85,24 @@ export const useUserStore = defineStore('userStore', {
       await loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
         .then((resp: any) => {
           setTimeout(() => {
-            let auth = { token: resp.data.token, status: AuthStatus.Succ };
-            this.auth = auth;
-            Local.set(storeKey, auth);
+            let auth = { token: resp.data.token, status: AuthStatus.Succ }
+            this.auth = auth
+            Local.set(storeKey, auth)
             this.getUserinfo()
-          }, timeoutMs);
-        }).catch((_e) => {
+          }, timeoutMs)
+        })
+        .catch((_e) => {
           setTimeout(() => {
             this.reset()
             // 登录失败的状态需要特别更改
             let auth = { token: '', status: AuthStatus.Fail }
             this.auth = auth
-          }, timeoutMs);
+          }, timeoutMs)
         })
     },
     async logout() {
-      await logoutApi().then(_ => {
-        this.reset();
+      await logoutApi().then((_) => {
+        this.reset()
       })
     },
     /**
@@ -108,29 +110,31 @@ export const useUserStore = defineStore('userStore', {
      */
     async checkToken(succ: any, fail: any) {
       this.auth.status = AuthStatus.Checking
-      await checkApi().then(resp => {
-        setTimeout(() => {
-          let auth = { token: resp.data.token, status: AuthStatus.Succ }
-          this.auth = auth
-          Local.set(storeKey, auth)
-          this.getUserinfo()
-          succ()
-        }, timeoutMs);
-      }).catch(_error => {
-        setTimeout(() => {
-          this.reset()
-          // 登录失败的状态需要特别更改
-          let auth = { token: '', status: AuthStatus.Wait }
-          this.auth = auth
-          fail()
-        }, timeoutMs);
-      })
+      await checkApi()
+        .then((resp) => {
+          setTimeout(() => {
+            let auth = { token: resp.data.token, status: AuthStatus.Succ }
+            this.auth = auth
+            Local.set(storeKey, auth)
+            this.getUserinfo()
+            succ()
+          }, timeoutMs)
+        })
+        .catch((_error) => {
+          setTimeout(() => {
+            this.reset()
+            // 登录失败的状态需要特别更改
+            let auth = { token: '', status: AuthStatus.Wait }
+            this.auth = auth
+            fail()
+          }, timeoutMs)
+        })
     },
     /**
      * 获取用户信息
      */
     getUserinfo() {
-      userinfoApi().then(resp => {
+      userinfoApi().then((resp) => {
         this.userinfo = resp.data
         Local.set(userinfoKey, resp.data)
         setUserinfo(resp.data)
@@ -140,10 +144,10 @@ export const useUserStore = defineStore('userStore', {
      * 重置登录状态和用户信息
      */
     reset() {
-      Local.remove(storeKey);
-      Local.remove(userinfoKey);
+      Local.remove(storeKey)
+      Local.remove(userinfoKey)
       this.auth = initAuth()
       this.userinfo = initUserinfo()
     }
   }
-});
+})

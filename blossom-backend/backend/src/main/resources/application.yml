@@ -63,8 +63,8 @@ mybatis-plus:
       insert-strategy: not_empty
       update-strategy: not_null
       where-strategy: not_null
-      logic-delete-field: 'delTime'
-      logic-not-delete-value: 0
+      # logic-delete-field: 'delTime'
+      # logic-not-delete-value: 0
 
 # pageHelper 分页配置
 pagehelper:

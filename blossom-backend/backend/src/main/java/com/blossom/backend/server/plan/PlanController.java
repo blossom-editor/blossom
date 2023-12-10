@@ -56,8 +56,8 @@ public class PlanController {
 
     /**
      * 修改每日计划
-     * <p>只能修改标题和内容, 如果是修改日期等信息需要重新新增
      *
+     * @apiNote 只能修改标题和内容, 如果是修改日期等信息需要重新新增
      * @since 1.9.0
      */
     @PostMapping("/upd/day")

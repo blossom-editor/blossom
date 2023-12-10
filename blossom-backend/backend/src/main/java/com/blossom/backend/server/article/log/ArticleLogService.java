@@ -55,7 +55,7 @@ public class ArticleLogService extends ServiceImpl<ArticleLogMapper, ArticleLogE
      */
     @Scheduled(cron = "0 0 05 * * ?")
     @Transactional(rollbackFor = Exception.class)
-    public void refreshWeather() {
+    public void delExpireLog() {
         ParamEntity param = paramService.getValue(ParamEnum.ARTICLE_LOG_EXP_DAYS);
         int expireDay = -60;
         if (param != null) {
