@@ -143,6 +143,18 @@
 
     <PictureViewerInfo ref="PictureViewerInfoRef"></PictureViewerInfo>
   </div>
+
+  <el-dialog
+    v-model="isShowBatchDelDialog"
+    width="500px"
+    style="height: 230px"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
+    <PictureBatchDel></PictureBatchDel>
+  </el-dialog>
 </template>
 <script setup lang="ts">
 // vue
@@ -162,6 +174,7 @@ import { articleNamesToArray, picCacheWrapper, Picture, picCacheRefresh } from '
 import PictureTreeDocs from './PictureTreeDocs.vue'
 import PictureUpload from './PictureUpload.vue'
 import PictureViewerInfo from './PictureViewerInfo.vue'
+import PictureBatchDel from './PictureBatchDel.vue'
 import errorImg from '@renderer/assets/imgs/img_error.png'
 
 const userStore = useUserStore()
@@ -435,7 +448,14 @@ const updPidBatch = () => {
   console.log(ids)
 }
 
-const delBatch = () => {}
+//#endregion
+
+//#region --批量删除
+const isShowBatchDelDialog = ref(false)
+
+const delBatch = () => {
+  isShowBatchDelDialog.value = true
+}
 
 //#endregion
 </script>
