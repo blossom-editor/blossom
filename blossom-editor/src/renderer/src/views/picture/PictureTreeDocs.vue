@@ -95,15 +95,15 @@
     <div v-if="rMenu.show" class="doc-tree-right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
-        <div class="menu-item" @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
-        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
+        <div :class="['menu-item', Number(curDoc.i) <= 0 ? 'disabled' : '']" @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
+        <div :class="['menu-item', Number(curDoc.i) <= 0 || curDoc.ty != 2 ? 'disabled' : '']" @click="handleShowDocInfoDialog('upd')">
           <span class="iconbl bl-a-fileedit-line"></span>编辑详情
         </div>
-        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="addFolder">
+        <div :class="['menu-item', Number(curDoc.i) <= 0 || curDoc.ty != 2 ? 'disabled' : '']" @click="addFolder">
           <span class="iconbl bl-a-fileadd-line"></span>新增文件夹
         </div>
         <div class="menu-item-divider"></div>
-        <div :class="['menu-item', curDoc.ty != 2 ? 'disabled' : '']" @click="delDoc()">
+        <div :class="['menu-item', Number(curDoc.i) <= 0 || curDoc.ty != 2 ? 'disabled' : '']" @click="delDoc()">
           <span class="iconbl bl-a-fileprohibit-line"></span>删除文件夹
         </div>
       </div>
