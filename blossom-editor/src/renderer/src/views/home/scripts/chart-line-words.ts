@@ -8,7 +8,7 @@ const isDark = useDark()
 export type ChartLineWordsData = {
   statDates: any[]
   statValues: any[]
-  statValuesSameMonth: any[]
+  statValuesMom: any[]
 }
 
 /**
@@ -19,6 +19,7 @@ export type ChartLineWordsData = {
  */
 export const renderChart = async (chart: any, chartData: ChartLineWordsData, callback?: any) => {
   let primaryColor = getPrimaryColor()
+  getMom(chartData)
   chart.setOption({
     grid: { top: 30, left: 60, right: 20, bottom: 35 },
     legend: {
@@ -26,7 +27,7 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
       ...{
         top: 15,
         left: 65,
-        selected: { Words: true, 'The Same Month': false }
+        selected: { Words: true, 'Month On Month': true }
       }
     },
     tooltip: {
@@ -105,12 +106,12 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
       },
       {
         z: 2,
-        name: 'The Same Month',
+        name: 'Month on Month',
         type: 'line',
         sampling: 'lttb',
         smooth: true, // 平滑曲线
         showSymbol: false,
-        data: chartData.statValuesSameMonth,
+        data: chartData.statValuesMom,
         lineStyle: {
           width: 2,
           color: '#e3a300',
@@ -140,4 +141,19 @@ export const renderChart = async (chart: any, chartData: ChartLineWordsData, cal
   if (callback !== undefined) {
     callback
   }
+}
+
+const getMom = (chartData: ChartLineWordsData) => {
+  let sameMonth: any[] = []
+  let lastMonth = 0
+  for (let i = 0; i < chartData.statValues.length; i++) {
+    const word = chartData.statValues[i]
+    if (i === 0) {
+      sameMonth.push(word)
+    } else {
+      sameMonth.push(word - lastMonth)
+    }
+    lastMonth = word
+  }
+  chartData.statValuesMom = sameMonth
 }

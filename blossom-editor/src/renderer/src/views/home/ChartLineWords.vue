@@ -46,24 +46,13 @@ watch(
 const ChartLineRef = ref<any>(null)
 const rqLoading = ref<boolean>(true)
 let chartLine: any
-let chartData: ChartLineWordsData = { statDates: [], statValues: [], statValuesSameMonth: [] }
+let chartData: ChartLineWordsData = { statDates: [], statValues: [], statValuesMom: [] }
 
 const getWords = () => {
   rqLoading.value = true
   articleWordLineApi().then((resp) => {
     chartData = resp.data
-    let sameMonth: any[] = []
-    let lastMonth = 0
-    for (let i = 0; i < chartData.statValues.length; i++) {
-      const word = chartData.statValues[i]
-      if (i === 0) {
-        sameMonth.push(word)
-      } else {
-        sameMonth.push(word - lastMonth)
-      }
-      lastMonth = word
-    }
-    chartData.statValuesSameMonth = sameMonth
+    
 
     renderChart(
       chartLine,

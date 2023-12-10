@@ -216,7 +216,7 @@ const render = () => {
   let chartDate: ChartLineWordsData = {
     statDates: [],
     statValues: [],
-    statValuesSameMonth: []
+    statValuesMom: []
   }
   wordsList
     .value!.sort((a, b) => a.date.localeCompare(b.date))
