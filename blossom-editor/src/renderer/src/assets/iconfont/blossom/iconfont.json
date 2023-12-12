@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11179871",
+      "name": "小写",
+      "font_class": "xiaoxie",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "17873550",
+      "name": "大写",
+      "font_class": "daxie",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
       "icon_id": "24341867",
       "name": "left-line",
       "font_class": "left-line",
