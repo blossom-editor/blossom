@@ -452,7 +452,6 @@ const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean =
     url = `[${curDoc.value.n}](${userinfo.params.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
     writeText(url)
   } else if (type === 'tempVisit') {
-    // console.log(server.serverUrl)
     articleTempKey({ id: curDoc.value.i }).then((resp) => {
       url = server.serverUrl + articleTempH + resp.data
       writeText(url)

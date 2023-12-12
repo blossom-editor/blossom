@@ -21,7 +21,6 @@ public class PropertiesCheckListener implements ApplicationListener<ApplicationE
         log.warn("\n\n正在检查 Blossom 后台配置项\n\n" +
                         "\n[CHECK] ==========================================================================================================================" +
                         "\n[CHECK] 使用环境: [{}], 版本: [{}]" +
-                        "\n[CHECK] 访问地址: http://127.0.0.1:{}{}" +
                         "\n[CHECK] ==========================================================================================================================" +
                         "\n[CHECK] 数据库配置: {}" +
                         "\n[CHECK] 数据库用户: {}" +
@@ -30,7 +29,6 @@ public class PropertiesCheckListener implements ApplicationListener<ApplicationE
                         "\n[CHECK] 图片存储: {}" +
                         "\n[CHECK] ==========================================================================================================================\n\n",
                 get(env, SpringUtil.PROFILE_ACTION), get(env, "project.base.version"),
-                get(env, SpringUtil.SERVER_PORT), StrUtil.isBlank(get(env, SpringUtil.SERVLET_CONTEXT_PATH)) ? "" : get(env, SpringUtil.SERVLET_CONTEXT_PATH),
                 get(env, "spring.datasource.url"),
                 get(env, "spring.datasource.username"),
                 get(env, "spring.datasource.password"),

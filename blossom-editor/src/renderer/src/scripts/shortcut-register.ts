@@ -38,7 +38,6 @@ class ShortcutRegistrant {
    * 
    * <pre>
    * window.onblur = () => {
-   *   console.log('没有被激活')
    *   shortcutRegistrant.clearDownCodes()
    * }
    * </pre>
@@ -56,7 +55,6 @@ class ShortcutRegistrant {
    */
   public keyup(event: KeyboardEvent): void {
     if (this.debug) {
-      console.log(event)
       let row1 = { col1: '动作', col2: '松开' }
       let row2 = { col1: 'key', col2: event.key }
       let row3 = { col1: 'code', col2: event.code }
@@ -82,7 +80,6 @@ class ShortcutRegistrant {
    */
   public keydown(event: KeyboardEvent): void {
     if (this.debug) {
-      console.log(event)
       let row1 = { col1: '动作', col2: '按下' }
       let row2 = { col1: 'key', col2: event.key }
       let row3 = { col1: 'code', col2: event.code }

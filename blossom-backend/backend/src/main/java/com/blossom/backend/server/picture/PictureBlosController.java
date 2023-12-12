@@ -86,7 +86,7 @@ public class PictureBlosController {
         return filename;
     }
 
-    private void checkFileName(String filename) {
+    private void checkFilename(String filename) {
         if (StrUtil.isBlank(filename)) {
             throw new XzException400("未知文件");
         }
@@ -94,7 +94,6 @@ public class PictureBlosController {
             // 如果图片前缀不是配置的前缀，则去数据库查询文件是否上传过。
             throw new XzException400("无法访问");
         }
-        System.out.println(FileUtil.exist(filename));
         if (!FileUtil.exist(filename)) {
             throw new XzException400("未知文件");
         }
@@ -110,7 +109,7 @@ public class PictureBlosController {
     public ResponseEntity<StreamingResponseBody> getFile(@PathVariable String filename,
                                                          HttpServletRequest request, HttpServletResponse resp) {
         filename = getFilename(filename, request);
-        checkFileName(filename);
+        checkFilename(filename);
         // sendfile 方式下载图片
         sendfile(filename, resp);
         return ResponseEntity.ok(null);

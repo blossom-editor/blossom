@@ -44,7 +44,6 @@ onMounted(() => {
 const notes = ref()
 const getNoteAll = () => {
   noteAllApi().then((resp) => {
-    console.log(resp.data)
     notes.value = resp.data
   })
 }

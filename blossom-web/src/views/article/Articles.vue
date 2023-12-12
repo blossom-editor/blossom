@@ -143,7 +143,6 @@ onMounted(() => {
 })
 
 onActivated(() => {
-  console.log(123123123)
   getRouteQueryParams()
   window.addEventListener('resize', onresize)
   initStyle()

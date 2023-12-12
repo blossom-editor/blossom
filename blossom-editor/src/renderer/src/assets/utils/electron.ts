@@ -145,12 +145,8 @@ export const writeText = (text: string): void => {
       const blob = new Blob([text], { type })
       const data = [new ClipboardItem({ [type]: blob })]
       navigator.clipboard.write(data).then(
-        () => {
-          console.log('write success')
-        },
-        () => {
-          console.log('write failure ')
-        }
+        () => {},
+        () => {}
       )
     } else {
       let textArea = document.createElement('textarea')

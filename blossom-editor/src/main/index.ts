@@ -420,8 +420,6 @@ export const initOnWindow = (window: BrowserWindow) => {
    */
   window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
     let url = details.url as string
-    console.log(url)
-
     if (blossomUserinfo && url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
       let articleId: string = url.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
       createNewWindow('article', articleId, Number(articleId))
@@ -439,7 +437,6 @@ export const initOnWindow = (window: BrowserWindow) => {
  */
 const interceptorATag = (e: Event, url: string): boolean => {
   e.preventDefault()
-  console.log(`[${new Date()}] electron 执行 <a/> 标签拦截器`)
   let innerUrl = url
   if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
     let articleId: string = innerUrl.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
