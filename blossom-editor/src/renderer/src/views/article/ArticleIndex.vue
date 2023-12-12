@@ -116,6 +116,8 @@
               <bl-row><span class="iconbl bl-image--line"></span>插入图片</bl-row>
             </el-upload>
           </div>
+          <div class="menu-item" @click="upper"><span class="iconbl bl-daxie"></span>大写</div>
+          <div class="menu-item" @click="lower"><span class="iconbl bl-xiaoxie"></span>小写</div>
           <div class="menu-item" @click="formatTable"><span class="iconbl bl-transcript-line"></span>格式化选中表格</div>
           <div class="menu-item" @click="openExtenal('https://katex.org/#demo')">
             <span class="iconbl bl-a-texteditorsuperscript-line"></span>Katex 在线校验
@@ -201,7 +203,6 @@ onMounted(() => {
   addListenerScroll()
   initAutoSaveInterval()
   if (!isMounted) {
-    console.log('onMounted')
     enterView()
     bindKeys()
   }
@@ -214,7 +215,6 @@ onBeforeUnmount(() => {
 })
 onActivated(() => {
   if (isMounted) {
-    console.log('onActivated')
     enterView()
     bindKeys()
   }
@@ -760,7 +760,7 @@ const removeListenerScroll = () => {
 
 //#region ----------------------------------------< 编辑器右键 >----------------------------------------
 const editorRightMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
-const rightMenuHeight = isElectron() ? 215 : 155
+const rightMenuHeight = isElectron() ? 270 : 220
 
 const handleEditorClickRight = (event: MouseEvent) => {
   event.preventDefault()
@@ -791,6 +791,16 @@ const rightMenuCopy = () => {
 /** 右键黏贴功能 */
 const rightMenuPaste = () => {
   cmw.insertBlockCommand(readText())
+}
+
+/** 转大写功能 */
+const upper = () => {
+  cmw.toUpper()
+}
+
+/** 转小写功能 */
+const lower = () => {
+  cmw.toLower()
 }
 
 /**

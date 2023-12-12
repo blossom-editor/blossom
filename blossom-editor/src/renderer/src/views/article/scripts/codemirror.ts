@@ -174,7 +174,7 @@ export class CmWrapper {
   /**
    * 获取编辑器，不建议直接使用该对象，而是对使用到的方法进行封装
    */
-  get eidtor(): EditorView {
+  get editor(): EditorView {
     return this._editor
   }
 
@@ -600,6 +600,30 @@ export class CmWrapper {
       CmWrapper.insert(editor, 0, maxLen, formatContent, position, position)
     })
   }
+  /** 转为大写 */
+  private static toUpper = (editor: EditorView) => {
+    editor.dispatch(
+      editor.state.changeByRange((range: SelectionRange) => {
+        let text = this.sliceDoc(editor, range.from, range.to)
+        return {
+          changes: [{ from: range.from, to: range.to, insert: text.toLocaleUpperCase() }],
+          range: EditorSelection.range(range.from, range.to)
+        }
+      })
+    )
+  }
+  /** 转为小写 */
+  private static toLower = (editor: EditorView) => {
+    editor.dispatch(
+      editor.state.changeByRange((range: SelectionRange) => {
+        let text = this.sliceDoc(editor, range.from, range.to)
+        return {
+          changes: [{ from: range.from, to: range.to, insert: text.toLocaleLowerCase() }],
+          range: EditorSelection.range(range.from, range.to)
+        }
+      })
+    )
+  }
   // 实例调用
   insertBlockCommand = (content: string) => CmWrapper.insertBlockCommand(this._editor, content)
   commandBold = () => CmWrapper.commandBold(this._editor)
@@ -623,6 +647,8 @@ export class CmWrapper {
   commandOrdered = () => CmWrapper.commandOrdered(this._editor)
   commandImg = () => CmWrapper.commandImg(this._editor)
   commandLink = () => CmWrapper.commandLink(this._editor)
+  toUpper = () => CmWrapper.toUpper(this._editor)
+  toLower = () => CmWrapper.toLower(this._editor)
   commandFormatMarkdown = async () => CmWrapper.commandFormatMarkdown(this._editor)
   //#endregion
 }
