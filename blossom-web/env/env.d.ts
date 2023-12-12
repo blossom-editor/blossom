@@ -2,9 +2,9 @@
 
 interface ImportMetaEnv {
   /**
-   * 基础URL
+   * API 的基础 URL
    */
-  readonly VITE_BLOSSOM_BASE_URI: string
+  readonly VITE_BL_API_BASE_URI: string
 }
 
 interface ImportMeta {

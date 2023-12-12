@@ -12,17 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import router from '@/router'
-import { checkToken } from '@/scripts/auth'
 import IndexHeader from './index/IndexHeader.vue'
 import type { RouteRecordName } from 'vue-router'
 
 const includeRouter = ref<any>(['Home'])
-
-onMounted(() => {
-  // checkToken()
-})
 
 const curRoute = ref<RouteRecordName>('Home')
 
@@ -42,8 +37,6 @@ watch(
   },
   { immediate: true }
 )
-
-onMounted(() => {})
 </script>
 <style scoped lang="scss">
 .index-root {

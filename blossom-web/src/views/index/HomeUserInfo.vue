@@ -15,7 +15,7 @@
       <div class="userinfo-content-btns">
         <ul>
           <li @click="toRoute('/articles')">所有文章 <span class="iconbl bl-sendmail-line"></span></li>
-          <li v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
+          <li v-for="link in getLinks()" @click="toView(link.URL)">
             {{ link.NAME }}
           </li>
         </ul>
@@ -33,9 +33,10 @@
 import { toRoute } from '@/router'
 import { onMounted, ref } from 'vue'
 import { userinfoApi } from '@/api/blossom'
-import ChartHeatmap from './ChartHeatmap.vue'
-import SYSTEM from '@/assets/constants/blossom'
 import { toView } from '@/assets/utils/util'
+import SYSTEM from '@/assets/constants/blossom'
+import { getLinks } from '@/scripts/env'
+import ChartHeatmap from './ChartHeatmap.vue'
 
 const userinfo = ref({
   avatar: '',
@@ -74,7 +75,7 @@ onMounted(() => {
       padding-left: 20px;
 
       .name {
-        @include font(38px, 200);
+        @include font(38px, 300);
         height: 65px;
         color: #ffffff;
         letter-spacing: 5px;
@@ -82,7 +83,7 @@ onMounted(() => {
       }
 
       .desc {
-        @include font(13px, 500);
+        @include font(13px, 300);
         height: 20px;
         color: #7a7a7a;
         letter-spacing: 1px;
@@ -102,7 +103,7 @@ onMounted(() => {
 
       ol,
       ul {
-        @include font(15px, 500);
+        @include font(15px, 300);
         color: #7a7a7a;
         text-align: left;
 

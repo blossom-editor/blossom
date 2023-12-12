@@ -160,9 +160,10 @@ $width-item: 210px;
 
   .subject-icon,
   .menu-icon-img {
-    @include box(55px, 55px);
-    @include absolute('', 2px, 8px, '');
+    @include box(50px, 50px);
+    @include absolute('', 5px, 8px, '');
     @include themeFilter(drop-shadow(0 0 3px rgb(62, 62, 62)), drop-shadow(0 0 3px #000000));
+    border-radius: 4px;
   }
 
   .infos {

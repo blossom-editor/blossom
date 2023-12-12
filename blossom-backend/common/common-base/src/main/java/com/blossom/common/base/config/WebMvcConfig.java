@@ -28,17 +28,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/editor/**")
-                .addResourceLocations("classpath:/static/editor/")
-                .setCacheControl(CacheControl.maxAge(48, TimeUnit.HOURS).cachePublic());
-
-        /*
-        博客因无法获取域名, 暂不支持集成
-        registry.addResourceHandler("/blog/**")
-                .addResourceLocations("classpath:/static/blog/")
-                .setCacheControl(CacheControl.maxAge(4, TimeUnit.MINUTES).cachePublic());
-         */
-
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/static/favicon.png")
                 .setCacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic());

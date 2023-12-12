@@ -6,16 +6,18 @@ import { Local } from '@/assets/utils/storage'
 import { isNotNull } from '@/assets/utils/obj'
 import pinia from '@/stores/store-config'
 import { storeKey as authKey, useUserStore } from '@/stores/user'
-import SYSTEM from '@/assets/constants/blossom'
+import { getApiBaseUrl, getUserId } from '@/scripts/env'
 
 const userStore = useUserStore(pinia)
+const userId = getUserId()
+const baseUrl = getApiBaseUrl()
 
 export class Request {
   /** axios 实例 */
   instance: AxiosInstance
   /** 基础配置，url和超时时间 */
   baseConfig: AxiosRequestConfig = {
-    baseURL: SYSTEM.DOMAIN.PRD,
+    baseURL: baseUrl,
     timeout: 60000
   }
   /**
@@ -34,11 +36,10 @@ export class Request {
         if (isNotNull(tokenCache) && isNotNull(tokenCache.token)) {
           token = tokenCache.token
         }
-        console.log(config.url, 'token: ' + tokenCache.token)
         config.headers = {
           ...config.headers,
           ...{
-            'Blossom-User-Id': SYSTEM.DOMAIN.USER_ID,
+            'Blossom-User-Id': userId,
             Authorization: 'Bearer ' + token
           }
         }

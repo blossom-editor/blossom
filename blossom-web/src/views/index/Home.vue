@@ -1,8 +1,5 @@
 <template>
   <div class="blossom-home-root">
-    <!-- <div class="home-header">
-      <IndexHeader></IndexHeader>
-    </div> -->
     <div class="home-main">
       <div class="home-main-userinfo">
         <UserInfo></UserInfo>
@@ -18,16 +15,16 @@
     </div>
     <div class="home-footer">
       <div class="about-us">
-        <span>{{ blossom.SYS.VERSION + (isNotBlank(blossom.SYS.EMAIL) ? ' | 邮箱：' + blossom.SYS.EMAIL : '') }}</span>
+        <span>{{ blossom.SYS.VERSION + (isNotBlank(getEmail()) ? ' | 邮箱：' + getEmail() : '') }}</span>
       </div>
       <div class="icp">
         <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
           <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
-          {{ blossom.SYS.GONG_WANG_AN_BEI }}
+          {{ getGwab() }}
         </div>
-        <div v-if="isNotBlank(blossom.SYS.GONG_WANG_AN_BEI)">|</div>
+        <div v-if="isNotBlank(getGwab())">|</div>
         <div style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
-          {{ blossom.SYS.ICP_BEI_AN_HAO }}
+          {{ getIpc() }}
         </div>
       </div>
     </div>
@@ -36,12 +33,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import IndexHeader from './IndexHeader.vue'
 import UserInfo from './HomeUserInfo.vue'
 import ChartLineWords from './ChartLineWords.vue'
 import HomeSubject from './HomeSubject.vue'
 import blossom from '@/assets/constants/blossom'
 import { isNotBlank } from '@/assets/utils/obj'
+import { getGwab, getIpc, getEmail } from '@/scripts/env'
 
 const ChartLineWordsRef = ref()
 onMounted(() => {
@@ -57,8 +54,6 @@ const openNew = (url: string) => {
 .blossom-home-root {
   @include box(100%, 100%);
   @include flex(column, center, center);
-  // box-shadow: 0 0 10px #24272c;
-  // background-image: linear-gradient(to bottom right, #3e464e, #212121);
   position: relative;
   overflow: hidden;
 

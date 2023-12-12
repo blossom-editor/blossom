@@ -1,8 +1,15 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
+#!**/src/main/**
 !**/src/test/**
+
+### static ###
+/backend/src/main/resources/static/blog/**
+!/backend/src/main/resources/static/blog/README.md
+
+/backend/src/main/resources/static/editor/**
+!/backend/src/main/resources/static/editor/README.md
 
 ### STS ###
 .apt_generated

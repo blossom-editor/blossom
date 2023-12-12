@@ -2,9 +2,9 @@
   <div :class="['blossom-header-root', props.bg ? 'blossom-header-bg' : '']">
     <bl-row class="head-row" width="auto" height="100%">
       <div class="blossom-logo" @click="toLogin">
-        <img :src="logo" :style="SYSTEM.THEME.LOGO_STYLE" />
+        <img src="/blog-logo.png" :style="getThemeLogoStyle()" />
       </div>
-      <div class="project-name" @click="toRoute('/home')">{{ SYSTEM.SYS.NAME }}</div>
+      <div class="project-name" @click="toRoute('/home')">{{ getSysName() }}</div>
     </bl-row>
 
     <bl-row class="head-row" width="auto" height="100%">
@@ -17,11 +17,11 @@
         :offset="-5"
         transition="el-zoom-in-top">
         <template #reference>
-          <div v-show="SYSTEM.LINKS != undefined && SYSTEM.LINKS.length > 0" class="popper-target">更多</div>
+          <div v-show="getLinks().length > 0" class="popper-target">更多</div>
         </template>
         <div class="popper-content">
-          <div class="item" v-for="link in SYSTEM.LINKS" @click="toView(link.URL)">
-            <img :src="getImg(link.LOGO)" style="width: 25px" />{{ link.NAME }}
+          <div class="item" v-for="link in getLinks()" @click="toView(link.URL)">
+            <img :src="link.LOGO" style="width: 25px" />{{ link.NAME }}
           </div>
         </div>
       </el-popover>
@@ -59,7 +59,7 @@ import { toRoute } from '@/router'
 import { toView } from '@/assets/utils/util'
 import { useUserStore } from '@/stores/user'
 import { logout } from '@/scripts/auth'
-import SYSTEM from '@/assets/constants/blossom'
+import { getLinks, getSysName, getThemeLogoStyle } from '@/scripts/env'
 
 const userStore = useUserStore()
 
@@ -69,12 +69,6 @@ const props = defineProps({
     default: false
   }
 })
-
-const logo = new URL(`../../assets/imgs/logo/${SYSTEM.SYS.LOGO}`, import.meta.url).href
-
-const getImg = (img: string) => {
-  return new URL(`../../assets/imgs/linklogo/${img}`, import.meta.url).href
-}
 
 let recount: NodeJS.Timeout | undefined
 const tryLoginCount = ref(0)

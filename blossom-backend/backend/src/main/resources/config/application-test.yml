@@ -1,11 +1,10 @@
-#server:
-#  servlet:
-#    context-path: /dev
+server:
+  port: 9997
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.31.99:3306/xzzz-blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/blossom-all?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
     username: root
     password: jasmine888
     hikari:
@@ -13,7 +12,7 @@ spring:
 
 logging:
   level:
-    com.blossom: debug
+    com.blossom: info
     com.blossom.expand.tracker: info
     com.blossom.backend.base.auth: info
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn
@@ -35,12 +34,12 @@ project:
       duration: 600000 # 动态日志级别 6 分钟后失效
       restore-duration: 30000 # 30 秒判断一次是否失效
   db:
-    slow-interval: 10 # 慢SQL
+    slow-interval: 200 # 慢SQL
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Auth ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   auth: # 授权
     enabled: true # 开启授权
     # 请求日志: com.blossom.backend.base.auth.enums.LogTypeEnum
-    log-type: none
+    log-type: simple
     # 授权 token 的方式, 注意, 如果使用 redis, 需要引入 redis 包, 否则会提示错误
     # com.blossom.backend.base.auth.enums.AuthTypeEnum
     type: caffeine
@@ -53,8 +52,8 @@ project:
         multi-place-login: true # 客户端是否允许多地登录
     white-list: # 白名单
       - /sentinel/**
-      - /editor/**
       - /blog/**
+      - /editor/**
       - /assets/**
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Cache/Redis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   cache: # 缓存
@@ -78,6 +77,7 @@ project:
     os-type: blossom
     blos:
       # 请以 /pic 结尾, 如果你在 nginx 中配置有代理, 注意别忘了添加你的代理路径
-      domain: "http://localhost:9999/dev/pic/"
+      # 注意：在下方示例中, /bl 即为 nginx 反向代理路径, 如果你的访问路径中不包含反向代理或路径不同, 请酌情删除或修改
+      domain: "https://www.wangyunf.com/blall/pic/"
       # 请以 / 开头, / 结尾, 简短的路径在文章中有更好的显示效果, 过长一定程度会使文章内容混乱
-      default-path: "/home/bl/img/"
+      default-path: "/home/blall/img/"

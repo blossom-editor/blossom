@@ -2,9 +2,9 @@
   <div class="login-root">
     <div class="login-form">
       <bl-col just="center" class="logo" height="auto">
-        <img :src="logo" :style="SYSTEM.THEME.LOGO_STYLE" />
+        <img src="/blog-logo.png" :style="getThemeLogoStyle()" />
         <br />
-        <bl-row class="title" just="center">{{ SYSTEM.SYS.NAME }}</bl-row>
+        <bl-row class="title" just="center">{{ getSysName() }}</bl-row>
       </bl-col>
       <el-input class="login-input" size="default" v-model="formLogin.username">
         <template #prepend>用户名</template>
@@ -24,9 +24,7 @@
 import { ref } from 'vue'
 import { toRoute } from '@/router'
 import { login } from '@/scripts/auth'
-import SYSTEM from '@/assets/constants/blossom'
-
-const logo = new URL(`../../assets/imgs/logo/${SYSTEM.SYS.LOGO}`, import.meta.url).href
+import { getSysName, getThemeLogoStyle } from '@/scripts/env'
 
 const formLogin = ref({ username: '', password: '' })
 

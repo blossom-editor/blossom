@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.CacheControl;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -79,25 +81,8 @@ public class WebConfigurer implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(userTypeInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/blog/**",
-                        "/assets/**"
-                );
-
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/blog/").setViewName("/blog/index.html");
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/blog/**").addResourceLocations("classpath:/META-INF/resources/webjars/blossom-web/");
-        registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/META-INF/resources/webjars/blossom-web/assets/");
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        configurer.setTaskExecutor(executor);
     }
 
     @Bean
@@ -105,9 +90,36 @@ public class WebConfigurer implements WebMvcConfigurer {
         return new UserTypeInterceptor();
     }
 
-
     @Override
-    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-        configurer.setTaskExecutor(executor);
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(userTypeInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/blog/**",
+                        "/editor/**"
+                );
+
+    }
+
+    /**
+     * 页面映射
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/blog/").setViewName("/blog/index.html");
+        registry.addViewController("/editor/").setViewName("/editor/index.html");
+    }
+
+    /***
+     * 静态文件处理
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/editor/**")
+                .addResourceLocations("classpath:/static/editor/")
+                .setCacheControl(CacheControl.maxAge(48, TimeUnit.HOURS).cachePublic());
+        registry.addResourceHandler("/blog/**")
+                .addResourceLocations("classpath:/static/blog/")
+                .setCacheControl(CacheControl.maxAge(48, TimeUnit.HOURS).cachePublic());
     }
 }

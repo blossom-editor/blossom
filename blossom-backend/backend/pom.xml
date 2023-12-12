@@ -14,14 +14,10 @@
     <properties>
         <java-jwt.version>4.3.0</java-jwt.version> <!-- JWT -->
         <smart-doc.version>2.6.7-BL-SNAPSHOT</smart-doc.version>
+        <thumbnailator.version>0.4.20</thumbnailator.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.blossom</groupId>
-            <artifactId>blossom-web</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>com.blossom</groupId>
@@ -72,13 +68,8 @@
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>0.4.20</version>
+            <version>${thumbnailator.version}</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-<!--        </dependency>-->
 
     </dependencies>
 

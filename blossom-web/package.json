@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "dev:spring": "vite --mode spring",
     "build": "run-p type-check build-only",
+    "build:spring": "vite build --mode spring",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit --skipLibCheck"

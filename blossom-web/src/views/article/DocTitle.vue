@@ -27,7 +27,7 @@
 import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { isNotBlank } from '@/assets/utils/obj'
-import SYSTEM from '@/assets/constants/blossom'
+import { getThemeSubjecTitle } from '@/scripts/env'
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
@@ -60,7 +60,7 @@ const tags = computed(() => {
 })
 
 const titleClass = computed(() => {
-  if (!SYSTEM.THEME.SUBJECT_TITLE) {
+  if (!getThemeSubjecTitle()) {
     return 'doc-title'
   }
 

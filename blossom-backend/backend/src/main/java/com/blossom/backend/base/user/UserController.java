@@ -1,5 +1,6 @@
 package com.blossom.backend.base.user;
 
+import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.sys.SysService;
@@ -10,6 +11,7 @@ import com.blossom.backend.server.article.stat.ArticleStatService;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.common.base.exception.XzException400;
+import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -54,7 +56,9 @@ public class UserController {
         if (userId == null) {
             return R.ok(new BlossomUserRes());
         }
-        BlossomUserRes user = userService.selectById(userId).to(BlossomUserRes.class);
+        UserEntity u = userService.selectById(userId);
+        XzException404.throwBy(ObjUtil.isNull(u), "用户不存在");
+        BlossomUserRes user = u.to(BlossomUserRes.class);
         ArticleStatRes stat = articleService.statCount(null, null, userId);
         user.setArticleWords(stat.getArticleWords());
         user.setArticleCount(stat.getArticleCount());

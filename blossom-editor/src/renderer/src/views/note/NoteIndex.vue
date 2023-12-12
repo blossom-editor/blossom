@@ -21,7 +21,8 @@
       </bl-row>
     </div>
     <div class="note-container">
-      <section :class="['note', note.top == 1 ? 'note-top' : '']" v-for="note in notes" :key="note.id">
+      <div v-if="isEmpty(notes)" class="placeholder">无便签</div>
+      <section v-else v-for="note in notes" :key="note.id" :class="['note', note.top == 1 ? 'note-top' : '']">
         <div class="cd" @click="saveToStorage(note.content)" @click.right="copyContent(note.content)">
           <img src="@renderer/assets/imgs/note/cd.png" />
         </div>
@@ -53,11 +54,12 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { CopyDocument } from '@element-plus/icons-vue'
 import { noteAllApi, noteUpdApi, noteDelApi, noteTopApi } from '@renderer/api/note'
-import NoteEditor from '@renderer/views/note/NoteEditor.vue'
 import { TempTextareaKey } from '@renderer/views/article/scripts/article'
 import { Local } from '@renderer/assets/utils/storage'
 import { ElMessage } from 'element-plus'
 import { writeText } from '@renderer/assets/utils/electron'
+import { isEmpty } from 'lodash'
+import NoteEditor from '@renderer/views/note/NoteEditor.vue'
 
 onMounted(() => {
   getNoteList()
@@ -139,6 +141,11 @@ const notes = ref<any>([])
     z-index: 3;
     overflow: auto;
     overflow-y: overlay;
+
+    .placeholder {
+      @include font(14px, 300);
+      color: var(--bl-text-color-light);
+    }
 
     .note {
       position: relative;
