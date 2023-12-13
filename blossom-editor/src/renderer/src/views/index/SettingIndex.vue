@@ -22,9 +22,6 @@
   <div class="version">
     <span>{{ CONFIG.SYS.NAME + ' | ' + CONFIG.SYS.VERSION }}</span>
   </div>
-  <bl-row class="footer">
-    <WaveFooter></WaveFooter>
-  </bl-row>
 </template>
 
 <script setup lang="ts">
@@ -32,7 +29,6 @@ import SettingLogin from './SettingLogin.vue'
 import SettingConfig from './SettingConfig.vue'
 import SettingAboutVue from './SettingAbout.vue'
 import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
-import WaveFooter from '@renderer/components/WaveFooter.vue'
 import CONFIG from '@renderer/assets/constants/system'
 </script>
 

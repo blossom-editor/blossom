@@ -3,7 +3,7 @@
     <bl-row class="location" just="flex-end">
       {{ weather.location.name }}
       <el-tooltip placement="top" effect="light" :show-after="1000" :hide-after="0" :auto-close="3000">
-        <span class="iconbl bl-refresh-smile container-refresh" @click="refresh"></span>
+        <span class="iconbl bl-refresh-smile" @click="refresh"></span>
         <template #content>
           刷新天气信息
           <br />
@@ -188,13 +188,15 @@ const refreshWeatherTask = () => {
       }
     }
 
-    .container-refresh {
+    .bl-refresh-smile {
       cursor: pointer;
       margin-left: 3px;
+      transition: color 0.3s;
 
       &:hover {
         animation: rotation 10s linear infinite;
         text-shadow: none;
+        color: var(--el-color-primary);
       }
     }
   }

@@ -27,10 +27,18 @@
   }
 }
 
-.container-refresh {
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+.bl-refresh-smile {
   font-size: 20px;
-  margin-left: 10px;
-  cursor: pointer;
+  margin: 0 10px;
 
   &:hover {
     animation: rotation 10s linear infinite;
@@ -38,9 +46,13 @@
   }
 }
 
-.container-operator {
-  margin-left: 10px;
+.iconbl {
+  transition: color 0.3s;
   cursor: pointer;
+
+  &:hover {
+    color: var(--el-color-primary);
+  }
 }
 
 ::-webkit-scrollbar {
@@ -50,9 +62,6 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--bl-scroll-color);
-  width: 4px;
-  height: 3px;
-  transition: background-color 0.3s;
   &:hover {
     background-color: var(--bl-scroll-color-hover);
   }

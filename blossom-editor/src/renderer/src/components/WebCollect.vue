@@ -150,10 +150,19 @@ const delWeb = () => {
 <style scoped lang="scss">
 .web-collect-root {
   @include box(100%, 100%);
+  @include themeColor(#bdbdbd, #a3a6ad);
+
+  .iconbl {
+    transition: color 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
 
   .web-collect-title {
     @include box(100%, 31px);
-    @include themeColor(#bdbdbd, #a3a6ad);
     flex-wrap: wrap-reverse;
     align-content: flex-end;
     text-shadow: var(--bl-text-shadow);
@@ -172,6 +181,22 @@ const delWeb = () => {
         opacity: 1;
       }
     }
+    .bl-refresh-smile {
+      &:hover {
+        animation: rotation 10s linear infinite;
+        text-shadow: none;
+      }
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
   }
 
   .web-collect-group {
@@ -185,12 +210,27 @@ const delWeb = () => {
     @include flex(row, flex-start, flex-start);
     align-content: flex-start;
     flex-wrap: wrap;
+    padding-left: 8px;
   }
 
   .web-item-container {
     @include box(100%, calc(100% - 31px));
     overflow-y: overlay;
-    padding: 0 5px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+      height: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--bl-scroll-color);
+      width: 4px;
+      height: 3px;
+      transition: background-color 0.3s;
+      &:hover {
+        background-color: var(--bl-scroll-color-hover);
+      }
+    }
   }
 
   .web-item {
@@ -252,14 +292,6 @@ const delWeb = () => {
     .save-form-title {
       border-bottom: 1px solid var(--el-border-color);
       padding: 10px;
-
-      .iconbl {
-        cursor: pointer;
-
-        &:hover {
-          color: var(--el-color-primary);
-        }
-      }
     }
 
     .el-form {

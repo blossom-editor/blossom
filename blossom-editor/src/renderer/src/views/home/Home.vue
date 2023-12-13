@@ -23,7 +23,7 @@
           <bl-col width="670px">
             <bl-row class="container-sub-name">
               The last 36 months
-              <span class="iconbl bl-refresh-smile container-refresh" @click="loadWordLine"></span>
+              <span class="iconbl bl-refresh-smile" @click="loadWordLine"></span>
               <span class="iconbl bl-statistic-line container-operator" @click="showWordsInfo"></span>
             </bl-row>
             <ChartLineWords ref="ChartLineWordsRef"></ChartLineWords>
@@ -39,7 +39,7 @@
         <bl-row class="container-name">请求流量</bl-row>
         <bl-row class="container-sub-name">
           Flow Statistic / Requests & Average Response Time(ms)
-          <span class="iconbl bl-refresh-smile container-refresh" @click="loadSentinlLine"></span>
+          <span class="iconbl bl-refresh-smile" @click="loadSentinlLine"></span>
         </bl-row>
         <bl-row width="880px" height="250px">
           <SentinelChartLine ref="SentinelChartLineRef"></SentinelChartLine>
@@ -49,7 +49,7 @@
         <bl-row class="container-name">编辑热力图</bl-row>
         <bl-row class="container-sub-name">
           每日编辑文章数 (每5分钟更新)
-          <span class="iconbl bl-refresh-smile container-refresh" @click="loadArticleHeapmap"></span>
+          <span class="iconbl bl-refresh-smile" @click="loadArticleHeapmap"></span>
         </bl-row>
         <bl-row width="870px" height="270px">
           <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
@@ -92,7 +92,7 @@
      -->
     <div
       :class="[
-        'web-container gradient-linear',
+        'web-container',
         viewStyle.webCollectExpand ? 'expand' : 'fold',
         viewStyle.isGlobalShadow ? 'web-container-heavy' : 'web-container-light'
       ]"
@@ -241,7 +241,6 @@ const fold = () => {
     border-bottom-left-radius: 10px;
     overflow: hidden;
     z-index: 2;
-    background: #1c1c1c;
   }
 
   .web-container-heavy {
@@ -300,28 +299,6 @@ const fold = () => {
       @include themeBorder(1px, #e6e6e6, #171717, 'left');
       display: block;
       padding: 0 10px 10px 20px;
-    }
-  }
-
-  @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(-360deg);
-    }
-  }
-
-  .gradient-linear {
-    background: var(--backgound-linear-gradient);
-    background-size: 60px 60px;
-    animation: alwaysToLeftBottom 120s linear infinite;
-  }
-
-  @keyframes alwaysToLeftBottom {
-    to {
-      background-position: 300%;
     }
   }
 }

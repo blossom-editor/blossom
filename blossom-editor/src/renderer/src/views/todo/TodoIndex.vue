@@ -64,7 +64,7 @@
         </el-collapse>
       </div>
     </div>
-    <div class="todo-main gradient-linear">
+    <div class="todo-main">
       <div class="todo-tasks" :style="{ width: viewStyle.todoStatExpand ? 'calc(100% - 450px)' : '100%' }">
         <TaskProgress ref="TaskProgressRef" @refresh-todo="getTodos"></TaskProgress>
       </div>
@@ -83,9 +83,9 @@ import { TodoList, TodoType } from './scripts/types'
 import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { getDateFormat } from '@renderer/assets/utils/util'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 import TaskProgress from './TaskProgress.vue'
 import TodoStat from './TodoStat.vue'
-import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const { viewStyle } = useConfigStore()
 
@@ -372,18 +372,6 @@ const blurPhasedUpdHandle = (todoId: string) => {
     .todo-stat {
       @include box(450px, 100%);
       border-left: 1px solid var(--el-border-color);
-    }
-  }
-
-  .gradient-linear {
-    background: var(--backgound-linear-gradient);
-    background-size: 60px 60px;
-    animation: alwaysToLeftBottom 320s linear infinite;
-  }
-
-  @keyframes alwaysToLeftBottom {
-    to {
-      background-position: 300%;
     }
   }
 

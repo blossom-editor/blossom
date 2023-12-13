@@ -4,7 +4,6 @@ body {
   overflow: hidden;
 }
 
-/* font-family: 'Jetbrains Mono', 'Consolas', 'Menlo', 'PingFang SC', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif; */
 * {
   font-family: 'Jetbrains Mono', sans-serif;
   box-sizing: border-box;

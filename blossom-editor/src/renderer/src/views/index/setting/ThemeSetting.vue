@@ -60,13 +60,6 @@
             <el-switch v-model="viewStyle.isGlobalShadow" size="default" @change="changeGlobalShadow" />
           </bl-row>
 
-          <bl-row class="prop-row" just="space-between">
-            <div class="prop">
-              <div class="prop-name">开启梯度动画</div>
-            </div>
-            <el-switch v-model="viewStyle.isGlobalGradientLinear" size="default" @change="changeGlobalGradientLinear" />
-          </bl-row>
-
           <bl-col class="desc" align="flex-end">
             <div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div>
             <div>
@@ -234,22 +227,6 @@ const changeGlobalShadow = (open: boolean) => {
       '--bl-box-shadow-subject': 'none',
       '--bl-drop-shadow-star': 'none'
     }
-    setStyleItemObj(style, true)
-    setStyleItemObj(style, false)
-  }
-  config.setViewStyle(viewStyle)
-}
-
-/**
- * 设置阶梯动画
- * @param open
- */
-const changeGlobalGradientLinear = (open: boolean) => {
-  if (open) {
-    resetStyleItems(['--backgound-linear-gradient'], true)
-    resetStyleItems(['--backgound-linear-gradient'], false)
-  } else {
-    let style = { '--backgound-linear-gradient': 'none' }
     setStyleItemObj(style, true)
     setStyleItemObj(style, false)
   }
