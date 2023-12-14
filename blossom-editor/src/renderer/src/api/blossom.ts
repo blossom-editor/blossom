@@ -486,11 +486,30 @@ export const pictureDelApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * 批量删除图片
+ * @param params {ids:id}
+ * @returns
+ */
+export type PictureDelBatchRes = { success: number; fault: number; inuse: number; successIds: Array<string> }
+export const pictureDelBatchApi = (data?: object): Promise<R<PictureDelBatchRes>> => {
+  return rq.post<PictureDelBatchRes>('/picture/del/batch', data)
+}
+
+/**
  * 删除图片
  * @param params {id:id}
  * @returns
  */
 export const pictureStatApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/picture/stat', { params })
+}
+
+/**
+ * 转移文件
+ * @param data 
+ * @returns 
+ */
+export const pictureTransferApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/picture/transfer', data)
 }
 //#endregion

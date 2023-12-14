@@ -58,6 +58,7 @@ public class DocService {
      */
     public List<DocTreeRes> listTree(DocTreeReq req) {
         List<DocTreeRes> all = new ArrayList<>();
+        boolean priorityType = false;
 
         /* ===============================================================================================
          * 只查询文件夹
@@ -67,6 +68,7 @@ public class DocService {
             List<DocTreeRes> folder = folderService.listTree(where);
             all.addAll(CollUtil.newArrayList(PictureUtil.getDefaultFolder(req.getUserId())));
             all.addAll(folder);
+            priorityType = true;
         }
         /* ===============================================================================================
          * 只查询有图片的文件夹, 包含有图片的文章文件夹
@@ -91,6 +93,7 @@ public class DocService {
 
             // 3. 默认的图片文件夹
             all.addAll(CollUtil.newArrayList(defaultFolder));
+            priorityType = true;
         }
         /* ===============================================================================================
          * 只查询公开的的文章和文章文件夹
@@ -164,7 +167,7 @@ public class DocService {
             all.addAll(articles);
         }
 
-        return DocUtil.treeWrap(all.stream().distinct().collect(Collectors.toList()), req.getOnlyPicture());
+        return DocUtil.treeWrap(all.stream().distinct().collect(Collectors.toList()), priorityType);
     }
 
     /**

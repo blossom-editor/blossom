@@ -41,6 +41,16 @@ public interface PictureMapper extends BaseMapper<PictureEntity> {
     void updById(PictureEntity entity);
 
     /**
+     * 文件专题
+     *
+     * @param ids    文件ID
+     * @param pid    文件夹ID
+     * @param userId 用户ID
+     * @since 1.10.0
+     */
+    void transfer(@Param("ids") List<Long> ids, @Param("pid") Long pid, @Param("userId") Long userId);
+
+    /**
      * 统计文件夹下的图片
      *
      * @param pid 文件夹ID

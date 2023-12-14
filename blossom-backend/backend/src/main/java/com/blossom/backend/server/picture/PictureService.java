@@ -215,6 +215,24 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
         osManager.delete(pic.getPathName());
     }
 
+    /**
+     * 转移文件
+     *
+     * @param ids    ID 集合
+     * @param pid    文件夹ID
+     * @param userId 用户ID
+     */
+    @Transactional
+    public void transfer(List<Long> ids, Long pid, Long userId) {
+        baseMapper.transfer(ids, pid, userId);
+    }
+
+    /**
+     * 统计图片信息
+     *
+     * @param userId 用户ID
+     * @param pid    上级ID
+     */
     public PictureStatRes stat(Long userId, Long pid) {
         return baseMapper.stat(userId, pid);
     }

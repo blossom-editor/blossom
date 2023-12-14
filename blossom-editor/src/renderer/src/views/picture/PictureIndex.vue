@@ -18,7 +18,7 @@
         <div class="workbenchs">
           <div class="workbench-level1">
             <div class="star">
-              <div v-if="picuturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus"></div>
+              <div v-if="picturePageParam.starStatus == undefined" class="iconbl bl-star-line" @click="changeStarStatus"></div>
               <div v-else class="iconbl bl-star-fill" @click="changeStarStatus"></div>
             </div>
 
@@ -58,35 +58,29 @@
             </div>
           </div>
           <!-- @ts-ignore -->
-          <div class="workbench-level2" :style="workbencStyle.workbench2 as StyleValue">
-            <div>
-              <el-button @click="checkedAll">选择全部</el-button>
-              <el-button @click="uncheckAll">取消全选</el-button>
-              <el-button type="primary" plain @click="updPidBatch">将选中转移至</el-button>
-              <el-button type="primary" plain @click="delBatch">删除已选中</el-button>
-            </div>
+          <div class="workbench-level2" :style="workbencStyle.workbench2">
+            <el-checkbox v-model="checkedAll" @change="handlCheckedAll">全选</el-checkbox>
+            <el-button type="primary" text bg @click="transfer" style="margin-left: 11px">移动</el-button>
+            <el-button type="primary" text bg @click="delBatch">删除</el-button>
+            <el-button type="danger" text bg @click="delBatchIgnoreCheck">强制删除</el-button>
           </div>
         </div>
 
         <div class="statistic">
           <bl-col just="center" :style="{ ...workbencStyle.workbench2, ...{ height: '100%' } }">
-            <div style="font-size: 30px; font-weight: 300; font-style: italic; padding: 0 10px">{{ picChecks.size }}</div>
+            <div style="font-size: 40px; font-weight: 300; font-style: italic; padding: 0 10px">{{ picChecks.size }}</div>
           </bl-col>
         </div>
       </div>
 
       <div class="picture-card-container" :style="workbencStyle.cards">
-        <div :class="['picture-card', cardClass]" v-for="pic in picturePages">
+        <div :class="['picture-card', cardClass]" v-for="pic in picturePages" @click.right="picCheckRightClick(pic, $event)">
           <el-checkbox
             v-show="isExpandWorkbench"
             class="picture-card-check"
             size="large"
             v-model="pic.checked"
-            @change="
-              (check: boolean) => {
-                picCheckChange(check, pic.id)
-              }
-            ">
+            @change="(check: boolean) => picCheckChange(check, pic.id)">
           </el-checkbox>
 
           <div v-if="pic.delTime" class="img-deleted">
@@ -145,15 +139,27 @@
   </div>
 
   <el-dialog
-    v-model="isShowBatchDelDialog"
-    width="500px"
-    style="height: 230px"
+    v-model="isShowTransferDialog"
+    width="400px"
+    style="height: fit-content"
     :align-center="true"
     :append-to-body="true"
     :destroy-on-close="true"
     :close-on-click-modal="false"
     draggable>
-    <PictureBatchDel></PictureBatchDel>
+    <PictureTransfer :ids="picChecks" @transferred="transferred"></PictureTransfer>
+  </el-dialog>
+
+  <el-dialog
+    v-model="isShowBatchDelDialog"
+    width="500px"
+    style="height: fit-content"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
+    <PictureBatchDel :ids="picChecks" :ignore-check="delIgnoreCheck" @deleted="deleted"></PictureBatchDel>
   </el-dialog>
 </template>
 <script setup lang="ts">
@@ -175,7 +181,9 @@ import PictureTreeDocs from './PictureTreeDocs.vue'
 import PictureUpload from './PictureUpload.vue'
 import PictureViewerInfo from './PictureViewerInfo.vue'
 import PictureBatchDel from './PictureBatchDel.vue'
+import PictureTransfer from './PictureTransfer.vue'
 import errorImg from '@renderer/assets/imgs/img_error.png'
+import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
 
@@ -197,12 +205,9 @@ const cardClass = computed(() => {
 //#region ----------------------------------------< 当前文件当前文件 >----------------------------
 type PageParam = { pageNum: number; pageSize: number; pid: string; name: string; starStatus: number | undefined } // 分页对象类型
 const curFolder = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
-const picuturePageParam = ref<PageParam>({ pageNum: 1, pageSize: 10, pid: '0', name: '', starStatus: undefined }) // 列表参数
+const picturePageParam = ref<PageParam>({ pageNum: 1, pageSize: 10, pid: '0', name: '', starStatus: undefined }) // 列表参数
 const picturePages = ref<Picture[]>([]) // 图片列表
-const pictureStat = ref<any>({
-  cur: { picCount: 0, picSize: '0 MB' },
-  global: { picCount: 0, picSize: '0 MB' }
-})
+const pictureStat = ref<any>({ cur: { picCount: 0, picSize: '0MB' }, global: { picCount: 0, picSize: '0MB' } })
 // 依赖注入
 provide(provideKeyDocInfo, curFolder)
 
@@ -242,11 +247,12 @@ const getPictureStat = (pid?: string) => {
  */
 const clickCurFolder = (tree: DocTree) => {
   picChecks.value.clear()
+  checkedAll.value = false
   curFolder.value = treeToInfo(tree)
-  picuturePageParam.value.pageNum = 1
-  picuturePageParam.value.pid = curFolder.value.id
-  picturePages.value = []
-  picturePageApi(picuturePageParam.value).then((resp) => {
+  picturePageParam.value.pageNum = 1
+  picturePageParam.value.pid = curFolder.value.id
+  // picturePages.value = []
+  picturePageApi(picturePageParam.value).then((resp) => {
     picturePages.value = resp.data.datas
   })
   getPictureStat(curFolder.value.id)
@@ -259,10 +265,10 @@ const nextPage = () => {
   if (!curIsFolder()) {
     return
   }
-  picuturePageParam.value.pageNum += 1
-  picturePageApi(picuturePageParam.value).then((resp) => {
-    if (resp.data.pageNum < picuturePageParam.value.pageNum) {
-      picuturePageParam.value.pageNum = resp.data.pageNum
+  picturePageParam.value.pageNum += 1
+  picturePageApi(picturePageParam.value).then((resp) => {
+    if (resp.data.pageNum < picturePageParam.value.pageNum) {
+      picturePageParam.value.pageNum = resp.data.pageNum
       return
     }
     resp.data.datas.forEach((pic: Picture) => {
@@ -275,15 +281,15 @@ const nextPage = () => {
  * 只查询星标图片
  */
 const changeStarStatus = () => {
-  if (picuturePageParam.value.starStatus == undefined) {
-    picuturePageParam.value.starStatus = 1
-  } else if (picuturePageParam.value.starStatus == 1) {
-    picuturePageParam.value.starStatus = undefined
+  if (picturePageParam.value.starStatus == undefined) {
+    picturePageParam.value.starStatus = 1
+  } else if (picturePageParam.value.starStatus == 1) {
+    picturePageParam.value.starStatus = undefined
   }
   if (curIsFolder()) {
-    picuturePageParam.value.pageNum = 1
-    picuturePageParam.value.pid = curFolder.value!.id
-    picturePageApi(picuturePageParam.value).then((resp) => {
+    picturePageParam.value.pageNum = 1
+    picturePageParam.value.pid = curFolder.value!.id
+    picturePageApi(picturePageParam.value).then((resp) => {
       picturePages.value = resp.data.datas
     })
   }
@@ -325,6 +331,12 @@ const copyUrl = (url: string) => {
   ElMessage.info({ message: '已复制链接', duration: 3000, offset: 10, grouping: true, icon: CopyDocument, customClass: 'bl-message' })
 }
 
+/**
+ * 复制文章 Markdown 链接
+ * @param url 路径
+ * @param picName 图片名称
+ * @param event event
+ */
 const copyMarkdownUrl = (url: string, picName: string, event: MouseEvent) => {
   event.preventDefault()
   writeText(`![${picName}](${url})`)
@@ -399,9 +411,9 @@ const handleBenchworkStyle = () => {
   if (isExpandWorkbench.value) {
     // 展开
     workbencStyle.value = {
-      workbench1: { height: '85px' },
-      workbench2: { height: '35px', visibility: 'visible', opacity: 1 },
-      cards: { height: 'calc(100% - 85px - 28px - 15px)' }
+      workbench1: { height: '90px' },
+      workbench2: { height: '40px', visibility: 'visible', opacity: 1 },
+      cards: { height: 'calc(100% - 90px - 28px - 15px)' }
     }
   } else {
     // 收起
@@ -415,26 +427,26 @@ const handleBenchworkStyle = () => {
 
 // 图片多选
 const picChecks = ref<Set<string>>(new Set())
+const delIgnoreCheck = ref(false)
 
 /** 选中全部图片 */
-const checkedAll = () => {
-  picturePages.value.forEach((ele) => {
-    ele.checked = true
-    picChecks.value.add(ele.id)
-  })
-}
-
-/** 取消选中的图片 */
-const uncheckAll = () => {
-  picturePages.value.forEach((ele) => {
-    ele.checked = false
-    picChecks.value.delete(ele.id)
-  })
+const checkedAll = ref(false)
+const handlCheckedAll = (checked: boolean) => {
+  if (checked) {
+    picturePages.value.forEach((ele) => {
+      ele.checked = true
+      picChecks.value.add(ele.id)
+    })
+  } else {
+    picturePages.value.forEach((ele) => {
+      ele.checked = false
+      picChecks.value.delete(ele.id)
+    })
+  }
 }
 
 /** 图片选中 */
 const picCheckChange = (check: boolean, id: string) => {
-  console.log(check, id)
   if (check) {
     picChecks.value.add(id)
   } else {
@@ -442,19 +454,77 @@ const picCheckChange = (check: boolean, id: string) => {
   }
 }
 
-/** 修改图片的归属 */
-const updPidBatch = () => {
-  let ids: string[] = Array.from(picChecks.value)
-  console.log(ids)
+const picCheckRightClick = (doc: Picture, event: MouseEvent) => {
+  event.preventDefault()
+  if (doc.checked) {
+    doc.checked = false
+    picChecks.value.delete(doc.id)
+  } else {
+    doc.checked = true
+    picChecks.value.add(doc.id)
+  }
 }
 
 //#endregion
 
-//#region --批量删除
+//#region ----------------------------------------< 批量删除 >----------------------------------
 const isShowBatchDelDialog = ref(false)
 
 const delBatch = () => {
+  if (picChecks.value.size == 0) {
+    Notify.info('请先选中图片', '提示')
+    return
+  }
+  delIgnoreCheck.value = false
   isShowBatchDelDialog.value = true
+}
+
+const delBatchIgnoreCheck = () => {
+  if (picChecks.value.size == 0) {
+    Notify.info('请先选中图片', '提示')
+    return
+  }
+  delIgnoreCheck.value = true
+  isShowBatchDelDialog.value = true
+}
+
+const deleted = (ids: Array<string>) => {
+  picChecks.value.clear()
+  checkedAll.value = false
+  for (let i = 0; i < picturePages.value.length; i++) {
+    const pic = picturePages.value[i]
+    if (ids.includes(pic.id)) {
+      pic.url = '1'
+      pic.delTime = 2
+    }
+    pic.checked = false
+  }
+}
+
+//#endregion
+
+//#region ----------------------------------------< 移动 >----------------------------------
+
+const isShowTransferDialog = ref(false)
+
+const transfer = () => {
+  if (picChecks.value.size == 0) {
+    Notify.info('请先选中图片', '提示')
+    return
+  }
+  isShowTransferDialog.value = true
+}
+
+const transferred = () => {
+  picChecks.value.clear()
+  checkedAll.value = false
+  picturePageParam.value.pageNum = 1
+  picturePageParam.value.pid = curFolder.value!.id
+  picturePageApi(picturePageParam.value).then((resp) => {
+    picturePages.value = resp.data.datas
+  })
+  getPictureStat(curFolder.value!.id)
+  isShowTransferDialog.value = false
 }
 
 //#endregion

@@ -29,9 +29,9 @@
     background-color: #ffffff00;
 
     .star {
-      @include box(40px, 100%);
+      @include flex(row, center, flex-end);
+      height: 100%;
       color: rgb(206, 175, 0);
-      padding: 0 5px;
 
       .iconbl {
         padding: 5px;
@@ -78,12 +78,14 @@
       }
 
       .workbench-level1 {
-        @include flex(row, space-between, flex-end);
+        @include flex(row, flex-start, flex-end);
         width: 100%;
+        height: 50px;
+        padding-bottom: 5px;
       }
 
       .workbench-level2 {
-        @include flex(row, space-between, center);
+        @include flex(row, flex-start, center);
         width: 100%;
         transition:
           height 0.1s,

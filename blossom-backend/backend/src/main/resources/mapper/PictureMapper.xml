@@ -27,7 +27,7 @@
                 <foreach collection="urls" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </if>
         </where>
-        group by p.url order by p.id desc
+        group by p.url order by p.cre_time desc
     </select>
 
     <select id="selectByPathName" resultType="com.blossom.backend.server.picture.pojo.PictureEntity">
@@ -56,6 +56,13 @@
         where id = #{id}
     </update>
 
+    <update id="transfer">
+        update blossom_picture set pid = #{pid}, cre_time = now()
+         where user_id = #{userId}
+           and id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </update>
+
     <select id="stat" resultType="com.blossom.backend.server.picture.pojo.PictureStatRes">
         select count(*) as picture_count,
         sum(size) as picture_size
@@ -64,6 +71,5 @@
         <if test="pid != null">and pid = #{pid}</if>
     </select>
 
-    <update id="updByPathName">
-    </update>
+
 </mapper>

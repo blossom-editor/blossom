@@ -3,6 +3,7 @@ package com.blossom.backend.server.picture;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.server.picture.pojo.*;
+import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.pojo.PageRes;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 图片 [Picture]
  *
- * @order 20
  * @author xzzz
+ * @order 20
  */
 @Slf4j
 @RestController
@@ -56,6 +57,42 @@ public class PictureController {
             req.setIgnoreCheck(false);
         }
         baseService.delete(req.getId(), req.getIgnoreCheck());
+        return R.ok();
+    }
+
+    /**
+     * 批量删除文件
+     *
+     * @since 1.10.0
+     */
+    @PostMapping("/del/batch")
+    public R<PictureDelBatchRes> deleteBatch(@Validated @RequestBody PictureDelBatchReq req) {
+        if (req.getIgnoreCheck() == null) {
+            req.setIgnoreCheck(false);
+        }
+        PictureDelBatchRes res = PictureDelBatchRes.build();
+        for (Long id : req.getIds()) {
+            try {
+                baseService.delete(id, req.getIgnoreCheck());
+                res.getSuccessIds().add(id);
+                res.incSuccess();
+            } catch (XzException400 e) {
+                res.incInuse();
+            } catch (Exception e) {
+                res.incFault();
+            }
+        }
+        return R.ok(res);
+    }
+
+    /**
+     * 文件转移
+     *
+     * @since 1.10.0
+     */
+    @PostMapping("/transfer")
+    public R<?> transfer(@Validated @RequestBody PictureTransferReq req) {
+        baseService.transfer(req.getIds(), req.getPid(), AuthContext.getUserId());
         return R.ok();
     }
 

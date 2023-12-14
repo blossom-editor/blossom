@@ -29,11 +29,11 @@ public class DocUtil {
     /**
      * 将菜单列表构造成树状
      *
-     * @param list        菜单列表
-     * @param onlyPicture 是否图片文件夹, 如果是图片文件夹一级菜单优先按类型排序
+     * @param list         菜单列表
+     * @param priorityType 是否优先按类型排序
      * @return 树状菜单对象
      */
-    public static List<DocTreeRes> treeWrap(List<DocTreeRes> list, boolean onlyPicture) {
+    public static List<DocTreeRes> treeWrap(List<DocTreeRes> list, boolean priorityType) {
         final List<DocTreeRes> allList = list;
         //查询根菜单
         List<DocTreeRes> rootLevel =
@@ -41,7 +41,7 @@ public class DocUtil {
                         .filter(p -> p.getP().equals(ROOT_FOLDER_ID))
                         .sorted(Comparator.comparing(DocTreeRes::getS))
                         .sorted((d1, d2) -> {
-                            if (onlyPicture) {
+                            if (priorityType) {
                                 if (d2.getTy().equals(d1.getTy())) {
                                     return d1.getS() - d2.getS();
                                 }
