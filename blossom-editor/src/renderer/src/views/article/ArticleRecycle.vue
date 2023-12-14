@@ -80,11 +80,6 @@ const restore = (id: string) => {
     @include box(100%, calc(100% - 50px));
     padding: 0 20px;
 
-    .tips {
-      @include font(12px, 300);
-      padding: 0 10px;
-    }
-
     .workbench {
       @include box(100%, 45px);
     }

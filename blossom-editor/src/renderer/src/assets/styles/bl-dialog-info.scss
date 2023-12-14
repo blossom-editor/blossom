@@ -39,3 +39,8 @@ $height-form: calc(100% - #{$height-title} - #{$height-footer});
   padding: 10px;
   text-align: right;
 }
+
+.tips {
+  @include font(13px, 300);
+  padding: 5px 10px;
+}

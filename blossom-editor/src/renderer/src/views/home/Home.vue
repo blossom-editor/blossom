@@ -105,7 +105,7 @@
   <el-dialog
     v-model="isShowWordsInfoDialog"
     width="80%"
-    top="100px"
+    :align-center="true"
     :append-to-body="true"
     :destroy-on-close="true"
     :close-on-click-modal="false"
