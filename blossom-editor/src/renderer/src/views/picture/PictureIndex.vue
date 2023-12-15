@@ -251,7 +251,7 @@ const clickCurFolder = (tree: DocTree) => {
   curFolder.value = treeToInfo(tree)
   picturePageParam.value.pageNum = 1
   picturePageParam.value.pid = curFolder.value.id
-  // picturePages.value = []
+  picturePages.value = [] // 在重新加载前清空，防止因加载慢而残留显示其他文件夹的图片
   picturePageApi(picturePageParam.value).then((resp) => {
     picturePages.value = resp.data.datas
   })
@@ -455,7 +455,9 @@ const picCheckChange = (check: boolean, id: string) => {
 }
 
 const picCheckRightClick = (doc: Picture, event: MouseEvent) => {
-  event.preventDefault()
+  if (!isExpandWorkbench.value) {
+    return
+  }
   if (doc.checked) {
     doc.checked = false
     picChecks.value.delete(doc.id)
@@ -463,6 +465,7 @@ const picCheckRightClick = (doc: Picture, event: MouseEvent) => {
     doc.checked = true
     picChecks.value.add(doc.id)
   }
+  event.preventDefault()
 }
 
 //#endregion
