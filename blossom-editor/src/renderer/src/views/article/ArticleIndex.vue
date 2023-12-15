@@ -448,7 +448,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   // 如果文档发生变动才保存
   if (!articleChanged) {
-    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;padding: 3px 10px;color:#fff;border-radius:10px;')
+    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;color:#fff;')
     saveCallback()
     return
   }
@@ -575,6 +575,15 @@ const initEditor = (_doc?: string) => {
       EditorRef.value
     )
   )
+  // 创建元素
+  let editorHeightHolder = document.createElement('div')
+  editorHeightHolder.style.height = '65vh'
+  editorHeightHolder.addEventListener('click', () => {
+    let length = cmw.getDocLength()
+    cmw.editor.focus()
+    cmw.insert(length, length, '', length, length)
+  })
+  EditorRef.value.appendChild(editorHeightHolder)
 }
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态

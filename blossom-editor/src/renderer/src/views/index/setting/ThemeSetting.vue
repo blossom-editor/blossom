@@ -201,6 +201,7 @@ const presetsDark = [
   { color: 'rgb(93, 131, 81)', name: '漆姑' },
   { color: 'rgb(84, 118, 137)', name: '太师青' },
   { color: 'rgb(107, 121, 142)', name: '菘蓝' },
+  { color: 'rgb(179, 173, 160)', name: '利休白茶' },
   { color: 'rgb(122, 123, 120)', name: '雷雨垂' },
   { color: 'rgb(82, 84, 84)', name: '深灰' }
 ]

@@ -68,7 +68,7 @@ import CONFIG from '@renderer/assets/constants/system'
 }
 
 .version {
-  @include themeColor(#adadad, #3a3a3a);
+  @include themeColor(#FFFFFF, #9B9B9B);
   @include font(13px, 300);
   @include absolute('', 10px, 10px, '');
   z-index: 2;

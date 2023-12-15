@@ -91,7 +91,9 @@
         <div class="conf-tip">请使用<code>yyyy-MM-dd</code>格式。</div>
       </el-form-item>
     </el-form>
-    <el-input v-if="auth.status == '已登录'" type="textarea" v-model="userinfoJson" :rows="30" resize="none" disabled></el-input>
+    <div class="server-config">
+      {{ userinfoJson }}
+    </div>
   </div>
 </template>
 
@@ -176,4 +178,11 @@ const userinfoJson = computed(() => {
 
 <style scoped lang="scss">
 @import './styles/config-root.scss';
+
+.server-config {
+  padding: 10px;
+  font-size: 12px;
+  white-space: pre;
+  color: var(--bl-text-color-light);
+}
 </style>
