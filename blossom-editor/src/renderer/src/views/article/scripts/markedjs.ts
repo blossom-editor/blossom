@@ -166,14 +166,6 @@ export const renderBlockquote = (quote: string) => {
     clazz = 'bl-blockquote-red'
     finalQuote = quote.replaceAll('<p>[!CAUTION]', '<p>')
   }
-
-  // else if (quote.startsWith('<p>[!TIP]')) {
-  //   clazz = 'bl-blockquote-green'
-  //   finalQuote = quote.replaceAll('<p>[!TIP]', '<p>')
-  // } else if (quote.startsWith('<p>[!CAUTION]')) {
-  //   clazz = 'bl-blockquote-red'
-  //   finalQuote = quote.replaceAll('<p>[!CAUTION]', '<p>')
-  // }
   return `<blockquote class="${clazz}">${finalQuote}</blockquote>`
 }
 
@@ -193,9 +185,22 @@ export const renderBlockquote = (quote: string) => {
  */
 export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
   if (language == undefined) language = 'text'
-  if (language === 'mermaid' && isNotBlank(code)) {
+  if (language.startsWith('mermaid') && isNotBlank(code)) {
     const eleid = 'mermaid-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
+
+    let height = 'auto'
+    let tags: string[] = language.split(grammar)
+    if (tags.length >= 2) {
+      let tag = tags[1]
+      if (tag.startsWith('h')) {
+        height = tag.substring(1)
+        if (!height.endsWith('%')) {
+          height += 'px'
+        }
+      }
+    }
+
     mermaid
       .parse(escape)
       .then((syntax) => {
@@ -210,26 +215,26 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       })
       .catch((error) => {
         console.error('mermaid 格式校验失败:错误信息如下:\n', error)
-        let html = `<div class='bl-preview-analysis-fail-block'>
+        let html = `<p class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Mermaid 语法解析失败!</div><br/>
           ${error}<br/><br/>
           你可以尝试前往 Mermaid 官网来校验你的内容, 或者查看相关文档: <a href='https://mermaid.live/edit' target='_blank'>https://mermaid.live/edit</a>
-          </div>`
+          </p>`
         let element = document.getElementById(eleid)
         if (element) element!.innerHTML = html
       })
-    return `<p id="${eleid}">${eleid}</p>`
+    return `<p class="mermaid-container" style="height:${height}" id="${eleid}">${eleid}</p>`
   }
 
   if (language === 'katex') {
     try {
       return katex.renderToString(escape2Html(code), { throwOnError: true, displayMode: true, output: 'html' })
     } catch (error) {
-      return `<div class='bl-preview-analysis-fail-block'>
+      return `<p class='bl-preview-analysis-fail-block'>
           <div class="fail-title">Katex 语法解析失败!</div><br/>
           ${error}<br/><br/>
           你可以尝试前往 Katex 官网来校验你的公式, 或者查看相关文档: <a href='https://katex.org/#demo' target='_blank'>https://katex.org/#demo</a>
-          </div>`
+          </p>`
     }
   }
 
@@ -298,9 +303,9 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
 
     if (isBlank(bvid)) {
-      return `<div class='bl-preview-analysis-fail-block'>
+      return `<p class='bl-preview-analysis-fail-block'>
       <span style="color:#00aeec">bilibili</span> 视频解析失败, 未获取到 <span style="color:#00aeec">BVID</span>，请检查你的配置
-      </div>`
+      </p>`
     }
 
     return `<iframe width="${width}" height="${height}" style="margin: 10px 0"
@@ -441,11 +446,11 @@ const simpleRenderer = {
           output: 'html'
         })
       } catch (error) {
-        return `<div></div>`
+        return `<p></p>`
       }
     } else if (language === 'mermaid') {
       return '<p></p>'
-    } else if (language === 'markmap') {
+    } else if (language?.startsWith('markmap')) {
       return `<p><svg></svg></p>`
     }
     const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)

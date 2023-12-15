@@ -1,7 +1,10 @@
 import { CmWrapper } from './codemirror'
 import { simpleMarked } from './markedjs'
 
-const marginTop = 75
+const marginTop = 85
+/**
+ * 不能增加 div 标签, 只能是 preview 元素下的一级标签, 而 div 会出现在 markmap 的内部节点中
+ */
 const matchHtmlTags = 'p, h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, hr, table, tr, iframe'
 
 /**
@@ -49,9 +52,7 @@ export class EPScroll {
     if (this._editor == undefined) {
       return
     }
-    // console.log(this._editor?.scrollHeight,
-    //   this._editor?.clientHeight,
-    //   this._editor?.scrollTop)
+    // console.log(this._editor?.scrollHeight, this._editor?.clientHeight, this._editor?.scrollTop)
 
     this._scrollTop = this._editor.scrollTop
     // 如果在头部附近
@@ -76,11 +77,14 @@ export class EPScroll {
       const invisibleMarkdown: string = this._cmw.sliceDoc(0, topBlock.from)
 
       // 将不可见的内容全部转换为 html
-      //@ts-ignore
-      simpleMarked!.parse(invisibleMarkdown, { async: true }).then((html: string) => {
-        const invisibleHtml = html
+      // @ts-ignore
+      simpleMarked.parse(invisibleMarkdown, { async: true }).then((invisibleHtml: string) => {
+        // let logLine = { markdown: invisibleMarkdown, html: html }
+        // console.table([logLine])
+
         // 将不可见的的 html 转换为 dom 对象, 是一个从 <html> 标签开始的 dom 对象
         const invisibleDomAll = new DOMParser().parseFromString(invisibleHtml, 'text/html')
+        
         // body 下的内容才是由 markdown 转换而来的, 不可见内容转换的 dom 集合
         const editorDoms = invisibleDomAll.body.querySelectorAll(matchHtmlTags)
         // 预览页面的 dom 集合
@@ -94,7 +98,6 @@ export class EPScroll {
         if (targetDom) {
           targetDom.scrollIntoView()
         }
-        // tagetDom.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
       })
     }
   }

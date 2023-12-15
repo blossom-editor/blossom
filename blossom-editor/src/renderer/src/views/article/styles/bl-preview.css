@@ -442,3 +442,13 @@ table container
   background-color: #000000;
   color: #ffffff;
 }
+
+
+.bl-preview .mermaid-container {
+  /* border: 1px solid var(--el-border-color);
+  border-radius: 4px; */
+}
+
+.bl-preview .mermaid-container svg {
+  height: 100% !important;
+}
