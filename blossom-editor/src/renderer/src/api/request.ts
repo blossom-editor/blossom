@@ -54,6 +54,7 @@ export class Request {
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
         const status = res.status
+
         if (status !== 200) {
           Promise.reject(res)
         }
@@ -101,6 +102,7 @@ export class Request {
        * @returns
        */
       (err: any) => {
+        console.log(err)
         let errorMsg = err.message
         let code = err.code
         let resp = err.response
@@ -109,6 +111,10 @@ export class Request {
         }
         if (code === 'ERR_NETWORK') {
           errorMsg = '网络错误,请检查您的网络是否通畅'
+        }
+        if (err.request && err.request.status === 404) {
+          Notify.error('未找到您的请求, 请您检查服务器地址或应用版本!', '请求失败(404)')
+          return Promise.reject(err)
         }
         Notify.error(errorMsg, '请求失败')
         return Promise.reject(err)
