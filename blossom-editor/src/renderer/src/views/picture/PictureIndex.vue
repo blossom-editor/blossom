@@ -57,8 +57,7 @@
               <el-button type="primary" plain @click="handleBenchworkStyle">批量管理</el-button>
             </div>
           </div>
-          <!-- @ts-ignore -->
-          <div class="workbench-level2" :style="workbencStyle.workbench2">
+          <div class="workbench-level2" :style="workbencStyle.workbench2 as StyleValue">
             <el-checkbox v-model="checkedAll" @change="handlCheckedAll">全选</el-checkbox>
             <el-button type="primary" text bg @click="transfer" style="margin-left: 11px">移动</el-button>
             <el-button type="primary" text bg @click="delBatch">删除</el-button>

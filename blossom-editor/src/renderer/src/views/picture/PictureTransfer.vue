@@ -74,7 +74,7 @@ const transfer = () => {
   }
   isLoading.value = true
   pictureTransferApi({ ids: Array.from(props.ids), pid: targetDoc.value?.i })
-    .then((resp) => {
+    .then((_resp) => {
       emits('transferred')
     })
     .finally(() => {
