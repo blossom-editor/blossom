@@ -168,11 +168,23 @@ api[1].list[1].list.push({
 api[1].list[1].list.push({
     order: '6',
     deprecated: 'false',
+    url: 'http://127.0.0.1/folder/upd/name',
+    desc: '修改文件夹',
+});
+api[1].list[1].list.push({
+    order: '7',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/folder/upd/tag',
+    desc: '为文件夹快速增加/删除标签',
+});
+api[1].list[1].list.push({
+    order: '8',
+    deprecated: 'false',
     url: 'http://127.0.0.1/folder/open',
     desc: '公开文件夹',
 });
 api[1].list[1].list.push({
-    order: '7',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/del',
     desc: '删除文件夹',
@@ -217,41 +229,53 @@ api[1].list[2].list.push({
 api[1].list[2].list.push({
     order: '6',
     deprecated: 'false',
+    url: 'http://127.0.0.1/article/upd/name',
+    desc: '修改文章名称',
+});
+api[1].list[2].list.push({
+    order: '7',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/upd/tag',
+    desc: '为文章快速增加/删除标签',
+});
+api[1].list[2].list.push({
+    order: '8',
+    deprecated: 'false',
     url: 'http://127.0.0.1/article/del',
     desc: '删除文章',
 });
 api[1].list[2].list.push({
-    order: '7',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/star',
     desc: '星标文章',
 });
 api[1].list[2].list.push({
-    order: '8',
+    order: '10',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/download',
     desc: '下载文章',
 });
 api[1].list[2].list.push({
-    order: '9',
+    order: '11',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/download/html',
     desc: '下载文章 Html',
 });
 api[1].list[2].list.push({
-    order: '10',
+    order: '12',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/import',
     desc: '文章导入',
 });
 api[1].list[2].list.push({
-    order: '11',
+    order: '13',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/temp/key',
     desc: '创建文章的临时访问缓存',
 });
 api[1].list[2].list.push({
-    order: '12',
+    order: '14',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/temp/h',
     desc: '临时查看文章',
@@ -320,37 +344,56 @@ api[1].list[5].list.push({
     desc: '查文章记录内容',
 });
 api[1].list.push({
-    alias: 'ArticleBackupController',
+    alias: 'ArticleRecycleController',
     order: '7',
-    link: '文章备份_[a#backup]',
-    desc: '文章备份 [A#Backup]',
+    link: '文章回收站_[a#recycle]',
+    desc: '文章回收站 [A#Recycle]',
     list: []
 })
 api[1].list[6].list.push({
     order: '1',
     deprecated: 'false',
+    url: 'http://127.0.0.1/article/recycle/list',
+    desc: '查询列表',
+});
+api[1].list[6].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/recycle/restore',
+    desc: '还原文章',
+});
+api[1].list.push({
+    alias: 'ArticleBackupController',
+    order: '8',
+    link: '文章备份_[a#backup]',
+    desc: '文章备份 [A#Backup]',
+    list: []
+})
+api[1].list[7].list.push({
+    order: '1',
+    deprecated: 'false',
     url: 'http://127.0.0.1/article/backup',
     desc: '执行备份',
 });
-api[1].list[6].list.push({
+api[1].list[7].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/backup/list',
     desc: '备份记录',
 });
-api[1].list[6].list.push({
+api[1].list[7].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/backup/download',
     desc: '下载压缩包',
 });
-api[1].list[6].list.push({
+api[1].list[7].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/backup/download/fragment',
     desc: 'head 请求获取分片信息 [OP]',
 });
-api[1].list[6].list.push({
+api[1].list[7].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/backup/download/fragment',
@@ -358,54 +401,54 @@ api[1].list[6].list.push({
 });
 api[1].list.push({
     alias: 'ArticleStatController',
-    order: '8',
+    order: '9',
     link: '文章统计_[a#stat]',
     desc: '文章统计 [A#Stat]',
     list: []
 })
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/heatmap/open',
     desc: '每日编辑热力图 [OP]',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/heatmap',
     desc: '每日编辑热力图',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words/open',
     desc: '文章数和文章字数 [OP]',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words',
     desc: '文章数和文章字数',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words/list',
     desc: '字数统计列表',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words/save',
     desc: '保存字数统计信息',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/line/open',
     desc: '文章字数折线图 [OP]',
 });
-api[1].list[7].list.push({
+api[1].list[8].list.push({
     order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/line',
@@ -413,55 +456,67 @@ api[1].list[7].list.push({
 });
 api[1].list.push({
     alias: 'PictureController',
-    order: '9',
+    order: '10',
     link: '图片_[picture]',
     desc: '图片 [Picture]',
     list: []
 })
-api[1].list[8].list.push({
+api[1].list[9].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/page',
     desc: '分页列表',
 });
-api[1].list[8].list.push({
+api[1].list[9].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/info',
     desc: '查询图片信息',
 });
-api[1].list[8].list.push({
+api[1].list[9].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/del',
     desc: '删除图片',
 });
-api[1].list[8].list.push({
+api[1].list[9].list.push({
     order: '4',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/picture/del/batch',
+    desc: '批量删除文件',
+});
+api[1].list[9].list.push({
+    order: '5',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/picture/transfer',
+    desc: '文件转移',
+});
+api[1].list[9].list.push({
+    order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/star',
     desc: '星标图片',
 });
-api[1].list[8].list.push({
-    order: '5',
+api[1].list[9].list.push({
+    order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/stat',
     desc: '统计图片 [OP]',
 });
 api[1].list.push({
     alias: 'PictureBlosController',
-    order: '10',
+    order: '11',
     link: '图片上传查看_[p#blos]',
     desc: '图片上传查看 [P#Blos]',
     list: []
 })
-api[1].list[9].list.push({
+api[1].list[10].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/file/upload',
     desc: '上传文件',
 });
-api[1].list[9].list.push({
+api[1].list[10].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/pic/{filename}/**',
@@ -469,42 +524,42 @@ api[1].list[9].list.push({
 });
 api[1].list.push({
     alias: 'PlanController',
-    order: '11',
+    order: '12',
     link: '计划_[plan]',
     desc: '计划 [Plan]',
     list: []
 })
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/list/day',
     desc: '每日计划',
 });
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/list/daily',
     desc: '日常计划',
 });
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/add/day',
     desc: '新增每日计划',
 });
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/upd/day',
-    desc: '修改每日计划  &lt;p&gt;只能修改标题和内容, 如果是修改日期等信息需要重新新增',
+    desc: '修改每日计划',
 });
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/add/daily',
     desc: '新增日常计划',
 });
-api[1].list[10].list.push({
+api[1].list[11].list.push({
     order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/plan/del',
@@ -512,48 +567,48 @@ api[1].list[10].list.push({
 });
 api[1].list.push({
     alias: 'TodoController',
-    order: '12',
+    order: '13',
     link: '待办事项_[todo]',
     desc: '待办事项 [Todo]',
     list: []
 })
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/list',
     desc: '待办事项列表',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/add/phased',
     desc: '新增阶段性事项',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/upd/name',
     desc: '修改阶段性事项名称',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/open',
     desc: '开启阶段性事项',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/completed',
     desc: '完成阶段性事项',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/stat',
     desc: '待办事项列表',
 });
-api[1].list[11].list.push({
+api[1].list[12].list.push({
     order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/export',
@@ -561,78 +616,78 @@ api[1].list[11].list.push({
 });
 api[1].list.push({
     alias: 'TaskController',
-    order: '13',
+    order: '14',
     link: '待办事项_[todo#task]',
     desc: '待办事项 [Todo#Task]',
     list: []
 })
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/list',
     desc: '任务列表',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/info',
     desc: '任务详情',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/count',
     desc: '任务数量',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/tags',
     desc: '标签列表',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/stat',
     desc: '统计',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/add',
     desc: '新增任务',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/upd',
     desc: '修改任务',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/waiting',
     desc: '事项移动到待办',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/processing',
     desc: '事项移动到进行中',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '10',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/completed',
     desc: '事项移动到完成',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '11',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/del',
     desc: '删除事项',
 });
-api[1].list[12].list.push({
+api[1].list[13].list.push({
     order: '12',
     deprecated: 'false',
     url: 'http://127.0.0.1/todo/task/transfer',
@@ -640,36 +695,36 @@ api[1].list[12].list.push({
 });
 api[1].list.push({
     alias: 'NoteController',
-    order: '14',
+    order: '15',
     link: '便签_[note]',
     desc: '便签 [Note]',
     list: []
 })
-api[1].list[13].list.push({
+api[1].list[14].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/list',
     desc: '全部列表',
 });
-api[1].list[13].list.push({
+api[1].list[14].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/add',
     desc: '新增',
 });
-api[1].list[13].list.push({
+api[1].list[14].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/upd',
     desc: '修改',
 });
-api[1].list[13].list.push({
+api[1].list[14].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/del',
     desc: '删除',
 });
-api[1].list[13].list.push({
+api[1].list[14].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/note/top',
@@ -677,24 +732,24 @@ api[1].list[13].list.push({
 });
 api[1].list.push({
     alias: 'WebController',
-    order: '15',
+    order: '16',
     link: '网站收藏_[web]',
     desc: '网站收藏 [Web]',
     list: []
 })
-api[1].list[14].list.push({
+api[1].list[15].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/web/list',
     desc: '网站列表 [OP]',
 });
-api[1].list[14].list.push({
+api[1].list[15].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/web/save',
     desc: '保存',
 });
-api[1].list[14].list.push({
+api[1].list[15].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/web/del',
