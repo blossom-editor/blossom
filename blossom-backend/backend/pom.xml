@@ -13,7 +13,6 @@
 
     <properties>
         <java-jwt.version>4.3.0</java-jwt.version> <!-- JWT -->
-        <smart-doc.version>2.6.7-BL-SNAPSHOT</smart-doc.version>
         <thumbnailator.version>0.4.20</thumbnailator.version>
     </properties>
 
