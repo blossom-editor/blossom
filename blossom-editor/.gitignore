@@ -3,3 +3,5 @@ dist
 out
 *.log*
 stats.html
+auto-imports.d.ts
+components.d.ts
