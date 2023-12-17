@@ -54,6 +54,10 @@ public class AuthProperties implements EnvironmentAware, ApplicationContextAware
      */
     private String defaultPassword = "123456";
     /**
+     * 重置密码
+     */
+    private Boolean passwordReset = Boolean.FALSE;
+    /**
      * 日志类型
      */
     private LogTypeEnum logType = LogTypeEnum.none;

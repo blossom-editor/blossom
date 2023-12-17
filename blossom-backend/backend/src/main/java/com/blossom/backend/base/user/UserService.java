@@ -93,5 +93,18 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         baseMapper.updPwd(req.getUserId(), newPwd);
     }
 
+    /**
+     * 重置用户密码
+     *
+     * @param userId   用户ID
+     * @param password 密码
+     * @param salt     加盐
+     * @since 1.11.0
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(Long userId, String password, String salt) {
+        String newPwd = passwordEncoder.encode(password + salt);
+        baseMapper.updPwd(userId, newPwd);
+    }
 
 }

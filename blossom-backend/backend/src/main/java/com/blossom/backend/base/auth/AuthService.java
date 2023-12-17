@@ -4,16 +4,18 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.exception.AuthException;
 import com.blossom.backend.base.auth.exception.AuthRCode;
-import com.blossom.backend.base.auth.pojo.LoginDTO;
-import com.blossom.backend.base.auth.security.PasswordEncoder;
 import com.blossom.backend.base.auth.pojo.AccessToken;
+import com.blossom.backend.base.auth.pojo.LoginDTO;
 import com.blossom.backend.base.auth.repo.TokenRepository;
+import com.blossom.backend.base.auth.security.PasswordEncoder;
 import com.blossom.backend.base.auth.token.TokenEncoder;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 /**
@@ -71,5 +73,19 @@ public class AuthService extends AbstractAuthService {
      */
     public AccessToken check() {
         return AuthContext.getContext();
+    }
+
+    /**
+     * 启动时重置密码
+     */
+    @EventListener(ApplicationStartedEvent.class)
+    public void refresh() {
+        if (properties.getPasswordReset()) {
+            log.warn("[AUTHORIZ] 重置用户密码");
+            for (UserEntity user : userService.listAll()) {
+                log.warn("[AUTHORIZ] 重置用户[{}]密码", user.getId());
+                userService.resetPassword(user.getId(), properties.getDefaultPassword(), user.getSalt());
+            }
+        }
     }
 }
