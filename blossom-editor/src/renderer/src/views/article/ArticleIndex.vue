@@ -382,7 +382,7 @@ let articleChanged = false
 // 上次保存时间
 let lastSaveTime: number = new Date().getTime()
 // 自动保存定时器
-let autoSaveInterval: NodeJS.Timer
+let autoSaveInterval: NodeJS.Timeout
 // 文章加载延迟遮罩
 let editorLoadingTimeout: NodeJS.Timeout
 

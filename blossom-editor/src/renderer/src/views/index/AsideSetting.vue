@@ -186,7 +186,7 @@ const printscreenUpload = () => {
   } else {
     filename = printScreenName.value + '.png'
   }
-  formData.append('file', blob, blob.name)
+  formData.append('file', blob, filename)
   formData.append('pid', pid.value.toString())
   formData.append('filename', filename)
   uploadFileApi(formData)

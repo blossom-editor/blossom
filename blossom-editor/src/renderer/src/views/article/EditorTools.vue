@@ -356,7 +356,7 @@ const duration = ref(30)
 const remainStr = ref('00:00:00')
 // 番茄钟参数, 开始时间, 时长(毫秒)
 let param = { start: 0, duration: 0 }
-let bell: NodeJS.Timer
+let bell: NodeJS.Timeout
 
 /**
  * 番茄钟开始
