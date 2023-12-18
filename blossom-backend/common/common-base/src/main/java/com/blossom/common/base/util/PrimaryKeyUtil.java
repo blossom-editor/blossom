@@ -57,11 +57,11 @@ public class PrimaryKeyUtil {
     /**
      * 数据中心 ID
      */
-    private static final long datacenterId;
+    private static long datacenterId;
     /**
      * 机器标识 ID
      */
-    private static final long machineId;
+    private static long machineId;
     /**
      * 序列号
      */
@@ -85,7 +85,9 @@ public class PrimaryKeyUtil {
                 throw new IllegalArgumentException("machineId can't be greater than MAX_MACHINE_NUM or less than 0");
             }
         } catch (UnknownHostException e) {
-            throw new RuntimeException("生成唯一 Id 时，获取机器 Ip 异常");
+            log.warn("生成唯一 Id 时，获取机器 Ip 异常");
+            datacenterId = 254L;
+            machineId = 254L;
         }
     }
 
@@ -144,4 +146,5 @@ public class PrimaryKeyUtil {
         }
         return sums % (max + 1);
     }
+
 }
