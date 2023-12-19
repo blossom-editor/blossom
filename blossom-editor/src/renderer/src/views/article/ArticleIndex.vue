@@ -73,7 +73,7 @@
         </div>
         <div class="toc-content" v-show="tocsExpand">
           <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
-            {{ toc.content }}
+            <span v-html="toc.content"></span>
           </div>
         </div>
         <div class="img-title">
