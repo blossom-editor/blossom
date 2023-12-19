@@ -126,7 +126,6 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
      * @param repeatUpload 重复上传
      * @since 1.6.0 允许重复上传图片
      */
-    @Transactional(rollbackFor = Exception.class)
     public PictureEntity insert(MultipartFile file, String filename, Long pid, Long userId, Boolean repeatUpload) {
         PictureEntity pic = new PictureEntity();
         pic.setUserId(userId);

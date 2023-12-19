@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
@@ -56,6 +57,7 @@ public class PictureBlosController {
      * @param repeatUpload 是否允许重复上传 @since 1.6.0
      */
     @PostMapping("/picture/file/upload")
+    @Transactional(rollbackFor = Exception.class)
     public R<String> uploadFile(@RequestParam("file") MultipartFile file,
                                 @RequestParam(value = "filename", required = false) String filename,
                                 @RequestParam(value = "pid", required = false) Long pid,
