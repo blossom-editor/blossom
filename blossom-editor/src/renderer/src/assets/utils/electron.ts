@@ -27,6 +27,14 @@ export const windowClose = () => {
 export const setBestSize = () => {
   window.electronAPI.setBestSize()
 }
+/** 设置创建缩放变化  */
+export const setZoomLevel = (level: number) => {
+  window.electronAPI.setZoomLevel(level)
+}
+/** 重置窗口缩放 */
+export const resetZoomLevel = () => {
+  window.electronAPI.resetZoomLevel()
+}
 
 /**
  * 设置用户信息

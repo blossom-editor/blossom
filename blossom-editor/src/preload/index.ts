@@ -1,11 +1,9 @@
-
 // @ts-ignore (define in dts)
 import { contextBridge, ipcRenderer, clipboard, shell, OpenExternalOptions, NativeImage } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {
-}
+const api = {}
 
 /**
  * 主进程调用渲染进程方法
@@ -14,12 +12,10 @@ const ipcToRender = {
   /**
    * 截屏结束后, 主进程会调用该方法
    * @param callback 截屏回调
-   * @returns 
+   * @returns
    */
-  printScreenAfter: (callback: any) => ipcRenderer.on('printScreenAfter', callback),
-  printLog: (callback: any) => ipcRenderer.on('printLog', callback),
+  printScreenAfter: (callback: any) => ipcRenderer.on('printScreenAfter', callback)
 }
-
 
 /**
  * 渲染进程调用主进程方法
@@ -34,10 +30,12 @@ const rednerToIpc = {
   windowClose: () => ipcRenderer.send('window-close'),
   openDevTools: () => ipcRenderer.send('openDevTools'),
   setBestSize: () => ipcRenderer.send('set-best-size'),
+  setZoomLevel: (level: number) => ipcRenderer.send('set-zoom-level', level),
+  resetZoomLevel: () => ipcRenderer.send('reset-zoom-level'),
   /**
    * 设置用户信息
    * @param userinfo 用户信息
-   * @returns 
+   * @returns
    */
   setUserinfo: (userinfo: any) => ipcRenderer.send('set-userinfo', userinfo),
   /**
@@ -57,21 +55,25 @@ const rednerToIpc = {
   openNewArticleWindow: (article: any): void => ipcRenderer.send('open-new-article-window', article),
   /**
    * 新窗口查看图标
-   * @returns 
+   * @returns
    */
   openNewIconWindow: (): void => ipcRenderer.send('open-new-icon-window'),
   /**
    * 新窗口查看文章引用
    * @param article 查看指定文章的引用关系
-   * @returns 
+   * @returns
    */
-  openNewArticleReferenceWindow: (article?: any): void => { ipcRenderer.send('open-new-article-referece-window', article) },
+  openNewArticleReferenceWindow: (article?: any): void => {
+    ipcRenderer.send('open-new-article-referece-window', article)
+  },
   /**
    * 新窗口查看文章编辑历史记录
    * @param article 文章信息
-   * @returns 
+   * @returns
    */
-  openNewArticleLogWindow: (article: any): void => { ipcRenderer.send('open-new-article-log-window', article) },
+  openNewArticleLogWindow: (article: any): void => {
+    ipcRenderer.send('open-new-article-log-window', article)
+  },
   /**
    * 剪贴板, 读取文本
    * @returns 剪切板的文本
@@ -96,14 +98,14 @@ const rednerToIpc = {
    * 剪贴板, 写入文本
    * @param text 文本
    * @param type 类型
-   * @returns 
+   * @returns
    */
   writeText: (text: string, type?: 'selection' | 'clipboard') => clipboard.writeText(text, type),
   /**
    * 默认浏览器打开链接
    * @param url 链接路径
-   * @param options 
-   * @returns 
+   * @param options
+   * @returns
    */
   openExtenal: (url: string, options?: OpenExternalOptions) => shell.openExternal(url, options)
 }

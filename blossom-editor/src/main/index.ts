@@ -289,12 +289,24 @@ const initOnFocusedWindow = (): void => {
       BrowserWindow.getFocusedWindow()?.webContents.openDevTools({ mode: 'right' })
     }
   })
-
   /**
    * 将窗口大小设置为最佳显示效果
    */
   ipcMain.on('set-best-size', () => {
     BrowserWindow.getFocusedWindow()?.setSize(1905, 1022)
+  })
+  /**
+   * 设置窗口缩放
+   * @param level: 变更的缩放等级, 在当前缩放上加减
+   */
+  ipcMain.on('set-zoom-level', (_event: IpcMainEvent, level: number) => {
+    mainWindow?.webContents.setZoomLevel(mainWindow!.webContents.getZoomLevel() + level)
+  })
+  /**
+   * 重置窗口缩放
+   */
+  ipcMain.on('reset-zoom-level', (_event: IpcMainEvent) => {
+    mainWindow?.webContents.setZoomLevel(0)
   })
 }
 

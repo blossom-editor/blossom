@@ -60,6 +60,17 @@
             <el-switch v-model="viewStyle.isGlobalShadow" size="default" @change="changeGlobalShadow" />
           </bl-row>
 
+          <bl-row v-if="isElectron()" class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">窗口缩放</div>
+            </div>
+            <el-button-group>
+              <el-button @click="zoomOut">缩小</el-button>
+              <el-button @click="zoomIn">放大</el-button>
+              <el-button @click="zoomReset">还原</el-button>
+            </el-button-group>
+          </bl-row>
+
           <bl-col class="desc" align="flex-end">
             <div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div>
             <div>
@@ -171,6 +182,8 @@ import { Sunny, Moon } from '@element-plus/icons-vue'
 import { useDraggable } from '@renderer/scripts/draggable'
 import { useThemeStore } from '@renderer/stores/theme'
 import { isDark, getTheme, changeTheme, setPrimaryColor, setStyleItem, setStyleItemObj, resetStyleItems } from '@renderer/scripts/global-theme'
+import { setZoomLevel, resetZoomLevel } from '@renderer/assets/utils/electron'
+import { isElectron } from '@renderer/assets/utils/util'
 
 const config = useConfigStore()
 const { viewStyle } = config
@@ -189,10 +202,11 @@ const presetsLight = [
   { color: 'rgb(119, 150, 73)', name: '碧山' },
   { color: 'rgb(128, 164, 146)', name: '缈碧' },
   { color: 'rgb(110, 155, 197)', name: '挼蓝' },
-  { color: 'rgb(173, 140, 242)', name: '亮紫' },
+  // { color: 'rgb(173, 140, 242)', name: '亮紫' },
   { color: 'rgb(97, 94, 168)', name: '优昙瑞' },
   { color: 'rgb(178, 182, 182)', name: '月魄' },
-  { color: 'rgb(199, 198, 183)', name: '霜地' }
+  { color: 'rgb(199, 198, 183)', name: '霜地' },
+  { color: 'rgb(104, 104, 104)', name: '深灰' }
 ]
 const presetsDark = [
   { color: 'rgb(178, 119, 119)', name: '绛纱' },
@@ -238,6 +252,22 @@ const changeSubjectStype = () => {
   config.setViewStyle(viewStyle)
 }
 
+//#endregion
+
+//#region
+let zoomLevel = 0
+const zoomIn = () => {
+  zoomLevel = zoomLevel + 0.2
+  setZoomLevel(0.2)
+}
+const zoomOut = () => {
+  zoomLevel = zoomLevel - 0.2
+  setZoomLevel(-0.2)
+}
+
+const zoomReset = () => {
+  resetZoomLevel()
+}
 //#endregion
 
 //#region 文档设置
