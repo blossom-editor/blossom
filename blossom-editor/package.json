@@ -1,7 +1,7 @@
 {
   "name": "blossom",
   "productName": "Blossom",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "A markdown editor",
   "license": "MIT",
   "main": "./out/main/index.js",
