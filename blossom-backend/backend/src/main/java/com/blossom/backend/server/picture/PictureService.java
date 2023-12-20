@@ -14,6 +14,7 @@ import com.blossom.backend.server.picture.pojo.PictureStatRes;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException400HTTP;
 import com.blossom.common.base.exception.XzException404;
+import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.PrimaryKeyUtil;
 import com.blossom.common.db.aspect.Pages;
 import com.blossom.common.iaas.OSManager;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -183,6 +186,12 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
         }
 
         baseMapper.insert(pic);
+        // 入库后进行文件上传操作
+        try (InputStream inputStream = file.getInputStream()) {
+            osManager.put(pic.getPathName(), inputStream);
+        } catch (IOException e) {
+            throw new XzException500("图片[" + pic.getPathName() + "]上传异常,请重试");
+        }
         return pic;
     }
 
