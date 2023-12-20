@@ -68,11 +68,7 @@ public class PictureBlosController {
         if (picture.getId() == null) {
             return R.ok("上传失败");
         }
-        try (InputStream inputStream = file.getInputStream()) {
-            return R.ok(osManager.put(picture.getPathName(), inputStream));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return R.ok(picture.getUrl());
     }
 
