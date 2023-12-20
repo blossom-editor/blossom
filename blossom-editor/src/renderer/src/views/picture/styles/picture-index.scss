@@ -24,9 +24,22 @@
   // 编辑器内容
   .picture-container {
     @include box(calc(100% - 250px), 100%);
-    position: relative;
     border-left: 1px solid var(--el-border-color);
     background-color: #ffffff00;
+    position: relative;
+
+    .tip {
+      @include font(12px, 300);
+      padding-top: 8px;
+      color: var(--bl-text-color-light);
+      position: absolute;
+      left: 10px;
+      bottom: 35px;
+      cursor: pointer;
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
 
     .star {
       @include flex(row, center, flex-end);
@@ -228,8 +241,6 @@
             &:hover {
               background-color: var(--el-color-primary);
               width: 30%;
-              // @include themeColor(#904aff, rgb(255, 242, 0));
-              // background-color: var(--el-color-primary);
             }
           }
         }
