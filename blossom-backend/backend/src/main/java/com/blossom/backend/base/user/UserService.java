@@ -61,6 +61,8 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public void insert(UserAddReq req) {
+        UserEntity userByUsername = selectByUsername(req.getUsername());
+        XzException400.throwBy(userByUsername != null, "用户名[" + req.getUsername() + "]已存在, 无法重复添加");
         UserEntity user = req.to(UserEntity.class);
         user.setNickName(req.getUsername());
         user.setRealName(req.getUsername());
