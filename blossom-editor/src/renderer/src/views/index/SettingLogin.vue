@@ -12,6 +12,17 @@
         <div class="input-wrapper" style="width: 500px">
           <input type="text" class="form__input" placeholder="https://..." v-model="formLogin.serverUrl" @input="handleServerUrl" />
           <div class="iconbl bl-a-servercloud-line"></div>
+          <div v-if="serverUrlIsInValid" class="server-url-invalid">
+            <el-tooltip effect="light" placement="top">
+              <template #content>
+                登录地址可能存在错误<br />地址中不应包含以下内容：
+                <li>/#/</li>
+              </template>
+              <svg style="height: 20px; width: 20px" aria-hidden="true">
+                <use xlink:href="#wl-jinggao"></use>
+              </svg>
+            </el-tooltip>
+          </div>
         </div>
       </bl-row>
       <bl-row just="center">
@@ -172,6 +183,17 @@ const handleServerUsername = () => {
   serverStore.setServerUsername(formLogin.value.username)
 }
 
+/**
+ * 登录地址可能不合法
+ */
+const serverUrlIsInValid = computed(() => {
+  let url = formLogin.value.serverUrl.toLocaleLowerCase()
+  if (url.includes('/#/')) {
+    return true
+  }
+  return false
+})
+
 //#endregion
 
 //#region --------------------------------------------------< 试用 >--------------------------------------------------
@@ -198,8 +220,6 @@ const helpMeLogin = () => {
   @include box(100%, 100%);
   @include flex(column, center, center);
   padding: 40px;
-  
-  
 
   .avatar-img {
     height: 150px;
@@ -263,6 +283,14 @@ const helpMeLogin = () => {
       font-size: 25px;
       display: flex;
       transition: 0.3s ease;
+    }
+
+    .server-url-invalid {
+      @include themeFilter(drop-shadow(0 0 3px rgb(197, 197, 197)), drop-shadow(0 0 3px #000000));
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      cursor: pointer;
     }
   }
 
