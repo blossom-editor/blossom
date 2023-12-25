@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamEntity;
+import com.blossom.backend.base.search.message.ArticleIndexMsg;
+import com.blossom.backend.base.search.message.IndexMsgTypeEnum;
+import com.blossom.backend.base.search.queue.IndexMsgQueue;
 import com.blossom.backend.server.article.recycle.pojo.ArticleRecycleEntity;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
@@ -58,6 +61,13 @@ public class ArticleRecycleService extends ServiceImpl<ArticleRecycleMapper, Art
             baseMapper.restore(id, folder.getId());
         }
         baseMapper.deleteById(id);
+        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, article.getId(), article.getName(), article.getMarkdown());
+        try {
+            IndexMsgQueue.add(articleIndexMsg);
+        } catch (InterruptedException e) {
+            // 不抛出, 暂时先记录
+            log.error("索引更新失败" + e.getMessage());
+        }
     }
 
     /**

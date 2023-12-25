@@ -48,6 +48,15 @@
         </where>
     </select>
 
+    <!-- 查询全部文章,包含id, name , markdown字段，用于批量索引的建立 -->
+    <select id="listAllArticleWithContent" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
+        select
+        id,
+        `name`,
+        markdown
+        from blossom_article
+    </select>
+
 
     <!-- 根据ID修改 -->
     <update id="updById">
