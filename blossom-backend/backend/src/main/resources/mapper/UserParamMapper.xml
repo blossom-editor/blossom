@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.base.paramu.UserParamMapper">
+    <select id="selectByUserId" resultType="com.blossom.backend.base.paramu.pojo.UserParamEntity">
+        select *
+        from base_user_param
+        where user_id = #{userId}
+          and param_name = #{paramName}
+    </select>
+
+    <update id="updByParamName">
+        update base_user_param
+          set param_value = #{paramValue}
+        where param_name = #{paramName}
+          and user_id = #{userId}
+    </update>
+</mapper>

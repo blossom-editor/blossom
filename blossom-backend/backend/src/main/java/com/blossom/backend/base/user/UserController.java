@@ -1,15 +1,17 @@
 package com.blossom.backend.base.user;
 
 import cn.hutool.core.util.ObjUtil;
+import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
+import com.blossom.backend.base.paramu.UserParamEnum;
+import com.blossom.backend.base.paramu.UserParamService;
 import com.blossom.backend.base.sys.SysService;
 import com.blossom.backend.base.user.pojo.*;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
 import com.blossom.backend.server.article.stat.ArticleStatService;
-import com.blossom.backend.base.auth.AuthContext;
-import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
@@ -32,6 +34,7 @@ public class UserController {
     private final ArticleStatService articleService;
     private final SysService sysService;
     private final ParamService paramService;
+    private final UserParamService userParamService;
 
     /**
      * 用户信息
@@ -42,6 +45,8 @@ public class UserController {
         user.setOsRes(sysService.getOsConfig());
         Map<String, String> paramMap = paramService.selectMap(true, ParamEnum.values());
         user.setParams(paramMap);
+        Map<String, String> userParamMap = userParamService.selectMap(AuthContext.getUserId(), true, UserParamEnum.values());
+        user.setUserParams(userParamMap);
         return R.ok(user);
     }
 

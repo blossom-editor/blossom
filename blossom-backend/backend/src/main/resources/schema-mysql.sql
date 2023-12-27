@@ -152,6 +152,22 @@ SELECT 904,
                   WHERE id = 904);
 
 
+
+-- ----------------------------
+-- since: 1.12.0
+-- ----------------------------
+INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
+SELECT 101,
+       'BLOSSOM_OBJECT_STORAGE_DOMAIN',
+       'http://www.xxx.com/',
+       'BLOSSOM 对象存储地址',
+       1,
+       CURRENT_TIMESTAMP,
+       CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1
+                  FROM base_sys_param
+                  WHERE id = 101);
+
 -- ----------------------------
 -- Table structure for base_user
 -- ----------------------------

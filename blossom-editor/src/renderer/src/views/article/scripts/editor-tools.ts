@@ -19,7 +19,7 @@ export const keymaps = {
 
   blockquote: isMac ? '>' : '>',
   code: isMac ? 'Cmd + E' : 'Alt + E',
-  pre: isMac ? 'Ctrl + Cmd + S' : 'Ctrl + Alt + E',
+  pre: isMac ? 'Ctrl + Cmd + E' : 'Ctrl + Alt + E',
 
   table: isMac ? 'Cmd + T' : 'Alt + T',
   image: isMac ? 'Cmd + M' : 'Alt + M',

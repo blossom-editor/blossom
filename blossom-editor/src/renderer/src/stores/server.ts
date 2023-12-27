@@ -7,7 +7,7 @@ const isDemo = import.meta.env.MODE === 'tryuse'
 export const storeKey = 'serverUrl'
 export const usernameKey = 'username'
 
-const initServerUrl = () => {
+const initServerUrl = (): string => {
   const defaultUrl = isDemo ? SYSTEM.TRY_USE.serverUrl : ''
   Local.set(storeKey, defaultUrl)
   return defaultUrl
@@ -15,7 +15,7 @@ const initServerUrl = () => {
 
 export const useServerStore = defineStore('serverStore', {
   state: () => ({
-    serverUrl: Local.get(storeKey) || initServerUrl(),
+    serverUrl: (Local.get(storeKey) as string) || initServerUrl(),
     serverUsername: Local.get(usernameKey) || ''
   }),
   actions: {

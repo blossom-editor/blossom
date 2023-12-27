@@ -10,6 +10,8 @@ import com.blossom.backend.base.param.pojo.ParamEntity;
 import com.blossom.backend.base.param.pojo.ParamUpdReq;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.BeanUtil;
+import com.blossom.common.iaas.IaasEnum;
+import com.blossom.common.iaas.OSManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -32,7 +34,11 @@ import java.util.Map;
 public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
 
     private static final Map<String, ParamEntity> CACHE = new HashMap<>(20);
+    private final OSManager osManager;
 
+    /**
+     * 初始化系统参数
+     */
     @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
         log.info("[    BASE] 初始化系统参数缓存");
@@ -76,8 +82,37 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
                 param.setParamValue(StrUtil.hide(param.getParamValue(), 0, Math.min(param.getParamValue().length(), name.getMaskingLength())));
             }
             result.put(name.name(), param.getParamValue());
+
+            // domain 涉及多个地方配置, 需要特别处理
+            if (name.equals(ParamEnum.BLOSSOM_OBJECT_STORAGE_DOMAIN)) {
+                result.put(name.name(), getDomain());
+            }
         }
         return result;
+    }
+
+    /**
+     * 获取对象存储的地址前缀, 优先从数据库中获取, 如果数据库中配置的是默认值,
+     *
+     * @return 对象存储的地址
+     * @since 1.12.0
+     */
+    public String getDomain() {
+        if (osManager.getProp().getOsType().equals(IaasEnum.BLOSSOM.getType())) {
+            String domain = getValue(ParamEnum.BLOSSOM_OBJECT_STORAGE_DOMAIN).getParamValue();
+            // 如果后台配置的图片地址为默认值
+            if (ParamEnum.BLOSSOM_OBJECT_STORAGE_DOMAIN.getDefaultValue().equals(domain)) {
+                // 如果配置文件中未配置地址
+                if (StrUtil.isNotBlank(osManager.getDomain())) {
+                    domain = osManager.getDomain();
+                }
+            }
+            if (StrUtil.isBlank(domain)) {
+                throw new XzException500("文件地址 [" + ParamEnum.BLOSSOM_OBJECT_STORAGE_DOMAIN.name() + "] 配置错误");
+            }
+            return domain;
+        }
+        return osManager.getDomain();
     }
 
     /**

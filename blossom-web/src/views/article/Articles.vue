@@ -125,28 +125,33 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onActivated, onUnmounted, onMounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '@/api/blossom'
 import { useUserStore } from '@/stores/user'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import DocTitle from './DocTitle.vue'
+import { useLifecycle } from '@/scripts/lifecycle'
 import 'katex/dist/katex.min.css'
 
 const userStore = useUserStore()
+useLifecycle(
+  () => {
+    window.onHtmlEventDispatch = onHtmlEventDispatch
+    getRouteQueryParams()
+    window.addEventListener('resize', onresize)
+    initStyle()
+  },
+  () => {
+    getRouteQueryParams()
+    window.addEventListener('resize', onresize)
+    initStyle()
+  }
+)
 
-onMounted(() => {
-  window.onHtmlEventDispatch = onHtmlEventDispatch
-  getRouteQueryParams()
-  window.addEventListener('resize', onresize)
-  initStyle()
-})
+// onMounted(() => {})
 
-onActivated(() => {
-  getRouteQueryParams()
-  window.addEventListener('resize', onresize)
-  initStyle()
-})
+// onActivated(() => {})
 
 onUnmounted(() => {
   window.removeEventListener('resize', onresize)
@@ -227,6 +232,12 @@ const clickCurDoc = async (tree: DocTree) => {
  * 如果点击的是文章, 则查询文章信息和正文, 并在编辑器中显示.
  */
 const getCurEditArticle = async (id: number) => {
+  if (id == -123) {
+    article.value.html = `<div style="color:#C6C6C6;font-weight: 300;width:100%;height:300px;padding:0 20px;display:flex;justify-content: center;
+    align-items: center;text-align:center;font-size:25px;">如果您看到这句话, 证明博客验证成功</div>`
+    return
+  }
+
   const then = (resp: any) => {
     if (isNull(resp.data)) return
     article.value = resp.data

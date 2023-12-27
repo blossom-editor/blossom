@@ -96,7 +96,8 @@ public class WebConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/blog/**",
-                        "/editor/**"
+                        "/editor/**",
+                        "/error"
                 );
 
     }
@@ -110,7 +111,7 @@ public class WebConfigurer implements WebMvcConfigurer {
         registry.addViewController("/editor/").setViewName("/editor/index.html");
     }
 
-    /***
+    /**
      * 静态文件处理
      */
     @Override

@@ -166,8 +166,8 @@ const renderChart = () => {
         if (!params.data.inner) {
           url = `<div>地址: <a target="_blank" href="${params.data.artUrl}">${params.data.artUrl}</a></div>`
         } else {
-          url = `<div>地址: <a target="_blank" href="${userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId}">${
-            userStore.userinfo.params.WEB_ARTICLE_URL + params.data.artId
+          url = `<div>地址: <a target="_blank" href="${userStore.userinfo.userParams.WEB_ARTICLE_URL + params.data.artId}">${
+            userStore.userinfo.userParams.WEB_ARTICLE_URL + params.data.artId
           }</a></div>`
         }
         return `<div class="chart-graph-article-ref-tooltip">
