@@ -28,6 +28,8 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
      */
     List<ArticleEntity> listAll(ArticleEntity entity);
 
+    List<ArticleEntity> listAllArticleWithContent();
+
     /**
      * 根据ID修改
      */

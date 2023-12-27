@@ -4,6 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.blossom.backend.base.auth.AuthContext;
+import com.blossom.backend.base.search.message.ArticleIndexMsg;
+import com.blossom.backend.base.search.message.IndexMsgTypeEnum;
+import com.blossom.backend.base.search.queue.IndexMsgQueue;
 import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
@@ -80,6 +84,18 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     }
 
     /**
+     * 获取所有文章，包含markdown字段，用于索引的批量维护
+     * @return
+     */
+    public List<ArticleEntity> listAllArticleWithContent() {
+        List<ArticleEntity> articles = baseMapper.listAllArticleWithContent();
+        if (CollUtil.isEmpty(articles)) {
+            return new ArrayList<>();
+        }
+        return articles;
+    }
+
+    /**
      * 查询列表
      * <p>避免在查询主要信息时返回正文信息造成的性能影响, 该接口不返回文章正文 toc/markdown/html</p>
      * <p>如需查询正文, 请使用{@link ArticleService#selectById} 或 {@link ArticleService#listAllContent}</p>
@@ -138,6 +154,13 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     @Transactional(rollbackFor = Exception.class)
     public ArticleEntity insert(ArticleEntity req) {
         baseMapper.insert(req);
+        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(), AuthContext.getUserId());
+        try {
+            IndexMsgQueue.add(articleIndexMsg);
+        } catch (InterruptedException e) {
+            // 不抛出, 暂时先记录
+            log.error("索引更新失败" + e.getMessage());
+        }
         return req;
     }
 
@@ -149,6 +172,13 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     public Long update(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
         baseMapper.updById(req);
+        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(),AuthContext.getUserId());
+        try {
+            IndexMsgQueue.add(articleIndexMsg);
+        } catch (InterruptedException e) {
+            // 不抛出, 暂时先记录
+            log.error("索引更新失败" + e.getMessage());
+        }
         return req.getId();
     }
 
@@ -169,6 +199,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         baseMapper.updContentById(req);
         referenceService.bind(req.getUserId(), req.getId(), req.getName(), req.getReferences());
         logService.insert(req.getId(), 0, req.getMarkdown());
+        // 更新索引
+        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(), AuthContext.getUserId());
+        try {
+            IndexMsgQueue.add(articleIndexMsg);
+        } catch (InterruptedException e) {
+            // 不抛出, 暂时先记录
+            log.error("索引更新失败" + e.getMessage());
+        }
         return req.getWords();
     }
 
@@ -197,6 +235,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         referenceService.delete(id);
         // 删除访问记录
         viewService.delete(id);
+        // 删除索引
+        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.DELETE, id, AuthContext.getUserId());
+        try {
+            IndexMsgQueue.add(articleIndexMsg);
+        } catch (InterruptedException e) {
+            // 不抛出, 暂时先记录
+            log.error("索引更新失败" + e.getMessage());
+        }
     }
 
     /**
