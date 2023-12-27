@@ -79,8 +79,8 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 | 林诗                 | Criesgod          | 支付宝用户-\*伟   | 黑醋栗和丁香      |
 | Mr_tg000             | Lucky             | egil              | Glimpse           |
 | 支付宝用户-\*\*衡    | 支付宝用户-\*\*福 | 支付宝用户-\*\*盼 | 何其正            |
-| -A 明                |                   |                   |                   |
-wweeesssssssssssssswwwweewwweesssssssssssssssssssddddxzzxzxaasdasdqweqqqwertffghyq11231232
+| -A 明                | 开心。            | Please            |                   |
+
 ---
 
 <h4 align="center">你可以通过以下几种方式赞助 Blossom。</h4>
