@@ -30,7 +30,7 @@
     top="60px"
     style="margin-left: 300px"
     :append-to-body="true"
-    :destroy-on-close="false"
+    :destroy-on-close="true"
     :close-on-click-modal="true"
     draggable>
     <PlanDailyInfo @saved="savedCallback"></PlanDailyInfo>
