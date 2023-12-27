@@ -57,8 +57,11 @@
       </ol>
 
       <p class="paragraph">
-        更多内容，可前往<a :href="CONFIG.SYS.GITHUB_REPO" target="_blank">源码仓库</a>、<a :href="CONFIG.SYS.DOC" target="_blank">查看文档</a
-        >、或联系作者<span style="font-size: 13px">({{ CONFIG.SYS.CONTACT }})</span>。
+        更多内容，可前往<a :href="CONFIG.SYS.GITHUB_REPO" target="_blank">源码仓库</a>、<a :href="CONFIG.SYS.DOC" target="_blank">查看文档</a>、或<a
+          :href="CONFIG.SYS.CONTACT"
+          target="_blank"
+          >联系作者</a
+        >。
       </p>
     </div>
 
@@ -120,8 +123,8 @@ const developer = [
 
   .project-name {
     @include font(50px, 500);
-    @include themeColor(#2b2b2b, #e4e4e4);
     @include themeText(2px 2px 5px #878787, 2px 2px 5px #000000);
+    color: var(--el-color-primary);
     width: 100%;
     text-align: center;
   }

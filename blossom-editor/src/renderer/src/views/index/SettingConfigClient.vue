@@ -3,14 +3,14 @@
     <div class="title">
       客户端配置<span class="version">{{ CONFIG.SYS.VERSION }}</span>
     </div>
-    <div class="desc">Blossom 桌面客户端配置</div>
+    <div class="desc">桌面客户端配置</div>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章设置</bl-row>
       <el-form-item label="编辑器字体">
         <el-input v-model="configEditorStyleForm.fontFamily" size="default" @input="changeEditorStyle"></el-input>
         <div class="conf-tip">
-          会影响 Markdown 编辑器、预览页面、新窗口预览、编辑历史中的正文字体样式。中英文等宽字体在表格中会有更好的样式表现，如:
+          Markdown 编辑器、预览页面、新窗口预览、编辑历史中的正文字体样式。中英文等宽字体在表格中会有更好的样式表现，如:
           <a href="https://github.com/be5invis/Sarasa-Gothic" target="_blank">更纱黑体(Sarasa Fixed CL)</a>。
         </div>
       </el-form-item>
@@ -19,19 +19,19 @@
         <el-input v-model="configEditorStyleForm.fontSize" size="default" @input="changeEditorStyle">
           <template #append>单位 px</template>
         </el-input>
-        <div class="conf-tip">会影响 Markdown 编辑器、预览页面、新窗口预览、编辑历史中的正文字体大小。</div>
+        <div class="conf-tip">Markdown 编辑器、预览页面、新窗口预览、编辑历史中的正文字体大小。</div>
       </el-form-item>
 
       <el-form-item label="文档菜单字体大小">
         <el-input v-model="configViewStyleForm.treeDocsFontSize" size="default" @input="changeViewStyle">
           <template #append>单位 px</template>
         </el-input>
-        <div class="conf-tip">会影响文章、照片墙功能中左侧树状菜单的字体大小。</div>
+        <div class="conf-tip">文章、照片墙功能中左侧树状菜单的字体大小。</div>
       </el-form-item>
 
       <el-form-item label="代码块默认语言">
         <el-input v-model="configEditorStyleForm.defaultPreLanguage" size="default" @input="changeEditorStyle"> </el-input>
-        <div class="conf-tip">通过快捷键或者操作按钮生成多行代码块<code>```</code>时的默认语言。</div>
+        <div class="conf-tip">通过快捷键或者工具栏按钮生成多行代码块<code>```</code>时的默认语言。</div>
       </el-form-item>
 
       <el-form-item label="显示代码块行数">

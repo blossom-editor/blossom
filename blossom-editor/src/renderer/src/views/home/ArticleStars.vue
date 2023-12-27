@@ -62,7 +62,7 @@ const toRoute = (articleId: number) => {
 
 const toWebview = (article: any) => {
   if (article.openStatus === 1) {
-    openExtenal(userStore.userinfo.params.WEB_ARTICLE_URL + article.id)
+    openExtenal(userStore.userinfo.userParams.WEB_ARTICLE_URL + article.id)
   }
 }
 

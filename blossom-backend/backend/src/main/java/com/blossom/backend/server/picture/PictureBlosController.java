@@ -22,7 +22,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -82,15 +81,26 @@ public class PictureBlosController {
         return filename;
     }
 
+    /**
+     * 检查文件路径
+     *
+     * @param filename 文件名称
+     */
     private void checkFilename(String filename) {
         if (StrUtil.isBlank(filename)) {
             throw new XzException400("未知文件");
         }
         if (!filename.startsWith(osManager.getDefaultPath())) {
             // 如果图片前缀不是配置的前缀，则去数据库查询文件是否上传过。
+            log.error("路径必须以配置的前缀开头");
+            throw new XzException400("无法访问");
+        }
+        if (!filename.startsWith("/")) {
+            log.error("路径必须是绝对路径");
             throw new XzException400("无法访问");
         }
         if (!FileUtil.exist(filename)) {
+            log.error("文件不存在");
             throw new XzException400("未知文件");
         }
     }

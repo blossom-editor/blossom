@@ -6,9 +6,9 @@ import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
-import com.blossom.backend.base.param.ParamEnum;
-import com.blossom.backend.base.param.ParamService;
-import com.blossom.backend.base.param.pojo.ParamEntity;
+import com.blossom.backend.base.paramu.UserParamEnum;
+import com.blossom.backend.base.paramu.UserParamService;
+import com.blossom.backend.base.paramu.pojo.UserParamEntity;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleInfoRes;
@@ -46,7 +46,7 @@ public class ArticleOpenController {
 
     private final ArticleService articleService;
     private final ArticleOpenService openService;
-    private final ParamService paramService;
+    private final UserParamService userParamService;
 
 
     /**
@@ -96,7 +96,7 @@ public class ArticleOpenController {
      * @param req 文章对象
      */
     @PostMapping("/sync")
-    public R<ArticleOpenRes> sync(@Validated @RequestBody ArticleOpenSyncReq req) {
+    protected R<ArticleOpenRes> sync(@Validated @RequestBody ArticleOpenSyncReq req) {
         openService.sync(req.getId());
         ArticleOpenEntity openEntity = openService.selectById(req.getId(), false, false, false);
         return R.ok(openEntity.to(ArticleOpenRes.class));
@@ -110,8 +110,8 @@ public class ArticleOpenController {
      */
     @GetMapping("/qrcode")
     public void qrcode(@RequestParam("id") Long id, HttpServletResponse response) {
-        ParamEntity param = paramService.getValue(ParamEnum.WEB_ARTICLE_URL);
-        XzException404.throwBy(ObjUtil.isNull(param), "未配置文章公网访问链接，无法生成二维码，请在服务端配置参数 [BaseParam.WEB_ARTICLE_URL]");
+        UserParamEntity param = userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_ARTICLE_URL);
+        XzException404.throwBy(ObjUtil.isNull(param), "请先在设置中配置博客访问路径");
         final String url = param.getParamValue() + id;
         BufferedImage bfi = QrCodeUtil.generate(url, new QrConfig(200, 200));
         response.setContentType("image/png");

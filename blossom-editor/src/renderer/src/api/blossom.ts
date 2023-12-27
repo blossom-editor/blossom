@@ -29,6 +29,33 @@ export const paramRefreshApi = (): Promise<R<any>> => {
   return rq.post<R<any>>('/sys/param/refresh', {})
 }
 
+// 用户参数
+
+/**
+ * 获取用户参数列表
+ * @returns
+ */
+export const userParamListApi = (): Promise<R<any>> => {
+  return rq.get<R<any>>('/user/param/list', {})
+}
+
+/**
+ * 修改系统参数
+ * @returns
+ */
+export const userParamUpdApi = (data: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/user/param/upd', data)
+}
+
+/**
+ * 刷新系统参数缓存
+ * @param data 文件 form
+ * @returns
+ */
+export const userParamRefreshApi = (): Promise<R<any>> => {
+  return rq.post<R<any>>('/user/param/refresh', {})
+}
+
 /**
  * 上传文件
  * @param data 文件 form
@@ -506,8 +533,8 @@ export const pictureStatApi = (params?: object): Promise<R<any>> => {
 
 /**
  * 转移文件
- * @param data 
- * @returns 
+ * @param data
+ * @returns
  */
 export const pictureTransferApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>('/picture/transfer', data)

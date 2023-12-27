@@ -1,4 +1,4 @@
-import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDetails } from 'electron'
+import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDetails, session } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
@@ -50,6 +50,15 @@ if (!gotTheLock) {
     setTimeout(() => {
       createMainWindow()
     }, 300)
+
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'Content-Security-Policy': ['frame-ancestors *']
+        }
+      })
+    })
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
@@ -432,8 +441,8 @@ export const initOnWindow = (window: BrowserWindow) => {
    */
   window.webContents.setWindowOpenHandler((details: HandlerDetails): any => {
     let url = details.url as string
-    if (blossomUserinfo && url.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
-      let articleId: string = url.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
+    if (blossomUserinfo && url.startsWith(blossomUserinfo.userParams.WEB_ARTICLE_URL)) {
+      let articleId: string = url.replaceAll(blossomUserinfo.userParams.WEB_ARTICLE_URL, '')
       createNewWindow('article', articleId, Number(articleId))
     } else {
       shell.openExternal(url)
@@ -450,8 +459,8 @@ export const initOnWindow = (window: BrowserWindow) => {
 const interceptorATag = (e: Event, url: string): boolean => {
   e.preventDefault()
   let innerUrl = url
-  if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.params.WEB_ARTICLE_URL)) {
-    let articleId: string = innerUrl.replaceAll(blossomUserinfo.params.WEB_ARTICLE_URL, '')
+  if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.userParams.WEB_ARTICLE_URL)) {
+    let articleId: string = innerUrl.replaceAll(blossomUserinfo.userParams.WEB_ARTICLE_URL, '')
     createNewWindow('article', articleId, Number(articleId))
   } else if (!is.dev) {
     shell.openExternal(url)

@@ -3,12 +3,20 @@
     <div class="title">
       服务器配置<span class="version" v-if="isNotBlank(serverParamForm.serverVersion)">{{ 'v' + serverParamForm.serverVersion }}</span>
     </div>
-    <div class="desc">Blossom 服务器配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
+    <div class="desc">服务器配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
     <el-form v-if="auth.status == '已登录'" :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
-      <el-form-item label="网页端地址">
+      <!-- <el-form-item label="网页端地址">
         <el-input size="default" v-model="serverParamForm.WEB_ARTICLE_URL" @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"></el-input>
         <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code>/#/articles?articleId=</code>结尾。</div>
+      </el-form-item> -->
+
+      <el-form-item label="文件访问地址" :required="true">
+        <el-input
+          size="default"
+          v-model="serverParamForm.BLOSSOM_OBJECT_STORAGE_DOMAIN"
+          @change="(cur: any) => updParam('BLOSSOM_OBJECT_STORAGE_DOMAIN', cur)"></el-input>
+        <div class="conf-tip">文件访问地址。需以<code>/pic</code>结尾。</div>
       </el-form-item>
 
       <el-form-item label="备份文件路径">
@@ -124,6 +132,7 @@ const serverParamForm = ref({
   ARTICLE_RECYCLE_EXP_DAYS: '',
   BACKUP_EXP_DAYS: '',
   HEFENG_KEY: '',
+  BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
   SERVER_MACHINE_EXPIRE: '',
   SERVER_DATABASE_EXPIRE: '',
   SERVER_DOMAIN_EXPIRE: '',

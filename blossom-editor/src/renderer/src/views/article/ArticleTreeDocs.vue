@@ -184,14 +184,7 @@
   </el-dialog>
 
   <!-- 二维码 -->
-  <el-dialog
-    v-model="isShowQrCodeDialog"
-    width="335"
-    top="100px"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="false"
-    draggable>
+  <el-dialog v-model="isShowQrCodeDialog" width="335" :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="false" draggable>
     <ArticleQrCode ref="ArticleQrCodeRef"></ArticleQrCode>
   </el-dialog>
 
@@ -253,7 +246,7 @@ import ArticleImport from './ArticleImport.vue'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
 
 const server = useServerStore()
-const { userinfo } = useUserStore()
+const user = useUserStore()
 const { viewStyle } = useConfigStore()
 const route = useRoute()
 
@@ -443,13 +436,13 @@ const openArticleWindow = () => {
  * @param open: 生成链接后是否直接打开
  */
 const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean = false) => {
-  let url: string = userinfo.params.WEB_ARTICLE_URL + curDoc.value.i
+  let url: string = user.userParams.WEB_ARTICLE_URL + curDoc.value.i
   if (type === 'open') {
     openExtenal(url)
   } else if (type === 'copy') {
     writeText(url)
   } else if (type === 'link') {
-    url = `[${curDoc.value.n}](${userinfo.params.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
+    url = `[${curDoc.value.n}](${user.userParams.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
     writeText(url)
   } else if (type === 'tempVisit') {
     articleTempKey({ id: curDoc.value.i }).then((resp) => {
@@ -536,13 +529,16 @@ const syncDoc = () => {
 /** 删除文档 */
 const delDoc = () => {
   let type = curDoc.value.ty === 3 ? '文章' : '文件夹'
-  ElMessageBox.confirm(`是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后的文章可在回收站中查看。`, {
-    confirmButtonText: '确定删除',
-    cancelButtonText: '我再想想',
-    type: 'info',
-    draggable: true,
-    dangerouslyUseHTMLString: true
-  }).then(() => {
+  ElMessageBox.confirm(
+    `是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后的文章可在回收站中查看。`,
+    {
+      confirmButtonText: '确定删除',
+      cancelButtonText: '我再想想',
+      type: 'info',
+      draggable: true,
+      dangerouslyUseHTMLString: true
+    }
+  ).then(() => {
     if (curDoc.value.ty === 3) {
       articleDelApi({ id: curDoc.value.i }).then((_resp) => {
         Notify.success(`删除文章成功`)

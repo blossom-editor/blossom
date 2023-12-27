@@ -102,21 +102,28 @@ export class Request {
        * @returns
        */
       (err: any) => {
-        console.log(err)
-        let errorMsg = err.message
+        let url = ''
+        if (err.config) {
+          url = ':' + err.config.url
+        }
         let code = err.code
         let resp = err.response
         if (resp && resp.data) {
-          errorMsg = resp.data.msg
-        }
-        if (code === 'ERR_NETWORK') {
-          errorMsg = '网络错误,请检查您的网络是否通畅'
-        }
-        if (err.request && err.request.status === 404) {
-          Notify.error('未找到您的请求, 请您检查服务器地址或应用版本!', '请求失败(404)')
+          Notify.error(resp.data.msg, '请求失败')
           return Promise.reject(err)
         }
-        Notify.error(errorMsg, '请求失败')
+        if (code === 'ERR_NETWORK') {
+          Notify.error('网络错误,请检查您的网络是否通畅', '请求失败')
+          return Promise.reject(err)
+        }
+        if (err.request && err.request.status === 404) {
+          Notify.error('未找到您的请求, 请您检查服务器地址!', '请求失败(404)')
+          return Promise.reject(err)
+        }
+        if (err.request && err.request.status === 405) {
+          Notify.error(`您的请求地址可能有误, 请检查请求地址${url}`, '请求失败(405)')
+          return Promise.reject(err)
+        }
         return Promise.reject(err)
       }
     )

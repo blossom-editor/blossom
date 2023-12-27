@@ -7,6 +7,9 @@
       <el-tab-pane label="服务器配置" :lazy="true">
         <div class="tab-content"><ConfigServer></ConfigServer></div>
       </el-tab-pane>
+      <el-tab-pane label="博客配置" :lazy="true">
+        <div class="tab-content"><ConfigBlog></ConfigBlog></div>
+      </el-tab-pane>
       <el-tab-pane label="修改个人信息" :lazy="true">
         <div class="tab-content"><ConfigUserinfo></ConfigUserinfo></div>
       </el-tab-pane>
@@ -28,6 +31,7 @@ import ConfigUpdPwd from './SettingConfigUpdPwd.vue'
 import ConfigAddUser from './SettingConfigAddUser.vue'
 import ConfigClient from './SettingConfigClient.vue'
 import ConfigServer from './SettingConfigServer.vue'
+import ConfigBlog from './SettingConfigBlog.vue'
 </script>
 
 <style scoped lang="scss">

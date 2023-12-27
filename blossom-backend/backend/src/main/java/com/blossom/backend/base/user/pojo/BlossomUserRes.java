@@ -63,4 +63,9 @@ public class BlossomUserRes extends AbstractPOJO implements Serializable {
      * 系统参数, paramName: paramValue
      */
     private Map<String, String> params;
+
+    /**
+     * 用户参数, paramName: paramValue
+     */
+    private Map<String, String> userParams;
 }

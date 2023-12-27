@@ -34,42 +34,110 @@ const initAuth = () => {
   return auth
 }
 
-const initUserinfo = () => {
-  let userinfo = {
-    id: '',
-    username: '暂未登录',
-    nickName: '暂未登录',
-    avatar: '',
-    remark: '',
-    articleCount: 0,
-    articleWords: 0,
-    osRes: {
-      osType: '',
-      bucketName: '',
-      domain: '',
-      defaultPath: ''
-    },
-    params: {
-      WEB_ARTICLE_URL: '',
-      BACKUP_PATH: '',
-      BACKUP_EXP_DAYS: '',
-      ARTICLE_LOG_EXP_DAYS: '',
-      ARTICLE_RECYCLE_EXP_DAYS: '',
-      SERVER_MACHINE_EXPIRE: '',
-      SERVER_DATABASE_EXPIRE: '',
-      SERVER_HTTPS_EXPIRE: '',
-      SERVER_DOMAIN_EXPIRE: ''
-    }
+const DEFAULT_USER_INFO = {
+  id: '',
+  username: '暂未登录',
+  nickName: '暂未登录',
+  avatar: '',
+  remark: '',
+  articleCount: 0,
+  articleWords: 0,
+  osRes: {
+    osType: '',
+    bucketName: '',
+    domain: '',
+    defaultPath: ''
+  },
+  params: {
+    /**
+     * @deprecated 该字段已不使用, 博客地址改用 userParams.WEB_ARTICLE_URL, 使用该地址会报错
+     */
+    WEB_ARTICLE_URL: '',
+    BACKUP_PATH: '',
+    BACKUP_EXP_DAYS: '',
+    ARTICLE_LOG_EXP_DAYS: '',
+    ARTICLE_RECYCLE_EXP_DAYS: '',
+    HEFENG_KEY: '',
+    BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
+    SERVER_MACHINE_EXPIRE: '',
+    SERVER_DATABASE_EXPIRE: '',
+    SERVER_HTTPS_EXPIRE: '',
+    SERVER_DOMAIN_EXPIRE: ''
+  },
+  userParams: {
+    WEB_ARTICLE_URL: '',
+    WEB_IPC_BEI_AN_HAO: '',
+    WEB_LOGO_NAME: '',
+    WEB_LOGO_URL: '',
+    WEB_GONG_WANG_AN_BEI: '',
+    WEB_BLOG_URL_ERROR_TIP_SHOW: ''
   }
-  Local.set(userinfoKey, userinfo)
-  return userinfo
 }
-const timeoutMs = 800
+
+export type Userinfo = typeof DEFAULT_USER_INFO
+
+/**
+ * 初始化用户默认值
+ */
+const initUserinfo = (): Userinfo => {
+  // let userinfo = {
+  //   id: '',
+  //   username: '暂未登录',
+  //   nickName: '暂未登录',
+  //   avatar: '',
+  //   remark: '',
+  //   articleCount: 0,
+  //   articleWords: 0,
+  //   osRes: {
+  //     osType: '',
+  //     bucketName: '',
+  //     domain: '',
+  //     defaultPath: ''
+  //   },
+  //   params: {
+  //     /**
+  //      * @deprecated 该字段已不使用, 博客地址改用 userParams.WEB_ARTICLE_URL, 使用该地址会报错
+  //      */
+  //     WEB_ARTICLE_URL: '',
+  //     BACKUP_PATH: '',
+  //     BACKUP_EXP_DAYS: '',
+  //     ARTICLE_LOG_EXP_DAYS: '',
+  //     ARTICLE_RECYCLE_EXP_DAYS: '',
+  //     HEFENG_KEY: '',
+  //     BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
+  //     SERVER_MACHINE_EXPIRE: '',
+  //     SERVER_DATABASE_EXPIRE: '',
+  //     SERVER_HTTPS_EXPIRE: '',
+  //     SERVER_DOMAIN_EXPIRE: ''
+  //   },
+  //   userParams: {
+  //     WEB_ARTICLE_URL: '',
+  //     WEB_IPC_BEI_AN_HAO: '',
+  //     WEB_LOGO_NAME: '',
+  //     WEB_LOGO_URL: '',
+  //     WEB_GONG_WANG_AN_BEI: '',
+  //     WEB_BLOG_URL_ERROR_TIP_SHOW: ''
+  //   }
+  // }
+  Local.set(userinfoKey, { ...DEFAULT_USER_INFO })
+  return { ...DEFAULT_USER_INFO }
+}
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     auth: Local.get(storeKey) || initAuth(),
-    userinfo: Local.get(userinfoKey) || initUserinfo()
+    /** @type { Userinfo } */
+    userinfo: (Local.get(userinfoKey) as Userinfo) || initUserinfo()
   }),
+  getters: {
+    /** 获取系统个人配置信息 */
+    sysParams(state) {
+      return state.userinfo.params
+    },
+    /** 获取用户个人配置信息 */
+    userParams(state) {
+      return state.userinfo.userParams
+    }
+  },
   actions: {
     /**
      * 根据用户名密码登录
@@ -84,20 +152,16 @@ export const useUserStore = defineStore('userStore', {
        */
       await loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
         .then((resp: any) => {
-          setTimeout(() => {
-            let auth = { token: resp.data.token, status: AuthStatus.Succ }
-            this.auth = auth
-            Local.set(storeKey, auth)
-            this.getUserinfo()
-          }, timeoutMs)
+          let auth = { token: resp.data.token, status: AuthStatus.Succ }
+          this.auth = auth
+          Local.set(storeKey, auth)
+          this.getUserinfo()
         })
         .catch((_e) => {
-          setTimeout(() => {
-            this.reset()
-            // 登录失败的状态需要特别更改
-            let auth = { token: '', status: AuthStatus.Fail }
-            this.auth = auth
-          }, timeoutMs)
+          this.reset()
+          // 登录失败的状态需要特别更改
+          let auth = { token: '', status: AuthStatus.Fail }
+          this.auth = auth
         })
     },
     async logout() {
@@ -112,22 +176,18 @@ export const useUserStore = defineStore('userStore', {
       this.auth.status = AuthStatus.Checking
       await checkApi()
         .then((resp) => {
-          setTimeout(() => {
-            let auth = { token: resp.data.token, status: AuthStatus.Succ }
-            this.auth = auth
-            Local.set(storeKey, auth)
-            this.getUserinfo()
-            succ()
-          }, timeoutMs)
+          let auth = { token: resp.data.token, status: AuthStatus.Succ }
+          this.auth = auth
+          Local.set(storeKey, auth)
+          this.getUserinfo()
+          succ()
         })
         .catch((_error) => {
-          setTimeout(() => {
-            this.reset()
-            // 登录失败的状态需要特别更改
-            let auth = { token: '', status: AuthStatus.Wait }
-            this.auth = auth
-            fail()
-          }, timeoutMs)
+          this.reset()
+          // 登录失败的状态需要特别更改
+          let auth = { token: '', status: AuthStatus.Wait }
+          this.auth = auth
+          fail()
         })
     },
     /**

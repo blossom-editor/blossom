@@ -1,7 +1,7 @@
 <template>
   <div class="picture-cant-show-tip-root">
     <div class="info-title">
-      <div class="iconbl bl-delete-line"></div>
+      <div class="iconbl bl-a-picturecracked-line"></div>
       图片无法显示的解决方式
     </div>
     <div class="content">

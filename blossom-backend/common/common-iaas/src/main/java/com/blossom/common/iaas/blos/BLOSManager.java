@@ -60,6 +60,13 @@ public class BLOSManager extends AbstractOSManager implements OSManager {
         return domain;
     }
 
+    /**
+     * 上传图片, 并返回文件的访问地址
+     * <p>但需要注意的是, 调用方可以保存自己的文件地址前缀, 而不使用 {@link BLOSManager#getDomain()},
+     *
+     * @param filename    文件名
+     * @param inputStream 输入流
+     */
     @Override
     public String put(String filename, InputStream inputStream) {
         File file = FileUtil.newFile(filename);

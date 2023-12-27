@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12579639",
+      "name": "blog",
+      "font_class": "blog",
+      "unicode": "e7c6",
+      "unicode_decimal": 59334
+    },
+    {
+      "icon_id": "24341306",
+      "name": "caution-line",
+      "font_class": "caution-line",
+      "unicode": "ea4c",
+      "unicode_decimal": 59980
+    },
+    {
+      "icon_id": "24342104",
+      "name": "picture cracked-line",
+      "font_class": "a-picturecracked-line",
+      "unicode": "ea4b",
+      "unicode_decimal": 59979
+    },
+    {
       "icon_id": "11179871",
       "name": "小写",
       "font_class": "xiaoxie",

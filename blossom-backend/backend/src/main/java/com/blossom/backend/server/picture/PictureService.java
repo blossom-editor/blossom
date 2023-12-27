@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
@@ -42,6 +43,7 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
     private FolderService folderService;
     private ArticleReferenceService articleReferenceService;
     private OSManager osManager;
+    private ParamService paramService;
 
     @Autowired
     public void setFolderService(FolderService folderService) {
@@ -56,6 +58,11 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
     @Autowired
     public void setOsManager(OSManager osManager) {
         this.osManager = osManager;
+    }
+
+    @Autowired
+    public void setParamService(ParamService paramService) {
+        this.paramService = paramService;
     }
 
     /**
@@ -149,7 +156,7 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
         }
         pic.setSize(file.getSize());
 
-        final String domain = osManager.getDomain();
+        final String domain = paramService.getDomain();
         final String rootPath = osManager.getDefaultPath();
         final String uid = "/U" + userId;
         final String pname = "/" + pic.getName();
@@ -245,4 +252,5 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
     public PictureStatRes stat(Long userId, Long pid) {
         return baseMapper.stat(userId, pid);
     }
+
 }

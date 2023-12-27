@@ -9,7 +9,7 @@ const blossom = {
 
     //
     DOC: 'https://www.wangyunf.com/blossom-doc/index',
-    CONTACT: 'QQ群:522359970 / Email: kuamax888@qq.com',
+    CONTACT: 'https://www.wangyunf.com/blossom-doc/guide/about/all.html',
     GITHUB_REPO: 'https://github.com/blossom-editor/blossom',
     GITHUB_RELEASE: 'https://github.com/blossom-editor/blossom/releases',
     GITEE_REPO: 'https://gitee.com/blossom-editor/blossom'
