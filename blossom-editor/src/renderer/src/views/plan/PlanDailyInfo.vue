@@ -130,6 +130,7 @@ const saveDaily = async (formEl: FormInstance | undefined) => {
 
 const imgs = [
   { name: 'base-awesome.png', url: getImg('base-awesome.png') },
+  { name: 'base-celebrate.png', url: getImg('base-celebrate.png') },
   { name: 'base-cool.png', url: getImg('base-cool.png') },
   { name: 'base-learning.png', url: getImg('base-learning.png') },
   { name: 'cat-kiss.png', url: getImg('cat-kiss.png') },
