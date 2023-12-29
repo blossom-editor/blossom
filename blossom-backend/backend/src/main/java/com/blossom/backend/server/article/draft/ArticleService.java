@@ -4,10 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.blossom.backend.base.auth.AuthContext;
-import com.blossom.backend.base.search.message.ArticleIndexMsg;
+import com.blossom.backend.base.search.EnableIndex;
 import com.blossom.backend.base.search.message.IndexMsgTypeEnum;
-import com.blossom.backend.base.search.queue.IndexMsgQueue;
 import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
@@ -151,16 +149,10 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     /**
      * 新增
      */
+    @EnableIndex(type = IndexMsgTypeEnum.ADD, id = "#req.id")
     @Transactional(rollbackFor = Exception.class)
     public ArticleEntity insert(ArticleEntity req) {
         baseMapper.insert(req);
-        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(), AuthContext.getUserId());
-        try {
-            IndexMsgQueue.add(articleIndexMsg);
-        } catch (InterruptedException e) {
-            // 不抛出, 暂时先记录
-            log.error("索引更新失败" + e.getMessage());
-        }
         return req;
     }
 
@@ -168,17 +160,11 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * 修改
      * <p>该接口只能修改文章的基本信息, 正文及版本修改请使用 {@link ArticleService#updateContentById(ArticleEntity)}
      */
+    @EnableIndex(type = IndexMsgTypeEnum.ADD, id = "#req.id")
     @Transactional(rollbackFor = Exception.class)
     public Long update(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
         baseMapper.updById(req);
-        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(),AuthContext.getUserId());
-        try {
-            IndexMsgQueue.add(articleIndexMsg);
-        } catch (InterruptedException e) {
-            // 不抛出, 暂时先记录
-            log.error("索引更新失败" + e.getMessage());
-        }
         return req.getId();
     }
 
@@ -187,6 +173,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      *
      * @return 返回文章字数
      */
+    @EnableIndex(type = IndexMsgTypeEnum.ADD, id = "#req.id")
     @Transactional(rollbackFor = Exception.class)
     public Integer updateContentById(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
@@ -199,14 +186,6 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         baseMapper.updContentById(req);
         referenceService.bind(req.getUserId(), req.getId(), req.getName(), req.getReferences());
         logService.insert(req.getId(), 0, req.getMarkdown());
-        // 更新索引
-        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, req.getId(), AuthContext.getUserId());
-        try {
-            IndexMsgQueue.add(articleIndexMsg);
-        } catch (InterruptedException e) {
-            // 不抛出, 暂时先记录
-            log.error("索引更新失败" + e.getMessage());
-        }
         return req.getWords();
     }
 
@@ -218,6 +197,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * @param id 文章ID
      * @since 1.10.0 删除时不校验文章内容, 被删除的文章会进入回收站, 可在回收站中查询
      */
+    @EnableIndex(type = IndexMsgTypeEnum.DELETE, id = "#id")
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         ArticleEntity article = selectById(id, false, true, true);
@@ -235,14 +215,6 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         referenceService.delete(id);
         // 删除访问记录
         viewService.delete(id);
-        // 删除索引
-        ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.DELETE, id, AuthContext.getUserId());
-        try {
-            IndexMsgQueue.add(articleIndexMsg);
-        } catch (InterruptedException e) {
-            // 不抛出, 暂时先记录
-            log.error("索引更新失败" + e.getMessage());
-        }
     }
 
     /**

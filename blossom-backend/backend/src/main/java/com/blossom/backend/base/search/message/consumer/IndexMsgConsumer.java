@@ -21,7 +21,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.util.concurrent.Executors;
 
 /**
@@ -88,7 +87,7 @@ public class IndexMsgConsumer {
                             }
                         } else if (IndexMsgTypeEnum.DELETE.equals(indexMsg.getType())) {
                             // 删除索引
-                            try (Directory directory = FSDirectory.open(new File(searchProperties.getPath()).toPath());
+                            try (Directory directory = FSDirectory.open(searchProperties.getUserIndexDirectory(userId));
                                  IndexWriter indexWriter = new IndexWriter(directory, new IndexWriterConfig(new StandardAnalyzer()));
 
                             ) {
