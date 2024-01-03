@@ -51,14 +51,14 @@ if (!gotTheLock) {
       createMainWindow()
     }, 300)
 
-    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-      callback({
-        responseHeaders: {
-          ...details.responseHeaders,
-          'Content-Security-Policy': ['frame-ancestors *']
-        }
-      })
-    })
+    // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    //   callback({
+    //     responseHeaders: {
+    //       ...details.responseHeaders,
+    //       'Content-Security-Policy': ['frame-ancestors *']
+    //     }
+    //   })
+    // })
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
