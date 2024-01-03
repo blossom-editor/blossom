@@ -464,6 +464,7 @@ const articleDownload = () => {
     if (matches != null && matches[1]) {
       filename = decodeURI(matches[1].replace(/['"]/g, ''))
     }
+    filename = decodeURI(filename)
     let a = document.createElement('a')
     let blob = new Blob([resp.data], { type: 'text/plain' })
     let objectUrl = URL.createObjectURL(blob)
@@ -479,11 +480,14 @@ const articleDownload = () => {
 const articleDownloadHtml = () => {
   articleDownloadHtmlApi({ id: curDoc.value.i }).then((resp) => {
     let filename: string = resp.headers.get('content-disposition')
+    console.log(decodeURI(filename))
+
     let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
     let matches = filenameRegex.exec(filename)
     if (matches != null && matches[1]) {
       filename = decodeURI(matches[1].replace(/['"]/g, ''))
     }
+    filename = decodeURI(filename)
     let a = document.createElement('a')
     let blob = new Blob([resp.data], { type: 'text/plain' })
     let objectUrl = URL.createObjectURL(blob)
