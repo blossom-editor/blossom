@@ -43,7 +43,7 @@
     "highlight.js": "^11.8.0",
     "hotkeys-js": "^3.12.0",
     "katex": "^0.16.8",
-    "marked": "^7.0.4",
+    "marked": "^7.0.5",
     "marked-highlight": "^2.0.4",
     "marked-katex-extension": "^4.0.5",
     "markmap-lib": "^0.15.4",
