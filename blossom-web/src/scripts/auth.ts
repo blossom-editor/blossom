@@ -5,8 +5,13 @@ import { Local } from '@/assets/utils/storage'
 import { toRoute } from '@/router'
 
 const userStore = useUserStore()
-const { auth, userinfo } = storeToRefs(userStore)
+const { auth } = storeToRefs(userStore)
 
+/**
+ * 登录
+ * @param username
+ * @param password
+ */
 export const login = async (username: string, password: string) => {
   console.log(userStore.auth)
   auth.value = { token: '', status: AuthStatus.Loging }
@@ -14,7 +19,6 @@ export const login = async (username: string, password: string) => {
     .then((resp: any) => {
       auth.value = { token: resp.data.token, status: AuthStatus.Succ }
       Local.set(storeKey, auth.value)
-      // getUserinfo()
       toRoute('/home')
     })
     .catch((_e) => {
@@ -24,11 +28,17 @@ export const login = async (username: string, password: string) => {
     })
 }
 
+/**
+ * 退出登录
+ */
 export const logout = () => {
   auth.value = { token: '', status: AuthStatus.Wait }
   Local.set(storeKey, { token: '', status: AuthStatus.Wait })
 }
 
+/**
+ * 检查 token
+ */
 export const checkToken = () => {
   checkApi()
     .then((resp) => {
@@ -38,11 +48,4 @@ export const checkToken = () => {
     .catch((_error) => {
       userStore.reset()
     })
-}
-
-const getUserinfo = () => {
-  userinfoApi().then((resp) => {
-    userinfo.value = resp.data
-    Local.set(userinfoKey, resp.data)
-  })
 }

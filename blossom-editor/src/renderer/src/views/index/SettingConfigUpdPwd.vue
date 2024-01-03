@@ -61,7 +61,7 @@ const save = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, _fields) => {
     if (valid) {
       userUpdPwdApi(updPwdForm.value).then((_resp) => {
-        Notify.success('保存成功')
+        Notify.success('密码修改成功')
       })
     }
   })

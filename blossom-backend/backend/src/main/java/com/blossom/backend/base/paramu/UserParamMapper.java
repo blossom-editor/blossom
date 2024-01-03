@@ -5,6 +5,8 @@ import com.blossom.backend.base.paramu.pojo.UserParamEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 用户参数
  *
@@ -13,13 +15,21 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserParamMapper extends BaseMapper<UserParamEntity> {
 
+
     /**
-     * 参数是否存在
+     * 根据用户ID获取参数列表
+     *
+     * @param userId 用户ID
+     */
+    List<UserParamEntity> selectByUserId(@Param("userId") Long userId);
+
+    /**
+     * 根据用户ID和参数名获取具体参数
      *
      * @param userId    用户ID
      * @param paramName 参数值
      */
-    UserParamEntity selectByUserId(@Param("userId") Long userId, @Param("paramName") String paramName);
+    UserParamEntity selectByUserIdAndName(@Param("userId") Long userId, @Param("paramName") String paramName);
 
     /**
      * 修改用户参数
@@ -29,4 +39,9 @@ public interface UserParamMapper extends BaseMapper<UserParamEntity> {
      * @param paramValue 参数值
      */
     void updByParamName(@Param("userId") Long userId, @Param("paramName") String paramName, @Param("paramValue") String paramValue);
+
+    /**
+     * 新增参数
+     */
+    int insertByUserId(UserParamEntity param);
 }

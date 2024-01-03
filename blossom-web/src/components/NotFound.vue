@@ -3,16 +3,14 @@
     <div class="notfount">404</div>
     <div class="desc">您可能想前往....</div>
     <div class="router">
-      <div class="item" @click="toRoute('/home')"><span class="iconbl bl-a-home1-line"></span>回到首页</div>
-      <div class="item" v-for="link in getLinks()" @click="toView(link.URL)"><img :src="link.LOGO" style="width: 25px" />{{ link.NAME }}</div>
+      <div class="item" @click="toRoute('/home')"><span class="iconbl bl-a-home1-line"></span>首页</div>
+      <div class="item" @click="toRoute('/articles')"><span class="iconbl bl-a-texteditorhighlightcolor-line"></span>文章列表</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { toView } from '@/assets/utils/util'
 import { toRoute } from '@/router'
-import { getLinks } from '@/scripts/env'
 </script>
 
 <style scoped lang="scss">

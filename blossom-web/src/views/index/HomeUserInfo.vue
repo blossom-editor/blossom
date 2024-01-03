@@ -1,13 +1,13 @@
 <template>
   <div class="home-userinfo-root">
     <div class="userinfo-desc">
-      <div class="avatar" v-if="userinfo.avatar !== ''">
-        <img :src="userinfo.avatar" alt="头像" />
+      <div class="avatar" v-if="userStore.userinfo.avatar !== ''">
+        <img :src="userStore.userinfo.avatar" alt="头像" />
       </div>
       <div class="info">
-        <div class="name">{{ userinfo.nickName }}</div>
-        <div class="desc">{{ userinfo.remark }}</div>
-        <div class="desc">Doc:{{ userinfo.articleCount }} | Words:{{ userinfo.articleWords }}</div>
+        <div class="name">{{ userStore.userinfo.nickName }}</div>
+        <div class="desc">{{ userStore.userinfo.remark }}</div>
+        <div class="desc">Doc:{{ userStore.userinfo.articleCount }} | Words:{{ userStore.userinfo.articleWords }}</div>
       </div>
     </div>
 
@@ -15,7 +15,7 @@
       <div class="userinfo-content-btns">
         <ul>
           <li @click="toRoute('/articles')">所有文章 <span class="iconbl bl-sendmail-line"></span></li>
-          <li v-for="link in getLinks()" @click="toView(link.URL)">
+          <li v-for="link in links()" @click="toView(link.URL)">
             {{ link.NAME }}
           </li>
         </ul>
@@ -31,26 +31,22 @@
 
 <script setup lang="ts">
 import { toRoute } from '@/router'
-import { onMounted, ref } from 'vue'
-import { userinfoApi } from '@/api/blossom'
+import { useUserStore } from '@/stores/user'
 import { toView } from '@/assets/utils/util'
-import SYSTEM from '@/assets/constants/blossom'
 import { getLinks } from '@/scripts/env'
+import { isNotBlank } from '@/assets/utils/obj'
 import ChartHeatmap from './ChartHeatmap.vue'
 
-const userinfo = ref({
-  avatar: '',
-  nickName: '',
-  remark: '',
-  articleCount: '0',
-  articleWords: '0'
-})
+const userStore = useUserStore()
 
-onMounted(() => {
-  userinfoApi().then((resp) => {
-    userinfo.value = resp.data
-  })
-})
+const links = () => {
+  console.log(userStore.links)
+  if (isNotBlank(userStore.links)) {
+    return JSON.parse(userStore.links)
+  } else {
+    getLinks()
+  }
+}
 </script>
 
 <style scoped lang="scss">

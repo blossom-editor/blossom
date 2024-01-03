@@ -161,18 +161,6 @@
     draggable>
     <PictureBatchDel :ids="picChecks" :ignore-check="delIgnoreCheck" @deleted="deleted"></PictureBatchDel>
   </el-dialog>
-
-  <el-dialog
-    v-model="isShowCantShowTipDialog"
-    width="600px"
-    style="height: fit-content"
-    :align-center="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="false"
-    draggable>
-    <PictureCantShowTip></PictureCantShowTip>
-  </el-dialog>
 </template>
 <script setup lang="ts">
 // vue
@@ -195,7 +183,6 @@ import PictureUpload from './PictureUpload.vue'
 import PictureViewerInfo from './PictureViewerInfo.vue'
 import PictureBatchDel from './PictureBatchDel.vue'
 import PictureTransfer from './PictureTransfer.vue'
-import PictureCantShowTip from './PictureCantShowTip.vue'
 import errorImg from '@renderer/assets/imgs/img_error.png'
 import Notify from '@renderer/scripts/notify'
 

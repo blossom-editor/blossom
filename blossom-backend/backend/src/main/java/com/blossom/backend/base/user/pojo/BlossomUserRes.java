@@ -25,6 +25,10 @@ public class BlossomUserRes extends AbstractPOJO implements Serializable {
      */
     private Long id;
     /**
+     * 用户类型
+     */
+    private Integer type;
+    /**
      * 用户名
      */
     private String username;

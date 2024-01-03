@@ -1,5 +1,6 @@
 package com.blossom.backend.base.user.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.blossom.common.base.pojo.AbstractPOJO;
@@ -23,7 +24,7 @@ public class UserEntity extends AbstractPOJO implements Serializable {
     /**
      * 用户ID
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 用户类型

@@ -8,7 +8,6 @@ import pinia from '@/stores/store-config'
 import { storeKey as authKey, useUserStore } from '@/stores/user'
 import { getApiBaseUrl, getUserId } from '@/scripts/env'
 
-const userStore = useUserStore(pinia)
 const userId = getUserId()
 const baseUrl = getApiBaseUrl()
 
@@ -78,6 +77,7 @@ export class Request {
         } else if (res.data.code === 'AUTH-40101') {
           /* 授权被拦截, 则需要退回登录页请求 */
           console.log('授权失败, 重置登录状态')
+          const userStore = useUserStore()
           userStore.reset()
           toRoute('/home')
           return Promise.reject(res)

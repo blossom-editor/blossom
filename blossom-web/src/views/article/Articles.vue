@@ -234,7 +234,7 @@ const clickCurDoc = async (tree: DocTree) => {
 const getCurEditArticle = async (id: number) => {
   if (id == -123) {
     article.value.html = `<div style="color:#C6C6C6;font-weight: 300;width:100%;height:300px;padding:0 20px;display:flex;justify-content: center;
-    align-items: center;text-align:center;font-size:25px;">如果您看到这句话, 证明博客验证成功</div>`
+    align-items: center;text-align:center;font-size:25px;">当您看到这句话, 证明博客地址配置正确</div>`
     return
   }
 

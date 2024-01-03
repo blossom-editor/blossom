@@ -74,7 +74,7 @@ const save = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, _fields) => {
     if (valid) {
       userAddApi(addUserForm.value).then((_resp) => {
-        Notify.success('保存成功')
+        Notify.success('添加用户成功')
       })
     }
   })

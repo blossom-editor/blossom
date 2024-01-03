@@ -21,7 +21,7 @@
           p-id="1066"></path>
       </svg>
     </div>
-    <div class="project-name">Blossom</div>
+    <div class="project-name" v-if="props.name">Blossom</div>
   </div>
 </template>
 
@@ -32,6 +32,13 @@ import { getPrimaryColor } from '@renderer/scripts/global-theme'
 
 const isDark = useDark()
 const primaryColor = ref(getPrimaryColor().color2)
+
+const props = defineProps({
+  name: {
+    type: Boolean,
+    default: false
+  }
+})
 
 watch(
   () => isDark.value,

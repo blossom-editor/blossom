@@ -67,6 +67,8 @@ public class UserController {
         ArticleStatRes stat = articleService.statCount(null, null, userId);
         user.setArticleWords(stat.getArticleWords());
         user.setArticleCount(stat.getArticleCount());
+        Map<String, String> userParamMap = userParamService.selectMap(userId, true, UserParamEnum.values());
+        user.setUserParams(userParamMap);
         return R.ok(user);
     }
 

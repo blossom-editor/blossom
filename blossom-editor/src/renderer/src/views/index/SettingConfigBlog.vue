@@ -1,27 +1,35 @@
 <template>
   <div class="config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用博客设置...">
     <div class="title">博客配置</div>
-    <div class="desc">博客配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
+    <div class="desc">博客各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
     <el-form v-if="auth.status == '已登录'" :model="userParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文章查看地址" :required="true">
         <el-input
           size="default"
+          style="width: calc(100% - 100px)"
           v-model="userParamForm.WEB_ARTICLE_URL"
-          @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"
-          style="width: calc(100% - 100px)"></el-input>
-        <el-button size="default" style="width: 90px; margin-left: 10px">访问测试</el-button>
-        <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code>/#/articles?articleId=</code>结尾。</div>
+          @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)">
+          <template #prefix>
+            <div class="iconbl bl-blog" style="font-size: 20px"></div>
+          </template>
+        </el-input>
+        <el-button size="default" style="width: 90px; margin-left: 10px" @click="toBlog">点击访问博客</el-button>
+        <div class="conf-tip">
+          博客的文章访问地址，即使不使用博客，也推荐配置为后台自带的博客地址。<span style="color: var(--el-color-danger)"
+            >必须以<code style="color: var(--el-color-danger)">/#/articles?articleId=</code>结尾。 </span
+          >你可以点击右上角的<span class="iconbl bl-blog" style="padding: 0 3px"></span>图标进行快捷配置。
+        </div>
       </el-form-item>
 
       <el-form-item label="博客名称">
         <el-input size="default" v-model="userParamForm.WEB_LOGO_NAME" @change="(cur: any) => updParam('WEB_LOGO_NAME', cur)"></el-input>
-        <div class="conf-tip">博客左上角名称。</div>
+        <div class="conf-tip">博客左上角名称，以及在浏览器标签中的名称。</div>
       </el-form-item>
 
       <el-form-item label="博客LOGO地址">
         <el-input size="default" v-model="userParamForm.WEB_LOGO_URL" @change="(cur: any) => updParam('WEB_LOGO_URL', cur)"></el-input>
-        <div class="conf-tip">博客左上角 Logo 的访问地址。</div>
+        <div class="conf-tip">博客左上角 Logo 的访问地址，以及在浏览器标签中的 Logo。</div>
       </el-form-item>
 
       <el-form-item label="IPC备案号">
@@ -36,20 +44,33 @@
           @change="(cur: any) => updParam('WEB_GONG_WANG_AN_BEI', cur)"></el-input>
         <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置公网安备号</div>
       </el-form-item>
+
+      <el-form-item label="外部链接">
+        <div class="conf-tip">
+          可以填写其他网站链接，该链接会展示在博客右上角的【更多】按钮，以及首页的【所有文章】下。<span style="color: var(--el-color-danger)"
+            >你需要严格遵循模板中的 Json 格式。</span
+          >
+        </div>
+        <el-button style="margin-bottom: 5px" @click="genWebLinksTemplate">生成链接配置模板</el-button>
+        <el-input
+          size="default"
+          type="textarea"
+          :rows="11"
+          v-model="userParamForm.WEB_BLOG_LINKS"
+          @change="(cur: any) => updParam('WEB_BLOG_LINKS', cur)"></el-input>
+      </el-form-item>
     </el-form>
-    <div class="server-config">
-      {{ userinfoJson }}
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onMounted, ref } from 'vue'
+import { onActivated, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { userParamListApi, userParamUpdApi, userParamRefreshApi } from '@renderer/api/blossom'
-import { formatJson } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
+import { isNotBlank } from '@renderer/assets/utils/obj'
+import { openExtenal } from '@renderer/assets/utils/electron'
 
 onMounted(() => {
   getParamList()
@@ -60,7 +81,7 @@ onActivated(() => {
 })
 
 const userStore = useUserStore()
-const { userinfo, auth } = storeToRefs(userStore)
+const { auth } = storeToRefs(userStore)
 
 const userParamForm = ref({
   WEB_ARTICLE_URL: '',
@@ -68,7 +89,8 @@ const userParamForm = ref({
   WEB_LOGO_NAME: '',
   WEB_LOGO_URL: '',
   WEB_GONG_WANG_AN_BEI: '',
-  WEB_BLOG_URL_ERROR_TIP_SHOW: ''
+  WEB_BLOG_URL_ERROR_TIP_SHOW: '',
+  WEB_BLOG_LINKS: ''
 })
 
 /**
@@ -94,9 +116,29 @@ const updParam = (paramName: string, paramValue: string) => {
   })
 }
 
-const userinfoJson = computed(() => {
-  return formatJson(userinfo.value)
-})
+const toBlog = () => {
+  let url = userStore.userParams.WEB_ARTICLE_URL.replaceAll('/#/articles?articleId=', '/#/home')
+  openExtenal(url)
+}
+
+const genWebLinksTemplate = () => {
+  if (isNotBlank(userParamForm.value.WEB_BLOG_LINKS)) {
+    Notify.info('你需要将内容清空后再生成模板', '提示')
+  } else {
+    userParamForm.value.WEB_BLOG_LINKS = `[
+  {
+    "NAME": "链接 A 名称(必填)",
+    "URL": "链接 A 的地址(必填)",
+    "LOGO": "链接 A 的 Logo"
+  },{
+    "NAME": "链接 B 名称",
+    "URL": "链接 B 的地址",
+    "LOGO": "链接 B 的 Logo"
+  }
+]`
+    updParam('WEB_BLOG_LINKS', userParamForm.value.WEB_BLOG_LINKS)
+  }
+}
 </script>
 
 <style scoped lang="scss">

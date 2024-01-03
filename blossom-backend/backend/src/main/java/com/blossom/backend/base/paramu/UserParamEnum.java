@@ -34,7 +34,10 @@ public enum UserParamEnum {
      * 是否提示博客地址配置有误
      */
     WEB_BLOG_URL_ERROR_TIP_SHOW(false, 0, ""),
-
+    /**
+     * 更多链接 JSON
+     */
+    WEB_BLOG_LINKS(false, 0, ""),
     ;
 
     /**

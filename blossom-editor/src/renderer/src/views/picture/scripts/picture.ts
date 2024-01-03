@@ -1,3 +1,4 @@
+import pinia from '@renderer/stores/store-config'
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
 import type { UploadProps, UploadRawFile } from 'element-plus'
@@ -6,8 +7,8 @@ import Notify from '@renderer/scripts/notify'
 import { uploadFileApi } from '@renderer/api/blossom'
 import { getFilePrefix, getFileSuffix, getNowTime, randomInt } from '@renderer/assets/utils/util'
 
-const { picStyle } = useConfigStore()
-const { userinfo } = useUserStore()
+const { picStyle } = useConfigStore(pinia)
+const userStore = useUserStore(pinia)
 
 /**
  * Picture Object
@@ -193,9 +194,12 @@ export const picCacheRefresh = () => {
   picCache = new Date().getTime()
 }
 
-// 图片路径包装
+/**
+ * 图片路径包装
+ * 如果是 blossom 存储的图片, 会增加 picCache 参数, 用来清理缓存
+ */
 export const picCacheWrapper = (url: string) => {
-  if (url.includes(userinfo.osRes.domain)) {
+  if (url.includes(userStore.sysParams.BLOSSOM_OBJECT_STORAGE_DOMAIN)) {
     return url + '?picCache=' + picCache
   } else {
     return url

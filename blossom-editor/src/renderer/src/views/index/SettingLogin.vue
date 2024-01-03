@@ -59,7 +59,7 @@
           </el-progress>
         </div>
       </bl-col>
-      <bl-row just="center">
+      <bl-row just="center" v-if="configStore.viewStyle.isShowTryuseBtn">
         <span class="try-use" @click="showTryUse">我想试用!</span>
       </bl-row>
     </div>
@@ -82,9 +82,11 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark } from '@vueuse/core'
 import { useServerStore } from '@renderer/stores/server'
+import { useConfigStore } from '@renderer/stores/config'
 import { useUserStore, AuthStatus } from '@renderer/stores/user'
 import TryUse from './setting/TryUse.vue'
 import SYSTEM from '@renderer/assets/constants/system'
+import { isBlank } from '@renderer/assets/utils/obj'
 
 onMounted(() => {
   formLogin.value.serverUrl = serverUrl.value
@@ -93,12 +95,22 @@ onMounted(() => {
 })
 
 const isDark = useDark()
+const configStore = useConfigStore()
 const userStore = useUserStore()
 const { auth, userinfo } = storeToRefs(userStore)
 
 //#region --------------------------------------------------< 授权 >--------------------------------------------------
+// 是否登录中
 const logingIn = ref(false)
+
+/**
+ * 登录
+ */
 const login = async () => {
+  // 未填写地址时, 不校验用户是否登录
+  if (isBlank(formLogin.value.serverUrl)) {
+    return
+  }
   if (logingIn.value) {
     return
   }
@@ -107,11 +119,25 @@ const login = async () => {
   logingIn.value = false
 }
 
+/**
+ * 退出登录
+ */
 const logout = async () => {
+  // 未填写地址时, 不校验用户是否登录
+  if (isBlank(formLogin.value.serverUrl)) {
+    return
+  }
   await userStore.logout()
 }
 
+/**
+ * 检查用户的登录状态
+ */
 const checkLogin = async () => {
+  // 未填写地址时, 不校验用户是否登录
+  if (isBlank(formLogin.value.serverUrl)) {
+    return
+  }
   await userStore.checkToken(
     () => {
       console.log('%c已登录', 'background-color:#09A113;color:#fff;padding:10px 40px;border-radius:5px;font-size:17px;')

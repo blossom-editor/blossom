@@ -70,6 +70,7 @@ const emits = defineEmits(['saved'])
     @include absolute(10px, '', '', 15px);
     transition: 0.5s;
     z-index: 9999;
+    cursor: pointer;
 
     .plant {
       transform: rotate(-105deg);

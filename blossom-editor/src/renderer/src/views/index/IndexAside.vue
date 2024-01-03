@@ -1,7 +1,7 @@
 <template>
   <div class="index-aside-root">
     <div class="item-logo">
-      <logo></logo>
+      <logo :name="true"></logo>
     </div>
     <div :class="['aside-item-container', viewStyle.isGlobalShadow ? 'aside-item-container-heavy' : 'aside-item-container-light']">
       <!-- 模块菜单 -->

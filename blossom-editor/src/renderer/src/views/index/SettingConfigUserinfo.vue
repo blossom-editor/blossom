@@ -6,7 +6,11 @@
     </div>
     <el-form :model="userinfoForm" :rules="rules" label-position="right" label-width="130px" style="max-width: 800px" ref="UserinfoFormRef">
       <el-form-item label="ID" prop="username">
-        <el-input v-model="userinfoForm.id" size="default" disabled></el-input>
+        <el-input v-model="userinfoForm.id" size="default" disabled>
+          <template #prefix>
+            <div class="iconbl bl-a-Securitypermissions-line" style="font-size: 20px"></div>
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="userinfoForm.username" size="default">
@@ -77,7 +81,7 @@ const userStore = useUserStore()
 const { userinfo } = storeToRefs(userStore)
 
 interface UserinfoForm {
-  id: number
+  id: string
   username: string
   nickName: string
   remark: string
@@ -105,7 +109,7 @@ const save = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, _fields) => {
     if (valid) {
       userUpdApi(userinfoForm.value).then((_resp) => {
-        Notify.success('保存成功')
+        Notify.success('个人信息修改成功')
         userStore.checkToken(
           () => {},
           () => {}

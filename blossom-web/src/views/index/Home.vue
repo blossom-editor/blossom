@@ -20,11 +20,11 @@
       <div class="icp">
         <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
           <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
-          {{ getGwab() }}
+          {{ gwab() }}
         </div>
-        <div v-if="isNotBlank(getGwab())">|</div>
+        <div v-if="isNotBlank(gwab())">|</div>
         <div style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
-          {{ getIpc() }}
+          {{ ipc() }}
         </div>
       </div>
     </div>
@@ -33,13 +33,16 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { isNotBlank } from '@/assets/utils/obj'
+import { getGwab, getIpc, getEmail } from '@/scripts/env'
+
 import UserInfo from './HomeUserInfo.vue'
 import ChartLineWords from './ChartLineWords.vue'
 import HomeSubject from './HomeSubject.vue'
 import blossom from '@/assets/constants/blossom'
-import { isNotBlank } from '@/assets/utils/obj'
-import { getGwab, getIpc, getEmail } from '@/scripts/env'
 
+const userStore = useUserStore()
 const ChartLineWordsRef = ref()
 onMounted(() => {
   ChartLineWordsRef.value.reload()
@@ -47,6 +50,20 @@ onMounted(() => {
 
 const openNew = (url: string) => {
   window.open(url)
+}
+
+const gwab = () => {
+  if (userStore.userParams.WEB_GONG_WANG_AN_BEI) {
+    return userStore.userParams.WEB_GONG_WANG_AN_BEI
+  }
+  return getGwab()
+}
+
+const ipc = () => {
+  if (userStore.userParams.WEB_IPC_BEI_AN_HAO) {
+    return userStore.userParams.WEB_IPC_BEI_AN_HAO
+  }
+  return getIpc()
 }
 </script>
 
@@ -99,7 +116,7 @@ const openNew = (url: string) => {
     div {
       @include flex(row, center, center);
       color: #6d6d6d;
-      font-size: 12px;
+      font-size: 13px;
       white-space: pre;
     }
   }

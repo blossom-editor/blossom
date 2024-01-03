@@ -24,8 +24,8 @@ export interface ViewStyle {
   isHomeSubjectCard: boolean
   // 是否开启全局阴影, 在 ThemeSetting.vue#changeGlobalShadow 中设置
   isGlobalShadow: boolean
-  // 是否开启阶梯动画, 在 ThemeSetting.vue#changeGlobalGradientLinear 中设置
-  isGlobalGradientLinear
+  // 是否显示试用按钮
+  isShowTryuseBtn: boolean
 }
 
 /**
@@ -69,6 +69,10 @@ export interface BlConfig {
   keymapConfig: KeymapConfig
 }
 
+/**
+ * 客户端的配置项
+ * 客户端配置会缓存在 localStorage 中, 由于版本变更会新增配置项, 所以需要通过扩展运算符将已缓存的数据和新增配置进行合并
+ */
 export const useConfigStore = defineStore('configStore', {
   state: (): BlConfig => ({
     // 编辑器配置
@@ -99,7 +103,7 @@ export const useConfigStore = defineStore('configStore', {
         isHomeStarCard: true,
         isHomeSubjectCard: true,
         isGlobalShadow: true,
-        isGlobalGradientLinear: true
+        isShowTryuseBtn: true
       },
       ...Local.get(VIEW_STYLE_KEY)
     },

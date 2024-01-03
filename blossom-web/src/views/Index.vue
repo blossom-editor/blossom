@@ -18,9 +18,7 @@ import IndexHeader from './index/IndexHeader.vue'
 import type { RouteRecordName } from 'vue-router'
 
 const includeRouter = ref<any>(['Home'])
-
 const curRoute = ref<RouteRecordName>('Home')
-
 const isHome = computed(() => {
   return curRoute.value === 'Home'
 })

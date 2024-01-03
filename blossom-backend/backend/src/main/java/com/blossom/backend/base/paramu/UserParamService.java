@@ -10,7 +10,7 @@ import com.blossom.backend.base.param.ParamMapper;
 import com.blossom.backend.base.param.pojo.ParamEntity;
 import com.blossom.backend.base.paramu.pojo.UserParamEntity;
 import com.blossom.backend.base.paramu.pojo.UserParamUpdReq;
-import com.blossom.backend.base.user.UserService;
+import com.blossom.backend.base.user.UserMapper;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.BeanUtil;
@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户参数
@@ -32,7 +33,7 @@ import java.util.Map;
 public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEntity> {
 
     private final ParamMapper paramMapper;
-    private final UserService userService;
+    private final UserMapper userMapper;
 
     private static final Map<Long, Map<String, UserParamEntity>> CACHE = new HashMap<>(20);
 
@@ -42,7 +43,7 @@ public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEnti
     @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
         CACHE.clear();
-        List<UserEntity> users = userService.listAll();
+        List<UserEntity> users = userMapper.selectList(new QueryWrapper<>());
         // 初始化所有用户的配置参数
         for (UserEntity user : users) {
             initUserParams(user.getId());
@@ -79,9 +80,10 @@ public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEnti
      */
     public void initUserParams(Long userId) {
         Map<String, UserParamEntity> params = new HashMap<>(UserParamEnum.values().length);
+        List<UserParamEntity> userParams = baseMapper.selectByUserId(userId);
+        Map<String, UserParamEntity> userParamMap = userParams.stream().collect(Collectors.toMap(UserParamEntity::getParamName, p -> p));
         for (UserParamEnum param : UserParamEnum.values()) {
-            // TODO 一次性查出数据以提高效率
-            UserParamEntity storeParam = baseMapper.selectByUserId(userId, param.name());
+            UserParamEntity storeParam = userParamMap.get(param.name());
             // 该用户不存在该参数, 则新增参数
             if (storeParam == null) {
                 UserParamEntity istParam = new UserParamEntity();
@@ -92,7 +94,7 @@ public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEnti
                 if (param.name().equals(UserParamEnum.WEB_ARTICLE_URL.name())) {
                     istParam.setParamValue(getWebArticleUrl());
                 }
-                baseMapper.insert(istParam);
+                baseMapper.insertByUserId(istParam);
                 params.put(param.name(), istParam);
             } else {
                 params.put(param.name(), storeParam);

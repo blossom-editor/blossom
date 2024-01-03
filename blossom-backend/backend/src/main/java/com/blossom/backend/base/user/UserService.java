@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.auth.security.PasswordEncoder;
+import com.blossom.backend.base.paramu.UserParamService;
 import com.blossom.backend.base.user.pojo.UserAddReq;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.base.user.pojo.UserUpdPwdReq;
@@ -14,9 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户
@@ -28,9 +27,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class UserService extends ServiceImpl<UserMapper, UserEntity> {
 
-    private static final Map<String, UserEntity> userCache = new HashMap<>();
-
     private final PasswordEncoder passwordEncoder;
+    private final UserParamService userParamService;
 
     /**
      * 查询全部用户
@@ -70,6 +68,7 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         user.setSalt(SaltUtil.randomSalt());
         user.setPassword(passwordEncoder.encode(req.getPassword() + user.getSalt()));
         baseMapper.insert(user);
+        userParamService.initUserParams(user.getId());
     }
 
     /**

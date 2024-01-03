@@ -2,9 +2,9 @@
   <div :class="['blossom-header-root', props.bg ? 'blossom-header-bg' : '']">
     <bl-row class="head-row" width="auto" height="100%">
       <div class="blossom-logo" @click="toLogin">
-        <img src="/blog-logo.png" :style="getThemeLogoStyle()" />
+        <img :src="logo()" :style="getThemeLogoStyle()" />
       </div>
-      <div class="project-name" @click="toRoute('/home')">{{ getSysName() }}</div>
+      <div class="project-name" @click="toRoute('/home')">{{ sysName() }}</div>
     </bl-row>
 
     <bl-row class="head-row" width="auto" height="100%">
@@ -17,12 +17,10 @@
         :offset="-5"
         transition="el-zoom-in-top">
         <template #reference>
-          <div v-show="getLinks().length > 0" class="popper-target">更多</div>
+          <div v-show="links() && links().length > 0" class="popper-target">更多</div>
         </template>
         <div class="popper-content">
-          <div class="item" v-for="link in getLinks()" @click="toView(link.URL)">
-            <img :src="link.LOGO" style="width: 25px" />{{ link.NAME }}
-          </div>
+          <div class="item" v-for="link in links()" @click="toView(link.URL)"><img :src="link.LOGO" style="width: 25px" />{{ link.NAME }}</div>
         </div>
       </el-popover>
       <el-popover
@@ -60,6 +58,7 @@ import { toView } from '@/assets/utils/util'
 import { useUserStore } from '@/stores/user'
 import { logout } from '@/scripts/auth'
 import { getLinks, getSysName, getThemeLogoStyle } from '@/scripts/env'
+import { isNotBlank } from '@/assets/utils/obj'
 
 const userStore = useUserStore()
 
@@ -84,6 +83,29 @@ const toLogin = () => {
   }
   if (tryLoginCount.value === 7) {
     toRoute('/login')
+  }
+}
+
+const sysName = () => {
+  if (userStore.userParams.WEB_LOGO_NAME) {
+    return userStore.userParams.WEB_LOGO_NAME
+  }
+  return getSysName()
+}
+
+const logo = () => {
+  if (userStore.userParams.WEB_LOGO_URL) {
+    return userStore.userParams.WEB_LOGO_URL
+  }
+  return '/blog-logo.png'
+}
+
+const links = () => {
+  console.log(userStore.links)
+  if (isNotBlank(userStore.links)) {
+    return JSON.parse(userStore.links)
+  } else {
+    getLinks()
   }
 }
 

@@ -232,7 +232,7 @@ const { editorStyle } = useConfigStore()
 
 watch(
   () => userStore.userinfo.id,
-  (_newId: number, _oldId: number) => {
+  (_newId: string, _oldId: string) => {
     curDoc.value = undefined
     curArticle.value = undefined
     setNewState('')

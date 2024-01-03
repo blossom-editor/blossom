@@ -60,6 +60,13 @@
             <el-switch v-model="viewStyle.isGlobalShadow" size="default" @change="changeGlobalShadow" />
           </bl-row>
 
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">隐藏试用按钮</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowTryuseBtn" size="default" @change="changeSubjectStype" />
+          </bl-row>
+
           <bl-row v-if="isElectron()" class="prop-row" just="space-between">
             <div class="prop">
               <div class="prop-name">窗口缩放</div>

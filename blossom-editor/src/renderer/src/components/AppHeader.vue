@@ -13,13 +13,14 @@
         :offset="5"
         :persistent="false"
         virtual-triggering>
-        <div class="header-config-popover">
+        <div v-if="!userStore.isLogin" class="header-config-popover-placeholder">登录后查看配置项</div>
+        <div v-else class="header-config-popover">
           <bl-row class="url-container" just="space-between">
             <bl-col width="60px" height="60px" class="iconbl bl-blog" just="center"></bl-col>
             <bl-col width="calc(100% - 70px)" height="60px" align="flex-start" just="flex-start">
-              <div class="name"><span>博客地址</span> <span class="iconbl bl-sendmail-line"></span></div>
+              <div class="name blog" @click="toBlog"><span>博客地址</span> <span class="iconbl bl-sendmail-line"></span></div>
               <div class="url">
-                {{ userStore.userParams.WEB_ARTICLE_URL }}123123123123123123123123123123123123123123123123123123123123123123123123123123123123
+                {{ userStore.userParams.WEB_ARTICLE_URL }}
               </div>
             </bl-col>
           </bl-row>
@@ -30,14 +31,12 @@
               <div class="url">{{ userStore.sysParams.BLOSSOM_OBJECT_STORAGE_DOMAIN }}</div>
             </bl-col>
           </bl-row>
-          <bl-row just="space-between">
-            <el-button text>关闭闪烁提示</el-button>
+          <bl-row just="flex-end">
             <el-button type="primary" plain @click="showQuickSetting">快捷配置</el-button>
           </bl-row>
         </div>
       </el-popover>
-
-      <div class="iconbl bl-blog warn-heightlight" ref="ButtonRef" v-click-outside="onClickOutside"></div>
+      <div :class="['iconbl', 'bl-blog', userStore.paramIsCorrect ? '' : 'warn-heightlight']" ref="ButtonRef" v-click-outside="onClickOutside"></div>
 
       <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
 
@@ -67,14 +66,14 @@
 
   <el-dialog
     v-model="isShowQuickSetting"
-    width="80%"
-    style="height: fit-content; max-width: 800px"
+    width="750px"
     :align-center="true"
-    :append-to-body="false"
+    :append-to-body="true"
+    :lock-scroll="false"
     :destroy-on-close="true"
     :close-on-click-modal="false"
     draggable>
-    <QuickSetting ref="PlanDayInfoRef"></QuickSetting>
+    <QuickSetting ref="PlanDayInfoRef" @completed="quickSettingComplete"></QuickSetting>
   </el-dialog>
 </template>
 
@@ -82,13 +81,13 @@
 import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
 import { toRoute } from '@renderer/router'
+import { useUserStore } from '@renderer/stores/user'
 import { useThemeStore } from '@renderer/stores/theme'
 import { windowMin, windowMax, windowHide, setBestSize, openExtenal } from '@renderer/assets/utils/electron'
-import WebCollect from './WebCollect.vue'
 import { isWindows, isElectron } from '@renderer/assets/utils/util'
 import { isTryuse } from '@renderer/scripts/env'
 import SYSTEM from '@renderer/assets/constants/system'
-import { useUserStore } from '@renderer/stores/user'
+import WebCollect from './WebCollect.vue'
 import QuickSetting from '@renderer/views/index/setting/QuickSetting.vue'
 
 const themeStrore = useThemeStore()
@@ -132,6 +131,9 @@ const ButtonRef = ref()
 const PopoverRef = ref()
 const isShowQuickSetting = ref(false)
 
+/**
+ * 点击外部时关闭
+ */
 const onClickOutside = () => {
   unref(PopoverRef).popperRef?.delayHide?.()
 }
@@ -139,6 +141,15 @@ const onClickOutside = () => {
 const showQuickSetting = () => {
   unref(PopoverRef).popperRef?.delayHide?.()
   isShowQuickSetting.value = true
+}
+
+const toBlog = () => {
+  let url = userStore.userParams.WEB_ARTICLE_URL.replaceAll('/#/articles?articleId=', '/#/home')
+  openExtenal(url)
+}
+
+const quickSettingComplete = () => {
+  isShowQuickSetting.value = false
 }
 //#endregion
 </script>
@@ -215,6 +226,13 @@ const showQuickSetting = () => {
   }
 }
 
+.header-config-popover-placeholder {
+  @include box(350px, 190px);
+  @include flex(row, center, center);
+  font-weight: 300;
+  font-size: 14px;
+}
+
 .header-config-popover {
   @include font(13px, 300);
   margin: 6px;
@@ -252,10 +270,16 @@ const showQuickSetting = () => {
     color: var(--el-text-color);
   }
 
+  .name.blog {
+    cursor: pointer;
+    &:hover {
+      color: var(--el-color-primary);
+    }
+  }
+
   .url {
     @include box(100%, 40px);
     font-size: 12px;
-    padding: 2px 5px 0 5px;
     overflow-y: scroll;
     border-radius: 4px;
     color: var(--bl-text-color-light);

@@ -1,10 +1,12 @@
 <template>
-  <div class="bl-col-root" :style="{
-    justifyContent: props.just,
-    alignItems: props.align,
-    width: props.width,
-    height: props.height,
-  }">
+  <div
+    class="bl-col-root"
+    :style="{
+      justifyContent: props.just,
+      alignItems: props.align,
+      width: props.width,
+      height: props.height
+    }">
     <slot />
   </div>
 </template>

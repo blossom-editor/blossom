@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { Local } from '@/assets/utils/storage'
-// import { loginApi, logoutApi, checkApi, userinfoApi } from '@/api/auth'
+import { userinfoOpenApi } from '@/api/blossom'
 
 export const storeKey = 'token'
 export const userinfoKey = 'userinfo'
@@ -30,13 +30,31 @@ const initAuth = () => {
   return auth
 }
 
+const DEFAULT_USER_INFO = {
+  id: '',
+  username: '暂未登录',
+  nickName: '暂未登录',
+  avatar: '',
+  remark: '',
+  articleCount: 0,
+  articleWords: 0,
+  userParams: {
+    WEB_ARTICLE_URL: '',
+    WEB_IPC_BEI_AN_HAO: '',
+    WEB_LOGO_NAME: '',
+    WEB_LOGO_URL: '',
+    WEB_GONG_WANG_AN_BEI: '',
+    WEB_BLOG_URL_ERROR_TIP_SHOW: 1,
+    WEB_BLOG_LINKS: ''
+  }
+}
+
+export type Userinfo = typeof DEFAULT_USER_INFO
 /**
  * 初始化用户信息
  */
 const initUserinfo = () => {
-  let userinfo = { id: '', username: '暂未登录', nickName: '暂未登录', avatar: '', remark: '', articleCount: 0, articleWords: 0 }
-  Local.set(userinfoKey, userinfo)
-  return userinfo
+  return { ...DEFAULT_USER_INFO }
 }
 
 /**
@@ -45,7 +63,7 @@ const initUserinfo = () => {
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     auth: Local.get(storeKey) || initAuth(),
-    userinfo: Local.get(userinfoKey) || initUserinfo()
+    userinfo: initUserinfo()
   }),
   getters: {
     isLogin: (state): boolean => {
@@ -53,69 +71,20 @@ export const useUserStore = defineStore('userStore', {
         return false
       }
       return state.auth.status === AuthStatus.Succ
+    },
+    userParams: (state): any => {
+      return state.userinfo.userParams
+    },
+    links: (state): any => {
+      return state.userinfo.userParams.WEB_BLOG_LINKS
     }
   },
   actions: {
-    //   /**
-    //    * 根据用户名密码登录
-    //    * @param username 用户名
-    //    * @param password 密码
-    //    */
-    //   async loginByPassword(username: string, password: string) {
-    //     this.auth.status = AuthStatus.Loging
-    //     /*
-    //      * 客户端ID, 见服务器配置 project.auth.clients.clientid
-    //      * 登录模式, 见服务器配置 project.auth.clients.grantType
-    //      */
-    //     await loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
-    //       .then((resp: any) => {
-    //         let auth = { token: resp.data.token, status: AuthStatus.Succ }
-    //         this.auth = auth
-    //         Local.set(storeKey, auth)
-    //         this.getUserinfo()
-    //       })
-    //       .catch((_e) => {
-    //         this.reset()
-    //         // 登录失败的状态需要特别更改
-    //         let auth = { token: '', status: AuthStatus.Fail }
-    //         this.auth = auth
-    //       })
-    //   },
-    //   async logout() {
-    //     await logoutApi().then((_) => {
-    //       this.reset()
-    //     })
-    //   },
-    //   /**
-    //    * 检查登录状态
-    //    */
-    //   async checkToken(succ: any, fail: any) {
-    //     this.auth.status = AuthStatus.Checking
-    //     await checkApi()
-    //       .then((resp) => {
-    //         let auth = { token: resp.data.token, status: AuthStatus.Succ }
-    //         this.auth = auth
-    //         Local.set(storeKey, auth)
-    //         this.getUserinfo()
-    //         succ()
-    //       })
-    //       .catch((_error) => {
-    //         this.reset()
-    //         // 登录失败的状态需要特别更改
-    //         let auth = { token: '', status: AuthStatus.Wait }
-    //         this.auth = auth
-    //         fail()
-    //       })
-    //   },
-    //   /**
-    //    * 获取用户信息
-    //    */
-    //   getUserinfo() {
-    //     userinfoApi().then((resp) => {
-    //       this.userinfo = resp.data
-    //       Local.set(userinfoKey, resp.data)
-    //     })
-    //   },
+    async getUserinfoOpen() {
+      await userinfoOpenApi().then((resp) => {
+        this.userinfo = resp.data
+      })
+    },
     /**
      * 重置登录状态和用户信息
      */

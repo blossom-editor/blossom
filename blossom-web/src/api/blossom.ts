@@ -6,7 +6,7 @@ import type { R } from './request'
  * @param params
  * @returns
  */
-export const userinfoApi = (params?: object): Promise<R<any>> => {
+export const userinfoOpenApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/user/info/open', { params })
 }
 

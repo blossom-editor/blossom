@@ -1,6 +1,5 @@
 // index.ts
 import axios from 'axios'
-import pinia from '@renderer/stores/store-config'
 import { toLogin } from '@renderer/router'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Local } from '@renderer/assets/utils/storage'
@@ -8,8 +7,6 @@ import { isNotNull } from '@renderer/assets/utils/obj'
 import { storeKey as authKey, useUserStore } from '@renderer/stores/user'
 import { storeKey as serverUrlKey } from '@renderer/stores/server'
 import Notify from '@renderer/scripts/notify'
-
-const userStore = useUserStore(pinia)
 
 export class Request {
   /** axios 实例 */
@@ -85,6 +82,7 @@ export class Request {
           return data
         } else if (data.code === 'AUTH-40101') {
           /* 授权被拦截, 则需要退回登录页请求 */
+          const userStore = useUserStore()
           userStore.reset()
           toLogin()
           return Promise.reject(res)
