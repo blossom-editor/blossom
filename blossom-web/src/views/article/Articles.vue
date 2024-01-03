@@ -90,7 +90,7 @@
         </el-menu>
       </div>
 
-      <div class="article">
+      <div class="article" ref="PreviewRef">
         <div class="bl-preview" v-html="article.html"></div>
       </div>
 
@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onUnmounted } from 'vue'
+import { ref, onUnmounted, nextTick } from 'vue'
 import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '@/api/blossom'
 import { useUserStore } from '@/stores/user'
@@ -148,10 +148,6 @@ useLifecycle(
     initStyle()
   }
 )
-
-// onMounted(() => {})
-
-// onActivated(() => {})
 
 onUnmounted(() => {
   window.removeEventListener('resize', onresize)
@@ -191,6 +187,7 @@ const article = ref<DocInfo>({
 })
 const tocList = ref<any>([])
 const defaultOpeneds = ref<string[]>([])
+const PreviewRef = ref()
 
 /**
  * 获取文档树状列表
@@ -225,6 +222,9 @@ const clickCurDoc = async (tree: DocTree) => {
   if (tree.ty == 3) {
     await getCurEditArticle(tree.i)
     window.history.replaceState('', '', '#/articles?articleId=' + tree.i)
+    nextTick(() => {
+      PreviewRef.value.scrollTo({ top: 0 })
+    })
   }
 }
 
@@ -678,37 +678,6 @@ const onresize = () => {
         :deep(li::marker) {
           color: #989898;
         }
-
-        // 有序列表
-        // :deep(ol) {
-        //   padding-left: 20px;
-        // }
-
-        // 无序列表
-        // :deep(ul) {
-        //   padding-left: 15px;
-
-        //   ul {
-        //     padding-left: 15px;
-        //   }
-        // }
-
-        // checkbox
-        // :deep(ul:has(input)) {
-        //   padding-left: 0px;
-
-        //   input {
-        //     margin: 0;
-        //   }
-
-        //   ul {
-        //     padding-left: 15px;
-        //   }
-
-        //   li::marker {
-        //     content: none;
-        //   }
-        // }
 
         /* 有序列表 */
         :deep(ol) {

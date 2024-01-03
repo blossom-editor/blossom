@@ -148,7 +148,7 @@
 
 <script setup lang="ts">
 // vue
-import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch } from 'vue'
+import { ref, computed, provide, onMounted, onBeforeUnmount, onActivated, onDeactivated, defineAsyncComponent, watch, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { UploadProps, UploadRawFile } from 'element-plus'
 import { useUserStore } from '@renderer/stores/user'
@@ -430,6 +430,9 @@ const clickCurDoc = async (tree: DocTree) => {
         editorLoading.value = false
         articleChanged = false
       })
+    nextTick(() => {
+      scrollTopReset()
+    })
   }
 }
 /**
@@ -603,7 +606,6 @@ const setNewState = (md: string): void => {
     )
   )
   parse()
-  // scrollTopReset()
 }
 
 //#endregion
@@ -723,6 +725,12 @@ const initScroll = () => {
 
 const scroll = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
   scrollWrapper.sycnScroll(event, source, lineno, colno, error)
+}
+
+const scrollTopReset = () => {
+  if (scrollWrapper) {
+    scrollWrapper.scrollTopReset()
+  }
 }
 
 const scrollTopLast = () => {
