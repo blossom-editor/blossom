@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.blossom.backend.base.user.UserMapper">
 
+    <insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into base_user (`id`, `type`, `username`,  `password`, `salt`, `nick_name`, `real_name`)
+        values (
+            null,
+            #{type},
+            #{username},
+            '${password}',
+            '${salt}',
+            #{username},
+            #{username}
+       )
+    </insert>
+
     <!-- 根据ID修改 -->
     <update id="updById">
         update base_user
@@ -17,6 +30,7 @@
     </update>
 
     <update id="updPwd">
-        update base_user set password = #{password},upd_time = now() where id = #{userId}
+        update base_user set password = '${password}',upd_time = now() where id = #{userId}
     </update>
+
 </mapper>

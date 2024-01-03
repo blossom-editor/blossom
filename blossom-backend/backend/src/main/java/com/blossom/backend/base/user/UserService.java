@@ -67,7 +67,7 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         user.setType(req.getType());
         user.setSalt(SaltUtil.randomSalt());
         user.setPassword(passwordEncoder.encode(req.getPassword() + user.getSalt()));
-        baseMapper.insert(user);
+        baseMapper.insertUser(user);
         userParamService.initUserParams(user.getId());
     }
 
@@ -89,7 +89,6 @@ public class UserService extends ServiceImpl<UserMapper, UserEntity> {
         if (!passwordEncoder.matches(req.getPassword() + user.getSalt(), user.getPassword())) {
             throw new XzException400("密码错误");
         }
-
         String newPwd = passwordEncoder.encode(req.getNewPassword() + user.getSalt());
         baseMapper.updPwd(req.getUserId(), newPwd);
     }

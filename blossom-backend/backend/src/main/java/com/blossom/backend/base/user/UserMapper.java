@@ -14,6 +14,11 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper extends BaseMapper<UserEntity> {
 
     /**
+     * 新增用户
+     */
+    void insertUser(UserEntity user);
+
+    /**
      * 修改用户信息
      */
     void updById(UserEntity user);
