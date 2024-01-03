@@ -680,32 +680,56 @@ const onresize = () => {
         }
 
         // 有序列表
-        :deep(ol) {
-          padding-left: 20px;
-        }
+        // :deep(ol) {
+        //   padding-left: 20px;
+        // }
 
         // 无序列表
-        :deep(ul) {
-          padding-left: 15px;
+        // :deep(ul) {
+        //   padding-left: 15px;
 
-          ul {
-            padding-left: 15px;
-          }
-        }
+        //   ul {
+        //     padding-left: 15px;
+        //   }
+        // }
 
         // checkbox
-        :deep(ul:has(input)) {
-          padding-left: 0px;
+        // :deep(ul:has(input)) {
+        //   padding-left: 0px;
 
+        //   input {
+        //     margin: 0;
+        //   }
+
+        //   ul {
+        //     padding-left: 15px;
+        //   }
+
+        //   li::marker {
+        //     content: none;
+        //   }
+        // }
+
+        /* 有序列表 */
+        :deep(ol) {
+          padding-left: 2em;
+        }
+
+        /* 无序列表 */
+        :deep(ul) {
+          padding-left: 2em;
+        }
+
+        /* checkbox */
+        :deep(li) {
           input {
-            margin: 0;
+            margin: 0 0 0 -1.4em;
           }
 
-          ul {
-            padding-left: 15px;
+          &:has(> input)::marker {
+            content: none;
           }
-
-          li::marker {
+          & :has(> p > input)::marker {
             content: none;
           }
         }

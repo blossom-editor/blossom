@@ -1648,33 +1648,28 @@
           color: #989898;
       }
 
+      /* 有序列表 */
       .bl-preview ol {
-          padding-left: 20px;
+          padding-left: 2em;
           font-size: inherit;
           font-family: inherit;
       }
 
+      /* 无序列表 */
       .bl-preview ul {
-          padding-left: 15px;
+          padding-left: 2em;
       }
 
-      .bl-preview ul ul {
-          padding-left: 15px;
+      /* checkbox */
+      .bl-preview li input {
+          margin: 0 0 0 -1.4em;
       }
 
-      .bl-preview ul:has(input) {
-          padding-left: 0px;
+      .bl-preview li:has(> input)::marker {
+          content: none;
       }
 
-      .bl-preview ul:has(input) input {
-          margin: 0;
-      }
-
-      .bl-preview ul:has(input) ul {
-          padding-left: 15px;
-      }
-
-      .bl-preview ul:has(input) li::marker {
+      .bl-preview li:has(> p > input)::marker {
           content: none;
       }
 
