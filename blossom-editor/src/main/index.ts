@@ -1,4 +1,4 @@
-import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDetails, session } from 'electron'
+import { app, shell, ipcMain, BrowserWindow, Menu, IpcMainEvent, Tray, HandlerDetails } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is, platform } from '@electron-toolkit/utils'
 import icon from '../../resources/imgs/icon.ico?asset'
