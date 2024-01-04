@@ -3,40 +3,38 @@
     <div class="drag">{{ tryuseComment }}</div>
     <div class="window-workbench">
       <el-popover
-        popper-class="header-popover"
+        popper-class="caution-popover"
         ref="PopoverRef"
         trigger="click"
         width="350px"
         :virtual-ref="ButtonRef"
         :hide-after="10"
         :tabindex="100"
-        :offset="5"
+        :offset="10"
         :persistent="false"
         virtual-triggering>
-        <div v-if="!userStore.isLogin" class="header-config-popover-placeholder">登录后查看配置项</div>
-        <div v-else class="header-config-popover">
-          <bl-row class="url-container" just="space-between">
-            <bl-col width="60px" height="60px" class="iconbl bl-blog" just="center"></bl-col>
-            <bl-col width="calc(100% - 70px)" height="60px" align="flex-start" just="flex-start">
-              <div class="name blog" @click="toBlog"><span>博客地址</span> <span class="iconbl bl-sendmail-line"></span></div>
-              <div class="url">
-                {{ userStore.userParams.WEB_ARTICLE_URL }}
-              </div>
-            </bl-col>
+        <div v-if="!userStore.isLogin" class="caution-popover-placeholder">登录后查看</div>
+        <div v-else class="caution-content">
+          <bl-row class="caution-row caution-row-warn" v-if="!userStore.paramIsCorrect" @click="showQuickSetting">
+            <bl-col width="40px" height="40px" class="iconbl bl-blog" just="center"></bl-col>
+            <bl-col just="center">您有一些设置需要修改，点击快速设置。</bl-col>
           </bl-row>
-          <bl-row class="url-container" height="100%" style="margin-bottom: 6px">
-            <bl-col width="60px" height="60px" class="iconbl bl-image--line" just="center"></bl-col>
-            <bl-col width="calc(100% - 70px)" height="60px" align="flex-start" just="flex-start">
-              <div class="name">图片地址</div>
-              <div class="url">{{ userStore.sysParams.BLOSSOM_OBJECT_STORAGE_DOMAIN }}</div>
-            </bl-col>
-          </bl-row>
-          <bl-row just="flex-end">
-            <el-button type="primary" plain @click="showQuickSetting">快捷配置</el-button>
-          </bl-row>
+
+          <!-- <bl-row class="caution-row">
+            <bl-col width="40px" height="40px" class="iconbl bl-a-cloudrefresh-line" just="center"></bl-col>
+            <bl-col just="center">发现新版本，点击查看更新内容。</bl-col>
+          </bl-row> -->
+
+          <bl-row class="no-more" just="center"> 无更多内容 </bl-row>
         </div>
+        <bl-row class="caution-footer" just="flex-end">
+          <div @click="showQuickSetting">快速配置</div>
+        </bl-row>
       </el-popover>
-      <div :class="['iconbl', 'bl-blog', userStore.paramIsCorrect ? '' : 'warn-heightlight']" ref="ButtonRef" v-click-outside="onClickOutside"></div>
+      <div
+        :class="['iconbl', 'bl-caution-line', userStore.paramIsCorrect ? '' : 'warn-heightlight']"
+        ref="ButtonRef"
+        v-click-outside="onClickOutside"></div>
 
       <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
 
@@ -66,6 +64,7 @@
 
   <el-dialog
     v-model="isShowQuickSetting"
+    class="dialog-quick-setting"
     width="750px"
     :align-center="true"
     :append-to-body="true"
@@ -83,7 +82,7 @@ import { ClickOutside as vClickOutside } from 'element-plus'
 import { toRoute } from '@renderer/router'
 import { useUserStore } from '@renderer/stores/user'
 import { useThemeStore } from '@renderer/stores/theme'
-import { windowMin, windowMax, windowHide, setBestSize, openExtenal } from '@renderer/assets/utils/electron'
+import { windowMin, windowMax, windowHide, setBestSize } from '@renderer/assets/utils/electron'
 import { isWindows, isElectron } from '@renderer/assets/utils/util'
 import { isTryuse } from '@renderer/scripts/env'
 import SYSTEM from '@renderer/assets/constants/system'
@@ -143,11 +142,6 @@ const showQuickSetting = () => {
   isShowQuickSetting.value = true
 }
 
-const toBlog = () => {
-  let url = userStore.userParams.WEB_ARTICLE_URL.replaceAll('/#/articles?articleId=', '/#/home')
-  openExtenal(url)
-}
-
 const quickSettingComplete = () => {
   isShowQuickSetting.value = false
 }
@@ -205,89 +199,94 @@ const quickSettingComplete = () => {
       }
     }
   }
+}
 
-  .warn-heightlight {
-    animation: animated-border 1.5s infinite;
-    text-shadow: 0 0 3px #e3a300;
-    background-color: #e3a300;
-    color: var(--bl-html-color);
+.warn-heightlight {
+  animation: animated-border 1.5s infinite;
+  text-shadow: 0 0 3px #e3a300;
+  background-color: #e3a300;
+  color: var(--bl-html-color);
+}
+
+@keyframes animated-border {
+  0% {
+    filter: drop-shadow(0 0 0 #e3a300);
   }
 
-  @keyframes animated-border {
-    0% {
-      // box-shadow: 0 0 0 0 rgba(227, 163, 0, 0.7);
-      filter: drop-shadow(0 0 0 #e3a300);
-    }
-
-    100% {
-      // box-shadow: 0 0 0 10px rgba(227, 163, 0, 0);
-      filter: drop-shadow(0 0 30px #e3a300);
-    }
+  100% {
+    filter: drop-shadow(0 0 30px #e3a300);
   }
 }
 
-.header-config-popover-placeholder {
+.caution-popover-placeholder {
   @include box(350px, 190px);
   @include flex(row, center, center);
   font-weight: 300;
   font-size: 14px;
 }
 
-.header-config-popover {
+.caution-content {
+  @include box(350px, 250px);
   @include font(13px, 300);
-  margin: 6px;
+  padding: 10px;
+  height: 250px;
 
-  .url-container {
-    padding: 6px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-
-    .bl-blog,
-    .bl-image--line {
-      @include themeBg(#f5f5f5, #060404);
-      font-size: 28px;
-      border-radius: 4px;
-      margin-right: 10px;
-    }
-
-    .bl-image--line {
-      font-size: 33px;
-    }
-
-    .bl-sendmail-line {
-      font-size: 14px;
-    }
-
-    &:hover {
-      border: 1px solid var(--el-border-color);
-    }
-  }
-
-  .name {
-    width: 100%;
-    min-height: 20px;
-    text-decoration: none;
-    color: var(--el-text-color);
-  }
-
-  .name.blog {
+  .caution-row {
+    height: 50px;
+    border: 1px solid var(--el-border-color);
+    border-radius: 10px;
+    padding: 0 5px;
+    transition: border 0.3s;
+    margin-bottom: 10px;
     cursor: pointer;
+
     &:hover {
-      color: var(--el-color-primary);
+      border: 1px solid var(--el-color-primary);
+
+      .iconbl {
+        background-color: var(--el-color-primary-light-7) !important;
+      }
+    }
+
+    .iconbl {
+      @include themeBg(#f5f5f5, #414141);
+      font-size: 20px;
+      border-radius: 10px;
+      margin-right: 5px;
+      transition: background-color 0.3s;
     }
   }
 
-  .url {
-    @include box(100%, 40px);
+  .caution-row-warn {
+    border: 1px solid #e3a300;
+    color: #ca9100;
+  }
+
+  .no-more {
     font-size: 12px;
-    overflow-y: scroll;
-    border-radius: 4px;
+    margin: 10px 0;
     color: var(--bl-text-color-light);
+  }
+}
+
+.caution-footer {
+  padding: 5px;
+  color: var(--bl-text-color-light);
+  div {
+    padding: 0 10px;
+    cursor: pointer;
   }
 }
 </style>
 
 <style>
+.dialog-quick-setting {
+  .el-dialog__headerbtn {
+    height: 30px;
+    width: 30px;
+    font-size: 20px;
+  }
+}
 .web-collect-drawer {
   --el-drawer-bg-color: var(--bl-html-color);
   .el-drawer__header {
@@ -298,11 +297,8 @@ const quickSettingComplete = () => {
     --el-drawer-padding-primary: 0;
   }
 }
-.header-popover {
-  /* inset: 35.3333px 10px auto auto !important; */
+.caution-popover {
   padding: 0 !important;
-  .el-popper__arrow {
-    /* left: 240.333px !important; */
-  }
+  border-radius: 10px !important;
 }
 </style>
