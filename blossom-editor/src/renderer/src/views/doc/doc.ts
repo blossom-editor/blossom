@@ -29,7 +29,7 @@ export const treeToInfo = (tree: DocTree): DocInfo => {
   }
 }
 
-export enum TitleColor {
+export enum SortLevelColor {
   ONE = '#C9515193',
   TWO = '#E6981293',
   THREE = '#127EA993',
@@ -43,15 +43,15 @@ export enum TitleColor {
  */
 export const computedDocTitleColor = (level: number) => {
   if (level === 1) {
-    return TitleColor.ONE
+    return SortLevelColor.ONE
   }
   if (level === 2) {
-    return TitleColor.TWO
+    return SortLevelColor.TWO
   }
   if (level === 3) {
-    return TitleColor.THREE
+    return SortLevelColor.THREE
   }
-  return TitleColor.FOUR
+  return SortLevelColor.FOUR
 }
 
 /**
