@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12687054",
+      "name": "回车",
+      "font_class": "enter",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
       "icon_id": "12579639",
       "name": "blog",
       "font_class": "blog",
