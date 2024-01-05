@@ -64,7 +64,7 @@
 
   <el-dialog
     v-model="isShowQuickSetting"
-    class="dialog-quick-setting"
+    class="bl-dialog-bigger-headerbtn"
     width="750px"
     :align-center="true"
     :append-to-body="true"
@@ -280,13 +280,6 @@ const quickSettingComplete = () => {
 </style>
 
 <style>
-.dialog-quick-setting {
-  .el-dialog__headerbtn {
-    height: 30px;
-    width: 30px;
-    font-size: 20px;
-  }
-}
 .web-collect-drawer {
   --el-drawer-bg-color: var(--bl-html-color);
   .el-drawer__header {
