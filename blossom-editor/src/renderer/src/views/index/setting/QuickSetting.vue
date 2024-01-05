@@ -76,7 +76,7 @@
             <el-button size="default" type="primary" @click="saveBlog" plain>
               确认使用{{ blogType === 'backend' ? '自带博客' : '独立部署' }}
             </el-button>
-            <el-button size="default" @click="saveBlog" text>我不关心</el-button>
+            <el-button size="default" @click="saveBlog" text>我不使用博客</el-button>
           </div>
         </div>
         <div class="iframe-container">

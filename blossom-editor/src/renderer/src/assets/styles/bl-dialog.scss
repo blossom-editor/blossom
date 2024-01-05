@@ -3,5 +3,27 @@
   --el-dialog-padding-primary: 0 !important;
   --el-dialog-bg-color: var(--bl-dialog-bg-color) !important;
   --el-dialog-box-shadow: var(--bl-dialog-box-shadow) !important;
+}
 
+.bl-dialog-hidden-header {
+  .el-dialog__header {
+    display: none !important;
+  }
+  .el-dialog__headerbtn {
+    display: none;
+  }
+}
+
+.bl-dialog-bigger-headerbtn {
+  .el-dialog__headerbtn {
+    height: 30px;
+    width: 30px;
+    font-size: 20px;
+  }
+}
+
+.bl-dialog-fixed-body {
+  .el-dialog__body {
+    height: calc(100% - 10px);
+  }
 }

@@ -1,9 +1,7 @@
 <template>
   <div class="config-root">
     <div class="title">修改用户信息</div>
-    <div class="desc">
-      天气预报使用<a target="_blank" href="https://dev.qweather.com/">和风天气API</a>，您可以在其上免费创建您的令牌以使用天气预报功能。
-    </div>
+    <div class="desc">用户的个人信息，若无内容请点击右侧刷新。<el-button @click="refreshUserinfo" text bg>刷新</el-button></div>
     <el-form :model="userinfoForm" :rules="rules" label-position="right" label-width="130px" style="max-width: 800px" ref="UserinfoFormRef">
       <el-form-item label="ID" prop="username">
         <el-input v-model="userinfoForm.id" size="default" disabled>
@@ -18,6 +16,7 @@
             <div class="iconbl bl-user-line" style="font-size: 20px"></div>
           </template>
         </el-input>
+        <div class="conf-tip">用于登录。</div>
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
         <el-input v-model="userinfoForm.nickName" size="default">
@@ -44,6 +43,7 @@
             <el-button @click="openExtenal('https://github.com/qwd/LocationList/blob/master/China-City-List-latest.csv')">查看城市代码</el-button>
           </template>
         </el-input>
+        <div class="conf-tip">填写和风天气的城市代码。</div>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <el-input v-model="userinfoForm.avatar" size="default" placeholder="请输入图片地址, http://...">
@@ -71,14 +71,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { storeToRefs } from 'pinia'
-import { userUpdApi } from '@renderer/api/auth'
+import { userUpdApi, userinfoApi } from '@renderer/api/auth'
 import { useUserStore } from '@renderer/stores/user'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
-const { userinfo } = storeToRefs(userStore)
 
 interface UserinfoForm {
   id: string
@@ -90,12 +88,12 @@ interface UserinfoForm {
 }
 const UserinfoFormRef = ref<FormInstance>()
 const userinfoForm = ref<UserinfoForm>({
-  id: userinfo.value.id,
-  username: userinfo.value.username,
-  nickName: userinfo.value.nickName,
-  remark: userinfo.value.remark,
-  location: userinfo.value.location,
-  avatar: userinfo.value.avatar
+  id: '',
+  username: '',
+  nickName: '',
+  remark: '',
+  location: '',
+  avatar: ''
 })
 const rules = ref<FormRules<UserinfoForm>>({
   username: [{ required: true, message: '请填写用户名', trigger: 'blur' }],
@@ -103,6 +101,19 @@ const rules = ref<FormRules<UserinfoForm>>({
   remark: [{ required: true, message: '请填写备注', trigger: 'blur' }],
   avatar: [{ required: true, message: '请填写头像', trigger: 'blur' }]
 })
+
+const getUserinfo = () => {
+  userinfoApi().then((resp) => {
+    userinfoForm.value = resp.data
+  })
+}
+
+const refreshUserinfo = () => {
+  userinfoApi().then((resp) => {
+    userinfoForm.value = resp.data
+    Notify.success('刷新用户信息成功', '刷新成功')
+  })
+}
 
 const save = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -118,6 +129,12 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
+
+const reload = () => {
+  getUserinfo()
+}
+
+defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">

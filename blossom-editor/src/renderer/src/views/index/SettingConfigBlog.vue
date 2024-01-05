@@ -64,21 +64,13 @@
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { userParamListApi, userParamUpdApi, userParamRefreshApi } from '@renderer/api/blossom'
-import Notify from '@renderer/scripts/notify'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { openExtenal } from '@renderer/assets/utils/electron'
-
-onMounted(() => {
-  getParamList()
-})
-
-onActivated(() => {
-  getParamList()
-})
+import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
 const { auth } = storeToRefs(userStore)
@@ -139,6 +131,12 @@ const genWebLinksTemplate = () => {
     updParam('WEB_BLOG_LINKS', userParamForm.value.WEB_BLOG_LINKS)
   }
 }
+
+const reload = () => {
+  getParamList()
+}
+
+defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">
