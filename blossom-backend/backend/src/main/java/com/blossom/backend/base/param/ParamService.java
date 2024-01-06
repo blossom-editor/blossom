@@ -41,7 +41,7 @@ public class ParamService extends ServiceImpl<ParamMapper, ParamEntity> {
      */
     @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
-        log.info("[    BASE] 初始化系统参数缓存");
+        log.info("[   PARAM] 初始化系统参数缓存");
         CACHE.clear();
         List<ParamEntity> params = baseMapper.selectList(new QueryWrapper<>());
         if (CollUtil.isEmpty(params)) {

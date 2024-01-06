@@ -15,6 +15,7 @@ import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.BeanUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 /**
  * 用户参数
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEntity> {
@@ -42,6 +44,7 @@ public class UserParamService extends ServiceImpl<UserParamMapper, UserParamEnti
      */
     @EventListener(ApplicationStartedEvent.class)
     public void refresh() {
+        log.info("[ U_PARAM] 初始化用户参数缓存");
         CACHE.clear();
         List<UserEntity> users = userMapper.selectList(new QueryWrapper<>());
         // 初始化所有用户的配置参数
