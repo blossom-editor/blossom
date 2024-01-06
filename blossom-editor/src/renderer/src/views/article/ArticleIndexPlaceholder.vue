@@ -6,9 +6,11 @@
           <div class="desc-text">显示排序</div>
         </div>
       </div>
-      <div class="iconbl bl-cloud-line"></div>
-      <div class="iconbl bl-a-lowerrightpage-line"></div>
-      <div class="iconbl bl-star-line"></div>
+      <div class="iconbl bl-search-line">
+        <div class="desc-line">
+          <div class="desc-text">全文搜索</div>
+        </div>
+      </div>
       <div class="iconbl bl-a-cloudrefresh-line"></div>
       <div class="iconbl bl-a-fileadd-line">
         <div class="desc-line">
@@ -34,6 +36,10 @@
       <bl-row>
         <div class="label">格式化</div>
         <div class="key">{{ keymaps.formatAll }}</div>
+      </bl-row>
+      <bl-row>
+        <div class="label">全文搜索</div>
+        <div class="key">{{ keymaps.fullSearch }}</div>
       </bl-row>
     </div>
   </div>
@@ -70,7 +76,10 @@ import { keymaps } from './scripts/editor-tools'
     }
   }
 
+  // 排序
   .bl-a-leftdirection-line {
+    padding-bottom: 5px;
+    padding-right: 0px;
     .desc-line {
       border-top: none;
       border-left: none;
@@ -82,6 +91,24 @@ import { keymaps } from './scripts/editor-tools'
       .desc-text {
         left: -55px;
         top: 10px;
+      }
+    }
+  }
+
+  .bl-search-line {
+    font-size: 22px;
+    padding-bottom: 5px;
+    .desc-line {
+      border-left: none;
+      border-bottom: none;
+      height: 20px;
+      width: 30px;
+      left: -20px;
+      top: -20px;
+
+      .desc-text {
+        left: -55px;
+        top: -10px;
       }
     }
   }

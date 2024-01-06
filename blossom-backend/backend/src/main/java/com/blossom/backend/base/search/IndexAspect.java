@@ -33,36 +33,32 @@ public class IndexAspect {
     private static final LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
 
     @Pointcut("@annotation(com.blossom.backend.base.search.EnableIndex)")
-    private void cutMethod(){
+    private void cutMethod() {
 
     }
 
     /**
-     *  成功返回后调用该方法，维护索引。 使用after防止事务未提交导致的数据滞后
+     * 成功返回后调用该方法, 维护索引. 使用after防止事务未提交导致的数据滞后
      */
     @AfterReturning("cutMethod()")
     public void afterReturning(JoinPoint joinPoint) {
         // 此处进行索引处理, 降低索引维护代码侵入
         // 获取注解对象
         EnableIndex annotation = getAnnotation(joinPoint);
-        if (annotation == null){
+        if (annotation == null) {
             // 记录问题， 并结束逻辑
             log.error("索引切面获取注解失败!");
             return;
         }
 
         IndexMsgTypeEnum indexMsgTypeEnum = annotation.type();
-        if (indexMsgTypeEnum == null){
-            log.error("获取索引消息操作类型失败");
-            return;
-        }
         String idSpEL = annotation.id();
-        if (!StringUtils.hasText(idSpEL)){
+        if (!StringUtils.hasText(idSpEL)) {
             log.error("获取id表达式失败");
             return;
         }
         Long customerId = parse(idSpEL, joinPoint, Long.class);
-        if (customerId == null){
+        if (customerId == null) {
             return;
         }
         ArticleIndexMsg indexMsg = new ArticleIndexMsg(indexMsgTypeEnum, customerId, AuthContext.getUserId());
@@ -76,15 +72,16 @@ public class IndexAspect {
 
     /**
      * 获取method
+     *
      * @return method
      */
     private Method getTargetMethod(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature)signature;
+        MethodSignature methodSignature = (MethodSignature) signature;
         Method agentMethod = methodSignature.getMethod();
         try {
-          return  joinPoint.getTarget().getClass().getMethod(agentMethod.getName(),agentMethod.getParameterTypes());
-        }catch (Exception e){
+            return joinPoint.getTarget().getClass().getMethod(agentMethod.getName(), agentMethod.getParameterTypes());
+        } catch (Exception e) {
             // 只记录异常
             log.error("获取目标方法失败");
         }
@@ -93,33 +90,26 @@ public class IndexAspect {
 
     /**
      * 获取注解声明对象
-     * @param joinPoint
-     * @return
      */
-    private EnableIndex getAnnotation(JoinPoint joinPoint){
+    private EnableIndex getAnnotation(JoinPoint joinPoint) {
         // 获取方法上的注解
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         Method method = sign.getMethod();
-        return  method.getAnnotation(EnableIndex.class);
+        return method.getAnnotation(EnableIndex.class);
     }
 
     /**
      * 解析SpEL表达式， 提供后续拓展的灵活性
-     * @param spel
-     * @param joinPoint
-     * @param clazz
-     * @return
-     * @param <T>
      */
-    private <T> T parse(String spel, JoinPoint joinPoint, Class<T> clazz){
+    private <T> T parse(String spel, JoinPoint joinPoint, Class<T> clazz) {
         ExpressionParser parser = new SpelExpressionParser();
         Method method = getTargetMethod(joinPoint);
-        if (method == null){
+        if (method == null) {
             return null;
         }
 
         String[] params = discoverer.getParameterNames(method);
-        if (params == null || params.length == 0){
+        if (params == null || params.length == 0) {
             log.error("获取参数列表失败");
             return null;
         }
@@ -133,7 +123,6 @@ public class IndexAspect {
         Expression expression = parser.parseExpression(spel);
         return expression.getValue(context, clazz);
     }
-
 
 
 }

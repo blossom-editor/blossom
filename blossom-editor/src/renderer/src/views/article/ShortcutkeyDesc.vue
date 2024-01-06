@@ -43,8 +43,9 @@ const keymapsView = [
   { icon: 'bl-a-eyeclose-line', name: '隐藏左侧菜单', key: keymaps.hideDocs },
   { icon: 'bl-a-filetext-line', name: '折叠浮动目录', key: keymaps.hideToc },
   { icon: 'bl-search-line', name: '全文搜索', key: keymaps.fullSearch },
+  { icon: 'bl-and', name: '全文搜索时匹配所有关键字', key: keymaps.fullSearchOperatorAnd },
   { icon: 'bl-transcript-line', name: '格式化 Markdown 文章', key: keymaps.formatAll },
-  { icon: 'bl-a-fileadd-line', name: '新增文件夹或文章', key: 'Ctrl + N' }
+  { icon: 'bl-a-fileadd-line', name: '打开新增文件夹或文章窗口', key: 'Ctrl + N' }
 ]
 
 const keymapsTool = [

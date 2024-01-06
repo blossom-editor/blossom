@@ -7,9 +7,10 @@ import com.blossom.backend.base.search.message.consumer.BatchIndexMsgConsumer;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,20 +19,33 @@ import java.util.List;
 /**
  * 对既有索引进行监控与维护
  */
-
-@Component
 @Slf4j
+@Component
 public class IndexObserver {
 
-    private SearchProperties searchProperties;
-    private ArticleService articleService;
-    private BatchIndexMsgConsumer batchIndexMsgConsumer;
+    private final SearchProperties searchProperties;
+    private final ArticleService articleService;
+    private final BatchIndexMsgConsumer batchIndexMsgConsumer;
 
-
-    IndexObserver(SearchProperties searchProperties, ArticleService articleService, BatchIndexMsgConsumer batchIndexMsgConsumer){
+    IndexObserver(SearchProperties searchProperties, ArticleService articleService, BatchIndexMsgConsumer batchIndexMsgConsumer) {
         this.searchProperties = searchProperties;
         this.articleService = articleService;
         this.batchIndexMsgConsumer = batchIndexMsgConsumer;
+    }
+
+    /**
+     * 启动时维护索引
+     */
+    @EventListener(ApplicationStartedEvent.class)
+    public void refresh() {
+        try {
+            log.info("[  SEARCH] 重建全部用户索引开始");
+            long start = System.currentTimeMillis();
+            this.reloadIndex();
+            log.info("[  SEARCH] 重建全部用户索引完成, 用时: {} ms", (System.currentTimeMillis() - start));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -39,16 +53,13 @@ public class IndexObserver {
      */
     @Scheduled(cron = "0 0 04 * * ?")
     public void reloadIndex() throws IOException {
-        if (StringUtils.hasText(searchProperties.getPath())){
-            List<ArticleEntity> allArticleWithContent = articleService.listAllArticleWithContent();
-            List<IndexMsg> batchReloadMsgs = new ArrayList<>();
-            allArticleWithContent.forEach(article ->{
-                ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD,article.getId(),article.getName(),article.getTags(),article.getMarkdown(),article.getUserId());
-                batchReloadMsgs.add(articleIndexMsg);
-            });
-
-            batchIndexMsgConsumer.batchReload(batchReloadMsgs);
-        }
+        List<ArticleEntity> allArticleWithContent = articleService.listAllIndexField();
+        List<IndexMsg> batchReloadMsgs = new ArrayList<>();
+        allArticleWithContent.forEach(article -> {
+            ArticleIndexMsg articleIndexMsg = new ArticleIndexMsg(IndexMsgTypeEnum.ADD, article.getId(), article.getName(), article.getTags(), article.getMarkdown(), article.getUserId());
+            batchReloadMsgs.add(articleIndexMsg);
+        });
+        batchIndexMsgConsumer.batchReload(batchReloadMsgs);
     }
 
 

@@ -12,15 +12,40 @@
             <template #content>
               显示排序<br />
               <bl-row>
-                <bl-tag :bgColor="TitleColor.ONE">一级</bl-tag>
-                <bl-tag :bgColor="TitleColor.TWO">二级</bl-tag>
+                <bl-tag :bgColor="SortLevelColor.ONE">一级</bl-tag>
+                <bl-tag :bgColor="SortLevelColor.TWO">二级</bl-tag>
               </bl-row>
               <bl-row>
-                <bl-tag :bgColor="TitleColor.THREE">三级</bl-tag>
-                <bl-tag :bgColor="TitleColor.FOUR">四级</bl-tag>
+                <bl-tag :bgColor="SortLevelColor.THREE">三级</bl-tag>
+                <bl-tag :bgColor="SortLevelColor.FOUR">四级</bl-tag>
               </bl-row>
             </template>
           </el-tooltip>
+          <el-tooltip effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+            <template #content>
+              <div>全文搜索</div>
+              <div class="keyboard small">Ctrl+Shift+F</div>
+            </template>
+            <div class="iconbl bl-search-line" @click="showSearch()"></div>
+          </el-tooltip>
+          <el-tooltip content="刷新" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+            <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
+          </el-tooltip>
+          <el-tooltip effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+            <template #content>
+              <div>新增文件夹或文章</div>
+              <div class="keyboard small">Ctrl + N</div>
+            </template>
+            <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
+          </el-tooltip>
+          <el-tooltip content="文章引用网络" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+            <div class="iconbl bl-correlation-line" @click="openArticleReferenceWindow()"></div>
+          </el-tooltip>
+        </bl-row>
+      </Transition>
+
+      <Transition name="wbpage-two">
+        <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 2">
           <el-tooltip content="只显示公开" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div v-if="props.showOpen">
               <div v-if="onlyOpen" class="iconbl bl-cloud-fill" @click="changeOnlyOpen()"></div>
@@ -39,20 +64,6 @@
               <div v-else class="iconbl bl-star-line" @click="changeOnlyStar()"></div>
             </div>
           </el-tooltip>
-          <el-tooltip content="刷新列表" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
-          </el-tooltip>
-          <el-tooltip content="新增文件夹或文档" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
-          </el-tooltip>
-          <el-tooltip content="文章引用网络" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-correlation-line" @click="openArticleReferenceWindow()"></div>
-          </el-tooltip>
-        </bl-row>
-      </Transition>
-
-      <Transition name="wbpage-two">
-        <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 2">
           <el-tooltip content="查看回收站" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <div class="iconbl bl-delete-line" @click="handleShowRecycleDialog"></div>
           </el-tooltip>
@@ -86,7 +97,7 @@
   </el-dialog>
 
   <el-dialog
-    class="backup-dialog"
+    class="bl-dialog-fixed-body"
     v-model="isShowBackupDialog"
     width="80%"
     style="height: 80%"
@@ -99,7 +110,7 @@
   </el-dialog>
 
   <el-dialog
-    class="backup-dialog"
+    class="bl-dialog-fixed-body"
     v-model="isShowRecycleDialog"
     width="80%"
     style="height: 80%"
@@ -113,17 +124,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject } from 'vue'
+import { ref, nextTick, inject, onDeactivated } from 'vue'
 import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
-import { provideKeyDocInfo, TitleColor } from '@renderer/views/doc/doc'
+import { provideKeyDocInfo, SortLevelColor } from '@renderer/views/doc/doc'
 import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
 import { useConfigStore } from '@renderer/stores/config'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleBackup from './ArticleBackup.vue'
 import ArticleRecycle from './ArticleRecycle.vue'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
+import hotkeys from 'hotkeys-js'
 
 const configStore = useConfigStore()
 const { viewStyle } = configStore
+
+useLifecycle(
+  () => bindKeys(),
+  () => bindKeys()
+)
+
+onDeactivated(() => {
+  unbindKeys()
+})
 
 const props = defineProps({
   showOpen: {
@@ -140,7 +162,7 @@ const props = defineProps({
   }
 })
 
-//#region 控制台翻页
+//#region --------------------------------------------------< 控制台翻页 >--------------------------------------------------
 
 const workbenchPage = ref(1)
 
@@ -150,7 +172,7 @@ const toWorkbenchPage = (page: number) => {
 
 //#endregion
 
-//#region 查询
+//#region --------------------------------------------------< 查询 >--------------------------------------------------
 const curDoc = inject(provideKeyDocInfo)
 
 const onlyOpen = ref<boolean>(false) // 只显示公开
@@ -180,7 +202,7 @@ const changeOnlyStar = () => {
 
 //#endregion
 
-//#region 新增窗口
+//#region --------------------------------------------------< 新增窗口 >--------------------------------------------------
 const ArticleInfoRef = ref()
 const isShowDocInfoDialog = ref<boolean>(false)
 
@@ -212,9 +234,13 @@ const savedCallback = () => {
   emits('refreshDocTree', onlyOpen.value, onlySubject.value, onlyStars.value)
 }
 
+const showSearch = () => {
+  emits('show-search')
+}
+
 //#endregion
 
-//#region 备份记录
+//#region --------------------------------------------------< 备份记录 >--------------------------------------------------
 const ArticleBackupRef = ref()
 const isShowBackupDialog = ref<boolean>(false)
 
@@ -223,7 +249,7 @@ const handleShowBackupDialog = () => {
 }
 //#endregion
 
-//#region 备份记录
+//#region --------------------------------------------------< 备份记录 >--------------------------------------------------
 const ArticleRecycleRef = ref()
 const isShowRecycleDialog = ref<boolean>(false)
 
@@ -232,7 +258,25 @@ const handleShowRecycleDialog = () => {
 }
 //#endregion
 
-const emits = defineEmits(['refreshDocTree', 'show-sort'])
+//#region --------------------------------------------------< 绑定快捷键 >--------------------------------------------------
+const bindKeys = () => {
+  hotkeys('ctrl+shift+f, ctrl+shift+f', () => {
+    showSearch()
+    return false
+  })
+  hotkeys('ctrl+n, ctrl+n', () => {
+    handleShowAddDocInfoDialog()
+    return false
+  })
+}
+
+const unbindKeys = () => {
+  hotkeys.unbind('ctrl+shift+f, ctrl+shift+f')
+  hotkeys.unbind('ctrl+n, ctrl+n')
+}
+
+//#endregion
+const emits = defineEmits(['refreshDocTree', 'show-sort', 'show-search'])
 defineExpose({ handleShowBackupDialog })
 </script>
 
@@ -268,13 +312,5 @@ defineExpose({ handleShowBackupDialog })
 .wbpage-two-enter-active,
 .wbpage-two-leave-active {
   transition: all 0.2s ease;
-}
-</style>
-
-<style lang="scss">
-.backup-dialog {
-  .el-dialog__body {
-    height: calc(100% - 10px);
-  }
 }
 </style>

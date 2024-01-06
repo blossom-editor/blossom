@@ -5,6 +5,13 @@ package com.blossom.backend.base.search.message;
  */
 public enum IndexMsgTypeEnum {
 
-    ADD,DELETE
+    /**
+     * 新增文档
+     */
+    ADD,
+    /**
+     * 删除文档
+     */
+    DELETE
 
 }

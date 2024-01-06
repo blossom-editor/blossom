@@ -83,10 +83,11 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
 
     /**
      * 获取所有文章，包含markdown字段，用于索引的批量维护
+     *
      * @return
      */
-    public List<ArticleEntity> listAllArticleWithContent() {
-        List<ArticleEntity> articles = baseMapper.listAllArticleWithContent();
+    public List<ArticleEntity> listAllIndexField() {
+        List<ArticleEntity> articles = baseMapper.listAllIndexField();
         if (CollUtil.isEmpty(articles)) {
             return new ArrayList<>();
         }
