@@ -1,7 +1,7 @@
 name: "Close inactive issues"
 on:
   schedule:
-    - cron: "30 1 * * *"
+    - cron: "00 15 * * *"
 
 permissions:
   issues: write
