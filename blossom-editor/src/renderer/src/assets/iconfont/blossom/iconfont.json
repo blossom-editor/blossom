@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8990451",
+      "name": "相交",
+      "font_class": "and",
+      "unicode": "e71b",
+      "unicode_decimal": 59163
+    },
+    {
+      "icon_id": "17525623",
+      "name": "无内容",
+      "font_class": "wuneirong",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
       "icon_id": "12687054",
       "name": "回车",
       "font_class": "enter",
