@@ -124,6 +124,16 @@ export const hexToRgba = (hex: string) => {
 }
 
 /**
+ * rgb颜色字符串转化为16进制颜色字符串
+ * @param rgb rgb颜色字符串
+ * @returns 16进制颜色字符串
+ */
+export const rgbToHex = (rgb: string) => {
+  const colorObj = parseColorString(rgb)
+  return toHexString(colorObj)
+}
+
+/**
  * rgba颜色字符串转化为16进制颜色字符串
  * @param rgba rgba颜色字符串
  * @returns 16进制颜色字符串
