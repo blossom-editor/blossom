@@ -45,7 +45,6 @@ img {
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
   background-color: var(--bl-scrollbar-color);
-  transition: 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
