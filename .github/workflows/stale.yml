@@ -1,7 +1,7 @@
 name: "Close inactive issues"
 on:
   schedule:
-    - cron: "00 15 * * *"
+    - cron: "55 14 * * *"
 
 permissions:
   issues: write
@@ -16,6 +16,7 @@ jobs:
     steps:
       - uses: actions/stale@v5
         with:
+          debug-only: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-issue-stale: 30
           days-before-issue-close: 7
