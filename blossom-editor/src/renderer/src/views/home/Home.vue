@@ -14,10 +14,10 @@
         <Weather></Weather>
         <UserAvatar style="margin-left: 20px"></UserAvatar>
       </bl-row>
-
+      <div style="height: 10px"></div>
       <!-- 统计 -->
       <div class="chart-container">
-        <bl-row class="container-name">字数统计</bl-row>
+        <bl-row class="container-name" style="height: 50px; min-height: 50px">字数统计</bl-row>
         <bl-row height="270px">
           <!-- 字数图表 -->
           <bl-col width="670px">
