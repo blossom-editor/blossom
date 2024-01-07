@@ -1,3 +1,5 @@
+### [中文](./README.md) | [English](./README-EN.md
+
 <p align="center">
 <img src="./doc/imgs/blossom_name.png" height="auto">
 </p>
