@@ -60,7 +60,7 @@ public class IndexMsgConsumer {
                         try (Directory directory = FSDirectory.open(this.searchProperties.getUserIndexDirectory(userId));
                              IndexWriter indexWriter = new IndexWriter(directory, new IndexWriterConfig(new StandardAnalyzer()))) {
                             // 查询最新的消息
-                            ArticleEntity article = this.articleService.selectById(id, false, true, false);
+                            ArticleEntity article = this.articleService.selectById(id, false, true, false, userId);
                             Document document = new Document();
                             document.add(new StringField("id", Convert.toStr(id), Field.Store.YES));
                             document.add(new TextField("name", article.getName(), Field.Store.YES));
