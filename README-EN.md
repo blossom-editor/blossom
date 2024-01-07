@@ -27,7 +27,6 @@ Blossom doesn't rely on any third-party storage or image hosting; it functions a
 
 You can write in Markdown with non-destructive syntax extensions, content created here can be displayed correctly in any Markdown software.
 
-
 ### Quick Migration
 
 All images and articles support one-click backup and export, making migration easy within minutes. The exported files can seamlessly be opened with local software like VS Code or Obsidian.
@@ -75,15 +74,17 @@ However, sustaining a livelihood through open-source software is challenging. Th
 
 **Thanks to every sponsor for their strong support, Blossom becomes better because of all of you.**
 
-| Sponsors    | Sponsors | Sponsors | Sponsors |
-| :------------------- | :---------------- | :---------------- | :---------------- |
-| i just walked away🏃 | KalyanYang        | dsx               | 熊猫不是猫        |
-| 白驹过隙             | Alipay-\*发   | Alipay-\*琛   | Alipay Anonymous    |
-| 疾风剑豪索隆         | 放羊的星星        | 立冬              | 给你一支烟        |
-| 林诗                 | Criesgod          | Alipay-\*伟   | 黑醋栗和丁香      |
-| Mr_tg000             | Lucky             | egil              | Glimpse           |
-| Alipay-\*\*衡    | Alipay-\*\*福 | Alipay-\*\*盼 | 何其正            |
-| -A 明                | 开心。            | Please            |                   |
+| Sponsors             | Sponsors      | Sponsors      | Sponsors         |
+| :------------------- | :------------ | :------------ | :--------------- |
+| i just walked away🏃 | KalyanYang    | dsx           | 熊猫不是猫       |
+| 白驹过隙             | Alipay-\*发   | Alipay-\*琛   | Alipay Anonymous |
+| 疾风剑豪索隆         | 放羊的星星    | 立冬          | 给你一支烟       |
+| 林诗                 | Criesgod      | Alipay-\*伟   | 黑醋栗和丁香     |
+| Mr_tg000             | Lucky         | egil          | Glimpse          |
+| Alipay-\*\*衡        | Alipay-\*\*福 | Alipay-\*\*盼 | 何其正           |
+| -A 明                | 开心。        | Please        | 樹梢             |
+| Alipay-\*\*耀        | Crius         | 初五          | 一巷灯火深       |
+| Alipay-\*\*鲲        | 木辰音        | 宁采臣        | Alipay-\*\*雷    |
 
 ---
 
