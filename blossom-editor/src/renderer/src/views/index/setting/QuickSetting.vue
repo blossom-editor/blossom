@@ -36,42 +36,49 @@
 
       -->
       <div class="step-detail blog-detail" v-else-if="activeSetp === 2">
-        <div class="detail">
-          <div class="row">您选择使用后台自带博客, 还是自己独立部署博客？</div>
-          <div class="row" just="center">
-            <el-button size="default" :type="blogType == 'backend' ? 'primary' : ''" @click="setBlogType('backend')">自带博客</el-button>
-            <el-button size="default" :type="blogType == 'custom' ? 'primary' : ''" @click="setBlogType('custom')">独立部署</el-button>
-          </div>
-          <div v-if="blogType == 'backend'" class="row blog-type">
-            <div><strong>自带博客默认只提供给用户ID为 1 的用户使用。</strong></div>
-            <div>您的ID为:{{ userStore.userinfo.id }}</div>
-            <div>
-              如需修改默认值，请查看<a href="https://www.wangyunf.com/blossom-doc/guide/deploy/blog.html#update-config" target="_blank"
-                >文档<span class="iconbl bl-sendmail-line"></span></a
-              >。
-            </div>
-          </div>
-          <div v-if="blogType == 'custom'" class="row blog-type">
-            <div style="font-size: 13px">
-              填写博客地址，并以<code>/#/articles?articleId=</code>结尾
-              <el-tooltip effect="light" content="复制地址结尾" placement="top">
-                <span class="iconbl bl-copy-line" @click="writeText(URL_SUFFIX)"></span>
-              </el-tooltip>
-            </div>
-            <bl-row>
-              <el-input
-                type="textarea"
-                :rows="2"
-                resize="none"
-                v-model="customBlogUrl"
-                placeholder="您单独部署的博客地址..."
-                @input="customBlogUrlChange"></el-input>
-            </bl-row>
-            <div class="blog-url-error">
-              <span v-show="customBlogUrlError">博客地址格式错误!</span>
-            </div>
-          </div>
-          <div class="row" style="margin-top: 20px">
+        <div>
+          <div class="row" style="margin-bottom: 30px">您选择使用后台自带博客, 还是自行独立部署博客？</div>
+
+          <el-tabs v-model="blogType" type="border-card" class="blog-tabs" stretch>
+            <el-tab-pane label="自带博客" name="backend" style="line-height: 30px">
+              <div>自带博客默认只提供给用户ID为 "1" 的用户使用。</div>
+              <div>
+                您的ID为:<code class="user-id">{{ userStore.userinfo.id }}</code>
+              </div>
+              <div>
+                如需修改，请查看<a href="https://www.wangyunf.com/blossom-doc/guide/deploy/blog.html#update-config" target="_blank"
+                  >《如何修改默认配置》<span class="iconbl bl-sendmail-line"></span></a
+                >。
+              </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="独立部署" name="custom">
+              <bl-row>
+                1. 请确保博客的<code>config.js</code>中的<code>USER_ID</code>配置为<code class="user-id">{{ userStore.userinfo.id }}</code
+                >。
+              </bl-row>
+              <bl-row height="40px">
+                2. 填写博客地址，以<code>/#/articles?articleId=</code>结尾
+                <el-tooltip effect="light" content="复制地址结尾" placement="top">
+                  <span class="iconbl bl-copy-line" @click="writeText(URL_SUFFIX)"></span>
+                </el-tooltip>
+              </bl-row>
+              <bl-row>
+                <el-input
+                  type="textarea"
+                  :rows="2"
+                  resize="none"
+                  v-model="customBlogUrl"
+                  placeholder="示例: http://www.xxx.com/#/articles?articleId="
+                  @input="customBlogUrlChange"></el-input>
+              </bl-row>
+              <div class="blog-url-error" style="margin-top: 10px">
+                <span v-show="customBlogUrlError">博客地址格式错误!</span>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+
+          <div class="row" style="margin-top: 30px">
             <el-button v-if="userStore.userinfo.type === 1" size="default" text @click="last(1)">上一步</el-button>
             <el-button size="default" type="primary" @click="saveBlog" plain>
               确认使用{{ blogType === 'backend' ? '自带博客' : '独立部署' }}
@@ -79,10 +86,13 @@
             <el-button size="default" @click="saveBlog" text>我不使用博客</el-button>
           </div>
         </div>
+
         <div class="iframe-container">
           <bl-row v-if="isBlank(blogUrlPreview)" class="iframe-placeholder" just="center">请填写博客地址</bl-row>
           <iframe v-else :src="blogUrlPreview" width="100%"></iframe>
         </div>
+
+        <div class="document">有疑问？查看文档。</div>
       </div>
       <!--
 
@@ -144,7 +154,7 @@ const savePicture = () => {
 type BlogType = 'backend' | 'custom'
 const URL_SUFFIX_SERVER = '/blog/#/articles?articleId='
 const URL_SUFFIX = '/#/articles?articleId='
-const previewId = -123
+const previewId = -999
 const blogType = ref<BlogType>('backend')
 const customBlogUrl = ref('')
 const customBlogUrlError = ref(false)
@@ -163,14 +173,6 @@ const blogUrlPreview = computed(() => {
 
   return customBlogUrl.value
 })
-
-/**
- * 设置选择的博客类型
- * @param type
- */
-const setBlogType = (type: BlogType) => {
-  blogType.value = type
-}
 
 /**
  * 修改博客地址时, 将博客校验重置, 重新加载博客页面
@@ -216,7 +218,7 @@ const emits = defineEmits(['completed'])
 //#endregion
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .quick-setting-root {
   widows: 100%;
   padding: 20px 10px 0 10px;
@@ -250,27 +252,13 @@ const emits = defineEmits(['completed'])
     @include font(14px, 300);
     padding: 35px 20px 20px 20px;
     text-align: center;
+    text-decoration: dashed;
 
     .server-url {
       padding: 10px;
       border-radius: 8px;
       background-color: var(--bl-preview-code-bg-color);
       color: var(--bl-preview-code-color);
-    }
-
-    .blog-type {
-      @include flex(column, space-around, center);
-      @include box(100%, 100px);
-      padding: 5px;
-      border-radius: 6px;
-      border: 1px dashed var(--el-border-color);
-      background-color: var(--bl-preview-code-bg-color);
-    }
-
-    .blog-url-error {
-      height: 16px;
-      font-size: 12px;
-      color: var(--el-color-danger);
     }
 
     .bl-sendmail-line {
@@ -282,14 +270,14 @@ const emits = defineEmits(['completed'])
       cursor: pointer;
     }
 
-    .bl-refresh-smile {
-      font-size: 50px;
-    }
-
     code {
       color: var(--el-color-primary);
       font-size: 13px;
-      margin: 0 5px;
+      margin: 0 4px;
+    }
+
+    a {
+      color: var(--el-color-primary);
     }
   }
 
@@ -298,9 +286,16 @@ const emits = defineEmits(['completed'])
     padding-top: 0;
     transition: height 0.4s;
 
-    .detail {
-      @include flex(column, flex-start, center);
-      @include box(400px, auto, 400px, 400px);
+    .blog-tabs {
+      width: 410px;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+      font-size: 13px;
+      --el-font-size-base: 14px;
+      .el-tabs__item {
+        transition: none;
+      }
     }
 
     .iframe-container {
@@ -324,6 +319,28 @@ const emits = defineEmits(['completed'])
         border: none;
         border-radius: 6px;
       }
+    }
+
+    .blog-url-error {
+      height: 16px;
+      font-size: 12px;
+      color: var(--el-color-danger);
+    }
+
+    .user-id {
+      color: #e3a300;
+      border-bottom: 3px solid #e3a300;
+      border-radius: 3px;
+    }
+
+    .document {
+      @include font(12px, 300);
+      font-style: italic;
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      color: var(--bl-text-color-light);
+      cursor: pointer;
     }
   }
 }

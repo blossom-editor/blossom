@@ -232,9 +232,10 @@ const clickCurDoc = async (tree: DocTree) => {
  * 如果点击的是文章, 则查询文章信息和正文, 并在编辑器中显示.
  */
 const getCurEditArticle = async (id: number) => {
-  if (id == -123) {
-    article.value.html = `<div style="color:#C6C6C6;font-weight: 300;width:100%;height:300px;padding:0 20px;display:flex;justify-content: center;
-    align-items: center;text-align:center;font-size:25px;">当您看到这句话, 证明博客地址配置正确</div>`
+  if (id == -999) {
+    article.value.html = `<div style="color:#C6C6C6;font-weight: 300;width:100%;height:300px;padding:150px 20px;font-size:25px;text-align:center">
+      该博客所配置的 USER_ID 为<br/><span style="color:#e3a300; border-bottom: 5px solid #e3a300;border-radius:5px">${window.blconfig.DOMAIN.USER_ID}</span>
+      </div>`
     return
   }
 
