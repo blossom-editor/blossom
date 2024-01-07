@@ -1,8 +1,6 @@
 <template>
   <div class="config-root">
-    <div class="title">
-      客户端配置<span class="version">{{ CONFIG.SYS.VERSION }}</span>
-    </div>
+    <div class="title">客户端配置</div>
     <div class="desc">客户端配置</div>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
@@ -85,30 +83,12 @@
         </bl-row>
         <div class="conf-tip">设置日间/夜间主题颜色。</div>
       </el-form-item>
-      <el-form-item label="检查更新">
-        <bl-row>
-          <el-button @click="checkUpdate">检查更新</el-button>
-        </bl-row>
-        <div class="conf-tip">获取最新的版本和更新信息</div>
-      </el-form-item>
     </el-form>
   </div>
-
-  <el-dialog
-    draggable
-    v-model="isShowUpdateLog"
-    :align-center="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="true"
-    width="550">
-    {{ updateLog }}
-  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import CONFIG from '@renderer/assets/constants/system'
 import { useConfigStore } from '@renderer/stores/config'
 import type { EditorStyle, ViewStyle, PicStyle } from '@renderer/stores/config'
 import { openDevTools } from '@renderer/assets/utils/electron'
@@ -130,14 +110,6 @@ const changeViewStyle = () => {
 
 const changePicStyle = () => {
   configStore.setPicStyle(configPicStyleForm.value)
-}
-
-const isShowUpdateLog = ref(false)
-const updateLoading = ref(false)
-const updateLog = ref<{ version: ''; content: '' }>()
-const checkUpdate = () => {
-  isShowUpdateLog.value = true
-  updateLoading.value = true
 }
 </script>
 

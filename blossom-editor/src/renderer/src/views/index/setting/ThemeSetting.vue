@@ -62,7 +62,7 @@
 
           <bl-row class="prop-row" just="space-between">
             <div class="prop">
-              <div class="prop-name">隐藏试用按钮</div>
+              <div class="prop-name">显示试用按钮</div>
             </div>
             <el-switch v-model="viewStyle.isShowTryuseBtn" size="default" @change="changeSubjectStype" />
           </bl-row>

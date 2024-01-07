@@ -152,7 +152,7 @@ export const timestampToDatetime = (timestamp: number | string | Date): string =
 }
 
 /**
- * 两个日期相差的条数
+ * 两个日期相差的天数
  *
  * @param date1 yyyy-MM-dd
  * @param date2 yyyy-MM-dd

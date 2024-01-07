@@ -9,6 +9,8 @@ export const keymaps = {
   fullViewer: isMac ? 'Cmd + 3' : 'Alt + 3',
   fullEditor: isMac ? 'Cmd + 4' : 'Alt + 4',
   formatAll: isMac ? 'Slift + Cmd + F' : 'Slift + Alt + F',
+  fullSearch: isMac ? 'Ctrl + Shift + F' : 'Ctrl + Shift + F',
+  fullSearchOperatorAnd: isMac ? 'Cmd + G' : 'Alt + G',
 
   blod: isMac ? 'Cmd + B' : 'Alt + B',
   italic: isMac ? 'Cmd + I' : 'Alt + I',

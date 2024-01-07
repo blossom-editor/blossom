@@ -1,22 +1,22 @@
 <template>
   <div class="server-config-root">
-    <el-tabs tab-position="left" type="card" style="height: 100%" class="config-tabs">
-      <el-tab-pane label="客户端配置">
+    <el-tabs v-model="curTab" style="height: 100%" class="config-tabs" tab-position="left" type="card" @tab-change="handleChange">
+      <el-tab-pane label="客户端配置" name="client">
         <div class="tab-content"><ConfigClient></ConfigClient></div>
       </el-tab-pane>
-      <el-tab-pane label="服务器配置" :lazy="true" v-if="userStore.userinfo.type === 1">
-        <div class="tab-content"><ConfigServer></ConfigServer></div>
+      <el-tab-pane label="服务器配置" name="server" :lazy="true" v-if="userStore.userinfo.type === 1">
+        <div class="tab-content"><ConfigServer ref="ConfigServerRef"></ConfigServer></div>
       </el-tab-pane>
-      <el-tab-pane label="博客配置" :lazy="true">
-        <div class="tab-content"><ConfigBlog></ConfigBlog></div>
+      <el-tab-pane label="博客配置" name="blog" :lazy="true">
+        <div class="tab-content"><ConfigBlog ref="ConfigBlogRef"></ConfigBlog></div>
       </el-tab-pane>
-      <el-tab-pane label="修改个人信息" :lazy="true">
-        <div class="tab-content"><ConfigUserinfo></ConfigUserinfo></div>
+      <el-tab-pane label="修改个人信息" name="userinfo" :lazy="true">
+        <div class="tab-content"><ConfigUserinfo ref="ConfigUserinfoRef"></ConfigUserinfo></div>
       </el-tab-pane>
-      <el-tab-pane label="修改登录密码" :lazy="true">
+      <el-tab-pane label="修改登录密码" name="password" :lazy="true">
         <div class="tab-content"><ConfigUpdPwd></ConfigUpdPwd></div>
       </el-tab-pane>
-      <el-tab-pane label="添加使用账号" :lazy="true" v-if="userStore.userinfo.type === 1">
+      <el-tab-pane label="添加使用账号" name="adduser" :lazy="true" v-if="userStore.userinfo.type === 1">
         <div class="tab-content">
           <ConfigAddUser></ConfigAddUser>
         </div>
@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick, ref } from 'vue'
 import ConfigUserinfo from './SettingConfigUserinfo.vue'
 import ConfigUpdPwd from './SettingConfigUpdPwd.vue'
 import ConfigAddUser from './SettingConfigAddUser.vue'
@@ -34,6 +35,23 @@ import ConfigServer from './SettingConfigServer.vue'
 import ConfigBlog from './SettingConfigBlog.vue'
 import { useUserStore } from '@renderer/stores/user'
 const userStore = useUserStore()
+
+const curTab = ref('client')
+const ConfigServerRef = ref()
+const ConfigBlogRef = ref()
+const ConfigUserinfoRef = ref()
+
+const handleChange = (name: string) => {
+  if (name === 'server') {
+    nextTick(() => ConfigServerRef.value.reload())
+  }
+  if (name === 'blog') {
+    nextTick(() => ConfigBlogRef.value.reload())
+  }
+  if (name === 'userinfo') {
+    nextTick(() => ConfigUserinfoRef.value.reload())
+  }
+}
 </script>
 
 <style scoped lang="scss">

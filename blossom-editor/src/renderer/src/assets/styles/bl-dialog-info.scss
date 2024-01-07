@@ -10,6 +10,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-footer});
   padding-left: 10px;
   color: var(--bl-text-title-color);
   text-shadow: var(--bl-text-shadow);
+  padding-bottom: 8px;
 
   .iconbl {
     font-size: 25px;

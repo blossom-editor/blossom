@@ -1,16 +1,9 @@
 <template>
   <div class="config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用服务端设置...">
-    <div class="title">
-      服务器配置<span class="version" v-if="isNotBlank(serverParamForm.serverVersion)">{{ 'v' + serverParamForm.serverVersion }}</span>
-    </div>
+    <div class="title">服务器配置</div>
     <div class="desc">服务器各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
     <el-form v-if="auth.status == '已登录'" :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
-      <!-- <el-form-item label="网页端地址">
-        <el-input size="default" v-model="serverParamForm.WEB_ARTICLE_URL" @change="(cur: any) => updParam('WEB_ARTICLE_URL', cur)"></el-input>
-        <div class="conf-tip">网页端博客的访问地址，如果不使用博客可不配置。需以<code>/#/articles?articleId=</code>结尾。</div>
-      </el-form-item> -->
-
       <el-form-item label="文件访问地址" :required="true">
         <el-input
           size="default"
@@ -85,25 +78,25 @@
       <el-form-item label="服务器到期时间">
         <div class="conf-tip">如果你使用云服务器或其他有时限的环境，可在此配置到期提示，其他环境可无视，(<code>yyyy-MM-dd</code>格式)。</div>
         <el-input size="default" v-model="serverParamForm.SERVER_MACHINE_EXPIRE" @change="(cur: any) => updParam('SERVER_MACHINE_EXPIRE', cur)">
-          <template #append> {{ serverExpire.machine }} 天后到期 </template>
+          <template #append> {{ serverExpire.machine }} </template>
         </el-input>
       </el-form-item>
 
       <el-form-item label="数据库到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_DATABASE_EXPIRE" @change="(cur: any) => updParam('SERVER_DATABASE_EXPIRE', cur)">
-          <template #append> {{ serverExpire.database }} 天后到期 </template>
+          <template #append> {{ serverExpire.database }} </template>
         </el-input>
       </el-form-item>
 
       <el-form-item label="域名到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_DOMAIN_EXPIRE" @change="(cur: any) => updParam('SERVER_DOMAIN_EXPIRE', cur)">
-          <template #append> {{ serverExpire.domain }} 天后到期 </template>
+          <template #append> {{ serverExpire.domain }} </template>
         </el-input>
       </el-form-item>
 
       <el-form-item label="证书到期时间">
         <el-input size="default" v-model="serverParamForm.SERVER_HTTPS_EXPIRE" @change="(cur: any) => updParam('SERVER_HTTPS_EXPIRE', cur)">
-          <template #append> {{ serverExpire.https }} 天后到期 </template>
+          <template #append> {{ serverExpire.https }} </template>
         </el-input>
       </el-form-item>
     </el-form>
@@ -114,22 +107,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useServerStore } from '@renderer/stores/server'
 import { KEY_BLOSSOM_OBJECT_STORAGE_DOMAIN, useUserStore } from '@renderer/stores/user'
 import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blossom'
 import { getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
-import { isNotBlank } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
-
-onMounted(() => {
-  getParamList()
-})
-
-onActivated(() => {
-  getParamList()
-})
+import dayjs from 'dayjs'
 
 const serverStore = useServerStore()
 const userStore = useUserStore()
@@ -138,16 +123,16 @@ const { userinfo, auth } = storeToRefs(userStore)
 const serverParamForm = ref({
   WEB_ARTICLE_URL: '',
   BACKUP_PATH: '',
-  ARTICLE_LOG_EXP_DAYS: '',
-  ARTICLE_RECYCLE_EXP_DAYS: '',
-  BACKUP_EXP_DAYS: '',
+  ARTICLE_LOG_EXP_DAYS: 0,
+  ARTICLE_RECYCLE_EXP_DAYS: 0,
+  BACKUP_EXP_DAYS: 0,
   HEFENG_KEY: '',
   BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
   SERVER_MACHINE_EXPIRE: '',
   SERVER_DATABASE_EXPIRE: '',
   SERVER_DOMAIN_EXPIRE: '',
   SERVER_HTTPS_EXPIRE: '',
-  serverVersion: ''
+  SERVER_VERSION: ''
 })
 
 /**
@@ -157,10 +142,18 @@ const serverExpire = computed(() => {
   let now = getDateTimeFormat()
   try {
     return {
-      machine: betweenDay(now, serverParamForm.value.SERVER_MACHINE_EXPIRE),
-      database: betweenDay(now, serverParamForm.value.SERVER_DATABASE_EXPIRE),
-      domain: betweenDay(now, serverParamForm.value.SERVER_DOMAIN_EXPIRE),
-      https: betweenDay(now, serverParamForm.value.SERVER_HTTPS_EXPIRE)
+      machine: dayjs().isBefore(serverParamForm.value.SERVER_MACHINE_EXPIRE)
+        ? betweenDay(now, serverParamForm.value.SERVER_MACHINE_EXPIRE) + '天后到期'
+        : '已到期',
+      database: dayjs().isBefore(serverParamForm.value.SERVER_DATABASE_EXPIRE)
+        ? betweenDay(now, serverParamForm.value.SERVER_DATABASE_EXPIRE) + '天后到期'
+        : '已到期',
+      domain: dayjs().isBefore(serverParamForm.value.SERVER_DOMAIN_EXPIRE)
+        ? betweenDay(now, serverParamForm.value.SERVER_DOMAIN_EXPIRE) + '天后到期'
+        : '已到期',
+      https: dayjs().isBefore(serverParamForm.value.SERVER_HTTPS_EXPIRE)
+        ? betweenDay(now, serverParamForm.value.SERVER_HTTPS_EXPIRE) + '天后到期'
+        : '已到期'
     }
   } catch {
     return {}
@@ -172,7 +165,14 @@ const serverExpire = computed(() => {
  */
 const getParamList = () => {
   paramListApi().then((resp) => {
-    serverParamForm.value = resp.data
+    serverParamForm.value = {
+      ...resp.data,
+      ...{
+        ARTICLE_LOG_EXP_DAYS: Number(resp.data.ARTICLE_LOG_EXP_DAYS),
+        ARTICLE_RECYCLE_EXP_DAYS: Number(resp.data.ARTICLE_RECYCLE_EXP_DAYS),
+        BACKUP_EXP_DAYS: Number(resp.data.BACKUP_EXP_DAYS)
+      }
+    }
   })
 }
 
@@ -201,6 +201,12 @@ const autuUpdBlossomOSDomain = () => {
     Notify.success('配置成功', '配置成功')
   })
 }
+
+const reload = () => {
+  getParamList()
+}
+
+defineExpose({ reload })
 </script>
 
 <style scoped lang="scss">

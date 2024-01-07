@@ -81,7 +81,8 @@ const DEFAULT_USER_INFO = {
     SERVER_MACHINE_EXPIRE: '',
     SERVER_DATABASE_EXPIRE: '',
     SERVER_HTTPS_EXPIRE: '',
-    SERVER_DOMAIN_EXPIRE: ''
+    SERVER_DOMAIN_EXPIRE: '',
+    SERVER_VERSION: ''
   },
   /**
    * 用户参数配置

@@ -16,13 +16,11 @@ public @interface EnableIndex {
 
     /**
      * 索引操作类型， 默认值为追加
-     * @return
      */
     IndexMsgTypeEnum type();
 
     /**
-     * id字段表达式
-     * @return
+     * ID 字段表达式
      */
     String id();
 

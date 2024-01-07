@@ -47,235 +47,7 @@
 
       <!-- 其他工具 -->
       <div class="divider"></div>
-      <el-tooltip placement="top" effect="light" :hide-after="0" trigger="click">
-        <template #content>
-          <div class="editor-tools-content">
-            <bl-row>
-              <div class="info-title">编辑器工具栏</div>
-            </bl-row>
-            <bl-row align="flex-start">
-              <bl-col width="230px">
-                <bl-row>
-                  <div class="iconbl bl-a-texteditorsave-line"></div>
-                  <div class="label">保存内容</div>
-                  <div class="keyboard">{{ keymaps.save }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-eyeclose-line"></div>
-                  <div class="label">隐藏菜单</div>
-                  <div class="keyboard">{{ keymaps.hideDocs }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-eyeclose-line"></div>
-                  <div class="label">隐藏目录</div>
-                  <div class="keyboard">{{ keymaps.hideToc }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-eye-line"></div>
-                  <div class="label">全屏预览</div>
-                  <div class="keyboard">{{ keymaps.fullViewer }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-expansion-line"></div>
-                  <div class="label">全屏编辑</div>
-                  <div class="keyboard">{{ keymaps.fullEditor }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-transcript-fill"></div>
-                  <div class="label">格式化</div>
-                  <div class="keyboard">{{ keymaps.formatAll }}</div>
-                </bl-row>
-              </bl-col>
-              <bl-col width="230px">
-                <bl-row>
-                  <div class="iconbl bl-bold"></div>
-                  <div class="label">加粗</div>
-                  <div class="keyboard">{{ keymaps.blod }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-italic"></div>
-                  <div class="label">斜体</div>
-                  <div class="keyboard">{{ keymaps.italic }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-strikethrough"></div>
-                  <div class="label">删除</div>
-                  <div class="keyboard">Alt + S</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-texteditorsuperscript-line"></div>
-                  <div class="label">上标</div>
-                  <div class="keyboard">{{ keymaps.sup }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-texteditorsubscript-line"></div>
-                  <div class="label">下标</div>
-                  <div class="keyboard">{{ keymaps.sub }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-separator"></div>
-                  <div class="label">分割线</div>
-                  <div class="keyboard">{{ keymaps.separator }}</div>
-                </bl-row>
-              </bl-col>
-              <!--  -->
-              <bl-col width="230px">
-                <bl-row>
-                  <div class="iconbl bl-a-rightsmallline-line"></div>
-                  <div class="label">引用</div>
-                  <div class="keyboard">></div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-single-quotes-r"></div>
-                  <div class="label">行内代码</div>
-                  <div class="keyboard">{{ keymaps.code }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-double-quotes-r"></div>
-                  <div class="label">多行代码</div>
-                  <div class="keyboard">{{ keymaps.pre }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-underbox-line"></div>
-                  <div class="label">单选框</div>
-                  <div class="keyboard">- []</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-list-unordered"></div>
-                  <div class="label">无序列表</div>
-                  <div class="keyboard">-</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-list-ordered"></div>
-                  <div class="label">有序列表</div>
-                  <div class="keyboard">1.</div>
-                </bl-row>
-              </bl-col>
-
-              <bl-col>
-                <!--  -->
-                <el-divider style="margin: 5px 0; border: 0"></el-divider>
-                <bl-row>
-                  <div class="iconbl bl-table-"></div>
-                  <div class="label">插入表格</div>
-                  <div class="keyboard">{{ keymaps.table }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-image--line"></div>
-                  <div class="label">添加图片</div>
-                  <div class="keyboard">{{ keymaps.image }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-link-m"></div>
-                  <div class="label">添加链接</div>
-                  <div class="keyboard">{{ keymaps.link }}</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-jianpan-xianxing"></div>
-                  <div class="label">按键说明</div>
-                  <div class="keyboard">暂无</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-fanqiezhong"></div>
-                  <div class="label">番茄时钟</div>
-                  <div class="keyboard">暂无</div>
-                </bl-row>
-              </bl-col>
-            </bl-row>
-
-            <el-divider style="margin: 5px 0; border: 0"></el-divider>
-            <bl-row>
-              <div class="info-title">编辑器快捷键</div>
-            </bl-row>
-            <bl-row align="flex-start">
-              <bl-col width="190px">
-                <bl-row>
-                  <div class="iconbl bl-a-icon_jiandaojianqie"></div>
-                  <div class="label">剪切整行</div>
-                  <div class="keyboard">Ctrl + X</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-texteditorback-line"></div>
-                  <div class="label">撤销</div>
-                  <div class="keyboard">Ctrl + Z</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-texteditorforward-line"></div>
-                  <div class="label">恢复</div>
-                  <div class="keyboard">Ctrl + Y</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-search-line"></div>
-                  <div class="label">查找</div>
-                  <div class="keyboard">Ctrl + F</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-switch-line"></div>
-                  <div class="label">替换</div>
-                  <div class="keyboard">Ctrl + G</div>
-                </bl-row>
-              </bl-col>
-              <bl-col width="190px">
-                <bl-row>
-                  <div class="iconbl bl-problem-line"></div>
-                  <div class="label">注释</div>
-                  <div class="keyboard">Ctrl + /</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-indent-decrease"></div>
-                  <div class="label">向前缩进</div>
-                  <div class="keyboard">Ctrl + [</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-indent-increase"></div>
-                  <div class="label">向后缩进</div>
-                  <div class="keyboard">Ctrl + ]</div>
-                </bl-row>
-              </bl-col>
-              <bl-col width="190px">
-                <bl-row>
-                  <div class="iconbl bl-a-listview-line"></div>
-                  <div class="label">列模式</div>
-                  <div class="keyboard">Alt</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-radiochoose-line"></div>
-                  <div class="label">选中该行</div>
-                  <div class="keyboard">Alt + L</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-rightto-line"></div>
-                  <div class="label">前往行数</div>
-                  <div class="keyboard">Alt + G</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-online-line"></div>
-                  <div class="label">行上移</div>
-                  <div class="keyboard">Alt + ↑</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-underline-line"></div>
-                  <div class="label">行下移</div>
-                  <div class="keyboard">Alt + ↓</div>
-                </bl-row>
-              </bl-col>
-              <bl-col width="230px">
-                <bl-row>
-                  <div class="iconbl bl-a-doubleonline-line"></div>
-                  <div class="label">上方复制</div>
-                  <div class="keyboard">Shift + Alt + ↑</div>
-                </bl-row>
-                <bl-row>
-                  <div class="iconbl bl-a-doubleunderline-line"></div>
-                  <div class="label">下方复制</div>
-                  <div class="keyboard">Shift + Alt + ↓</div>
-                </bl-row>
-              </bl-col>
-            </bl-row>
-          </div>
-        </template>
-        <div class="iconbl bl-jianpan-xianxing"></div>
-      </el-tooltip>
+      <div class="iconbl bl-jianpan-xianxing" @click="handleShowHotKeyDialog"></div>
 
       <!-- 番茄 -->
       <el-popover placement="bottom" :width="220" trigger="click" popper-style="padding:0;">
@@ -303,13 +75,25 @@
       <div style="font-size: 12px; padding: 4px 5px">{{ remainStr }}</div>
     </div>
   </div>
+
+  <!-- 导入 -->
+  <el-dialog
+    v-model="isShowHotKeyDialog"
+    class="bl-dialog-fixed-body"
+    width="500"
+    style="height: 80%"
+    :align-center="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="true">
+    <ShortcutKeyDesc></ShortcutKeyDesc>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { computed, onUnmounted, ref } from 'vue'
 import { secondsToDatetime, formateMs } from '@renderer/assets/utils/util'
 import { ElNotification } from 'element-plus'
-import { keymaps } from './scripts/editor-tools'
+import ShortcutKeyDesc from './ShortcutkeyDesc.vue'
 
 const emits = defineEmits([
   'save',
@@ -393,6 +177,12 @@ const stop = () => {
     TomatoBellRef.value.style.transform = `translateX(100%)`
   }
 }
+
+const isShowHotKeyDialog = ref<boolean>(false)
+
+const handleShowHotKeyDialog = () => {
+  isShowHotKeyDialog.value = true
+}
 </script>
 
 <style scoped lang="scss">
@@ -450,7 +240,7 @@ const stop = () => {
 <!-- 
 快捷键说明为弹出框 需要设置全局的样式
 -->
-<style lang="scss">
+<style lang="scss" scoped>
 .editor-tools-content {
   @include flex(column, flex-start, flex-start);
   color: var(--bl-text-color);

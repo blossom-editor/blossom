@@ -3,5 +3,43 @@
   --el-dialog-padding-primary: 0 !important;
   --el-dialog-bg-color: var(--bl-dialog-bg-color) !important;
   --el-dialog-box-shadow: var(--bl-dialog-box-shadow) !important;
+}
 
+// 更大的 header close 按钮
+.bl-dialog-bigger-headerbtn {
+  .el-dialog__headerbtn {
+    height: 30px;
+    width: 30px;
+    font-size: 20px;
+  }
+}
+
+// 无 header
+.bl-dialog-hidden-header {
+  .el-dialog__header {
+    display: none !important;
+  }
+  .el-dialog__headerbtn {
+    display: none;
+  }
+}
+
+// 固定 body 长度
+.bl-dialog-fixed-body {
+  .el-dialog__body {
+    height: calc(100% - 10px);
+  }
+}
+
+// 无 header 且固定 body 长度
+.bl-dialog-hidden-header-fixed-body {
+  .el-dialog__header {
+    display: none !important;
+  }
+  .el-dialog__headerbtn {
+    display: none;
+  }
+  .el-dialog__body {
+    height: 100%;
+  }
 }

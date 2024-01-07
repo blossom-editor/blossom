@@ -28,6 +28,7 @@ stats.html
 /nbdist/
 /.nb-gradle/
 /build/
+/lucene/
 
 ### VS Code ###
 .vscode/

@@ -18,7 +18,8 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
 
     /**
      * 批量查询文章正文
-     * @param ids 文章ID
+     *
+     * @param ids         文章ID
      * @param contentType 正文类型 MARKDOWN/HTML
      */
     List<ArticleEntity> listAllContent(@Param("ids") List<Long> ids, @Param("contentType") String contentType);
@@ -28,7 +29,10 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
      */
     List<ArticleEntity> listAll(ArticleEntity entity);
 
-    List<ArticleEntity> listAllArticleWithContent();
+    /**
+     * 查询全部需要索引的字段
+     */
+    List<ArticleEntity> listAllIndexField();
 
     /**
      * 根据ID修改

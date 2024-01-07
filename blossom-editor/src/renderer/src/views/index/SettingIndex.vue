@@ -14,13 +14,13 @@
       <el-tab-pane label="关于">
         <SettingAboutVue></SettingAboutVue>
       </el-tab-pane>
-      <el-tab-pane label="流量监控" :lazy="true">
+      <el-tab-pane label="访问流量" :lazy="true">
         <SentinelResources></SentinelResources>
       </el-tab-pane>
     </el-tabs>
   </div>
   <div class="version">
-    <span>{{ CONFIG.SYS.NAME + ' | ' + CONFIG.SYS.VERSION }}</span>
+    <span>{{ CONFIG.SYS.NAME + ' | ' + CONFIG.SYS.VERSION + getServerVersion() }}</span>
   </div>
 </template>
 
@@ -30,6 +30,16 @@ import SettingConfig from './SettingConfig.vue'
 import SettingAboutVue from './SettingAbout.vue'
 import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
 import CONFIG from '@renderer/assets/constants/system'
+import { useUserStore } from '@renderer/stores/user'
+
+const userStore = useUserStore()
+
+const getServerVersion = () => {
+  if (userStore.sysParams && userStore.sysParams.SERVER_VERSION) {
+    return ' | v' + userStore.sysParams.SERVER_VERSION.replaceAll('-SNAPSHOT', '')
+  }
+  return ''
+}
 </script>
 
 <style scoped lang="scss">

@@ -30,14 +30,14 @@
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="系统图片" name="sysimg">
+      <!-- <el-tab-pane label="系统图片" name="sysimg">
         <div class="icon-container">
           <div v-for="img in imgs" class="icon-item" :key="img.icon_id">
             <img style="width: 40px; height: 40px; object-fit: contain" :src="img" />
             <div class="icon-name">{{ img.substring(img.lastIndexOf('/') + 1) }}</div>
           </div>
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -57,57 +57,57 @@ onMounted(() => {
   })
 })
 
-const getImg = (img: string) => {
-  return new URL(`../assets/imgs/${img}`, import.meta.url).href
-}
+// const getImg = (img: string) => {
+//   return new URL(`../assets/imgs/${img}`, import.meta.url).href
+// }
 
 const activeTab = ref('weblogo')
 
 const blossom = shallowRef<any[]>([])
 const weblogo = shallowRef<any[]>([])
-const imgs = shallowRef<any[]>([
-  getImg('plan/base-awesome.png'),
-  getImg('plan/base-cool.png'),
-  getImg('plan/base-learning.png'),
-  getImg('plan/cat-kiss.png'),
-  getImg('plan/cat-nice.png'),
-  getImg('plan/cat-smile.png'),
-  getImg('plan/cat.png'),
-  getImg('plan/coffee.png'),
-  getImg('plan/juice.png'),
-  getImg('plan/beer.png'),
-  // note
-  getImg('note/cd.png'),
-  getImg('note/dustbin.png'),
-  getImg('note/note.png'),
-  getImg('note/pin.png'),
-  getImg('note/plane.png'),
-  // pe
-  getImg('pe/headset.png'),
-  getImg('pe/phone.png'),
-  getImg('pe/sound.png'),
-  getImg('pe/watch.png'),
-  // plant
-  getImg('plant/02.png'),
-  getImg('plant/08.png'),
-  getImg('plant/cactus.png'),
-  // weather
-  getImg('weather/feng-s.png'),
-  getImg('weather/feng.png'),
-  getImg('weather/qing-s.png'),
-  getImg('weather/qing.png'),
-  getImg('weather/qing-moon.png'),
-  getImg('weather/wu-s.png'),
-  getImg('weather/wu.png'),
-  getImg('weather/xue-s.png'),
-  getImg('weather/xue.png'),
-  getImg('weather/yin-s.png'),
-  getImg('weather/yin.png'),
-  getImg('weather/yu-s.png'),
-  getImg('weather/yu.png'),
-  getImg('weather/zhongyu-s.png'),
-  getImg('weather/zhongyu.png')
-])
+// const imgs = shallowRef<any[]>([
+//   getImg('plan/base-awesome.png'),
+//   getImg('plan/base-cool.png'),
+//   getImg('plan/base-learning.png'),
+//   getImg('plan/cat-kiss.png'),
+//   getImg('plan/cat-nice.png'),
+//   getImg('plan/cat-smile.png'),
+//   getImg('plan/cat.png'),
+//   getImg('plan/coffee.png'),
+//   getImg('plan/juice.png'),
+//   getImg('plan/beer.png'),
+//   // note
+//   getImg('note/cd.png'),
+//   getImg('note/dustbin.png'),
+//   getImg('note/note.png'),
+//   getImg('note/pin.png'),
+//   getImg('note/plane.png'),
+//   // pe
+//   getImg('pe/headset.png'),
+//   getImg('pe/phone.png'),
+//   getImg('pe/sound.png'),
+//   getImg('pe/watch.png'),
+//   // plant
+//   getImg('plant/02.png'),
+//   getImg('plant/08.png'),
+//   getImg('plant/cactus.png'),
+//   // weather
+//   getImg('weather/feng-s.png'),
+//   getImg('weather/feng.png'),
+//   getImg('weather/qing-s.png'),
+//   getImg('weather/qing.png'),
+//   getImg('weather/qing-moon.png'),
+//   getImg('weather/wu-s.png'),
+//   getImg('weather/wu.png'),
+//   getImg('weather/xue-s.png'),
+//   getImg('weather/xue.png'),
+//   getImg('weather/yin-s.png'),
+//   getImg('weather/yin.png'),
+//   getImg('weather/yu-s.png'),
+//   getImg('weather/yu.png'),
+//   getImg('weather/zhongyu-s.png'),
+//   getImg('weather/zhongyu.png')
+// ])
 
 const iconSearch = ref('')
 

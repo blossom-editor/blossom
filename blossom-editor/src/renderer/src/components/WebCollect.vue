@@ -38,7 +38,7 @@
             <el-input-number v-model="webForm.sort" :min="1" style="width: 80px; margin-left: 10px" />
           </el-form-item>
         </el-form>
-        <div class="web-item hover">
+        <div class="web-item-card hover">
           <img v-if="isNotBlank(webForm.img)" :src="webForm.img" style="width: 40px; height: 40px; object-fit: contain" />
           <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
             <use :xlink:href="'#' + webForm.icon"></use>
@@ -54,10 +54,13 @@
 
     <bl-row just="flex-end" class="web-collect-title">
       <span class="title-remind" style="">右键点击卡片修改</span>
-      <span class="iconbl bl-add-line" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="showForm($event)"></span>
-      <span class="iconbl bl-refresh-smile" style="font-size: 20px; margin-right: 10px; cursor: pointer" @click="getWebAll"></span>
+      <span v-if="viewStyle.isWebCollectCard" class="iconbl bl-array-line" @click="showWebCollectCard(false)"></span>
+      <span v-else class="iconbl bl-article-line container-operator" @click="showWebCollectCard(true)" />
+      <span class="iconbl bl-add-line" @click="showForm($event)"></span>
+      <span class="iconbl bl-refresh-smile" @click="getWebAll"></span>
       Quick Access
     </bl-row>
+
     <div class="web-item-container">
       <div v-for="(collect, index) in data" @click="closeForm">
         <bl-row just="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
@@ -65,13 +68,17 @@
         </bl-row>
         <div class="web-collect-content">
           <div
-            :class="['web-item', viewStyle.isGlobalShadow ? 'web-item-heavy' : 'web-item-light']"
             v-for="web in collect.webs"
             :key="web.name"
+            :class="[
+              'web-item',
+              viewStyle.isWebCollectCard ? 'web-item-card' : 'web-item-list',
+              viewStyle.isGlobalShadow ? 'web-item-heavy' : 'web-item-light'
+            ]"
             @click="openExtenal(web.url)"
             @contextmenu="showForm($event, web)">
-            <img v-if="isNotBlank(web.img)" :src="web.img" style="width: 40px; height: 40px; object-fit: contain" />
-            <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
+            <img v-if="isNotBlank(web.img)" :src="web.img" />
+            <svg v-else aria-hidden="true">
               <use :xlink:href="'#' + web.icon"></use>
             </svg>
             <div class="web-name">{{ web.name }}</div>
@@ -89,10 +96,10 @@ import { webAllApi, webSaveApi, webDelApi } from '@renderer/api/web'
 import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
-import { useConfigStore } from '@renderer/stores/config'
+import { ViewStyle, useConfigStore } from '@renderer/stores/config'
 
 const configStore = useConfigStore()
-const { viewStyle } = configStore
+const viewStyle = ref<ViewStyle>(configStore.viewStyle)
 
 useLifecycle(
   () => getWebAll(),
@@ -145,6 +152,11 @@ const delWeb = () => {
     })
   })
 }
+
+const showWebCollectCard = (card: boolean) => {
+  viewStyle.value.isWebCollectCard = card
+  configStore.setViewStyle(viewStyle.value)
+}
 </script>
 
 <style scoped lang="scss">
@@ -167,6 +179,12 @@ const delWeb = () => {
     align-content: flex-end;
     text-shadow: var(--bl-text-shadow);
     padding: 5px 10px;
+
+    .iconbl {
+      font-size: 17px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
 
     .title-remind {
       color: var(--el-color-primary);
@@ -234,19 +252,28 @@ const delWeb = () => {
   }
 
   .web-item {
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    cursor: pointer;
+    img,
+    svg {
+      object-fit: contain;
+      filter: var(--bl-drop-shadow-star);
+    }
+  }
+
+  .web-item-card {
     @include flex(column, space-between, center);
     @include box(80px, 110px);
     @include themeBrightness(100%, 80%);
     padding: 15px 10px 10px 10px;
-    transition:
-      transform 0.2s,
-      box-shadow 0.2s;
     border-radius: 10px;
-    cursor: pointer;
 
     img,
     svg {
-      filter: var(--bl-drop-shadow-star);
+      width: 40px;
+      height: 40px;
     }
 
     .web-name {
@@ -257,6 +284,28 @@ const delWeb = () => {
       font-size: 11px;
       overflow: hidden;
       white-space: normal;
+    }
+  }
+
+  .web-item-list {
+    @include flex(row, flex-start, center);
+    @include box(200px, auto);
+    border-radius: 4px;
+    padding: 3px 3px 3px 5px;
+    margin-bottom: 5px;
+    color: var(--bl-text-color-light);
+
+    img,
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .web-name {
+      @include ellipsis();
+      width: 175px;
+      font-size: 13px;
+      padding-left: 5px;
     }
   }
 
@@ -274,9 +323,9 @@ const delWeb = () => {
     }
   }
 
-  .web-item.hover {
-    transform: translateY(-5px);
+  .web-item-card.hover {
     @include themeShadow(0 3px 5px 0 rgb(190, 190, 190), 0 3px 5px 0 rgba(0, 0, 0, 1));
+    transform: translateY(-5px);
   }
 
   .save-form {

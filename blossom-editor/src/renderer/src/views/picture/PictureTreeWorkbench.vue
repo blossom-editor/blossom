@@ -12,12 +12,12 @@
         <template #content>
           显示排序<br />
           <bl-row>
-            <bl-tag :bgColor="TitleColor.ONE">一级</bl-tag>
-            <bl-tag :bgColor="TitleColor.TWO">二级</bl-tag>
+            <bl-tag :bgColor="SortLevelColor.ONE">一级</bl-tag>
+            <bl-tag :bgColor="SortLevelColor.TWO">二级</bl-tag>
           </bl-row>
           <bl-row>
-            <bl-tag :bgColor="TitleColor.THREE">三级</bl-tag>
-            <bl-tag :bgColor="TitleColor.FOUR">四级</bl-tag>
+            <bl-tag :bgColor="SortLevelColor.THREE">三级</bl-tag>
+            <bl-tag :bgColor="SortLevelColor.FOUR">四级</bl-tag>
           </bl-row>
         </template>
       </el-tooltip>
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, inject } from 'vue'
-import { provideKeyDocInfo, TitleColor } from '@renderer/views/doc/doc'
+import { provideKeyDocInfo, SortLevelColor } from '@renderer/views/doc/doc'
 import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
 
 // 当前菜单中选择的文档

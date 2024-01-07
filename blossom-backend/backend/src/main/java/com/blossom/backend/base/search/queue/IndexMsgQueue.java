@@ -7,19 +7,18 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * 消息处理使用的阻塞队列
+ *
  * @author Andecheal
  */
 public class IndexMsgQueue {
 
     /**
-     * 阻塞队列 , 存放消息
+     * 阻塞队列, 存放消息
      */
     private static final BlockingQueue<IndexMsg> indexMsgQueue = new ArrayBlockingQueue<>(2048);
 
     /**
-     * 应用提交消息
-     * @param msg
-     * @throws InterruptedException
+     * 提交消息
      */
     public static void add(IndexMsg msg) throws InterruptedException {
         indexMsgQueue.add(msg);
@@ -27,8 +26,6 @@ public class IndexMsgQueue {
 
     /**
      * 提供一个阻塞式消息入口
-     * @param msg
-     * @throws InterruptedException
      */
     public static void put(IndexMsg msg) throws InterruptedException {
         indexMsgQueue.put(msg);
@@ -36,8 +33,6 @@ public class IndexMsgQueue {
 
     /**
      * 获取消息
-     * @return
-     * @throws InterruptedException
      */
     public static IndexMsg take() throws InterruptedException {
         return indexMsgQueue.take();

@@ -1,7 +1,12 @@
 <template>
   <!-- 文件夹操作 -->
   <div class="doc-workbench">
-    <ArticleTreeWorkbench @refresh-doc-tree="getDocTree" @show-sort="handleShowSort" ref="ArticleTreeWorkbenchRef"> </ArticleTreeWorkbench>
+    <ArticleTreeWorkbench
+      @refresh-doc-tree="getDocTree"
+      @show-sort="handleShowSort"
+      @show-search="handleShowArticleSearchDialog"
+      ref="ArticleTreeWorkbenchRef">
+    </ArticleTreeWorkbench>
   </div>
   <!--   -->
   <div
@@ -184,7 +189,14 @@
   </el-dialog>
 
   <!-- 二维码 -->
-  <el-dialog v-model="isShowQrCodeDialog" width="335" :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="false" draggable>
+  <el-dialog
+    v-model="isShowQrCodeDialog"
+    width="335"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    draggable>
     <ArticleQrCode ref="ArticleQrCodeRef"></ArticleQrCode>
   </el-dialog>
 
@@ -198,6 +210,19 @@
     :close-on-click-modal="false"
     draggable>
     <ArticleImport ref="ArticleImportRef" :doc="curDoc"></ArticleImport>
+  </el-dialog>
+
+  <!-- 搜索 -->
+  <el-dialog
+    v-model="isShowArticleSearchDialog"
+    class="bl-dialog-hidden-header-fixed-body"
+    width="705"
+    style="height: 80%"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="true">
+    <ArticleSearch @open-article="openArticle" @create-link="createUrlLink"></ArticleSearch>
   </el-dialog>
 </template>
 
@@ -224,6 +249,7 @@ import {
 import { isNotNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
 import { checkLevel, provideKeyDocTree } from '@renderer/views/doc/doc'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
 import { grammar } from './scripts/markedjs'
 import {
   folderDelApi,
@@ -243,7 +269,7 @@ import ArticleTreeWorkbench from './ArticleTreeWorkbench.vue'
 import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
-import { useLifecycle } from '@renderer/scripts/lifecycle'
+import ArticleSearch from './ArticleSearch.vue'
 
 const server = useServerStore()
 const user = useUserStore()
@@ -319,6 +345,10 @@ const getDocTreeData = (): DocTree[] => {
   return docTreeData.value
 }
 
+/**
+ * 菜单中选中文章
+ * @param index 文章ID
+ */
 const openMenu = (index: string) => {
   docTreeActiveArticleId.value = index
 }
@@ -442,8 +472,7 @@ const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean =
   } else if (type === 'copy') {
     writeText(url)
   } else if (type === 'link') {
-    url = `[${curDoc.value.n}](${user.userParams.WEB_ARTICLE_URL + curDoc.value.i} "${grammar}${curDoc.value.i}${grammar}")`
-    writeText(url)
+    createUrlLink(curDoc.value.n, curDoc.value.i)
   } else if (type === 'tempVisit') {
     articleTempKey({ id: curDoc.value.i }).then((resp) => {
       url = server.serverUrl + articleTempH + resp.data
@@ -453,6 +482,16 @@ const createUrl = (type: 'open' | 'copy' | 'link' | 'tempVisit', open: boolean =
       }
     })
   }
+}
+
+/**
+ * 复制双链引用
+ * @param name : 文章名称
+ * @param id   : 文章ID
+ */
+const createUrlLink = (name: string, id: string) => {
+  let url = `[${name}](${user.userParams.WEB_ARTICLE_URL + id} "${grammar}${id}${grammar}")`
+  writeText(url)
 }
 
 /** 下载文章 */
@@ -723,7 +762,6 @@ const savedCallback = (_dialogType: DocDialogType) => {
 //#endregion
 
 //#region ----------------------------------------< 导入文章 >--------------------------------------
-
 const ArticleImportRef = ref()
 const isShowArticleImportDialog = ref<boolean>(false)
 
@@ -734,6 +772,23 @@ const handleShowArticleImportDialog = () => {
   isShowArticleImportDialog.value = true
 }
 
+//#endregion
+
+//#region ----------------------------------------< 搜索文章 >--------------------------------------
+const isShowArticleSearchDialog = ref<boolean>(false)
+
+const handleShowArticleSearchDialog = () => {
+  isShowArticleSearchDialog.value = true
+}
+
+const openArticle = (article: DocTree) => {
+  openMenu(article.i)
+  emits('clickDoc', article)
+  isShowArticleSearchDialog.value = false
+  nextTick(() => {
+    docTreeActiveArticleId.value = article.i
+  })
+}
 //#endregion
 
 const clickCurDoc = (tree: DocTree) => {

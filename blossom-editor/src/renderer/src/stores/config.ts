@@ -18,10 +18,12 @@ export interface ViewStyle {
   webCollectExpand: boolean
   // 是否显示专题样式
   isShowSubjectStyle: boolean
-  // 是否在首页显示收藏卡片
+  // 是否以卡片方式显示文章收藏
   isHomeStarCard: boolean
-  // 是否在首页显示专题卡片
+  // 是否以卡片方式显示专题
   isHomeSubjectCard: boolean
+  // 是否以卡片方式显示网页收藏
+  isWebCollectCard: boolean
   // 是否开启全局阴影, 在 ThemeSetting.vue#changeGlobalShadow 中设置
   isGlobalShadow: boolean
   // 是否显示试用按钮
@@ -102,7 +104,8 @@ export const useConfigStore = defineStore('configStore', {
         isShowSubjectStyle: true,
         isHomeStarCard: true,
         isHomeSubjectCard: true,
-        isGlobalShadow: true,
+        isWebCollectCard: true,
+        isGlobalShadow: false,
         isShowTryuseBtn: true
       },
       ...Local.get(VIEW_STYLE_KEY)

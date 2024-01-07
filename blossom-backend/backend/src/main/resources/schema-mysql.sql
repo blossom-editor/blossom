@@ -391,8 +391,10 @@ CREATE TABLE IF NOT EXISTS `blossom_article_reference`
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of blossom_article_reference
+-- since: 1.12.0
 -- ----------------------------
+alter table blossom_article_reference
+    modify target_url varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL comment '链接地址';
 
 -- ----------------------------
 -- Table structure for blossom_article_view

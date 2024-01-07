@@ -472,6 +472,13 @@ export const articleRecycleListApi = (): Promise<any> => {
 export const articleRecycleRestoreApi = (data?: object): Promise<any> => {
   return rq.post('/article/recycle/restore', data)
 }
+
+/**
+ * 文章全文搜索
+ */
+export const articleSearchApi = (params?: object): Promise<any> => {
+  return rq.get('/search', { params })
+}
 //#endregion
 
 //#region ====================================================< picture >===================================================

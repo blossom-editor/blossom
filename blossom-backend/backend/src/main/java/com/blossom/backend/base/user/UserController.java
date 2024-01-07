@@ -15,6 +15,7 @@ import com.blossom.backend.server.article.stat.ArticleStatService;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.R;
+import com.blossom.common.base.util.spring.SpringUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class UserController {
         user.setOsRes(sysService.getOsConfig());
         Map<String, String> paramMap = paramService.selectMap(true, ParamEnum.values());
         user.setParams(paramMap);
+        paramMap.put("SERVER_VERSION", SpringUtil.get("project.base.version"));
         Map<String, String> userParamMap = userParamService.selectMap(AuthContext.getUserId(), true, UserParamEnum.values());
         user.setUserParams(userParamMap);
         return R.ok(user);

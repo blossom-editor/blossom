@@ -102,8 +102,6 @@
           <div v-if="isElectron()" class="menu-item" @click="rightMenuCopy"><span class="iconbl bl-copy-line"></span>复制</div>
           <div v-if="isElectron()" class="menu-item" @click="rightMenuPaste"><span class="iconbl bl-a-texteditorpastetext-line"></span>黏贴</div>
           <div class="menu-item">
-            <!-- 
-              :data="{ pid: curArticle?.pid }" -->
             <el-upload
               name="file"
               :action="serverStore.serverUrl + uploadFileApiUrl"
@@ -468,17 +466,21 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
-  await articleUpdContentApi(data).then((resp) => {
-    lastSaveTime = new Date().getTime()
-    curArticle.value!.words = resp.data.words as number
-    curArticle.value!.updTime = resp.data.updTime as string
-    if (curArticle.value!.version != undefined) {
-      curArticle.value!.version = curArticle.value!.version + 1
-    } else {
-      curArticle.value!.version = 1
-    }
-    saveCallback()
-  })
+  await articleUpdContentApi(data)
+    .then((resp) => {
+      lastSaveTime = new Date().getTime()
+      curArticle.value!.words = resp.data.words as number
+      curArticle.value!.updTime = resp.data.updTime as string
+      if (curArticle.value!.version != undefined) {
+        curArticle.value!.version = curArticle.value!.version + 1
+      } else {
+        curArticle.value!.version = 1
+      }
+      saveCallback()
+    })
+    .catch(() => {
+      articleChanged = true
+    })
 }
 /**
  * 初始化自动保存定时器

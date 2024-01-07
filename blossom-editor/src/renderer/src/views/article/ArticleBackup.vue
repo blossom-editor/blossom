@@ -32,7 +32,6 @@
         </el-button>
         <div class="tips">服务器将于每日早上 7 点备份 Markdown 数据。</div>
         <div class="download-process">
-          <!-- 当前仅支持下载最大 10MB 的文件, 过大时请您自行从服务器中下载。若您的服务器带宽较小，也建议您自行从服务器下载。 -->
           <el-progress :text-inside="true" :stroke-width="20" :percentage="downloadProgress" striped striped-flow :duration="200" />
         </div>
       </div>

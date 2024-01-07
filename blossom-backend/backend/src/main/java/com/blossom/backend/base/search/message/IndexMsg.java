@@ -8,27 +8,23 @@ import org.apache.lucene.document.Document;
 public interface IndexMsg {
 
     /**
-     * 消息类型
-     * @return
+     * 消息操作类型
      */
     IndexMsgTypeEnum getType();
 
     /**
-     * 主键id
-     * @return
+     * 主键 ID
      */
     Long getId();
 
     /**
-     * 为批量reload提供的提前构造数据的接口，避免多次查询数据库
-     * @return
+     * 为批量 reload 提供的提前构造数据的接口, 避免多次查询数据库
      */
     Document getDoc();
 
     /**
-     * 消息对应用户id
-     * @return
+     * 消息对应用户 ID
      */
-    Long getCurrentUserId();
+    Long getUserId();
 
 }
