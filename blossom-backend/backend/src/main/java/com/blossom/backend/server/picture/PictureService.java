@@ -178,7 +178,6 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
 
         PictureEntity originPic;
         if ((originPic = baseMapper.selectByPathName(pic.getPathName())) != null) {
-
             // 如果允许重复上传, 则修改大小
             if (repeatUpload) {
                 PictureEntity upd = new PictureEntity();
@@ -187,12 +186,13 @@ public class PictureService extends ServiceImpl<PictureMapper, PictureEntity> {
                 upd.setCreTime(new Date());
                 baseMapper.updById(upd);
                 pic.setId(originPic.getId());
-                return pic;
+            } else {
+                throw new XzException400HTTP("图片[" + pic.getPathName() + "]已存在, 请重命名文件或选择其他路径!");
             }
-            throw new XzException400HTTP("图片[" + pic.getPathName() + "]已存在, 请重命名文件或选择其他路径!");
+        } else {
+            baseMapper.insert(pic);
         }
 
-        baseMapper.insert(pic);
         // 入库后进行文件上传操作
         try (InputStream inputStream = file.getInputStream()) {
             osManager.put(pic.getPathName(), inputStream);
