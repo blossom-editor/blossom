@@ -4,22 +4,13 @@
       <div>Blossom</div>
       <div class="version">Client {{ CONFIG.SYS.VERSION + getServerVersion() }}</div>
     </div>
-    <!-- <bl-row class="repository" just="center">
-      <bl-col @click="openExtenal(CONFIG.SYS.GITHUB_REPO)">
-        <svg class="github" aria-hidden="true"><use xlink:href="#wl-github2"></use></svg>
-      </bl-col>
-
-      <bl-col @click="openExtenal(CONFIG.SYS.GITEE_REPO)" style="margin-left: 20px">
-        <svg class="gitee" aria-hidden="true"><use xlink:href="#wl-gitee"></use></svg>
-      </bl-col>
-    </bl-row> -->
 
     <bl-col height="fit-content">
       <bl-row just="center" class="about-item" height="50px" width="700px">
         <div class="iconbl bl-books-line"></div>
         <bl-col just="center" align="flex-start" height="100%" width="400px">
           <div class="title">官方帮助文档</div>
-          <div class="desc">可查看 Blossom 更新日志，功能介绍。</div>
+          <div class="desc">查看 Blossom 功能介绍，了解关于项目的更新信息，开发进度以及未来规划的功能。</div>
         </bl-col>
         <div class="btns">
           <el-button size="default" style="width: 55px" @click="openExtenal(CONFIG.SYS.DOC)"> 浏览 </el-button>
@@ -142,8 +133,8 @@ const getServerVersion = () => {
     text-align: center;
 
     .version {
+      @include font(12px, 300);
       color: var(--bl-text-color-light);
-      font-size: 12px;
       text-shadow: none;
     }
   }
@@ -174,7 +165,7 @@ const getServerVersion = () => {
     }
 
     .desc {
-      font-size: 13px;
+      @include font(13px, 300);
       color: var(--bl-text-color-light);
     }
 
