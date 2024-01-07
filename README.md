@@ -1,7 +1,7 @@
 ### [English](./README-EN.md) | [中文](./README.md)
 
 <p align="center">
-<img src="./doc/imgs/blossom_name.png" height="auto">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/blossom_name.png" height="auto">
 </p>
 <p align="center">
 <a href="https://www.wangyunf.com/blossom-demo/#/settingindex">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 文档</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 下载</a> 
@@ -12,7 +12,7 @@ Blossom 是一个支持**私有部署**的**云端双链笔记软件**，你可�
 支持 Windows，Mac，网页客户端，网页移动端。
 
 <p align="center">
-<img src="./doc/imgs/device.png">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/device.png">
 </p>
 
 # 🛎️ 在线试用
@@ -61,8 +61,8 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 - 2 群：921906098
 
 <p align="center">
-<img src="./doc/imgs/qq1.png" height="400">
-<img src="./doc/imgs/qq2.png" height="400">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/qq1.png" height="400">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/qq2.png" height="400">
 </p>
 
 # 🤝 赞助 Blossom
@@ -88,57 +88,57 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 <h4 align="center">你可以通过以下几种方式赞助 Blossom。</h4>
 
 <p align="center">
-<img src="./doc/imgs/sponsors/wechat.png" height="400">
-<img src="./doc/imgs/sponsors/ali.png" height="400">
-<img src="./doc/imgs/sponsors/aifadian.png" height="400">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/sponsors/wechat.png" height="400">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/sponsors/ali.png" height="400">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/sponsors/aifadian.png" height="400">
 </p>
 
 <br/>
 
 # 更多图片
 
-!["编辑器"](./doc/imgs/article.png)
+!["编辑器"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/article.png)
 
 <p align="center">编辑器</p>
 
 ---
 
-!["双链笔记"](./doc/imgs/article_reference.png)
+!["双链笔记"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/article_reference.png)
 
 <p align="center">双链笔记</p>
 
 ---
 
-!["照片墙"](./doc/imgs/picture.png)
+!["照片墙"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/picture.png)
 
 <p align="center">照片墙</p>
 
 ---
 
-!["日历计划"](./doc/imgs/todo.png)
+!["日历计划"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/todo.png)
 
 <p align="center">待办事项清单</p>
 
 ---
 
-!["日历计划"](./doc/imgs/plan.png)
+!["日历计划"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/plan.png)
 
 <p align="center">日历计划</p>
 
 ---
 
-!["便签管理"](./doc/imgs/note.png)
+!["便签管理"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/note.png)
 
 <p align="center">便签管理</p>
 
 ---
 
-!["博客"](./doc/imgs/blog_home_pc.png)
+!["博客"](https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/blog_home_pc.png)
 
 <p align="center">博客</p>
 
 <p align="center">
-<img src="./doc/imgs/blog_home_m.png" height="600">
-<img src="./doc/imgs/blog_article.png" height="600" style="margin-left: 30px">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/blog_home_m.png" height="600">
+<img src="https://raw.githubusercontent.com/blossom-editor/blossom/dev/doc/imgs/blog_article.png" height="600" style="margin-left: 30px">
 </p>
 <p align="center">博客移动端</p>
