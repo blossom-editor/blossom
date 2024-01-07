@@ -13,7 +13,6 @@
 
     <!-- editor -->
     <div class="picture-container">
-      <div v-if="picCantShow" class="tip" @click="showCantShowTipDialog">图片无法正常显示？点此查看解决方式。</div>
       <!-- 工作台 -->
       <div class="picutre-workbench" :style="workbencStyle.workbench1">
         <div class="workbenchs">
@@ -310,7 +309,6 @@ const showPicInfo = (url: string) => {
  * @param a
  */
 const onErrorImg = (a: Event) => {
-  picCantShow.value = true
   let imgEle = a.target as HTMLImageElement
   if (imgEle) {
     imgEle.src = errorImg
@@ -532,24 +530,6 @@ const transferred = () => {
   isShowTransferDialog.value = false
 }
 
-//#endregion
-
-//#region ----------------------------------------< 图片无法显示 >----------------------------------
-const picCantShow = ref(false)
-// const handlePicCantShow = () => {
-//   let domain: string = userStore.userinfo.osRes.domain
-//   if (!domain.includes('/pic')) {
-//     picCantShow.value = true
-//   }
-//   domain = domain.substring(0, domain.lastIndexOf('/pic'))
-//   picCantShow.value = serverStore.serverUrl != domain
-// }
-
-const isShowCantShowTipDialog = ref(false)
-
-const showCantShowTipDialog = () => {
-  isShowCantShowTipDialog.value = true
-}
 //#endregion
 </script>
 

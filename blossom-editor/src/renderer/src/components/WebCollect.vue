@@ -39,7 +39,7 @@
           </el-form-item>
         </el-form>
         <div class="web-item-card hover">
-          <img v-if="isNotBlank(webForm.img)" :src="webForm.img" style="width: 40px; height: 40px; object-fit: contain" />
+          <img v-if="isNotBlank(webForm.img)" :src="webForm.img" />
           <svg v-else style="width: 40px; height: 40px" aria-hidden="true">
             <use :xlink:href="'#' + webForm.icon"></use>
           </svg>
