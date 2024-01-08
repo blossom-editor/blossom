@@ -217,7 +217,7 @@ export class CmWrapper {
           },
           {
             key: 'Alt-i',
-            mac: 'Cmd-i',
+            mac: 'Cmd-Alt-b',
             run(view: EditorView) {
               CmWrapper.commandItalic(view)
               return true
@@ -225,7 +225,7 @@ export class CmWrapper {
           },
           {
             key: 'Alt-s',
-            mac: 'Cmd-s',
+            mac: 'Alt-s',
             run(view: EditorView) {
               CmWrapper.commandStrike(view)
               return true
@@ -298,7 +298,7 @@ export class CmWrapper {
           },
           {
             key: 'Shift-Alt-f',
-            mac: 'Shift-Cmd-f',
+            mac: 'Shift-Alt-f',
             run(view: EditorView) {
               CmWrapper.commandFormatMarkdown(view)
               return true
