@@ -1,14 +1,13 @@
-name: "Close inactive issues"
+name: "macos"
 on:
-  schedule:
-    - cron: "10 15 * * *"
+  workflow_dispatch:
 
 permissions:
   issues: write
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
+    runs-on: macos-11
     permissions:
       issues: write
       pull-requests: write
