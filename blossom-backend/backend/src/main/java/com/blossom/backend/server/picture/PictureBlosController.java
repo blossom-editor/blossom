@@ -129,11 +129,11 @@ public class PictureBlosController {
             long size = fileChannel.size();
             String contentType = Files.probeContentType(file);
             if (contentType == null) {
-                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+                contentType = probContentType(filename);
             }
             resp.setContentType(contentType);
             resp.setContentLengthLong(size);
-            // resp.setHeader(HttpHeaders.CACHE_CONTROL,"max-age=3600");
+            // resp.setHeader(HttpHeaders.CACHE_CONTROL, "max-age=13600");
 
             long position = 0;
             WritableByteChannel channel = Channels.newChannel(os);
@@ -147,6 +147,13 @@ public class PictureBlosController {
         } catch (IOException e) {
             log.info(e.getMessage());
         }
+    }
+
+    private String probContentType(String filename) {
+        if (filename.endsWith(".svg")) {
+            return "image/svg+xml";
+        }
+        return MediaType.APPLICATION_OCTET_STREAM_VALUE;
     }
 
     // endregion
