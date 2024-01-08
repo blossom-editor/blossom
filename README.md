@@ -53,6 +53,10 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 <br/><br/>
 
+# 在 sealos 上一键部署
+
+[![](https://raw.githubusercontent.com/labring-actions/templates/main/Deploy-on-Sealos.svg)](https://cloud.sealos.io/?openapp=system-template%3FtemplateName%3Dblossom)
+
 # 🥳 加入群聊
 
 加入群聊进行沟通，反馈问题。
