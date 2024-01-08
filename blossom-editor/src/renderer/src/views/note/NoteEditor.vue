@@ -113,7 +113,7 @@ const emits = defineEmits(['saved'])
     .textarea-placeholder {
       @include box(100%, 42px);
       @include absolute(0, 0);
-      @include font(14px, 500);
+      @include font(14px, 100);
       color: #c2c2c2;
       background-color: #ffffffdc;
       text-align: right;
