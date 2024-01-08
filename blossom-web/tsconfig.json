@@ -9,6 +9,7 @@
     "global.d.ts"
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "baseUrl": "./",
     "types": [
       "node"
