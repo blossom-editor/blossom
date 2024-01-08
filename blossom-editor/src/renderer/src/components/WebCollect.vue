@@ -175,6 +175,7 @@ const showWebCollectCard = (card: boolean) => {
 
   .web-collect-title {
     @include box(100%, 31px);
+    @include font(14px, 500);
     flex-wrap: wrap-reverse;
     align-content: flex-end;
     text-shadow: var(--bl-text-shadow);
@@ -219,9 +220,9 @@ const showWebCollectCard = (card: boolean) => {
 
   .web-collect-group {
     @include themeColor(#bdbdbd, #a3a6ad);
-    @include font(14px);
+    @include font(14px, 300);
     text-shadow: var(--bl-text-shadow);
-    padding: 10px 20px;
+    padding: 5px 20px;
   }
 
   .web-collect-content {
