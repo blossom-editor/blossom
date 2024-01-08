@@ -18,7 +18,7 @@
         <div class="conf-tip">
           博客的文章访问地址，即使不使用博客，也推荐配置为后台自带的博客地址。<span style="color: var(--el-color-danger)"
             >必须以<code style="color: var(--el-color-danger)">/#/articles?articleId=</code>结尾。 </span
-          >你可以点击右上角的<span class="iconbl bl-blog" style="padding: 0 3px"></span>图标进行快捷配置。
+          >你可以点击右上角的<span class="iconbl bl-caution-line" style="padding: 0 3px"></span>图标进行快捷配置。
         </div>
       </el-form-item>
 
