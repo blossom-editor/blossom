@@ -27,7 +27,7 @@
 
           <bl-row class="no-more" just="center"> 无更多内容 </bl-row>
         </div>
-        <bl-row class="caution-footer" just="flex-end">
+        <bl-row v-if="userStore.isLogin" class="caution-footer" just="flex-end">
           <div @click="showQuickSetting">快速配置</div>
         </bl-row>
       </el-popover>
