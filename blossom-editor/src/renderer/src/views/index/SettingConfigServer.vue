@@ -1,9 +1,9 @@
 <template>
-  <div class="config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用服务端设置...">
+  <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">服务器配置</div>
     <div class="desc">服务器各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
-    <el-form v-if="auth.status == '已登录'" :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
+    <el-form :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文件访问地址" :required="true">
         <el-input
           size="default"
@@ -101,14 +101,13 @@
       </el-form-item>
     </el-form>
     <div class="server-config">
-      {{ userinfo }}
+      {{ userStore.userinfo }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useServerStore } from '@renderer/stores/server'
 import { KEY_BLOSSOM_OBJECT_STORAGE_DOMAIN, useUserStore } from '@renderer/stores/user'
 import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blossom'
@@ -118,7 +117,6 @@ import dayjs from 'dayjs'
 
 const serverStore = useServerStore()
 const userStore = useUserStore()
-const { userinfo, auth } = storeToRefs(userStore)
 
 const serverParamForm = ref({
   WEB_ARTICLE_URL: '',

@@ -1,5 +1,5 @@
 <template>
-  <div class="config-root">
+  <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">修改登录密码</div>
     <div class="desc">修改后下次登录将使用新密码。</div>
     <el-form :model="updPwdForm" :rules="rules" label-position="right" label-width="130px" ref="UpdPwdFormRef">
@@ -35,9 +35,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useUserStore } from '@renderer/stores/user'
 import type { FormInstance, FormRules } from 'element-plus'
 import { userUpdPwdApi } from '@renderer/api/auth'
 import Notify from '@renderer/scripts/notify'
+
+const userStore = useUserStore()
 
 interface UpdPwdForm {
   password: string

@@ -1,9 +1,9 @@
 <template>
-  <div class="config-root">
+  <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">修改用户信息</div>
     <div class="desc">用户的个人信息，若无内容请点击右侧刷新。<el-button @click="refreshUserinfo" text bg>刷新</el-button></div>
     <el-form :model="userinfoForm" :rules="rules" label-position="right" label-width="130px" style="max-width: 800px" ref="UserinfoFormRef">
-      <el-form-item label="ID" prop="username">
+      <el-form-item label="ID" prop="id">
         <el-input v-model="userinfoForm.id" size="default" disabled>
           <template #prefix>
             <div class="iconbl bl-a-Securitypermissions-line" style="font-size: 20px"></div>
@@ -96,6 +96,7 @@ const userinfoForm = ref<UserinfoForm>({
   avatar: ''
 })
 const rules = ref<FormRules<UserinfoForm>>({
+  id: [{ required: true, message: '请填写用户ID', trigger: 'blur' }],
   username: [{ required: true, message: '请填写用户名', trigger: 'blur' }],
   nickName: [{ required: true, message: '请填写昵称', trigger: 'blur' }],
   remark: [{ required: true, message: '请填写备注', trigger: 'blur' }],
