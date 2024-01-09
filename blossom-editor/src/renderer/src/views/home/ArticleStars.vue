@@ -6,7 +6,7 @@
     <span v-else class="iconbl bl-article-line container-operator" @click="showStarCard(true)" />
   </bl-row>
   <div class="article-stars-root">
-    <div v-if="isEmpty(articles)" class="placeholder">无收藏的文章</div>
+    <div v-if="isEmpty(articles)" class="placeholder">无收藏文章</div>
     <div
       v-else
       v-for="article in articles"
@@ -92,6 +92,7 @@ defineExpose({ reload })
 }
 
 .placeholder {
+  @include font(15px, 300);
   padding: 20px 0 0 20px;
   color: var(--bl-text-color-light);
 }

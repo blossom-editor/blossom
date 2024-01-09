@@ -17,7 +17,7 @@
         <el-button size="default" style="width: 90px; margin-left: 10px" @click="autuUpdBlossomOSDomain">点击自动配置</el-button>
         <div class="conf-tip">
           文件访问地址。需以<code style="color: var(--el-color-danger)">/pic</code>结尾。你可以点击右上角的<span
-            class="iconbl bl-blog"
+            class="iconbl bl-caution-line"
             style="padding: 0 3px"></span
           >图标进行快捷配置。
         </div>

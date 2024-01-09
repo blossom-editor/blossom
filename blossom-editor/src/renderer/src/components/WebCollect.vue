@@ -62,6 +62,9 @@
     </bl-row>
 
     <div class="web-item-container">
+      <div v-if="isEmpty(data)" class="placeholder">
+        无收藏网址，点击上方 <span class="iconbl bl-add-line" style="padding-right: 10px"></span>添加
+      </div>
       <div v-for="(collect, index) in data" @click="closeForm">
         <bl-row just="flex-end" class="web-collect-group" :style="index == 0 ? 'marginTop:0' : ''">
           {{ collect.title }}
@@ -97,6 +100,7 @@ import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
 import { ViewStyle, useConfigStore } from '@renderer/stores/config'
+import { isEmpty } from 'lodash'
 
 const configStore = useConfigStore()
 const viewStyle = ref<ViewStyle>(configStore.viewStyle)
@@ -109,6 +113,10 @@ useLifecycle(
 const data = ref<any>([])
 const getWebAll = () => {
   webAllApi().then((resp) => {
+    if (isEmpty(resp.data.daily) && isEmpty(resp.data.work) && isEmpty(resp.data.other)) {
+      data.value = []
+      return
+    }
     let webs = [
       { title: 'Daily', webs: resp.data.daily },
       { title: 'Work', webs: resp.data.work },
@@ -235,6 +243,12 @@ const showWebCollectCard = (card: boolean) => {
   .web-item-container {
     @include box(100%, calc(100% - 31px));
     overflow-y: overlay;
+
+    .placeholder {
+      @include font(15px, 300);
+      padding: 20px 0 0 20px;
+      color: var(--bl-text-color-light);
+    }
 
     &::-webkit-scrollbar {
       width: 4px;
