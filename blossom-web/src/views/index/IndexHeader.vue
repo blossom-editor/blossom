@@ -97,7 +97,7 @@ const logo = () => {
   if (userStore.userParams.WEB_LOGO_URL && isNotBlank(userStore.userParams.WEB_LOGO_URL)) {
     return userStore.userParams.WEB_LOGO_URL
   }
-  return '/blog-logo.png'
+  return 'blog-logo.png'
 }
 
 const links = () => {
