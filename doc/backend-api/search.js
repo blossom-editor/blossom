@@ -31,37 +31,75 @@ api[0].list[0].list.push({
     desc: '检查 Token 状态',
 });
 api[0].list.push({
-    alias: 'SysController',
+    alias: 'UserParamController',
     order: '2',
-    link: '系统功能_[sys]',
-    desc: '系统功能 [Sys]',
+    link: '用户参数配置',
+    desc: '用户参数配置',
     list: []
 })
 api[0].list[1].list.push({
     order: '1',
     deprecated: 'false',
+    url: 'http://127.0.0.1/user/param/list',
+    desc: '用户参数列表',
+});
+api[0].list[1].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/param/upd',
+    desc: '修改用户参数',
+});
+api[0].list[1].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/param/refresh',
+    desc: '刷新用户配置',
+});
+api[0].list.push({
+    alias: 'SearchController',
+    order: '3',
+    link: '搜索接口',
+    desc: '搜索接口',
+    list: []
+})
+api[0].list[2].list.push({
+    order: '1',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/search',
+    desc: '搜索',
+});
+api[0].list.push({
+    alias: 'SysController',
+    order: '4',
+    link: '系统功能_[sys]',
+    desc: '系统功能 [Sys]',
+    list: []
+})
+api[0].list[3].list.push({
+    order: '1',
+    deprecated: 'false',
     url: 'http://127.0.0.1/sys/alive',
     desc: '服务在线检查 [OP]',
 });
-api[0].list[1].list.push({
+api[0].list[3].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/sys/osconfig',
     desc: '对象存储配置',
 });
-api[0].list[1].list.push({
+api[0].list[3].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/sys/param/list',
     desc: '系统参数列表',
 });
-api[0].list[1].list.push({
+api[0].list[3].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/sys/param/upd',
     desc: '修改系统参数',
 });
-api[0].list[1].list.push({
+api[0].list[3].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/sys/param/refresh',
@@ -69,36 +107,36 @@ api[0].list[1].list.push({
 });
 api[0].list.push({
     alias: 'UserController',
-    order: '3',
+    order: '5',
     link: '用户_[user]',
     desc: '用户 [User]',
     list: []
 })
-api[0].list[2].list.push({
+api[0].list[4].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/info',
     desc: '用户信息',
 });
-api[0].list[2].list.push({
+api[0].list[4].list.push({
     order: '2',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/info/open',
     desc: '用户信息 [OP]',
 });
-api[0].list[2].list.push({
+api[0].list[4].list.push({
     order: '3',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/upd',
     desc: '修改用户',
 });
-api[0].list[2].list.push({
+api[0].list[4].list.push({
     order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/upd/pwd',
     desc: '修改密码',
 });
-api[0].list[2].list.push({
+api[0].list[4].list.push({
     order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/add',
