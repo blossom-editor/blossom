@@ -1,9 +1,0 @@
-## 用于生成API文档，查询数据库中的配置信息
-# JDBC URL，根据不同的数据库，使用相应的JDBC连接字符串
-url = jdbc:mysql://192.168.31.99:3306/xzzz-blossom
-# 用户名，此处也可以使用 user 代替
-username = root
-# 密码，此处也可以使用 pass 代替
-password = jasmine888
-# JDBC驱动名
-driver = com.mysql.cj.jdbc.Driver
