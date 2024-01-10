@@ -49,6 +49,7 @@ const DEFAULT_USER_INFO = {
   }
 }
 
+export type UserParams = typeof DEFAULT_USER_INFO.userParams
 export type Userinfo = typeof DEFAULT_USER_INFO
 /**
  * 初始化用户信息
@@ -58,7 +59,7 @@ const initUserinfo = () => {
 }
 
 /**
- *
+ * 
  */
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -72,7 +73,7 @@ export const useUserStore = defineStore('userStore', {
       }
       return state.auth.status === AuthStatus.Succ
     },
-    userParams: (state): any => {
+    userParams: (state): UserParams => {
       return state.userinfo.userParams
     },
     links: (state): any => {
