@@ -92,7 +92,7 @@
           <iframe v-else :src="blogUrlPreview" width="100%"></iframe>
         </div>
 
-        <div class="document">有疑问？查看文档。</div>
+        <div class="document" @click="openExtenal('http://localhost:5175/blossom-doc/guide/deploy/blog.html')">有疑问？查看文档。</div>
       </div>
       <!--
 
@@ -117,7 +117,7 @@ import { useServerStore } from '@renderer/stores/server'
 import { useUserStore } from '@renderer/stores/user'
 import { KEY_BLOSSOM_OBJECT_STORAGE_DOMAIN, KEY_WEB_ARTICLE_URL } from '@renderer/stores/user'
 import { isBlank } from '@renderer/assets/utils/obj'
-import { writeText } from '@renderer/assets/utils/electron'
+import { openExtenal, writeText } from '@renderer/assets/utils/electron'
 import { paramUpdApi, userParamUpdApi } from '@renderer/api/blossom'
 
 const userStore = useUserStore()
@@ -156,7 +156,7 @@ const URL_SUFFIX_SERVER = '/blog/#/articles?articleId='
 const URL_SUFFIX = '/#/articles?articleId='
 const previewId = -999
 const blogType = ref<BlogType>('backend')
-const customBlogUrl = ref('')
+const customBlogUrl = ref(userStore.userParams.WEB_ARTICLE_URL)
 const customBlogUrlError = ref(false)
 
 /**
