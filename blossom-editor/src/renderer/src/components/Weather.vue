@@ -89,6 +89,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
 import { getAll, refreshApi } from '@renderer/api/weather'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
+import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 
 useLifecycle(
   () => {
@@ -103,7 +104,18 @@ useLifecycle(
 const userStore = useUserStore()
 
 const getImgUrl = (name: string) => {
-  return new URL(`../assets/imgs/weather/${name}.png`, import.meta.url).href
+  let iconValue = replacePrefix(name)
+  if (isBlank(iconValue)) {
+    return new URL(`../assets/imgs/weather/qing.png`, import.meta.url).href
+  }
+  return new URL(`../assets/imgs/weather/${iconValue}.png`, import.meta.url).href
+}
+
+const replacePrefix = (icon: string) => {
+  if (icon && isNotBlank(icon)) {
+    return icon.replaceAll('#wt-', '')
+  }
+  return ''
 }
 
 const weather = ref({
@@ -126,27 +138,28 @@ const weather = ref({
 
 const getWeather = () => {
   getAll({ location: userStore.userinfo.location }).then((resp) => {
+    console.log(resp)
+
     if (resp.data.now) {
       if (resp.data.now.iconValue === '#wt-qing') {
         let nowHours = new Date().getHours()
         if (nowHours < 7 || nowHours > 19) {
           resp.data.now.img = getImgUrl('qing-moon')
         } else {
-          resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+          resp.data.now.img = getImgUrl(resp.data.now.iconValue)
         }
       } else {
-        resp.data.now.img = getImgUrl(resp.data.now.iconValue.replaceAll('#wt-', ''))
+        resp.data.now.img = getImgUrl(resp.data.now.iconValue)
       }
     }
     if (resp.data.daily) {
-      resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay.replaceAll('#wt-', '') + '-s')
-      resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay.replaceAll('#wt-', '') + '-s')
-      resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay.replaceAll('#wt-', '') + '-s')
+      resp.data.daily[0].img = getImgUrl(resp.data.daily[0].iconValueDay + '-s')
+      resp.data.daily[1].img = getImgUrl(resp.data.daily[1].iconValueDay + '-s')
+      resp.data.daily[2].img = getImgUrl(resp.data.daily[2].iconValueDay + '-s')
     }
     weather.value = { ...weather.value, ...resp.data }
   })
 }
-
 const refresh = () => {
   refreshApi().then((_) => {
     getWeather()
