@@ -288,6 +288,8 @@ const quickSettingComplete = () => {
 <style>
 .web-collect-drawer {
   --el-drawer-bg-color: var(--bl-html-color);
+  --el-drawer-padding-primary: 10px 10px 0 0;
+  --color: var(--bl-text-color-light);
   .el-drawer__header {
     margin-bottom: 0;
   }
