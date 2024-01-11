@@ -271,6 +271,7 @@ public class ArticleController {
             ArticleEntity article = new ArticleEntity();
             article.setMarkdown(content);
             article.setPid(pid);
+            article.setUserId(AuthContext.getUserId());
             article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
             baseService.insert(article);
         } catch (Exception e) {
