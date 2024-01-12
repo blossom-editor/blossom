@@ -1,9 +1,7 @@
-import type { Temp } from './types'
-
-export const en: Temp = {
+const template = {
   editor: {
     treeDoc: {
-      loading: 'loading....'
+      loading: ''
     }
   },
   picture: {
@@ -12,3 +10,4 @@ export const en: Temp = {
     }
   }
 }
+export type Temp = typeof template

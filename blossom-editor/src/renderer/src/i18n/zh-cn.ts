@@ -1,9 +1,9 @@
 import type { Temp } from './types'
 
-export const en: Temp = {
+export const zhCn: Temp = {
   editor: {
     treeDoc: {
-      loading: 'loading....'
+      loading: '加载中'
     }
   },
   picture: {
