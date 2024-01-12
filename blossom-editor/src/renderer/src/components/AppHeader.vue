@@ -27,7 +27,7 @@
 
           <bl-row class="no-more" just="center"> 无更多内容 </bl-row>
         </div>
-        <bl-row class="caution-footer" just="flex-end">
+        <bl-row v-if="userStore.isLogin" class="caution-footer" just="flex-end">
           <div @click="showQuickSetting">快速配置</div>
         </bl-row>
       </el-popover>
@@ -47,10 +47,8 @@
       </el-tooltip>
 
       <el-tooltip content="最佳窗口大小" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-        <div v-if="isElectron()" class="iconbl bl-computer-line" @click="setBestSize"></div>
+        <div v-if="isElectron()" :class="['iconbl bl-computer-line', isWindows() ? '' : 'electron-mac-last']" @click="setBestSize"></div>
       </el-tooltip>
-
-      <div class="divider"></div>
 
       <div v-if="isElectron() && isWindows()" class="iconbl bl-subtract-line" @click="windowMin"></div>
       <div v-if="isElectron() && isWindows()" :class="['iconbl', isFullScreen ? 'bl-win-reset' : 'bl-box-line']" @click="windowMax"></div>
@@ -168,12 +166,12 @@ const quickSettingComplete = () => {
 
   .window-workbench {
     @include box($width-workbench, 100%);
-    @include flex(row, flex-end, flex-end);
+    @include flex(row, flex-end, center);
     color: var(--el-color-primary);
-    padding-right: 4px;
+    padding-right: 2px;
 
     div {
-      @include box(40px, 90%);
+      @include box(26px, 26px);
       @include flex(row, center, center);
       cursor: pointer;
       transition: 0.3s;
@@ -185,12 +183,20 @@ const quickSettingComplete = () => {
       }
     }
 
+    .electron-mac-last {
+      border-top-right-radius: 9px;
+    }
+
     .divider {
       width: 20px;
       cursor: auto;
       &:hover {
         background-color: #00000000;
       }
+    }
+
+    .bl-subtract-line {
+      margin-left: 10px;
     }
 
     .close {
@@ -282,6 +288,8 @@ const quickSettingComplete = () => {
 <style>
 .web-collect-drawer {
   --el-drawer-bg-color: var(--bl-html-color);
+  --el-drawer-padding-primary: 10px 10px 0 0;
+  --color: var(--bl-text-color-light);
   .el-drawer__header {
     margin-bottom: 0;
   }

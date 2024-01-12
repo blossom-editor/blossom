@@ -17,7 +17,7 @@
             <el-time-select
               v-model="dayForm.planStartTime"
               :max-time="dayForm.planEndTime"
-              placeholder="开始日期"
+              placeholder="开始时间"
               start="00:00"
               step="00:15"
               end="23:59"
@@ -27,7 +27,7 @@
             <el-time-select
               v-model="dayForm.planEndTime"
               :min-time="dayForm.planStartTime"
-              placeholder="结束日期"
+              placeholder="结束时间"
               start="00:00"
               step="00:15"
               end="23:59"

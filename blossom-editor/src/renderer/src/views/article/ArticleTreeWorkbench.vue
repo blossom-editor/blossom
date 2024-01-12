@@ -34,7 +34,7 @@
           <el-tooltip effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
             <template #content>
               <div>新增文件夹或文章</div>
-              <div class="keyboard small">Ctrl + N</div>
+              <div class="keyboard small">{{ keymaps.newDoc }}</div>
             </template>
             <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
           </el-tooltip>
@@ -134,6 +134,7 @@ import ArticleBackup from './ArticleBackup.vue'
 import ArticleRecycle from './ArticleRecycle.vue'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
 import hotkeys from 'hotkeys-js'
+import { keymaps } from './scripts/editor-tools'
 
 const configStore = useConfigStore()
 const { viewStyle } = configStore
@@ -260,19 +261,21 @@ const handleShowRecycleDialog = () => {
 
 //#region --------------------------------------------------< 绑定快捷键 >--------------------------------------------------
 const bindKeys = () => {
-  hotkeys('ctrl+shift+f, ctrl+shift+f', () => {
+  hotkeys('ctrl+shift+f, command+shift+f', (keyboardEvent: KeyboardEvent) => {
     showSearch()
+    keyboardEvent.preventDefault()
     return false
   })
-  hotkeys('ctrl+n, ctrl+n', () => {
+  hotkeys('ctrl+n, command+n', (keyboardEvent: KeyboardEvent) => {
     handleShowAddDocInfoDialog()
+    keyboardEvent.preventDefault()
     return false
   })
 }
 
 const unbindKeys = () => {
-  hotkeys.unbind('ctrl+shift+f, ctrl+shift+f')
-  hotkeys.unbind('ctrl+n, ctrl+n')
+  hotkeys.unbind('ctrl+shift+f, command+shift+f')
+  hotkeys.unbind('ctrl+n, command+n')
 }
 
 //#endregion

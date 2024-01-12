@@ -79,18 +79,20 @@ const changeStyle = () => {
       color: primaryColor.color
     },
     label: {
+      fontSize: 14,
       color: isDark.value ? '#BABABA' : '#000000',
-      textBorderColor: isDark.value ? '#000000' : '#ffffff',
+      textBorderColor: isDark.value ? '#3B3B3B' : '#E7E7E7',
       textBorderWidth: 2
     }
   }
   outside = {
     itemStyle: {
-      color: isDark.value ? '#624B0087' : '#FDC81A87'
+      color: isDark.value ? '#7B5E00' : '#FDC81A87'
     },
     label: {
+      fontSize: 12,
       show: showOutsideName.value,
-      color: isDark.value ? '#808080' : '#B5B5B5'
+      color: isDark.value ? '#959595' : '#B5B5B5'
     }
   }
 }
@@ -194,7 +196,6 @@ const renderChart = () => {
         roam: true,
         label: {
           show: true,
-          fontSize: 12,
           formatter: (param: any) => {
             let len = param.name.length
             if (len < 20) {
@@ -216,6 +217,7 @@ const renderChart = () => {
         // autoCurveness: true,
         lineStyle: {
           color: isDark.value ? '#5E5E5E' : '#B3B3B3',
+          width: 2,
           // 直线或曲线
           curveness: 0.1
         },

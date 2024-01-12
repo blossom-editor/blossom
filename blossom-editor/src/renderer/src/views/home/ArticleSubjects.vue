@@ -94,6 +94,7 @@ const toToc = (articleId: number) => {
 }
 
 .placeholder {
+  @include font(15px, 300);
   padding: 20px 0 0 20px;
   color: var(--bl-text-color-light);
 }

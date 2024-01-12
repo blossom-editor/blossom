@@ -1,9 +1,9 @@
 <template>
-  <div class="config-root" v-loading="auth.status !== '已登录'" element-loading-spinner="none" element-loading-text="请登录后使用博客设置...">
+  <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">博客配置</div>
     <div class="desc">博客各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
 
-    <el-form v-if="auth.status == '已登录'" :model="userParamForm" label-position="right" label-width="130px" style="max-width: 800px">
+    <el-form :model="userParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文章查看地址" :required="true">
         <el-input
           size="default"
@@ -18,7 +18,7 @@
         <div class="conf-tip">
           博客的文章访问地址，即使不使用博客，也推荐配置为后台自带的博客地址。<span style="color: var(--el-color-danger)"
             >必须以<code style="color: var(--el-color-danger)">/#/articles?articleId=</code>结尾。 </span
-          >你可以点击右上角的<span class="iconbl bl-blog" style="padding: 0 3px"></span>图标进行快捷配置。
+          >你可以点击右上角的<span class="iconbl bl-caution-line" style="padding: 0 3px"></span>图标进行快捷配置。
         </div>
       </el-form-item>
 
@@ -65,7 +65,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
 import { userParamListApi, userParamUpdApi, userParamRefreshApi } from '@renderer/api/blossom'
 import { isNotBlank } from '@renderer/assets/utils/obj'
@@ -73,7 +72,6 @@ import { openExtenal } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
 
 const userStore = useUserStore()
-const { auth } = storeToRefs(userStore)
 
 const userParamForm = ref({
   WEB_ARTICLE_URL: '',

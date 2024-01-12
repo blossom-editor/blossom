@@ -79,8 +79,8 @@ const getServerVersion = () => {
 
 .version {
   @include themeColor(#ffffff, #9b9b9b);
-  @include font(13px, 300);
-  @include absolute('', 10px, 10px, '');
+  @include font(12px, 100);
+  @include absolute('', 10px, 7px, '');
   z-index: 2;
 }
 

@@ -6,6 +6,7 @@ import '@renderer/assets/styles/index.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import i18n from './i18n/plugin'
 
 import 'element-plus/es/components/message/style/css'
 import 'element-plus/es/components/message-box/style/css'
@@ -25,6 +26,7 @@ import BLRow from '@renderer/components/BLRow.vue'
 import BLCol from '@renderer/components/BLCol.vue'
 
 const app = createApp(App)
+app.use(i18n)
 app.use(pinia)
 app.use(router)
 app.component('bl-tag', BLTag).component('bl-row', BLRow).component('bl-col', BLCol)

@@ -129,7 +129,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      * @param showMarkdown 是否返回 markdown 正文
      * @param showHtml     是否返回 html 正文
      */
-    public ArticleEntity selectById(Long id, boolean showToc, boolean showMarkdown, boolean showHtml) {
+    public ArticleEntity selectById(Long id, boolean showToc, boolean showMarkdown, boolean showHtml, Long userId) {
         QueryWrapper<ArticleEntity> where = new QueryWrapper<>();
         List<String> column = CollUtil.newArrayList("id", "pid", "name", "icon", "tags", "sort", "cover", "describes", "star_status",
                 "open_status", "pv", "uv", "likes", "words", "version", "cre_time", "upd_time");
@@ -143,7 +143,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
             column.add("html");
         }
         where.select(column);
-        where.eq("id", id).last("limit 1");
+        where.eq("id", id).eq("user_id", userId).last("limit 1");
         return baseMapper.selectOne(where);
     }
 
@@ -200,8 +200,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
      */
     @EnableIndex(type = IndexMsgTypeEnum.DELETE, id = "#id")
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        ArticleEntity article = selectById(id, false, true, true);
+    public void delete(Long id, Long userId) {
+        ArticleEntity article = selectById(id, false, true, true, userId);
         XzException404.throwBy(ObjUtil.isNull(article), "文章不存在");
         /*
         @since 1.10.0

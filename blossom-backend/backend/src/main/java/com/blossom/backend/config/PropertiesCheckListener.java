@@ -41,15 +41,21 @@ public class PropertiesCheckListener implements ApplicationListener<ApplicationE
                         "\n[CHECK] 数据库配置: {}" +
                         "\n[CHECK] 数据库用户: {}" +
                         "\n[CHECK] 数据库密码: {}" +
-                        "\n[CHECK] 图片前缀: {}" +
-                        "\n[CHECK] 图片存储: {}" +
+                        "\n[CHECK] 文件前缀: {}, 非 [http://www.xxx.com/] 内容会强制覆盖后台配置" +
+                        "\n[CHECK] 文件存储: {}" +
+                        "\n[CHECK] 文件大小: {}" +
+                        "\n[CHECK] 授权时长: {}" +
+                        "\n[CHECK] 重置密码: {}" +
                         "\n[CHECK] ==========================================================================================================================\n\n",
                 get(env, SpringUtil.PROFILE_ACTION), get(env, "project.base.version"),
                 get(env, "spring.datasource.url"),
                 get(env, "spring.datasource.username"),
                 get(env, "spring.datasource.password"),
                 get(env, "project.iaas.blos.domain"),
-                get(env, "project.iaas.blos.default-path")
+                get(env, "project.iaas.blos.default-path"),
+                get(env, "spring.servlet.multipart.max-file-size"),
+                get(env, "project.auth.clients[0].duration"),
+                get(env, "project.auth.password-reset")
         );
 
         String defaultPath = get(env, "project.iaas.blos.default-path");

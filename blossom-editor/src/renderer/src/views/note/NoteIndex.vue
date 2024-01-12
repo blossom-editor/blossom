@@ -216,7 +216,7 @@ const notes = ref<any>([])
 
       .note-workbench {
         @include box(100%, 42px);
-        @include font(13px, 700);
+        @include font(13px, 100);
         color: #d1d1d1;
         background-color: #ffffffdc;
         padding: 3px 5px;
@@ -228,8 +228,8 @@ const notes = ref<any>([])
 
       .content {
         @include box(100%, calc(100% - 42px));
+        @include font(14px,300);
         max-height: calc(100% - 21px);
-        font-size: 14px;
         line-height: 20.8px;
         padding: 0 5px;
         z-index: 3;

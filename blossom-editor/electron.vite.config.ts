@@ -17,6 +17,11 @@ export default defineConfig({
   },
   renderer: {
     envDir: resolve('src/env'),
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      hmr: true
+    },
     plugins: [
       vue(),
       visualizer({

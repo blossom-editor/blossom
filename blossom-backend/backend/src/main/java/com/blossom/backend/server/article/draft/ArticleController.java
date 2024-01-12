@@ -92,7 +92,7 @@ public class ArticleController {
         if (showHtml == null) {
             showHtml = false;
         }
-        ArticleEntity article = baseService.selectById(id, showToc, showMarkdown, showHtml);
+        ArticleEntity article = baseService.selectById(id, showToc, showMarkdown, showHtml, AuthContext.getUserId());
         XzException400.throwBy(ObjUtil.isNull(article), "文章不存在");
         ArticleInfoRes res = article.to(ArticleInfoRes.class);
         res.setTags(DocUtil.toTagList(article.getTags()));
@@ -177,7 +177,7 @@ public class ArticleController {
      */
     @PostMapping("/upd/tag")
     public R<List<String>> updTag(@Validated @RequestBody ArticleUpdTagReq req) {
-        ArticleEntity info = baseService.selectById(req.getId(), false, false, false);
+        ArticleEntity info = baseService.selectById(req.getId(), false, false, false, AuthContext.getUserId());
         List<String> tags = DocUtil.toTagList(info.getTags());
         if (tags.contains(req.getTag().toLowerCase()) || tags.contains(req.getTag().toUpperCase())) {
             tags.remove(req.getTag().toLowerCase());
@@ -196,7 +196,7 @@ public class ArticleController {
      */
     @PostMapping("/del")
     public R<?> delete(@Validated @RequestBody DelReq req) {
-        baseService.delete(req.getId());
+        baseService.delete(req.getId(), AuthContext.getUserId());
         return R.ok();
     }
 
@@ -219,7 +219,7 @@ public class ArticleController {
      */
     @GetMapping("/download")
     public void download(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
-        ArticleEntity article = baseService.selectById(id, false, true, false);
+        ArticleEntity article = baseService.selectById(id, false, true, false, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getMarkdown())) {
             throw new IllegalArgumentException("文章内容为空,无法导出");
         }
@@ -240,7 +240,7 @@ public class ArticleController {
      */
     @GetMapping("/download/html")
     public void downloadHtml(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
-        ArticleEntity article = baseService.selectById(id, false, false, true);
+        ArticleEntity article = baseService.selectById(id, false, false, true, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getHtml())) {
             throw new IllegalArgumentException("文章内容为空,无法导出");
         }
@@ -271,6 +271,7 @@ public class ArticleController {
             ArticleEntity article = new ArticleEntity();
             article.setMarkdown(content);
             article.setPid(pid);
+            article.setUserId(AuthContext.getUserId());
             article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
             baseService.insert(article);
         } catch (Exception e) {
@@ -302,7 +303,7 @@ public class ArticleController {
     public String content(@RequestParam("k") String s, HttpServletResponse resp) {
         ArticleTempVisitService.TempVisit visit = tempVisitService.get(s);
         XzException404.throwBy(ObjUtil.isNull(visit), "文章不存在或您无权限查看");
-        ArticleEntity article = baseService.selectById(visit.getArticleId(), false, false, true);
+        ArticleEntity article = baseService.selectById(visit.getArticleId(), false, false, true, visit.getUserId());
         resp.setContentType("text/html");
         return ArticleUtil.toHtml(article, userService.selectById(visit.getUserId()));
     }

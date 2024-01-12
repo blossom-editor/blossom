@@ -9,6 +9,7 @@ import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.base.paramu.UserParamEnum;
 import com.blossom.backend.base.paramu.UserParamService;
 import com.blossom.backend.base.paramu.pojo.UserParamEntity;
+import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleInfoRes;
@@ -57,7 +58,9 @@ public class ArticleOpenController {
      */
     @AuthIgnore
     @GetMapping("/info")
-    public R<ArticleInfoRes> infoOpen(@RequestParam("id") Long id, HttpServletRequest request) {
+    public R<ArticleInfoRes> infoOpen(@RequestHeader(BlConstants.REQ_HEADER_USERID) Long userId,
+                                      @RequestParam("id") Long id,
+                                      HttpServletRequest request) {
         log.info("公开文章被查看:{}", id);
         ArticleOpenEntity open = openService.selectById(id, true, false, true);
         XzException404.throwBy(ObjUtil.isNull(open), "文章不存在");
@@ -68,7 +71,7 @@ public class ArticleOpenController {
         res.setSyncTime(open.getSyncTime());
         res.setType(DocTypeEnum.A.getType());
 
-        ArticleEntity article = articleService.selectById(id, false, false, false);
+        ArticleEntity article = articleService.selectById(id, false, false, false, userId);
         if (article != null) {
             res.setTags(DocUtil.toTagList(article.getTags()));
             res.setName(article.getName());

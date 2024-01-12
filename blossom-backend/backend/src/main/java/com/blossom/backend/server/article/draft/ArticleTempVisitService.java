@@ -76,19 +76,4 @@ public class ArticleTempVisitService {
             this.userId = userId;
         }
     }
-
-
-//    public static void main(String[] args) throws InterruptedException {
-//        ArticleTempService a = new ArticleTempService();
-//        String key = a.create(20034L);
-//        System.out.println(key);
-//
-//        Thread.sleep(2000);
-//        Long v1 = a.get(key);
-//        System.out.println(v1);
-//
-//        Thread.sleep(5000);
-//        Long v2 = a.get(key);
-//        System.out.println(v2);
-//    }
 }
