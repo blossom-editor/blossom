@@ -36,17 +36,19 @@
         ref="ButtonRef"
         v-click-outside="onClickOutside"></div>
 
-      <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
+      <el-tooltip content="主题配置" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
+        <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
+      </el-tooltip>
 
-      <el-tooltip content="查看图标" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="所有图标" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
         <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>
 
-      <el-tooltip content="显示网页收藏" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="网页收藏" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
         <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
       </el-tooltip>
 
-      <el-tooltip content="最佳窗口大小" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
+      <el-tooltip content="最佳窗口大小" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
         <div v-if="isElectron()" :class="['iconbl bl-computer-line', isWindows() ? '' : 'electron-mac-last']" @click="setBestSize"></div>
       </el-tooltip>
 
