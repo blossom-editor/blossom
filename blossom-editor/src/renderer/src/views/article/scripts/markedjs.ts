@@ -7,7 +7,7 @@ import markedKatex from 'marked-katex-extension'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 // katex
-import katex from 'katex'
+import katex, { KatexOptions } from 'katex'
 import 'katex/dist/katex.min.css'
 // mermaid
 import mermaid from 'mermaid'
@@ -54,7 +54,7 @@ export const singleDollar = /^\$+([^\$\n]+?)\$+/
 export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
 export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
 
-const katexOptions = {
+const katexOptions: KatexOptions = {
   throwOnError: false,
   displayMode: true,
   // 生成 katex-mathml 时会出现错误, mathml 绝对定位没有定到 katex-display 元素, 而是找到上级导致页面出现错误
