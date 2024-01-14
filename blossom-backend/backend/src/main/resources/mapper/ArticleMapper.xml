@@ -78,6 +78,7 @@
             upd_time = now()
         </set>
         where id = #{id}
+          and user_id = #{userId}
     </update>
 
     <!-- 根据ID修改 -->

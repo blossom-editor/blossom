@@ -139,6 +139,7 @@ public class ArticleController {
     public R<Long> insert(@Validated @RequestBody ArticleUpdReq req) {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
+        article.setUserId(AuthContext.getUserId());
         return R.ok(baseService.update(article));
     }
 
@@ -166,6 +167,7 @@ public class ArticleController {
     @PostMapping("/upd/name")
     public R<?> updName(@Validated @RequestBody ArticleUpdNameReq name) {
         ArticleEntity article = name.to(ArticleEntity.class);
+        article.setUserId(AuthContext.getUserId());
         baseService.update(article);
         return R.ok();
     }
@@ -187,6 +189,7 @@ public class ArticleController {
         }
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(tags));
+        article.setUserId(AuthContext.getUserId());
         baseService.update(article);
         return R.ok(tags);
     }
@@ -207,7 +210,9 @@ public class ArticleController {
      */
     @PostMapping("/star")
     public R<Long> star(@Validated @RequestBody ArticleStarReq req) {
-        return R.ok(baseService.update(req.to(ArticleEntity.class)));
+        ArticleEntity article = req.to(ArticleEntity.class);
+        article.setUserId(AuthContext.getUserId());
+        return R.ok(baseService.update(article));
     }
 
     /**

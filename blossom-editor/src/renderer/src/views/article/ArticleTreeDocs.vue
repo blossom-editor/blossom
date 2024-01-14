@@ -573,11 +573,14 @@ const syncDoc = () => {
 const delDoc = () => {
   let type = curDoc.value.ty === 3 ? '文章' : '文件夹'
   ElMessageBox.confirm(
-    `是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后的文章可在回收站中查看。`,
+    `<strong>注意：</strong><br/>
+    1. 公开访问记录将永久删除。<br/>
+    2. 双链引用将永久删除，还原后续重新编辑才可再次生成。<br/>
+    是否继续删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？`,
     {
       confirmButtonText: '确定删除',
       cancelButtonText: '我再想想',
-      type: 'info',
+      // type: 'warning',
       draggable: true,
       dangerouslyUseHTMLString: true
     }

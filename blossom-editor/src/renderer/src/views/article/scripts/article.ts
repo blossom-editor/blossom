@@ -41,7 +41,8 @@ export interface ArticleReference {
    *
    * 10 : picture
    * 11 : inner article
+   * 12 : unknown inner article
    * 21 : public article
    */
-  type: 10 | 11 | 21
+  type: 10 | 11 | 12 | 21
 }

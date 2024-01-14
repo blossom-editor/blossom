@@ -166,6 +166,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     public Long update(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
         baseMapper.updById(req);
+        referenceService.updateInnerName(req.getUserId(), req.getId(), req.getName());
         return req.getId();
     }
 
@@ -212,8 +213,10 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         baseMapper.deleteById(id);
         // 删除公开文章
         openMapper.delById(id);
-        // 删除引用
+        // 删除主动引用
         referenceService.delete(id);
+        // 将被动引用中的名称修改为未知
+        referenceService.updateToUnknown(userId, id);
         // 删除访问记录
         viewService.delete(id);
     }

@@ -16,8 +16,8 @@ import java.util.List;
  * 文章回收站 [A#Recycle]
  *
  * @author xzzz
- * @since 1.10.0
  * @order 7
+ * @since 1.10.0
  */
 @Slf4j
 @RestController
@@ -44,7 +44,7 @@ public class ArticleRecycleController {
      */
     @PostMapping("/restore")
     public R<?> restore(@Validated @RequestBody ArticleRecycleRestoreReq req) {
-        baseService.restore(req.getId());
+        baseService.restore(AuthContext.getUserId(), req.getId());
         return R.ok();
     }
 }

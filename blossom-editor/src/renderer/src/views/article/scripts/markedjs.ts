@@ -413,14 +413,18 @@ export const renderLink = (href: string | null, title: string | null, text: stri
       }
 
       // 从文章列表中获取文章, 如果找到则认为是内部引用, 否则即使是内部引用格式, 也认为是个外部文章.
+      // 内部引用不会使用 Markdown 中的链接名, 而是用内部文章名
       let article = getDocById(articleId.toString(), docTrees)
       if (article != undefined) {
         ref.targetId = article.i
         ref.targetName = article.n
         ref.type = 11
+      } else {
+        ref.targetId = articleId.toString()
+        ref.targetName = '未知文章-' + articleId.toString()
+        ref.type = 12
       }
 
-      // class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》"
       link = `<a target="_blank" href=${href} class="inner-link"
       onclick="onHtmlEventDispatch(this,'',event,'showArticleReferenceView','${ref.targetId}')">${text}</a>`
     } else {
