@@ -453,6 +453,7 @@ const unbindKeys = () => {
         padding: 0 3px 2px 3px;
         border-top: 1px solid var(--el-border-color);
         overflow-y: scroll;
+        color: var(--bl-text-color-light);
       }
 
       .workbench {
@@ -486,6 +487,10 @@ const unbindKeys = () => {
         border-top: 1px solid var(--el-color-primary);
         border-left: 1px solid var(--el-color-primary);
         display: block;
+      }
+
+      .markdown {
+        color: var(--bl-text-color);
       }
     }
 

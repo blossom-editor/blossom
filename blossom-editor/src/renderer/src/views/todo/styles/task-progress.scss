@@ -105,7 +105,7 @@
 
   .add-icon {
     @include font(13px, 300);
-    padding-right: 3px;
+    padding: 0 3px;
     color: var(--bl-text-color-light);
     cursor: pointer;
 

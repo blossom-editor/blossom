@@ -81,7 +81,7 @@
           <bl-col class="desc" align="flex-end">
             <div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div>
             <div>
-              <a href="https://chinesecolor.org/" target="_blank">主题色参考 <span class="iconbl bl-sendmail-line"></span></a>
+              <a href="https://www.chinavid.com/color.html" target="_blank">主题色参考 <span class="iconbl bl-sendmail-line"></span></a>
             </div>
           </bl-col>
         </el-tab-pane>
