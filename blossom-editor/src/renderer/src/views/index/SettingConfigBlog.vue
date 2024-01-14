@@ -32,9 +32,9 @@
         <div class="conf-tip">博客左上角 Logo 的访问地址，以及在浏览器标签中的 Logo。</div>
       </el-form-item>
 
-      <el-form-item label="IPC备案号">
+      <el-form-item label="ICP备案号">
         <el-input size="default" v-model="userParamForm.WEB_IPC_BEI_AN_HAO" @change="(cur: any) => updParam('WEB_IPC_BEI_AN_HAO', cur)"></el-input>
-        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 IPC 备案号</div>
+        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 ICP 备案号</div>
       </el-form-item>
 
       <el-form-item label="公网安备号">
