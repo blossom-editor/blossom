@@ -227,7 +227,7 @@
       <!-- 其他工具 -->
       <div class="divider"></div>
       <el-tooltip
-        content="查看快捷键"
+        content="快捷键说明"
         popper-class="is-small"
         effect="light"
         placement="top"

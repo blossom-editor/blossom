@@ -103,15 +103,26 @@ export const tokenizerCodespan = (src: string): any => {
 //#endregion
 
 //#region ----------------------------------------< renderer >--------------------------------------
-
+const domParser = new DOMParser()
 /**
  * 标题解析为 TOC 集合, 增加锚点跳转
  * @param text  标题内容
  * @param level 标题级别
  */
 export const renderHeading = (text: any, level: number) => {
-  const realLevel = level
-  return `<h${realLevel} id="${realLevel}-${text}">${text}</h${realLevel}>`
+  let id: string = randomInt(1000000, 9999999).toString()
+  try {
+    let dom = domParser.parseFromString(text, 'text/html')
+    if (dom) {
+      id += dom.body.innerText
+    } else {
+      id += text
+    }
+  } catch {
+    id += text
+  }
+
+  return `<h${level} id="${id}">${text}</h${level}>`
 }
 
 /**
@@ -328,25 +339,10 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
 
 /**
  * 单行代码块的解析拓展
- * 1. katex `$内部写表达式$`
  * @param src
  * @returns
  */
 export const renderCodespan = (src: string) => {
-  let arr = src.match(singleDollar)
-  if (arr != null && arr.length > 0) {
-    try {
-      return katex.renderToString(arr[1], {
-        throwOnError: true,
-        output: 'html'
-      })
-    } catch (error) {
-      console.error(error)
-      return `<div class='bl-preview-analysis-fail-inline'>
-          Katex 语法解析失败! 你可以尝试前往<a href='https://katex.org/#demo' target='_blank'> Katex 官网</a> 来校验你的公式。
-          </div>`
-    }
-  }
   return `<code>${src}</code>`
 }
 

@@ -69,12 +69,10 @@
       <div :class="['bl-preview-toc-absolute', tocsExpand ? 'is-expand-open' : 'is-expand-close']" ref="TocRef">
         <div class="toc-title" ref="TocTitleRef">
           目录
-          <span v-show="tocsExpand" style="font-size: 10px">({{ isMacOS() ? 'Cmd' : 'Alt' }}+2 可隐藏)</span>
+          <span v-show="tocsExpand" style="font-size: 10px">({{ keymaps.hideToc }} 可隐藏)</span>
         </div>
         <div class="toc-content" v-show="tocsExpand">
-          <div v-for="toc in articleToc" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
-            <span v-html="toc.content"></span>
-          </div>
+          <div v-for="toc in articleToc" :key="toc.id" :class="[toc.clazz]" @click="toScroll(toc.id)" v-html="toc.content"></div>
         </div>
         <div class="img-title">
           引用图片
@@ -171,7 +169,8 @@ import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
 import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
-import { TempTextareaKey, ArticleReference, DocEditorStyle } from './scripts/article'
+import { TempTextareaKey, ArticleReference, DocEditorStyle, parseTocAsync } from './scripts/article'
+import type { Toc } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
 import { useResize } from './scripts/editor-preview-resize'
 // codemirror
@@ -189,6 +188,8 @@ import marked, {
 } from './scripts/markedjs'
 import { EPScroll } from './scripts/editor-preview-scroll'
 import { useArticleHtmlEvent } from './scripts/article-html-event'
+import { shallowRef } from 'vue'
+import { keymaps } from './scripts/editor-tools'
 
 const PictureViewerInfo = defineAsyncComponent(() => import('@renderer/views/picture/PictureViewerInfo.vue'))
 // const EditorTools = defineAsyncComponent(() => import('./EditorTools.vue'))
@@ -463,7 +464,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
     html: PreviewRef.value.innerHTML,
-    toc: JSON.stringify(articleToc.value),
+    // toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
   await articleUpdContentApi(data)
@@ -614,7 +615,7 @@ const setNewState = (md: string): void => {
 
 //#region ----------------------------------------< marked/preview >-------------------------------
 const renderInterval = ref(0) // 解析用时
-const articleHtml = ref('') // 解析后的 html 内容
+const articleHtml = shallowRef('') // 解析后的 html 内容
 let immediateParse = false // 是否立即渲染, 文档初次加载时立即渲染, 内容变更时防抖渲染
 /**
  * 自定义渲染
@@ -633,7 +634,6 @@ const renderer = {
     return renderCode(code, language, _isEscaped)
   },
   heading(text: any, level: number): string {
-    articleToc.value.push({ level: level, clazz: 'toc-' + level, index: articleToc.value.length, content: text })
     return renderHeading(text, level)
   },
   image(href: string | null, _title: string | null, text: string): string {
@@ -671,6 +671,7 @@ const parse = () => {
     articleHtml.value = content
     renderInterval.value = Date.now() - begin
     articleParseing = false
+    nextTick(() => parseToc())
   })
 }
 
@@ -693,9 +694,9 @@ useResize(EditorRef, PreviewRef, ResizeDividerRef)
 //#endregion
 
 //#region ----------------------------------------< TOC >------------------------------------------
-const articleToc = ref<any[]>([])
-const articleImg = ref<ArticleReference[]>([]) // 文章对图片引用
-const articleLink = ref<ArticleReference[]>([]) // 文章对链接的引用
+const articleToc = shallowRef<Toc[]>([])
+const articleImg = shallowRef<ArticleReference[]>([]) // 文章对图片引用
+const articleLink = shallowRef<ArticleReference[]>([]) // 文章对链接的引用
 const TocRef = ref()
 const TocTitleRef = ref()
 /**
@@ -703,16 +704,18 @@ const TocTitleRef = ref()
  * @param level 标题级别
  * @param content 标题内容
  */
-const toScroll = (level: number, content: string) => {
-  let id = level + '-' + content
+const toScroll = (id: string) => {
   let elm: HTMLElement = document.getElementById(id) as HTMLElement
   ;(elm.parentNode as Element).scrollTop = elm.offsetTop
 }
 // 清空当前目录内容
 const clearTocAndImg = () => {
-  articleToc.value = []
   articleImg.value = []
   articleLink.value = []
+}
+
+const parseToc = async () => {
+  parseTocAsync(PreviewRef.value).then((tocs) => (articleToc.value = tocs))
 }
 
 useDraggable(TocRef, TocTitleRef)

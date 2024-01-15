@@ -113,7 +113,7 @@
           </div>
           <div class="toc-title">目录</div>
           <div class="toc-content">
-            <div v-for="toc in tocList" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
+            <div v-for="toc in tocList" :key="toc.id" :class="[toc.clazz]" @click="toScroll(toc.id)">
               {{ toc.content }}
             </div>
           </div>
@@ -185,7 +185,7 @@ const article = ref<DocInfo>({
   html: `<div style="color:#E3E3E3;width:100%;height:300px;display:flex;justify-content: center;
     align-items: center;font-size:25px;">请在左侧菜单选择文章</div>`
 })
-const tocList = ref<any>([])
+const tocList = ref<Toc[]>([])
 const defaultOpeneds = ref<string[]>([])
 const PreviewRef = ref()
 
@@ -217,6 +217,10 @@ const getDocTree = () => {
   }
 }
 
+/**
+ * 获取文章信息
+ * @param tree
+ */
 const clickCurDoc = async (tree: DocTree) => {
   // 如果选中的是文章, 则查询文章详情, 用于在编辑器中显示以及注入
   if (tree.ty == 3) {
@@ -224,6 +228,7 @@ const clickCurDoc = async (tree: DocTree) => {
     window.history.replaceState('', '', '#/articles?articleId=' + tree.i)
     nextTick(() => {
       PreviewRef.value.scrollTo({ top: 0 })
+      parseTocAsync(PreviewRef.value)
     })
   }
 }
@@ -240,19 +245,56 @@ const getCurEditArticle = async (id: number) => {
   }
 
   const then = (resp: any) => {
-    if (isNull(resp.data)) return
+    if (isNull(resp.data)) {
+      return
+    }
     article.value = resp.data
-    tocList.value = JSON.parse(resp.data.toc)
   }
   if (userStore.isLogin) {
-    await articleInfoApi({ id: id, showToc: true, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
+    await articleInfoApi({ id: id, showToc: false, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
   } else {
-    await articleInfoOpenApi({ id: id, showToc: true, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
+    await articleInfoOpenApi({ id: id, showToc: false, showMarkdown: false, showHtml: true }).then((resp) => then(resp))
   }
 }
 
-const toScroll = (level: number, content: string) => {
-  let id = level + '-' + content
+/**
+ * 解析目录
+ */
+const parseTocAsync = async (ele: HTMLElement) => {
+  let heads = ele.querySelectorAll('h1, h2, h3, h4, h5, h6')
+  let tocs: Toc[] = []
+  for (let i = 0; i < heads.length; i++) {
+    let head: Element = heads[i]
+    let level = 1
+    let content = (head as HTMLElement).innerText
+    let id = head.id
+    switch (head.localName) {
+      case 'h1':
+        level = 1
+        break
+      case 'h2':
+        level = 2
+        break
+      case 'h3':
+        level = 3
+        break
+      case 'h4':
+        level = 4
+        break
+      case 'h5':
+        level = 5
+        break
+      case 'h6':
+        level = 6
+        break
+    }
+    let toc: Toc = { content: content, clazz: 'toc-' + level, id: id }
+    tocs.push(toc)
+  }
+  tocList.value = tocs
+}
+
+const toScroll = (id: string) => {
   let elm = document.getElementById(id)
   elm?.scrollIntoView(true)
 }
@@ -349,6 +391,9 @@ const closeAll = () => {
   maskStyle.value = { display: 'none' }
 }
 
+/**
+ *
+ */
 const onresize = () => {
   let width = document.body.clientWidth
   if (width < 1100) {
@@ -552,10 +597,6 @@ const onresize = () => {
           .toc-5,
           .toc-6 {
             cursor: pointer;
-            // overflow: hidden;
-            // white-space: nowrap;
-            // text-overflow: ellipsis;
-            // white-space: pre;
 
             &:hover {
               font-weight: bold;
@@ -564,7 +605,6 @@ const onresize = () => {
 
           .toc-1 {
             font-size: 1.1em;
-            border-top: 2px solid #eeeeee;
             margin-top: 5px;
             padding-top: 5px;
 
