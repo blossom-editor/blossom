@@ -279,8 +279,8 @@ html.dark {
   --bl-preview-pre-box-shadow: inset 0 0 8px #9e9e9e; */
 
   /* 全局滚动条样式 */
-  --bl-scrollbar-color: #0000001a;
-  --bl-scrollbar-color-hover: #0000002a;
+  --bl-scrollbar-color: #bfbfbf66;
+  --bl-scrollbar-color-hover: #8484848a;
 }
 
 html.dark {
