@@ -57,7 +57,10 @@
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
         <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
-        <el-backtop target=".editor-codemirror" :right="50" :bottom="70"> <div class="iconbl bl-send-line backtop"></div> </el-backtop>
+        <el-backtop target=".editor-codemirror" :right="20" :bottom="90"><div class="iconbl bl-a-doubleonline-line backtop"></div></el-backtop>
+        <el-backtop target=".editor-codemirror" :right="20" :bottom="45" :visibility-height="0" @click="scrollBottom">
+          <div class="iconbl bl-a-doubleunderline-line backbottom"></div>
+        </el-backtop>
       </div>
 
       <!-- status -->
@@ -154,15 +157,13 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@rendere
 // utils
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
-import { sleep, isMacOS, isElectron } from '@renderer/assets/utils/util'
+import { sleep, isElectron } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
-// import PictureViewerInfo from '@renderer/views/picture/PictureViewerInfo.vue'
 import ArticleTreeDocs from './ArticleTreeDocs.vue'
 import ArticleIndexPlaceholder from './ArticleIndexPlaceholder.vue'
 import EditorTools from './EditorTools.vue'
-// import EditorStatus from './EditorStatus.vue'
 // ts
 import hotkeys from 'hotkeys-js'
 import Notify from '@renderer/scripts/notify'
@@ -464,7 +465,6 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
     html: PreviewRef.value.innerHTML,
-    // toc: JSON.stringify(articleToc.value),
     references: articleImg.value.concat(articleLink.value)
   }
   await articleUpdContentApi(data)
@@ -517,7 +517,7 @@ const curIsArticle = (): boolean => {
   if (isNull(curArticle.value)) {
     return false
   }
-  if (isNull(curArticle.value?.type) || curArticle.value?.type != 3) {
+  if (isNull(curArticle.value!.type) || curArticle.value!.type != 3) {
     return false
   }
   return true
@@ -633,8 +633,8 @@ const renderer = {
   code(code: string, language: string | undefined, _isEscaped: boolean): string {
     return renderCode(code, language, _isEscaped)
   },
-  heading(text: any, level: number): string {
-    return renderHeading(text, level)
+  heading(text: string, level: number, raw: string): string {
+    return renderHeading(text, level, raw)
   },
   image(href: string | null, _title: string | null, text: string): string {
     articleImg.value.push({ targetId: '0', targetName: text, targetUrl: href as string, type: 10 })
@@ -724,7 +724,7 @@ useDraggable(TocRef, TocTitleRef)
 
 //#region ----------------------------------------< 双屏滚动  >----------------------------------------
 let scrollWrapper: EPScroll
-const initScroll = () => {
+const initScroll = async () => {
   scrollWrapper = new EPScroll(EditorRef.value, PreviewRef.value, cmw)
 }
 
@@ -750,6 +750,10 @@ const addListenerScroll = () => {
 
 const removeListenerScroll = () => {
   EditorRef.value.removeEventListener('scroll', scroll)
+}
+
+const scrollBottom = () => {
+  ;(EditorRef.value as Element).scrollTop = 9999999999
 }
 //#endregion
 

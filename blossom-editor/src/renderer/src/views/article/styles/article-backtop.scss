@@ -1,16 +1,25 @@
+.el-backtop {
+  @include box(37px, 37px);
+  box-shadow: none;
+  background-color: transparent;
+}
+
 .backtop {
   @include box(100%, 100%);
-  @include themeShadow(0 0 5px 1px #cecece, 0 0 5px 1px #000000);
-  @include themeColor(#c2c2c2, #717171);
+  @include themeShadow(0 0 3px 1px #0000001e, 0 0 3px 1px #000000);
+  color: var(--bl-text-color-light);
   background-color: var(--bl-html-color);
   text-align: center;
-  line-height: 40px;
+  line-height: 38px;
   border-radius: 8px;
-  font-size: 25px;
-  transform: rotate(-90deg);
-  transition: color 0.3s;
+  font-size: 20px;
+  transition: color 0.2s;
 
   &:hover {
     color: var(--el-color-primary);
   }
+}
+
+.backbottom {
+  @extend .backtop;
 }
