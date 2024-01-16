@@ -108,13 +108,18 @@ const domParser = new DOMParser()
  * 标题解析为 TOC 集合, 增加锚点跳转
  * @param text  标题内容
  * @param level 标题级别
+ * @param raw   原内容
  */
-export const renderHeading = (text: any, level: number) => {
+export const renderHeading = (text: string, level: number, raw: string) => {
   let id: string = randomInt(1000000, 9999999).toString()
   try {
-    let dom = domParser.parseFromString(text, 'text/html')
-    if (dom) {
-      id += dom.body.innerText
+    if (raw.indexOf('<') > -1 && raw.indexOf('>') > -1) {
+      let dom = domParser.parseFromString(raw, 'text/html')
+      if (dom) {
+        id += dom.body.innerText
+      } else {
+        id += text
+      }
     } else {
       id += text
     }
