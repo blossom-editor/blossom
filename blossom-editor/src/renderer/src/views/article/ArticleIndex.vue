@@ -581,15 +581,7 @@ const initEditor = (_doc?: string) => {
       EditorRef.value
     )
   )
-  // 创建元素
-  let editorHeightHolder = document.createElement('div')
-  editorHeightHolder.style.height = '65vh'
-  editorHeightHolder.addEventListener('click', () => {
-    let length = cmw.getDocLength()
-    cmw.editor.focus()
-    cmw.insert(length, length, '', length, length)
-  })
-  EditorRef.value.appendChild(editorHeightHolder)
+  appendEditorHolder()
 }
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
@@ -609,6 +601,19 @@ const setNewState = (md: string): void => {
     )
   )
   parse()
+}
+
+const appendEditorHolder = () => {
+  // 创建元素
+  let editorHeightHolder = document.createElement('div')
+  editorHeightHolder.style.height = '65vh'
+  editorHeightHolder.style.position = 'relative'
+  editorHeightHolder.addEventListener('click', () => {
+    let length = cmw.getDocLength()
+    cmw.editor.focus()
+    cmw.insert(length, length, '', length, length)
+  })
+  EditorRef.value.appendChild(editorHeightHolder)
 }
 
 //#endregion
@@ -640,7 +645,7 @@ const renderer = {
     articleImg.value.push({ targetId: '0', targetName: text, targetUrl: href as string, type: 10 })
     return renderImage(href, _title, text)
   },
-  link(href: string | null, title: string | null, text: string): string {
+  link(href: string, title: string | null | undefined, text: string): string {
     let { link, ref } = renderLink(href, title, text, ArticleTreeDocsRef.value.getDocTreeData())
     articleLink.value.push(ref)
     return link
@@ -656,7 +661,6 @@ const tokenizer = {
   }
 }
 
-//@ts-ignore
 marked.use({ tokenizer: tokenizer, renderer: renderer })
 
 /**
@@ -671,7 +675,22 @@ const parse = () => {
     articleHtml.value = content
     renderInterval.value = Date.now() - begin
     articleParseing = false
-    nextTick(() => parseToc())
+    nextTick(() => {
+      parseToc()
+
+      let previewHeightHolder = document.createElement('div')
+      previewHeightHolder.style.height = '60vh'
+      PreviewRef.value.appendChild(previewHeightHolder)
+
+      const clientHeight = EditorRef.value.clientHeight
+      const scrollTop = EditorRef.value.scrollTop
+      const scrollHeight = EditorRef.value.scrollHeight
+      let a = clientHeight + scrollTop
+      if (a >= scrollHeight - 150) {
+        EditorRef.value.scrollTop = 99999999
+        PreviewRef.value.scrollTop = 99999999
+      }
+    })
   })
 }
 

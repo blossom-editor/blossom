@@ -311,7 +311,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
           if (tag.startsWith('h')) {
             height = tags[i].substring(1)
             if (!height.endsWith('%')) {
-              width += 'px'
+              height += 'px'
             }
           }
         }
@@ -325,7 +325,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
 
     return `<iframe width="${width}" height="${height}" style="margin: 10px 0"
-      scrolling="no" border="0" frameborder="no" framespacing="0"
+      scrolling="no" border="0" frameborder="no" framespacing="0" loading="lazy" 
       src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
   }
   const id = 'pre-' + Date.now() + '-' + randomInt(1, 1000000)
@@ -398,7 +398,7 @@ export const renderImage = (href: string | null, title: string | null, text: str
  *  ref: 双链内容
  * }
  */
-export const renderLink = (href: string | null, title: string | null, text: string, docTrees: DocTree[]) => {
+export const renderLink = (href: string, title: string | null | undefined, text: string, docTrees: DocTree[]) => {
   let link: string
   let ref: ArticleReference = { targetId: '0', targetName: text, targetUrl: href as string, type: 21 }
   if (isBlank(title)) {
