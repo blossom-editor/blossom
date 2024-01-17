@@ -154,6 +154,9 @@ const ascending = 1
 const getLinkCount = (name: string, links: any[]): number => {
   let count: number = 20
   for (let i = 0; i < links.length; i++) {
+    if (count >= 100) {
+      break
+    }
     let link = links[i]
     if (link.source == name) {
       count += ascending
