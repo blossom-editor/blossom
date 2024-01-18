@@ -1,8 +1,8 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-col class="workbench-name" just="flex-start" align="flex-end" height="46px" v-show="curDoc !== undefined">
-      <span>《{{ curDoc?.name }}》</span>
-      <span style="font-size: 9px; padding-right: 5px">{{ curDoc?.id }}</span>
+    <bl-col class="workbench-name" just="flex-start" align="flex-end" height="46px" v-show="curArticle !== undefined">
+      <span>《{{ curArticle?.name }}》</span>
+      <span style="font-size: 9px; padding-right: 5px">{{ curArticle?.id }}</span>
     </bl-col>
     <bl-row class="wb-page-container">
       <Transition name="wbpage-one">
@@ -126,7 +126,7 @@
 <script setup lang="ts">
 import { ref, nextTick, inject, onDeactivated } from 'vue'
 import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
-import { provideKeyDocInfo, SortLevelColor } from '@renderer/views/doc/doc'
+import { provideKeyCurArticleInfo, SortLevelColor } from '@renderer/views/doc/doc'
 import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
 import { useConfigStore } from '@renderer/stores/config'
 import ArticleInfo from './ArticleInfo.vue'
@@ -174,7 +174,7 @@ const toWorkbenchPage = (page: number) => {
 //#endregion
 
 //#region --------------------------------------------------< 查询 >--------------------------------------------------
-const curDoc = inject(provideKeyDocInfo)
+const curArticle = inject(provideKeyCurArticleInfo)
 
 const onlyOpen = ref<boolean>(false) // 只显示公开
 const onlySubject = ref<boolean>(false) // 只显示专题
