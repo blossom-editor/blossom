@@ -83,8 +83,9 @@
   }
 
   .toc-content {
-    @include box(100%, calc(100% - 20px - 20px));
-    @include font(14px);
+    @include box(100%, calc(100% - 130px));
+    @include font(13px);
+    padding-bottom: 10px;
 
     .toc-1 {
       border-top: 2px solid var(--bl-preview-toc-border-color);
