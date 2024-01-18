@@ -53,7 +53,10 @@ export const cwTheme: any = {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     borderColor: 'var(--bl-editor-gutters-border-color)',
     color: 'var(--bl-editor-gutters-color)',
-    fontSize: '12px'
+    fontSize: '12px',
+    width: '50px',
+    minWidth: '50px',
+    maxWidth: '50px'
   },
   '.cm-activeLineGutter': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
@@ -364,7 +367,7 @@ export class CmWrapper {
     return editor.state.doc.toString()
   }
   /**
-   * 获取文档长度
+   * 获取文档的最大长度
    * @param editor
    * @returns 长度
    */
@@ -441,6 +444,9 @@ export class CmWrapper {
   }
   getDocLength = (): number => {
     return CmWrapper.getDocLength(this._editor)
+  }
+  getTotalLine = () => {
+    return this.editor.state.doc.lines
   }
   getSelectionRangesText = (): string => {
     return CmWrapper.getSelectionRangesText(this._editor)
