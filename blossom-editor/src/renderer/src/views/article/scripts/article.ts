@@ -1,3 +1,5 @@
+import { isNull } from '@renderer/assets/utils/obj'
+
 /**
  * 临时内容的 localStorage key
  */
