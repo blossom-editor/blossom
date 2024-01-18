@@ -187,13 +187,10 @@ export const renderBlockquote = (quote: string) => {
 
 /**
  * 自定义代码块内容解析:
- * 1. bilibili
- *    格式为: ```bilibili${grammar}bvid${grammar}w100${grammar}h100
- *    官方使用文档: https://player.bilibili.com/
- *
+ * 1. mermaid  (async)
  * 2. katex
- * 3. mermaid
- * 4. markmap
+ * 3. markmap  (async)
+ * 4. bilibili (iframe), 文档: https://player.bilibili.com/
  *
  * @param code      解析后的 HTML 代码
  * @param language  语言
@@ -201,6 +198,11 @@ export const renderBlockquote = (quote: string) => {
  */
 export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
   if (language == undefined) language = 'text'
+
+  /** ==========================================================================================
+   * 渲染 mermaid
+   * ```mermaid${grammar}h300
+   * ========================================================================================== */
   if (language.startsWith('mermaid') && isNotBlank(code)) {
     const eleid = 'mermaid-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
@@ -239,9 +241,12 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
         let element = document.getElementById(eleid)
         if (element) element!.innerHTML = html
       })
-    return `<p class="mermaid-container" style="height:${height}" id="${eleid}">${eleid}</p>`
+    return `<p class="mermaid-container" style="height:${height}" id="${eleid}"></p>`
   }
 
+  /**
+   * 渲染 katex
+   */
   if (language === 'katex') {
     try {
       return katex.renderToString(escape2Html(code), { throwOnError: true, displayMode: true, output: 'html' })
@@ -254,6 +259,10 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
   }
 
+  /** ==========================================================================================
+   * 渲染 markmap
+   * ```markmap${grammar}h300
+   * ========================================================================================== */
   if (language.startsWith('markmap')) {
     let height = '300px'
     let tags: string[] = language.split(grammar)
@@ -287,9 +296,13 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }).then((svgEl: SVGElement) => {
       Markmap.create(svgEl, markmapOptions, root)
     })
-    return `<p><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
+    return `<p class="markmap-container"><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
   }
 
+  /** ==========================================================================================
+   * 渲染 bilibili
+   * ```bilibili${grammar}bvid${grammar}w100${grammar}h100
+   * ========================================================================================== */
   if (language.startsWith('bilibili')) {
     let bvid = ''
     let width = '100%'
@@ -328,6 +341,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       scrolling="no" border="0" frameborder="no" framespacing="0" loading="lazy" 
       src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
   }
+
   const id = 'pre-' + Date.now() + '-' + randomInt(1, 1000000)
   const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
   let result = '<ol>'
@@ -398,7 +412,12 @@ export const renderImage = (href: string | null, title: string | null, text: str
  *  ref: 双链内容
  * }
  */
-export const renderLink = (href: string, title: string | null | undefined, text: string, docTrees: DocTree[]) => {
+export const renderLink = (
+  href: string,
+  title: string | null | undefined,
+  text: string,
+  docTrees: DocTree[]
+): { link: string; ref: ArticleReference } => {
   let link: string
   let ref: ArticleReference = { targetId: '0', targetName: text, targetUrl: href as string, type: 21 }
   if (isBlank(title)) {
