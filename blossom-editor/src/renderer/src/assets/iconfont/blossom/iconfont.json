@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9691336",
+      "name": "滚轮滚动",
+      "font_class": "scroll",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
       "icon_id": "8990451",
       "name": "相交",
       "font_class": "and",
