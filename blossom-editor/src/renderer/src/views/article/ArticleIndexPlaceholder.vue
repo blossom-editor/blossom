@@ -57,7 +57,7 @@ import { keymaps } from './scripts/editor-tools'
   @include flex(column, center, center);
 
   .iconbl {
-    @include themeColor(#dbdbdb, #323232);
+    @include themeColor(#dbdbdb, #444444);
     font-size: 25px;
     padding: 3px 2px;
     transition: 0.3s;
@@ -65,11 +65,11 @@ import { keymaps } from './scripts/editor-tools'
   }
 
   .desc-line {
-    @include themeBorder(1px, #dcdcdc, #323232);
+    @include themeBorder(1px, #dcdcdc, #444444);
     position: absolute;
 
     .desc-text {
-      @include themeColor(#dbdbdb, #323232);
+      @include themeColor(#dbdbdb, #444444);
       font-size: 13px;
       position: absolute;
       width: 100px;
@@ -153,13 +153,13 @@ import { keymaps } from './scripts/editor-tools'
     width: 210px;
     font-size: 13px;
     .label {
-      @include themeColor(#dbdbdb, #323232);
+      @include themeColor(#dbdbdb, #444444);
       width: 60px;
       text-align: right;
       margin-right: 10px;
     }
     .key {
-      @include themeBg(#f1f1f1, #323232);
+      @include themeBg(#f1f1f1, #444444);
       @include themeColor(#c6c6c6, #151515);
       border-radius: 4px;
       padding: 2px 5px;
