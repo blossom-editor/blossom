@@ -19,7 +19,7 @@
 
     <div class="preview bl-preview" :style="editorStyle" v-html="article?.html" ref="WindowPreviewRef"></div>
     <el-backtop target=".preview" :right="50" :bottom="50">
-      <div class="iconbl bl-send-line backtop"></div>
+      <div class="iconbl bl-a-doubleonline-line backtop"></div>
     </el-backtop>
   </div>
 </template>
@@ -80,6 +80,7 @@ onMounted(() => {
     font-size: 15px;
     padding: 30px;
     overflow-y: overlay;
+    overflow-x: hidden;
     line-height: 23px;
 
     :deep(*) {
