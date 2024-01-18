@@ -310,6 +310,9 @@ const getRouteQueryParams = () => {
     docTreeActiveArticleId.value = articleId as string
     let treeParam: any = { ty: 3, i: articleId }
     clickCurDoc(treeParam)
+    nextTick(() => {
+      docTreeActiveArticleId.value = articleId as string
+    })
   }
 }
 /**
@@ -801,7 +804,6 @@ const openArticle = (article: DocTree) => {
   })
 }
 //#endregion
-
 const clickCurDoc = (tree: DocTree) => {
   emits('clickDoc', tree)
 }
