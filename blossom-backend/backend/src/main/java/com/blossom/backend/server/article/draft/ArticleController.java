@@ -275,9 +275,11 @@ public class ArticleController {
             String content = new String(file.getBytes(), StandardCharsets.UTF_8);
             ArticleEntity article = new ArticleEntity();
             article.setMarkdown(content);
+            article.setVersion(1);
             article.setPid(pid);
             article.setUserId(AuthContext.getUserId());
             article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
+            article.setWords(ArticleUtil.statWords(content));
             baseService.insert(article);
         } catch (Exception e) {
             e.printStackTrace();
