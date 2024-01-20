@@ -20,7 +20,7 @@ const DEFAULT_WEB_ARTICLE_URL = 'https://www.domain.com/blossom/#/articles?artic
 /**
  * 博客的默认地址
  */
-const DEFAULT_BLOSSOM_OBJECT_STORAGE_DOMAIN = 'http://www.xxx.com/'
+const DEFAULT_BLOSSOM_OBJECT_STORAGE_DOMAIN = 'http://www.google.com/'
 
 /**
  * 登录状态枚举
