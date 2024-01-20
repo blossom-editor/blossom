@@ -48,6 +48,15 @@ public class ArticleRecycleService extends ServiceImpl<ArticleRecycleMapper, Art
     }
 
     /**
+     * 根据ID查询
+     *
+     * @param id 文章ID
+     */
+    public ArticleRecycleEntity selectById(Long id) {
+        return baseMapper.selectById(id);
+    }
+
+    /**
      * 还原数据
      *
      * @param id 文章ID

@@ -473,6 +473,11 @@ export const articleRecycleRestoreApi = (data?: object): Promise<any> => {
   return rq.post('/article/recycle/restore', data)
 }
 
+export const articleRecycleDownloadApi = (params?: object): Promise<any> => {
+  let config = { params: params, responseType: 'blob' }
+  return rq.get('/article/recycle/download', config)
+}
+
 /**
  * 文章全文搜索
  */

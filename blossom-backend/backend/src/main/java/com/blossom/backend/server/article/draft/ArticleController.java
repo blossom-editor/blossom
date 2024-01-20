@@ -226,12 +226,11 @@ public class ArticleController {
     public void download(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
         ArticleEntity article = baseService.selectById(id, false, true, false, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getMarkdown())) {
-            throw new IllegalArgumentException("文章内容为空,无法导出");
+            article.setMarkdown("文章无内容");
         }
         try (InputStream is = new ByteArrayInputStream(article.getMarkdown().getBytes(StandardCharsets.UTF_8));
              BufferedInputStream bis = new BufferedInputStream(is)) {
             String filename = URLEncodeUtil.encode(article.getName() + ".md");
-
             DownloadUtil.forceDownload(response, bis, filename);
         }
     }
@@ -247,7 +246,7 @@ public class ArticleController {
     public void downloadHtml(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
         ArticleEntity article = baseService.selectById(id, false, false, true, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getHtml())) {
-            throw new IllegalArgumentException("文章内容为空,无法导出");
+            article.setHtml("<span>文章无内容</span>");
         }
         String reportHtml = ArticleUtil.toHtml(article, userService.selectById(AuthContext.getUserId()));
         try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));

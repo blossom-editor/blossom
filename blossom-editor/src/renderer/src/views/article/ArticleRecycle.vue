@@ -19,7 +19,7 @@
           <div class="name">{{ recycle.name }}</div>
           <div class="size">{{ recycle.delTime }}|{{ remainingDays(recycle.delTime) }}天后删除</div>
           <el-button class="restore-btn" @click="restore(recycle.id)"><span class="iconbl bl-a-cloudupload-line"></span></el-button>
-          <el-button class="download-btn" @click=""><span class="iconbl bl-folder-download-line"></span></el-button>
+          <el-button class="download-btn" @click="download(recycle.id)"><span class="iconbl bl-folder-download-line"></span></el-button>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@renderer/stores/user'
-import { articleRecycleListApi, articleRecycleRestoreApi } from '@renderer/api/blossom'
+import { articleRecycleListApi, articleRecycleRestoreApi, articleRecycleDownloadApi } from '@renderer/api/blossom'
 import { isNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
@@ -66,6 +66,26 @@ const getBackupList = () => {
 const restore = (id: string) => {
   articleRecycleRestoreApi({ id: id }).then((_resp) => {
     getBackupList()
+  })
+}
+
+const download = (id: string) => {
+  articleRecycleDownloadApi({ id: id }).then((resp) => {
+    let filename: string = resp.headers.get('content-disposition')
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+    let matches = filenameRegex.exec(filename)
+    if (matches != null && matches[1]) {
+      filename = decodeURI(matches[1].replace(/['"]/g, ''))
+    }
+    filename = decodeURI(filename)
+    let a = document.createElement('a')
+    let blob = new Blob([resp.data], { type: 'text/plain' })
+    let objectUrl = URL.createObjectURL(blob)
+    a.setAttribute('href', objectUrl)
+    a.setAttribute('download', filename)
+    a.click()
+    URL.revokeObjectURL(a.href)
+    a.remove()
   })
 }
 </script>
