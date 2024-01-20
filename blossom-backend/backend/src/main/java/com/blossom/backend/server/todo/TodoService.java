@@ -41,19 +41,34 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
     public TodoGroupRes listTodo() {
         List<TodoEntity> todos = baseMapper.listTodo(AuthContext.getUserId());
         TodoGroupRes res = TodoGroupRes.build();
-        for (TodoEntity todo : todos) {
-            TodoGroupRes.TodoGroup group = todo.to(TodoGroupRes.TodoGroup.class);
-            if (TodoTypeEnum.DAY.getType().equals(todo.getTodoType())) {
+
+        Map<String, List<TodoEntity>> map = todos.stream().collect(Collectors.groupingBy(TodoEntity::getTodoId));
+        map.forEach((todoId, data) -> {
+            TodoGroupRes.TodoGroup group = data.get(0).to(TodoGroupRes.TodoGroup.class);
+            Map<String, List<TodoEntity>> taskStatusMap = data.stream().collect(Collectors.groupingBy(TodoEntity::getTaskStatus));
+            int w = 0, p = 0, c = 0;
+            if (CollUtil.isNotEmpty(taskStatusMap.get(TaskStatusEnum.WAITING.name()))) {
+                w = taskStatusMap.get(TaskStatusEnum.WAITING.name()).get(0).getTaskCount();
+            }
+            if (CollUtil.isNotEmpty(taskStatusMap.get(TaskStatusEnum.PROCESSING.name()))) {
+                p = taskStatusMap.get(TaskStatusEnum.PROCESSING.name()).get(0).getTaskCount();
+            }
+            if (CollUtil.isNotEmpty(taskStatusMap.get(TaskStatusEnum.COMPLETED.name()))) {
+                c = taskStatusMap.get(TaskStatusEnum.COMPLETED.name()).get(0).getTaskCount();
+            }
+            group.setTaskCountStat(String.format("%d|%d|%d", w, p, c));
+
+            if (TodoTypeEnum.DAY.getType().equals(data.get(0).getTodoType())) {
                 res.getTodoDays().put(group.getTodoId(), group);
             } else {
                 // 未完成的阶段性事项
-                if (TodoStatusEnum.OPEN.getType().equals(todo.getTodoStatus())) {
+                if (TodoStatusEnum.OPEN.getType().equals(data.get(0).getTodoStatus())) {
                     res.getTaskPhased().add(group);
                 } else {
                     res.getTaskPhasedClose().add(group);
                 }
             }
-        }
+        });
         return res;
     }
 

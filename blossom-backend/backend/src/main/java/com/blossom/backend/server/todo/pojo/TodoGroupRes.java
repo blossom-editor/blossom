@@ -56,6 +56,10 @@ public class TodoGroupRes {
          */
         private Integer taskCount;
         /**
+         * 任务数量说明
+         */
+        private String taskCountStat;
+        /**
          * 事项状态 1:完成 | 2:未完成
          */
         private Integer todoStatus;
