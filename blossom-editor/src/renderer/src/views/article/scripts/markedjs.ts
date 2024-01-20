@@ -33,7 +33,7 @@ const markmapOptions = deriveOptions({
   duration: 0, // 展开缩起动画
   maxWidth: 160, // 每个节点最大宽度
   zoom: true, // 缩放
-  pan: false // 拖动
+  pan: true // 拖动
 })
 
 /**
@@ -84,22 +84,6 @@ let hljsConfig = {
   }
 }
 marked.use(markedHighlight(hljsConfig))
-//#endregion
-
-//#region ----------------------------------------< tokenizer >--------------------------------------
-export const tokenizerCodespan = (src: string): any => {
-  const match = src.match(singleDollar)
-  if (match) {
-    let result = {
-      type: 'codespan',
-      raw: match[0],
-      text: match[0]
-    }
-    return result
-  }
-  return false
-}
-
 //#endregion
 
 //#region ----------------------------------------< renderer >--------------------------------------
@@ -196,7 +180,7 @@ export const renderBlockquote = (quote: string) => {
  * @param language  语言
  * @param isEscaped
  */
-export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
+export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean, asyncStat: { need: number; done: number }) => {
   if (language == undefined) language = 'text'
 
   /** ==========================================================================================
@@ -204,6 +188,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
    * ```mermaid${grammar}h300
    * ========================================================================================== */
   if (language.startsWith('mermaid') && isNotBlank(code)) {
+    asyncStat.need++
     const eleid = 'mermaid-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
 
@@ -224,10 +209,20 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       .then((syntax) => {
         let canSyntax: boolean | void = syntax
         if (canSyntax) {
-          mermaid.render(eleid + '-svg', escape).then((resp) => {
+          mermaid.render(eleid + '-svg', escape).then(async (resp) => {
             const { svg } = resp
             let element = document.getElementById(eleid)
-            element!.innerHTML = svg
+            let retry = 0
+            while (!element || element == null) {
+              if (retry > 30) break
+              await sleep(5)
+              element = document.querySelector(`#${eleid}`)
+              retry++
+            }
+            if (element) {
+              element.innerHTML = svg
+            }
+            asyncStat.done++
           })
         }
       })
@@ -240,6 +235,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
           </p>`
         let element = document.getElementById(eleid)
         if (element) element!.innerHTML = html
+        asyncStat.done++
       })
     return `<p class="mermaid-container" style="height:${height}" id="${eleid}"></p>`
   }
@@ -264,6 +260,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
    * ```markmap${grammar}h300
    * ========================================================================================== */
   if (language.startsWith('markmap')) {
+    asyncStat.need++
     let height = '300px'
     let tags: string[] = language.split(grammar)
     if (tags.length >= 2) {
@@ -279,22 +276,32 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     const eleid = 'markmap-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
     const { root } = transformer.transform(escape)
-    new Promise<SVGElement>(async (resolve, reject) => {
-      let svgEl: SVGElement | null = document.querySelector(`#${eleid}`)
+
+    // let svg: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    // svg.id = eleid
+    // svg.setAttributeNS(null, 'width', '100%')
+    // svg.setAttributeNS(null, 'height', '500px')
+    // svg.setAttributeNS(null, 'viewBox', '0 0 100 500')
+    // svg.classList.add('markmap')
+    // svg.style.width = '500px'
+    // svg.style.height = height
+    // let markmap = Markmap.create(svg, markmapOptions, root)
+    // console.log(svg.outerHTML)
+    // return `<p class="markmap-container">${svg.outerHTML} </p>`
+
+    new Promise<SVGElement>(async (_resolve, _reject) => {
+      let svg: SVGElement | null = document.querySelector(`#${eleid}`)
       let retry = 0
-      while (!svgEl || svgEl == null) {
-        if (retry > 10) break
-        await sleep(10)
-        svgEl = document.querySelector(`#${eleid}`)
+      while (!svg || svg == null) {
+        if (retry > 30) break
+        await sleep(5)
+        svg = document.querySelector(`#${eleid}`)
         retry++
       }
-      if (svgEl) {
-        resolve(svgEl)
-      } else {
-        reject()
+      if (svg) {
+        Markmap.create(svg, markmapOptions, root)
       }
-    }).then((svgEl: SVGElement) => {
-      Markmap.create(svgEl, markmapOptions, root)
+      asyncStat.done++
     })
     return `<p class="markmap-container"><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
   }
@@ -484,21 +491,14 @@ const simpleRenderer = {
     }
     let lineNumbers = result + '</ol>'
     return `<pre><code class="hljs language-${language}"></code>${lineNumbers}<div class="pre-copy">${language}</div></pre>`
-    // return `<pre><code class="hljs language-${language}">${code}</code></pre>`
   },
   codespan(src: string): string {
     return renderCodespan(src)
   }
 }
 
-const tokenizer = {
-  codespan(src: string): any {
-    return tokenizerCodespan(src)
-  }
-}
-
 //@ts-ignore
-simpleMarked.use({ tokenizer: tokenizer, renderer: simpleRenderer })
+simpleMarked.use({ renderer: simpleRenderer })
 
 //#endregion
 

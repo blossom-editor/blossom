@@ -54,6 +54,17 @@
           <ArticleIndexPlaceholder></ArticleIndexPlaceholder>
         </div>
         <div class="operator" ref="EditorOperatorRef">
+          <el-tooltip popper-class="is-small" effect="light" placement="top" transition="none" :show-after="500" :hide-after="0" :show-arrow="false">
+            <template #content>
+              当编辑超大文档时
+              <bl-row>
+                可关闭同步预览
+                <div class="iconbl bl-eye-line" style="transform: rotate(90deg)"></div>
+                与同步滚动<span class="iconbl bl-scroll"></span>提升性能
+              </bl-row>
+            </template>
+            <div class="iconbl bl-admonish-line"></div>
+          </el-tooltip>
           <el-tooltip
             :content="'同步滚动:' + (editorOperator.sycnScroll ? '开启' : '关闭')"
             popper-class="is-small"
@@ -515,18 +526,18 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   const saveCallback = () => {
     if (!auto) {
-      ElMessage.info({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
+      ElMessage.success({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
     }
   }
   // 如果文档发生变动才保存
   if (!articleChanged) {
-    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;color:#fff;padding-top:2px')
+    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;color:#fff;')
     saveCallback()
     return
   }
   // 如果文档正在解析中, 则等待解析完成
   while (articleParseing) {
-    console.info('%c检测到正在解析, 等待解析完成', 'background:#AD7736;color:#fff;padding-top:2px')
+    console.log('检测到正在解析, 等待解析完成')
     await sleep(100)
   }
   articleChanged = false
@@ -727,6 +738,10 @@ const parse = () => {
           }, 7)
         }
       })
+
+      setTimeout(() => {
+        console.log(renderAsync.value)
+      }, 500)
     })
 }
 

@@ -2,7 +2,7 @@
   <div class="index-article-root">
     <!-- folder menu -->
     <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
-      <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree">
+      <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree" ref="ArticleTreeDocsContainerRef">
         <ArticleTreeDocs @click-doc="clickCurDoc" ref="ArticleTreeDocsRef"></ArticleTreeDocs>
       </div>
 
@@ -18,8 +18,12 @@
     </div>
 
     <!-- editor -->
-    <div class="editor-container" :style="{ width: docEditorStyle.editor }" v-loading="editorLoading" element-loading-text="正在读取文章内容...">
-      <div class="editor-tools">
+    <div
+      class="editor-container"
+      :style="{ width: docEditorStyle.editor }"
+      v-loading="editorGetLoading || editorSaveLoading"
+      :element-loading-text="editorGetLoading ? '正在读取文章内容...' : editorSaveLoading ? '正在保存文章内容...' : ''">
+      <div class="editor-tools" v-once>
         <EditorTools
           @save="saveCurArticleContent()"
           @preview-full-screen="alt_3()"
@@ -54,6 +58,43 @@
           <ArticleIndexPlaceholder></ArticleIndexPlaceholder>
         </div>
         <div class="operator" ref="EditorOperatorRef">
+          <el-tooltip popper-class="is-small" effect="light" placement="top" transition="none" :show-after="500" :hide-after="0" :show-arrow="false">
+            <template #content>
+              当编辑超大文档时
+              <bl-row>
+                可关闭同步预览
+                <div class="iconbl bl-eye-line" style="transform: rotate(90deg)"></div>
+                与同步滚动<span class="iconbl bl-scroll"></span>提升性能
+              </bl-row>
+            </template>
+            <div class="iconbl bl-admonish-line"></div>
+          </el-tooltip>
+          <el-tooltip
+            content="更新预览内容"
+            popper-class="is-small"
+            effect="light"
+            placement="right"
+            transition="none"
+            :show-after="500"
+            :hide-after="0"
+            :show-arrow="false">
+            <div class="iconbl bl-refresh-line"></div>
+          </el-tooltip>
+          <el-tooltip
+            :content="'同步预览:' + (editorOperator.syncParse ? '开启' : '关闭')"
+            popper-class="is-small"
+            effect="light"
+            placement="right"
+            transition="none"
+            :show-after="500"
+            :hide-after="0"
+            :show-arrow="false">
+            <div
+              class="iconbl bl-eye-line"
+              :style="{ color: editorOperator.syncParse ? 'var(--el-color-primary-light-3)' : '' }"
+              @click="handleSyncParse"></div>
+          </el-tooltip>
+
           <el-tooltip
             :content="'同步滚动:' + (editorOperator.sycnScroll ? '开启' : '关闭')"
             popper-class="is-small"
@@ -93,6 +134,7 @@
         </div>
         <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
+
         <div class="resize-divider" ref="ResizeDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
       </div>
@@ -252,6 +294,9 @@ onDeactivated(() => {
   unbindKeys()
 })
 
+//#endregion
+
+//#region ----------------------------------------< panin store >--------------------------------------
 const userStore = useUserStore()
 const serverStore = useServerStore()
 const { editorStyle } = useConfigStore()
@@ -264,7 +309,6 @@ watch(
     setNewState('')
   }
 )
-
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
@@ -277,6 +321,7 @@ const editorOperator = ref({
   syncParse: true,
   sycnScroll: true
 })
+
 /**
  * 文档列表的展开和收起
  */
@@ -392,13 +437,181 @@ const uploadFile = (file: File) => {
     cmw.insertBlockCommand(`\n![${file.name}](${url})\n`)
   })
 }
+//#endregion
+
+//#region ----------------------------------------< html 事件监听 >----------------------------
+const ArticleViewRef = ref()
+const { articleReferenceView } = useArticleHtmlEvent(ArticleViewRef)
+
+const openArticleWindow = (id: string) => {
+  openNewArticleWindow('article_window_' + id, id)
+}
+//#endregion
+
+//#region ----------------------------------------< 文档列表与当前文章 >----------------------------
+const editorGetLoading = ref(false) // eidtor loading
+const editorSaveLoading = ref(false) // eidtor loading
+const ArticleTreeDocsRef = ref()
+const ArticleTreeDocsContainerRef = ref()
+const curDoc = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
+const curArticle = ref<DocInfo>() // 当前选中的文章, 用于在编辑器中展示
+const autoSaveMs = 5 * 60 * 1000 // 自定保存间隔, 5分钟不编辑则自动保存
+let lastSaveTime: number = new Date().getTime() // 上次保存时间
+let autoSaveInterval: NodeJS.Timeout // 自动保存定时器
+let editorGetLoadingTimeout: NodeJS.Timeout // 文章切换时加载的延迟遮罩, 避免每次切换文章都显示遮罩
+let editorSaveLoadingTimeout: NodeJS.Timeout // 文章保存时的遮罩, 避免每次切换文章都显示遮罩
+/**
+ * 编辑器内容是否有变更, 防止在没有变更时频繁保存导致请求接口和版本号的无意义变更
+ * @var boolean 如果为 true, 则文章允许保存, 为 false 时跳过保存
+ */
+let articleChanged = false
+
+provide(provideKeyDocInfo, curDoc)
+provide(provideKeyCurArticleInfo, curArticle)
+
+/**
+ * 点击 doc title 的回调, 用于选中某个文档
+ * 选中分为两种
+ * 1:选中的是文件夹
+ * 2:选中的是文章, 则查询文章内容
+ *
+ * @param tree
+ */
+const clickCurDoc = async (tree: DocTree) => {
+  let doc: DocInfo = treeToInfo(tree)
+  curDoc.value = doc
+  // 如果点击的是文章, 则查询文章详情, 用于在编辑器中显示以及注入
+  if (doc.type != 3) return
+  // 如果点击的文章是当前正在展示的文章, 则不会再次查询
+  if (isArticle(curArticle.value) && curArticle.value!.id == doc.id) return
+
+  editorGetLoadingTimeout = setTimeout(() => (editorGetLoading.value = true), 100)
+  await saveCurArticleContent(true)
+  clearTocAndImg()
+  await articleInfoApi({ id: doc.id, showToc: false, showMarkdown: true, showHtml: false })
+    .then((resp) => {
+      if (isNull(resp.data)) {
+        return
+      }
+      curArticle.value = { ...resp.data, ...{ markdown: '' } }
+      console.log(resp.data.name)
+      if (isBlank(resp.data.markdown)) {
+        setNewState('')
+      } else {
+        setNewState(resp.data.markdown)
+      }
+    })
+    .finally(() => {
+      if (editorGetLoadingTimeout) clearTimeout(editorGetLoadingTimeout)
+      editorGetLoading.value = false
+      articleChanged = false
+      scrollTopReset()
+    })
+}
+
+/**
+ * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
+ *
+ * @param auto 是否为自动保存, 如果是自动保存, 则不弹出保存成功的提示框, 避免在非用户主动操作下弹框
+ */
+const saveCurArticleContent = async (auto: boolean = false) => {
+  if (!isArticle(curArticle.value)) return
+
+  // 文档发生变动才保存
+  if (!articleChanged) {
+    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;color:#fff;')
+    saveCallback(auto)
+    return
+  }
+  console.log('1. 开始保存 saveCurArticleContent')
+  ArticleTreeDocsContainerRef.value.style.pointerEvents = 'none'
+  editorSaveLoadingTimeout = setTimeout(() => (editorSaveLoading.value = true), 500)
+  if (editorOperator.value.syncParse) {
+    parseCallback()
+  } else {
+    parse(parseCallback)
+  }
+}
+
+const parseCallback = async (auto: boolean = false) => {
+  while (renderAsync.value.done != renderAsync.value.need) {
+    console.log('   检测到正在解析, 等待解析完成')
+    await sleep(50)
+  }
+  console.log('6. 开始调用保存接口 parseCallback')
+  articleChanged = false
+  let data = {
+    id: curArticle.value!.id,
+    name: curArticle.value!.name,
+    markdown: cmw.getDocString(),
+    html: PreviewRef.value.innerHTML, // 存在异步渲染的 html 元素, 不能直接使用 articleHtml.value
+    references: articleImg.value.concat(articleLink.value)
+  }
+  await articleUpdContentApi(data)
+    .then((resp) => {
+      lastSaveTime = new Date().getTime()
+      curArticle.value!.words = resp.data.words as number
+      curArticle.value!.updTime = resp.data.updTime as string
+      if (curArticle.value!.version != undefined) {
+        curArticle.value!.version = curArticle.value!.version + 1
+      } else {
+        curArticle.value!.version = 1
+      }
+      if (editorSaveLoadingTimeout) clearTimeout(editorSaveLoadingTimeout)
+      saveCallback(auto)
+    })
+    .catch(() => {
+      articleChanged = true
+    })
+    .finally(() => {
+      console.log('7. 保存接口调用完成 parseCallback finally')
+      ArticleTreeDocsContainerRef.value.style.pointerEvents = 'auto'
+      editorSaveLoading.value = false
+    })
+}
+
+const saveCallback = (auto: boolean = false) => {
+  if (!auto) ElMessage.success({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
+}
+
+/**
+ * 初始化自动保存定时器
+ * 如果 authSaveMs 时间没有保存, 则自动保存.
+ */
+const initAutoSaveInterval = () => {
+  autoSaveInterval = setInterval(() => {
+    let current = new Date().getTime()
+    if (current - lastSaveTime > autoSaveMs) {
+      autoSave()
+    }
+  }, 30 * 1000)
+}
+/**
+ * 销毁自动保存定时器
+ */
+const distoryAutoSaveInterval = () => {
+  clearInterval(autoSaveInterval)
+}
+/**
+ * 自动保存, 该种方式不会有保存成功的提示
+ */
+const autoSave = () => {
+  saveCurArticleContent(true)
+}
+
+//#endregion
+
+//#region ----------------------------------------< codemirror/editor >----------------------------
+let cmw: CmWrapper // codemirror editor wrapper
 
 /**
  * 文件上传回调
  * @param event DragEvent | ClipboardEvent
  */
 const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
-  if (!isArticle(curArticle.value)) return
+  if (!isArticle(curArticle.value)) {
+    return
+  }
 
   /**
    * 拖拽上传
@@ -427,208 +640,39 @@ const uploadFileCallback = async (event: DragEvent | ClipboardEvent) => {
     }
   }
 }
-//#endregion
-
-//#region ----------------------------------------< html 事件监听 >----------------------------
-const ArticleViewRef = ref()
-const { articleReferenceView } = useArticleHtmlEvent(ArticleViewRef)
-
-const openArticleWindow = (id: string) => {
-  openNewArticleWindow('article_window_' + id, id)
-}
-//#endregion
-
-//#region ----------------------------------------< 文档列表与当前文章 >----------------------------
-const editorLoading = ref(false) // eidtor loading
-const ArticleTreeDocsRef = ref()
-const curDoc = ref<DocInfo>() // 当前选中的文档, 包含文件夹和文章, 如果选中是文件夹, 则不会重置编辑器中的文章
-const curArticle = ref<DocInfo>() // 当前选中的文章, 用于在编辑器中展示
-// 自定保存间隔, 5分钟不编辑则自动保存
-const authSaveMs = 5 * 60 * 1000
-// 非绑定数据
-// 文章是否在解析时, 为 true 则正在解析, 为 false 则解析完成
-let articleParseing = false
-// 编辑器内容是否有变更, 防止在没有变更时频繁保存导致请求接口和版本号的无意义变更, 如果为 true, 则文章允许保存, 为 false 时跳过保存
-let articleChanged = false
-// 上次保存时间
-let lastSaveTime: number = new Date().getTime()
-// 自动保存定时器
-let autoSaveInterval: NodeJS.Timeout
-// 文章加载延迟遮罩
-let editorLoadingTimeout: NodeJS.Timeout
-
-provide(provideKeyDocInfo, curDoc)
-provide(provideKeyCurArticleInfo, curArticle)
-
-/**
- * 点击 doc title 的回调, 用于选中某个文档
- * 选中分为两种
- * 1:选中的是文件夹
- * 2:选中的是文章, 则查询文章内容, 变
- *
- * @param tree
- */
-const clickCurDoc = async (tree: DocTree) => {
-  let doc: DocInfo = treeToInfo(tree)
-  curDoc.value = doc
-  // 如果选中的是文章, 则查询文章详情, 用于在编辑器中显示以及注入
-  if (doc.type == 3) {
-    // 重复点击同一个, 不会多次查询
-    if (isArticle(curArticle.value) && curArticle.value!.id == doc.id) {
-      return
-    }
-    editorLoadingTimeout = setTimeout(() => (editorLoading.value = true), 100)
-    await saveCurArticleContent(true)
-    clearTocAndImg()
-    await articleInfoApi({ id: doc.id, showToc: false, showMarkdown: true, showHtml: false })
-      .then((resp) => {
-        if (isNull(resp.data)) {
-          return
-        }
-        curArticle.value = resp.data
-        // 初次加载时立即渲染
-        immediateParse = true
-        if (isBlank(resp.data.markdown)) {
-          setNewState('')
-        } else {
-          setNewState(resp.data.markdown)
-        }
-      })
-      .finally(() => {
-        if (editorLoadingTimeout) clearTimeout(editorLoadingTimeout)
-        editorLoading.value = false
-        articleChanged = false
-      })
-    nextTick(() => {
-      scrollTopReset()
-    })
-  }
-}
-/**
- * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
- *
- * @param auto 是否为自动保存, 如果是自动保存, 则不弹出保存成功的提示框, 避免在非用户主动操作下弹框
- */
-const saveCurArticleContent = async (auto: boolean = false) => {
-  if (!isArticle(curArticle.value)) {
-    return
-  }
-  const saveCallback = () => {
-    if (!auto) {
-      ElMessage.info({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
-    }
-  }
-  // 如果文档发生变动才保存
-  if (!articleChanged) {
-    console.info('%c文档内容无变化, 无需保存', 'background:#AD8CF2;color:#fff;padding-top:2px')
-    saveCallback()
-    return
-  }
-  // 如果文档正在解析中, 则等待解析完成
-  while (articleParseing) {
-    console.info('%c检测到正在解析, 等待解析完成', 'background:#AD7736;color:#fff;padding-top:2px')
-    await sleep(100)
-  }
-  articleChanged = false
-  let data = {
-    id: curArticle.value!.id,
-    name: curArticle.value!.name,
-    markdown: cmw.getDocString(),
-    html: PreviewRef.value.innerHTML,
-    references: articleImg.value.concat(articleLink.value)
-  }
-  await articleUpdContentApi(data)
-    .then((resp) => {
-      lastSaveTime = new Date().getTime()
-      curArticle.value!.words = resp.data.words as number
-      curArticle.value!.updTime = resp.data.updTime as string
-      if (curArticle.value!.version != undefined) {
-        curArticle.value!.version = curArticle.value!.version + 1
-      } else {
-        curArticle.value!.version = 1
-      }
-      saveCallback()
-    })
-    .catch(() => {
-      articleChanged = true
-    })
-}
-/**
- * 初始化自动保存定时器
- * 如果 authSaveMs 时间没有保存, 则自动保存.
- */
-const initAutoSaveInterval = () => {
-  autoSaveInterval = setInterval(() => {
-    let current = new Date().getTime()
-    if (current - lastSaveTime > authSaveMs) {
-      autoSave()
-    }
-  }, 30 * 1000)
-}
-/**
- * 销毁自动保存定时器
- */
-const distoryAutoSaveInterval = () => {
-  clearInterval(autoSaveInterval)
-}
-/**
- * 自动保存, 该种方式不会有保存成功的提示
- */
-const autoSave = () => {
-  saveCurArticleContent(true)
-}
-
-//#endregion
-
-//#region ----------------------------------------< codemirror/editor >----------------------------
-let cmw: CmWrapper // codemirror editor wrapper
 
 /**
  * 初始化编辑器, 创建编辑器封装器, 并在编辑器底部增加一个空白页
  */
 const initEditor = (_doc?: string) => {
-  cmw = new CmWrapper(
-    CmWrapper.newEditor(
-      // 创建 state
-      CmWrapper.newState(
-        () => {
-          articleParseing = true
-          debounceParse(parse, 300)
-        },
-        saveCurArticleContent,
-        uploadFileCallback
-      ),
-      EditorRef.value
-    )
-  )
+  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(updateCallback, saveCurArticleContent, uploadFileCallback), EditorRef.value))
   appendEditorHolder()
 }
+
 /**
  * 将 markdown 原文设置到编辑器中, 并且会重置编辑器状态
  * @param md markdown
  */
 const setNewState = (md: string): void => {
-  cmw.setState(
-    CmWrapper.newState(
-      () => {
-        articleChanged = true
-        articleParseing = true
-        allwaysBottom()
-        debounceParse(parse, 300)
-      },
-      saveCurArticleContent,
-      uploadFileCallback,
-      md
-    )
-  )
+  cmw.setState(CmWrapper.newState(updateCallback, saveCurArticleContent, uploadFileCallback, md))
   parse()
+}
+
+/**
+ * markdown 内容更新后的回调
+ */
+const updateCallback = () => {
+  articleChanged = true
+  editorAlwaysBottom()
+  if (editorOperator.value.syncParse) {
+    debounceParse(parse, 300)
+  }
 }
 
 /**
  * 编辑器底部增加空白占位元素, 点击占位元素会时会聚焦在编辑器
  */
 const appendEditorHolder = () => {
-  // 创建元素
   let editorHeightHolder = document.createElement('div')
   editorHeightHolder.style.height = '65vh'
   editorHeightHolder.style.position = 'relative'
@@ -643,25 +687,25 @@ const appendEditorHolder = () => {
 /**
  * 编辑器滚动条永远置底
  */
-const allwaysBottom = async () => {
+const editorAlwaysBottom = async () => {
   const clientHeight = EditorRef.value.clientHeight
   const scrollTop = EditorRef.value.scrollTop
   const scrollHeight = EditorRef.value.scrollHeight
   let a = clientHeight + scrollTop
-  if (a >= scrollHeight - 100) {
+  if (a >= scrollHeight - 150) {
     scrollWrapper.toBottom()
   }
 }
+
 //#endregion
 
 //#region ----------------------------------------< marked/preview >-------------------------------
 const renderInterval = ref(0) // 解析用时
-const articleHtml = ref('') // 解析后的 html 内容
+const articleHtml = shallowRef('') // 解析后的 html 内容
 const renderAsync = ref({
   need: 0,
   done: 0
 })
-let immediateParse = false // 是否立即渲染, 文档初次加载时立即渲染, 内容变更时防抖渲染
 /**
  * 自定义渲染
  */
@@ -696,55 +740,133 @@ marked.use({ renderer: renderer })
 
 /**
  * 解析 markdown 为 html, 并将 html 赋值给 articleHtml
+ *
+ * @param callback 渲染后执行的内容
  */
-const parse = () => {
+const parse = (callback?: () => Promise<void>) => {
+  console.log('2. 开始解析 html')
   const begin = Date.now()
-  immediateParse = false
-  let mdContent = cmw.getDocString()
+  renderAsync.value = { need: 0, done: 0 }
   clearTocAndImg()
-  renderAsync.value = {
-    need: 0,
-    done: 0
-  }
-  marked
-    .parse(mdContent, { async: true })
-    .then((content: string) => {
+  if (editorOperator.value.syncParse) {
+    marked.parse(cmw.getDocString(), { async: true }).then((content: string) => {
       articleHtml.value = content
       renderInterval.value = Date.now() - begin
-      articleParseing = false
-    })
-    .then(() => {
       nextTick(() => {
         parseToc()
-      }).then(() => {
-        const clientHeight = EditorRef.value.clientHeight
-        const scrollTop = EditorRef.value.scrollTop
-        const scrollHeight = EditorRef.value.scrollHeight
-        let a = clientHeight + scrollTop
-        if (a >= scrollHeight - 150) {
-          setTimeout(() => {
-            PreviewRef.value.scrollTop = PreviewRef.value.scrollHeight
-          }, 7)
-        }
+        previewAlwaysBottom()
       })
+      console.log('3. 完成解析 html')
+      if (callback) {
+        callback()
+      }
     })
+  } else {
+    let html = marked.parse(cmw.getDocString())
+    console.log(html);
+    articleHtml.value = html
+    renderInterval.value = Date.now() - begin
+    nextTick(() => {
+      parseToc()
+    })
+    console.log('3. 完成解析 html')
+    if (callback) {
+      callback()
+    }
+    previewAlwaysBottom()
+  }
+
+  // .then(async (content: string) => {
+  //   if (!callback) {
+  //     return
+  //   }
+  //   console.log('4. 检查异步解析 ')
+  //   let mermaidExist = content.indexOf('mermaid-container') > -1
+  //   let markmapExist = content.indexOf('markmap-container') > -1
+  //   if (!markmapExist && !mermaidExist) {
+  //     console.log('4.1 没有需要异步解析的数据')
+  //     return
+  //   }
+
+  //   console.log('4.1 检查 mermaid ===============', mermaidExist)
+  //   function checkMermaid(): boolean {
+  //     let preview = PreviewRef.value as Element
+  //     let mermaidNodes: HTMLCollectionOf<Element> | undefined = preview.getElementsByClassName('mermaid-container')
+  //     if (!mermaidNodes) return true
+  //     let waitCheck = mermaidNodes.length
+  //     for (let i = 0; i < mermaidNodes!.length; i++) {
+  //       const node: Element = mermaidNodes![i]
+  //       if (node.innerHTML.toString() === '') {
+  //         break
+  //       } else {
+  //         waitCheck--
+  //       }
+  //     }
+  //     return waitCheck > 0
+  //   }
+
+  //   while (mermaidExist && checkMermaid()) {
+  //     console.log('    再次检查 mermaid')
+  //     await sleep(20)
+  //   }
+
+  //   console.log('4.2 检查 markmap ===============', markmapExist)
+  //   function checkMarkmap(): boolean {
+  //     let preview = PreviewRef.value as Element
+  //     let markmapNodes: HTMLCollectionOf<Element> | undefined = preview.getElementsByClassName('markmap-container')
+  //     if (!markmapNodes) return true
+  //     let waitCheck = markmapNodes.length
+  //     for (let i = 0; i < markmapNodes!.length; i++) {
+  //       const node: Element = markmapNodes![i]
+  //       if (node && node.firstChild) {
+  //         const svg = node.firstChild as SVGElement
+  //         if (svg && svg.innerHTML.toString() === '') {
+  //           break
+  //         } else {
+  //           let lre = svg.lastChild
+  //           console.log(lre)
+  //           waitCheck--
+  //         }
+  //       } else {
+  //         break
+  //       }
+  //     }
+  //     return waitCheck > 0
+  //   }
+
+  //   // 需要检查, 并且节点大于0, 并且
+  //   while (markmapExist && checkMarkmap()) {
+  //     console.log('    再次检查 markmap')
+  //     await sleep(20)
+  //   }
+  //   console.log('5. 完成异步解析 ')
+  // })
 }
 
 /**
  * 防抖, 防止频繁渲染造成的卡顿
  */
 let debounceTimeout: NodeJS.Timeout | undefined
-function debounceParse(parseFn: () => void, time = 500) {
+function debounceParse(fn: () => void, time = 500) {
   if (debounceTimeout != undefined) {
     clearTimeout(debounceTimeout)
   }
-  if (immediateParse) {
-    parseFn()
-  } else {
-    debounceTimeout = setTimeout(parseFn, time)
-  }
+  debounceTimeout = setTimeout(fn, time)
 }
 
+const handleSyncParse = () => {
+  editorOperator.value.syncParse = !editorOperator.value.syncParse
+}
+
+const previewAlwaysBottom = () => {
+  const clientHeight = EditorRef.value.clientHeight
+  const scrollTop = EditorRef.value.scrollTop
+  const scrollHeight = EditorRef.value.scrollHeight
+  let a = clientHeight + scrollTop
+  if (a >= scrollHeight - 150) {
+    PreviewRef.value.scrollTop = 99999999
+  }
+}
 //#endregion
 
 //#region ----------------------------------------< TOC >------------------------------------------
@@ -781,9 +903,11 @@ let scrollWrapper: EPScroll
 const initScroll = async () => {
   scrollWrapper = new EPScroll(EditorRef.value, PreviewRef.value, cmw)
 }
+
 const scroll = (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error) => {
   scrollWrapper.sycnScroll(event, source, lineno, colno, error)
 }
+
 const scrollTopReset = () => scrollWrapper.scrollTopReset()
 const scrollTopLast = () => scrollWrapper.scrollTopLast()
 const addListenerScroll = () => EditorRef.value.addEventListener('scroll', scroll)

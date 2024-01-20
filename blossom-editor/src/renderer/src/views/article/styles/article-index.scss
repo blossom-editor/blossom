@@ -130,11 +130,10 @@
       }
 
       .operator {
-        width: 20px;
-        height: 140px;
-        padding-top: 5px;
         @include themeBorder(2px, #d8d8d841, #ffffff12);
-        // border: 2px solid var(--el-border-color);
+        width: 20px;
+        height: 75px;
+        padding-top: 5px;
         background-color: var(--bl-html-color);
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
