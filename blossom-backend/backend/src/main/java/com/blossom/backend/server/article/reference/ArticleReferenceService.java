@@ -134,6 +134,8 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
         Map<String, Object> result = new HashMap<>();
         List<ArticleReferenceEntity> all = baseMapper.listGraph(onlyInner, userId, articleId);
         if (CollUtil.isEmpty(all)) {
+            result.put("nodes",new String[0]);
+            result.put("links",new String[0]);
             return result;
         }
 
