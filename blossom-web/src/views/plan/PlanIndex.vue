@@ -332,13 +332,14 @@ const delPlan = () => {
 
   .plan-add {
     @include flex(row, center, center);
-    @include box(40px, 40px);
-    border-radius: 50%;
-    background-color: #7b7b7b4c;
-    box-shadow: 3px 3px 5px #bababa;
+    @include box(35px, 35px);
+    background-color: #fff;
+    box-shadow: -1px 0px 3px #bababa;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     position: absolute;
-    right: 10px;
-    bottom: 5%;
+    right: 0;
+    bottom: 20px;
     cursor: pointer;
     transition: background-color 0.3s;
 
@@ -348,7 +349,7 @@ const delPlan = () => {
 
     .iconbl {
       color: #7b7b7ba9;
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 }
