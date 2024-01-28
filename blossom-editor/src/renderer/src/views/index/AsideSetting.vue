@@ -2,7 +2,7 @@
   <div class="index-setting-root">
     <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon" :inactive-icon="Sunny" @change="changeTheme" />
     <el-button-group>
-      <el-button class="setting-button" type="primary" :icon="Setting" @click="toSetting" />
+      <el-button class="setting-button" type="primary" :icon="Setting" @click="toSettingTab" />
       <el-button class="setting-button" type="primary" :icon="Crop" @click="handlePrintScreenUpload()" />
     </el-button-group>
   </div>
@@ -70,8 +70,9 @@
 </template>
 
 <script setup lang="ts">
-import { toLogin } from '@renderer/router'
 import { onMounted, ref } from 'vue'
+import { useUserStore } from '@renderer/stores/user'
+import { toLogin, toSetting } from '@renderer/router'
 import { Sunny, Moon, Setting, Crop } from '@element-plus/icons-vue'
 import { docTreeApi, uploadFileApi } from '@renderer/api/blossom'
 import { handleUploadSeccess, handleUploadError } from '@renderer/views/picture/scripts/picture'
@@ -82,12 +83,18 @@ import { getNowTime, isMacOS, isElectron } from '@renderer/assets/utils/util'
 import { isDark, changeTheme } from '@renderer/scripts/global-theme'
 import Notify from '@renderer/scripts/notify'
 
+const userStore = useUserStore()
+
 onMounted(() => {
   printscreenAfter()
 })
 
-const toSetting = () => {
-  toLogin()
+const toSettingTab = () => {
+  if (userStore.isLogin) {
+    toSetting('setting')
+  } else {
+    toLogin()
+  }
 }
 
 //#region ----------------------------------------< 截屏 >----------------------------------------
