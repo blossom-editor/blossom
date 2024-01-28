@@ -5,7 +5,7 @@
     <div class="headmenu">
       <bl-row @click="handleMenu(!menuShow)">
         <div class="iconbl bl-model-line"></div>
-        <div style="font-size: 0.8rem">菜单</div>
+        <div style="font-size: 0.8rem">文章列表</div>
       </bl-row>
       <bl-row just="flex-end" @click="handleToc(!tocShow)">
         <div style="font-size: 0.8rem">目录</div>
@@ -652,6 +652,10 @@ const onresize = () => {
         // font-size: 14px;
         line-height: 1.6;
 
+        :deep(svg) {
+          max-width: 100% !important;
+        }
+
         :deep(.katex > *) {
           font-size: 1.2em !important;
           // font-family: 'KaTeX_Size1', sans-serif !important;
@@ -1074,10 +1078,6 @@ const onresize = () => {
         padding-top: 10px;
         z-index: 9999;
         overflow: hidden;
-
-        // .doc-trees {
-        //   overflow: overlay;
-        // }
       }
 
       .article {
@@ -1085,7 +1085,13 @@ const onresize = () => {
         overflow-x: hidden;
 
         .bl-preview {
-          font-size: 0.8rem;
+          font-size: 0.9rem;
+
+          :deep(.markmap) {
+            & > g {
+              transform: translateX(0) translateY(50%) !important ;
+            }
+          }
 
           pre {
             margin: -10px !important;
