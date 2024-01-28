@@ -68,8 +68,9 @@ let stat = ref({
   outside: 0
 })
 
-let inside = { itemStyle: {}, label: {} }
-let outside = { itemStyle: {}, label: {} }
+let inside: any = { itemStyle: {}, label: {} }
+let insideUnknown: any = { itemStyle: {}, label: {} }
+let outside: any = { itemStyle: {}, label: {} }
 const changeStyle = () => {
   let primaryColor = getPrimaryColor()
   // 节点数量统计
@@ -83,6 +84,17 @@ const changeStyle = () => {
       color: isDark.value ? '#BABABA' : '#000000',
       textBorderColor: isDark.value ? '#3B3B3B' : '#E7E7E7',
       textBorderWidth: 2
+    }
+  }
+  insideUnknown = {
+    itemStyle: {
+      color: isDark.value ? '#7B0000' : '#EB6969'
+    },
+    label: {
+      fontSize: 13,
+      color: isDark.value ? '#BABABA' : '#030303',
+      textBorderColor: isDark.value ? '#7B0000' : '#EB6969',
+      textBorderWidth: 1
     }
   }
   outside = {
@@ -116,6 +128,9 @@ const getArticleRefList = (onlyInner: boolean) => {
         node.itemStyle = inside.itemStyle
         node.label = inside.label
         stat.value.inside += 1
+      } else if (node.artType === 12) {
+        node.itemStyle = insideUnknown.itemStyle
+        node.label = insideUnknown.label
       } else if (node.artType == 21) {
         node.itemStyle = outside.itemStyle
         node.label = outside.label
@@ -139,6 +154,9 @@ const ascending = 1
 const getLinkCount = (name: string, links: any[]): number => {
   let count: number = 20
   for (let i = 0; i < links.length; i++) {
+    if (count >= 100) {
+      break
+    }
     let link = links[i]
     if (link.source == name) {
       count += ascending
@@ -172,10 +190,19 @@ const renderChart = () => {
             userStore.userinfo.userParams.WEB_ARTICLE_URL + params.data.artId
           }</a></div>`
         }
-        return `<div class="chart-graph-article-ref-tooltip">
+        console.log(params.data)
+        let type = ''
+        if (params.data.artType === 11) {
+          type = `<div>类型: 内部文章</div>`
+        } else if (params.data.artType === 12) {
+          type = `<div style="color:${insideUnknown.itemStyle.color}">类型: 未知文章, 可能是文章ID错误或已被删除</div>`
+        } else if (params.data.artType === 21) {
+          type = `<div>类型: 外网文章</div>`
+        }
+        return `<div class="chart-graph-article-ref-tooltip" style="border:1px solid ${params.data.itemStyle.color}">
           <div class="title">${params.data.name}</div>
           <div class="content">
-            <div>类型: ${params.data.inner ? '内部文章' : '外网文章'}</div>
+            ${type}
             ${url}
           </div>
           </div>`
@@ -250,7 +277,7 @@ const renderChart = () => {
           // edgeLabel: { show: false },
         },
         blur: {
-          itemStyle: { opacity: 0.1 },
+          // itemStyle: { opacity: 0.1 },
           lineStyle: { opacity: 0.1 },
           label: { show: false },
           edgeLabel: { show: false }
@@ -377,10 +404,10 @@ onUnmounted(() => {
   white-space: normal;
   background-color: var(--bl-html-color);
   border-radius: 4px;
-  border: 1px solid var(--el-color-primary-light-5);
+  color: var(--bl-text-color);
 
   .title {
-    @include font(15px, 300);
+    @include font(15px, 500);
     border-bottom: 1px solid var(--el-color-primary-light-5);
     padding: 10px;
     overflow: hidden;

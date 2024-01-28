@@ -48,14 +48,43 @@
           from blossom_article_reference
          where user_id = #{userId}
           <if test="inner == true">
-              and type = 11
+              and type in(11,12)
           </if>
           <if test="inner == false">
-              and type in (11,21)
+              and type in (11,12,21)
           </if>
           <if test="articleId != null">
               and (source_id = #{articleId} or target_id = #{articleId})
           </if>
     </select>
 
+    <update id="updateSourceName">
+        update blossom_article_reference
+           set source_name = #{sourceName}
+         where source_id = #{sourceId}
+           and user_id = #{userId}
+    </update>
+
+    <update id="updateTargetName">
+        update blossom_article_reference
+           set target_name = #{targetName}
+         where target_Id = #{targetId}
+           and user_id = #{userId}
+    </update>
+
+    <update id="updateToUnknown">
+        update blossom_article_reference
+           set target_name = #{targetName},
+               type = 12
+         where target_Id = #{targetId}
+           and user_id = #{userId}
+    </update>
+
+    <update id="updateToKnown">
+        update blossom_article_reference
+           set target_name = #{targetName},
+               type = 11
+         where target_Id = #{targetId}
+           and user_id = #{userId}
+    </update>
 </mapper>

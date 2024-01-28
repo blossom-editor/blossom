@@ -1,7 +1,7 @@
 <template>
   <div class="aside-upload-root">
-    <el-tooltip effect="light" placement="right-start" :show-after="1000" :hide-after="0">
-      <template #content>提示:<br />从这里上传, 会上传至<br />《🌌 默认文件夹》</template>
+    <el-tooltip effect="light" placement="right" :show-after="1000" :hide-after="0">
+      <template #content>从这里上传, 会上传至<br />《🌌 默认文件夹》</template>
       <el-upload
         name="file"
         :action="serverStore.serverUrl + uploadFileApiUrl"

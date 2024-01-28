@@ -54,6 +54,10 @@ export interface TodoList {
    * 任务数量
    */
   taskCount: number
+  /**
+   * 任务数量统计
+   */
+  taskCountStat: string
 }
 
 /**

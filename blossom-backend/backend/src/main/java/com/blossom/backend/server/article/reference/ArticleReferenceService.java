@@ -1,6 +1,7 @@
 package com.blossom.backend.server.article.reference;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity;
@@ -29,11 +30,15 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
 
     /**
      * 文章引用记录
+     *
+     * @param userId     用户ID
+     * @param sourceId   引用源
+     * @param sourceName 引用源名称
+     * @param references 目标
      */
     @Transactional(rollbackFor = Exception.class)
     public void bind(Long userId, Long sourceId, String sourceName, List<ArticleReferenceReq> references) {
         delete(sourceId);
-
         // 没有图片, 则不保存
         if (CollUtil.isEmpty(references)) {
             return;
@@ -48,10 +53,50 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
     }
 
     /**
+     * 将文章修改为内部未知文章
+     *
+     * @param userId   用户ID
+     * @param targetId 目标文章ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateToUnknown(Long userId, Long targetId) {
+        baseMapper.updateToUnknown(userId, targetId, "未知文章-" + targetId);
+    }
+
+    /**
+     * 将文章引用修改为内部具名文章
+     *
+     * @param userId   用户ID
+     * @param targetId 目标文章ID
+     * @param name     文章名称
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateToKnown(Long userId, Long targetId, String name) {
+        baseMapper.updateToKnown(userId, targetId, name);
+    }
+
+    /**
+     * 内部链接修改名称时, 同时修改双链中的名称
+     *
+     * @param articleId ID
+     * @param name      名称
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateInnerName(Long userId, Long articleId, String name) {
+        if (articleId <= 0 || StrUtil.isBlank(name)) {
+            return;
+        }
+        baseMapper.updateSourceName(userId, articleId, name);
+        baseMapper.updateTargetName(userId, articleId, name);
+    }
+
+
+    /**
      * 删除引用
      *
      * @param articleId 文章ID
      */
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long articleId) {
         LambdaQueryWrapper<ArticleReferenceEntity> where = new LambdaQueryWrapper<>();
         where.eq(ArticleReferenceEntity::getSourceId, articleId);
@@ -89,6 +134,8 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
         Map<String, Object> result = new HashMap<>();
         List<ArticleReferenceEntity> all = baseMapper.listGraph(onlyInner, userId, articleId);
         if (CollUtil.isEmpty(all)) {
+            result.put("nodes",new String[0]);
+            result.put("links",new String[0]);
             return result;
         }
 
@@ -100,14 +147,15 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
 
         Set<Node> nodes = new HashSet<>();
         source.forEach((id, list) -> {
-            Node node = new Node(list.get(0).getSourceName(), 11);
+            Node node = new Node(list.get(0).getSourceName(), ArticleReferenceEnum.INNER.getType());
             node.setInner(true);
             node.setArtId(id);
             nodes.add(node);
         });
         target.forEach((name, list) -> {
-            Node node = new Node(list.get(0).getTargetName(), list.get(0).getType());
-            if (list.get(0).getType().equals(11)) {
+            final Integer type = list.get(0).getType();
+            Node node = new Node(list.get(0).getTargetName(), type);
+            if (type.equals(ArticleReferenceEnum.INNER.getType()) || type.equals(ArticleReferenceEnum.INNER_UNKNOWN.getType())) {
                 node.setInner(true);
                 node.setArtId(list.get(0).getTargetId());
             } else {

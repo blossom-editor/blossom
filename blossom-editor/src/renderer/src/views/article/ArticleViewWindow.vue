@@ -4,60 +4,62 @@
     <div class="bl-preview-toc-block">
       <div class="toc-subtitle">《{{ article?.name }}》</div>
       <div class="toc-subtitle">
-        <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 |
-        <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
+        <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
         <span class="iconbl bl-like-line"></span> {{ article?.likes }}
       </div>
-      <div class="toc-subtitle">
-        <span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}
-      </div>
-      <div class="toc-subtitle">
-        <span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}
-      </div>
+      <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}</div>
+      <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}</div>
       <div class="toc-title">目录</div>
       <div class="toc-content">
-        <div v-for="toc in tocList" :key="toc.index" :class="[toc.clazz]" @click="toScroll(toc.level, toc.content)">
+        <div v-for="toc in tocs" :key="toc.id" :class="[toc.clazz]" @click="toScroll(toc.id)">
           {{ toc.content }}
         </div>
       </div>
     </div>
 
-    <div class="preview bl-preview" :style="editorStyle" v-html="article?.html"></div>
+    <div class="preview bl-preview" :style="editorStyle" v-html="article?.html" ref="WindowPreviewRef"></div>
     <el-backtop target=".preview" :right="50" :bottom="50">
-      <div class="iconbl bl-send-line backtop"></div>
+      <div class="iconbl bl-a-doubleonline-line backtop"></div>
     </el-backtop>
   </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from "pinia"
-import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { articleInfoApi } from '@renderer/api/blossom'
 import { useConfigStore } from '@renderer/stores/config'
-
+import { parseTocAsync } from './scripts/article'
+import type { Toc } from './scripts/article'
 
 const configStore = useConfigStore()
 const { editorStyle } = storeToRefs(configStore)
 
-const route = useRoute();
+const route = useRoute()
 const article = ref<DocInfo>()
-const tocList = ref<any>([])
+const tocs = ref<Toc[]>([])
+const WindowPreviewRef = ref()
 
 /**
  * 跳转至指定ID位置,ID为 标题级别-标题内容
  * @param level 标题级别
  * @param content 标题内容
  */
-const toScroll = (level: number, content: string) => {
-  let id = level + '-' + content
+const toScroll = (id: string) => {
   let elm: HTMLElement = document.getElementById(id) as HTMLElement
-  (elm.parentNode as Element).scrollTop = elm.offsetTop
+  ;(elm.parentNode as Element).scrollTop = elm.offsetTop - 40
 }
 
 const initPreview = (articleId: string) => {
-  articleInfoApi({ id: articleId, showToc: true, showMarkdown: false, showHtml: true }).then(resp => {
+  articleInfoApi({ id: articleId, showToc: false, showMarkdown: false, showHtml: true }).then((resp) => {
     article.value = resp.data
-    tocList.value = JSON.parse(resp.data.toc)
+    nextTick(() => initToc())
+  })
+}
+
+const initToc = () => {
+  parseTocAsync(WindowPreviewRef.value).then((toc) => {
+    tocs.value = toc
   })
 }
 
@@ -65,7 +67,7 @@ onMounted(() => {
   initPreview(route.query.articleId as string)
 })
 </script>
-<style scoped lang=scss>
+<style scoped lang="scss">
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
 
@@ -78,6 +80,7 @@ onMounted(() => {
     font-size: 15px;
     padding: 30px;
     overflow-y: overlay;
+    overflow-x: hidden;
     line-height: 23px;
 
     :deep(*) {
@@ -88,10 +91,7 @@ onMounted(() => {
     :deep(.katex > *) {
       font-size: 1.2em !important;
       font-family: 'KaTeX_Size1', sans-serif !important;
-      // font-size: 1.3em !important;
-      // font-family: 'KaTeX_Math', sans-serif !important;
     }
   }
-
 }
 </style>

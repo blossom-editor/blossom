@@ -189,7 +189,7 @@ INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state,
 SELECT *
 FROM (select 101                             as id,
              'BLOSSOM_OBJECT_STORAGE_DOMAIN' as param_name,
-             'http://www.xxx.com/'           as param_value,
+             'http://www.google.com/'           as param_value,
              'BLOSSOM 对象存储地址'                as param_desc,
              1                               as open_state,
              CURRENT_TIMESTAMP               as cre_time,

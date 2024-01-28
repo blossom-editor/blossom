@@ -69,7 +69,7 @@
                   :rows="2"
                   resize="none"
                   v-model="customBlogUrl"
-                  placeholder="示例: http://www.xxx.com/#/articles?articleId="
+                  placeholder="示例: http://www.google.com//#/articles?articleId="
                   @input="customBlogUrlChange"></el-input>
               </bl-row>
               <div class="blog-url-error" style="margin-top: 10px">

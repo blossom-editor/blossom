@@ -85,7 +85,7 @@
 
       .gutter-holder {
         height: 100%;
-        width: 50px;
+        width: 49px;
         position: absolute;
         background-color: var(--bl-editor-gutters-bg-color);
         border-right: 1px solid var(--bl-editor-gutters-border-color);
@@ -129,11 +129,71 @@
         }
       }
 
+      .operator {
+        @include themeBorder(2px, #d8d8d841, #ffffff12);
+        width: 20px;
+        height: 75px;
+        padding-top: 5px;
+        background-color: var(--bl-html-color);
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        position: absolute;
+        bottom: 10%;
+        left: calc(50% - 0.5px);
+        z-index: 4;
+        text-align: center;
+        transition: border 0.3s;
+        cursor: pointer;
+
+        &:hover {
+          border: 2px solid var(--el-border-color);
+          .iconbl {
+            color: var(--el-border-color);
+          }
+        }
+
+        .iconbl {
+          @include themeColor(#d8d8d841, #ffffff12);
+          line-height: 20px;
+          font-size: 16px;
+          transition: color 0.3s;
+          &:hover {
+            color: var(--el-color-primary-light-3);
+          }
+          &:active {
+            transform: scale(0.9);
+          }
+        }
+        .bl-admonish-line {
+          font-size: 14px;
+        }
+
+        .bl-refresh-line {
+          font-size: 14px;
+        }
+
+        .bl-eye-line {
+          font-size: 18px;
+          margin-bottom: 7px;
+          transform: rotate(90deg);
+          &:active {
+            transform: scale(0.9) rotate(90deg);
+          }
+        }
+
+        .bl-scroll {
+          font-size: 19px;
+          margin-left: -2px;
+          margin-bottom: 2px;
+        }
+      }
+
       .resize-divider {
         height: 100%;
         border-left: 2px solid var(--el-border-color);
         margin-left: 1px;
-        z-index: 3;
+        z-index: 4;
+        position: relative;
         cursor: ew-resize;
 
         &:hover {
@@ -146,7 +206,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
         word-wrap: break-word;
-        padding: 10px 20px 0 20px;
+        padding: 10px 20px 0 30px;
         z-index: 3;
         font-family: inherit;
         font-size: inherit;
@@ -154,8 +214,6 @@
         :deep(.katex > *) {
           font-size: 1.2em !important;
           font-family: 'KaTeX_Size1', sans-serif !important;
-          // font-size: 1.3em !important;
-          // font-family: 'KaTeX_Math', sans-serif !important;
         }
       }
     }
@@ -165,6 +223,5 @@
       border-top: 1px solid var(--el-border-color);
       z-index: 2;
     }
-
   }
 }

@@ -47,7 +47,7 @@ public enum ParamEnum {
     /**
      * BLOSSOM 对象存储地址
      */
-    BLOSSOM_OBJECT_STORAGE_DOMAIN(false, 0,"http://www.xxx.com/"),
+    BLOSSOM_OBJECT_STORAGE_DOMAIN(false, 0,"http://www.google.com/"),
 
     /**
      * 服务器JWT加密字符串

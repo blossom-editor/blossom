@@ -53,3 +53,12 @@ declare type DocType = 1 | 2 | 3
 declare interface Window {
   onHtmlEventDispatch: any
 }
+
+/**
+ * 目录结构
+ */
+declare interface Toc {
+  content: string
+  clazz: string
+  id: string
+}

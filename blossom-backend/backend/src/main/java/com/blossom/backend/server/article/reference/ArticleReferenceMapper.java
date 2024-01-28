@@ -40,4 +40,25 @@ public interface ArticleReferenceMapper extends BaseMapper<ArticleReferenceEntit
      * @param articleId 文章ID
      */
     List<ArticleReferenceEntity> listGraph(@Param("inner") Boolean inner, @Param("userId") Long userId, @Param("articleId") Long articleId);
+
+    /**
+     * 修改 sourceName
+     */
+    void updateSourceName(@Param("userId") Long userId, @Param("sourceId") Long sourceId, @Param("sourceName") String sourceName);
+
+    /**
+     * 修改 targetName
+     */
+    void updateTargetName(@Param("userId") Long userId, @Param("targetId") Long targetId, @Param("targetName") String targetName);
+
+    /**
+     * 被引用的文章修改为未知
+     */
+    void updateToUnknown(@Param("userId") Long userId, @Param("targetId") Long targetId, @Param("targetName") String targetName);
+
+    /**
+     * 被引用的文章修改为未知
+     */
+    void updateToKnown(@Param("userId") Long userId, @Param("targetId") Long targetId, @Param("targetName") String targetName);
+
 }

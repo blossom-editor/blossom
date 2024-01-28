@@ -7,7 +7,7 @@
       <div class="task-collapse">
         <el-collapse v-model="activeName" accordion>
           <el-collapse-item title="每日待办事项" name="1" class="collapse-item">
-            <el-calendar ref="CalendarRef" class="task-day-calendar" v-model="selectDay">
+            <el-calendar ref="CalendarRef" class="task-day-calendar">
               <template #header="{ date }">
                 <bl-row just="space-between" class="header" style="margin: 8px 10px">
                   <div class="month">{{ date.split(' ')[2] }}{{ date.split(' ')[3] }}</div>
@@ -21,7 +21,7 @@
               <template #date-cell="{ data }">
                 <div class="cell-wrapper" @click="toTask(data.day, data.day, 10)">
                   <div class="day">{{ data.day.split('-')[2] }}</div>
-                  <div v-if="getCount(data.day) > 0">
+                  <div v-if="getCount(data.day) != 0">
                     <bl-tag>{{ getCount(data.day) }}</bl-tag>
                   </div>
                 </div>
@@ -35,13 +35,13 @@
               <!-- update name -->
               <el-input
                 v-if="phased.updTodoName"
-                :id="'phased-name-input-' + phased.todoId"
                 v-model="phased.todoName"
                 type="textarea"
+                :id="'phased-name-input-' + phased.todoId"
                 :rows="3"
                 @blur="blurPhasedUpdHandle(phased.todoId!)"></el-input>
               <div v-else @dblclick="showPhasedUpdHandle(phased.todoId!)">{{ phased.todoName }}</div>
-              <bl-tag v-if="phased.taskCount > 0">{{ phased.taskCount }}</bl-tag>
+              <bl-tag>{{ phased.taskCountStat }}</bl-tag>
             </div>
 
             <!-- add phased -->
@@ -49,6 +49,7 @@
               v-if="showPhasedAdd"
               ref="phasedAddInputRef"
               v-model="phasedAddName"
+              @keyup.enter="blurPhasedAddHandle"
               @blur="blurPhasedAddHandle"
               style="margin-top: 10px"></el-input>
             <div v-else class="task-phased-add" @click="showPhasedAddHandle">新增计划</div>
@@ -58,7 +59,7 @@
           <el-collapse-item title="阶段性事项 已完成" name="3">
             <div v-for="phased in todoPhasedClose" class="task-phased" @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
               {{ phased.todoName }}
-              <bl-tag v-if="phased.taskCount > 0">{{ phased.taskCount }}</bl-tag>
+              <bl-tag>{{ phased.taskCountStat }}</bl-tag>
             </div>
           </el-collapse-item>
         </el-collapse>
@@ -101,8 +102,6 @@ useLifecycle(
 )
 
 //#region ----------------------------------------< 日历 >--------------------------------------
-
-const selectDay = ref()
 const CalendarRef = ref<CalendarInstance>()
 const selectDate = (val: CalendarDateType) => {
   if (!CalendarRef.value) return
@@ -128,6 +127,7 @@ const getTodos = () => {
         todoType: 10,
         today: false,
         taskCount: todo.taskCount > 0 ? todo.taskCount : 0,
+        taskCountStat: '0|0|0',
         updTodoName: false
       })
     }
@@ -136,9 +136,17 @@ const getTodos = () => {
   })
 }
 
+/**
+ * @todo 日历每一项点击时由于内部数据变更, 都会触发查询
+ * @param day
+ */
 const getCount = (day: string): number => {
-  if (!todoDayMaps.value) return 0
-  if (!todoDayMaps.value.get(day)) return 0
+  if (!todoDayMaps.value) {
+    return 0
+  }
+  if (!todoDayMaps.value.has(day)) {
+    return 0
+  }
   return todoDayMaps.value.get(day)!.taskCount
 }
 
@@ -316,6 +324,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
     .task-phased {
       @include flex(row, flex-start, center);
       @include font(13px, 300);
+      flex-wrap: wrap;
       padding: 1px 3px;
       border-radius: 4px;
       color: var(--bl-text-color);
@@ -327,6 +336,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
       &:first-child {
         margin-top: 5px;
+        word-break: break-all;
       }
 
       &:last-child {

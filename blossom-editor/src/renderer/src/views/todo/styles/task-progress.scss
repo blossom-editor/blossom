@@ -105,7 +105,7 @@
 
   .add-icon {
     @include font(13px, 300);
-    padding-right: 3px;
+    padding: 0 3px;
     color: var(--bl-text-color-light);
     cursor: pointer;
 
@@ -169,10 +169,10 @@
         border: 3px solid var(--el-color-primary);
 
         .iconbl {
+          @include themeColor(#e4e4e4, #2c2c2c);
           display: inherit;
           margin-top: 40px;
           font-size: 90px;
-          color: #e4e4e4;
         }
       }
     }

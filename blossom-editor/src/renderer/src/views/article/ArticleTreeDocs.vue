@@ -118,7 +118,7 @@
         <div v-if="curDoc.ty !== 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
         <!-- 更多二级菜单 -->
-        <div @mouseenter="handleHoverRightMenuLevel2($event, 2)">
+        <div @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-apps-line"></span>更多
           <div class="menu-content-level2" :style="rMenuLevel2">
@@ -147,7 +147,7 @@
         <div v-if="curDoc.ty === 3" @click="createUrl('tempVisit', true)"><span class="iconbl bl-visit"></span>浏览器临时访问</div>
 
         <!-- 导出及二级菜单 -->
-        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)">
+        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
           <div class="menu-content-level2" :style="rMenuLevel2">
@@ -157,7 +157,7 @@
             <div @click="articleBackup('HTML')"><span class="iconbl bl-HTML"></span>导出为本地 HTML</div>
           </div>
         </div>
-        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 2)">
+        <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-a-linkspread-line"></span>复制链接
           <div class="menu-content-level2" :style="rMenuLevel2">
@@ -310,6 +310,9 @@ const getRouteQueryParams = () => {
     docTreeActiveArticleId.value = articleId as string
     let treeParam: any = { ty: 3, i: articleId }
     clickCurDoc(treeParam)
+    nextTick(() => {
+      docTreeActiveArticleId.value = articleId as string
+    })
   }
 }
 /**
@@ -422,7 +425,15 @@ const handleClickRightMenu = (doc: DocTree, event: MouseEvent) => {
   })
 }
 
-const closeTreeDocsMenuShow = () => {
+const closeTreeDocsMenuShow = (event: MouseEvent) => {
+  if (event.target) {
+    let isPrevent = (event.target as HTMLElement).getAttribute('data-bl-prevet')
+    if (isPrevent === 'true') {
+      event.preventDefault()
+      return
+    }
+  }
+
   document.body.removeEventListener('click', closeTreeDocsMenuShow)
   rMenu.value.show = false
 }
@@ -573,11 +584,14 @@ const syncDoc = () => {
 const delDoc = () => {
   let type = curDoc.value.ty === 3 ? '文章' : '文件夹'
   ElMessageBox.confirm(
-    `是否确定删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？删除后的文章可在回收站中查看。`,
+    `<strong>注意：</strong><br/>
+    1. 公开访问记录将永久删除。<br/>
+    2. 双链引用将永久删除，还原后续重新编辑才可再次生成。<br/>
+    是否继续删除${type}: <span style="color:#C02B2B;text-decoration: underline;">${curDoc.value.n}</span>？`,
     {
       confirmButtonText: '确定删除',
       cancelButtonText: '我再想想',
-      type: 'info',
+      // type: 'warning',
       draggable: true,
       dangerouslyUseHTMLString: true
     }
@@ -790,7 +804,6 @@ const openArticle = (article: DocTree) => {
   })
 }
 //#endregion
-
 const clickCurDoc = (tree: DocTree) => {
   emits('clickDoc', tree)
 }

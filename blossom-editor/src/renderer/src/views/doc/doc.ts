@@ -1,3 +1,4 @@
+import { isNull } from '@renderer/assets/utils/obj'
 import Notify from '@renderer/scripts/notify'
 import { isEmpty } from 'lodash'
 import { Ref } from 'vue'
@@ -34,6 +35,21 @@ export enum SortLevelColor {
   TWO = '#E6981293',
   THREE = '#127EA993',
   FOUR = '#4AA40E93'
+}
+
+/**
+ * 判断文档是否是文章
+ * @param doc
+ * @returns true: 是文章; false: 不是文章
+ */
+export const isArticle = (doc: DocInfo | undefined): boolean => {
+  if (isNull(doc)) {
+    return false
+  }
+  if (isNull(doc!.type) || doc!.type != 3) {
+    return false
+  }
+  return true
 }
 
 /**

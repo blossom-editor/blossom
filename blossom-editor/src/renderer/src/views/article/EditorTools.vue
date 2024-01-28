@@ -3,51 +3,240 @@
     <div class="tomato-bell" ref="TomatoBellRef"></div>
     <div class="tools-container">
       <!-- 文章的操作 -->
-      <div class="iconbl bl-a-texteditorsave-line" @click="emits('save')"></div>
-      <div class="iconbl bl-eye-line" @click="emits('previewFullScreen')"></div>
-      <div class="iconbl bl-expansion-line" @click="emits('editorFullScreen')"></div>
+      <el-tooltip
+        content="保存"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-a-texteditorsave-line" @click="emits('save')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="开启/关闭全屏预览"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-eye-line" @click="emits('previewFullScreen')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="开启/关闭全屏编辑"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-expansion-line" @click="emits('editorFullScreen')"></div>
+      </el-tooltip>
 
       <!--  -->
       <div class="divider"></div>
-      <div class="iconbl bl-bold" @click="emits('bold')"></div>
-      <div class="iconbl bl-italic" @click="emits('italic')"></div>
-      <div class="iconbl bl-strikethrough" @click="emits('strike')"></div>
-      <div class="iconbl bl-a-texteditorsuperscript-line" @click="emits('sup')"></div>
-      <div class="iconbl bl-a-texteditorsubscript-line" @click="emits('sub')"></div>
-      <div class="iconbl bl-separator" @click="emits('separator')"></div>
+      <el-tooltip
+        content="加粗"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-bold" @click="emits('bold')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="斜体"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-italic" @click="emits('italic')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="删除线"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-strikethrough" @click="emits('strike')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="上标"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-a-texteditorsuperscript-line" @click="emits('sup')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="下标"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-a-texteditorsubscript-line" @click="emits('sub')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="删除线"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-separator" @click="emits('separator')"></div>
+      </el-tooltip>
 
       <!--  -->
       <div class="divider"></div>
-      <el-dropdown>
-        <div class="iconbl bl-a-rightsmallline-line"></div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item @click="emits('blockquote')">⚪ Normal</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquoteBlock')">⚫ Black</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquoteGreen')">🟢 Green</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquoteYellow')">🟡 Yellow</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquoteRed')">🔴 Red</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquoteBlue')">🔵 Blue</el-dropdown-item>
-            <el-dropdown-item @click="emits('blockquotePurple')">🟣 Purple</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <!-- </div> -->
-      <div class="iconbl bl-single-quotes-r" @click="emits('code')"></div>
-      <div class="iconbl bl-double-quotes-r" @click="emits('pre')"></div>
-      <div class="iconbl bl-a-underbox-line" @click="emits('checkbox')"></div>
-      <div class="iconbl bl-list-unordered" @click="emits('unordered')"></div>
-      <div class="iconbl bl-list-ordered" @click="emits('ordered')"></div>
+      <el-tooltip
+        content="引用"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <el-dropdown>
+          <div class="iconbl bl-a-rightsmallline-line"></div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="emits('blockquote')">⚪ Normal</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquoteBlock')">⚫ Black</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquoteGreen')">🟢 Green</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquoteYellow')">🟡 Yellow</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquoteRed')">🔴 Red</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquoteBlue')">🔵 Blue</el-dropdown-item>
+              <el-dropdown-item @click="emits('blockquotePurple')">🟣 Purple</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </el-tooltip>
+      <el-tooltip
+        content="行内代码块"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-single-quotes-r" @click="emits('code')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="多行代码块"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-double-quotes-r" @click="emits('pre')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="单选框"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-a-underbox-line" @click="emits('checkbox')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="无序列表"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-list-unordered" @click="emits('unordered')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="有序列表"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-list-ordered" @click="emits('ordered')"></div>
+      </el-tooltip>
 
       <!-- 表格及其他 -->
       <div class="divider"></div>
-      <div class="iconbl bl-table-" @click="emits('table')"></div>
-      <div class="iconbl bl-image--line" @click="emits('image')"></div>
-      <div class="iconbl bl-link-m" @click="emits('link')"></div>
+      <el-tooltip
+        content="表格"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-table-" @click="emits('table')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="图片链接"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-image--line" @click="emits('image')"></div>
+      </el-tooltip>
+      <el-tooltip
+        content="链接"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-link-m" @click="emits('link')"></div>
+      </el-tooltip>
 
       <!-- 其他工具 -->
       <div class="divider"></div>
-      <div class="iconbl bl-jianpan-xianxing" @click="handleShowHotKeyDialog"></div>
+      <el-tooltip
+        content="快捷键说明"
+        popper-class="is-small"
+        effect="light"
+        placement="top"
+        transition="none"
+        :hide-after="0"
+        :show-arrow="false"
+        :offset="10">
+        <div class="iconbl bl-jianpan-xianxing" @click="handleShowHotKeyDialog"></div>
+      </el-tooltip>
 
       <!-- 番茄 -->
       <el-popover placement="bottom" :width="220" trigger="click" popper-style="padding:0;">

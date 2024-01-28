@@ -9,6 +9,7 @@ import com.blossom.backend.base.param.pojo.ParamEntity;
 import com.blossom.backend.base.search.EnableIndex;
 import com.blossom.backend.base.search.message.IndexMsgTypeEnum;
 import com.blossom.backend.server.article.recycle.pojo.ArticleRecycleEntity;
+import com.blossom.backend.server.article.reference.ArticleReferenceService;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.common.base.util.DateUtils;
@@ -34,6 +35,7 @@ public class ArticleRecycleService extends ServiceImpl<ArticleRecycleMapper, Art
 
     private final FolderService folderService;
     private final ParamService paramService;
+    private final ArticleReferenceService referenceService;
 
 
     /**
@@ -46,13 +48,22 @@ public class ArticleRecycleService extends ServiceImpl<ArticleRecycleMapper, Art
     }
 
     /**
+     * 根据ID查询
+     *
+     * @param id 文章ID
+     */
+    public ArticleRecycleEntity selectById(Long id) {
+        return baseMapper.selectById(id);
+    }
+
+    /**
      * 还原数据
      *
      * @param id 文章ID
      */
     @EnableIndex(type = IndexMsgTypeEnum.ADD, id = "#id")
     @Transactional(rollbackFor = Exception.class)
-    public void restore(Long id) {
+    public void restore(Long userId, Long id) {
         ArticleRecycleEntity article = baseMapper.selectById(id);
         FolderEntity folder = folderService.selectById(article.getPid());
         if (ObjUtil.isNull(folder)) {
@@ -61,10 +72,13 @@ public class ArticleRecycleService extends ServiceImpl<ArticleRecycleMapper, Art
             baseMapper.restore(id, folder.getId());
         }
         baseMapper.deleteById(id);
+        // 将被动引用中的未知文章名修改为正常文章名
+        referenceService.updateToKnown(userId, id, article.getName());
     }
 
     /**
      * 每天凌晨4点执行
+     *
      * @Scheduled(cron = "0 0/1 * * * ?")
      */
     @Scheduled(cron = "0 0 04 * * ?")

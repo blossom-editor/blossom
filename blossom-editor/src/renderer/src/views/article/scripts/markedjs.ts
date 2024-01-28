@@ -7,7 +7,7 @@ import markedKatex from 'marked-katex-extension'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 // katex
-import katex from 'katex'
+import katex, { KatexOptions } from 'katex'
 import 'katex/dist/katex.min.css'
 // mermaid
 import mermaid from 'mermaid'
@@ -33,7 +33,7 @@ const markmapOptions = deriveOptions({
   duration: 0, // 展开缩起动画
   maxWidth: 160, // 每个节点最大宽度
   zoom: true, // 缩放
-  pan: false // 拖动
+  pan: true // 拖动
 })
 
 /**
@@ -54,7 +54,7 @@ export const singleDollar = /^\$+([^\$\n]+?)\$+/
 export const doubleDollar = /(?<=\$\$).*?(?=\$\$)/
 export const doubleWell = /(?<=\#\#).*?(?=\#\#)/
 
-const katexOptions = {
+const katexOptions: KatexOptions = {
   throwOnError: false,
   displayMode: true,
   // 生成 katex-mathml 时会出现错误, mathml 绝对定位没有定到 katex-display 元素, 而是找到上级导致页面出现错误
@@ -86,32 +86,32 @@ let hljsConfig = {
 marked.use(markedHighlight(hljsConfig))
 //#endregion
 
-//#region ----------------------------------------< tokenizer >--------------------------------------
-export const tokenizerCodespan = (src: string): any => {
-  const match = src.match(singleDollar)
-  if (match) {
-    let result = {
-      type: 'codespan',
-      raw: match[0],
-      text: match[0]
-    }
-    return result
-  }
-  return false
-}
-
-//#endregion
-
 //#region ----------------------------------------< renderer >--------------------------------------
-
+const domParser = new DOMParser()
 /**
  * 标题解析为 TOC 集合, 增加锚点跳转
  * @param text  标题内容
  * @param level 标题级别
+ * @param raw   原内容
  */
-export const renderHeading = (text: any, level: number) => {
-  const realLevel = level
-  return `<h${realLevel} id="${realLevel}-${text}">${text}</h${realLevel}>`
+export const renderHeading = (text: string, level: number, raw: string) => {
+  let id: string = randomInt(1000000, 9999999).toString()
+  try {
+    if (raw.indexOf('<') > -1 && raw.indexOf('>') > -1) {
+      let dom = domParser.parseFromString(raw, 'text/html')
+      if (dom) {
+        id += dom.body.innerText
+      } else {
+        id += text
+      }
+    } else {
+      id += text
+    }
+  } catch {
+    id += text
+  }
+
+  return `<h${level} id="${id}">${text}</h${level}>`
 }
 
 /**
@@ -171,21 +171,24 @@ export const renderBlockquote = (quote: string) => {
 
 /**
  * 自定义代码块内容解析:
- * 1. bilibili
- *    格式为: ```bilibili${grammar}bvid${grammar}w100${grammar}h100
- *    官方使用文档: https://player.bilibili.com/
- *
+ * 1. mermaid  (async)
  * 2. katex
- * 3. mermaid
- * 4. markmap
+ * 3. markmap  (async)
+ * 4. bilibili (iframe), 文档: https://player.bilibili.com/
  *
  * @param code      解析后的 HTML 代码
  * @param language  语言
  * @param isEscaped
  */
-export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean) => {
+export const renderCode = (code: string, language: string | undefined, _isEscaped: boolean, asyncStat: { need: number; done: number }) => {
   if (language == undefined) language = 'text'
+
+  /** ==========================================================================================
+   * 渲染 mermaid
+   * ```mermaid${grammar}h300
+   * ========================================================================================== */
   if (language.startsWith('mermaid') && isNotBlank(code)) {
+    asyncStat.need++
     const eleid = 'mermaid-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
 
@@ -206,10 +209,20 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
       .then((syntax) => {
         let canSyntax: boolean | void = syntax
         if (canSyntax) {
-          mermaid.render(eleid + '-svg', escape).then((resp) => {
+          mermaid.render(eleid + '-svg', escape).then(async (resp) => {
             const { svg } = resp
             let element = document.getElementById(eleid)
-            element!.innerHTML = svg
+            let retry = 0
+            while (!element || element == null) {
+              if (retry > 30) break
+              await sleep(5)
+              element = document.querySelector(`#${eleid}`)
+              retry++
+            }
+            if (element) {
+              element.innerHTML = svg
+            }
+            asyncStat.done++
           })
         }
       })
@@ -222,10 +235,14 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
           </p>`
         let element = document.getElementById(eleid)
         if (element) element!.innerHTML = html
+        asyncStat.done++
       })
-    return `<p class="mermaid-container" style="height:${height}" id="${eleid}">${eleid}</p>`
+    return `<p class="mermaid-container" style="height:${height}" id="${eleid}"></p>`
   }
 
+  /**
+   * 渲染 katex
+   */
   if (language === 'katex') {
     try {
       return katex.renderToString(escape2Html(code), { throwOnError: true, displayMode: true, output: 'html' })
@@ -238,7 +255,12 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
   }
 
+  /** ==========================================================================================
+   * 渲染 markmap
+   * ```markmap${grammar}h300
+   * ========================================================================================== */
   if (language.startsWith('markmap')) {
+    asyncStat.need++
     let height = '300px'
     let tags: string[] = language.split(grammar)
     if (tags.length >= 2) {
@@ -254,26 +276,40 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     const eleid = 'markmap-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
     const { root } = transformer.transform(escape)
-    new Promise<SVGElement>(async (resolve, reject) => {
-      let svgEl: SVGElement | null = document.querySelector(`#${eleid}`)
+
+    // let svg: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    // svg.id = eleid
+    // svg.setAttributeNS(null, 'width', '100%')
+    // svg.setAttributeNS(null, 'height', '500px')
+    // svg.setAttributeNS(null, 'viewBox', '0 0 100 500')
+    // svg.classList.add('markmap')
+    // svg.style.width = '500px'
+    // svg.style.height = height
+    // let markmap = Markmap.create(svg, markmapOptions, root)
+    // console.log(svg.outerHTML)
+    // return `<p class="markmap-container">${svg.outerHTML} </p>`
+
+    new Promise<SVGElement>(async (_resolve, _reject) => {
+      let svg: SVGElement | null = document.querySelector(`#${eleid}`)
       let retry = 0
-      while (!svgEl || svgEl == null) {
-        if (retry > 10) break
-        await sleep(10)
-        svgEl = document.querySelector(`#${eleid}`)
+      while (!svg || svg == null) {
+        if (retry > 30) break
+        await sleep(5)
+        svg = document.querySelector(`#${eleid}`)
         retry++
       }
-      if (svgEl) {
-        resolve(svgEl)
-      } else {
-        reject()
+      if (svg) {
+        Markmap.create(svg, markmapOptions, root)
       }
-    }).then((svgEl: SVGElement) => {
-      Markmap.create(svgEl, markmapOptions, root)
+      asyncStat.done++
     })
-    return `<p><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
+    return `<p class="markmap-container"><svg id=${eleid} xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${height}"></svg></p>`
   }
 
+  /** ==========================================================================================
+   * 渲染 bilibili
+   * ```bilibili${grammar}bvid${grammar}w100${grammar}h100
+   * ========================================================================================== */
   if (language.startsWith('bilibili')) {
     let bvid = ''
     let width = '100%'
@@ -295,7 +331,7 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
           if (tag.startsWith('h')) {
             height = tags[i].substring(1)
             if (!height.endsWith('%')) {
-              width += 'px'
+              height += 'px'
             }
           }
         }
@@ -309,9 +345,10 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     }
 
     return `<iframe width="${width}" height="${height}" style="margin: 10px 0"
-      scrolling="no" border="0" frameborder="no" framespacing="0"
+      scrolling="no" border="0" frameborder="no" framespacing="0" loading="lazy" 
       src="https://player.bilibili.com/player.html?bvid=${bvid}&page=1&autoplay=0" ></iframe>`
   }
+
   const id = 'pre-' + Date.now() + '-' + randomInt(1, 1000000)
   const lines: string[] = code.split(/\n|\r\n?|\n\n+/g)
   let result = '<ol>'
@@ -328,25 +365,10 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
 
 /**
  * 单行代码块的解析拓展
- * 1. katex `$内部写表达式$`
  * @param src
  * @returns
  */
 export const renderCodespan = (src: string) => {
-  let arr = src.match(singleDollar)
-  if (arr != null && arr.length > 0) {
-    try {
-      return katex.renderToString(arr[1], {
-        throwOnError: true,
-        output: 'html'
-      })
-    } catch (error) {
-      console.error(error)
-      return `<div class='bl-preview-analysis-fail-inline'>
-          Katex 语法解析失败! 你可以尝试前往<a href='https://katex.org/#demo' target='_blank'> Katex 官网</a> 来校验你的公式。
-          </div>`
-    }
-  }
   return `<code>${src}</code>`
 }
 
@@ -397,7 +419,12 @@ export const renderImage = (href: string | null, title: string | null, text: str
  *  ref: 双链内容
  * }
  */
-export const renderLink = (href: string | null, title: string | null, text: string, docTrees: DocTree[]) => {
+export const renderLink = (
+  href: string,
+  title: string | null | undefined,
+  text: string,
+  docTrees: DocTree[]
+): { link: string; ref: ArticleReference } => {
   let link: string
   let ref: ArticleReference = { targetId: '0', targetName: text, targetUrl: href as string, type: 21 }
   if (isBlank(title)) {
@@ -413,14 +440,18 @@ export const renderLink = (href: string | null, title: string | null, text: stri
       }
 
       // 从文章列表中获取文章, 如果找到则认为是内部引用, 否则即使是内部引用格式, 也认为是个外部文章.
+      // 内部引用不会使用 Markdown 中的链接名, 而是用内部文章名
       let article = getDocById(articleId.toString(), docTrees)
       if (article != undefined) {
         ref.targetId = article.i
         ref.targetName = article.n
         ref.type = 11
+      } else {
+        ref.targetId = articleId.toString()
+        ref.targetName = '未知文章-' + articleId.toString()
+        ref.type = 12
       }
 
-      // class="inner-link bl-tip bl-tip-bottom" data-tip="双链引用: 《${text}》"
       link = `<a target="_blank" href=${href} class="inner-link"
       onclick="onHtmlEventDispatch(this,'',event,'showArticleReferenceView','${ref.targetId}')">${text}</a>`
     } else {
@@ -460,21 +491,14 @@ const simpleRenderer = {
     }
     let lineNumbers = result + '</ol>'
     return `<pre><code class="hljs language-${language}"></code>${lineNumbers}<div class="pre-copy">${language}</div></pre>`
-    // return `<pre><code class="hljs language-${language}">${code}</code></pre>`
   },
   codespan(src: string): string {
     return renderCodespan(src)
   }
 }
 
-const tokenizer = {
-  codespan(src: string): any {
-    return tokenizerCodespan(src)
-  }
-}
-
 //@ts-ignore
-simpleMarked.use({ tokenizer: tokenizer, renderer: simpleRenderer })
+simpleMarked.use({ renderer: simpleRenderer })
 
 //#endregion
 

@@ -139,6 +139,7 @@ public class ArticleController {
     public R<Long> insert(@Validated @RequestBody ArticleUpdReq req) {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
+        article.setUserId(AuthContext.getUserId());
         return R.ok(baseService.update(article));
     }
 
@@ -166,6 +167,7 @@ public class ArticleController {
     @PostMapping("/upd/name")
     public R<?> updName(@Validated @RequestBody ArticleUpdNameReq name) {
         ArticleEntity article = name.to(ArticleEntity.class);
+        article.setUserId(AuthContext.getUserId());
         baseService.update(article);
         return R.ok();
     }
@@ -187,6 +189,7 @@ public class ArticleController {
         }
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(tags));
+        article.setUserId(AuthContext.getUserId());
         baseService.update(article);
         return R.ok(tags);
     }
@@ -207,7 +210,9 @@ public class ArticleController {
      */
     @PostMapping("/star")
     public R<Long> star(@Validated @RequestBody ArticleStarReq req) {
-        return R.ok(baseService.update(req.to(ArticleEntity.class)));
+        ArticleEntity article = req.to(ArticleEntity.class);
+        article.setUserId(AuthContext.getUserId());
+        return R.ok(baseService.update(article));
     }
 
     /**
@@ -221,12 +226,11 @@ public class ArticleController {
     public void download(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
         ArticleEntity article = baseService.selectById(id, false, true, false, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getMarkdown())) {
-            throw new IllegalArgumentException("文章内容为空,无法导出");
+            article.setMarkdown("文章无内容");
         }
         try (InputStream is = new ByteArrayInputStream(article.getMarkdown().getBytes(StandardCharsets.UTF_8));
              BufferedInputStream bis = new BufferedInputStream(is)) {
             String filename = URLEncodeUtil.encode(article.getName() + ".md");
-
             DownloadUtil.forceDownload(response, bis, filename);
         }
     }
@@ -242,7 +246,7 @@ public class ArticleController {
     public void downloadHtml(@RequestParam("id") Long id, HttpServletResponse response) throws IOException {
         ArticleEntity article = baseService.selectById(id, false, false, true, AuthContext.getUserId());
         if (StrUtil.isBlank(article.getHtml())) {
-            throw new IllegalArgumentException("文章内容为空,无法导出");
+            article.setHtml("<span>文章无内容</span>");
         }
         String reportHtml = ArticleUtil.toHtml(article, userService.selectById(AuthContext.getUserId()));
         try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));
@@ -270,9 +274,11 @@ public class ArticleController {
             String content = new String(file.getBytes(), StandardCharsets.UTF_8);
             ArticleEntity article = new ArticleEntity();
             article.setMarkdown(content);
+            article.setVersion(1);
             article.setPid(pid);
             article.setUserId(AuthContext.getUserId());
             article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
+            article.setWords(ArticleUtil.statWords(content));
             baseService.insert(article);
         } catch (Exception e) {
             e.printStackTrace();

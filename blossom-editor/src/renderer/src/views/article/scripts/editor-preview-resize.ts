@@ -10,9 +10,9 @@ import type { Ref } from 'vue'
 export const useResize = (
   editorRef: Ref<HTMLElement | undefined>,
   previewRef: Ref<HTMLElement | undefined>,
-  resizeDividerRef: Ref<HTMLElement | undefined>
+  resizeDividerRef: Ref<HTMLElement | undefined>,
+  operatorRef: Ref<HTMLElement | undefined>
 ) => {
-
   const onMousedown = (_e: MouseEvent) => {
     const targetRect = editorRef.value!.getBoundingClientRect()
     // editor 距离应用左侧的距离
@@ -24,6 +24,7 @@ export const useResize = (
     const onMousemove = (e: MouseEvent) => {
       const x = Math.max(0, e.clientX - targetLeft)
       editorRef.value!.style.width = `${x}px`
+      operatorRef.value!.style.left = `${x + 1}px`
       previewRef.value!.style.width = `calc(100% - ${x}px - 3px)`
     }
 
