@@ -17,13 +17,9 @@
       <div class="about-us">
         <span>{{ blossom.SYS.VERSION + (isNotBlank(getEmail()) ? ' | 邮箱：' + getEmail() : '') }}</span>
       </div>
-      <div class="icp">
-        <div style="cursor: pointer" @click="openNew('http://www.beian.gov.cn/portal/index.do')">
-          <!-- <img style="height: 14px; width: 14px" src="@/assets/imgs/common/gong_wang_an_bei_img.png" /> -->
-          {{ gwab() }}
-        </div>
-        <div v-if="isNotBlank(gwab())">|</div>
-        <div style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
+      <div class="custom-info">
+        <div v-if="isNotBlank(gwab())" v-html="gwab()"></div>
+        <div v-if="isNotBlank(ipc())" style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">
           {{ ipc() }}
         </div>
       </div>
@@ -108,9 +104,18 @@ const ipc = () => {
   .home-footer {
     @include box(100%, 40px);
 
-    .icp,
+    // icp
+    .custom-info {
+      @include flex(column, flex-end, center);
+      height: 100%;
+      padding-bottom: 5px;
+    }
+
     .about-us {
       @include flex(row, center, center);
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
     }
 
     div {

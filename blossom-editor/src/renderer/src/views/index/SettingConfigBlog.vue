@@ -32,17 +32,19 @@
         <div class="conf-tip">博客左上角 Logo 的访问地址，以及在浏览器标签中的 Logo。</div>
       </el-form-item>
 
-      <el-form-item label="ICP备案号">
-        <el-input size="default" v-model="userParamForm.WEB_IPC_BEI_AN_HAO" @change="(cur: any) => updParam('WEB_IPC_BEI_AN_HAO', cur)"></el-input>
-        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 ICP 备案号</div>
-      </el-form-item>
-
-      <el-form-item label="公网安备号">
+      <el-form-item label="自定义信息">
         <el-input
           size="default"
+          type="textarea"
+          :rows="5"
           v-model="userParamForm.WEB_GONG_WANG_AN_BEI"
           @change="(cur: any) => updParam('WEB_GONG_WANG_AN_BEI', cur)"></el-input>
-        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置公网安备号</div>
+        <div class="conf-tip">自定义信息，可填写 HTML 内容。</div>
+      </el-form-item>
+
+      <el-form-item label="ICP备案号">
+        <el-input size="default" v-model="userParamForm.WEB_IPC_BEI_AN_HAO" @change="(cur: any) => updParam('WEB_IPC_BEI_AN_HAO', cur)"></el-input>
+        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 ICP 备案号，该内容会跳转至中国大陆《ICP/IP地址/域名信息备案管理系统》。</div>
       </el-form-item>
 
       <el-form-item label="外部链接">
@@ -55,7 +57,7 @@
         <el-input
           size="default"
           type="textarea"
-          :rows="11"
+          :rows="13"
           v-model="userParamForm.WEB_BLOG_LINKS"
           @change="(cur: any) => updParam('WEB_BLOG_LINKS', cur)"></el-input>
       </el-form-item>
