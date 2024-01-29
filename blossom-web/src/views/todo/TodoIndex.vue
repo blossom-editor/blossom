@@ -69,11 +69,11 @@
       </div>
     </bl-col>
     <!--  -->
-    <div class="task-add" @click="showDetail('add')"><span class="iconbl bl-a-addline-line"></span></div>
+    <div class="module-workbench" @click="showDetail('add')"><span class="iconbl bl-a-addline-line"></span></div>
   </div>
 
   <!--  -->
-  <el-drawer v-model="isShowDetail" direction="btt" :with-header="true" size="400px">
+  <el-drawer v-model="isShowDetail" class="center-drawer" direction="btt" :with-header="true" size="400px">
     <div class="detail">
       <el-input class="task-name" size="small" style="width: calc(100% - 30px)" v-model="curTask.taskName" placeholder="Todo 标题">
         <template #prefix>
@@ -680,30 +680,6 @@ const addTag = () => {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
-    }
-  }
-
-  // 新增按钮
-  .task-add {
-    @include flex(row, center, center);
-    @include box(35px, 35px);
-    background-color: #fff;
-    box-shadow: -1px 0px 3px #bababa;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    position: absolute;
-    right: 0;
-    bottom: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: var(--el-color-primary-light-7);
-    }
-
-    .iconbl {
-      color: #7b7b7ba9;
-      font-size: 16px;
     }
   }
 }

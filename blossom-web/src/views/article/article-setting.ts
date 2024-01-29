@@ -16,7 +16,11 @@ const decrease = () => {
   Local.set(FONT_SIZE_KEY, fontSize.value)
 }
 
+const getFontSizeValue = () => {
+  return fontSize.value
+}
+
 const getFontSize = () => {
   return fontSize.value + 'rem'
 }
-export { getFontSize, increase, decrease }
+export { increase, decrease, getFontSizeValue, getFontSize }

@@ -32,6 +32,17 @@
         <div class="conf-tip">博客左上角 Logo 的访问地址，以及在浏览器标签中的 Logo。</div>
       </el-form-item>
 
+      <el-form-item label="开启专题特殊样式">
+        <bl-row>
+          <el-switch
+            v-model="userParamForm.WEB_BLOG_SUBJECT_TITLE"
+            size="default"
+            style="margin-right: 10px"
+            @change="(cur: boolean) => updParam('WEB_BLOG_SUBJECT_TITLE', cur ? '1' : '0')" />
+        </bl-row>
+        <div class="conf-tip">是否在博客文档列表中以特殊的样式显示专题。</div>
+      </el-form-item>
+
       <el-form-item label="自定义信息">
         <el-input
           size="default"
@@ -72,6 +83,7 @@ import { userParamListApi, userParamUpdApi, userParamRefreshApi } from '@rendere
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 
@@ -82,7 +94,8 @@ const userParamForm = ref({
   WEB_LOGO_URL: '',
   WEB_GONG_WANG_AN_BEI: '',
   WEB_BLOG_URL_ERROR_TIP_SHOW: '',
-  WEB_BLOG_LINKS: ''
+  WEB_BLOG_LINKS: '',
+  WEB_BLOG_SUBJECT_TITLE: false
 })
 
 /**
@@ -90,7 +103,7 @@ const userParamForm = ref({
  */
 const getParamList = () => {
   userParamListApi().then((resp) => {
-    userParamForm.value = resp.data
+    userParamForm.value = { ...resp.data, ...{ WEB_BLOG_SUBJECT_TITLE: resp.data.WEB_BLOG_SUBJECT_TITLE === '1' } }
   })
 }
 
@@ -105,6 +118,7 @@ const refreshParam = () => {
 const updParam = (paramName: string, paramValue: string) => {
   userParamUpdApi({ paramName: paramName, paramValue: paramValue }).then((_resp) => {
     userStore.getUserinfo()
+    ElMessage.info({ message: '保存成功', grouping: true })
   })
 }
 

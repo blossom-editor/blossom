@@ -1,5 +1,4 @@
 :root {
-
   /* 数字越大, 颜色越淡 */
   --el-color-primary: #c1992f;
   --el-color-primary-dark-2: rgba(250, 195, 56, 0.8);
@@ -26,6 +25,7 @@
 
 :root {
   --bl-html-color: #ffffff;
+  --bl-header-color: #313131;
 }
 
 html.dark {
@@ -35,11 +35,11 @@ html.dark {
 :root {
   /*  */
   --bl-editor-color: #707070;
-  --bl-editor-bg-color: #FFFFFF;
+  --bl-editor-bg-color: #ffffff;
 
   /* gutter */
   --bl-editor-gutters-bg-color: #f5f5f5;
-  --bl-editor-gutters-border-color: #DDDDDD00;
+  --bl-editor-gutters-border-color: #dddddd00;
   --bl-editor-active-line-gutter-bg-color: #f7f3fe;
 
   /* 各类关键字颜色 */
@@ -51,14 +51,14 @@ html.dark {
   --bl-editor-ci-color: #ba7300;
   --bl-editor-cg-color: #9876aa;
 
-  --bl-editor-c5-color: #7843E9;
-  --bl-editor-c7-color: #7843E9;
+  --bl-editor-c5-color: #7843e9;
+  --bl-editor-c7-color: #7843e9;
   --bl-editor-c7-bg-color: #00000000;
   /* ============================================================= */
 
   /* 预览的字体颜色 */
   --bl-preview-color: #2b2b2b;
-  --bl-preview-bg-color: #FFFFFF;
+  --bl-preview-bg-color: #ffffff;
   --bl-preview-border-radius: 4px;
 
   /* 目录 */

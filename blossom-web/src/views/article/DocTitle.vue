@@ -16,7 +16,6 @@
     <div v-if="level === 2" class="folder-level-line" style="left: -26px"></div>
     <div v-if="level === 3" class="folder-level-line" style="left: -36px"></div>
     <div v-if="level === 3" class="folder-level-line" style="left: -22px"></div>
-    <!--  -->
     <div v-if="level === 4" class="folder-level-line" style="left: -46px"></div>
     <div v-if="level === 4" class="folder-level-line" style="left: -32px"></div>
     <div v-if="level === 4" class="folder-level-line" style="left: -18px"></div>
@@ -26,9 +25,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PropType } from 'vue'
+import { useUserStore } from '@/stores/user'
 import { isNotBlank } from '@/assets/utils/obj'
-import { getThemeSubjecTitle } from '@/scripts/env'
 
+const userStore = useUserStore()
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
 const props = defineProps({
@@ -60,14 +60,12 @@ const tags = computed(() => {
 })
 
 const titleClass = computed(() => {
-  if (!getThemeSubjecTitle()) {
-    return 'doc-title'
-  }
-
-  if (props.trees.t.includes('subject')) {
+  // if (!getThemeSubjecTitle()) {
+  //   return 'doc-title'
+  // }
+  if (props.trees.t.includes('subject') && userStore.userParams.WEB_BLOG_SUBJECT_TITLE === '1') {
     return 'subject-title'
   }
-
   return 'doc-title'
 })
 

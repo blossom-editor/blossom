@@ -19,3 +19,27 @@
     position: relative;
   }
 }
+
+.center-drawer {
+  --el-drawer-bg-color: transparent !important;
+  --max-width: 700px;
+  --el-transition-duration: 0.2s;
+  box-shadow: none !important;
+  align-items: center;
+
+  .el-drawer__header {
+    max-width: var(--max-width);
+    width: 100%;
+    background-color: #ffffff;
+    position: relative;
+  }
+
+  .el-drawer__body {
+    max-width: var(--max-width);
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: var(--el-box-shadow-dark);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+}

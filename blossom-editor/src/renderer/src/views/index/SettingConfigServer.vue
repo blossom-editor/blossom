@@ -114,6 +114,7 @@ import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blosso
 import { getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
 import dayjs from 'dayjs'
+import { ElMessage } from 'element-plus'
 
 const serverStore = useServerStore()
 const userStore = useUserStore()
@@ -185,6 +186,7 @@ const refreshParam = () => {
 const updParam = (paramName: string, paramValue: string) => {
   paramUpdApi({ paramName: paramName, paramValue: paramValue }).then((_resp) => {
     userStore.getUserinfo()
+    ElMessage.info({ message: '保存成功', grouping: true })
   })
 }
 

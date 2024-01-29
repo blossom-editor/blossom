@@ -26,16 +26,23 @@
       </template>
     </el-calendar>
     <!--  -->
-    <div class="plan-add" @click="showAddForm"><span class="iconbl bl-a-addline-line"></span></div>
+    <div class="module-workbench" @click="showAddForm"><span class="iconbl bl-a-addline-line"></span></div>
   </div>
 
   <!-- 新增页面 -->
-  <el-drawer v-model="isShowAddForm" direction="btt" :with-header="true" :destroy-on-close="true" size="470px">
+  <el-drawer v-model="isShowAddForm" class="center-drawer" direction="btt" :with-header="true" :destroy-on-close="true" size="470px">
     <PlanDayInfo ref="PlanDayInfoRef" @saved="savedCallback"></PlanDayInfo>
   </el-drawer>
 
   <!-- 修改页面 -->
-  <el-drawer v-model="isShowUpdForm" direction="btt" :with-header="true" :destroy-on-close="true" size="270px">
+  <el-drawer
+    v-model="isShowUpdForm"
+    class="center-drawer"
+    direction="btt"
+    :close-on-click-modal="true"
+    :with-header="true"
+    :destroy-on-close="true"
+    size="270px">
     <div class="detail">
       <el-input size="small" style="width: calc(100% - 30px); margin-bottom: 18px" v-model="curPlan.title" placeholder="计划 标题">
         <template #prefix>
@@ -327,29 +334,6 @@ const delPlan = () => {
           }
         }
       }
-    }
-  }
-
-  .plan-add {
-    @include flex(row, center, center);
-    @include box(35px, 35px);
-    background-color: #fff;
-    box-shadow: -1px 0px 3px #bababa;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    position: absolute;
-    right: 0;
-    bottom: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: var(--el-color-primary-light-7);
-    }
-
-    .iconbl {
-      color: #7b7b7ba9;
-      font-size: 16px;
     }
   }
 }

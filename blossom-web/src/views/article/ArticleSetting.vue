@@ -1,7 +1,8 @@
 <template>
   <div class="detail">
     <bl-row>
-      字体大小：
+      文章字体大小：
+      <bl-tag style="margin-right: 15px">{{ getFontSizeValue().toFixed(1) }}</bl-tag>
       <el-button size="small" :icon="Plus" @click="increase()"></el-button>
       <el-button size="small" :icon="Minus" @click="decrease()"></el-button>
     </bl-row>
@@ -10,7 +11,7 @@
 
 <script setup lang="ts">
 import { Plus, Minus } from '@element-plus/icons-vue'
-import { increase, decrease } from './article-setting'
+import { increase, decrease, getFontSizeValue } from './article-setting'
 </script>
 
 <style scoped lang="scss">

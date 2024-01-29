@@ -1,0 +1,35 @@
+.module-workbench {
+  @include box(35px, 35px);
+  @include flex(row, center, center);
+  background-color: var(--bl-html-color);
+  box-shadow: -1px 0px 3px #bababa;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  transition: background-color 0.4s;
+  cursor: pointer;
+
+  .iconbl {
+    color: #7b7b7ba9;
+    font-size: 16px;
+    transition: color 1s;
+  }
+
+  i {
+    transition: color 1s;
+  }
+
+  &:hover {
+    background-color: #606060;
+
+    .iconbl {
+      color: var(--bl-html-color);
+    }
+
+    i {
+      --color: var(--bl-html-color) !important;
+    }
+  }
+}

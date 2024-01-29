@@ -38,6 +38,11 @@ public enum UserParamEnum {
      * 更多链接 JSON
      */
     WEB_BLOG_LINKS(false, 0, ""),
+    /**
+     * 博客端专题特殊形式, 0:false;1:是
+     * @since 1.13.0
+     */
+    WEB_BLOG_SUBJECT_TITLE(false, 0, "0"),
     ;
 
     /**

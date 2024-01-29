@@ -20,7 +20,6 @@
           :default-active="docTreeDefaultActive"
           :default-openeds="defaultOpeneds"
           :unique-opened="true">
-          <!-- ================================================ L1 ================================================ -->
           <div v-for="L1 in docTreeData" :key="L1.i" class="menu-level-one">
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
@@ -120,13 +119,20 @@
         </div>
       </div>
 
-      <div class="workbench" @click="showSetting">
+      <div class="module-workbench" @click="showSetting">
         <el-icon color="#7b7b7ba9"><Setting /></el-icon>
       </div>
     </div>
   </div>
 
-  <el-drawer v-model="isShowSetting" direction="btt" :with-header="true" :destroy-on-close="true" size="70px">
+  <el-drawer
+    v-model="isShowSetting"
+    class="center-drawer"
+    direction="btt"
+    :close-on-click-modal="true"
+    :with-header="true"
+    :destroy-on-close="true"
+    size="70px">
     <ArticleSetting></ArticleSetting>
   </el-drawer>
 </template>
@@ -662,6 +668,7 @@ const onresize = () => {
       width: 1260px;
       max-width: 1260px;
       overflow-y: overlay;
+      overflow-x: hidden;
       padding: 0 30px;
 
       .bl-preview {
@@ -1079,24 +1086,6 @@ const onresize = () => {
             font-weight: 700;
           }
         }
-      }
-    }
-
-    .workbench {
-      @include flex(row, center, center);
-      @include box(35px, 35px);
-      background-color: #fff;
-      box-shadow: -1px 0px 3px #bababa;
-      border-top-left-radius: 10px;
-      border-bottom-left-radius: 10px;
-      position: absolute;
-      right: 0;
-      bottom: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: var(--el-color-primary-light-7);
       }
     }
   }
