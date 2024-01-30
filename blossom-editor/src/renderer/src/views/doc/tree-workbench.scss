@@ -11,32 +11,17 @@
     padding-right: 5px;
   }
 
-  .workbench-page {
-    @include themeColor(#909399, #535353);
-    padding: 5px;
+  .workbench-more {
+    @include themeBg(#f5f5f5);
+    border-radius: 5px;
+    cursor: pointer;
 
-    .up {
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
-    }
-
-    .down {
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
-    }
-
-    .el-icon {
-      @include box(15px, 15px);
-      @include themeBg(#f1f1f1, #333434);
-      cursor: pointer;
-
-      &:hover {
-        @include themeBg(#eaeaea, #000);
-      }
-    }
-
-    .icon-shadow {
-      @include themeShadow(0 0 3px #aeaeae, 0 0 3px rgb(0, 0, 0));
+    .iconbl {
+      @include themeColor(#a9a9a9, #969696);
+      position: absolute;
+      top: 2px;
+      right: -6px;
+      font-size: 20px;
     }
   }
 
@@ -55,77 +40,7 @@
     }
   }
 
-  .bl-a-leftdirection-line {
-    padding-bottom: 5px;
-    padding-right: 0px;
-  }
-
-  .bl-search-line {
-    font-size: 22px;
-    padding-bottom: 5px;
-  }
-
-  // 公开图标
-  // .bl-cloud-fill {
-  //   color: #7ac20c;
-  //   @include themeText(0px 5px 5px #79c20ca4, 2px 3px 5px rgba(183, 183, 183, 0.8));
-  // }
-
-  // .bl-cloud-fill,
-  // .bl-cloud-line {
-  //   &:hover {
-  //     color: #7ac20c;
-  //     @include themeText(5px 5px 5px #79c20ca4, 2px 3px 5px rgba(183, 183, 183, 0.8));
-  //   }
-  // }
-
-  // 专题图标
-  // .bl-a-lowerrightpage-fill {
-  //   color: salmon;
-  //   @include themeText(0px 5px 5px rgba(250, 128, 114, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-  // }
-
-  // 专题图标
-  // .bl-a-lowerrightpage-fill,
-  // .bl-a-lowerrightpage-line {
-  //   &:hover {
-  //     color: salmon;
-  //     @include themeText(5px 5px 5px rgba(250, 128, 114, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-  //   }
-  // }
-
-  // star 图标
-  // .bl-star-fill {
-  //   color: rgb(237, 204, 11);
-  //   @include themeText(0px 5px 5px rgba(237, 204, 11, 0.546), 2px 3px 5px rgba(183, 183, 183, 0.8));
-  // }
-
-  .bl-star-line,
-  .bl-star-fill {
-    font-size: 23px;
-    padding-bottom: 5px;
-
-    // &:hover {
-    //   color: rgb(237, 204, 11);
-    //   @include themeText(5px 5px 5px rgba(237, 203, 11, 0.756), 2px 3px 5px rgba(183, 183, 183, 0.8));
-    // }
-  }
-
-  // 刷新图标
-  .bl-a-cloudrefresh-line,
-  .bl-a-fileadd-line {
-    &:active {
-      color: #ffffff;
-    }
-  }
 
   .bl-a-fileadd-line {
-  }
-
-  .bl-correlation-line {
-    @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 5px rgb(0, 0, 0));
-    color: var(--el-color-primary) !important;
-    font-size: 40px;
-    padding-bottom: 0px;
   }
 }

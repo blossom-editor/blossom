@@ -2,10 +2,45 @@
   @include box(100%, 100%);
   @include flex(row, flex-start, center);
 
+  .resize-divider,
+  .resize-docs-divider {
+    width: 2px;
+    height: 100%;
+    z-index: 4;
+    background-color: var(--el-border-color);
+    z-index: 1001;
+    position: relative;
+    cursor: ew-resize;
+
+    &::before {
+      content: '';
+      width: 3px;
+      display: block;
+      height: 100%;
+      transition: 0.3s;
+      position: absolute;
+      background-color: transparent;
+      left: -1px;
+      z-index: 1002;
+      cursor: ew-resize;
+    }
+
+    &:hover {
+      &::before {
+        background-color: var(--el-color-primary);
+      }
+    }
+  }
+
+  .resize-docs-divider {
+    width: 1px;
+  }
+
   // 文档
   .doc-container {
     @include flex(column, flex-start, center);
     height: 100%;
+    min-width: 250px;
     font-weight: 200;
 
     .doc-tree-menu-container {
@@ -54,9 +89,8 @@
 
   // 编辑器内容
   .editor-container {
-    @include box(100%, 100%);
+    @include box(calc(100% - 2px), 100%);
     position: relative;
-    border-left: 1px solid var(--el-border-color);
     background-color: #ffffff00;
 
     $heightTools: 45px;
@@ -79,8 +113,10 @@
         position: absolute;
         z-index: 1999;
         height: 100%;
-        width: 100%;
+        width: calc(100% - 1px);
         background-color: var(--bl-html-color);
+        overflow: hidden;
+        right: 0;
       }
 
       .gutter-holder {
@@ -185,19 +221,6 @@
           font-size: 19px;
           margin-left: -2px;
           margin-bottom: 2px;
-        }
-      }
-
-      .resize-divider {
-        height: 100%;
-        border-left: 2px solid var(--el-border-color);
-        margin-left: 1px;
-        z-index: 4;
-        position: relative;
-        cursor: ew-resize;
-
-        &:hover {
-          border-left: 2px dashed var(--el-color-primary) !important;
         }
       }
 

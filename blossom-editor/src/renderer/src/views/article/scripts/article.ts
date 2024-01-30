@@ -8,7 +8,7 @@ export const TempTextareaKey = 'editor_temp_textarea_value'
 /**
  * doc tree and editor width
  */
-export interface DocEditorStyle {
+export interface DocsEditorStyle {
   docs: string
   editor: string
 }

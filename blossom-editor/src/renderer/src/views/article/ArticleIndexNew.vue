@@ -246,7 +246,7 @@ import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
 import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo, isArticle } from '@renderer/views/doc/doc'
-import { TempTextareaKey, ArticleReference, DocEditorStyle, parseTocAsync } from './scripts/article'
+import { TempTextareaKey, ArticleReference, DocsEditorStyle, parseTocAsync } from './scripts/article'
 import type { Toc } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
 import { useResize } from './scripts/editor-preview-resize'
@@ -327,7 +327,7 @@ const editorOperator = ref({
  */
 const docsExpand = ref<boolean>(true)
 const tocsExpand = ref<boolean>(true)
-const docEditorStyle = computed<DocEditorStyle>(() => {
+const docEditorStyle = computed<DocsEditorStyle>(() => {
   if (!docsExpand.value) {
     return { docs: '0px', editor: '100%' }
   }
