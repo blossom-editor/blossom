@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "24341231",
+      "name": "brush-line",
+      "font_class": "brush-line",
+      "unicode": "ea4f",
+      "unicode_decimal": 59983
+    },
+    {
+      "icon_id": "24341987",
+      "name": "more 2-line",
+      "font_class": "a-morevertical-line",
+      "unicode": "ea50",
+      "unicode_decimal": 59984
+    },
+    {
       "icon_id": "9691336",
       "name": "滚轮滚动",
       "font_class": "scroll",
