@@ -1,4 +1,4 @@
-package com.blossom.common.base.caffeine;
+package com.blossom.common.cache.caffeine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -13,25 +13,31 @@ import java.util.concurrent.TimeUnit;
 public class Test {
 
     private static final Cache<String, String> cache = Caffeine.newBuilder()
+            .expireAfter(new DynamicExpiry())
             .initialCapacity(100)
-            .expireAfterWrite(10, TimeUnit.SECONDS)
-            .removalListener((String key, String value, RemovalCause cause) -> System.out.println(key + " 被删除"))
+            .removalListener((String key, String value, RemovalCause cause) -> log.info(key + " 被删除"))
             .build();
+
     private static final ScheduledExecutorService clearUpScheduled = Executors.newScheduledThreadPool(1);
 
     public Test() {
-        clearUpScheduled.scheduleWithFixedDelay(this::clear, 5, 1, TimeUnit.SECONDS);
+        clearUpScheduled.scheduleWithFixedDelay(this::clear, 0, 1, TimeUnit.SECONDS);
     }
 
     private void clear() {
-        log.info("尝试过期缓存");
+        log.info("删除");
         cache.cleanUp();
     }
 
-    public static void main(String[] args) {
-        Test test = new Test();
+    public static void main(String[] args) throws InterruptedException {
+        Test t = new Test();
         cache.policy().expireVariably().ifPresent(e -> {
+            e.put("A1", "1", 7, TimeUnit.SECONDS);
         });
+        cache.policy().expireVariably().ifPresent(e -> {
+            e.put("A2", "2", 3, TimeUnit.SECONDS);
+        });
+        Thread.sleep(20 * 1000);
     }
 
 }

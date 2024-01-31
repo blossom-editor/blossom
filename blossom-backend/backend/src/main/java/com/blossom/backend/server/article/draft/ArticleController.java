@@ -289,13 +289,19 @@ public class ArticleController {
     /**
      * 创建文章的临时访问缓存
      *
-     * @param id 文章ID
+     * @param id       文章ID
+     * @param duration 临时访问的过期时间
      * @return 临时访问Key
      * @since 1.9.0
      */
     @GetMapping("/temp/key")
-    public R<String> createTempVisitKey(@RequestParam("id") Long id) {
-        return R.ok(tempVisitService.create(id, AuthContext.getUserId()));
+    public R<String> createTempVisitKey(@RequestParam("id") Long id,
+                                        @RequestParam(value = "duration", required = false) Long duration) {
+        if (duration == null) {
+            duration = 3 * 60L;
+        }
+        log.info("创建文章临时访问权限 [{}:{}m]", id, duration);
+        return R.ok(tempVisitService.create(id, AuthContext.getUserId(), duration));
     }
 
     /**
