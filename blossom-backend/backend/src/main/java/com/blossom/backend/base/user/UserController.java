@@ -169,7 +169,7 @@ public class UserController {
         Map<String, String> paramMap = paramService.selectMap(true, ParamEnum.values());
         user.setParams(paramMap);
         paramMap.put("SERVER_VERSION", SpringUtil.get("project.base.version"));
-        Map<String, String> userParamMap = userParamService.selectMap(AuthContext.getUserId(), true, UserParamEnum.values());
+        Map<String, String> userParamMap = userParamService.selectMap(userId, true, UserParamEnum.values());
         user.setUserParams(userParamMap);
         return R.ok(user);
     }

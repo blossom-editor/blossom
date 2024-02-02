@@ -60,7 +60,7 @@ public class UserParamController {
         XzException400.throwBy(ObjUtil.isNull(req.getUserId()), "用户ID为必填项");
         baseService.update(req);
         baseService.refresh();
-        return R.ok(baseService.selectMap(AuthContext.getUserId(), true, UserParamEnum.values()));
+        return R.ok(baseService.selectMap(req.getUserId(), true, UserParamEnum.values()));
     }
 
     /**
