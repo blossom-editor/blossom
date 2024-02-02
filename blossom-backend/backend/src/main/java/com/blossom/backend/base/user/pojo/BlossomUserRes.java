@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -56,6 +57,14 @@ public class BlossomUserRes extends AbstractPOJO implements Serializable {
      * 文章字数
      */
     private Integer articleWords;
+    /**
+     * 创建日期
+     */
+    private Date creTime;
+    /**
+     * 逻辑删除, 目前用于禁用用户, 而不是删除
+     */
+    private Long delTime;
 
     /**
      * 对象存储信息, 非登录状态不返回该字段

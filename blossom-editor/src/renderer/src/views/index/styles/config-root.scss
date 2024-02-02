@@ -45,6 +45,11 @@
     line-height: 30px;
     margin-bottom: 30px;
     color: var(--bl-text-color-light);
+
+    .iconbl {
+      @include font(12px, 300);
+      padding-right: 5px;
+    }
   }
 
   code {

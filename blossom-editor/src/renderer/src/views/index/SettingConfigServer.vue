@@ -1,7 +1,11 @@
 <template>
   <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">服务器配置</div>
-    <div class="desc">服务器各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
+    <div class="desc" style="margin-bottom: 0">服务器各项参数配置，若无内容请点击下方刷新。只有管理员用户具有操作服务器配置的权限。</div>
+    <div class="desc">
+      <el-button @click="refreshParam" text bg><span class="iconbl bl-refresh-line"></span>刷新参数</el-button>
+      <el-button @click="showUserListDialog" text bg><span class="iconbl bl-user-line"></span>用户管理</el-button>
+    </div>
 
     <el-form :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文件访问地址" :required="true">
@@ -100,21 +104,35 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <div class="server-config">
+    <!-- <div class="server-config">
       {{ userStore.userinfo }}
-    </div>
+    </div> -->
   </div>
+
+  <!-- 自定义临时访问链接 -->
+  <el-dialog
+    v-model="isShowUserListDialog"
+    class="bl-dialog-fixed-body"
+    width="710"
+    style="height: 70%"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="true">
+    <UserListSetting></UserListSetting>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import { useServerStore } from '@renderer/stores/server'
 import { KEY_BLOSSOM_OBJECT_STORAGE_DOMAIN, useUserStore } from '@renderer/stores/user'
 import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blossom'
 import { getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
 import dayjs from 'dayjs'
-import { ElMessage } from 'element-plus'
+import UserListSetting from './setting/UserListSetting.vue'
 
 const serverStore = useServerStore()
 const userStore = useUserStore()
@@ -177,7 +195,7 @@ const getParamList = () => {
 
 const refreshParam = () => {
   paramRefreshApi().then((_) => {
-    Notify.success('刷新参数成功', '刷新成功')
+    Notify.success('', '刷新成功')
     getParamList()
     userStore.getUserinfo()
   })
@@ -201,6 +219,13 @@ const autuUpdBlossomOSDomain = () => {
     Notify.success('配置成功', '配置成功')
   })
 }
+
+//#region ----------------------------------------< 菜单 >--------------------------------------
+const isShowUserListDialog = ref(false)
+const showUserListDialog = () => {
+  isShowUserListDialog.value = true
+}
+//#endregion
 
 const reload = () => {
   getParamList()

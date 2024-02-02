@@ -48,7 +48,7 @@ const initAuth = () => {
 /**
  * 默认用户信息
  */
-const DEFAULT_USER_INFO = {
+export const DEFAULT_USER_INFO = {
   id: '',
   type: 2,
   username: '暂未登录',
@@ -58,6 +58,8 @@ const DEFAULT_USER_INFO = {
   articleCount: 0,
   articleWords: 0,
   location: '',
+  creTime: '',
+  delTime: '',
   osRes: {
     osType: '',
     bucketName: '',

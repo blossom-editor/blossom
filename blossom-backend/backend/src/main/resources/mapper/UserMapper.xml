@@ -24,6 +24,8 @@
             <if test="avatar != null">avatar = #{avatar},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="location != null">location = #{location},</if>
+            <if test="delTime != null">del_time = #{delTime},</if>
+            <if test="type != null">type = #{type},</if>
             upd_time = now()
         </set>
         where id = #{id}

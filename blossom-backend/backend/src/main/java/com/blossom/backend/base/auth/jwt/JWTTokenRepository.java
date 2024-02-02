@@ -32,6 +32,10 @@ public class JWTTokenRepository implements TokenRepository {
     }
 
     @Override
+    public void removeAll(Long userId) {
+    }
+
+    @Override
     public void saveUniqueToken(AccessToken accessToken) {
 
     }

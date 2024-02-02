@@ -37,6 +37,5 @@ public class UserUpdReq extends AbstractEntity {
     /**
      * 用户头像
      */
-    @NotBlank(message = "用户头像为必填项")
     private String avatar;
 }

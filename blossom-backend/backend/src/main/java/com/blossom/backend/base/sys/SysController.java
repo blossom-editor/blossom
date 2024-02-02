@@ -2,6 +2,7 @@ package com.blossom.backend.base.sys;
 
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.auth.annotation.AuthUserType;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamUpdReq;
@@ -63,6 +64,7 @@ public class SysController {
     /**
      * 修改系统参数
      */
+    @AuthUserType(UserTypeEnum.ADMIN)
     @PostMapping("/param/upd")
     public R<Map<String, String>> upd(@Validated @RequestBody ParamUpdReq req) {
         if (!UserTypeEnum.ADMIN.getType().equals(AuthContext.getType())) {
@@ -76,6 +78,7 @@ public class SysController {
     /**
      * 刷新系统配置
      */
+    @AuthUserType(UserTypeEnum.ADMIN)
     @PostMapping("/param/refresh")
     public R<?> paramRefresh() {
         paramService.refresh();

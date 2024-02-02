@@ -14,9 +14,6 @@
       <el-tab-pane label="关于" name="about">
         <SettingAboutVue></SettingAboutVue>
       </el-tab-pane>
-      <el-tab-pane label="访问流量" :lazy="true" name="flow">
-        <SentinelResources></SentinelResources>
-      </el-tab-pane>
     </el-tabs>
   </div>
   <div class="version">
@@ -32,7 +29,6 @@ import { isNotBlank } from '@renderer/assets/utils/obj'
 import SettingLogin from './SettingLogin.vue'
 import SettingConfig from './SettingConfig.vue'
 import SettingAboutVue from './SettingAbout.vue'
-import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
 import CONFIG from '@renderer/assets/constants/system'
 
 const userStore = useUserStore()
@@ -40,7 +36,6 @@ const route = useRoute()
 
 onMounted(() => {
   let actTab = route.query.activeTab as string
-  console.log(actTab)
   if (isNotBlank(actTab)) {
     activeTab.value = actTab
   } else {
@@ -70,7 +65,11 @@ const getServerVersion = () => {
     height: 100%;
 
     :deep(.el-tabs__nav-wrap::after) {
-      background-color: var(--el-color-primary-light-8);
+      background-color: transparent;
+    }
+
+    :deep(el-tabs__nav-scroll::after) {
+      background-color: transparent;
     }
 
     :deep(.el-tabs__content) {

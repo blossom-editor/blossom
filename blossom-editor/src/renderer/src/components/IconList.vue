@@ -174,8 +174,6 @@ const copyIcon = (icon: string) => {
         @include box(143px, 110px);
         padding: 15px 10px 10px 10px;
         font-size: 35px;
-        // border-top:  1px solid var(--el-border-color);
-        // border-left:  1px solid var(--el-border-color);
         border-right: 1px solid var(--el-border-color);
         border-bottom: 1px solid var(--el-border-color);
         transition: 0.3s;

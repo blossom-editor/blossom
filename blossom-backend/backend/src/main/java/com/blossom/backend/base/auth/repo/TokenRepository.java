@@ -32,6 +32,13 @@ public interface TokenRepository {
     void remove(String token);
 
     /**
+     * 删除某个用户的所有 token
+     *
+     * @param userId 用户ID
+     */
+    void removeAll(Long userId);
+
+    /**
      * 保存唯一生效的 token 对象
      *
      * @param accessToken 唯一生效的 token 信息
