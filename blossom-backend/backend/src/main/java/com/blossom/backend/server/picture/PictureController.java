@@ -2,6 +2,8 @@ package com.blossom.backend.server.picture;
 
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.auth.annotation.AuthUserType;
+import com.blossom.backend.base.user.UserTypeEnum;
 import com.blossom.backend.server.picture.pojo.*;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.pojo.PageRes;
@@ -115,5 +117,16 @@ public class PictureController {
     @GetMapping("/stat")
     public R<PictureStatRes> stat(@RequestParam(value = "pid", required = false) Long pid) {
         return R.ok(baseService.stat(AuthContext.getUserId(), pid));
+    }
+
+    /**
+     * 查询用户的图片统计
+     *
+     * @param userId 用户ID
+     */
+    @AuthUserType(UserTypeEnum.ADMIN)
+    @GetMapping("/stat/user")
+    public R<PictureStatRes> statUser(@RequestParam(value = "id") Long userId) {
+        return R.ok(baseService.stat(userId, null));
     }
 }
