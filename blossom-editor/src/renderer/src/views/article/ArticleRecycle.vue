@@ -7,10 +7,12 @@
     </div>
 
     <div class="content">
-      <bl-row class="workbench">
-        <el-button @click="getBackupList"> <span class="iconbl bl-refresh-line" style="margin-right: 7px"></span>刷新</el-button>
-        <el-input style="width: 150px; margin-left: 10px" placeholder="搜索文章名" v-model="recycleSearch"></el-input>
-        <div class="tips">回收站只保存 {{ userinfo.params.ARTICLE_RECYCLE_EXP_DAYS }} 天内的文章。</div>
+      <bl-row class="workbench" just="space-between">
+        <div style="width: auto">
+          <el-input style="width: 150px; margin-left: 10px" placeholder="搜索文章名" v-model="recycleSearch"></el-input>
+          <span class="tips">回收站只保存 {{ userinfo.params.ARTICLE_RECYCLE_EXP_DAYS }} 天内的文章。</span>
+        </div>
+        <el-button @click="getBackupList" text> <span class="iconbl bl-refresh-line"></span></el-button>
       </bl-row>
 
       <div class="recycle-container">

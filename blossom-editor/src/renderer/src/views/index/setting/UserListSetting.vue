@@ -26,7 +26,7 @@
             <el-option :value="3" label="只读用户" />
           </el-select>
         </div>
-        <el-button size="default" class="iconbl bl-refresh-line" @click="getUserList"></el-button>
+        <el-button size="default" class="iconbl bl-refresh-line" text @click="getUserList"></el-button>
       </bl-row>
       <div class="user-container">
         <div :class="['user-item', user.delTime !== '0' ? 'warn-bg-zebra' : '']" v-for="user in usersComputed" @click="showDetailDialog(user.id)">
@@ -200,6 +200,9 @@ const infoSaved = () => {
     .search {
       height: 30px;
       margin: 10px 0 10px 0;
+      .iconbl {
+        font-size: 15px;
+      }
     }
 
     .user-container {

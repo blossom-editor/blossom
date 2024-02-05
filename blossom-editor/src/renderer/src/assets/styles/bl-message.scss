@@ -7,7 +7,7 @@
 
 .el-message--success {
   @include themeBg(#f7f7f7, #1e1e1e);
-  // --el-message-bg-color: var(--bl-html-color) !important;
-  // border: 0 !important;
+  --el-message-bg-color: var(--bl-html-color) !important;
+  border: 0 !important;
   // border: 1px solid rgb(51, 217, 0) !important;
 }
