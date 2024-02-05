@@ -411,3 +411,25 @@ export const getFilePrefix = (name: string): string => {
   }
   return prefix
 }
+
+/**
+ * 是否 http/https 协议开头的 url
+ * @param url
+ * @returns
+ */
+export const isHttp = (url: string) => {
+  return url.startsWith('http://')
+}
+
+/**
+ * 是否 base64 图片
+ * @param image
+ * @returns
+ */
+export const isBase64Img = (image: string) => {
+  if (isBlank(image)) {
+    return false
+  }
+  let prefix = image.substring(0, Math.max(image.indexOf(','), 0))
+  return prefix.startsWith('data:image') && prefix.endsWith('base64')
+}

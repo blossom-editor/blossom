@@ -191,7 +191,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@rendere
 // utils
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
-import { sleep, isElectron } from '@renderer/assets/utils/util'
+import { sleep, isElectron, isBase64Img } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
@@ -510,6 +510,7 @@ const clickCurDoc = async (tree: DocTree) => {
     })
   }
 }
+
 /**
  * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
  *
@@ -521,7 +522,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   const saveCallback = () => {
     if (!auto) {
-      ElMessage.info({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
+      ElMessage.success({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
     }
   }
   // 如果文档发生变动才保存
@@ -541,7 +542,14 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
     html: PreviewRef.value.innerHTML,
-    references: articleImg.value.concat(articleLink.value)
+    references: articleImg.value.concat(articleLink.value).map((item) => {
+      let refer: ArticleReference = { targetId: '', targetName: '', targetUrl: '', type: 10 }
+      Object.assign(refer, item)
+      if (isBase64Img(refer.targetUrl)) {
+        refer.targetUrl = ''
+      }
+      return refer
+    })
   }
   await articleUpdContentApi(data)
     .then((resp) => {
@@ -931,10 +939,10 @@ const unbindKeys = () => {
 </script>
 
 <style scoped lang="scss">
+@import '@renderer/assets/styles/bl-loading-spinner.scss';
 @import './styles/article-index.scss';
 @import './styles/article-view-absolute.scss';
 @import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
-@import '@renderer/assets/styles/bl-loading-spinner.scss';
 </style>

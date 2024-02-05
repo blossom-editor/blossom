@@ -84,9 +84,9 @@ import { useDark } from '@vueuse/core'
 import { useServerStore } from '@renderer/stores/server'
 import { useConfigStore } from '@renderer/stores/config'
 import { useUserStore, AuthStatus } from '@renderer/stores/user'
-import TryUse from './setting/TryUse.vue'
-import SYSTEM from '@renderer/assets/constants/system'
 import { isBlank } from '@renderer/assets/utils/obj'
+import SYSTEM from '@renderer/assets/constants/system'
+import TryUse from './setting/TryUse.vue'
 
 onMounted(() => {
   formLogin.value.serverUrl = serverUrl.value

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.reference.pojo.ArticleReferenceEntity;
 import com.blossom.backend.server.article.reference.pojo.ArticleReferenceReq;
 import com.blossom.common.base.util.BeanUtil;
+import com.blossom.common.base.util.security.Base64Util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +49,9 @@ public class ArticleReferenceService extends ServiceImpl<ArticleReferenceMapper,
             ref.setUserId(userId);
             ref.setSourceId(sourceId);
             ref.setSourceName(sourceName);
+            if (Base64Util.isBase64Img(ref.getTargetUrl())) {
+                ref.setTargetUrl("");
+            }
         }
         baseMapper.insertList(refs);
     }
