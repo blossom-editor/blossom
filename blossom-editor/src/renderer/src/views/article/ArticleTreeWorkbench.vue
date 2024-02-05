@@ -131,7 +131,7 @@
         </el-tooltip>
       </bl-row>
 
-      <bl-col width="12px" height="30px" just="end" class="workbench-more" style="position: absolute; top: 10px; right: 4px">
+      <bl-col width="12px" height="30px" just="end" class="workbench-more" style="">
         <div class="iconbl bl-a-morevertical-line" @click="showMoreMenu"></div>
       </bl-col>
     </bl-row>
@@ -419,7 +419,6 @@ defineExpose({ handleShowBackupDialog })
     }
 
     .bl-correlation-line {
-      @include themeText(2px 3px 4px rgba(107, 104, 104, 0.5), 2px 3px 5px rgb(0, 0, 0));
       color: var(--el-color-primary) !important;
       font-size: 40px;
       padding-bottom: 0px;
