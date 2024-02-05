@@ -40,4 +40,9 @@ public interface PlanMapper extends BaseMapper<PlanEntity> {
      * @param groupId 计划分组ID
      */
     void delById(@Param("id") Long id, @Param("groupId") Long groupId);
+
+    /**
+     * 删除计划
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

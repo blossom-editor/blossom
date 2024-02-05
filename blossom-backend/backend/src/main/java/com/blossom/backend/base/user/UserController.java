@@ -34,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
+
     private final UserService userService;
     private final AuthService authService;
     private final ArticleStatService articleService;
@@ -155,6 +156,20 @@ public class UserController {
     public R<?> updatePassword(@Validated @RequestBody UserUpdPwdReq req) {
         req.setUserId(AuthContext.getUserId());
         userService.updPassword(req);
+        return R.ok();
+    }
+
+    /**
+     * 删除用户
+     */
+    @AuthUserType(UserTypeEnum.ADMIN)
+    @PostMapping("/del")
+    public R<?> delete(@Validated @RequestBody UserDeleteReq req) {
+        if (req.getId().equals(AuthContext.getUserId())) {
+            throw new XzException500("不能删除自己");
+        }
+        userService.delete(req.getId());
+        authService.kickout(req.getId());
         return R.ok();
     }
 

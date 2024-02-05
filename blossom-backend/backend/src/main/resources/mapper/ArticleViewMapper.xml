@@ -9,4 +9,8 @@
            and cre_day = #{today}
     </select>
 
+    <delete id="delByIds">
+        delete from blossom_article_view
+         where article_id in <foreach collection="articleIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </delete>
 </mapper>

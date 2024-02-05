@@ -27,4 +27,8 @@
             o.html = a.html,
             o.sync_time = now()
     </update>
+
+    <delete id="delByUserId">
+        delete from blossom_article_open where user_id = #{userId}
+    </delete>
 </mapper>

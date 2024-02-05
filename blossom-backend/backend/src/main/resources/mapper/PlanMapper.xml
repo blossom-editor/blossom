@@ -78,4 +78,8 @@
          </if>
     </delete>
 
+    <delete id="delByUserId">
+        delete from blossom_plan where user_id = #{userId}
+    </delete>
+
 </mapper>

@@ -61,4 +61,8 @@ public interface ArticleReferenceMapper extends BaseMapper<ArticleReferenceEntit
      */
     void updateToKnown(@Param("userId") Long userId, @Param("targetId") Long targetId, @Param("targetName") String targetName);
 
+    /**
+     * 删除文章引用
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

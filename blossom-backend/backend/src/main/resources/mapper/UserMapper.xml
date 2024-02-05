@@ -35,4 +35,7 @@
         update base_user set password = '${password}',upd_time = now() where id = #{userId}
     </update>
 
+    <delete id="delById">
+        delete from base_user where id = #{userId}
+    </delete>
 </mapper>

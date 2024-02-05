@@ -28,4 +28,9 @@ public interface NoteMapper extends BaseMapper<NoteEntity> {
      * @param userId 用户ID
      */
     void updById(@Param("id") Long id, @Param("userId") Long userId, @Param("content") String content);
+
+    /**
+     * 删除便签
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

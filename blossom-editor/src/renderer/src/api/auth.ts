@@ -49,3 +49,7 @@ export const userAddApi = (data?: object): Promise<R<any>> => {
 export const userDisabledApi = (data?: object): Promise<R<any>> => {
   return rq.post<any>('/user/disabled', data)
 }
+
+export const userDelReq = (data?: object): Promise<R<any>> => {
+  return rq.post<any>('/user/del', data)
+}

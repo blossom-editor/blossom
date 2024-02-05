@@ -6,21 +6,28 @@
     </div>
 
     <div class="content">
-      <bl-row class="stat"
-        >共
-        <div>{{ users.length }}</div>
-        名用户，管理员
-        <div class="admin">{{ userStatComputed.admin }}</div>
-        名，普通用户
-        <div class="normal">{{ userStatComputed.normal }}</div>
-        名，只读用户
-        <div class="read">{{ userStatComputed.read }}</div>
-        名。</bl-row
-      >
+      <bl-row class="stat" just="space-between" align="space-between">
+        <div class="all">
+          <div class="label">用户总数</div>
+          <div class="count">{{ users.length }}</div>
+        </div>
+        <div class="admin">
+          <div class="label">管理员</div>
+          <div class="count">{{ userStatComputed.admin }}</div>
+        </div>
+        <div class="normal">
+          <div class="label">普通用户</div>
+          <div class="count">{{ userStatComputed.normal }}</div>
+        </div>
+        <div class="read">
+          <div class="label">只读用户</div>
+          <div class="count">{{ userStatComputed.read }}</div>
+        </div>
+      </bl-row>
       <bl-row class="search" just="space-between">
         <div>
-          <el-input size="default" placeholder="搜索用户名或昵称" style="width: 200px" v-model="userSearch"></el-input>
-          <el-select size="default" placeholder="用户名类型" style="width: 120px; margin-left: 10px" v-model="userTypeSearch" clearable>
+          <el-input size="default" placeholder="搜索用户名或昵称" style="width: 335px" v-model="userSearch"></el-input>
+          <el-select size="default" placeholder="用户名类型" style="width: 158px; margin-left: 19px" v-model="userTypeSearch" clearable>
             <el-option :value="1" label="管理员" />
             <el-option :value="2" label="普通用户" />
             <el-option :value="3" label="只读用户" />
@@ -170,30 +177,58 @@ const infoSaved = () => {
     padding: 10px 10px 20px;
 
     .stat {
-      height: 25px;
+      height: 34px;
       font-size: 13px;
 
-      div {
-        padding: 0 3px;
-        margin: 0 2px;
-        font-size: 13px;
-        transition: all 0.3s;
+      .all,
+      .admin,
+      .normal,
+      .read {
+        @include flex(row, space-between, center);
+        width: 158px;
+        height: 100%;
+        padding: 0 20px;
+        border: 1px solid var(--el-border-color);
         border-radius: 4px;
+        transition: transform 0.3s;
         cursor: pointer;
+        .label {
+          @include font(13px, 300);
+        }
+
+        .count {
+          font-size: 24px;
+          font-style: italic;
+          color: var(--bl-text-color-light);
+        }
+
+        &:hover {
+          transform: translateY(-3px);
+        }
       }
-      .admin:hover {
+
+      .all {
+        background: linear-gradient(155deg, $admin-bg 0%, $normal-bg 70%);
+        color: $admin-color;
+        --bl-text-color-light: $admin-color;
+      }
+
+      .admin {
         background-color: $admin-bg;
         color: $admin-color;
+        --bl-text-color-light: $admin-color;
       }
 
-      .normal:hover {
+      .normal {
         background-color: $normal-bg;
         color: $normal-color;
+        --bl-text-color-light: $normal-color;
       }
 
-      .read:hover {
+      .read {
         background-color: $read-bg;
         color: $read-color;
+        --bl-text-color-light: $read-color;
       }
     }
 
@@ -206,7 +241,7 @@ const infoSaved = () => {
     }
 
     .user-container {
-      @include box(100%, calc(100% - 75px));
+      @include box(100%, calc(100% - 84px));
       @include flex(row, flex-start, flex-start);
       align-content: flex-start;
       flex-wrap: wrap;

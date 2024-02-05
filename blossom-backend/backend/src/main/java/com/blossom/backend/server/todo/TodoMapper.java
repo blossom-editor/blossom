@@ -90,4 +90,9 @@ public interface TodoMapper extends BaseMapper<TodoEntity> {
      * 根据ID集合删除
      */
     void delByIds(@Param("ids") List<Long> ids, @Param("userId") Long userId);
+
+    /**
+     * 删除待办
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

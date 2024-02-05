@@ -65,4 +65,8 @@
               from blossom_article_recycle
              where id = #{id})
     </insert>
+
+    <delete id="delByUserId">
+        delete from blossom_article_recycle where user_id = #{userId}
+    </delete>
 </mapper>

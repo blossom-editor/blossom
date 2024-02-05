@@ -77,7 +77,7 @@
 
       <bl-row just="space-between" class="info-group">
         <el-button-group>
-          <el-button size="default" text bg type="danger">删除</el-button>
+          <el-button size="default" text bg type="danger" @click="del">删除</el-button>
           <el-button size="default" text bg type="warning" @click="disabled">
             {{ curUser.delTime === '0' ? '禁用' : '启用' }}
           </el-button>
@@ -90,14 +90,13 @@
 
 <script setup lang="ts">
 import { defineProps, onMounted, ref } from 'vue'
-import { userinfoAdminApi, userDisabledApi, userUpdAdminApi } from '@renderer/api/auth'
+import { userinfoAdminApi, userDisabledApi, userUpdAdminApi, userDelReq } from '@renderer/api/auth'
 import { articleWordsUserApi, pictureStatUserApi, userParamUpdAdminApi } from '@renderer/api/blossom'
 import { DEFAULT_USER_INFO } from '@renderer/stores/user'
 import type { Userinfo } from '@renderer/stores/user'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import { formartNumber, formatFileSize } from '@renderer/assets/utils/util'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { emit } from 'process'
 
 onMounted(() => {
   getUserInfo()
@@ -161,8 +160,8 @@ const upd = () => {
     <div style="width:100%;text-align:center;font-size:14px">${curUser.value.nickName} (${curUser.value.id})</div>`,
     {
       confirmButtonText: '确定保存',
-      cancelButtonText: '取消',
-      type: 'info',
+      cancelButtonText: '我再想想',
+      type: 'warning',
       dangerouslyUseHTMLString: true,
       draggable: true
     }
@@ -180,6 +179,25 @@ const upd = () => {
         emits('saved')
         ElMessage.info('用户信息已更新')
       })
+    })
+  })
+}
+
+const del = () => {
+  ElMessageBox.confirm(
+    `删除后该用户的<span style="color:var(--el-color-danger)">所有数据都将无法找回</span>, 是否确认删除?<br/>
+    <div style="width:100%;text-align:center;font-size:14px">${curUser.value.nickName} (${curUser.value.id})</div>`,
+    {
+      confirmButtonText: '确定删除',
+      cancelButtonText: '我再想想',
+      type: 'warning',
+      dangerouslyUseHTMLString: true,
+      draggable: true
+    }
+  ).then(() => {
+    userDelReq({ id: props.id }).then((_resp) => {
+      emits('saved')
+      ElMessage.info('用户已删除')
     })
   })
 }
