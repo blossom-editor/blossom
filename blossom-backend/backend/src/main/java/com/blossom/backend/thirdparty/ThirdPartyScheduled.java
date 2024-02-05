@@ -1,12 +1,12 @@
 package com.blossom.backend.thirdparty;
 
+import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.thirdparty.hefeng.WeatherManager;
 import com.blossom.common.base.pojo.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  *
  * @author : xzzz
  */
-@Component
 @RestController
 @RequestMapping("/thirdparty/scheduled")
 public class ThirdPartyScheduled {
@@ -42,6 +41,9 @@ public class ThirdPartyScheduled {
         List<UserEntity> users = userService.listAll();
         Set<String> locations = users.stream().collect(Collectors.groupingBy(UserEntity::getLocation)).keySet();
         for (String location : locations) {
+            if (StrUtil.isBlank(location)) {
+                continue;
+            }
             weatherManager.clear(location);
             weatherManager.findWeatherAll(location);
         }
