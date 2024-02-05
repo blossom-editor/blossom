@@ -425,23 +425,4 @@ defineExpose({ handleShowBackupDialog })
     }
   }
 }
-
-.wbpage-one-enter-from,
-.wbpage-one-leave-to {
-  opacity: 0;
-  transform: translateY(-30%);
-}
-
-.wbpage-two-enter-from,
-.wbpage-two-leave-to {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-.wbpage-one-enter-active,
-.wbpage-one-leave-active,
-.wbpage-two-enter-active,
-.wbpage-two-leave-active {
-  transition: all 0.2s ease;
-}
 </style>
