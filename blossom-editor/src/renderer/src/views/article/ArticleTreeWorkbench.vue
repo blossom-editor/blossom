@@ -190,7 +190,6 @@
 import { ref, nextTick, inject, onDeactivated } from 'vue'
 import { provideKeyCurArticleInfo, SortLevelColor } from '@renderer/views/doc/doc'
 import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
-import { keymaps } from './scripts/editor-tools'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
 import hotkeys from 'hotkeys-js'
 import ArticleInfo from './ArticleInfo.vue'

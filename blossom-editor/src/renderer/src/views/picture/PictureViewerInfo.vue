@@ -120,7 +120,7 @@ const deletePicture = () => {
     type: 'warning',
     icon: WarnTriangleFilled
   }).then(() => {
-    pictureDelApi({ id: picInfo.value.id, ignoreCheck: true }).then((_resp) => {
+    pictureDelApi({ id: picInfo.value!.id, ignoreCheck: true }).then((_resp) => {
       picCacheRefresh()
       closePicInfo()
       emits('saved')

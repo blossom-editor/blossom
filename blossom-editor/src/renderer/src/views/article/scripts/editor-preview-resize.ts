@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, ref, watchEffect } from 'vue'
+import { onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import { Local } from '@renderer/assets/utils/storage'
 
