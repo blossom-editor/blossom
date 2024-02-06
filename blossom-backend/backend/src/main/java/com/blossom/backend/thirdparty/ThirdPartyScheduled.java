@@ -5,6 +5,7 @@ import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.thirdparty.hefeng.WeatherManager;
 import com.blossom.common.base.pojo.R;
+import com.blossom.expand.tracker.core.adapter.aspect.TrackerStart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class ThirdPartyScheduled {
      *
      * @apiNote 每30分钟刷新, 请求会立即刷新
      */
+    @TrackerStart
     @PostMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
     public R<?> refreshWeather() {
