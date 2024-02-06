@@ -117,7 +117,7 @@ const login = async () => {
   }
   logingIn.value = true
   await userStore.loginByPassword(formLogin.value.username, formLogin.value.password)
-  if (configStore.viewStyle.isLoginToHomePage) {
+  if (userStore.isLogin && configStore.viewStyle.isLoginToHomePage) {
     router.push('/home')
   }
   logingIn.value = false
