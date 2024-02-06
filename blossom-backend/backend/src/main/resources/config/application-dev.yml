@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.31.99:3306/xzzz-blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
     username: root
     password: jasmine888
     hikari:
@@ -29,6 +29,7 @@ logging:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ project ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 project:
   base:
+    time-zone: GMT+8
     version: @project.version@
     ex:
       # 异常打印格式 all/project
@@ -51,7 +52,7 @@ project:
     type: caffeine
     default-password: 123456 # 默认密码
     password-encoder: bcrypt # 加密方式
-    password-reset: false    # 启动时重置密码
+    password-reset: true    # 启动时重置密码
     clients: # 客户端
       - client-id: blossom
         grant-type: 'password'
