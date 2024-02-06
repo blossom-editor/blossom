@@ -104,7 +104,7 @@
   }
 
   .add-icon {
-    @include font(13px, 300);
+    @include font(16px, 300);
     padding: 0 3px;
     color: var(--bl-text-color-light);
     cursor: pointer;
@@ -124,7 +124,7 @@
     padding: 0 10px;
 
     .tasks-title {
-      @include flex(row, space-between, center);
+      @include flex(row, space-between, flex-end);
       @include box(270px, 30px);
       @include font(28px, 700);
       text-shadow: var(--bl-text-shadow);

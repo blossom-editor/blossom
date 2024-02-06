@@ -13,7 +13,7 @@
         v-if="countComp != 0"
         :class="['completed', viewStyle.isGlobalShadow ? '' : 'bar-light']"
         :style="{ width: `calc(${(countComp / countTotal) * 100}% - 6px)` }"></div>
-      <div v-if="countTotal == 0" class="completed" style="width: calc(100% - 6px)"></div>
+      <div v-if="countTotal == 0" :class="['completed', viewStyle.isGlobalShadow ? '' : 'bar-light']" style="width: calc(100% - 6px)"></div>
     </bl-row>
     <bl-row height="24px" just="space-between" align="center" style="padding: 0 10px">
       <div class="task-name">{{ curTodo.todoName }}</div>
@@ -65,7 +65,10 @@
       ref="WaitRef">
       <div class="tasks-title">
         <span>待办</span>
-        <span class="add-icon iconbl bl-a-addline-line" @click="showTaskInfoDialog()"></span>
+        <div>
+          <span class="add-icon iconbl bl-a-addline-line" @click="quickAdd()"></span>
+          <span class="add-icon iconbl bl-a-pageadd-line" @click="showTaskInfoDialog()"></span>
+        </div>
       </div>
 
       <div class="tasks-sub-title" align="flex-start">
@@ -291,7 +294,7 @@
 import { useConfigStore } from '@renderer/stores/config'
 import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
-import { tasksApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi, taskTransferApi } from '@renderer/api/todo'
+import { tasksApi, addTaskApi, updTaskApi, toWaitingApi, toProcessingApi, toCompletedApi, exportTodoApi, taskTransferApi } from '@renderer/api/todo'
 import { TaskInfo, TaskStatus, TodoType } from './scripts/types'
 import { getDateFormat } from '@renderer/assets/utils/util'
 import { isEmpty } from 'lodash'
@@ -365,6 +368,12 @@ const showTaskInfoDialog = (id?: string) => {
     } else {
       TaskInfoRef.value.reload('add', undefined, curTodo.value.todoId, curTodo.value.todoType)
     }
+  })
+}
+
+const quickAdd = () => {
+  addTaskApi({ todoId: curTodo.value.todoId, taskName: '新待办事项' }).then((_resp) => {
+    getTasks(curTodo.value.todoId)
   })
 }
 
