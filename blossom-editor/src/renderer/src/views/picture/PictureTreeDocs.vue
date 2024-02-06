@@ -92,7 +92,7 @@
 
   <!-- 右键菜单, 添加到 body 下 -->
   <Teleport to="body">
-    <div v-if="rMenu.show" class="doc-tree-right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
+    <div v-if="rMenu.show" class="tree-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
         <div :class="['menu-item', Number(curDoc.i) <= 0 ? 'disabled' : '']" @click="rename"><span class="iconbl bl-pen"></span>重命名</div>

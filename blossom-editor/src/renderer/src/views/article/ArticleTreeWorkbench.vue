@@ -176,8 +176,8 @@
   </el-dialog>
 
   <Teleport to="body">
-    <div v-show="moreMenu.show" class="doc-tree-right-menu" :style="{ left: moreMenu.clientX + 'px', top: moreMenu.clientY + 'px', width: '120px' }">
-      <div class="menu-content">
+    <div v-show="moreMenu.show" class="tree-menu" :style="{ left: moreMenu.clientX + 'px', top: moreMenu.clientY + 'px', width: '120px' }">
+      <div class="menu-content" style="border: none">
         <div @click="changeOnlyOpen"><span class="iconbl bl-cloud-line"></span>查看公开</div>
         <div @click="changeOnlySubject"><span class="iconbl bl-a-lowerrightpage-line"></span>查看专题</div>
         <div @click="changeOnlyStar"><span class="iconbl bl-star-line"></span>查看收藏</div>
@@ -369,7 +369,6 @@ defineExpose({ handleShowBackupDialog })
 
 <style scoped lang="scss">
 @import '../doc/tree-workbench.scss';
-@import '../doc/tree-docs-right-menu.scss';
 
 .wb-page-container {
   position: relative;

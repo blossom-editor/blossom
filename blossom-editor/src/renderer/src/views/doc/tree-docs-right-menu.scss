@@ -1,10 +1,10 @@
 /*
 文档菜单右键菜单样式
 */
-.doc-tree-right-menu {
+.tree-menu {
   @include box(170px, auto);
-  @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
   @include themeBg(#f9f9f9, #333434);
+  @include themeShadow(2px 2px 5px 1px rgba(49, 49, 49, 0.2), 2px 3px 7px 2px #0f0f0f);
   position: fixed;
   z-index: 2002;
   border-radius: 5px;
@@ -25,8 +25,7 @@
     border-top: 1px solid var(--el-border-color);
     padding: 5px 0;
 
-
-    &>div,
+    & > div,
     .menu-item {
       @include flex(row, flex-start, center);
       line-height: 0.9;
@@ -54,7 +53,7 @@
       &:hover {
         background: var(--el-color-primary-light-8);
 
-        .menu-content-level2 {
+        .tree-menu-level2 {
           display: block;
           position: absolute;
           left: 160px;
@@ -65,21 +64,6 @@
       &:last-child {
         margin-bottom: 0;
       }
-
-      // 二级菜单
-      .menu-content-level2 {
-        @extend .doc-tree-right-menu;
-        padding: 5px 0;
-        display: none;
-
-        &:hover {
-          display: block;
-        }
-
-        &>div {
-          @extend .menu-item;
-        }
-      }
     }
 
     .menu-item-divider {
@@ -88,15 +72,44 @@
       margin: 0 0 5px 0;
       padding: 0;
     }
+  }
+}
 
-    .disabled {
-      cursor: not-allowed;
-      pointer-events: none;
-      color: var(--el-color-info-light-5);
+// 二级菜单
+.tree-menu-level2 {
+  @include box(170px, auto);
+  @include themeBg(#f9f9f9, #333434);
+  @include themeShadow(2px 2px 5px 1px rgba(49, 49, 49, 0.2), 2px 3px 7px 2px #0f0f0f);
+  position: fixed;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 5px 0;
+  display: none;
+  z-index: 2002;
 
-      &:hover {
-        color: var(--el-color-info-light-5);
-      }
+  &:hover {
+    display: block;
+  }
+
+  & > div {
+    @include flex(row, flex-start, center);
+    line-height: 0.9;
+    padding: 5px 5px 5px 10px;
+    margin: 0 5px 5px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+
+    .iconbl {
+      margin-right: 5px;
+    }
+
+    &:hover {
+      background: var(--el-color-primary-light-8);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }

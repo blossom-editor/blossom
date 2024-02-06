@@ -100,11 +100,7 @@
   </div>
 
   <Teleport to="body">
-    <div
-      v-show="rMenu.show"
-      class="doc-tree-right-menu"
-      :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }"
-      ref="ArticleDocTreeRightMenuRef">
+    <div v-show="rMenu.show" class="tree-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }" ref="ArticleDocTreeRightMenuRef">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
         <div @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
@@ -118,7 +114,7 @@
         <div @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-apps-line"></span>更多
-          <div class="menu-content-level2" :style="rMenuLevel2">
+          <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开</div>
             <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
             <div v-if="curDoc.star === 0 && curDoc.ty === 3" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
@@ -146,7 +142,7 @@
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
-          <div class="menu-content-level2" :style="rMenuLevel2">
+          <div class="tree-menu-level2" :style="rMenuLevel2">
             <div @click="articleDownload"><span class="iconbl bl-file-markdown"></span>导出为 MD</div>
             <div @click="articleBackup('MARKDOWN')"><span class="iconbl bl-file-markdown"></span>导出为本地 MD</div>
             <div @click="articleDownloadHtml"><span class="iconbl bl-HTML"></span>导出为 HTML</div>
@@ -156,7 +152,7 @@
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-a-linkspread-line"></span>创建链接
-          <div class="menu-content-level2" :style="rMenuLevel2">
+          <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制博客地址</div>
             <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>创建临时访问(3h)</div>
             <div @click="handleShowACustomTempVisitDialog"><span class="iconbl bl-visit"></span>创建临时访问(自定义)</div>
@@ -841,5 +837,8 @@ defineExpose({ getDocTreeData })
 
 <style scoped lang="scss">
 @import '../doc/tree-docs.scss';
-@import '../doc/tree-docs-right-menu.scss';
 </style>
+
+<!-- <style lang="scss">
+@import '../doc/tree-docs-right-menu.scss';
+</style> -->
