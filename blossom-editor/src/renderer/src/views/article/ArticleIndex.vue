@@ -356,8 +356,8 @@ const exitView = () => {
 
 const { hideOne, resotreOne } = useResize(DocsRef, EditorContainerRef, ResizeDocsDividerRef, undefined, {
   persistent: true,
-  keyOne: 't1',
-  keyTwo: 't2',
+  keyOne: 'article_docs_width',
+  keyTwo: 'article_editor_preview_width',
   defaultOne: '250px',
   defaultTwo: 'calc(100% - 250px)',
   maxOne: 700,
