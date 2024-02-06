@@ -78,6 +78,7 @@
 </template>
 
 <script setup lang="ts">
+import router from '@renderer/router'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark } from '@vueuse/core'
@@ -116,6 +117,9 @@ const login = async () => {
   }
   logingIn.value = true
   await userStore.loginByPassword(formLogin.value.username, formLogin.value.password)
+  if (configStore.viewStyle.isLoginToHomePage) {
+    router.push('/home')
+  }
   logingIn.value = false
 }
 

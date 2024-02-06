@@ -78,6 +78,12 @@
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-apps-line"></span>其他</bl-row>
+      <el-form-item label="登录后进入首页">
+        <bl-row>
+          <el-switch v-model="configViewStyleForm.isLoginToHomePage" size="default" style="margin-right: 10px" @change="changeViewStyle" />
+        </bl-row>
+        <div class="conf-tip">点击登录按钮后，是否自动跳转至首页。</div>
+      </el-form-item>
       <el-form-item label="开发者工具">
         <bl-row>
           <el-button @click="openDevTools"><span class="iconbl bl-bug-line" @click="openDevTools"></span></el-button>

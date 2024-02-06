@@ -30,6 +30,8 @@ export interface ViewStyle {
   isShowTryuseBtn: boolean
   // 只展开一项子菜单
   isMenuUniqueOpened: boolean
+  // 点击登录后自动进入首页
+  isLoginToHomePage: boolean
 }
 
 /**
@@ -109,7 +111,8 @@ export const useConfigStore = defineStore('configStore', {
         isWebCollectCard: true,
         isGlobalShadow: false,
         isShowTryuseBtn: true,
-        isMenuUniqueOpened: true
+        isMenuUniqueOpened: true,
+        isLoginToHomePage: false
       },
       ...Local.get(VIEW_STYLE_KEY)
     },
