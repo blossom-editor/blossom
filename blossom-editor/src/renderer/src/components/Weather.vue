@@ -138,8 +138,6 @@ const weather = ref({
 
 const getWeather = () => {
   getAll({ location: userStore.userinfo.location }).then((resp) => {
-    console.log(resp)
-
     if (resp.data.now) {
       if (resp.data.now.iconValue === '#wt-qing') {
         let nowHours = new Date().getHours()

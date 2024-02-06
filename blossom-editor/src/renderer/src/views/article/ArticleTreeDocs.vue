@@ -536,8 +536,6 @@ const articleDownload = () => {
 const articleDownloadHtml = () => {
   articleDownloadHtmlApi({ id: curDoc.value.i }).then((resp) => {
     let filename: string = resp.headers.get('content-disposition')
-    console.log(decodeURI(filename))
-
     let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
     let matches = filenameRegex.exec(filename)
     if (matches != null && matches[1]) {

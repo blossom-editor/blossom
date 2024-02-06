@@ -190,7 +190,6 @@ const renderChart = () => {
             userStore.userinfo.userParams.WEB_ARTICLE_URL + params.data.artId
           }</a></div>`
         }
-        console.log(params.data)
         let type = ''
         if (params.data.artType === 11) {
           type = `<div>类型: 内部文章</div>`

@@ -40,7 +40,6 @@ import ChartHeatmap from './ChartHeatmap.vue'
 const userStore = useUserStore()
 
 const links = () => {
-  console.log(userStore.links)
   if (isNotBlank(userStore.links)) {
     return JSON.parse(userStore.links)
   } else {

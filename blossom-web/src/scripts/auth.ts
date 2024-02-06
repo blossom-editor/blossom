@@ -13,7 +13,6 @@ const { auth } = storeToRefs(userStore)
  * @param password
  */
 export const login = async (username: string, password: string) => {
-  console.log(userStore.auth)
   auth.value = { token: '', status: AuthStatus.Loging }
   await loginApi({ username: username, password: password, clientId: 'blossom', grantType: 'password' })
     .then((resp: any) => {

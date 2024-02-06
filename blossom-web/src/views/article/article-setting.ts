@@ -7,7 +7,6 @@ const fontSize = ref<number>(Local.get(FONT_SIZE_KEY) || 0.9)
 
 const increase = () => {
   fontSize.value += 0.1
-  console.log(1)
   Local.set(FONT_SIZE_KEY, fontSize.value)
 }
 

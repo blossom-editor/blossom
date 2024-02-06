@@ -234,7 +234,6 @@ const showTryUse = () => {
 }
 
 const helpMeLogin = () => {
-  console.log(SYSTEM.TRY_USE)
   formLogin.value = SYSTEM.TRY_USE
   handleServerUrl()
   isShowTryUse.value = false

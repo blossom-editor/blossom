@@ -114,7 +114,6 @@ const curUser = ref<Userinfo>(DEFAULT_USER_INFO)
 const getUserInfo = () => {
   userinfoAdminApi({ id: props.id }).then((resp) => {
     curUser.value = resp.data
-    console.log(curUser.value)
   })
   articleWordsUserApi({ id: props.id }).then((resp) => {
     articleStat.value = resp.data

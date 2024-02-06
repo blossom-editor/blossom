@@ -156,7 +156,6 @@
             </el-input>
           </el-form-item>
 
-          
           <el-form-item label="排序">
             <el-input-number v-model="docForm.sort" style="width: 106px" />
           </el-form-item>
@@ -222,7 +221,7 @@
 import { ref, nextTick, inject, computed, watch, Ref } from 'vue'
 import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
-import { Document, Picture } from '@element-plus/icons-vue'
+import { Document } from '@element-plus/icons-vue'
 import { provideKeyDocTree, getCDocsByPid, getDocById, checkLevel } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import {

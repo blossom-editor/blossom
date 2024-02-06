@@ -85,7 +85,6 @@ export const useUserStore = defineStore('userStore', {
     async getUserinfoOpen() {
       await userinfoOpenApi().then((resp) => {
         this.userinfo = resp.data
-        console.log(this.userinfo)
       })
     },
     /**
