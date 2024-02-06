@@ -72,10 +72,6 @@ $zindex-header: 2001;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
-
-    // .index-footer {
-    //   @include box(100%, 37px);
-    // }
   }
 }
 </style>
