@@ -45,6 +45,13 @@
         </bl-row>
         <div class="conf-tip">是否在文档列表中以特殊的样式显示专题。</div>
       </el-form-item>
+
+      <el-form-item label="只展开一项子菜单">
+        <bl-row>
+          <el-switch v-model="configViewStyleForm.isMenuUniqueOpened" size="default" style="margin-right: 10px" @change="changeViewStyle" />
+        </bl-row>
+        <div class="conf-tip">展开子菜单时，收起其他子菜单。</div>
+      </el-form-item>
     </el-form>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">

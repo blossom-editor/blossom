@@ -10,7 +10,7 @@
     element-loading-text="正在读取文档..."
     :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
     <!-- 文件夹 -->
-    <el-menu v-if="!isEmpty(docTreeData)" ref="DocTreeRef" class="doc-trees" :unique-opened="true">
+    <el-menu v-if="!isEmpty(docTreeData)" ref="DocTreeRef" class="doc-trees" :unique-opened="configStore.viewStyle.isMenuUniqueOpened">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <div v-if="L1.ty == 11" class="menu-divider" />

@@ -18,7 +18,7 @@
       v-if="!isEmpty(docTreeData)"
       ref="DocTreeRef"
       class="doc-trees"
-      :unique-opened="true"
+      :unique-opened="viewStyle.isMenuUniqueOpened"
       :default-active="docTreeActiveArticleId"
       @open="openMenu">
       <!-- ================================================ L1 ================================================ -->

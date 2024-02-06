@@ -28,6 +28,8 @@ export interface ViewStyle {
   isGlobalShadow: boolean
   // 是否显示试用按钮
   isShowTryuseBtn: boolean
+  // 只展开一项子菜单
+  isMenuUniqueOpened: boolean
 }
 
 /**
@@ -106,7 +108,8 @@ export const useConfigStore = defineStore('configStore', {
         isHomeSubjectCard: true,
         isWebCollectCard: true,
         isGlobalShadow: false,
-        isShowTryuseBtn: true
+        isShowTryuseBtn: true,
+        isMenuUniqueOpened: true
       },
       ...Local.get(VIEW_STYLE_KEY)
     },
