@@ -3,7 +3,6 @@ package com.blossom.backend.server.plan.pojo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 每日计划
@@ -34,7 +33,7 @@ public class PlanDayRes implements Serializable {
     /**
      * 日期
      */
-    private Date planDate;
+    private String planDate;
     /**
      * 计划开始时间
      */

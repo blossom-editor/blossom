@@ -4,10 +4,12 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.server.plan.pojo.PlanDayRes;
-import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.SortUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -22,8 +24,8 @@ public class PlanUtil {
      *
      * @param plans 计划列表
      */
-    private static TreeMap<Date, List<PlanDayRes>> byDay(List<PlanDayRes> plans) {
-        TreeMap<Date, List<PlanDayRes>> map = new TreeMap<>();
+    private static TreeMap<String, List<PlanDayRes>> byDay(List<PlanDayRes> plans) {
+        TreeMap<String, List<PlanDayRes>> map = new TreeMap<>();
         for (PlanDayRes plan : plans) {
             List<PlanDayRes> list = map.getOrDefault(plan.getPlanDate(), new ArrayList<>());
             list.add(plan);
@@ -57,7 +59,7 @@ public class PlanUtil {
         if (CollUtil.isEmpty(plans)) {
             return plans;
         }
-        Map<Date, List<PlanDayRes>> byDay = byDay(plans);
+        Map<String, List<PlanDayRes>> byDay = byDay(plans);
         Map<Long, List<PlanDayRes>> byGroupId = byGroupId(plans);
 
         // 先为所有计划设置默认排序
@@ -105,13 +107,13 @@ public class PlanUtil {
      * @param plans 计划列表, 传入的计划列表需要提前按 {@link PlanDayRes#getPlanDate()} 升序
      * @return treeMap key 为日期(天), value 为该日期计划数组
      */
-    public static TreeMap<Date, List<PlanDayRes>> sortToTreeMap(List<PlanDayRes> plans, boolean debug) {
+    public static TreeMap<String, List<PlanDayRes>> sortToTreeMap(List<PlanDayRes> plans, boolean debug) {
         if (CollUtil.isEmpty(plans)) {
             return new TreeMap<>();
         }
-        Map<Date, List<PlanDayRes>> map = sort(plans).stream()
+        Map<String, List<PlanDayRes>> map = sort(plans).stream()
                 .collect(Collectors.groupingBy(PlanDayRes::getPlanDate));
-        TreeMap<Date, List<PlanDayRes>> treeMap = MapUtil.sort(map);
+        TreeMap<String, List<PlanDayRes>> treeMap = MapUtil.sort(map);
         treeMap.forEach((k, v) -> {
             v = v.stream().sorted((p1, p2) -> SortUtil.intSort.compare(p1.getSort(), p2.getSort())).collect(Collectors.toList());
             treeMap.put(k, v);
@@ -127,9 +129,9 @@ public class PlanUtil {
     /**
      * 控制台打印计划的排序
      */
-    private static void debugTreeMap(TreeMap<Date, List<PlanDayRes>> treeMap) {
-        for (Date date : treeMap.keySet()) {
-            System.out.print(DateUtils.format(date, DateUtils.PATTERN_YYYYMMDD) + "|");
+    private static void debugTreeMap(TreeMap<String, List<PlanDayRes>> treeMap) {
+        for (String date : treeMap.keySet()) {
+            System.out.print(date + "|");
         }
         System.out.println();
         for (int i = 0; i < treeMap.values().size(); i++) {
@@ -151,7 +153,7 @@ public class PlanUtil {
      * @param date 日期
      * @param sort 顺序
      */
-    private static PlanDayRes getHolderPlan(Date date, int sort) {
+    private static PlanDayRes getHolderPlan(String date, int sort) {
         PlanDayRes holder = new PlanDayRes();
         holder.setId(sort * -1L - 1);
         holder.setGroupId(0L);
@@ -166,31 +168,31 @@ public class PlanUtil {
         PlanDayRes p1_1 = new PlanDayRes();
         p1_1.setId(1L);
         p1_1.setGroupId(1L);
-        p1_1.setPlanDate(DateUtils.parse("2023-09-01", DateUtils.PATTERN_YYYYMMDD));
+        p1_1.setPlanDate("2023-09-01");
         plans.add(p1_1);
 
         PlanDayRes p1_2 = new PlanDayRes();
         p1_2.setId(2L);
         p1_2.setGroupId(1L);
-        p1_2.setPlanDate(DateUtils.parse("2023-09-02", DateUtils.PATTERN_YYYYMMDD));
+        p1_2.setPlanDate("2023-09-02");
         plans.add(p1_2);
 
         PlanDayRes p2 = new PlanDayRes();
         p2.setId(3L);
         p2.setGroupId(2L);
-        p2.setPlanDate(DateUtils.parse("2023-09-01", DateUtils.PATTERN_YYYYMMDD));
+        p2.setPlanDate("2023-09-01");
         plans.add(p2);
 
         PlanDayRes p3_1 = new PlanDayRes();
         p3_1.setId(4L);
         p3_1.setGroupId(3L);
-        p3_1.setPlanDate(DateUtils.parse("2023-09-02", DateUtils.PATTERN_YYYYMMDD));
+        p3_1.setPlanDate("2023-09-02");
         plans.add(p3_1);
 
         PlanDayRes p3_2 = new PlanDayRes();
         p3_2.setId(4L);
         p3_2.setGroupId(3L);
-        p3_2.setPlanDate(DateUtils.parse("2023-09-03", DateUtils.PATTERN_YYYYMMDD));
+        p3_2.setPlanDate("2023-09-03");
         plans.add(p3_2);
 
         sortToTreeMap(plans, true);
