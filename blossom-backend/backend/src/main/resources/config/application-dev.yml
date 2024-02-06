@@ -52,7 +52,7 @@ project:
     type: caffeine
     default-password: 123456 # 默认密码
     password-encoder: bcrypt # 加密方式
-    password-reset: true    # 启动时重置密码
+    password-reset: false    # 启动时重置密码
     clients: # 客户端
       - client-id: blossom
         grant-type: 'password'
