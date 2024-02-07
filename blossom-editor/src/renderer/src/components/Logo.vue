@@ -54,7 +54,7 @@ watch(
   @include box(100%, 80px);
 
   .logo-img {
-    @include box(60px, 60px);
+    @include box(60px, 58px);
     filter: var(--bl-drop-shadow-star);
     padding: 5px;
   }

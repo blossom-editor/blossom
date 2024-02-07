@@ -5,6 +5,7 @@
     </div>
     <div
       :class="[
+        isMacOS() ? 'mac' : '',
         viewStyle.isShowAsideSimple ? 'aside-item-container-simple' : 'aside-item-container',
         viewStyle.isGlobalShadow ? 'aside-item-container-heavy' : 'aside-item-container-light',
         viewStyle.isShowAsideLogo ? '' : 'no-logo'
@@ -49,6 +50,7 @@ import upload from './AsideUpload.vue'
 import setting from './AsideSetting.vue'
 import logo from '@renderer/components/Logo.vue'
 import ThemeSetting from './setting/ThemeSetting.vue'
+import { isMacOS } from '@renderer/assets/utils/util'
 
 const themeStrore = useThemeStore()
 const userStore = useUserStore()
@@ -120,12 +122,13 @@ const isLogin = () => {
   @include flex(column, flex-end, center);
 
   .item-logo {
-    @include box(100%, 85px);
+    @include box(100%, 95px);
+    @include flex(column, flex-end, center);
     background-color: var(--bl-html-color);
   }
 
   .aside-item-container {
-    @include box(100%, calc(100% - 95px));
+    @include box(100%, calc(100% - 105px));
     @include flex(column, space-between, center);
     border-top-right-radius: 10px;
     background-color: var(--bl-bg-color);
@@ -190,8 +193,8 @@ const isLogin = () => {
     }
 
     .top-user {
-      margin-top: 10px;
-      margin-bottom: 20px;
+      margin-top: 15px;
+      margin-bottom: 25px;
     }
 
     .item-upload {
@@ -236,7 +239,6 @@ const isLogin = () => {
       @include flex(column, flex-start, center);
       @include themeColor(#909399, #a3a6ad);
       padding-top: 5px;
-      border-top-right-radius: 10px;
 
       .is-active {
         color: var(--el-color-primary);
@@ -252,7 +254,7 @@ const isLogin = () => {
           display: none;
         }
         .top-user {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
       }
 
@@ -263,6 +265,7 @@ const isLogin = () => {
 
       .item-user {
         @include box(100%, 65px);
+        margin-top: 10px;
       }
 
       .item-upload {
@@ -275,6 +278,18 @@ const isLogin = () => {
         box-sizing: border-box;
       }
     }
+  }
+
+  .aside-item-container-simple.mac {
+    @include box(100%, calc(100% - 30px));
+    border-top-right-radius: 10px;
+    border-top: 1px solid var(--el-border-color);
+
+    .item-user {
+      height: 60px;
+      margin-top: 0;
+    }
+
   }
 
   :deep(.el-divider) {
