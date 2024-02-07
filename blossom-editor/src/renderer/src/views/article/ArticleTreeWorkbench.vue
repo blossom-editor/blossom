@@ -417,7 +417,6 @@ defineExpose({ handleShowBackupDialog })
     }
 
     .bl-correlation-line {
-      color: var(--el-color-primary) !important;
       font-size: 40px;
       padding-bottom: 0px;
     }

@@ -1,21 +1,19 @@
 <template>
+  <div class="header">
+    <AppHeader simple></AppHeader>
+  </div>
   <div class="article-history-root">
     <div class="left bl-preview-toc-block">
       <div class="desc">
         <div class="toc-subtitle">《{{ article?.name }}》</div>
         <div class="toc-subtitle">
-          <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 |
-          <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
+          <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
           <span class="iconbl bl-like-line"></span> {{ article?.likes }}
         </div>
-        <div class="toc-subtitle">
-          <span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}
-        </div>
-        <div class="toc-subtitle">
-          <span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}
-        </div>
+        <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}</div>
+        <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}</div>
       </div>
-      <el-divider style="margin: 10px 0;"></el-divider>
+      <el-divider style="margin: 10px 0"></el-divider>
       <div class="history-list">
         <div v-for="log in historyList" class="history-item">
           <div class="dt">{{ log.dt }}</div>
@@ -33,13 +31,12 @@
 </template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { storeToRefs } from "pinia"
+import { storeToRefs } from 'pinia'
 import { ref, onMounted } from 'vue'
-
 import { articleLogsApi, articleLogContentApi, articleInfoApi } from '@renderer/api/blossom'
 import { CmWrapper } from './scripts/codemirror'
 import { useConfigStore } from '@renderer/stores/config'
-
+import AppHeader from '@renderer/components/AppHeader.vue'
 
 const configStore = useConfigStore()
 const { editorStyle } = storeToRefs(configStore)
@@ -52,23 +49,32 @@ const HistoryEditorRef = ref()
 let cmw: CmWrapper
 
 const initEditor = (_doc?: string) => {
-  cmw = new CmWrapper(CmWrapper.newEditor(CmWrapper.newState(() => { }, () => { }, () => { }), HistoryEditorRef.value))
+  cmw = new CmWrapper(
+    CmWrapper.newEditor(
+      CmWrapper.newState(
+        () => {},
+        () => {},
+        () => {}
+      ),
+      HistoryEditorRef.value
+    )
+  )
 }
 
 const getLogs = (articleId: string | number) => {
-  articleInfoApi({ id: articleId, showToc: false, showMarkdown: true, showHtml: false }).then(resp => {
+  articleInfoApi({ id: articleId, showToc: false, showMarkdown: true, showHtml: false }).then((resp) => {
     article.value = resp.data
   })
-  articleLogsApi({ articleId: articleId }).then(resp => {
+  articleLogsApi({ articleId: articleId }).then((resp) => {
     historyList.value = resp.data
   })
 }
 
 const getLogContent = (id: number, dt: string) => {
   historyDt.value = dt
-  articleLogContentApi({ id: id }).then(resp => {
+  articleLogContentApi({ id: id }).then((resp) => {
     let maxLen = cmw.getDocLength()
-    cmw.insert(0, maxLen, resp.data, 0, 0);
+    cmw.insert(0, maxLen, resp.data, 0, 0)
   })
 }
 
@@ -78,12 +84,15 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang=scss>
+<style scoped lang="scss">
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-index.scss';
 
+.header {
+  @include box(100%, 30px);
+}
 .article-history-root {
-  @include box(100%, 100%);
+  @include box(100%, calc(100% - 30px));
   @include flex(row, flex-start, center);
   padding: 20px;
 
@@ -106,7 +115,7 @@ onMounted(() => {
         margin-bottom: 10px;
         padding: 3px 5px;
         font-size: 13px;
-        color: #ABABAB;
+        color: #ababab;
         border-radius: 5px;
         transition: box-shadow 0.1s;
 

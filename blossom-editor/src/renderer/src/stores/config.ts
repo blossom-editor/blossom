@@ -32,6 +32,22 @@ export interface ViewStyle {
   isMenuUniqueOpened: boolean
   // 点击登录后自动进入首页
   isLoginToHomePage: boolean
+  // 显示公开收藏等状态标识
+  isShowArticleType: boolean
+  // 显示文章图标
+  isShowArticleIcon: boolean
+  // 显示专题目录标签
+  isShowArticleTocTag: boolean
+  // 显示自定义标签
+  isShowArticleCustomTag: boolean
+  // 显示公开文件夹标签
+  isShowFolderOpenTag: boolean
+  // 显示左下角上传入口
+  isShowAsideUpload: boolean
+  // 显示左上角 LOGO
+  isShowAsideLogo: boolean
+  // 显示简易左侧菜单
+  isShowAsideSimple: boolean
 }
 
 /**
@@ -112,7 +128,15 @@ export const useConfigStore = defineStore('configStore', {
         isGlobalShadow: false,
         isShowTryuseBtn: true,
         isMenuUniqueOpened: true,
-        isLoginToHomePage: false
+        isLoginToHomePage: false,
+        isShowArticleType: true,
+        isShowArticleIcon: true,
+        isShowArticleTocTag: true,
+        isShowArticleCustomTag: true,
+        isShowFolderOpenTag: true,
+        isShowAsideUpload: true,
+        isShowAsideLogo: true,
+        isShowAsideSimple: false
       },
       ...Local.get(VIEW_STYLE_KEY)
     },

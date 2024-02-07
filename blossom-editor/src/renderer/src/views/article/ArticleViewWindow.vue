@@ -1,4 +1,7 @@
 <template>
+  <div class="header">
+    <AppHeader simple></AppHeader>
+  </div>
   <div class="article-view-window-root">
     <!-- the toc -->
     <div class="bl-preview-toc-block">
@@ -31,6 +34,7 @@ import { articleInfoApi } from '@renderer/api/blossom'
 import { useConfigStore } from '@renderer/stores/config'
 import { parseTocAsync } from './scripts/article'
 import type { Toc } from './scripts/article'
+import AppHeader from '@renderer/components/AppHeader.vue'
 
 const configStore = useConfigStore()
 const { editorStyle } = storeToRefs(configStore)
@@ -71,8 +75,12 @@ onMounted(() => {
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
 
+.header {
+  @include box(100%, 30px);
+}
+
 .article-view-window-root {
-  @include box(100%, 100%);
+  @include box(100%, calc(100% - 30px));
   @include flex(row, center, center);
 
   .preview {

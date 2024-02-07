@@ -1,4 +1,7 @@
 <template>
+  <div class="header">
+    <AppHeader simple></AppHeader>
+  </div>
   <div class="article-reference-root">
     <div class="setting">
       <bl-row>
@@ -49,6 +52,8 @@ import { GraphChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 import { isNotBlank, isNotNull } from '@renderer/assets/utils/obj'
 import { getPrimaryColor } from '@renderer/scripts/global-theme'
+import AppHeader from '@renderer/components/AppHeader.vue'
+
 echarts.use([TitleComponent, TooltipComponent, LegendComponent, GraphChart, CanvasRenderer])
 
 const isDark = useDark()
@@ -329,8 +334,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+.header {
+  @include box(100%, 30px);
+}
 .article-reference-root {
-  @include box(100%, 100%);
+  @include box(100%, calc(100% - 30px));
   position: relative;
 
   .setting {

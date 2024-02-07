@@ -1,9 +1,12 @@
 <template>
   <div class="index-root">
-    <div class="index-aside">
+    <div class="index-aside" :class="[viewStyle.isShowAsideSimple ? 'simple' : '']">
       <indexAside></indexAside>
     </div>
-    <div class="index-main-container">
+    <div class="index-main-container" :class="[viewStyle.isShowAsideSimple ? 'simple' : '']">
+      <div class="app-header">
+        <AppHeader></AppHeader>
+      </div>
       <div class="index-main">
         <router-view v-slot="{ Component }">
           <keep-alive :include="[includeRouter]">
@@ -18,8 +21,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import router from '@renderer/router'
-import indexAside from './index/IndexAside.vue'
 import { isElectron } from '@renderer/assets/utils/util'
+import indexAside from './index/IndexAside.vue'
+import AppHeader from '@renderer/components/AppHeader.vue'
+import { useConfigStore } from '@renderer/stores/config'
+
+const { viewStyle } = useConfigStore()
 
 onMounted(() => {
   console.log(`blossom => 是否 Electron 容器：${isElectron()}`)
@@ -56,8 +63,12 @@ $zindex-header: 2001;
     @include box(calc(100% - 62px), 100%);
     position: relative;
 
+    .app-header {
+      @include box(100%, 30px);
+    }
+
     .index-main {
-      @include box(100%, 100%);
+      @include box(100%, calc(100% - 30px));
     }
 
     .index-header {
@@ -72,6 +83,14 @@ $zindex-header: 2001;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
+  }
+
+  .index-aside.simple {
+    @include box(42px, 100%);
+  }
+
+  .index-main-container.simple {
+    @include box(calc(100% - 43px), 100%);
   }
 }
 </style>
