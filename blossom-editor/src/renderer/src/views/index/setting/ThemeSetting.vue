@@ -64,7 +64,28 @@
             <div class="prop">
               <div class="prop-name">显示试用按钮</div>
             </div>
-            <el-switch v-model="viewStyle.isShowTryuseBtn" size="default" @change="changeSubjectStype" />
+            <el-switch v-model="viewStyle.isShowTryuseBtn" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示左上角 LOGO</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowAsideLogo" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示左下角上传入口</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowAsideUpload" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">简约的左侧菜单</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowAsideSimple" size="default" @change="changeViewStype" />
           </bl-row>
 
           <bl-row v-if="isElectron()" class="prop-row" just="space-between">
@@ -78,12 +99,7 @@
             </el-button-group>
           </bl-row>
 
-          <bl-col class="desc" align="flex-end">
-            <div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div>
-            <div>
-              <a href="https://www.chinavid.com/color.html" target="_blank">主题色参考 <span class="iconbl bl-sendmail-line"></span></a>
-            </div>
-          </bl-col>
+          <bl-col class="desc" align="flex-end"><div>修改主题后, 再次切换日间/夜间模式可查看完整效果。</div></bl-col>
         </el-tab-pane>
         <!--  
 
@@ -128,7 +144,42 @@
             <div class="prop">
               <div class="prop-name">开启专题特殊样式</div>
             </div>
-            <el-switch v-model="viewStyle.isShowSubjectStyle" size="default" @change="changeSubjectStype" />
+            <el-switch v-model="viewStyle.isShowSubjectStyle" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示专题目录标签</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowArticleTocTag" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示公开文件夹标签</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowFolderOpenTag" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示自定义标签</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowArticleCustomTag" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop" style="width: 200px">
+              <div class="prop-name">显示文章名前的竖型状态标识</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowArticleType" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
+              <div class="prop-name">显示文章图标</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowArticleIcon" size="default" @change="changeViewStype" />
           </bl-row>
         </el-tab-pane>
         <!--  
@@ -255,7 +306,7 @@ const changeGlobalShadow = (open: boolean) => {
   config.setViewStyle(viewStyle)
 }
 
-const changeSubjectStype = () => {
+const changeViewStype = () => {
   config.setViewStyle(viewStyle)
 }
 

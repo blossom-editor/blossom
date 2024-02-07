@@ -18,7 +18,7 @@
       v-if="!isEmpty(docTreeData)"
       ref="DocTreeRef"
       class="doc-trees"
-      :unique-opened="true"
+      :unique-opened="viewStyle.isMenuUniqueOpened"
       :default-active="docTreeActiveArticleId"
       @open="openMenu">
       <!-- ================================================ L1 ================================================ -->
@@ -99,29 +99,22 @@
     <div v-else class="doc-trees-placeholder">暂无文档，可点击上方 ↑ 添加</div>
   </div>
 
-  <!-- 右键菜单, 添加到 body 下 -->
   <Teleport to="body">
-    <div
-      v-show="rMenu.show"
-      class="doc-tree-right-menu"
-      :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }"
-      ref="ArticleDocTreeRightMenuRef">
+    <div v-show="rMenu.show" class="tree-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }" ref="ArticleDocTreeRightMenuRef">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
         <div @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
         <div @click="handleShowDocInfoDialog('upd')"><span class="iconbl bl-a-fileedit-line"></span>编辑详情</div>
         <div v-if="curDoc.ty === 3" @click="syncDoc()"><span class="iconbl bl-a-cloudrefresh-line"></span>同步文章</div>
-        <!-- <div v-if="curDoc.ty != 3" @click="handleShowDocInfoDialog('add', curDoc.i)"><span class="iconbl bl-a-fileadd-fill"></span>新增子级文档</div> -->
         <div v-if="curDoc.ty !== 3" @click="addFolder"><span class="iconbl bl-a-fileadd-line"></span>新增文件夹</div>
         <div v-if="curDoc.ty !== 3" @click="addArticle"><span class="iconbl bl-a-fileadd-fill"></span>新增笔记</div>
         <div v-if="curDoc.ty === 3" @click="createUrl('link')"><span class="iconbl bl-correlation-line"></span>复制双链引用</div>
         <div v-if="curDoc.ty !== 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
-        <!-- 更多二级菜单 -->
         <div @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-apps-line"></span>更多
-          <div class="menu-content-level2" :style="rMenuLevel2">
+          <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开</div>
             <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
             <div v-if="curDoc.star === 0 && curDoc.ty === 3" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
@@ -146,11 +139,10 @@
         <div v-if="curDoc.ty === 3" @click="openArticleWindow"><span class="iconbl bl-a-computerend-line"></span>新窗口查看</div>
         <div v-if="curDoc.ty === 3" @click="createUrl('tempVisit', true)"><span class="iconbl bl-visit"></span>浏览器临时访问</div>
 
-        <!-- 导出及二级菜单 -->
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 4)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-file-download-line"></span>导出文章
-          <div class="menu-content-level2" :style="rMenuLevel2">
+          <div class="tree-menu-level2" :style="rMenuLevel2">
             <div @click="articleDownload"><span class="iconbl bl-file-markdown"></span>导出为 MD</div>
             <div @click="articleBackup('MARKDOWN')"><span class="iconbl bl-file-markdown"></span>导出为本地 MD</div>
             <div @click="articleDownloadHtml"><span class="iconbl bl-HTML"></span>导出为 HTML</div>
@@ -159,10 +151,11 @@
         </div>
         <div v-if="curDoc.ty === 3" @mouseenter="handleHoverRightMenuLevel2($event, 2)" data-bl-prevet="true">
           <span class="iconbl bl-a-rightsmallline-line"></span>
-          <span class="iconbl bl-a-linkspread-line"></span>复制链接
-          <div class="menu-content-level2" :style="rMenuLevel2">
-            <div v-if="curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制博客链接</div>
-            <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>复制临时访问链接</div>
+          <span class="iconbl bl-a-linkspread-line"></span>创建链接
+          <div class="tree-menu-level2" :style="rMenuLevel2">
+            <div v-if="curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制博客地址</div>
+            <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>创建临时访问(3h)</div>
+            <div @click="handleShowACustomTempVisitDialog"><span class="iconbl bl-visit"></span>创建临时访问(自定义)</div>
           </div>
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
@@ -224,6 +217,18 @@
     :close-on-click-modal="true">
     <ArticleSearch @open-article="openArticle" @create-link="createUrlLink"></ArticleSearch>
   </el-dialog>
+
+  <!-- 自定义临时访问链接 -->
+  <el-dialog
+    v-model="isShowACustomTempVisitDialog"
+    width="400"
+    style="height: 200px"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="true">
+    <ArticleCustomTempVisit ref="ArticleCustomTempVisitRef" @created="tempVisitCreated"></ArticleCustomTempVisit>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -270,6 +275,7 @@ import ArticleQrCode from './ArticleQrCode.vue'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleImport from './ArticleImport.vue'
 import ArticleSearch from './ArticleSearch.vue'
+import ArticleCustomTempVisit from './ArticleCustomTempVisit.vue'
 
 const server = useServerStore()
 const user = useUserStore()
@@ -530,8 +536,6 @@ const articleDownload = () => {
 const articleDownloadHtml = () => {
   articleDownloadHtmlApi({ id: curDoc.value.i }).then((resp) => {
     let filename: string = resp.headers.get('content-disposition')
-    console.log(decodeURI(filename))
-
     let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
     let matches = filenameRegex.exec(filename)
     if (matches != null && matches[1]) {
@@ -804,6 +808,22 @@ const openArticle = (article: DocTree) => {
   })
 }
 //#endregion
+
+//#region ----------------------------------------< 临时访问时长 >--------------------------------------
+const isShowACustomTempVisitDialog = ref(false)
+const ArticleCustomTempVisitRef = ref()
+const handleShowACustomTempVisitDialog = () => {
+  isShowACustomTempVisitDialog.value = true
+  nextTick(() => {
+    ArticleCustomTempVisitRef.value.reload(curDoc.value.n, curDoc.value.i)
+  })
+}
+
+const tempVisitCreated = () => {
+  isShowACustomTempVisitDialog.value = false
+}
+//#endregion
+
 const clickCurDoc = (tree: DocTree) => {
   emits('clickDoc', tree)
 }
@@ -815,5 +835,8 @@ defineExpose({ getDocTreeData })
 
 <style scoped lang="scss">
 @import '../doc/tree-docs.scss';
-@import '../doc/tree-docs-right-menu.scss';
 </style>
+
+<!-- <style lang="scss">
+@import '../doc/tree-docs-right-menu.scss';
+</style> -->

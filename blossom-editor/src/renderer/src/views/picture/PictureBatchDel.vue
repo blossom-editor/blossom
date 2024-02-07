@@ -47,9 +47,7 @@ const del = () => {
     return
   }
   isLoading.value = true
-  console.log(props.ids)
   pictureDelBatchApi({ ids: Array.from(props.ids), ignoreCheck: props.ignoreCheck }).then((resp: R<PictureDelBatchRes>) => {
-    console.log(resp.data)
     if (props.ignoreCheck) {
       delResult.value.msg = `${resp.data?.success} 个文件成功删除。 \n${resp.data?.fault} 个文件删除失败。`
     } else {

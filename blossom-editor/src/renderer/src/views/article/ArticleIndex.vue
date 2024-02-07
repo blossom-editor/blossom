@@ -1,7 +1,7 @@
 <template>
   <div class="index-article-root">
     <!-- folder menu -->
-    <div class="doc-container" :style="{ width: docEditorStyle.docs }" v-show="docsExpand">
+    <div class="doc-container" ref="DocsRef" v-show="docsExpand">
       <div class="doc-tree-menu-container" :style="tempTextareaStyle.docTree">
         <ArticleTreeDocs @click-doc="clickCurDoc" ref="ArticleTreeDocsRef"></ArticleTreeDocs>
       </div>
@@ -16,9 +16,9 @@
         </bl-row>
       </div>
     </div>
-
+    <div class="resize-docs-divider" ref="ResizeDocsDividerRef"></div>
     <!-- editor -->
-    <div class="editor-container" :style="{ width: docEditorStyle.editor }" v-loading="editorLoading" element-loading-text="正在读取文章内容...">
+    <div class="editor-container" ref="EditorContainerRef" v-loading="editorLoading" element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
         <EditorTools
           @save="saveCurArticleContent()"
@@ -93,7 +93,7 @@
         </div>
         <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
-        <div class="resize-divider" ref="ResizeDividerRef"></div>
+        <div class="resize-divider" ref="ResizeEditorDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
       </div>
 
@@ -191,7 +191,7 @@ import { articleInfoApi, articleUpdContentApi, uploadFileApiUrl } from '@rendere
 // utils
 import { Local } from '@renderer/assets/utils/storage'
 import { isBlank, isNull } from '@renderer/assets/utils/obj'
-import { sleep, isElectron } from '@renderer/assets/utils/util'
+import { sleep, isElectron, isBase64Img } from '@renderer/assets/utils/util'
 import { openExtenal, writeText, readText, openNewArticleWindow } from '@renderer/assets/utils/electron'
 import { formartMarkdownTable } from '@renderer/assets/utils/format-table'
 // component
@@ -204,7 +204,7 @@ import Notify from '@renderer/scripts/notify'
 import { useDraggable } from '@renderer/scripts/draggable'
 import type { shortcutFunc } from '@renderer/scripts/shortcut-register'
 import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo, isArticle } from '@renderer/views/doc/doc'
-import { TempTextareaKey, ArticleReference, DocEditorStyle, parseTocAsync } from './scripts/article'
+import { TempTextareaKey, ArticleReference, parseTocAsync } from './scripts/article'
 import type { Toc } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
 import { useResize } from './scripts/editor-preview-resize'
@@ -268,9 +268,12 @@ watch(
 //#endregion
 
 //#region ----------------------------------------< 公共参数和页面动态样式 >--------------------------------------
+const DocsRef = ref()
+const EditorContainerRef = ref()
+const ResizeDocsDividerRef = ref()
 const GutterHolderRef = ref() // editor gutter holder
 const EditorRef = ref() // editor
-const ResizeDividerRef = ref() // editor&preview resize dom
+const ResizeEditorDividerRef = ref() // editor&preview resize dom
 const EditorOperatorRef = ref()
 const PreviewRef = ref() // html 预览
 const editorOperator = ref({
@@ -282,12 +285,6 @@ const editorOperator = ref({
  */
 const docsExpand = ref<boolean>(true)
 const tocsExpand = ref<boolean>(true)
-const docEditorStyle = computed<DocEditorStyle>(() => {
-  if (!docsExpand.value) {
-    return { docs: '0px', editor: '100%' }
-  }
-  return { docs: '250px', editor: 'calc(100% - 250px)' }
-})
 
 /**
  * 编辑器和预览的展开收起
@@ -357,7 +354,16 @@ const exitView = () => {
   autoSave()
 }
 
-useResize(EditorRef, PreviewRef, ResizeDividerRef, EditorOperatorRef)
+const { hideOne, resotreOne } = useResize(DocsRef, EditorContainerRef, ResizeDocsDividerRef, undefined, {
+  persistent: true,
+  keyOne: 'article_docs_width',
+  keyTwo: 'article_editor_preview_width',
+  defaultOne: '250px',
+  defaultTwo: 'calc(100% - 250px)',
+  maxOne: 700,
+  minOne: 250
+})
+useResize(EditorRef, PreviewRef, ResizeEditorDividerRef, EditorOperatorRef)
 //#endregion
 
 //#region ----------------------------------------< 图片管理 >--------------------------------------
@@ -504,6 +510,7 @@ const clickCurDoc = async (tree: DocTree) => {
     })
   }
 }
+
 /**
  * 保存文章的正文, 并更新编辑器状态栏中的版本, 字数, 修改时间等信息.
  *
@@ -515,7 +522,7 @@ const saveCurArticleContent = async (auto: boolean = false) => {
   }
   const saveCallback = () => {
     if (!auto) {
-      ElMessage.info({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
+      ElMessage.success({ message: '保存成功', duration: 1000, offset: 70, grouping: true })
     }
   }
   // 如果文档发生变动才保存
@@ -535,7 +542,14 @@ const saveCurArticleContent = async (auto: boolean = false) => {
     name: curArticle.value!.name,
     markdown: cmw.getDocString(),
     html: PreviewRef.value.innerHTML,
-    references: articleImg.value.concat(articleLink.value)
+    references: articleImg.value.concat(articleLink.value).map((item) => {
+      let refer: ArticleReference = { targetId: '', targetName: '', targetUrl: '', type: 10 }
+      Object.assign(refer, item)
+      if (isBase64Img(refer.targetUrl)) {
+        refer.targetUrl = ''
+      }
+      return refer
+    })
   }
   await articleUpdContentApi(data)
     .then((resp) => {
@@ -865,6 +879,11 @@ const formatTable = () => {
 //#region ----------------------------------------< 快捷键注册 >-------------------------------------
 const alt_1: shortcutFunc = (): void => {
   docsExpand.value = !docsExpand.value
+  if (!docsExpand.value) {
+    hideOne()
+  } else {
+    resotreOne()
+  }
 }
 const alt_2: shortcutFunc = (): void => {
   tocsExpand.value = !tocsExpand.value
@@ -920,10 +939,10 @@ const unbindKeys = () => {
 </script>
 
 <style scoped lang="scss">
+@import '@renderer/assets/styles/bl-loading-spinner.scss';
 @import './styles/article-index.scss';
 @import './styles/article-view-absolute.scss';
 @import './styles/editor-right-menu.scss';
 @import './styles/bl-preview-toc.scss';
 @import './styles/article-backtop.scss';
-@import '@renderer/assets/styles/bl-loading-spinner.scss';
 </style>

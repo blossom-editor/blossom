@@ -16,16 +16,16 @@
 
     <div v-loading="isLoading">
       <!-- 封面 -->
-      <div class="info-img">
+      <!-- <div class="info-img">
         <div v-if="!docForm.cover" class="info-img-placeholder">
           <span>添加封面地址以查看封面</span>
           <span>封面比例为 [10:1] 时显示效果最佳, 建议 [1900 * 190]</span>
         </div>
         <img v-if="docForm.cover" :src="docForm.cover" />
-      </div>
+      </div> -->
 
       <!-- 状态栏 -->
-      <div class="article-stat-container">
+      <div class="article-stat-container" style="margin-top: 10px">
         <!-- 统计信息 -->
         <div class="stat-details">
           <div class="stat-main-left">
@@ -107,16 +107,9 @@
       <div class="info-form">
         <el-form :inline="true" :model="docForm" :rules="docFormRule" label-width="60px" ref="DocFormRef">
           <el-form-item label="上级菜单">
-            <!-- 
-              clearable      : 下拉列表可以被清空
-              indent         : 每一级别的缩进, px
-              accordion      : 是否每次只打开一个同级树节点展开	
-              show-checkbox  : 每个节点前增加一个单选框
-              check-strictly : true 为选中子节点不选中父和祖父
-             -->
             <el-tree-select
-              style="--el-form-inline-content-width: 432px"
               v-model="docForm.pid"
+              style="width: 432px"
               node-key="i"
               :data="docTreeData"
               :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }"
@@ -148,25 +141,31 @@
 
           <!--  -->
           <el-form-item label="类型">
-            <el-radio-group v-model="docForm.type" style="width: 176px" :disabled="curDocDialogType == 'upd'">
+            <el-radio-group v-model="docForm.type" style="width: 106px" :disabled="curDocDialogType == 'upd'">
               <el-radio-button :label="1">文件夹</el-radio-button>
               <el-radio-button :label="3">文章</el-radio-button>
             </el-radio-group>
-          </el-form-item>
-          <el-form-item label="排序">
-            <el-input-number v-model="docForm.sort" style="width: 176px" />
           </el-form-item>
 
           <!--  -->
           <el-form-item label="主色调">
             <el-input
               v-model="docForm.color"
-              :style="{ width: '176px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
+              :style="{ width: '245px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
               placeholder="主色调 #FFFFFF">
             </el-input>
           </el-form-item>
+
+          <el-form-item label="排序">
+            <el-input-number v-model="docForm.sort" style="width: 106px" />
+          </el-form-item>
+          <!--  -->
+          <!-- <el-form-item label="封面">
+            <el-input v-model="docForm.cover" style="width: 176px" placeholder="封面图片访问地址"> </el-input>
+          </el-form-item> -->
+
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width: 176px" placeholder="图标或图片地址">
+            <el-input v-model="docForm.icon" style="width: 245px" placeholder="图标/图片http地址">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
@@ -175,17 +174,6 @@
                     </svg>
                   </div>
                 </el-tooltip>
-              </template>
-            </el-input>
-          </el-form-item>
-
-          <!--  -->
-          <el-form-item label="封面">
-            <el-input v-model="docForm.cover" style="width: 432px" placeholder="封面图片的访问地址, http://...">
-              <template #prefix>
-                <el-icon size="15">
-                  <Picture />
-                </el-icon>
               </template>
             </el-input>
           </el-form-item>
@@ -233,7 +221,7 @@
 import { ref, nextTick, inject, computed, watch, Ref } from 'vue'
 import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
-import { Document, Picture } from '@element-plus/icons-vue'
+import { Document } from '@element-plus/icons-vue'
 import { provideKeyDocTree, getCDocsByPid, getDocById, checkLevel } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import {

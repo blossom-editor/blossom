@@ -44,4 +44,10 @@ public interface UserParamMapper extends BaseMapper<UserParamEntity> {
      * 新增参数
      */
     int insertByUserId(UserParamEntity param);
+
+    /**
+     * 删除参数
+     * @param userId 用户ID
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

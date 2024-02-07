@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `blossom_article_reference`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 100000
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_bin
+  COLLATE = utf8mb4_bin COMMENT = '文章引用'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -478,7 +478,7 @@ CREATE TABLE IF NOT EXISTS `blossom_note`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 18
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin
+  COLLATE = utf8mb4_bin COMMENT = '便签，Note'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -559,7 +559,7 @@ CREATE TABLE IF NOT EXISTS `blossom_stat`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 218
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin
+  COLLATE = utf8mb4_bin COMMENT = '统计信息'
   ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `blossom_web`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 292
   CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_bin COMMENT = '[FS] 网站收藏'
+  COLLATE = utf8mb4_bin COMMENT = '网站收藏'
   ROW_FORMAT = DYNAMIC;
 
 alter table blossom_web
@@ -637,5 +637,5 @@ CREATE TABLE IF NOT EXISTS `base_user_param`
     PRIMARY KEY (`id`),
     UNIQUE KEY `unq_bup_userid_paramname` (`user_id`, `param_name`) COMMENT '用户参数唯一'
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
+  DEFAULT CHARSET = utf8mb4 COMMENT = '用户参数'
   COLLATE = utf8mb4_bin;

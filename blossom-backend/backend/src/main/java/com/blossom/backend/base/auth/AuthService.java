@@ -46,6 +46,7 @@ public class AuthService extends AbstractAuthService {
         AuthException.throwBy(StrUtil.isBlank(login.getPassword()), AuthRCode.USERNAME_OR_PWD_FAULT);
         UserEntity user = userService.selectByUsername(login.getUsername());
         AuthException.throwBy(ObjUtil.isNull(user), AuthRCode.USERNAME_OR_PWD_FAULT);
+        AuthException.throwBy(user.getDelTime() == null || !user.getDelTime().equals(0L), AuthRCode.USER_NOT_ENABLED);
         AuthException.throwBy(!passwordEncoder.matches(login.getPassword() + user.getSalt(), user.getPassword()), AuthRCode.USERNAME_OR_PWD_FAULT);
         fillUserDetail(accessToken, user);
     }
@@ -57,6 +58,15 @@ public class AuthService extends AbstractAuthService {
      */
     public void logout(String token) {
         tokenRepository.remove(token);
+    }
+
+    /**
+     * 踢出用户的所有令牌
+     *
+     * @param userId 用户ID
+     */
+    public void kickout(Long userId) {
+        tokenRepository.removeAll(userId);
     }
 
     /**

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 用户
@@ -66,5 +67,13 @@ public class UserEntity extends AbstractPOJO implements Serializable {
      * 用户的位置
      */
     private String location;
+    /**
+     * 创建日期
+     */
+    private Date creTime;
+    /**
+     * 逻辑删除, 目前用于禁用用户, 而不是删除
+     */
+    private Long delTime;
 
 }

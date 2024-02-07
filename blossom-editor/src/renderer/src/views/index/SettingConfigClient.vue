@@ -45,6 +45,13 @@
         </bl-row>
         <div class="conf-tip">是否在文档列表中以特殊的样式显示专题。</div>
       </el-form-item>
+
+      <el-form-item label="只展开一项子菜单">
+        <bl-row>
+          <el-switch v-model="configViewStyleForm.isMenuUniqueOpened" size="default" style="margin-right: 10px" @change="changeViewStyle" />
+        </bl-row>
+        <div class="conf-tip">展开子菜单时，收起其他子菜单。</div>
+      </el-form-item>
     </el-form>
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
@@ -71,6 +78,12 @@
 
     <el-form label-position="right" label-width="130px" style="max-width: 800px">
       <bl-row just="flex-start" class="config-module-titile"><span class="iconbl bl-apps-line"></span>其他</bl-row>
+      <el-form-item label="登录后进入首页">
+        <bl-row>
+          <el-switch v-model="configViewStyleForm.isLoginToHomePage" size="default" style="margin-right: 10px" @change="changeViewStyle" />
+        </bl-row>
+        <div class="conf-tip">点击登录按钮后，是否自动跳转至首页。</div>
+      </el-form-item>
       <el-form-item label="开发者工具">
         <bl-row>
           <el-button @click="openDevTools"><span class="iconbl bl-bug-line" @click="openDevTools"></span></el-button>

@@ -56,4 +56,9 @@ public interface PictureMapper extends BaseMapper<PictureEntity> {
      * @param pid 文件夹ID
      */
     PictureStatRes stat(@Param("userId") Long userId, @Param("pid") Long pid);
+
+    /**
+     * 删除图片
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

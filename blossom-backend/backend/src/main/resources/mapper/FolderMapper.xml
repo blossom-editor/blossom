@@ -83,4 +83,9 @@
         </set>
         where id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </update>
+
+    <delete id="delByUserId">
+        delete from blossom_folder where user_id = #{userId}
+    </delete>
+
 </mapper>

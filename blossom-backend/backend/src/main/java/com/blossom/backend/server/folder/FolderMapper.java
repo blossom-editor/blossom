@@ -39,4 +39,9 @@ public interface FolderMapper extends BaseMapper<FolderEntity> {
      * 根据ID集合修改
      */
     void updByIds(FolderEntity entity);
+
+    /**
+     * 删除文件夹
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

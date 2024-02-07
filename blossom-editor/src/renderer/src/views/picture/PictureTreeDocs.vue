@@ -10,7 +10,7 @@
     element-loading-text="正在读取文档..."
     :style="{ fontSize: configStore.viewStyle.treeDocsFontSize }">
     <!-- 文件夹 -->
-    <el-menu v-if="!isEmpty(docTreeData)" ref="DocTreeRef" class="doc-trees" :unique-opened="true">
+    <el-menu v-if="!isEmpty(docTreeData)" ref="DocTreeRef" class="doc-trees" :unique-opened="configStore.viewStyle.isMenuUniqueOpened">
       <!-- ================================================ L1 ================================================ -->
       <div v-for="L1 in docTreeData" :key="L1.i">
         <div v-if="L1.ty == 11" class="menu-divider" />
@@ -92,7 +92,7 @@
 
   <!-- 右键菜单, 添加到 body 下 -->
   <Teleport to="body">
-    <div v-if="rMenu.show" class="doc-tree-right-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
+    <div v-if="rMenu.show" class="tree-menu" :style="{ left: rMenu.clientX + 'px', top: rMenu.clientY + 'px' }">
       <div class="doc-name">{{ curDoc.n }}</div>
       <div class="menu-content">
         <div :class="['menu-item', Number(curDoc.i) <= 0 ? 'disabled' : '']" @click="rename"><span class="iconbl bl-pen"></span>重命名</div>

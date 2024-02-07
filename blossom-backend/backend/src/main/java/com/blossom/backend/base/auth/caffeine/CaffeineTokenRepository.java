@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,7 +43,7 @@ public class CaffeineTokenRepository implements TokenRepository {
                 .initialCapacity(1000)
                 .expireAfterWrite(client.getDuration(), TimeUnit.SECONDS)
                 .removalListener((String key, AccessToken value, RemovalCause cause) ->
-                        log.info("Token [" + key + "] 被删除")
+                        log.info("Token [" + key + "] has been deleted")
                 )
                 .build();
 
@@ -50,9 +51,10 @@ public class CaffeineTokenRepository implements TokenRepository {
                 .initialCapacity(1000)
                 .expireAfterWrite(client.getDuration(), TimeUnit.SECONDS)
                 .removalListener((String userId, String token, RemovalCause cause) ->
-                        log.info("Unique Token(userId) [" + userId + "] 被删除")
+                        log.info("Unique Token(userId) [" + userId + "] has been deleted")
                 )
                 .build();
+
     }
 
     @Override
@@ -76,6 +78,17 @@ public class CaffeineTokenRepository implements TokenRepository {
     public void remove(String token) {
         log.info("异步删除 token");
         tokenCache.invalidate(token);
+    }
+
+    @Override
+    public void removeAll(Long userId) {
+        uniqueTokenCache.invalidate(userId);
+        Map<String, AccessToken> maps = tokenCache.asMap();
+        maps.forEach((k, t) -> {
+            if (t.getUserId().equals(userId)) {
+                tokenCache.invalidate(k);
+            }
+        });
     }
 
     @Override

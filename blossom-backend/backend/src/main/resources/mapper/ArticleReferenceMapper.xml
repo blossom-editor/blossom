@@ -87,4 +87,8 @@
          where target_Id = #{targetId}
            and user_id = #{userId}
     </update>
+
+    <delete id="delByUserId">
+        delete from blossom_article_reference where user_id = #{userId}
+    </delete>
 </mapper>

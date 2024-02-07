@@ -2,8 +2,10 @@ package com.blossom.backend.base.auth.interceptor;
 
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.auth.annotation.AuthUserType;
+import com.blossom.backend.base.auth.exception.AuthException;
+import com.blossom.backend.base.auth.exception.AuthRCode;
 import com.blossom.backend.base.user.UserTypeEnum;
-import com.blossom.common.base.exception.XzException400;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -14,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 判断用户的类型, 只读用户只允许发送 get 请求
+ * 接口对于用户的校验
  */
 @Slf4j
 public class UserTypeInterceptor implements HandlerInterceptor {
@@ -28,7 +30,7 @@ public class UserTypeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 忽略静态资源处理器
-        if(handler instanceof ResourceHttpRequestHandler) {
+        if (handler instanceof ResourceHttpRequestHandler) {
             return true;
         }
 
@@ -40,12 +42,25 @@ public class UserTypeInterceptor implements HandlerInterceptor {
         if (isIgnore) {
             return true;
         }
-        // GET请求校验
-        if (HttpMethod.GET.name().equals(request.getMethod())) {
-            return true;
+
+        // 校验接口允许的用户类型
+        boolean isCheckUserType = handlerMethod.hasMethodAnnotation(AuthUserType.class);
+        if (isCheckUserType) {
+            AuthUserType userType = handlerMethod.getMethodAnnotation(AuthUserType.class);
+            if (userType != null) {
+                UserTypeEnum type = userType.value();
+                if (!type.getType().equals(AuthContext.getType())) {
+                    throw new AuthException(AuthRCode.PERMISSION_DENIED);
+                }
+                return true;
+            }
         }
 
-        XzException400.throwBy(UserTypeEnum.READONLY.getType().equals(AuthContext.getType()), "您的账号为只读账号, 无法使用该功能");
+        // 只读账号不非 GET 请求
+        if (UserTypeEnum.READONLY.getType().equals(AuthContext.getType()) && !HttpMethod.GET.name().equals(request.getMethod())) {
+            throw new AuthException(AuthRCode.PERMISSION_DENIED.getCode(), "您的账号为只读账号, 无法使用该功能");
+        }
+
         return true;
     }
 }

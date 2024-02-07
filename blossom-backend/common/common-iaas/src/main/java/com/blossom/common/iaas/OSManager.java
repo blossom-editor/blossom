@@ -73,4 +73,11 @@ public interface OSManager {
      * @return 是否删除
      */
     boolean delete(String filename);
+
+    /**
+     * 删除文件夹
+     *
+     * @param pathname 文件夹路径
+     */
+    boolean deletePath(String pathname);
 }

@@ -26,4 +26,8 @@
     <insert id="insertByUserId">
         insert into base_user_param values (null, #{userId}, #{paramName}, #{paramValue}, now())
     </insert>
+
+    <delete id="delByUserId">
+        delete from base_user_param where user_id = #{userId}
+    </delete>
 </mapper>

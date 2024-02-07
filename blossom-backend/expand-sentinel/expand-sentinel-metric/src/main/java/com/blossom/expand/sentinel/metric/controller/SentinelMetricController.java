@@ -191,7 +191,7 @@ public class SentinelMetricController extends AbstractSentinelController {
                                        String interval,
                                        Integer customInterval,
                                        TimeUnit customIntervalUnit) {
-        log.info("查询 Sentinel 单机流量折线图");
+        log.debug("[SENTINEL] 查询 Sentinel 单机流量折线图");
         ResourceHistogram rh = explain(startTime, endTime, interval, customInterval, customIntervalUnit, "local");
         // 读取日志
         String all = this.metric(resource, rh.getStartTime(), rh.getEndTime(), "");

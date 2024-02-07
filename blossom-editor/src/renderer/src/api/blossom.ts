@@ -40,11 +40,19 @@ export const userParamListApi = (): Promise<R<any>> => {
 }
 
 /**
- * 修改系统参数
+ * 修改用户参数
  * @returns
  */
 export const userParamUpdApi = (data: object): Promise<R<any>> => {
   return rq.post<R<any>>('/user/param/upd', data)
+}
+
+/**
+ * 管理员修改用户参数
+ * @returns
+ */
+export const userParamUpdAdminApi = (data: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/user/param/upd/admin', data)
 }
 
 /**
@@ -305,6 +313,15 @@ export const articleWordsApi = (params?: object): Promise<R<any>> => {
 }
 
 /**
+ * 指定用户的文章数和文章字数统计
+ * @param params
+ * @returns
+ */
+export const articleWordsUserApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/article/stat/words/user', { params })
+}
+
+/**
  * 文章数和文章字数统计
  * @param params
  * @returns
@@ -541,6 +558,15 @@ export const pictureDelBatchApi = (data?: object): Promise<R<PictureDelBatchRes>
  */
 export const pictureStatApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/picture/stat', { params })
+}
+
+/**
+ * 删除图片
+ * @param params {id:id}
+ * @returns
+ */
+export const pictureStatUserApi = (params?: object): Promise<R<any>> => {
+  return rq.get<R<any>>('/picture/stat/user', { params })
 }
 
 /**

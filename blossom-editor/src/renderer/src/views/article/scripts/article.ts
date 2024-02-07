@@ -1,5 +1,3 @@
-import { isNull } from '@renderer/assets/utils/obj'
-
 /**
  * 临时内容的 localStorage key
  */
@@ -8,7 +6,7 @@ export const TempTextareaKey = 'editor_temp_textarea_value'
 /**
  * doc tree and editor width
  */
-export interface DocEditorStyle {
+export interface DocsEditorStyle {
   docs: string
   editor: string
 }

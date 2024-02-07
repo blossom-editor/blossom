@@ -1,21 +1,18 @@
 <template>
   <div class="setting-index-root">
-    <el-tabs tab-position="left" class="setting-tabs">
-      <el-tab-pane label="登录">
+    <el-tabs tab-position="left" class="setting-tabs" v-model="activeTab">
+      <el-tab-pane label="登录" name="login">
         <div class="setting-container">
           <div class="wrapper">
             <SettingLogin></SettingLogin>
           </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="设置">
+      <el-tab-pane label="设置" name="setting">
         <SettingConfig></SettingConfig>
       </el-tab-pane>
-      <el-tab-pane label="关于">
+      <el-tab-pane label="关于" name="about">
         <SettingAboutVue></SettingAboutVue>
-      </el-tab-pane>
-      <el-tab-pane label="访问流量" :lazy="true">
-        <SentinelResources></SentinelResources>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -25,14 +22,28 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '@renderer/stores/user'
+import { useRoute } from 'vue-router'
+import { isNotBlank } from '@renderer/assets/utils/obj'
 import SettingLogin from './SettingLogin.vue'
 import SettingConfig from './SettingConfig.vue'
 import SettingAboutVue from './SettingAbout.vue'
-import SentinelResources from '@renderer/views/statistic/SentinelResources.vue'
 import CONFIG from '@renderer/assets/constants/system'
-import { useUserStore } from '@renderer/stores/user'
 
 const userStore = useUserStore()
+const route = useRoute()
+
+onMounted(() => {
+  let actTab = route.query.activeTab as string
+  if (isNotBlank(actTab)) {
+    activeTab.value = actTab
+  } else {
+    activeTab.value = 'login'
+  }
+})
+
+const activeTab = ref('login')
 
 const getServerVersion = () => {
   if (userStore.sysParams && userStore.sysParams.SERVER_VERSION) {
@@ -54,7 +65,11 @@ const getServerVersion = () => {
     height: 100%;
 
     :deep(.el-tabs__nav-wrap::after) {
-      background-color: var(--el-color-primary-light-8);
+      background-color: transparent;
+    }
+
+    :deep(el-tabs__nav-scroll::after) {
+      background-color: transparent;
     }
 
     :deep(.el-tabs__content) {

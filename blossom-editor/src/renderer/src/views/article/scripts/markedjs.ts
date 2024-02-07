@@ -1,3 +1,4 @@
+import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
 import { isBlank, isNotBlank } from '@renderer/assets/utils/obj'
 import { escape2Html, randomInt, sleep } from '@renderer/assets/utils/util'
@@ -20,6 +21,7 @@ import { getDocById } from '@renderer/views/doc/doc'
 // import 'highlight.js/styles/atom-one-light.css';
 // import 'highlight.js/styles/base16/darcula.css';
 
+const userStore = useUserStore()
 const { editorStyle } = useConfigStore()
 
 //#region ----------------------------------------< 组件配置 >--------------------------------------
@@ -276,19 +278,6 @@ export const renderCode = (code: string, language: string | undefined, _isEscape
     const eleid = 'markmap-' + Date.now() + '-' + randomInt(1, 10000)
     const escape = escape2Html(code) as string
     const { root } = transformer.transform(escape)
-
-    // let svg: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    // svg.id = eleid
-    // svg.setAttributeNS(null, 'width', '100%')
-    // svg.setAttributeNS(null, 'height', '500px')
-    // svg.setAttributeNS(null, 'viewBox', '0 0 100 500')
-    // svg.classList.add('markmap')
-    // svg.style.width = '500px'
-    // svg.style.height = height
-    // let markmap = Markmap.create(svg, markmapOptions, root)
-    // console.log(svg.outerHTML)
-    // return `<p class="markmap-container">${svg.outerHTML} </p>`
-
     new Promise<SVGElement>(async (_resolve, _reject) => {
       let svg: SVGElement | null = document.querySelector(`#${eleid}`)
       let retry = 0
@@ -428,6 +417,8 @@ export const renderLink = (
   let link: string
   let ref: ArticleReference = { targetId: '0', targetName: text, targetUrl: href as string, type: 21 }
   if (isBlank(title)) {
+    link = `<a target="_blank" href=${href} target="_blank">${text}</a>`
+  } else if (!href.startsWith(userStore.userParams.WEB_ARTICLE_URL)) {
     link = `<a target="_blank" href=${href} target="_blank">${text}</a>`
   } else {
     let arr = title!.match(/(?<=\#\#).*?(?=\#\#)/)

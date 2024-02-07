@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class PlanController {
      * @param month 查询的月份, 会查询该月的所有每日计划
      */
     @GetMapping("/list/day")
-    public R<Map<Date, List<PlanDayRes>>> days(String month) {
+    public R<Map<String, List<PlanDayRes>>> days(String month) {
         return R.ok(baseService.listDay(month, AuthContext.getUserId()));
     }
 

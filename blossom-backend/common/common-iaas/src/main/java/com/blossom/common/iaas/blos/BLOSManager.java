@@ -111,4 +111,9 @@ public class BLOSManager extends AbstractOSManager implements OSManager {
         File file = FileUtil.newFile(filename);
         return file.delete();
     }
+
+    @Override
+    public boolean deletePath(String pathname) {
+        return FileUtil.del(pathname);
+    }
 }

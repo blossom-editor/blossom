@@ -21,9 +21,11 @@
   }
 
   .doc-trees-placeholder {
-    padding: 0 20px;
+    width: 100%;
+    padding-right: 35px;
     color: var(--bl-text-color-light);
     font-size: 13.5px;
+    text-align: right;
   }
 
   .doc-trees {
@@ -86,10 +88,6 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      // transition:
-      //   border-color var(--el-transition-duration),
-      //   background-color var(--el-transition-duration),
-      //   color var(--el-transition-duration);
       transition: none;
     }
 

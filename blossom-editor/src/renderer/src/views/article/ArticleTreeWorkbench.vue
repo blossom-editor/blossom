@@ -4,82 +4,135 @@
       <span>《{{ curArticle?.name }}》</span>
       <span style="font-size: 9px; padding-right: 5px">{{ curArticle?.id }}</span>
     </bl-col>
+
     <bl-row class="wb-page-container">
-      <Transition name="wbpage-one">
-        <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 1">
-          <el-tooltip effect="light" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
-            <template #content>
-              显示排序<br />
-              <bl-row>
-                <bl-tag :bgColor="SortLevelColor.ONE">一级</bl-tag>
-                <bl-tag :bgColor="SortLevelColor.TWO">二级</bl-tag>
-              </bl-row>
-              <bl-row>
-                <bl-tag :bgColor="SortLevelColor.THREE">三级</bl-tag>
-                <bl-tag :bgColor="SortLevelColor.FOUR">四级</bl-tag>
-              </bl-row>
-            </template>
-          </el-tooltip>
-          <el-tooltip effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <template #content>
-              <div>全文搜索</div>
-              <div class="keyboard small">Ctrl+Shift+F</div>
-            </template>
-            <div class="iconbl bl-search-line" @click="showSearch()"></div>
-          </el-tooltip>
-          <el-tooltip content="刷新" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
-          </el-tooltip>
-          <el-tooltip effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <template #content>
-              <div>新增文件夹或文章</div>
-              <div class="keyboard small">{{ keymaps.newDoc }}</div>
-            </template>
-            <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
-          </el-tooltip>
-          <el-tooltip content="文章引用网络" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-correlation-line" @click="openArticleReferenceWindow()"></div>
-          </el-tooltip>
-        </bl-row>
-      </Transition>
+      <bl-row class="wb-page-item" just="flex-start" align="flex-end" width="calc(100% - 16px)" height="44px">
+        <el-tooltip
+          content="文章引用网络"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="-5"
+          :hide-after="0">
+          <div class="iconbl bl-correlation-line" @click="openArticleReferenceWindow()"></div>
+        </el-tooltip>
+        <el-tooltip
+          content="新增文件夹或文章"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
+        </el-tooltip>
+        <el-tooltip
+          content="刷新"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
+        </el-tooltip>
+        <el-tooltip
+          content="全文搜索"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="9"
+          :hide-after="0">
+          <div class="iconbl bl-search-line" @click="showSearch()"></div>
+        </el-tooltip>
+        <el-tooltip effect="light" popper-class="is-small" transition="none" placement="top" :show-arrow="false" :offset="5" :hide-after="0">
+          <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
+          <template #content>
+            显示排序<br />
+            <bl-row>
+              <bl-tag :bgColor="SortLevelColor.ONE">一级</bl-tag>
+              <bl-tag :bgColor="SortLevelColor.TWO">二级</bl-tag>
+            </bl-row>
+            <bl-row style="padding-bottom: 5px">
+              <bl-tag :bgColor="SortLevelColor.THREE">三级</bl-tag>
+              <bl-tag :bgColor="SortLevelColor.FOUR">四级</bl-tag>
+            </bl-row>
+          </template>
+        </el-tooltip>
+        <el-tooltip
+          content="备份记录"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div class="iconbl bl-a-cloudstorage-line" @click="handleShowBackupDialog"></div>
+        </el-tooltip>
+        <el-tooltip
+          content="文章回收站"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div class="iconbl bl-delete-line" @click="handleShowRecycleDialog"></div>
+        </el-tooltip>
+        <el-tooltip
+          content="查看收藏"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div v-if="props.showStar">
+            <div v-if="onlyStars" class="iconbl bl-star-fill" @click="changeOnlyStar()"></div>
+            <div v-else class="iconbl bl-star-line" @click="changeOnlyStar()"></div>
+          </div>
+        </el-tooltip>
+        <el-tooltip
+          content="查看专题"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div v-if="props.showSubject">
+            <div v-if="onlySubject" class="iconbl bl-a-lowerrightpage-fill" @click="changeOnlySubject()"></div>
+            <div v-else class="iconbl bl-a-lowerrightpage-line" @click="changeOnlySubject()"></div>
+          </div>
+        </el-tooltip>
+        <el-tooltip
+          content="查看公开"
+          effect="light"
+          popper-class="is-small"
+          transition="none"
+          placement="top"
+          :show-arrow="false"
+          :offset="8"
+          :hide-after="0">
+          <div v-if="props.showOpen">
+            <div v-if="onlyOpen" class="iconbl bl-cloud-fill" @click="changeOnlyOpen()"></div>
+            <div v-else class="iconbl bl-cloud-line" @click="changeOnlyOpen()"></div>
+          </div>
+        </el-tooltip>
+      </bl-row>
 
-      <Transition name="wbpage-two">
-        <bl-row class="wb-page-item" just="flex-end" align="flex-end" v-if="workbenchPage == 2">
-          <el-tooltip content="只显示公开" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div v-if="props.showOpen">
-              <div v-if="onlyOpen" class="iconbl bl-cloud-fill" @click="changeOnlyOpen()"></div>
-              <div v-else class="iconbl bl-cloud-line" @click="changeOnlyOpen()"></div>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="只显示专题" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div v-if="props.showSubject">
-              <div v-if="onlySubject" class="iconbl bl-a-lowerrightpage-fill" @click="changeOnlySubject()"></div>
-              <div v-else class="iconbl bl-a-lowerrightpage-line" @click="changeOnlySubject()"></div>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="只显示 Star 文章" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div v-if="props.showStar">
-              <div v-if="onlyStars" class="iconbl bl-star-fill" @click="changeOnlyStar()"></div>
-              <div v-else class="iconbl bl-star-line" @click="changeOnlyStar()"></div>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="查看回收站" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-delete-line" @click="handleShowRecycleDialog"></div>
-          </el-tooltip>
-          <el-tooltip content="查看备份记录" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-            <div class="iconbl bl-a-cloudstorage-line" @click="handleShowBackupDialog"></div>
-          </el-tooltip>
-        </bl-row>
-      </Transition>
-
-      <bl-col width="25px" just="end" class="workbench-page" style="position: absolute; right: 0">
-        <el-icon size="13px" :class="['up', viewStyle.isGlobalShadow ? 'icon-shadow' : '']" @click="toWorkbenchPage(1)">
-          <ArrowUp />
-        </el-icon>
-        <el-icon size="13px" :class="['down', viewStyle.isGlobalShadow ? 'icon-shadow' : '']" @click="toWorkbenchPage(2)">
-          <ArrowDown />
-        </el-icon>
+      <bl-col width="12px" height="30px" just="end" class="workbench-more" style="">
+        <div class="iconbl bl-a-morevertical-line" @click="showMoreMenu"></div>
       </bl-col>
     </bl-row>
   </div>
@@ -121,23 +174,27 @@
     draggable>
     <ArticleRecycle ref="ArticleRecycleRef"></ArticleRecycle>
   </el-dialog>
+
+  <Teleport to="body">
+    <div v-show="moreMenu.show" class="tree-menu" :style="{ left: moreMenu.clientX + 'px', top: moreMenu.clientY + 'px', width: '120px' }">
+      <div class="menu-content" style="border: none">
+        <div @click="changeOnlyOpen"><span class="iconbl bl-cloud-line"></span>查看公开</div>
+        <div @click="changeOnlySubject"><span class="iconbl bl-a-lowerrightpage-line"></span>查看专题</div>
+        <div @click="changeOnlyStar"><span class="iconbl bl-star-line"></span>查看收藏</div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import { ref, nextTick, inject, onDeactivated } from 'vue'
-import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 import { provideKeyCurArticleInfo, SortLevelColor } from '@renderer/views/doc/doc'
 import { openNewArticleReferenceWindow } from '@renderer/assets/utils/electron'
-import { useConfigStore } from '@renderer/stores/config'
+import { useLifecycle } from '@renderer/scripts/lifecycle'
+import hotkeys from 'hotkeys-js'
 import ArticleInfo from './ArticleInfo.vue'
 import ArticleBackup from './ArticleBackup.vue'
 import ArticleRecycle from './ArticleRecycle.vue'
-import { useLifecycle } from '@renderer/scripts/lifecycle'
-import hotkeys from 'hotkeys-js'
-import { keymaps } from './scripts/editor-tools'
-
-const configStore = useConfigStore()
-const { viewStyle } = configStore
 
 useLifecycle(
   () => bindKeys(),
@@ -163,12 +220,39 @@ const props = defineProps({
   }
 })
 
-//#region --------------------------------------------------< 控制台翻页 >--------------------------------------------------
+//#region --------------------------------------------------< 控制台更多选项 >--------------------------------------------------
+const moreMenu = ref<RightMenu>({ show: false, clientX: 0, clientY: 0 })
 
-const workbenchPage = ref(1)
+/**
+ * 显示右键菜单
+ * @param doc 文档
+ * @param event 事件
+ */
+const showMoreMenu = (event: MouseEvent) => {
+  moreMenu.value.show = true
+  nextTick(() => {
+    let y = event.clientY
+    if (document.body.clientHeight - event.clientY < 50) {
+      y = event.clientY - 50
+    }
+    moreMenu.value = { show: true, clientX: event.clientX, clientY: y }
+    setTimeout(() => {
+      document.body.addEventListener('click', closeMoreMenu)
+    }, 100)
+  })
+}
 
-const toWorkbenchPage = (page: number) => {
-  workbenchPage.value = page
+const closeMoreMenu = (event: MouseEvent) => {
+  if (event.target) {
+    let isPrevent = (event.target as HTMLElement).getAttribute('data-bl-prevet')
+    if (isPrevent === 'true') {
+      event.preventDefault()
+      return
+    }
+  }
+
+  document.body.removeEventListener('click', closeMoreMenu)
+  moreMenu.value.show = false
 }
 
 //#endregion
@@ -291,29 +375,51 @@ defineExpose({ handleShowBackupDialog })
   height: 44px;
 
   .wb-page-item {
-    width: 225px !important;
-    height: 44px;
+    flex-direction: row-reverse !important;
+    align-content: space-between;
+    flex-wrap: wrap;
+    overflow: hidden;
     position: absolute;
     left: 0;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
+
+    // 排序
+    .bl-a-leftdirection-line {
+      font-size: 27px;
+      padding-bottom: 3px;
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    // 搜索
+    .bl-search-line {
+      font-size: 23px;
+      padding-bottom: 4px;
+    }
+
+    // 收藏
+    .bl-star-line,
+    .bl-star-fill {
+      font-size: 23px;
+      padding-bottom: 5px;
+    }
+
+    // 刷新图标
+    .bl-a-cloudrefresh-line,
+    .bl-a-fileadd-line {
+      &:active {
+        color: #ffffff;
+      }
+    }
+
+    .bl-correlation-line {
+      font-size: 40px;
+      padding-bottom: 0px;
+    }
   }
-}
-
-.wbpage-one-enter-from,
-.wbpage-one-leave-to {
-  opacity: 0;
-  transform: translateY(-30%);
-}
-
-.wbpage-two-enter-from,
-.wbpage-two-leave-to {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-.wbpage-one-enter-active,
-.wbpage-one-leave-active,
-.wbpage-two-enter-active,
-.wbpage-two-leave-active {
-  transition: all 0.2s ease;
 }
 </style>

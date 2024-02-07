@@ -28,12 +28,19 @@ public class PlanService extends ServiceImpl<PlanMapper, PlanEntity> {
     /**
      * 按月查询每日计划
      */
-    public Map<Date, List<PlanDayRes>> listDay(String month, Long userId) {
+    public Map<String, List<PlanDayRes>> listDay(String month, Long userId) {
         PlanEntity where = new PlanEntity();
         where.setPlanMonth(month);
         where.setUserId(userId);
         where.setType(PlanTypeEnum.DAY.getType());
-        return PlanUtil.sortToTreeMap(BeanUtil.toList(baseMapper.listAll(where), PlanDayRes.class), false);
+        List<PlanDayRes> list = new ArrayList<>();
+        for (PlanEntity plan : baseMapper.listAll(where)) {
+            PlanDayRes res =  BeanUtil.toObj(plan, PlanDayRes.class);
+            res.setPlanDate(DateUtils.toYMD(plan.getPlanDate()) + " 00:00:00");
+            list.add(res);
+        }
+
+        return PlanUtil.sortToTreeMap(list, false);
     }
 
     /**

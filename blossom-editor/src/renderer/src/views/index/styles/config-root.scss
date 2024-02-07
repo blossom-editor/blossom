@@ -11,7 +11,7 @@
 
   .el-form {
     max-width: 800px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     :deep(.el-form-item__label) {
       padding-top: 5px;
     }
@@ -45,6 +45,11 @@
     line-height: 30px;
     margin-bottom: 30px;
     color: var(--bl-text-color-light);
+
+    .iconbl {
+      @include font(12px, 300);
+      padding-right: 5px;
+    }
   }
 
   code {

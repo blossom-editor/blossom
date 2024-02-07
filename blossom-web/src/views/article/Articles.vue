@@ -5,7 +5,7 @@
     <div class="headmenu">
       <bl-row @click="handleMenu(!menuShow)">
         <div class="iconbl bl-model-line"></div>
-        <div style="font-size: 0.8rem">菜单</div>
+        <div style="font-size: 0.8rem">文章列表</div>
       </bl-row>
       <bl-row just="flex-end" @click="handleToc(!tocShow)">
         <div style="font-size: 0.8rem">目录</div>
@@ -20,7 +20,6 @@
           :default-active="docTreeDefaultActive"
           :default-openeds="defaultOpeneds"
           :unique-opened="true">
-          <!-- ================================================ L1 ================================================ -->
           <div v-for="L1 in docTreeData" :key="L1.i" class="menu-level-one">
             <el-menu-item v-if="isEmpty(L1.children)" :index="L1.i">
               <template #title>
@@ -91,7 +90,7 @@
       </div>
 
       <div class="article" ref="PreviewRef">
-        <div class="bl-preview" v-html="article.html"></div>
+        <div class="bl-preview" :style="{ fontSize: getFontSize() }" v-html="article.html"></div>
       </div>
 
       <div class="toc-container" :style="tocStyle">
@@ -119,20 +118,37 @@
           </div>
         </div>
       </div>
+
+      <div class="module-workbench" @click="showSetting">
+        <el-icon color="#7b7b7ba9"><Setting /></el-icon>
+      </div>
     </div>
   </div>
+
+  <el-drawer
+    v-model="isShowSetting"
+    class="center-drawer"
+    direction="btt"
+    :close-on-click-modal="true"
+    :with-header="true"
+    :destroy-on-close="true"
+    size="70px">
+    <ArticleSetting></ArticleSetting>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { ref, onUnmounted, nextTick } from 'vue'
-import { ArrowDownBold, ArrowRightBold } from '@element-plus/icons-vue'
+import { ArrowDownBold, ArrowRightBold, Setting } from '@element-plus/icons-vue'
 import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '@/api/blossom'
 import { useUserStore } from '@/stores/user'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
-import DocTitle from './DocTitle.vue'
 import { useLifecycle } from '@/scripts/lifecycle'
+import DocTitle from './DocTitle.vue'
+import ArticleSetting from './ArticleSetting.vue'
 import 'katex/dist/katex.min.css'
+import { getFontSize } from './article-setting'
 
 const userStore = useUserStore()
 useLifecycle(
@@ -333,6 +349,15 @@ const onHtmlEventDispatch = (_t: any, _ty: any, _event: any, type: ArticleHtmlEv
     }
   }
 }
+
+//#region setting
+const isShowSetting = ref(false)
+
+const showSetting = () => {
+  isShowSetting.value = true
+}
+//#endregion
+
 //#region ----------------------------------------< 响应式样式 >--------------------------------------
 const maskStyle = ref({ display: 'none' })
 const menuShow = ref(false)
@@ -643,14 +668,18 @@ const onresize = () => {
       width: 1260px;
       max-width: 1260px;
       overflow-y: overlay;
+      overflow-x: hidden;
       padding: 0 30px;
 
       .bl-preview {
         $borderRadius: 4px;
         color: #4b4b4b;
-        font-size: 0.9rem;
-        // font-size: 14px;
+        font-size: inherit;
         line-height: 1.6;
+
+        :deep(svg) {
+          max-width: 100% !important;
+        }
 
         :deep(.katex > *) {
           font-size: 1.2em !important;
@@ -667,7 +696,7 @@ const onresize = () => {
         /* 定义滑块 内阴影+圆角 */
         ::-webkit-scrollbar-thumb {
           border-radius: 4px;
-          background-color: #717171;
+          background-color: #967777;
         }
 
         :deep(a) {
@@ -691,25 +720,30 @@ const onresize = () => {
         :deep(h1) {
           padding: 10px 0;
           margin-top: 70px;
-          border-bottom: 2px solid #bebebe;
+          border-bottom: 2px solid #e5e5e5;
           text-align: left;
           position: relative;
+          font-size: 1.8em;
         }
 
         :deep(h2) {
-          font-size: 25px;
+          font-size: 1.6em;
         }
 
         :deep(h3) {
-          font-size: 22px;
+          font-size: 1.4em;
         }
 
         :deep(h4) {
-          font-size: 19px;
+          font-size: 1.3em;
         }
 
-        :deep(h5, h6) {
-          font-size: 16px;
+        :deep(h5) {
+          font-size: 1.2em;
+        }
+
+        :deep(h6) {
+          font-size: 1.1em;
         }
 
         :deep(h1:first-child) {
@@ -877,6 +911,11 @@ const onresize = () => {
           box-shadow: 2px 2px 5px rgb(76, 76, 76);
           position: relative;
           overflow: hidden;
+
+          ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-color: #5c5c5c;
+          }
 
           .pre-copy {
             position: absolute;
@@ -1074,10 +1113,6 @@ const onresize = () => {
         padding-top: 10px;
         z-index: 9999;
         overflow: hidden;
-
-        // .doc-trees {
-        //   overflow: overlay;
-        // }
       }
 
       .article {
@@ -1085,7 +1120,13 @@ const onresize = () => {
         overflow-x: hidden;
 
         .bl-preview {
-          font-size: 0.8rem;
+          font-size: 0.9rem;
+
+          :deep(.markmap) {
+            & > g {
+              transform: translateX(0) translateY(50%) !important ;
+            }
+          }
 
           pre {
             margin: -10px !important;

@@ -136,4 +136,8 @@
         <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
     </delete>
 
+    <delete id="delByUserId">
+        delete from blossom_todo where user_id = #{userId}
+    </delete>
+
 </mapper>

@@ -30,6 +30,12 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
     List<ArticleEntity> listAll(ArticleEntity entity);
 
     /**
+     * 获取指定用户的全部文章ID
+     * @param userId 用户ID
+     */
+    List<Long> listIdByUserId(Long userId);
+
+    /**
      * 查询全部需要索引的字段
      */
     List<ArticleEntity> listAllIndexField();
@@ -70,4 +76,8 @@ public interface ArticleMapper extends BaseMapper<ArticleEntity> {
      */
     void uvAndPv(@Param("articleId") Long article, @Param("pv") Integer pv, @Param("uv") Integer uv);
 
+    /**
+     * 删除文章
+     */
+    void delByUserId(@Param("userId") Long userId);
 }

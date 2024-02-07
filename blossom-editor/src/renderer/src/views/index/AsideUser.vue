@@ -1,15 +1,18 @@
 <template>
   <div class="index-user-root">
-    <img v-if="userinfo.avatar != ''" class="avatar-img" :src="userinfo.avatar" />
-    <img v-else class="avatar-img" src="@renderer/assets/imgs/default_user_avatar.jpg" />
+    <img
+      v-if="userStore.userinfo.avatar != ''"
+      :class="['avatar-img', viewStyle.isShowAsideSimple ? 'simple' : '']"
+      :src="userStore.userinfo.avatar" />
+    <img v-else :class="['avatar-img', viewStyle.isShowAsideSimple ? 'simple' : '']" src="@renderer/assets/imgs/default_user_avatar.jpg" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '@renderer/stores/user'
+import { useConfigStore } from '@renderer/stores/config'
 const userStore = useUserStore()
-const { userinfo } = storeToRefs(userStore)
+const { viewStyle } = useConfigStore()
 </script>
 
 <style scoped lang="scss">
@@ -18,11 +21,6 @@ const { userinfo } = storeToRefs(userStore)
   @include box(100%, 60px);
   padding: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: var(--el-color-primary-light-9);
-  }
 
   .avatar-img {
     @include box(50px, 50px);
@@ -30,6 +28,10 @@ const { userinfo } = storeToRefs(userStore)
     @include themeBorder(2px, var(--el-color-primary), var(--el-color-primary-light-5), 'around', 5px);
     @include themeBrightness();
     object-fit: cover;
+  }
+
+  .avatar-img.simple {
+    @include box(30px, 30px);
   }
 }
 </style>

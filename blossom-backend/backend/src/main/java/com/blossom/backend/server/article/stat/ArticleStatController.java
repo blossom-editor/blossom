@@ -2,12 +2,16 @@ package com.blossom.backend.server.article.stat;
 
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.auth.annotation.AuthUserType;
+import com.blossom.backend.base.auth.exception.AuthException;
+import com.blossom.backend.base.auth.exception.AuthRCode;
+import com.blossom.backend.base.user.UserTypeEnum;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.pojo.ArticleStatRes;
 import com.blossom.backend.server.article.stat.pojo.ArticleHeatmapRes;
 import com.blossom.backend.server.article.stat.pojo.ArticleLineRes;
-import com.blossom.backend.server.article.stat.pojo.ArticleWordsSaveReq;
 import com.blossom.backend.server.article.stat.pojo.ArticleWordsRes;
+import com.blossom.backend.server.article.stat.pojo.ArticleWordsSaveReq;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +79,21 @@ public class ArticleStatController {
     @GetMapping("/words")
     public R<ArticleStatRes> word() {
         return R.ok(statService.statCount(null, null, AuthContext.getUserId()));
+    }
+
+    /**
+     * 文章数和文章字数
+     *
+     * @apiNote 只有管理员可以查看
+     * @since 1.13.0
+     */
+    @AuthUserType(UserTypeEnum.ADMIN)
+    @GetMapping("/words/user")
+    public R<ArticleStatRes> word(@RequestParam("id") Long id) {
+        if (!AuthContext.getType().equals(UserTypeEnum.ADMIN.getType())) {
+            throw new AuthException(AuthRCode.PERMISSION_DENIED);
+        }
+        return R.ok(statService.statCount(null, null, id));
     }
 
     /**

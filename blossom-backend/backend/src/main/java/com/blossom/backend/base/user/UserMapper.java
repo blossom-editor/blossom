@@ -24,6 +24,13 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     void updById(UserEntity user);
 
     /**
+     * 删除用户
+     *
+     * @param userId 用户ID
+     */
+    void delById(@Param("userId") Long userId);
+
+    /**
      * 修改密码
      *
      * @param userId   用户ID

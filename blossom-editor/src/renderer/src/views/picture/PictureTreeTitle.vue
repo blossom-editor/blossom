@@ -6,9 +6,14 @@
     <span class="doc-name">
       <img
         class="menu-icon-img"
-        v-if="isNotBlank(props.trees.icon) && (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https')) && !props.trees.updn"
+        v-if="
+          viewStyle.isShowArticleIcon &&
+          isNotBlank(props.trees.icon) &&
+          (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https')) &&
+          !props.trees.updn
+        "
         :src="props.trees.icon" />
-      <svg v-else-if="isNotBlank(props.trees.icon) && !props.trees.updn" class="icon menu-icon" aria-hidden="true">
+      <svg v-else-if="viewStyle.isShowArticleIcon && isNotBlank(props.trees.icon) && !props.trees.updn" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
 
@@ -22,7 +27,9 @@
       <div v-else class="name-wrapper" :style="nameWrapperStyle">
         {{ props.trees.n }}
       </div>
-      <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">{{ tag.content }}</bl-tag>
+      <bl-tag v-for="tag in tags" :bg-color="tag.bgColor" style="margin-top: 5px" :icon="tag.icon">
+        {{ tag.content }}
+      </bl-tag>
     </span>
     <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
     <div v-if="level >= 3" class="folder-level-line" style="left: -30px"></div>
@@ -35,6 +42,9 @@ import type { PropType } from 'vue'
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { computedDocTitleColor } from '@renderer/views/doc/doc'
 import { folderUpdNameApi } from '@renderer/api/blossom'
+import { useConfigStore } from '@renderer/stores/config'
+
+const { viewStyle } = useConfigStore()
 
 //#region ----------------------------------------< 标题信息 >--------------------------------------
 
@@ -61,14 +71,19 @@ const tags = computed(() => {
   props.trees.t?.forEach((tag) => {
     if (tag === 'subject') {
       icons.unshift({ content: '专题', bgColor: 'var(--bl-tag-color-subject)', icon: 'bl-a-lowerrightpage-line' })
-    } else if (tag === 'toc') {
+    } else if (tag.toLocaleLowerCase() === 'toc') {
+      if (!viewStyle.isShowArticleTocTag) {
+        return
+      }
       icons.push({ content: 'TOC', bgColor: 'var(--bl-tag-color-toc)' })
-    } else {
+    } else if (viewStyle.isShowArticleCustomTag) {
       icons.push({ content: tag })
     }
   })
   if (props.trees.o === 1 && props.trees.ty != 3) {
-    icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+    if (viewStyle.isShowFolderOpenTag) {
+      icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+    }
   }
   return icons
 })

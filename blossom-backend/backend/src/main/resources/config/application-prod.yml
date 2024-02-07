@@ -20,6 +20,7 @@ logging:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ project ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 project:
   base:
+    time-zone: GMT+8
     version: @project.version@
     ex:
       # 异常打印格式 all/project

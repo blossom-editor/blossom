@@ -4,14 +4,13 @@
       <div class="table-operator">
         <bl-row class="component-title">资源列表</bl-row>
         <bl-row style="margin-top: 10px">
-          <!-- 资源搜索框 -->
           <el-input v-model="dataSearch" placeholder="搜索资源名" />
-          <el-button type="primary" :icon="Refresh" @click="getResource()" style="margin-left: 10px">刷新</el-button>
+          <el-button type="primary" :icon="Refresh" @click="getResource()" style="margin-left: 10px"></el-button>
         </bl-row>
       </div>
       <div class="table">
         <el-table border height="100%" tooltip-effect="dark" v-loading="tableLoading" :data="filterTableDatas" @row-click="rowClick">
-          <el-table-column sortable prop="resource" min-width="250" :show-overflow-tooltip="true" label="资源名称(24小时内)" />
+          <el-table-column sortable prop="resource" min-width="170" :show-overflow-tooltip="true" label="资源名称(24小时内)" />
           <el-table-column sortable prop="success" width="80" align="right" label="请求数" />
           <el-table-column sortable prop="avgRt" width="90" align="right" label="avgRT">
             <template #default="scope">
@@ -35,14 +34,14 @@
 
     <div class="chart-line">
       <bl-row class="component-title" just="space-between">
-        <div>
-          资源折线图：
+        <div class="title">
+          流量折线图：
           <span style="font-size: 12px"
             >查询最近{{ lineSearchParam.interval }}的流量信息，按每{{ lineSearchParam.customInterval }}分钟聚合，资源:
             {{ lineSearchParam.resource }}</span
           >
         </div>
-        <el-button-group>
+        <el-button-group style="width: 195px">
           <el-button round @click="intervalClick('5m', 1)">5M</el-button>
           <el-button round @click="intervalClick('10m', 1)">10M</el-button>
           <el-button round @click="intervalClick('1h', 1)">1H</el-button>
@@ -127,16 +126,23 @@ const rowClick = (row: ResourceRow) => {
   padding: 0 30px 30px 0;
 
   .component-title {
+    width: 100%;
     color: var(--bl-text-color);
     border: 1px solid var(--el-border-color);
     background-color: var(--bl-bg-color);
     border-radius: 4px;
     padding: 5px 10px;
     height: 36px;
+
+    .title {
+      width: calc(100% - 195px);
+      overflow: hidden;
+      @include ellipsis();
+    }
   }
 
   .table-container {
-    @include box(530px, 100%);
+    @include box(420px, 100%);
 
     .table-operator {
       @include box(100%, 80px);
@@ -163,7 +169,7 @@ const rowClick = (row: ResourceRow) => {
   }
 
   .chart-line {
-    @include box(calc(100% - 545px), 100%);
+    @include box(calc(100% - 420px), 100%);
     max-height: 500px;
     margin-left: 15px;
   }

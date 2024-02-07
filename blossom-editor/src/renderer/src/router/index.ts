@@ -13,4 +13,12 @@ export const toLogin = () => {
   router.push('/settingIndex')
 }
 
+/**
+ * 前往设置页面, 指定激活的 tab
+ * @param tabName
+ */
+export const toSetting = (tabName: 'setting' | 'about') => {
+  router.push('/settingIndex?activeTab=' + tabName)
+}
+
 export default router

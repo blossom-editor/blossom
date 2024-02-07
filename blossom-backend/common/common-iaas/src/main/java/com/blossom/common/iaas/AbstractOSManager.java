@@ -79,4 +79,8 @@ public abstract class AbstractOSManager implements OSManager {
         }
     }
 
+    @Override
+    public boolean deletePath(String pathname) {
+        return false;
+    }
 }

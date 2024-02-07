@@ -1,0 +1,66 @@
+$admin-bg: #ca9100;
+$admin-color: var(--bl-html-color);
+$normal-bg: var(--el-color-primary);
+$normal-color: var(--bl-html-color);
+$read-bg: #8b8b8b3f;
+$read-color: #939393;
+
+.bg-zebra {
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 20px 20px;
+    z-index: 0;
+  }
+}
+
+.warn-bg-zebra {
+  @extend .bg-zebra;
+
+  &:before {
+    background-image: linear-gradient(
+      -45deg,
+      #ca910021 0%,
+      #ca910021 25%,
+      transparent 25%,
+      transparent 50%,
+      #ca910021 50%,
+      #ca910021 75%,
+      transparent 75%,
+      transparent 100%
+    );
+  }
+}
+
+.type {
+  @include font(11px, 500);
+  @include themeShadow(0 2px 5px 0 rgb(190, 190, 190), 0 2px 3px 0 rgb(20, 20, 20));
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-left: 10px;
+  .iconbl {
+    font-size: 12px;
+    padding-right: 2px;
+  }
+}
+
+.type.admin {
+  background-color: $admin-bg;
+  color: $admin-color;
+}
+
+.type.normal {
+  background-color: $normal-bg;
+  color: $normal-color;
+}
+
+.type.read {
+  background-color: $read-bg;
+  color: $read-color;
+}

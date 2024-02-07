@@ -15,7 +15,7 @@
   </div>
 
   <!--  -->
-  <el-drawer v-model="isShowDetail" direction="btt" :with-header="true" size="330px">
+  <el-drawer v-model="isShowDetail" class="center-drawer" direction="btt" :with-header="true" size="330px">
     <div class="detail">
       <div class="detail-title">
         {{ detaileType === 'add' ? '添加便签' : '编辑便签' }}

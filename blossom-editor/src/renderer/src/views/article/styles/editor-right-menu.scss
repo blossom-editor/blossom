@@ -3,7 +3,7 @@
 */
 .editor-right-menu {
   @include box(170px, auto);
-  @include themeShadow(3px 3px 7px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
+  @include themeShadow(2px 2px 5px 2px rgba(49, 49, 49, 0.3), 2px 3px 7px 2px #0f0f0f);
   @include themeBg(#f9f9f9, #333434);
   position: fixed;
   z-index: 2002;
@@ -24,7 +24,6 @@
     .menu-item {
       @include flex(row, flex-start, center);
       line-height: 0.9;
-      // padding: 5px 5px 5px 10px;
       margin: 0 5px 5px 5px;
       height: 25px;
       line-height: 25px;

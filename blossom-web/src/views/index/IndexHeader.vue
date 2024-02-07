@@ -101,7 +101,6 @@ const logo = () => {
 }
 
 const links = () => {
-  console.log(userStore.links)
   if (isNotBlank(userStore.links)) {
     return JSON.parse(userStore.links)
   } else {
@@ -144,7 +143,7 @@ const handlLogout = () => {
     color: transparent;
     font-family: current, sans-serif;
     letter-spacing: 1px;
-    background: linear-gradient(90deg, #313131, #fff3fc, #313131);
+    background: linear-gradient(90deg, var(--bl-header-color), #fff3fc, var(--bl-header-color));
     -webkit-background-clip: text;
     animation: glow 10s linear infinite;
     transition: 1.5s;

@@ -18,6 +18,11 @@ import org.springframework.context.annotation.Configuration;
 public class BaseProperties {
 
     /**
+     * 指定项目的时区
+     */
+    private String timeZone = "GMT+8";
+
+    /**
      * 系统版本, 可以使用 @project.version@ 获取 pom 中版本
      */
     private String version = "xyz";

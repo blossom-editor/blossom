@@ -32,20 +32,21 @@
         </bl-row>
       </el-popover>
       <div
+        v-if="!props.simple"
         :class="['iconbl', 'bl-caution-line', userStore.paramIsCorrect ? '' : 'warn-heightlight']"
         ref="ButtonRef"
         v-click-outside="onClickOutside"></div>
 
       <el-tooltip content="主题配置" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
-        <div class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
+        <div v-if="!props.simple" class="iconbl bl-a-colorpalette-line" @click="themeStrore.show()"></div>
       </el-tooltip>
 
       <el-tooltip content="所有图标" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
-        <div class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
+        <div v-if="!props.simple" class="iconbl bl-a-radiochoose-line" @click="toRoute('/iconListIndex')"></div>
       </el-tooltip>
 
       <el-tooltip content="网页收藏" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
-        <div class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
+        <div v-if="!props.simple" class="iconbl bl-folding-line" @click="isShowWebDrawer = !isShowWebDrawer"></div>
       </el-tooltip>
 
       <el-tooltip content="最佳窗口大小" popper-class="is-small" transition="none" effect="light" placement="top" :show-after="0" :hide-after="0">
@@ -98,6 +99,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
+})
+
+const props = defineProps({
+  simple: {
+    default: false,
+    type: Boolean
+  }
 })
 
 const tryuseComment = computed(() => {

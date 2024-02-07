@@ -27,7 +27,7 @@ public enum AuthRCode implements IRCode {
      */
     USERNAME_OR_PWD_FAULT ("AUTH-40004", "用户名或密码错误","用户名或密码错误, 或用户名不存在。"),
     CAPTCHA_FAULT         ("AUTH-40005", "验证码错误","验证码错误, 或手机号不存在。"),
-    USER_NOT_ENABLED      ("AUTH-40010", "用户已禁用, 暂时无法登录","用户已禁用, 暂时无法登录。"),
+    USER_NOT_ENABLED      ("AUTH-40010", "您的账户已被已禁用, 暂时无法登录","您的账户已被已禁用, 暂时无法登录。"),
 
     /**
      * 401: 未经过认证

@@ -22,4 +22,9 @@
          where id = #{id}
            and user_id = #{userId}
     </update>
+
+    <delete id="delByUserId">
+        delete from blossom_note where user_id = #{userId}
+    </delete>
+
 </mapper>

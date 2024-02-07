@@ -23,9 +23,11 @@ public class WeatherController {
 
     /**
      * 获取天气信息
+     *
+     * @param location 用户位置
      */
     @GetMapping
-    public R<WeatherRes> weather(@RequestParam(value = "location",required = false)String location) {
+    public R<WeatherRes> weather(@RequestParam(value = "location", required = false) String location) {
         if (StrUtil.isBlank(location)) {
             return R.ok(new WeatherRes());
         }

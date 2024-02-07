@@ -50,7 +50,7 @@
           <el-form-item label="上级菜单">
             <el-tree-select
               v-model="docForm.pid"
-              style="--el-form-inline-content-width: 432px"
+              style="width: 432px"
               :data="docTreeData"
               node-key="i"
               :props="{ label: 'n', disabled: checkSelectTreeIsDisabled }"

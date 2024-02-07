@@ -54,7 +54,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .tag-root {
   @include flex(row, center, center);
-  @include themeShadow(2px 2px 3px 0 #bbbbbb, 1px 2px 5px #0F0F0F);
+  @include themeShadow(2px 2px 3px 0 #bbbbbb, 1px 2px 3px #0F0F0F);
   border-radius: 4px;
   padding: 1px 4px;
   margin: 3px;
@@ -72,7 +72,6 @@ const props = defineProps({
   }
 
   .tag-content {
-    // font-size: 10px;
     line-height: 12px;
   }
 }

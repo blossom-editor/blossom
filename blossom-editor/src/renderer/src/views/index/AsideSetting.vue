@@ -1,8 +1,23 @@
 <template>
-  <div class="index-setting-root">
-    <el-switch class="setting-switch" inline-prompt size="large" v-model="isDark" :active-icon="Moon" :inactive-icon="Sunny" @change="changeTheme" />
-    <el-button-group>
-      <el-button class="setting-button" type="primary" :icon="Setting" @click="toSetting" />
+  <div :class="['index-setting-root', viewStyle.isShowAsideSimple ? 'simple' : '']">
+    <el-switch
+      :class="['setting-switch', viewStyle.isShowAsideSimple ? 'simple' : '']"
+      inline-prompt
+      :size="viewStyle.isShowAsideSimple ? 'default' : 'large'"
+      v-model="isDark"
+      :active-icon="Moon"
+      :inactive-icon="Sunny"
+      @change="changeTheme" />
+    <div v-if="viewStyle.isShowAsideSimple" class="button-group-simple">
+      <el-button type="primary" text @click="handlePrintScreenUpload()">
+        <el-icon :size="18"><Crop /></el-icon>
+      </el-button>
+      <el-button type="primary" text @click="toSettingTab" style="margin: 0; margin-top: 3px">
+        <el-icon :size="18"><Setting /></el-icon>
+      </el-button>
+    </div>
+    <el-button-group v-else>
+      <el-button class="setting-button" type="primary" :icon="Setting" @click="toSettingTab" />
       <el-button class="setting-button" type="primary" :icon="Crop" @click="handlePrintScreenUpload()" />
     </el-button-group>
   </div>
@@ -70,8 +85,10 @@
 </template>
 
 <script setup lang="ts">
-import { toLogin } from '@renderer/router'
 import { onMounted, ref } from 'vue'
+import { useConfigStore } from '@renderer/stores/config'
+import { useUserStore } from '@renderer/stores/user'
+import { toLogin, toSetting } from '@renderer/router'
 import { Sunny, Moon, Setting, Crop } from '@element-plus/icons-vue'
 import { docTreeApi, uploadFileApi } from '@renderer/api/blossom'
 import { handleUploadSeccess, handleUploadError } from '@renderer/views/picture/scripts/picture'
@@ -82,12 +99,19 @@ import { getNowTime, isMacOS, isElectron } from '@renderer/assets/utils/util'
 import { isDark, changeTheme } from '@renderer/scripts/global-theme'
 import Notify from '@renderer/scripts/notify'
 
+const userStore = useUserStore()
+const { viewStyle } = useConfigStore()
+
 onMounted(() => {
   printscreenAfter()
 })
 
-const toSetting = () => {
-  toLogin()
+const toSettingTab = () => {
+  if (userStore.isLogin) {
+    toSetting('setting')
+  } else {
+    toLogin()
+  }
 }
 
 //#region ----------------------------------------< 截屏 >----------------------------------------
@@ -242,6 +266,26 @@ const printscreenUpload = () => {
 
     :deep(.el-button--small) {
       margin: 0;
+    }
+  }
+}
+
+.index-setting-root.simple {
+  @include flex(column, flex-end, center);
+  @include box(100%, 145px);
+
+  .setting-switch.simple {
+    transform: rotate(90deg);
+    margin-bottom: 16px;
+  }
+
+  .button-group-simple {
+    @include flex(column, flex-end, center);
+    padding: 0;
+    margin-bottom: 5px;
+
+    .el-button--small {
+      padding: 15px 5px;
     }
   }
 }

@@ -1,14 +1,13 @@
 package com.blossom.backend.thirdparty;
 
+import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.thirdparty.hefeng.WeatherManager;
 import com.blossom.common.base.pojo.R;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.blossom.expand.tracker.core.adapter.aspect.TrackerStart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +21,9 @@ import java.util.stream.Collectors;
  *
  * @author : xzzz
  */
-@Component
 @RestController
 @RequestMapping("/thirdparty/scheduled")
 public class ThirdPartyScheduled {
-    private static final Logger log = LoggerFactory.getLogger(ThirdPartyScheduled.class);
 
     @Autowired
     private WeatherManager weatherManager;
@@ -39,14 +36,17 @@ public class ThirdPartyScheduled {
      *
      * @apiNote 每30分钟刷新, 请求会立即刷新
      */
+    @TrackerStart
     @PostMapping("/weather")
     @Scheduled(cron = "0 0/30 * * * ?")
     public R<?> refreshWeather() {
-        log.debug("[BLOSSOM] 刷新天气");
         List<UserEntity> users = userService.listAll();
         Set<String> locations = users.stream().collect(Collectors.groupingBy(UserEntity::getLocation)).keySet();
         for (String location : locations) {
-            weatherManager.clearAll(location);
+            if (StrUtil.isBlank(location)) {
+                continue;
+            }
+            weatherManager.clear(location);
             weatherManager.findWeatherAll(location);
         }
         return R.ok();

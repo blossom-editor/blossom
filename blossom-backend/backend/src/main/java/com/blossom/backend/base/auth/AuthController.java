@@ -1,9 +1,12 @@
 package com.blossom.backend.base.auth;
 
 import cn.hutool.core.util.StrUtil;
-import com.blossom.backend.base.auth.pojo.LoginReq;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.auth.annotation.AuthUserType;
 import com.blossom.backend.base.auth.pojo.AccessToken;
+import com.blossom.backend.base.auth.pojo.KickOutReq;
+import com.blossom.backend.base.auth.pojo.LoginReq;
+import com.blossom.backend.base.user.UserTypeEnum;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
@@ -49,6 +52,18 @@ public class AuthController {
     @PostMapping("logout")
     public R<?> logout() {
         authService.logout(AuthContext.getToken());
+        return R.ok();
+    }
+
+    /**
+     * 踢出用户
+     *
+     * @since 1.13.0
+     */
+    @AuthUserType(UserTypeEnum.ADMIN)
+    @PostMapping("kickout")
+    public R<?> kickout(@RequestBody KickOutReq req) {
+        authService.kickout(req.getUserId());
         return R.ok();
     }
 

@@ -20,4 +20,11 @@ public interface ArticleLogMapper extends BaseMapper<ArticleLogEntity> {
      * @param articleId 文章ID
      */
     List<ArticleLogEntity> listAll(@Param("articleId") Long articleId);
+
+    /**
+     * 删除文章的记录
+     *
+     * @param articleIds 文章ID集合
+     */
+    Long delByIds(@Param("articleIds") List<Long> articleIds);
 }

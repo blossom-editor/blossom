@@ -6,9 +6,14 @@
     <div class="doc-name">
       <img
         class="menu-icon-img"
-        v-if="isNotBlank(props.trees.icon) && (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https')) && !props.trees?.updn"
+        v-if="
+          viewStyle.isShowArticleIcon &&
+          isNotBlank(props.trees.icon) &&
+          (props.trees.icon.startsWith('http') || props.trees.icon.startsWith('https')) &&
+          !props.trees?.updn
+        "
         :src="props.trees.icon" />
-      <svg v-else-if="isNotBlank(props.trees.icon) && !props.trees?.updn" class="icon menu-icon" aria-hidden="true">
+      <svg v-else-if="viewStyle.isShowArticleIcon && isNotBlank(props.trees.icon) && !props.trees?.updn" class="icon menu-icon" aria-hidden="true">
         <use :xlink:href="'#' + props.trees.icon"></use>
       </svg>
       <el-input
@@ -21,12 +26,19 @@
       <div v-else class="name-wrapper" :style="nameWrapperStyle">
         {{ props.trees.n }}
       </div>
-      <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">{{ tag.content }}</bl-tag>
+      <bl-tag v-for="tag in tags" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">
+        {{ tag.content }}
+      </bl-tag>
     </div>
     <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
     <div v-if="level >= 3" class="folder-level-line" style="left: -30px"></div>
     <div v-if="level >= 4" class="folder-level-line" style="left: -40px"></div>
-    <div v-for="(line, index) in tagLins" :key="line" :class="[line]" :style="{ left: -1 * (index + 1.5) * 4 + 'px' }"></div>
+    <div
+      v-if="viewStyle.isShowArticleType"
+      v-for="(line, index) in tagLins"
+      :key="line"
+      :class="[line]"
+      :style="{ left: -1 * (index + 1.5) * 4 + 'px' }"></div>
   </div>
 </template>
 
@@ -72,13 +84,18 @@ const tags = computed(() => {
     if (tag.toLocaleLowerCase() === 'subject') {
       icons.unshift({ content: '专题', bgColor: 'var(--bl-tag-color-subject)', icon: 'bl-a-lowerrightpage-line' })
     } else if (tag.toLocaleLowerCase() === 'toc') {
+      if (!viewStyle.isShowArticleTocTag) {
+        return
+      }
       icons.push({ content: 'TOC', bgColor: 'var(--bl-tag-color-toc)' })
-    } else {
+    } else if (viewStyle.isShowArticleCustomTag) {
       icons.push({ content: tag })
     }
   })
   if (props.trees.o === 1 && props.trees.ty != 3) {
-    icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+    if (viewStyle.isShowFolderOpenTag) {
+      icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
+    }
   }
   return icons
 })

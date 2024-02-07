@@ -1,7 +1,7 @@
 <template>
   <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">博客配置</div>
-    <div class="desc">博客各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新</el-button></div>
+    <div class="desc">博客各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新参数</el-button></div>
 
     <el-form :model="userParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文章查看地址" :required="true">
@@ -32,17 +32,30 @@
         <div class="conf-tip">博客左上角 Logo 的访问地址，以及在浏览器标签中的 Logo。</div>
       </el-form-item>
 
-      <el-form-item label="ICP备案号">
-        <el-input size="default" v-model="userParamForm.WEB_IPC_BEI_AN_HAO" @change="(cur: any) => updParam('WEB_IPC_BEI_AN_HAO', cur)"></el-input>
-        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 ICP 备案号</div>
+      <el-form-item label="开启专题特殊样式">
+        <bl-row>
+          <el-switch
+            v-model="userParamForm.WEB_BLOG_SUBJECT_TITLE"
+            size="default"
+            style="margin-right: 10px"
+            @change="(cur: boolean) => updParam('WEB_BLOG_SUBJECT_TITLE', cur ? '1' : '0')" />
+        </bl-row>
+        <div class="conf-tip">是否在博客文档列表中以特殊的样式显示专题。</div>
       </el-form-item>
 
-      <el-form-item label="公网安备号">
+      <el-form-item label="自定义信息">
         <el-input
           size="default"
+          type="textarea"
+          :rows="5"
           v-model="userParamForm.WEB_GONG_WANG_AN_BEI"
           @change="(cur: any) => updParam('WEB_GONG_WANG_AN_BEI', cur)"></el-input>
-        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置公网安备号</div>
+        <div class="conf-tip">自定义信息，可填写 HTML 内容。</div>
+      </el-form-item>
+
+      <el-form-item label="ICP备案号">
+        <el-input size="default" v-model="userParamForm.WEB_IPC_BEI_AN_HAO" @change="(cur: any) => updParam('WEB_IPC_BEI_AN_HAO', cur)"></el-input>
+        <div class="conf-tip">如果博客作为你的域名首页，你可能需要配置 ICP 备案号，该内容会跳转至中国大陆《ICP/IP地址/域名信息备案管理系统》。</div>
       </el-form-item>
 
       <el-form-item label="外部链接">
@@ -55,7 +68,7 @@
         <el-input
           size="default"
           type="textarea"
-          :rows="11"
+          :rows="13"
           v-model="userParamForm.WEB_BLOG_LINKS"
           @change="(cur: any) => updParam('WEB_BLOG_LINKS', cur)"></el-input>
       </el-form-item>
@@ -70,6 +83,7 @@ import { userParamListApi, userParamUpdApi, userParamRefreshApi } from '@rendere
 import { isNotBlank } from '@renderer/assets/utils/obj'
 import { openExtenal } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 
@@ -80,7 +94,8 @@ const userParamForm = ref({
   WEB_LOGO_URL: '',
   WEB_GONG_WANG_AN_BEI: '',
   WEB_BLOG_URL_ERROR_TIP_SHOW: '',
-  WEB_BLOG_LINKS: ''
+  WEB_BLOG_LINKS: '',
+  WEB_BLOG_SUBJECT_TITLE: false
 })
 
 /**
@@ -88,13 +103,13 @@ const userParamForm = ref({
  */
 const getParamList = () => {
   userParamListApi().then((resp) => {
-    userParamForm.value = resp.data
+    userParamForm.value = { ...resp.data, ...{ WEB_BLOG_SUBJECT_TITLE: resp.data.WEB_BLOG_SUBJECT_TITLE === '1' } }
   })
 }
 
 const refreshParam = () => {
   userParamRefreshApi().then((_) => {
-    Notify.success('刷新参数成功', '刷新成功')
+    Notify.success('', '刷新成功')
     getParamList()
     userStore.getUserinfo()
   })
@@ -103,6 +118,7 @@ const refreshParam = () => {
 const updParam = (paramName: string, paramValue: string) => {
   userParamUpdApi({ paramName: paramName, paramValue: paramValue }).then((_resp) => {
     userStore.getUserinfo()
+    ElMessage.info({ message: '保存成功', grouping: true })
   })
 }
 

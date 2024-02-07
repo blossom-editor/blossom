@@ -48,6 +48,10 @@
         </where>
     </select>
 
+    <select id="listIdByUserId" resultType="java.lang.Long">
+        select id from blossom_article where user_id = #{userId}
+    </select>
+
     <!-- 查询全部文章,包含id, name , markdown, tags , userId字段，用于批量索引的建立 -->
     <select id="listAllIndexField" resultType="com.blossom.backend.server.article.draft.pojo.ArticleEntity">
         select
@@ -121,4 +125,9 @@
             </if>
         where id = #{articleId}
     </update>
+
+    <delete id="delByUserId">
+        delete from blossom_article where user_id = #{userId}
+    </delete>
+
 </mapper>

@@ -71,5 +71,7 @@
         <if test="pid != null">and pid = #{pid}</if>
     </select>
 
-
+    <delete id="delByUserId">
+        delete from blossom_picture where user_id = #{userId}
+    </delete>
 </mapper>
