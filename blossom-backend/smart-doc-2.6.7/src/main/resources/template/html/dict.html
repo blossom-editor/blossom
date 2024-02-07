@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="smart-doc">
+    <title>Dictionary</title>
+    <link rel="stylesheet" href="font.css">
+    <link rel="stylesheet" href="AllInOne.css?v=${version}"/>
+    <%if(isNotEmpty(highlightCssLink)){%><link rel="stylesheet" href="${highlightCssLink}"><%}%>
+    <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
+        background: ${background}
+    }
+    .hljs {
+        padding: 0em
+    }</style>
+    <script src="highlight.min.js"></script>
+    <script src="jquery.min.js"></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header"><%if(isNotEmpty(projectName)){%><h1>${projectName}</h1><%}%>
+    <div id="toc" class="toc2">
+        <div id="book-search-input"><input id="search" type="text" placeholder="Type to search"></div>
+        <div id="toctitle"><span>API Reference</span></div>
+        <ul id="accordion" class="sectlevel1"><%for(api in apiDocList){%><%if(apiLP.first){%>
+            <li><a class="dd" href="${alias}.html#header">${api.order}.&nbsp;${htmlEscape(api.desc)}</a>
+                <ul class="sectlevel2" style="display: none"><%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%><a href="${alias}.html#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
+                            class="line-through">${htmlEscape(doc.desc)}</span></a><%}else{%><a
+                            href="${alias}.html#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${htmlEscape(doc.desc)}</a><%}%>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}else{%>
+            <li><a class="dd" href="${api.alias}.html#header">${api.order}.&nbsp;${htmlEscape(api.desc)}</a>
+                <ul class="sectlevel2" style="display: none"><%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%><a href="${api.alias}.html#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;<span
+                            class="line-through">${htmlEscape(doc.desc)}</span></a><%}else{%><a
+                            href="${api.alias}.html#_${api.order}_${doc.order}_${doc.desc}">${api.order}.${doc.order}.&nbsp;${htmlEscape(doc.desc)}</a><%}%>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}%><%}%><%if(isNotEmpty(errorCodeList)){%>
+            <li><a href="error.html#_error_code_list">${apiDocList.~size+1}.&nbsp;${errorListTitle}</a></li>
+            <%}%><%if(isNotEmpty(dictList)){%>
+            <li class="open"><a class="dd" href="dict.html#_dict_list">${dictListOrder}.&nbsp;${dictListTitle}</a>
+                <ul class="sectlevel2" style="display: block"><%for(dict in dictList){%>
+                    <li><a href="dict.html#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.&nbsp;${dict.title}</a>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>
+<div id="content"><%if(isNotEmpty(dictList)){%>
+    <div class="sect1"><h2 id="_dict_list"><a class="anchor" href="#_dict_list"></a><a class="link" href="#_dict_list">${dictListOrder}.&nbsp;${dictListTitle}</a>
+    </h2>
+        <div class="sectionbody"><%for(dict in dictList){%>
+            <div class="sect2"><h3 id="_${dictListOrder}_${dict.order}_${dict.title}">
+                <a class="anchor" href="#_${dictListOrder}_${dict.order}_${dict.title}"></a>
+                <a class="link" href="#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.&nbsp;${dict.title}</a>
+            </h3>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Code</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody><%for(dataDict in dict.dataDictList){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${dataDict.value}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${dataDict.type}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${htmlEscape(dataDict.desc)}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <%}%>
+    <footer class="page-footer"><span class="copyright">Generated by smart-doc at ${createTime}</span><span
+            class="footer-modification">Suggestions,contact,support and error reporting on<a
+            href="https://gitee.com/smart-doc-team/smart-doc" target="_blank">&nbsp;Gitee</a>&nbsp;or<a
+            href="https://github.com/smart-doc-group/smart-doc.git" target="_blank">&nbsp;Github</a></span></footer>
+</div>
+<script src="search.js?v=${version}"></script>
+<script>
+    $(function () {
+        const Accordion = function (el, multiple) {
+            this.el = el || {};
+            this.multiple = multiple || false;
+            const links = this.el.find('.dd');
+            links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown);
+        };
+        Accordion.prototype.dropdown = function (e) {
+            const $el = e.data.el;
+            const $this = $(this), $next = $this.next();
+            $next.slideToggle();
+            $this.parent().toggleClass('open');
+            if (!e.data.multiple) {
+                $el.find('.submenu').not($next).slideUp("20").parent().removeClass('open');
+            }
+        };
+        new Accordion($('#accordion'), false);
+        hljs.highlightAll()
+    });
+</script>
+</body>
+</html>
