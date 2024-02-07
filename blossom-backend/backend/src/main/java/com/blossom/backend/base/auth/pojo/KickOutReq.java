@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class KickOutReq {
 
+    /**
+     * 用户ID
+     */
     @NotNull(message = "userId 为必填项")
     private Long userId;
 }
