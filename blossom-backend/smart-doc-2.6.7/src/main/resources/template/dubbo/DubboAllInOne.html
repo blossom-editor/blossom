@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="smart-doc" name="generator">
+    <%if(isNotEmpty(projectName)){%><title>${projectName}</title><%}else{%><title>API Reference</title><%}%>
+    <link href="font.css?v=${version}" rel="stylesheet">
+    <link href="AllInOne.css?v=${version}" rel="stylesheet"/>
+    <script src="jquery.min.js"></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header"><%if(isNotEmpty(projectName)){%><h1>${projectName}</h1><%}%>
+    <div class="toc2" id="toc">
+        <div id="book-search-input"><input id="search" placeholder="Type to search" type="text"></div>
+        <div id="toctitle"><span>API Reference</span></div>
+        <ul class="sectlevel1" id="accordion">
+            <li><a href="#_add_dependency">1.&nbsp;Add dependency</a></li>
+            <%for(api in apiDocList){%><%if(apiLP.first){%>
+            <li class="open"><a class="dd" href="#_${api.link}">${api.order+1}.&nbsp;${htmlEscape(api.desc)}</a>
+                <ul class="sectlevel2" style="display: block"><%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%><a href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;<span
+                            class="line-through">${htmlEscape(doc.desc)}</span></a><%}else{%><a
+                            href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;${htmlEscape(doc.desc)}</a><%}%>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}else{%>
+            <li><a class="dd" href="#_${api.link}">${api.order+1}.&nbsp;${htmlEscape(api.desc)}</a>
+                <ul class="sectlevel2"><%for(doc in api.list){%>
+                    <li><%if(doc.deprecated){%><a href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;<span
+                            class="line-through">${htmlEscape(doc.desc)}</span></a><%}else{%><a
+                            href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;${htmlEscape(doc.desc)}</a><%}%>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}%><%}%><%if(isNotEmpty(errorCodeList)){%>
+            <li><a href="#_error_code_list">${apiDocList.~size+1}.&nbsp;${errorListTitle}</a></li>
+            <%}%><%if(isNotEmpty(dictList)){%>
+            <li><a class="dd" href="#_dict_list">${dictListOrder}.&nbsp;${dictListTitle}</a>
+                <ul class="sectlevel2"><%for(dict in dictList){%>
+                    <li><a href="#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.&nbsp;${htmlEscape(dict.title)}</a>
+                    </li>
+                    <%}%>
+                </ul>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>
+<div id="content"><%if(isNotEmpty(revisionLogList)){%>
+    <div id="preamble">
+        <div class="sectionbody">
+            <table class="tableblock frame-all grid-all spread">
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 20%;">
+                    <col style="width: 20%;">
+                    <col style="width: 20%;">
+                    <col style="width: 20%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="tableblock halign-left valign-top">Version</th>
+                    <th class="tableblock halign-left valign-top">Update Time</th>
+                    <th class="tableblock halign-left valign-top">Status</th>
+                    <th class="tableblock halign-left valign-top">Author</th>
+                    <th class="tableblock halign-left valign-top">Description</th>
+                </tr>
+                </thead>
+                <tbody><%for(revisionLog in revisionLogList){%>
+                <tr>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${revisionLog.version}</p></td>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${revisionLog.revisionTime}</p>
+                    </td>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${revisionLog.status}</p></td>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${revisionLog.author}</p></td>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${revisionLog.remarks}</p></td>
+                </tr>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%}%><%if(isNotEmpty(dependencyList)){%>
+    <div class="sect1"><h2 id="_add_dependency"><a class="anchor" href="#_add_dependency"></a><a class="link"
+                                                                                                 href="#_add_dependency">1.&nbsp;Add
+        dependency</a></h2>
+        <div class="sectionbody">
+            <div class="listingblock">
+                <div class="content">
+ <pre><%for(dp in dependencyList){%>&lt;dependency&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;${dp.groupId}&lt;/groupId&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;${dp.artifactId}&lt;/artifactId&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;${dp.version}&lt;/version&gt;
+&lt;/dependency&gt;
+<%}%>
+ </pre>
+                </div>
+            </div>
+            <%if(isNotEmpty(consumerConfigExample)){%>
+            <div class="paragraph"><p>Consumer config</p></div>
+            <div class="listingblock">
+                <div class="content">
+                    <pre>${consumerConfigExample}</pre>
+                </div>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <%}%><%for(api in apiDocList){%>
+    <div class="sect1"><h2 id="_${api.desc}"><a class="anchor" href="#_${api.desc}"></a><a class="link"
+                                                                                           href="#_${api.desc}">${api.order+1}.&nbsp;${htmlEscape(api.desc)}</a>
+    </h2>
+        <div class="sectionbody">
+            <div class="paragraph"><p><strong>URI:</strong>&nbsp;${api.uri}</p></div>
+            <div class="paragraph"><p><strong>Service:</strong>&nbsp;${api.name}</p></div>
+            <div class="paragraph"><p><strong>Protocol:</strong>&nbsp;${api.protocol}</p></div>
+            <div class="paragraph"><p><strong>Author:</strong>&nbsp;${api.author}</p></div>
+            <div class="paragraph"><p><strong>Version:</strong>&nbsp;${api.version}</p></div>
+            <%for(doc in api.list){%>
+            <div class="sect2"><h3 id="_${api.order+1}_${doc.order}_${doc.desc}"><a class="anchor"
+                                                                                    href="#_${api.order+1}_${doc.order}_${doc.desc}"></a><%if(doc.deprecated){%><a
+                    class="link"
+                    href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;<span
+                    class="line-through">${htmlEscape(doc.desc)}</span></a><%}else{%><a class="link"
+                                                                                        href="#_${api.order+1}_${doc.order}_${doc.desc}">${api.order+1}.${doc.order}.&nbsp;${htmlEscape(doc.desc)}</a><%}%>
+            </h3>
+                <div class="paragraph"><p><strong>Definition:</strong>&nbsp;${doc.escapeMethodDefinition}</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;${doc.detail}</p></div>
+                <%if(isNotEmpty(doc.requestParams)){%>
+                <div class="paragraph"><p><strong>Invoke-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody><%for(param in doc.requestParams){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.version}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%}%><%if(isNotEmpty(doc.responseParams)){%>
+                <div class="paragraph"><p><strong>Response-fields:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Field</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody><%for(param in doc.responseParams){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.field}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.type}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.desc}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.version}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%}%>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <%}%><%if(isNotEmpty(errorCodeList)){%>
+    <div class="sect1"><h2 id="_error_code_list"><a class="anchor" href="#_error_code_list"></a><a class="link"
+                                                                                                   href="#_error_code_list">${apiDocList.~size+2}.&nbsp;${errorListTitle}</a>
+    </h2>
+        <div class="sectionbody">
+            <table class="tableblock frame-all grid-all spread">
+                <colgroup>
+                    <col style="width: 50%;">
+                    <col style="width: 50%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th class="tableblock halign-left valign-top">Error code</th>
+                    <th class="tableblock halign-left valign-top">Description</th>
+                </tr>
+                </thead>
+                <tbody><%for(error in errorCodeList){%>
+                <tr>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${error.value}</p></td>
+                    <td class="tableblock halign-left valign-top"><p class="tableblock">${htmlEscape(error.desc)}</p>
+                    </td>
+                </tr>
+                <%}%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%}%><%if(isNotEmpty(dictList)){%>
+    <div class="sect1"><h2 id="_${dictListTitle}"><a class="anchor" href="#_${dictListTitle}"></a><a class="link"
+                                                                                                     href="#_${dictListTitle}">${dictListOrder}.&nbsp;${dictListTitle}</a>
+    </h2>
+        <div class="sectionbody"><%for(dict in dictList){%>
+            <div class="sect2"><h3 id="_${dictListOrder}_${dict.order}_${dict.title}"><a class="anchor"
+                                                                                         href="#_${dictListOrder}_${dict.order}_${dict.title}"></a><a
+                    class="link" href="#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.&nbsp;${htmlEscape(dict.title)}</a>
+            </h3>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                        <col style="width: 33%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Code</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody><%for(dataDict in dict.dataDictList){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${dataDict.value}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${dataDict.type}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">
+                            ${htmlEscape(dataDict.desc)}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <%}%>
+    <footer class="page-footer"><span class="copyright">Generated by smart-doc at ${createTime}</span><span
+            class="footer-modification">Suggestions,contact,support and error reporting on<a href="https://gitee.com/smart-doc-team/smart-doc" target="_blank">&nbsp;Gitee</a>&nbsp;or<a href="https://github.com/smart-doc-group/smart-doc.git" target="_blank">&nbsp;Github</a></span>
+    </footer>
+    <div href="javascript:void(0)" id="toTop"><img id="upArrow" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABlUlEQVRIS+2UvUvDQBiH398Rly4udnARwUXs4qAIOigI4iL30dTZ2T9AcNPVvUsXF7uYttdScNDFRRAnB11cFFwKxcXBJTQnJ6lEbRI/CIiY9e6e5/e+9+ZAGX/ImE9/QKCU2jfGbGTQqq4xZgtSyisiKmQgIAAVCCFWAGxnIOhqrdd/xyUrpRZsP40xSwA6AI57vd5eq9W6T6s8tQIppSKi+gDQNREprfVNkiRRwDlfY4xZ+FAIuSOi8Qjw0nEc5XnebZwkViClXA2T5+xhY8xus9ncEUJMAziITN5FEARuXLsGCoQQywBs8uEovJ+Scz7FGDuMSM4cx3E9z+u8r+SDQEq5SEQ1IhoZBE+QnBKRq7V+iEreCDjn84wxCx9NgidITnK5nFutVh/7e14FSqnZIAhqAMY+A4+TADjyfb/Ubref7J4XQXhxNvnEV+AJlbTy+XypUqn4KBaLBZuciCa/A0+opN5oNFz7FpUBbP4EHicxxsyAcz7HGDvvz3nar5+2Ho5wOQwsU5+KNGDa+r8grUP0DBLjtRtNKEliAAAAAElFTkSuQmCC"><span id="upText">Top</span></div>
+</div>
+<script src="search.js?v=${version}"></script>
+<script>$(function () {
+    const Accordion = function (el, multiple) {
+        this.el = el || {};
+        this.multiple = multiple || false;
+        const links = this.el.find(".dd");
+        links.on("click", {el: this.el, multiple: this.multiple}, this.dropdown)
+    };
+    Accordion.prototype.dropdown = function (e) {
+        const $el = e.data.el;
+        $this = $(this), $next = $this.next();
+        $next.slideToggle();
+        $this.parent().toggleClass("open");
+        if (!e.data.multiple) {
+            $el.find(".submenu").not($next).slideUp("20").parent().removeClass("open")
+        }
+    };
+    new Accordion($("#accordion"), false);
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 100) {
+            $("#toTop").fadeIn(1500);
+            $("#toTop").hover(function () {
+                $("#upArrow").hide();
+                $("#upText").show()
+            }, function () {
+                $("#upArrow").show();
+                $("#upText").hide()
+            })
+        } else {
+            $("#toTop").fadeOut(1500)
+        }
+    });
+    $("#toTop").click(function () {
+        $("body, html").animate({scrollTop: 0}, 1000);
+        return false
+    })
+});</script>
+</body>
+</html>

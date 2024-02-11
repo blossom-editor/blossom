@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="smart-doc" name="generator">
+  <%if(isNotEmpty(projectName)){%>
+  <title>${projectName}</title>
+  <%}else{%>
+  <title>API 接口文档</title>
+  <%}%>
+  <link href="font.css" rel="stylesheet">
+  <link href="AllInOne.css?v=${version}" rel="stylesheet"/>
+  <%if(isNotEmpty(highlightCssLink)){%>
+  <link href="${highlightCssLink}" rel="stylesheet">
+  <%}%>
+  <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
+      background: ${background}
+  }
+
+  .hljs {
+      padding: 0
+  }</style>
+  <script src="highlight.min.js"></script>
+  <script src="jquery.min.js"></script>
+</head>
+
+<body class="book toc2 toc-left">
+<div id="header">
+  <%if(isNotEmpty(projectName)){%>
+  <h2>${htmlEscape(projectName)}</h2>
+  <%}%>
+  <div class="toc2" id="toc">
+    <div id="book-search-input">
+      <input id="search" placeholder="按目录搜索" type="text">
+    </div>
+    <div id="toctitle">
+      <span>API 接口目录</span>
+    </div>
+    <ul class="sectlevel1" id="accordion">
+      <%for(apiGroup in apiDocList){%>
+      <%if(!apiDocListOnlyHasDefaultGroup){%>
+      <%if(apiGroupLP.first){%>
+      <li class="open">
+        <a class="dd" href="#_${apiGroup.order}_${apiGroup.group}">${apiGroup.order}.${htmlEscape(apiGroup.group)}</a>
+        <ul class="sectlevel1">
+          <%for(api in apiGroup.childrenApiDocs){%>
+          <li class="open">
+            <a class="dd" href="#_${apiGroup.order}_${api.order}_${removeLineBreaks(api.desc)}">${apiGroup.order}.${api.order}.${htmlEscape(api.desc)}</a>
+            <!-- <ul class="sectlevel2" style="display: block"> 第一分组默认展开-->
+            <ul class="sectlevel2">
+              <%for(doc in api.list){%>
+              <li>
+                <%if(doc.deprecated){%>
+                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${apiGroup.order}.${api.order}.${doc.order}.
+                  <span class="line-through">${htmlEscape(doc.desc)}</span>
+                </a>
+                <%}else{%>
+                <!--                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${apiGroup.order}.${api.order}.${doc.order}.${htmlEscape(doc.desc)}</a>-->
+                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${doc.order}.${htmlEscape(doc.desc)}</a>
+                <%}%>
+              </li>
+              <%}%>
+            </ul>
+          </li>
+          <%}%>
+        </ul>
+      </li>
+      <%}else{%>
+      <li>
+        <a class="dd" href="#_${apiGroup.order}_${apiGroup.group}">${apiGroup.order}.${htmlEscape(apiGroup.group)}</a>
+        <ul class="sectlevel1">
+          <%for(api in apiGroup.childrenApiDocs){%>
+          <li class="open">
+            <a class="dd" href="#_${apiGroup.order}_${api.order}_${removeLineBreaks(api.desc)}">${apiGroup.order}.${api.order}.${htmlEscape(api.desc)}</a>
+            <ul class="sectlevel2">
+              <%for(doc in api.list){%>
+              <li>
+                <%if(doc.deprecated){%>
+                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${apiGroup.order}.${api.order}.${doc.order}.
+                  <span class="line-through">${htmlEscape(doc.desc)}</span>
+                </a>
+                <%}else{%>
+                <!--                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${apiGroup.order}.${api.order}.${doc.order}.${htmlEscape(doc.desc)}</a>-->
+                <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${doc.order}.${htmlEscape(doc.desc)}</a>
+                <%}%>
+              </li>
+              <%}%>
+            </ul>
+          </li>
+          <%}%>
+        </ul>
+      </li>
+      <%}%>
+      <%}else{%>
+      <%if(apiGroupLP.first){%>
+      <%for(api in apiGroup.childrenApiDocs){%>
+      <li class="open">
+        <a class="dd"
+           href="#_${api.order}_${removeLineBreaks(api.desc)}">${api.order}.${htmlEscape(api.desc)}</a>
+        <ul class="sectlevel2">
+          <%for(doc in api.list){%>
+          <li>
+            <%if(doc.deprecated){%>
+            <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${api.order}.${doc.order}.
+              <span class="line-through">${htmlEscape(doc.desc)}</span>
+            </a>
+            <%}else{%>
+            <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">c${api.order}.${doc.order}.${htmlEscape(doc.desc)}</a>
+            <%}%>
+          </li>
+          <%}%>
+        </ul>
+      </li>
+      <%}%>
+      <%}else{%>
+      <%for(api in apiGroup.childrenApiDocs){%>
+      <li>
+        <a class="dd"
+           href="#_${api.order}_${removeLineBreaks(api.desc)}">${api.order}.${htmlEscape(api.desc)}</a>
+        <ul class="sectlevel2">
+          <%for(doc in api.list){%>
+          <li>
+            <%if(doc.deprecated){%>
+            <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${api.order}.${doc.order}.
+              <span class="line-through">${htmlEscape(doc.desc)}</span>
+            </a>
+            <%}else{%>
+            <a href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">${api.order}.${doc.order}.${htmlEscape(doc.desc)}</a>
+            <%}%>
+          </li>
+          <%}%>
+        </ul>
+      </li>
+      <%}%>
+      <%}%>
+      <%}%>
+      <%}%>
+      <%if(isNotEmpty(errorCodeList)){%>
+      <li>
+        <a href="#_${errorListTitle}">${errorCodeListOrder}.${errorListTitle}</a>
+      </li>
+      <%}%>
+      <%if(isNotEmpty(dictList)){%>
+      <li>
+        <a class="dd" href="#_${dictListTitle}">${dictListOrder}.${dictListTitle}</a>
+        <ul class="sectlevel2">
+          <%for(dict in dictList){%>
+          <li>
+            <!--            <a href="#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.${dict.title}</a>-->
+            <a href="#_${dictListOrder}_${dict.order}_${dict.title}">${dict.order}.${dict.title}</a>
+          </li>
+          <%}%>
+        </ul>
+      </li>
+      <%}%>
+    </ul>
+  </div>
+</div>
+<div id="content">
+  <%if(isNotEmpty(revisionLogList)){%>
+  <div id="preamble">
+    <div class="paragraph" style="color: #bc0c0c;
+    background-color: #d74c4c1f;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 5px;
+    margin-bottom: 10px;">
+      <h3 style="color: #bc0c0c;font-weight: 700;margin-top: 15px;">项目事项说明</h3>
+      <p style="text-align: left;padding-left: 10px;font-weight: 700;">
+        1. 说明接口基本注意事项, 建议使用接口文档前阅读该部分。
+      </p>
+      <p style="text-align: left;padding-left: 10px;font-weight: 700;">
+        2. 仓库地址: https://github.com/blossom-editor/blossom
+      </p>
+    </div>
+    <div class="sectionbody">
+      <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+        <!--        <colgroup>-->
+        <!--          <col style="width: 20%;">-->
+        <!--          <col style="width: 20%;">-->
+        <!--          <col style="width: 20%;">-->
+        <!--          <col style="width: 20%;">-->
+        <!--          <col style="width: 20%;">-->
+        <!--        </colgroup>-->
+        <thead style="background-color: #cbcbcb;">
+        <tr>
+          <th class="tableblock halign-left valign-top">事项</th>
+          <!--          <th class="tableblock halign-left valign-top">修改时间</th>-->
+          <!--          <th class="tableblock halign-left valign-top">状态</th>-->
+          <!--          <th class="tableblock halign-left valign-top">作者</th>-->
+          <th class="tableblock halign-left valign-top">使用说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%for(revisionLog in revisionLogList){%>
+        <tr>
+          <td class="tableblock halign-left valign-top">
+            <p class="tableblock">${revisionLog.version}</p>
+          </td>
+          <!--          <td class="tableblock halign-left valign-top">-->
+          <!--            <p class="tableblock">${revisionLog.revisionTime}</p>-->
+          <!--          </td>-->
+          <!--          <td class="tableblock halign-left valign-top">-->
+          <!--            <p class="tableblock">${revisionLog.status}</p>-->
+          <!--          </td>-->
+          <!--          <td class="tableblock halign-left valign-top">-->
+          <!--            <p class="tableblock">${revisionLog.author}</p>-->
+          <!--          </td>-->
+          <td class="tableblock halign-left valign-top">
+            <p class="tableblock" style="white-space: pre-wrap;">${htmlEscape(revisionLog.remarks)}</p>
+          </td>
+        </tr>
+        <%}%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <%}%>
+  <%for(apiGroup in apiDocList){%>
+  <%if(!apiDocListOnlyHasDefaultGroup){%>
+  <h1 id="_${apiGroup.order}_${apiGroup.name}" style="background-color: #4cd7641f;
+    text-align: center;
+    padding: 15px 0;
+    border-radius: 5px;">
+    <a class="anchor" href="#_${apiGroup.order}_${apiGroup.name}">
+    </a>
+    <a class="link" href="#_${apiGroup.order}_${apiGroup.name}">${apiGroup.order}.${htmlEscape(apiGroup.name)}</a>
+  </h1>
+  <%}%>
+  <%for(api in apiGroup.childrenApiDocs){%>
+  <div class="sect1">
+    <h2 id="_${apiGroup.order}_${api.order}_${removeLineBreaks(api.desc)}" style="text-align: center">
+      <a class="anchor" href="#_${apiGroup.order}_${api.order}_${removeLineBreaks(api.desc)}">
+      </a>
+      <a class="link" href="#_${apiGroup.order}_${api.order}_${removeLineBreaks(api.desc)}">
+        <%if(apiGroupLP.size>1){%>${apiGroup.order}.${api.order}.${htmlEscape(api.desc)}
+        <%}else{%>${api.order}.${htmlEscape(api.desc)}
+        <%}%></a>
+    </h2>
+    <div class="sectionbody">
+      <%for(doc in api.list){%>
+      <div class="sect2" id="${doc.methodId}" style="border-top: 3px solid #9a9a9a;margin-bottom: 150px;">
+        <h3 id="_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">
+          <a class="anchor"
+             href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">
+          </a>
+          <%if(doc.deprecated){%>
+          <a class="link" href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">
+            <%if(!apiDocListOnlyHasDefaultGroup){%>${apiGroup.order}.${api.order}.${doc.order}.
+            <%}else{%>${api.order}.${doc.order}.
+            <%}%>
+            <span class="line-through">${htmlEscape(doc.desc)}</span>
+          </a>
+          <%}else{%>
+          <a class="link" href="#_${apiGroup.order}_${api.order}_${doc.order}_${removeLineBreaks(doc.desc)}">
+            <%if(!apiDocListOnlyHasDefaultGroup){%>${apiGroup.order}.${api.order}.${doc.order}.${htmlEscape(doc.desc)}
+            <%}else{%>${api.order}.${doc.order}.${htmlEscape(doc.desc)}
+            <%}%></a>
+          <%}%>
+        </h3>
+        <div class="paragraph" data-download="${doc.download}" data-page="${doc.page}" data-url="${doc.url}"
+             id="${doc.methodId}-url">
+          <p style="margin-bottom: 10px;">
+            <!--            <strong>接口地址:</strong>-->
+            <%if(doc.type == 'POST'){%>
+            <span style="color: #a27300;background: #aa7a0059;border-radius: 5px;padding: 5px 10px;">${doc.type}</span>
+            <%}%>
+            <%if(doc.type == 'GET'){%>
+            <span style="color: #317f00;background: #4a920061;border-radius: 5px;padding: 5px 10px;">${doc.type}</span>
+            <%}%>
+            <a class="bare" href="${doc.url}" style="color: #626262;
+              background: lightgrey;
+              padding: 5px 10px;
+              border-radius: 5px;">${doc.url}</a>
+          </p>
+        </div>
+        <!--        <div class="paragraph" data-method="${doc.type}" id="${doc.methodId}-method">-->
+        <!--          <p><strong>接口方法:&nbsp;</strong>${doc.type}</p>-->
+        <!--        </div>-->
+        <%if(isNotEmpty(doc.author)){%>
+        <div class="paragraph">
+          <p>
+            <strong>Author:&nbsp;</strong>${doc.author}</p>
+        </div>
+        <%}%>
+        <!--                <div class="paragraph" data-content-type="${doc.contentType}" id="${doc.methodId}-content-type">-->
+        <!--                    <p>-->
+        <!--                        <strong>Content-Type:&nbsp;</strong>${doc.contentType}</p>-->
+        <!--                </div>-->
+        <div class="paragraph" style="margin-bottom: 20px">
+          <p style="border-radius: 5px;background: #e1e1e1;padding: 8px 10px;color: #787878;font-size: 15px;">
+            <!--            <strong>接口说明:&nbsp;</strong>-->
+            ${htmlEscape(doc.detail)}
+          </p>
+        </div>
+        <%if(isNotEmpty(doc.requestHeaders)&&displayRequestParams){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>请求头（RequestHeaders）说明:</strong>
+          </p>
+        </div>
+        <table class="tableblock frame-all grid-all spread">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">请求头</th>
+            <!--            <th class="tableblock halign-left valign-top">Type</th>-->
+            <th class="tableblock halign-left valign-top">说明</th>
+            <th class="tableblock halign-left valign-top">是否必填</th>
+            <!--            <th class="tableblock halign-left valign-top">Since</th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <%for(header in doc.requestHeaders){%>
+          <tr>
+            <td class="tableblock halign-left valign-top" style="font-size: 14px">
+              <p class="tableblock">${header.name}</p>
+            </td>
+            <!--            <td class="tableblock halign-left valign-top">-->
+            <!--              <p class="tableblock">${header.type}</p>-->
+            <!--            </td>-->
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${htmlEscape(header.desc)}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${header.required}</p>
+            </td>
+            <!--            <td class="tableblock halign-left valign-top">-->
+            <!--              <p class="tableblock">${header.since}</p>-->
+            <!--            </td>-->
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+        <%}%>
+        <%if(isNotEmpty(doc.pathParams)&&displayRequestParams){%>
+        <div class="paragraph">
+          <p>
+            <strong>Path-parameters:</strong>
+          </p>
+        </div>
+        <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">Required</th>
+            <th class="tableblock halign-left valign-top">Since</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%for(param in doc.pathParams){%>
+          <tr>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.field}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.type}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.desc}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.required}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.version}</p>
+            </td>
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+        <%}%>
+        <%if(isNotEmpty(doc.queryParams)&&displayRequestParams){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>请求链接（QueryParams）参数说明:</strong>
+          </p>
+        </div>
+        <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">字段名称</th>
+            <th class="tableblock halign-left valign-top">字段类型</th>
+            <th class="tableblock halign-left valign-top">字段类型</th>
+            <th class="tableblock halign-left valign-top">是否必填</th>
+            <!--            <th class="tableblock halign-left valign-top">字段版本</th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <%for(param in doc.queryParams){%>
+          <tr>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.field}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.type}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.desc}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <%if(param.required){%>
+              <p class="tableblock" style="color: #e60000;font-weight: bold">${param.required}</p>
+              <%}%>
+              <%else{%>
+              <p class="tableblock" style="color: #919191">${param.required}</p>
+              <%}%>
+            </td>
+            <!--            <td class="tableblock halign-left valign-top">-->
+            <!--              <p class="tableblock">${param.version}</p>-->
+            <!--            </td>-->
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+        <%}%>
+        <%if(isNotEmpty(doc.requestParams)&&displayRequestParams){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>请求体（RequestBody）参数说明:</strong>
+          </p>
+        </div>
+        <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--            <col style="width: 20%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">字段名</th>
+            <th class="tableblock halign-left valign-top">字段类型</th>
+            <th class="tableblock halign-left valign-top">字段说明</th>
+            <th class="tableblock halign-left valign-top">是否必填</th>
+            <!--            <th class="tableblock halign-left valign-top">字段版本</th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <%for(param in doc.requestParams){%>
+          <tr>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.field}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.type}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.desc}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <%if(param.required){%>
+              <p class="tableblock" style="color: #e60000;font-weight: bold">${param.required}</p>
+              <%}%>
+              <%else{%>
+              <p class="tableblock" style="color: #919191">${param.required}</p>
+              <%}%>
+            </td>
+            <!--            <td class="tableblock halign-left valign-top">-->
+            <!--              <p class="tableblock">${param.version}</p>-->
+            <!--            </td>-->
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+        <%}%>
+        <%if(isNotEmpty(doc.requestUsage)&&isRequestExample){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>请求示例:</strong>
+          </p>
+        </div>
+        <div class="listingblock">
+          <div class="content">
+            <pre>
+              <code class="bash">${doc.requestUsage}</code>
+            </pre>
+          </div>
+        </div>
+        <%}%>
+        <%if(isNotEmpty(doc.responseParams)&&displayResponseParams){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>响应字段（ResponseBody）说明:</strong>
+          </p>
+        </div>
+        <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 25%;">-->
+          <!--            <col style="width: 25%;">-->
+          <!--            <col style="width: 25%;">-->
+          <!--            <col style="width: 25%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">字段名</th>
+            <th class="tableblock halign-left valign-top">字段类型</th>
+            <th class="tableblock halign-left valign-top">字段说明</th>
+            <!--            <th class="tableblock halign-left valign-top">字段版本</th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <%for(param in doc.responseParams){%>
+          <tr>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.field}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.type}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${param.desc}</p>
+            </td>
+            <!--            <td class="tableblock halign-left valign-top">-->
+            <!--              <p class="tableblock">${param.version}</p>-->
+            <!--            </td>-->
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+        <%}%>
+        <%if(isNotEmpty(doc.responseUsage)&&isResponseExample){%>
+        <div class="paragraph" style="color: #329a00;">
+          <p>
+            <strong>响应示例:</strong>
+          </p>
+        </div>
+        <div class="listingblock">
+          <div class="content">
+            <pre><code class="json">${doc.responseUsage}</code></pre>
+          </div>
+        </div>
+        <%}%>
+      </div>
+      <%}%>
+    </div>
+  </div>
+  <%}%>
+  <%}%>
+  <%if(isNotEmpty(errorCodeList)){%>
+  <div class="sect1">
+    <h2 id="_${errorListTitle}">
+      <a class="anchor" href="#_${errorListTitle}">
+      </a>
+      <a class="link" href="#_${errorListTitle}">${errorCodeListOrder}.${errorListTitle}</a>
+    </h2>
+    <div class="sectionbody">
+      <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+        <!--        <colgroup>-->
+        <!--          <col style="width: 50%;">-->
+        <!--          <col style="width: 50%;">-->
+        <!--        </colgroup>-->
+        <thead style="background-color: #cbcbcb;">
+        <tr>
+          <th class="tableblock halign-left valign-top">错误码</th>
+          <th class="tableblock halign-left valign-top">字段说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%for(error in errorCodeList){%>
+        <tr>
+          <td class="tableblock halign-left valign-top">
+            <p class="tableblock">${error.value}</p>
+          </td>
+          <td class="tableblock halign-left valign-top">
+            <p class="tableblock">${htmlEscape(error.desc)}</p>
+          </td>
+        </tr>
+        <%}%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <%}%>
+  <%if(isNotEmpty(dictList)){%>
+  <div class="sect1">
+    <h2 id="_${dictListTitle}">
+      <a class="anchor" href="#_${dictListTitle}">
+      </a>
+      <a class="link" href="#_dict_list">${dictListOrder}.${dictListTitle}</a>
+    </h2>
+    <div class="sectionbody">
+      <%for(dict in dictList){%>
+      <div class="sect2">
+        <h3 id="_${dictListOrder}_${dict.order}_${dict.title}">
+          <a class="anchor" href="#_${dictListOrder}_${dict.order}_${dict.title}">
+          </a>
+          <a class="link" href="#_${dictListOrder}_${dict.order}_${dict.title}">${dictListOrder}.${dict.order}.${htmlEscape(dict.title)}</a>
+        </h3>
+        <table class="tableblock frame-all grid-all spread" style="font-size: 14px">
+          <!--          <colgroup>-->
+          <!--            <col style="width: 33%;">-->
+          <!--            <col style="width: 33%;">-->
+          <!--            <col style="width: 33%;">-->
+          <!--          </colgroup>-->
+          <thead style="background-color: #cbcbcb;">
+          <tr>
+            <th class="tableblock halign-left valign-top">字典值</th>
+            <th class="tableblock halign-left valign-top">数据类型</th>
+            <th class="tableblock halign-left valign-top">字典说明</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%for(dataDict in dict.dataDictList){%>
+          <tr>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${dataDict.value}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${dataDict.type}</p>
+            </td>
+            <td class="tableblock halign-left valign-top">
+              <p class="tableblock">${htmlEscape(dataDict.desc)}</p>
+            </td>
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+      </div>
+      <%}%>
+    </div>
+  </div>
+  <%}%>
+  <footer class="page-footer">
+    <span class="copyright">Generated by smart-doc at ${createTime}</span>
+    <span class="footer-modification">Suggestions,contact,support and error reporting on
+                                  <a href="https://gitee.com/smart-doc-team/smart-doc"
+                                     target="_blank">&nbsp;Gitee&nbsp;</a>or
+                                  <a href="https://github.com/smart-doc-group/smart-doc.git" target="_blank">&nbsp;Github</a>
+                                </span>
+  </footer>
+  <div href="javascript:void(0)" id="toTop">
+    <img id="upArrow"
+         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABlUlEQVRIS+2UvUvDQBiH398Rly4udnARwUXs4qAIOigI4iL30dTZ2T9AcNPVvUsXF7uYttdScNDFRRAnB11cFFwKxcXBJTQnJ6lEbRI/CIiY9e6e5/e+9+ZAGX/ImE9/QKCU2jfGbGTQqq4xZgtSyisiKmQgIAAVCCFWAGxnIOhqrdd/xyUrpRZsP40xSwA6AI57vd5eq9W6T6s8tQIppSKi+gDQNREprfVNkiRRwDlfY4xZ+FAIuSOi8Qjw0nEc5XnebZwkViClXA2T5+xhY8xus9ncEUJMAziITN5FEARuXLsGCoQQywBs8uEovJ+Scz7FGDuMSM4cx3E9z+u8r+SDQEq5SEQ1IhoZBE+QnBKRq7V+iEreCDjn84wxCx9NgidITnK5nFutVh/7e14FSqnZIAhqAMY+A4+TADjyfb/Ubref7J4XQXhxNvnEV+AJlbTy+XypUqn4KBaLBZuciCa/A0+opN5oNFz7FpUBbP4EHicxxsyAcz7HGDvvz3nar5+2Ho5wOQwsU5+KNGDa+r8grUP0DBLjtRtNKEliAAAAAElFTkSuQmCC">
+    <span id="upText">Top</span>
+  </div>
+</div>
+<script src="search.js?v=${version}">
+</script>
+<script>$(function () {
+  const Accordion = function (el, multiple) {
+    this.el = el || {};
+    this.multiple = multiple || false;
+    const links = this.el.find(".dd");
+    links.on("click", {
+        el: this.el,
+        multiple: this.multiple
+      },
+      this.dropdown)
+  };
+  Accordion.prototype.dropdown = function (e) {
+    const $el = e.data.el;
+    const $this = $(this),
+      $next = $this.next();
+    $next.slideToggle();
+    $this.parent().toggleClass("open");
+    if (!e.data.multiple) {
+      $el.find(".submenu").not($next).slideUp("20").parent().removeClass("open")
+    }
+  };
+  new Accordion($("#accordion"), false);
+  hljs.highlightAll();
+  $(window).scroll(function () {
+    if ($(window).scrollTop() > 100) {
+      let $toTop = $("#toTop");
+      $toTop.fadeIn(1500);
+      $toTop.hover(function () {
+          $("#upArrow").hide();
+          $("#upText").show()
+        },
+        function () {
+          $("#upArrow").show();
+          $("#upText").hide()
+        })
+    } else {
+      $("#toTop").fadeOut(1500)
+    }
+  });
+  $("#toTop").click(function () {
+    $("body, html").animate({
+        scrollTop: 0
+      },
+      1000);
+    return false
+  })
+});</script>
+</body>
+
+</html>

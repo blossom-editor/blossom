@@ -1,0 +1,12 @@
+# Error code list
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Error code |Description
+<%
+for(error in list){
+%>
+|${error.value}|${error.desc}
+<%}%>
+|====================
