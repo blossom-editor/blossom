@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <AppHeader simple></AppHeader>
+    <AppHeader v-if="props.window" simple></AppHeader>
   </div>
   <div class="icon-list-root">
     <div class="icon-desc">
@@ -40,17 +40,25 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, shallowRef } from 'vue'
 import { ElMessage } from 'element-plus'
-import blossomIcons from '@renderer/assets/iconfont/blossom/iconfont.json'
-import weblogIcons from '@renderer/assets/iconfont/weblogo/iconfont.json'
 import { isNull } from '@renderer/assets/utils/obj'
 import { writeText } from '@renderer/assets/utils/electron'
 import AppHeader from '@renderer/components/AppHeader.vue'
+//
+import blossomIcons from '@renderer/assets/iconfont/blossom/iconfont.json'
+import weblogIcons from '@renderer/assets/iconfont/weblogo/iconfont.json'
 
 onMounted(() => {
   blossom.value = blossomIcons.glyphs
   weblogo.value = weblogIcons.glyphs.sort((w1, w2) => {
     return w1.font_class.localeCompare(w2.font_class)
   })
+})
+
+const props = defineProps({
+  window: {
+    type: Boolean,
+    default: true
+  }
 })
 
 const activeTab = ref('weblogo')
