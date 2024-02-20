@@ -132,7 +132,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     public ArticleEntity selectById(Long id, boolean showToc, boolean showMarkdown, boolean showHtml, Long userId) {
         QueryWrapper<ArticleEntity> where = new QueryWrapper<>();
         List<String> column = CollUtil.newArrayList("id", "pid", "name", "icon", "tags", "sort", "cover", "describes", "star_status",
-                "open_status", "pv", "uv", "likes", "words", "version", "cre_time", "upd_time");
+                "open_status", "pv", "uv", "likes","dislikes", "words", "version", "cre_time", "upd_time");
         if (showToc) {
             column.add(TagEnum.toc.name());
         }
@@ -246,6 +246,5 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         }
         baseMapper.uvAndPv(id, 1, uv);
     }
-
 
 }

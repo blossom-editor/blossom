@@ -13,6 +13,7 @@
 		"openapi": "node src/api/openapi/openapi.ts"
 	},
 	"dependencies": {
+		"@fingerprintjs/fingerprintjs": "^4.2.2",
 		"axios": "^1.4.0",
 		"echarts": "^5.4.3",
 		"element-plus": "^2.4.4",
@@ -34,7 +35,6 @@
 		"unplugin-element-plus": "^0.7.2",
 		"unplugin-vue-components": "^0.25.1",
 		"vite": "^4.5.1",
-		"vue-tsc": "^1.8.27",
-		"@umijs/openapi": "^1.10.1"
+		"vue-tsc": "^1.8.27"
 	}
 }

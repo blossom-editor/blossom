@@ -1,5 +1,7 @@
 import { defaultRequest as rq } from './request'
 import type { R } from './request'
+import type { BlossomAPI } from '@/api/typings'
+
 
 /**
  * 用户信息
@@ -63,3 +65,9 @@ export const articleInfoOpenApi = (params?: object): Promise<R<any>> => {
 export const articleInfoApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/article/info', { params })
 }
+
+
+export const likeActionPost = (params: BlossomAPI.LikeActionRequest): Promise<R<any>> => {
+  return rq.post<R<any>>(`/article/interact/like/${params.articleId}`, undefined,{params:{ action: params.action }})
+}
+

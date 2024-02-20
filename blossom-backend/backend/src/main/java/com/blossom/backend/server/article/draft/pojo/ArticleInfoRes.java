@@ -68,6 +68,10 @@ public class ArticleInfoRes extends AbstractPOJO implements Serializable {
      */
     private Integer likes;
     /**
+     * 点赞数
+     */
+    private Integer dislikes;
+    /**
      * 文章字数
      */
     private Integer words;

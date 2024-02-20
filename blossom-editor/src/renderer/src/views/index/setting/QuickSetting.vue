@@ -179,11 +179,14 @@ const blogUrlPreview = computed(() => {
  * @param url 博客地址
  */
 const customBlogUrlChange = (url: string) => {
-  customBlogUrl.value = ''
+
+  // 此处由于const customBlogUrl = ref(userStore.userParams.WEB_ARTICLE_URL)双向绑定，会自动重新渲染
+  // 如果使用nextTick重置customBlogUrl.value的逻辑，这个过程会打断用户的输入体验并引起光标位置问题。
+  // customBlogUrl.value = ''
   customBlogUrlError.value = false
-  nextTick(() => {
-    customBlogUrl.value = url
-  })
+  // nextTick(() => {
+  //   customBlogUrl.value = url
+  // })
 }
 
 /**

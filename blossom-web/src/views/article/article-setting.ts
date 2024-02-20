@@ -22,4 +22,6 @@ const getFontSizeValue = () => {
 const getFontSize = () => {
   return fontSize.value + 'rem'
 }
+
 export { increase, decrease, getFontSizeValue, getFontSize }
+

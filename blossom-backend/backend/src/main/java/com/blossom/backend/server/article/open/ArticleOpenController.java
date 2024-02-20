@@ -77,6 +77,7 @@ public class ArticleOpenController {
             res.setName(article.getName());
             res.setUv(article.getUv());
             res.setLikes(article.getLikes());
+            res.setDislikes(article.getDislikes());
         }
         articleService.uvAndPv(ServletUtil.getIP(request), ServletUtil.getUserAgent(request), id);
         return R.ok(res);

@@ -1,3 +1,5 @@
+import { LikeActionType } from '@/views/article/Interaction'
+
 declare namespace BlossomAPI {
   type AccessTokenResponse = {
     /** 登录令牌 */
@@ -25,6 +27,11 @@ declare namespace BlossomAPI {
     /** 用户元信息, 由用户自定义各类信息(map data) */
     metadata?: Record<string, any>;
   };
+
+  type LikeActionRequest= {
+    action: LikeActionType;
+    articleId: number; // 这个实际上是通过URL路径传递的，而不是作为请求体的一部分
+  }
 
   type ArticleAddReqRequest = {
     /** 文章所在的文件夹ID */
