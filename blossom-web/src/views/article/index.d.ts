@@ -1,3 +1,5 @@
+import { Cancel } from 'axios'
+
 declare interface DocTree {
   /** ID */
   i: number
@@ -29,9 +31,9 @@ declare interface DocInfo {
   starStatus: number
   pv?: number
   uv?: number
-  likes?: number
+  likes: number
+  dislikes: number,
   words?: number
-  openVersion?: number
   version?: number
   storePath?: string
   subjectWords?: string
@@ -62,3 +64,5 @@ declare interface Toc {
   clazz: string
   id: string
 }
+
+
