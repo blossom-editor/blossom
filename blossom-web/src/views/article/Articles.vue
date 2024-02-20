@@ -878,6 +878,10 @@ const onresize = () => {
           thead {
             background-color: #2b2b2b;
             color: #d4d4d4;
+            
+            code {
+              background-color: #000000;
+            }
 
             tr {
               th {
