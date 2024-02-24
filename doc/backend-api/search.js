@@ -27,6 +27,12 @@ api[0].list[0].list.push({
 api[0].list[0].list.push({
     order: '3',
     deprecated: 'false',
+    url: 'http://127.0.0.1/kickout',
+    desc: '踢出用户',
+});
+api[0].list[0].list.push({
+    order: '4',
+    deprecated: 'false',
     url: 'http://127.0.0.1/check',
     desc: '检查 Token 状态',
 });
@@ -51,6 +57,12 @@ api[0].list[1].list.push({
 });
 api[0].list[1].list.push({
     order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/param/upd/admin',
+    desc: '修改用户参数',
+});
+api[0].list[1].list.push({
+    order: '4',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/param/refresh',
     desc: '刷新用户配置',
@@ -115,32 +127,62 @@ api[0].list.push({
 api[0].list[4].list.push({
     order: '1',
     deprecated: 'false',
+    url: 'http://127.0.0.1/user/list',
+    desc: '获取用户列表',
+});
+api[0].list[4].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/info/admin',
+    desc: '用户信息',
+});
+api[0].list[4].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/add',
+    desc: '新增用户',
+});
+api[0].list[4].list.push({
+    order: '4',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/upd/admin',
+    desc: '修改用户',
+});
+api[0].list[4].list.push({
+    order: '5',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/user/disabled',
+    desc: '禁用启用',
+});
+api[0].list[4].list.push({
+    order: '6',
+    deprecated: 'false',
     url: 'http://127.0.0.1/user/info',
     desc: '用户信息',
 });
 api[0].list[4].list.push({
-    order: '2',
+    order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/info/open',
     desc: '用户信息 [OP]',
 });
 api[0].list[4].list.push({
-    order: '3',
+    order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/upd',
     desc: '修改用户',
 });
 api[0].list[4].list.push({
-    order: '4',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/user/upd/pwd',
     desc: '修改密码',
 });
 api[0].list[4].list.push({
-    order: '5',
+    order: '10',
     deprecated: 'false',
-    url: 'http://127.0.0.1/user/add',
-    desc: '新增用户',
+    url: 'http://127.0.0.1/user/del',
+    desc: '删除用户',
 });
 api.push({
     name: '业务功能',
@@ -400,6 +442,12 @@ api[1].list[6].list.push({
     url: 'http://127.0.0.1/article/recycle/restore',
     desc: '还原文章',
 });
+api[1].list[6].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/article/recycle/download',
+    desc: '下载文章',
+});
 api[1].list.push({
     alias: 'ArticleBackupController',
     order: '8',
@@ -471,23 +519,29 @@ api[1].list[8].list.push({
 api[1].list[8].list.push({
     order: '5',
     deprecated: 'false',
+    url: 'http://127.0.0.1/article/stat/words/user',
+    desc: '文章数和文章字数',
+});
+api[1].list[8].list.push({
+    order: '6',
+    deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words/list',
     desc: '字数统计列表',
 });
 api[1].list[8].list.push({
-    order: '6',
+    order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/words/save',
     desc: '保存字数统计信息',
 });
 api[1].list[8].list.push({
-    order: '7',
+    order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/line/open',
     desc: '文章字数折线图 [OP]',
 });
 api[1].list[8].list.push({
-    order: '8',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/stat/line',
     desc: '近36月字数折线图',
@@ -540,6 +594,12 @@ api[1].list[9].list.push({
     deprecated: 'false',
     url: 'http://127.0.0.1/picture/stat',
     desc: '统计图片 [OP]',
+});
+api[1].list[9].list.push({
+    order: '8',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/picture/stat/user',
+    desc: '查询用户的图片统计',
 });
 api[1].list.push({
     alias: 'PictureBlosController',
