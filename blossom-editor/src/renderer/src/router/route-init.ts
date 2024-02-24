@@ -44,7 +44,15 @@ router.addRoute({
     { path: '/todoIndex', name: 'TodoIndex', component: TodoIndex, meta: { keepAlive: true } },
     { path: '/noteIndex', name: 'NoteIndex', component: NoteIndex, meta: { keepAlive: false } },
     { path: '/planIndex', name: 'PlanIndex', component: PlanIndex, meta: { keepAlive: false } },
-    { path: '/iconListIndex', name: 'IconListIndex', component: IconListIndex, meta: { keepAlive: false } }
+    {
+      path: '/iconListIndex',
+      name: 'IconListIndex',
+      component: IconListIndex,
+      meta: { keepAlive: false },
+      props: {
+        window: false
+      }
+    }
   ]
 })
 
