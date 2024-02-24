@@ -270,7 +270,11 @@ CREATE TABLE IF NOT EXISTS `blossom_article`
     `pv`           int                                                    NOT NULL DEFAULT 0 COMMENT '页面的查看数',
     `uv`           int                                                    NOT NULL DEFAULT 0 COMMENT '独立的访问次数,每日IP重置',
     `likes`        int                                                    NOT NULL DEFAULT 0 COMMENT '点赞数',
+<<<<<<< HEAD
     `dislikes`     int                                                    NOT NULL DEFAULT 0 comment '点踩数',
+=======
+    `dislikes`     int                                                    NOT NULL DEFAULT 0 comment '点踩数'
+>>>>>>> 902d7222f8f8fcb82a7ffea86d067c30185b20db
     `words`        int                                                    NOT NULL DEFAULT 0 COMMENT '文章字数',
     `version`      int                                                    NOT NULL DEFAULT 0 COMMENT '版本',
     `color`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  NOT NULL DEFAULT '' COMMENT '颜色',
