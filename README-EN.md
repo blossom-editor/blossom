@@ -56,7 +56,8 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 Join QQ group, communicate with us and discuss problems.
 
 - Group 1：522359970 (It is full)
-- Group 2：921906098
+- Group 2：921906098 (It is full)
+- Group 3：749721525
 
 You can also contact with us by the issue , We will definitely try our best to reply to you.
 We also welcome everyone to participate in the development and discussion of Blossom.
@@ -64,6 +65,7 @@ We also welcome everyone to participate in the development and discussion of Blo
 <p align="center">
 <img src="./doc/imgs/qq1.png" height="400">
 <img src="./doc/imgs/qq2.png" height="400">
+<img src="./doc/imgs/qq3.png" height="400">
 </p>
 
 # 🤝 Sponsor Blossom
