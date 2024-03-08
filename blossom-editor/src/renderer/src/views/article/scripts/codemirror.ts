@@ -29,6 +29,11 @@ export const cwTheme: any = {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     color: 'var(--el-color-primary)'
   },
+  '.cm-panel.cm-search [name=close]': {
+    fontSize: '20px !important',
+    marginRight: '10px',
+    color: 'var(--el-color-primary)'
+  },
   '.cm-panels-top': {
     'z-index': '999',
     borderColor: 'var(--el-border-color)'
