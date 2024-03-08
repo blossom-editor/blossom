@@ -57,7 +57,7 @@
     <bl-col just="center" height="fit-content">
       <div class="blod" style="margin: 80px 0 10px 0">开发者列表</div>
       <div class="developer">
-        <bl-row class="item" v-for="dever in developer" width="250px" height="70px">
+        <bl-row class="item" v-for="dever in developer" width="250px" height="70px" @click="toView(dever.github)">
           <div>
             <img :src="dever.avatar" />
           </div>
@@ -86,12 +86,15 @@
         </ol>
       </div>
     </bl-row>
+
+    <bl-row just="center" class="statement"> 本应用完全免费并开源全部源代码，如果你从付费渠道获取本应用，谨防上当受骗。 </bl-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import CONFIG from '@renderer/assets/constants/system'
 import { openExtenal } from '@renderer/assets/utils/electron'
+import { toView } from '@renderer/assets/utils/util'
 import { useUserStore } from '@renderer/stores/user'
 
 const userStore = useUserStore()
@@ -105,8 +108,15 @@ const references = [
 const developer = [
   {
     name: '小贼贼子',
-    desc: '一个后端程序员，也是一个半吊子前端。',
+    desc: '创建者',
+    github: 'https://github.com/xiaozzzi',
     avatar: 'https://www.wangyunf.com/bl/pic/home/bl/img/U1/head/luban.png'
+  },
+  {
+    name: 'Tianjiu',
+    desc: '项目成员、英文译者',
+    github: 'https://github.com/T1anjiu',
+    avatar: 'https://www.wangyunf.com/bl/pic/home/bl/img/U1/pic/blosteam/T1anjiu.jpg'
   }
 ]
 
@@ -181,10 +191,11 @@ const getServerVersion = () => {
   }
 
   .developer {
-    width: 630px;
     @include flex(row, flex-start, flex-start);
+    width: 630px;
     align-content: flex-start;
     flex-wrap: wrap;
+    cursor: pointer;
 
     .item {
       background-color: var(--bl-bg-color);
@@ -199,6 +210,7 @@ const getServerVersion = () => {
       }
 
       .name {
+        font-size: 14px;
         height: 25px;
       }
 
@@ -208,6 +220,7 @@ const getServerVersion = () => {
       }
     }
   }
+
   .reference {
     width: 630px;
     font-size: 12px;
@@ -216,6 +229,12 @@ const getServerVersion = () => {
     border: 1px dashed #8b8b8b;
     border-radius: 5px;
     color: #8b8b8b;
+  }
+
+  .statement {
+    font-size: 13px;
+    margin-top: 20px;
+    color: var(--bl-text-color-light);
   }
 }
 </style>
