@@ -33,3 +33,5 @@ stats.html
 ### VS Code ###
 .vscode/
 /logs/
+/blossom-backend/smart-doc-2.6.7/
+/blossom-backend/backend/src/main/resources/config/application-mydev.yml

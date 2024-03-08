@@ -6,7 +6,7 @@ import { join } from 'path'
 /**
  * 截图功能
  * @param win 窗口
- * @returns 
+ * @returns
  */
 export const printScreen = (win: BrowserWindow) => {
   // 非 window 平台不支持截图

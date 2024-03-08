@@ -63,7 +63,8 @@
                       </template>
                     </el-menu-item>
 
-                    <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold" :index="L3.i">
+                    <el-sub-menu v-else :expand-open-icon="ArrowDownBold" :expand-close-icon="ArrowRightBold"
+                                 :index="L3.i">
                       <template #title>
                         <div class="menu-item-wrapper">
                           <DocTitle :trees="L3" :level="3" />
@@ -98,7 +99,8 @@
           <div v-if="article.id != 0">
             <div class="toc-subtitle" style="font-size: 15px">《{{ article.name }}》</div>
             <div class="toc-subtitle">
-              <span class="iconbl bl-pen-line"></span> {{ article.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article.uv }} |
+              <span class="iconbl bl-pen-line"></span> {{ article.words }} 字 | <span
+              class="iconbl bl-read-line"></span> {{ article.uv }} |
               <span class="iconbl bl-like-line"></span> {{ article.likes }}
             </div>
             <div class="toc-subtitle">
@@ -116,13 +118,20 @@
               {{ toc.content }}
             </div>
           </div>
+          <div class="bl-interaction" v-if="article.id !== 0">
+            <Interaction :dislikes="article.dislikes" :likes="article.likes" :like-action="likeAction"
+                         :like-type="curLikeType" />
+          </div>
         </div>
       </div>
 
       <div class="module-workbench" @click="showSetting">
-        <el-icon color="#7b7b7ba9"><Setting /></el-icon>
+        <el-icon color="#7b7b7ba9">
+          <Setting />
+        </el-icon>
       </div>
     </div>
+
   </div>
 
   <el-drawer
@@ -139,9 +148,9 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onUnmounted, nextTick } from 'vue'
+import { ref, onUnmounted, nextTick,computed } from 'vue'
 import { ArrowDownBold, ArrowRightBold, Setting } from '@element-plus/icons-vue'
-import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi } from '@/api/blossom'
+import { articleInfoOpenApi, articleInfoApi, docTreeOpenApi, docTreeApi, likeActionPost } from '@/api/blossom'
 import { useUserStore } from '@/stores/user'
 import { isNull, isEmpty, isNotNull } from '@/assets/utils/obj'
 import { useLifecycle } from '@/scripts/lifecycle'
@@ -149,6 +158,12 @@ import DocTitle from './DocTitle.vue'
 import ArticleSetting from './ArticleSetting.vue'
 import 'katex/dist/katex.min.css'
 import { getFontSize } from './article-setting'
+import Interaction from '@/views/article/Interaction.vue'
+import BLTooltip from '@/components/BLTooltip.vue'
+import type { DocInfo, DocTree, Toc } from '@/views/article/index'
+import { LikeActionType, LikeType } from '@/views/article/Interaction'
+import { disLikePrefix, fingerprintKey, likePrefix } from '@/assets/constants/blLocalstorage'
+
 
 const userStore = useUserStore()
 useLifecycle(
@@ -168,6 +183,55 @@ useLifecycle(
 onUnmounted(() => {
   window.removeEventListener('resize', onresize)
 })
+
+const likeAction = async (type: LikeActionType) => {
+  const fingerprint = localStorage.getItem(fingerprintKey)
+  switch (type) {
+    case LikeActionType.Like:
+      localStorage.setItem(likePrefix + fingerprint + article.value.id, '1')
+      article.value.likes++
+      curLikeType.value = LikeType.Like
+      break
+    case LikeActionType.Dislike:
+      localStorage.setItem(disLikePrefix + fingerprint + article.value.id, '1')
+      article.value.dislikes++
+      curLikeType.value = LikeType.Dislike
+      break
+    case LikeActionType.CancelLike:
+      localStorage.setItem(likePrefix + fingerprint + article.value.id, '0')
+      article.value.likes--
+      curLikeType.value = LikeType.None
+      break
+    case LikeActionType.CancelDislike:
+      localStorage.setItem(disLikePrefix + fingerprint + article.value.id, '0')
+      article.value.dislikes--
+      curLikeType.value = LikeType.None
+      break
+    case LikeActionType.LikeToDislike:
+      localStorage.setItem(likePrefix + fingerprint + article.value.id, '0')
+      localStorage.setItem(disLikePrefix + fingerprint + article.value.id, '1')
+      article.value.likes--
+      article.value.dislikes++
+      curLikeType.value = LikeType.Dislike
+      break
+    case LikeActionType.DislikeToLike:
+      localStorage.setItem(likePrefix + fingerprint + article.value.id, '1')
+      localStorage.setItem(disLikePrefix + fingerprint + article.value.id, '0')
+      article.value.likes++
+      article.value.dislikes--
+      curLikeType.value = LikeType.Like
+      break
+  }
+  const res = await likeActionPost({ articleId: article.value.id, action: type })
+}
+const curLikeType = ref(LikeType.None)
+
+const initCurLikeType = () => {
+  const fingerprint = localStorage.getItem(fingerprintKey)
+  curLikeType.value = localStorage.getItem(likePrefix + fingerprint + article.value.id) === '1' ? LikeType.Like : localStorage.getItem(disLikePrefix + fingerprint + article.value.id) === '1' ? LikeType.Dislike : LikeType.None
+}
+
+
 
 /**
  * 路由中获取ID参数
@@ -197,6 +261,8 @@ const article = ref<DocInfo>({
   sort: 0,
   starStatus: 0,
   openStatus: 0,
+  likes: 0,
+  dislikes: 0,
   type: 3,
   html: `<div style="color:#E3E3E3;width:100%;height:300px;display:flex;justify-content: center;
     align-items: center;font-size:25px;">请在左侧菜单选择文章</div>`
@@ -245,6 +311,7 @@ const clickCurDoc = async (tree: DocTree) => {
     nextTick(() => {
       PreviewRef.value.scrollTo({ top: 0 })
       parseTocAsync(PreviewRef.value)
+      initCurLikeType()
     })
   }
 }
@@ -482,6 +549,7 @@ const onresize = () => {
       border-right: 1px solid var(--el-border-color);
       font-weight: 200;
       transition: 0.1s;
+
       &:hover {
         :deep(.folder-level-line) {
           opacity: 1;
@@ -579,6 +647,8 @@ const onresize = () => {
       border-left: 1px solid #eeeeee;
       overflow: auto;
       transition: 0.3s;
+      position: relative;
+      padding-bottom: 20px; /* footer的高度 */
 
       .viewer-toc {
         @include box(100%, 100%);
@@ -661,6 +731,15 @@ const onresize = () => {
           }
         }
       }
+
+      .bl-interaction {
+        padding: 20px;
+        position: absolute;
+        left: 0;
+        bottom: 40px;
+        width: 100%;
+        text-align: center;
+      }
     }
 
     .article {
@@ -670,6 +749,7 @@ const onresize = () => {
       overflow-y: overlay;
       overflow-x: hidden;
       padding: 0 30px;
+
 
       .bl-preview {
         $borderRadius: 4px;
@@ -773,6 +853,7 @@ const onresize = () => {
           &:has(> input)::marker {
             content: none;
           }
+
           & :has(> p > input)::marker {
             content: none;
           }
@@ -938,6 +1019,7 @@ const onresize = () => {
             background-color: #1a1a1a;
             color: #9d9d9d;
           }
+
           .pre-copy:active {
             color: #e2e2e2;
           }
@@ -949,8 +1031,10 @@ const onresize = () => {
             top: 15px;
             left: 3px;
             user-select: none;
+
             li {
               list-style: none;
+
               .line-num {
                 width: 30px;
                 display: inline-block;
@@ -1128,7 +1212,7 @@ const onresize = () => {
 
           :deep(.markmap) {
             & > g {
-              transform: translateX(0) translateY(50%) !important ;
+              transform: translateX(0) translateY(50%) !important;
             }
           }
 
@@ -1136,6 +1220,7 @@ const onresize = () => {
             margin: -10px !important;
           }
         }
+
       }
     }
 

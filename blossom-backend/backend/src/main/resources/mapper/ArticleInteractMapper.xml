@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blossom.backend.server.article.interact.ArticleInteractMapper">
+
+
+    <update id="likeAction" >
+        UPDATE blossom_article
+        <set>
+            <if test="actionType.name() == 'Like'">
+                likes = likes + 1
+            </if>
+            <if test="actionType.name() == 'Dislike'">
+                dislikes = dislikes + 1
+            </if>
+            <if test="actionType.name() == 'CancelLike'">
+                likes = likes - 1
+            </if>
+            <if test="actionType.name() == 'CancelDislike'">
+                dislikes = dislikes - 1
+            </if>
+            <if test="actionType.name() == 'LikeToDislike'">
+                likes = likes - 1,
+                dislikes = dislikes + 1
+            </if>
+            <if test="actionType.name() == 'DislikeToLike'">
+                dislikes = dislikes - 1,
+                likes = likes + 1
+            </if>
+        </set>
+        WHERE id = #{articleId}
+    </update>
+</mapper>
