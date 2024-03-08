@@ -47,7 +47,7 @@ export const keymaps = {
   // https://codemirror.net/docs/ref/#commands.defaultKeymap
   selectLine: isMac ? '⌃ L' : 'Alt + L',
   // https://codemirror.net/docs/ref/#search
-  toLine: isMac ? '⌥ ⌘ G' : 'Alt + G',
+  toLine: isMac ? '⌥ ⌘ G' : 'Ctrl + Alt + G',
   moveLineUp: isMac ? '⌥ ↑' : 'Alt + ↑',
   moveLineDown: isMac ? '⌥ ↓' : 'Alt + ↓',
   copyLineUp: isMac ? '⌥ ⇧ ↑' : 'Shift + Alt + ↑',
