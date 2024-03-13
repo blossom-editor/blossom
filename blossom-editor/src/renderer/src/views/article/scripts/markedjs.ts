@@ -104,15 +104,14 @@ export const renderHeading = (text: string, level: number, raw: string) => {
       if (dom) {
         id += dom.body.innerText
       } else {
-        id += text
+        id += raw
       }
     } else {
-      id += text
+      id += raw
     }
   } catch {
-    id += text
+    id += raw
   }
-
   return `<h${level} id="${id}">${text}</h${level}>`
 }
 
