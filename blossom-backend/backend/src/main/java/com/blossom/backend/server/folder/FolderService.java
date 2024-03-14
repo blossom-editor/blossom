@@ -20,6 +20,7 @@ import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.DateUtils;
+import com.blossom.common.base.util.PrimaryKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -178,6 +179,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
                 folder.setStorePath(parentFolder.getStorePath());
             }
         }
+        folder.setId(PrimaryKeyUtil.nextId());
         baseMapper.insert(folder);
         return folder;
     }

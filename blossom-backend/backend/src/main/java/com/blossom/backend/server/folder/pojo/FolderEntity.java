@@ -27,7 +27,6 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 父id
