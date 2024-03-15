@@ -58,11 +58,13 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 加入群聊进行沟通，反馈问题。
 
 - 1 群：522359970 (即将满)
-- 2 群：921906098
+- 2 群：921906098 (即将满)
+- 3 群：749721525
 
 <p align="center">
 <img src="./doc/imgs/qq1.png" height="400">
 <img src="./doc/imgs/qq2.png" height="400">
+<img src="./doc/imgs/qq3.png" height="400">
 </p>
 
 # 🤝 赞助 Blossom

@@ -26,6 +26,7 @@ import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException500;
 import com.blossom.common.base.util.DateUtils;
+import com.blossom.common.base.util.PrimaryKeyUtil;
 import com.blossom.common.base.util.SortUtil;
 import com.blossom.common.iaas.IaasProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,10 +38,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -164,12 +162,24 @@ public class ArticleBackupService {
             int idLen = String.valueOf(allContents.stream()
                     .map(ArticleEntity::getId).max(SortUtil.longSort).orElse((1L))).length();
 
+            // 记录已经保存的文件
+            Set<String> exists = new HashSet<>();
+
             backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 文章列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             backLogs.add("┃ 排序 [ID] [版本] [时间] 文章路径");
             backLogs.add("┠────────────────────────────────────────────────────────────────────────────");
             for (DocTreeRes article : articles) {
+                String name = clearPath(article.getN());
+                // 处理文章或文件夹重名的情况
+                if (exists.contains(name)) {
+                    name = name + "_" + article.getI();
+                    if (exists.contains(name)) {
+                        name = name + "_" + PrimaryKeyUtil.nextId();
+                    }
+                }
+                exists.add(name);
                 // 创建文章 file
-                File file = new File(backupFile.getRootPath() + "/" + clearPath(article.getN()) + getArticleSuffix(type));
+                File file = new File(backupFile.getRootPath() + "/" + name + getArticleSuffix(type));
                 // 导出的文章正文
                 ArticleEntity articleDetail = markdowns.get(article.getI());
                 if (articleDetail == null) {
@@ -305,7 +315,8 @@ public class ArticleBackupService {
         req.setArticleId(articleId);
         List<DocTreeRes> docs = docService.listTree(req);
         List<DocTreeRes> articles = new ArrayList<>();
-        findArticle("", docs, articles);
+        Set<String> exists = new HashSet<>();
+        findArticle("", docs, articles, exists);
         return articles;
     }
 
@@ -315,15 +326,20 @@ public class ArticleBackupService {
      * @param prefix   上级文件夹名称
      * @param docs     文章树状列表
      * @param articles 拼接结果列表, 虽然是 DocTreeRes 对象, 但不是树状结构
+     * @param exists   判断文件夹是否重名
      */
-    private void findArticle(String prefix, List<DocTreeRes> docs, List<DocTreeRes> articles) {
+    private void findArticle(String prefix, List<DocTreeRes> docs, List<DocTreeRes> articles, Set<String> exists) {
         if (CollUtil.isEmpty(docs)) {
             return;
         }
         for (DocTreeRes doc : docs) {
+            if (exists.contains(doc.getN())) {
+                doc.setN(doc.getN() + "_" + doc.getI());
+            }
+            exists.add(doc.getN());
             doc.setN(prefix + "/" + doc.getN());
             if (CollUtil.isNotEmpty(doc.getChildren())) {
-                findArticle(doc.getN(), doc.getChildren(), articles);
+                findArticle(doc.getN(), doc.getChildren(), articles, exists);
             }
             if (doc.getTy().equals(DocTypeEnum.A.getType())) {
                 articles.add(doc);
@@ -439,11 +455,13 @@ public class ArticleBackupService {
         private String userId;
         /**
          * 备份日期 YYYYMMDD
+         *
          * @mock 20230101
          */
         private String date;
         /**
          * 备份时间 HHMMSS
+         *
          * @mock 123001
          */
         private String time;
@@ -459,7 +477,6 @@ public class ArticleBackupService {
          * 备份包路径
          */
         private String path;
-
         /**
          * 本地文件
          */
