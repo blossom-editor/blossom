@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11855598",
+      "name": "收起",
+      "font_class": "collapse",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
       "icon_id": "24341231",
       "name": "brush-line",
       "font_class": "brush-line",
