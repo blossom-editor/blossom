@@ -1,14 +1,21 @@
 import { onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 
+/**
+ * 元素拖拽
+ * @param targetRef 拖拽时移动的元素
+ * @param dragRef 拖拽时拖动的元素
+ * @param regionRef 元素可以拖拽的范围
+ */
 export const useDraggable = (
   targetRef: Ref<HTMLElement | undefined>,
   dragRef: Ref<HTMLElement | undefined>,
+  regionRef?: Ref<HTMLElement | undefined>
   // draggable: ComputedRef<boolean>
 ) => {
   let transform = {
     offsetX: 0,
-    offsetY: 0,
+    offsetY: 0
   }
 
   const onMousedown = (e: MouseEvent) => {
@@ -22,27 +29,33 @@ export const useDraggable = (
     const targetWidth = targetRect.width
     const targetHeight = targetRect.height
 
-    const clientWidth = document.documentElement.clientWidth
-    const clientHeight = document.documentElement.clientHeight
+    let clientWidth = document.documentElement.clientWidth
+    let clientHeight = document.documentElement.clientHeight
+    let minLeft = -targetLeft + offsetX
+    let minTop = -targetTop + offsetY
 
-    const minLeft = -targetLeft + offsetX
-    const minTop = -targetTop + offsetY
+    if (regionRef) {
+      console.log(regionRef.value!.getBoundingClientRect())
+      const rect = regionRef.value!.getBoundingClientRect()
+      clientWidth = rect.width + rect.x
+      clientHeight = rect.height + rect.y
+      minLeft += rect.x
+      minTop += rect.y
+    } else {
+      clientWidth = document.documentElement.clientWidth
+      clientHeight = document.documentElement.clientHeight
+    }
+
     const maxLeft = clientWidth - targetLeft - targetWidth + offsetX
     const maxTop = clientHeight - targetTop - targetHeight + offsetY
 
     const onMousemove = (e: MouseEvent) => {
-      const moveX = Math.min(
-        Math.max(offsetX + e.clientX - downX, minLeft),
-        maxLeft
-      )
-      const moveY = Math.min(
-        Math.max(offsetY + e.clientY - downY, minTop),
-        maxTop
-      )
+      const moveX = Math.min(Math.max(offsetX + e.clientX - downX, minLeft), maxLeft)
+      const moveY = Math.min(Math.max(offsetY + e.clientY - downY, minTop), maxTop)
 
       transform = {
         offsetX: moveX,
-        offsetY: moveY,
+        offsetY: moveY
       }
       targetRef.value!.style.transform = `translate(${moveX}px, ${moveY}px)`
     }
@@ -71,7 +84,7 @@ export const useDraggable = (
   onMounted(() => {
     watchEffect(() => {
       // if (draggable.value) {
-        onDraggable()
+      onDraggable()
       // } else {
       //   offDraggable()
       // }
