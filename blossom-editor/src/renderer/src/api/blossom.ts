@@ -275,6 +275,15 @@ export const articleStarApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * star 或取消 star
+ * @param data
+ * @returns
+ */
+export const folderStarApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/folder/star', data)
+}
+
+/**
  * 下载文章 markdown
  * @param params
  * @returns

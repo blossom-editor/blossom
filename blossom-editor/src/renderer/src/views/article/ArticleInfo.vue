@@ -69,7 +69,7 @@
 
         <!-- 星标 -->
         <div class="stat-star">
-          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curDocDialogType == 'add' || curIsFolder ? 'disabled' : '']" @click="star(1)"></div>
+          <div v-if="!curIsStar" :class="['iconbl bl-star-line', curDocDialogType == 'add']" @click="star(1)"></div>
           <div v-else class="iconbl bl-star-fill" @click="star(0)"></div>
         </div>
       </div>
@@ -239,6 +239,7 @@ import {
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
+import {folderStarApi} from "../../api/blossom";
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
 const userStore = useUserStore()
@@ -481,6 +482,12 @@ const star = (changeStarStatus: number) => {
   if (curIsArticle.value) {
     docForm.value.starStatus = changeStarStatus
     articleStarApi({ id: docForm.value.id, starStatus: docForm.value.starStatus }).then(() => {
+      Notify.success(docForm.value.starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
+    })
+  }
+  if (curIsFolder.value) {
+    docForm.value.starStatus = changeStarStatus
+    folderStarApi({ id: docForm.value.id, starStatus: docForm.value.starStatus }).then(() => {
       Notify.success(docForm.value.starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
     })
   }

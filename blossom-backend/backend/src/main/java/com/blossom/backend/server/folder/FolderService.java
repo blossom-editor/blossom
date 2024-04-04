@@ -23,11 +23,13 @@ import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.PrimaryKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +53,8 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         this.pictureService = pictureService;
     }
 
+
+
     /**
      * 专题列表
      * <p>1. 查询全部公开专题
@@ -60,12 +64,14 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * <p>5. 通过文件夹ID获取到专题下的所有文章, 从而统计文章的总字数, 修改时间, 创建时间等.
      * <p>6. 如果文章包含 TOC 标签, 则该文章为专题的目录, 专题的默认跳转会跳转至该目录
      */
-    public List<FolderSubjectRes> subjects(Long userId) {
-        // 1. 查询所有公开的专题
+    public List<FolderSubjectRes> subjects(Long userId, @Nullable Integer starStatus) {
+        // 1. 查询所有专题
         FolderEntity where = new FolderEntity();
         where.setTags(TagEnum.subject.name());
-        where.setOpenStatus(YesNo.YES.getValue());
         where.setUserId(userId);
+        if (Objects.nonNull(starStatus) &&
+                (starStatus.equals(1) || starStatus.equals(0))) { where.setStarStatus(starStatus); }
+        else {where.setStarStatus(0);}
         List<FolderEntity> allOpenSubject = baseMapper.listAll(where);
         if (CollUtil.isEmpty(allOpenSubject)) {
             return new ArrayList<>();
@@ -196,6 +202,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
     public Long update(FolderEntity folder) {
         XzException404.throwBy(folder.getId() == null, "ID不得为空");
         XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
+        if (Objects.isNull(folder.getStarStatus())) {folder.setStarStatus(0);}
         // 如果
         if (StrUtil.isNotBlank(folder.getStorePath())) {
             final FolderEntity oldFolder = selectById(folder.getId());
@@ -214,6 +221,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             }
         }
         folder.setStorePath(formatStorePath(folder.getStorePath()));
+        if (Objects.isNull(folder.getStarStatus())) { folder.setStarStatus(0);}
         baseMapper.updById(folder);
         return folder.getId();
     }

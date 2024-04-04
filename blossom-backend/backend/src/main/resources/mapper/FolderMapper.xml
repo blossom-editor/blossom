@@ -9,6 +9,7 @@
             `name`,
             icon,
             tags,
+            star_status,
             open_status,
             sort,
             cover,
@@ -21,6 +22,7 @@
             cre_time
           from blossom_folder
         <where>
+            <if test="starStatus != null ">and star_status = #{starStatus}</if>
             <if test="openStatus != null ">and open_status = #{openStatus}</if>
             <if test="type != null ">and type = #{type}</if>
             <if test="tags != null and tags != ''">and tags like concat('%',#{tags},'%')</if>
@@ -62,6 +64,7 @@
             <if test="name != null">`name` = #{name},</if>
             <if test="icon != null">icon = #{icon},</if>
             <if test="tags != null">tags = #{tags},</if>
+            <if test="starStatus != null">star_status = #{starStatus},</if>
             <if test="sort != null">sort = #{sort},</if>
             <if test="cover != null">cover = #{cover},</if>
             <if test="color != null">color = #{color},</if>

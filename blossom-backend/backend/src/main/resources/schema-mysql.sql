@@ -639,3 +639,6 @@ CREATE TABLE IF NOT EXISTS `base_user_param`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT = '用户参数'
   COLLATE = utf8mb4_bin;
+
+-- Code that might be wrong goes last
+alter table blossom_folder add column star_status tinyint(1) NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是';

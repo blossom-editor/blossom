@@ -45,6 +45,10 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
      */
     private String tags;
     /**
+     * star状态
+     */
+    private Integer starStatus;
+    /**
      * 开放状态
      */
     private Integer openStatus;
