@@ -59,6 +59,9 @@ public class IndexMsgConsumer {
                              IndexWriter indexWriter = new IndexWriter(directory, new IndexWriterConfig(new StandardAnalyzer()))) {
                             // 查询最新的消息
                             ArticleEntity article = this.articleService.selectById(id, false, true, false, userId);
+                            if (null == article) {
+                                continue;
+                            }
                             Document document = new Document();
                             document.add(new StringField("id", String.valueOf(id), Field.Store.YES));
                             document.add(new TextField("name", article.getName(), Field.Store.YES));
