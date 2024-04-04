@@ -94,8 +94,10 @@ public class DocService {
             // 2. 有图片的图片或文章文件夹
             List<Long> pids = pictureService.listDistinctPid(req.getUserId());
             if (CollUtil.isNotEmpty(pids)) {
-                List<FolderEntity> articleTopFolder = folderMapper.recursiveToParent(pids);
-                all.addAll(DocUtil.toTreeRes(articleTopFolder));
+                List<Long> picFolderIds = picFolder.stream().map(FolderEntity::getId).collect(Collectors.toList());
+                List<Long> withoutPicPids = pids.stream().filter(i -> !picFolderIds.contains(i)).collect(Collectors.toList());
+                List<FolderEntity> articleFolder = folderMapper.recursiveToParent(withoutPicPids);
+                all.addAll(DocUtil.toTreeRes(articleFolder));
             }
 
             Optional<DocTreeRes> min = all.stream().min((f1, f2) -> SortUtil.intSort.compare(f1.getS(), f2.getS()));
