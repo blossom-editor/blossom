@@ -33,6 +33,10 @@ public class FolderUpdReq extends AbstractPOJO implements Serializable {
     private String name;
     /** 图标 */
     private String icon;
+    /**
+     * star状态
+     */
+    private Integer starStatus;
     /** 标签 */
     private List<String> tags;
     /** 排序 */

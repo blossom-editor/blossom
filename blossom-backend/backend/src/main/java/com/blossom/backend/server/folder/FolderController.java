@@ -5,6 +5,8 @@ import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
+import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
+import com.blossom.backend.server.article.draft.pojo.ArticleStarReq;
 import com.blossom.backend.server.article.draft.pojo.ArticleUpdTagReq;
 import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.folder.pojo.*;
@@ -44,15 +46,27 @@ public class FolderController {
         if (userId == null) {
             return R.ok(new ArrayList<>());
         }
-        return R.ok(baseService.subjects(userId));
+        return R.ok(baseService.subjects(userId, null));
     }
 
     /**
      * 查询专题列表
      */
     @GetMapping("/subjects")
-    public R<List<FolderSubjectRes>> listSubject() {
-        return R.ok(baseService.subjects(AuthContext.getUserId()));
+    public R<List<FolderSubjectRes>> listSubject(@RequestParam("starStatus") Integer starStatus) {
+        return R.ok(baseService.subjects(AuthContext.getUserId(), starStatus));
+    }
+
+    /**
+     * 星标目录
+     *
+     * @param req 目录对象
+     */
+    @PostMapping("/star")
+    public R<Long> star(@Validated @RequestBody FolderStarReq req) {
+        FolderEntity folder = req.to(FolderEntity.class);
+        folder.setUserId(AuthContext.getUserId());
+        return R.ok(baseService.update(folder));
     }
 
     /**
@@ -68,6 +82,7 @@ public class FolderController {
         FolderRes res = entity.to(FolderRes.class);
         res.setTags(DocUtil.toTagList(entity.getTags()));
         res.setType(entity.getType());
+        res.setStarStatus(entity.getStarStatus());
         return R.ok(res);
     }
 

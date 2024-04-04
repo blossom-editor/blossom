@@ -26,7 +26,7 @@ import { subjectsApi } from '@/api/blossom'
 
 onMounted(() => {
   subjects.value = []
-  subjectsApi().then((resp) => {
+  subjectsApi({ starStatus: 1 }).then((resp) => {
     subjects.value = resp.data
   })
 })
