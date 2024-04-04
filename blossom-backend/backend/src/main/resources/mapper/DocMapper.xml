@@ -5,9 +5,9 @@
     <select id="selectMaxSortByPid" resultType="java.lang.Integer">
         select IFNULL(max(h.sort), 0)
         from (
-             select sort from blossom_article where pid = #{pid}
+             select sort from blossom_article where pid = #{pid} and user_id = #{userId}
               union
-             select sort from blossom_folder where pid = #{pid}
+             select sort from blossom_folder where pid = #{pid} and user_id = #{userId} and type = #{type}
         ) h;
     </select>
 </mapper>

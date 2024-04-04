@@ -1,6 +1,6 @@
 :root {
   /* 数字越大, 颜色越淡 */
-  --el-color-primary: #c1992f;
+  /* --el-color-primary: #c1992f;
   --el-color-primary-dark-2: rgba(250, 195, 56, 0.8);
   --el-color-primary-light-1: rgba(193, 153, 47, 0.9);
   --el-color-primary-light-2: rgba(193, 153, 47, 0.8);
@@ -9,7 +9,20 @@
   --el-color-primary-light-6: rgba(193, 153, 47, 0.4);
   --el-color-primary-light-7: rgba(193, 153, 47, 0.3);
   --el-color-primary-light-8: rgba(193, 153, 47, 0.2);
-  --el-color-primary-light-9: rgba(232, 219, 190, 0.505);
+  --el-color-primary-light-9: rgba(232, 219, 190, 0.505); */
+
+  --el-color-primary:          rgb(104, 104, 104);
+  --el-color-primary-dark:     rgb(104, 104, 104);
+  --el-color-primary-dark-2:  rgba(104, 104, 104, 0.8);
+  --el-color-primary-light-1: rgba(104, 104, 104, 0.9);
+  --el-color-primary-light-2: rgba(104, 104, 104, 0.8);
+  --el-color-primary-light-3: rgba(104, 104, 104, 0.7);
+  --el-color-primary-light-4: rgba(104, 104, 104, 0.6);
+  --el-color-primary-light-5: rgba(104, 104, 104, 0.5);
+  --el-color-primary-light-6: rgba(104, 104, 104, 0.4);
+  --el-color-primary-light-7: rgba(104, 104, 104, 0.3);
+  --el-color-primary-light-8: rgba(104, 104, 104, 0.2);
+  --el-color-primary-light-9: rgba(104, 104, 104, 0.1);
 
   /* 文本颜色 */
   --el-text-color-primary: #606266;

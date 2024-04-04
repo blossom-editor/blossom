@@ -1,0 +1,91 @@
+.toc-container {
+  @include box(270px, 100%, 270px, 270px);
+  border-left: 1px solid #eeeeee;
+  overflow: auto;
+  transition: 0.3s;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ebebeb;
+  }
+
+  .viewer-toc {
+    @include box(100%, 100%);
+    color: #5e5e5e;
+    padding: 10px;
+    z-index: 1000;
+    transition: 0.3s;
+
+    .toc-title {
+      @include box(100%, 40px);
+      @include font(25px, 700);
+      line-height: 40px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 3px solid #bcbcbc;
+    }
+
+    .toc-subtitle {
+      width: 100%;
+      @include flex(row, flex-start, center);
+      @include font(12px);
+      color: #ababab;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      white-space: pre;
+      margin-top: 5px;
+    }
+
+    .toc-content {
+      @include font(14px);
+      width: 100%;
+      overflow-y: auto;
+      margin-top: 20px;
+
+      .toc-1,
+      .toc-2,
+      .toc-3,
+      .toc-4,
+      .toc-5,
+      .toc-6 {
+        min-height: 20px;
+        cursor: pointer;
+
+        &:hover {
+          font-weight: bold;
+        }
+      }
+
+      .toc-1 {
+        font-size: 1.1em;
+        margin-top: 5px;
+
+        &:first-child {
+          margin: 0;
+          padding: 0;
+          border: 0;
+        }
+      }
+
+      .toc-2 {
+        padding-left: 10px;
+      }
+
+      .toc-3 {
+        padding-left: 20px;
+      }
+
+      .toc-4 {
+        padding-left: 30px;
+      }
+
+      .toc-5 {
+        padding-left: 40px;
+      }
+
+      .toc-6 {
+        padding-left: 50px;
+      }
+    }
+  }
+}

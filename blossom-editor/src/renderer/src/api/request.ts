@@ -90,7 +90,7 @@ export class Request {
           /* 其他接口报错, 直接拒绝并提示错误信息 */
           let errorResponse = data
           errorResponse['url'] = res.config.url
-          Notify.error(data.msg, '请求失败')
+          Notify.error(data.msg, '处理失败')
           return Promise.reject(res)
         }
       },
@@ -106,20 +106,21 @@ export class Request {
         }
         let code = err.code
         let resp = err.response
-        if (resp && resp.data) {
-          Notify.error(resp.data.msg, '请求失败')
-          return Promise.reject(err)
-        }
+        console.log("🚀 ~ Request ~ constructor ~ resp:123123123", resp)
         if (code === 'ERR_NETWORK') {
-          Notify.error('网络错误,请检查您的网络是否通畅', '请求失败')
+          Notify.error('网络错误, 请检查您的网络是否通畅', '请求失败')
           return Promise.reject(err)
         }
         if (err.request && err.request.status === 404) {
-          Notify.error('未找到您的请求, 请您检查服务器地址!', '请求失败(404)')
+          Notify.error('未找到您的请求', '请求失败(404)')
           return Promise.reject(err)
         }
         if (err.request && err.request.status === 405) {
           Notify.error(`您的请求地址可能有误, 请检查请求地址${url}`, '请求失败(405)')
+          return Promise.reject(err)
+        }
+        if (resp && resp.data) {
+          Notify.error(resp.data.msg, '请求失败')
           return Promise.reject(err)
         }
         return Promise.reject(err)

@@ -54,6 +54,10 @@ const toToc = (articleId: number) => {
   padding: 20px;
   overflow: scroll;
 
+  &::-webkit-scrollbar-thumb {
+    background-color: #414141;
+  }
+
   .subject-item {
     @include box(260px, 150px);
     position: relative;

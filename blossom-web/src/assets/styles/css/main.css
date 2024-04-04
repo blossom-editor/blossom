@@ -39,11 +39,10 @@ body {
 
 /* 定义滑块 内阴影+圆角 */
 ::-webkit-scrollbar-thumb {
-  border-radius: 4px;
   background-color: #c7c7c7;
 }
 
-/* 解决滚动条右下角出现白色方块 */
+/* 滚动条右下角出现白色方块 */
 ::-webkit-scrollbar-corner {
   background: transparent;
 }

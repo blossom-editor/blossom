@@ -14,9 +14,6 @@
       </div>
     </div>
     <div class="home-footer">
-      <div class="about-us">
-        <span>{{ blossom.SYS.VERSION + (isNotBlank(getEmail()) ? ' | 邮箱：' + getEmail() : '') }}</span>
-      </div>
       <div class="custom-info">
         <div v-if="isNotBlank(gwab())" v-html="gwab()"></div>
         <div v-if="isNotBlank(ipc())" style="cursor: pointer" @click="openNew('https://beian.miit.gov.cn/')">

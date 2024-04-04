@@ -122,7 +122,7 @@ public class DocUtil {
         tree.setTy(DocTypeEnum.A.getType());
 
         // 判断文章的版本与公开版本是否有差异
-        if (article.getOpenStatus().equals(YesNo.YES.getValue()) && article.getVersion() > article.getOpenVersion()) {
+        if (YesNo.YES.getValue().equals(article.getOpenStatus()) && article.getVersion() > article.getOpenVersion()) {
             tree.setVd(YesNo.YES.getValue());
         }
 

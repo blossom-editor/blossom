@@ -53,8 +53,8 @@ const props = defineProps({
   @include flex(row, center, center);
   box-shadow: 2px 2px 3px 0 #999999;
   border-radius: 4px;
-  padding: 0px 4px;
-  margin: 3px;
+  padding: 0 4px;
+  margin: 4px;
   height: 15px;
   min-height: 15px;
   max-height: 15px;

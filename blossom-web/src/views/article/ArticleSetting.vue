@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { Plus, Minus } from '@element-plus/icons-vue'
-import { increase, decrease, getFontSizeValue } from './article-setting'
+import { increase, decrease, getFontSizeValue } from './scripts/article-setting'
 </script>
 
 <style scoped lang="scss">

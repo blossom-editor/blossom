@@ -1,6 +1,5 @@
 package com.blossom.backend.base.search.message.consumer;
 
-import cn.hutool.core.convert.Convert;
 import com.blossom.backend.base.search.SearchProperties;
 import com.blossom.backend.base.search.message.IndexMsg;
 import com.blossom.backend.base.search.message.IndexMsgTypeEnum;
@@ -51,7 +50,6 @@ public class IndexMsgConsumer {
                     final Long userId = indexMsg.getUserId();
                     final Long id = indexMsg.getId();
                     if (userId == null || id == null) {
-                        log.error("消费异常. 获取用户id为空");
                         continue;
                     }
                     if (IndexMsgTypeEnum.ADD == indexMsg.getType()) {
@@ -62,11 +60,11 @@ public class IndexMsgConsumer {
                             // 查询最新的消息
                             ArticleEntity article = this.articleService.selectById(id, false, true, false, userId);
                             Document document = new Document();
-                            document.add(new StringField("id", Convert.toStr(id), Field.Store.YES));
+                            document.add(new StringField("id", String.valueOf(id), Field.Store.YES));
                             document.add(new TextField("name", article.getName(), Field.Store.YES));
                             document.add(new TextField("tags", article.getTags(), Field.Store.YES));
                             document.add(new TextField("markdown", article.getMarkdown(), Field.Store.YES));
-                            indexWriter.updateDocument(new Term("id", Convert.toStr(id)), document);
+                            indexWriter.updateDocument(new Term("id", String.valueOf(id)), document);
                             indexWriter.flush();
                             indexWriter.commit();
                         }
@@ -74,7 +72,7 @@ public class IndexMsgConsumer {
                         // 删除索引
                         try (Directory directory = FSDirectory.open(this.searchProperties.getUserIndexDirectory(userId));
                              IndexWriter indexWriter = new IndexWriter(directory, new IndexWriterConfig(new StandardAnalyzer()))) {
-                            indexWriter.deleteDocuments(new Term("id", Convert.toStr(id)));
+                            indexWriter.deleteDocuments(new Term("id", String.valueOf(id)));
                             indexWriter.flush();
                             indexWriter.commit();
                         }

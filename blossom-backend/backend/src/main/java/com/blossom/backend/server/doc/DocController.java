@@ -5,6 +5,8 @@ import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.doc.pojo.DocTreeReq;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
+import com.blossom.backend.server.doc.pojo.DocTreeUpdSortReq;
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,7 @@ public class DocController {
     /**
      * 文档列表
      *
-     * @return 文件夹列表
+     * @return 文档列表
      * @apiNote 文档包含文章和文件夹, 文件夹分为图片文件夹和文章文件夹 {@link DocTypeEnum}
      */
     @GetMapping("/trees")
@@ -55,5 +57,22 @@ public class DocController {
         open.setOnlyOpen(true);
         open.setUserId(userId);
         return R.ok(docService.listTree(open));
+    }
+
+    /**
+     * 修改排序
+     * <p/>todo 返回列表, 兼容列表查询条件
+     *
+     * @param tree 需要修改排序的文档列表
+     * @return 文档列表
+     * @since 1.14.0
+     */
+    @PostMapping("/upd/sort")
+    public R<List<DocTreeRes>> updSort(@RequestBody DocTreeUpdSortReq tree) {
+        docService.updSort(tree.getDocs(), AuthContext.getUserId(), FolderTypeEnum.getType(tree.getFolderType()));
+        DocTreeReq req = new DocTreeReq();
+        req.setUserId(AuthContext.getUserId());
+        req.setOnlyPicture(tree.getOnlyPicture());
+        return R.ok(docService.listTree(req));
     }
 }

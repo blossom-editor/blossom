@@ -2,6 +2,7 @@ package com.blossom.backend.server.article.draft;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.search.EnableIndex;
@@ -166,7 +167,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     public Long update(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
         baseMapper.updById(req);
-        referenceService.updateInnerName(req.getUserId(), req.getId(), req.getName());
+        if(StrUtil.isNotBlank(req.getName())) {
+            referenceService.updateInnerName(req.getUserId(), req.getId(), req.getName());
+        }
         return req.getId();
     }
 

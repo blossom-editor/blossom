@@ -5,17 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.TagEnum;
-import com.blossom.backend.server.article.draft.ArticleService;
+import com.blossom.backend.server.article.draft.ArticleMapper;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
-import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
-import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
-import com.blossom.backend.server.folder.pojo.FolderQueryReq;
 import com.blossom.backend.server.folder.pojo.FolderSubjectRes;
-import com.blossom.backend.server.picture.PictureService;
+import com.blossom.backend.server.picture.PictureMapper;
 import com.blossom.backend.server.picture.pojo.PictureEntity;
 import com.blossom.backend.server.utils.DocUtil;
-import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.exception.XzException500;
@@ -29,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -40,19 +35,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
-    private ArticleService articleService;
-    private PictureService pictureService;
 
     @Autowired
-    public void setArticleService(ArticleService articleService) {
-        this.articleService = articleService;
-    }
+    private PictureMapper picMapper;
 
     @Autowired
-    public void setPictureService(PictureService pictureService) {
-        this.pictureService = pictureService;
-    }
-
+    private ArticleMapper articleMapper;
 
 
     /**
@@ -69,9 +57,11 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         FolderEntity where = new FolderEntity();
         where.setTags(TagEnum.subject.name());
         where.setUserId(userId);
-        if (Objects.nonNull(starStatus) &&
-                (starStatus.equals(1) || starStatus.equals(0))) { where.setStarStatus(starStatus); }
-        else {where.setStarStatus(0);}
+        if (null != starStatus && (starStatus.equals(1) || starStatus.equals(0))) {
+            where.setStarStatus(starStatus);
+        } else {
+            where.setStarStatus(0);
+        }
         List<FolderEntity> allOpenSubject = baseMapper.listAll(where);
         if (CollUtil.isEmpty(allOpenSubject)) {
             return new ArrayList<>();
@@ -85,12 +75,10 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         allOpenSubjectIds.addAll(allOpenSubjectChildFolders.stream().map(FolderEntity::getId).collect(Collectors.toList()));
 
         // 3. 查询这些文件夹下的所有文章
-        ArticleQueryReq articleWhere = new ArticleQueryReq();
+        ArticleEntity articleWhere = new ArticleEntity();
         articleWhere.setPids(allOpenSubjectIds);
         articleWhere.setUserId(userId);
-        // 统计专题信息时, 会包含非公开文章
-        // articleWhere.setOpenStatus(YesNo.YES.getValue());
-        List<ArticleEntity> articles = articleService.listAll(articleWhere);
+        List<ArticleEntity> articles = articleMapper.listAll(articleWhere);
 
         List<FolderSubjectRes> results = new ArrayList<>();
 
@@ -121,34 +109,6 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         }
 
         return results;
-    }
-
-    /**
-     * 查询全部文件夹, 并转换成 {@link DocTreeRes}
-     */
-    public List<DocTreeRes> listTree(FolderQueryReq req) {
-        List<FolderEntity> folders = baseMapper.listAll(req.to(FolderEntity.class));
-        return DocUtil.toTreeRes(folders);
-    }
-
-    /**
-     * 递归获取传入ID的所有的父文件夹, 并转换成 {@link DocTreeRes}, 结果会包含自己
-     *
-     * @param ids ID 集合
-     */
-    public List<DocTreeRes> recursiveToParentTree(List<Long> ids) {
-        List<FolderEntity> folders = baseMapper.recursiveToParent(ids);
-        return DocUtil.toTreeRes(folders);
-    }
-
-    /**
-     * 递归获取传入ID的所有的子文件夹, 并转换成 {@link DocTreeRes}, 结果会包含自己
-     *
-     * @param ids ID 集合
-     */
-    public List<DocTreeRes> recursiveToChildrenTree(List<Long> ids) {
-        List<FolderEntity> folders = baseMapper.recursiveToChildren(ids);
-        return DocUtil.toTreeRes(folders);
     }
 
     /**
@@ -200,9 +160,52 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public Long update(FolderEntity folder) {
+        updateParamValid(folder);
+        updateStorePath(folder);
+        baseMapper.updById(folder);
+        return folder.getId();
+    }
+
+    /**
+     * 删除文件夹
+     * <p>1. 文件夹下有子文件夹时, 无法删除</p>
+     * <p>2. 文件夹下有文章时, 无法删除</p>
+     *
+     * @param folderId 文件夹ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long folderId) {
+        // 文件夹下有文件夹, 无法删除
+        if (baseMapper.recursiveToChildren(CollUtil.newArrayList(folderId)).stream().anyMatch(d -> !d.getId().equals(folderId))) {
+            throw new XzException500("文件夹下有子文件夹, 无法删除, 请先删除子文件夹");
+        }
+
+        // 文件夹下有文章, 无法删除
+        ArticleEntity articleWhere = new ArticleEntity();
+        articleWhere.setPids(CollUtil.newArrayList(folderId));
+        if (CollUtil.isNotEmpty(articleMapper.listAll(articleWhere))) {
+            throw new XzException500("文件夹下有文章, 无法删除, 请先删除下属文章");
+        }
+
+        // 文件夹下有图片, 无法删除
+        PictureEntity picReq = new PictureEntity();
+        picReq.setPid(folderId);
+        if (CollUtil.isNotEmpty(picMapper.listAll(picReq))) {
+            throw new XzException500("文件夹下有图片, 无法删除, 请先删除下属图片");
+        }
+
+        baseMapper.deleteById(folderId);
+    }
+
+    /**
+     * 修改文件夹的存储地址
+     *
+     * @param folder
+     */
+    private void updateStorePath(FolderEntity folder) {
+        // 处理文件夹的存储地址
         XzException404.throwBy(folder.getId() == null, "ID不得为空");
         XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
-        if (Objects.isNull(folder.getStarStatus())) {folder.setStarStatus(0);}
         // 如果
         if (StrUtil.isNotBlank(folder.getStorePath())) {
             final FolderEntity oldFolder = selectById(folder.getId());
@@ -221,9 +224,6 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             }
         }
         folder.setStorePath(formatStorePath(folder.getStorePath()));
-        if (Objects.isNull(folder.getStarStatus())) { folder.setStarStatus(0);}
-        baseMapper.updById(folder);
-        return folder.getId();
     }
 
     /**
@@ -253,34 +253,12 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
     }
 
     /**
-     * 删除文件夹
-     * <p>1. 文件夹下有子文件夹时, 无法删除</p>
-     * <p>2. 文件夹下有文章时, 无法删除</p>
+     * 检查修改是否有效
      *
-     * @param folderId 文件夹ID
+     * @param folder 文件夹
      */
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Long folderId) {
-        // 文件夹下有文件夹, 无法删除
-        if (recursiveToChildrenTree(CollUtil.newArrayList(folderId)).stream().anyMatch(d -> !d.getI().equals(folderId))) {
-            throw new XzException500("文件夹下有子文件夹, 无法删除, 请先删除子文件夹");
-        }
-
-        // 文件夹下有文章, 无法删除
-        ArticleQueryReq articleReq = new ArticleQueryReq();
-        articleReq.setPids(CollUtil.newArrayList(folderId));
-        if (CollUtil.isNotEmpty(articleService.listTree(articleReq))) {
-            throw new XzException500("文件夹下有文章, 无法删除, 请先删除下属文章");
-        }
-
-        // 文件夹下有图片, 无法删除
-        PictureEntity picReq = new PictureEntity();
-        picReq.setPid(folderId);
-        if (CollUtil.isNotEmpty(pictureService.listAll(picReq))) {
-            throw new XzException500("文件夹下有图片, 无法删除, 请先删除下属图片");
-        }
-
-        baseMapper.deleteById(folderId);
+    private void updateParamValid(FolderEntity folder) {
+        XzException404.throwBy(folder.getId() == null, "ID不得为空");
+        XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
     }
-
 }

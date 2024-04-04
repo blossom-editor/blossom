@@ -222,7 +222,7 @@ import { ref, nextTick, inject, computed, watch, Ref } from 'vue'
 import { ElInput, ElMessageBox, FormInstance } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { Document } from '@element-plus/icons-vue'
-import { provideKeyDocTree, getCDocsByPid, getDocById, checkLevel } from '@renderer/views/doc/doc'
+import { provideKeyDocTree, getCDocsByPid, getDocById } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import {
   folderInfoApi,
@@ -388,6 +388,10 @@ const formatStorePath = () => {
 }
 
 const showStorePathWarning = ref(false)
+
+/**
+ * 填充文件夹路径
+ */
 const fillStorePath = (id: string, path: string = ''): void => {
   let doc = getDocById(id, docTreeData!.value)
   if (!doc) {
@@ -542,13 +546,9 @@ const saveDoc = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, _fields) => {
     if (valid) {
       saveLoading.value = true
-      if (!checkLevel(docForm.value.pid, docTreeData!.value)) {
-        saveLoading.value = false
-        return
-      }
       const handleResp = (_: any) => {
         Notify.success(curDocDialogType.value === 'upd' ? `修改《${docForm.value.name}》成功` : `新增《${docForm.value.name}》成功`)
-        emits('saved', curDocDialogType.value)
+        emits('saved', curDocDialogType.value, docForm.value)
       }
       const handleFinally = () => setTimeout(() => (saveLoading.value = false), 300)
       // 新增文件夹

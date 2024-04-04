@@ -75,13 +75,14 @@ export const computedDocTitleColor = (level: number) => {
  * @param pid   上级ID
  * @param trees 树状列表
  * @returns
+ * @deprecated 1.14.0 支持无限菜单后不需要控制层级
  */
 export const checkLevel = (pid: string, trees: DocTree[]): boolean => {
-  let parents = getPDocsByPid(pid, trees)
-  if (parents.length >= 4) {
-    Notify.error('最多仅支持4级层级关系', '菜单层级错误')
-    return false
-  }
+  // let parents = getPDocsByPid(pid, trees)
+  // if (parents.length >= 4) {
+  //   Notify.error('最多仅支持4级层级关系', '菜单层级错误')
+  //   return false
+  // }
   return true
 }
 

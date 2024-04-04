@@ -5,10 +5,9 @@ import cn.hutool.core.util.ObjUtil;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
-import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
-import com.blossom.backend.server.article.draft.pojo.ArticleStarReq;
 import com.blossom.backend.server.article.draft.pojo.ArticleUpdTagReq;
 import com.blossom.backend.server.doc.DocService;
+import com.blossom.backend.server.doc.DocSortChecker;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
@@ -34,6 +33,7 @@ import java.util.List;
 public class FolderController {
     private final FolderService baseService;
     private final DocService docService;
+    private final DocSortChecker docSortChecker;
 
     /**
      * 查询专题列表 [OP]
@@ -96,9 +96,9 @@ public class FolderController {
         FolderEntity folder = req.to(FolderEntity.class);
         folder.setTags(DocUtil.toTagStr(req.getTags()));
         folder.setUserId(AuthContext.getUserId());
-        // 如果新增到顶部, 获取最小的
+        // 如果新增到底部, 获取最大的排序
         if (BooleanUtil.isTrue(req.getAddToLast())) {
-            folder.setSort(docService.selectMinSortByPid(req.getPid()) + 1);
+            folder.setSort(docService.selectMaxSortByPid(req.getPid(), AuthContext.getUserId(), FolderTypeEnum.PICTURE) + 1);
         }
         return R.ok(baseService.insert(folder));
     }
@@ -112,6 +112,15 @@ public class FolderController {
     public R<Long> update(@Validated @RequestBody FolderUpdReq req) {
         FolderEntity folder = req.to(FolderEntity.class);
         folder.setTags(DocUtil.toTagStr(req.getTags()));
+        // 检查排序是否重复
+//        if (folder.getSort() != null && folder.getPid() != null) {
+//            final long newPid = folder.getPid();
+//            docSortChecker.checkUnique(CollUtil.newArrayList(newPid),
+//                    CollUtil.newArrayList(folder),
+//                    null,
+//                    FolderTypeEnum.ARTICLE,
+//                    AuthContext.getUserId());
+//        }
         return R.ok(baseService.update(folder));
     }
 

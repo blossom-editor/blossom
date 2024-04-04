@@ -12,8 +12,10 @@ import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.doc.DocService;
+import com.blossom.backend.server.doc.DocSortChecker;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.folder.FolderService;
+import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
@@ -50,13 +52,14 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/article")
 public class ArticleController {
-
     private final ArticleService baseService;
     private final ArticleOpenService openService;
     private final FolderService folderService;
     private final UserService userService;
     private final ArticleTempVisitService tempVisitService;
     private final DocService docService;
+    private final DocSortChecker docSortChecker;
+    private final ImportManager importManager;
 
     /**
      * 查询列表
@@ -122,9 +125,9 @@ public class ArticleController {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
         article.setUserId(AuthContext.getUserId());
-        // 如果新增到顶部, 获取最小的
+        // 如果新增到顶部, 获取最小的排序
         if (BooleanUtil.isTrue(req.getAddToLast())) {
-            article.setSort(docService.selectMinSortByPid(req.getPid()) + 1);
+            article.setSort(docService.selectMaxSortByPid(req.getPid(), AuthContext.getUserId(), FolderTypeEnum.ARTICLE) + 1);
         }
         return R.ok(baseService.insert(article));
     }
@@ -136,10 +139,19 @@ public class ArticleController {
      * @apiNote 该接口只能修改文章的基本信息, 正文及版本修改请使用 "/upd/content" 接口，或者 {@link ArticleService#updateContentById(ArticleEntity)}
      */
     @PostMapping("/upd")
-    public R<Long> insert(@Validated @RequestBody ArticleUpdReq req) {
+    public R<Long> update(@Validated @RequestBody ArticleUpdReq req) {
         ArticleEntity article = req.to(ArticleEntity.class);
         article.setTags(DocUtil.toTagStr(req.getTags()));
         article.setUserId(AuthContext.getUserId());
+        // 检查排序是否重复
+//        if (req.getSort() != null && req.getPid() != null) {
+//            final long newPid = req.getPid();
+//            docSortChecker.checkUnique(CollUtil.newArrayList(newPid),
+//                    null,
+//                    CollUtil.newArrayList(article),
+//                    FolderTypeEnum.ARTICLE,
+//                    AuthContext.getUserId());
+//        }
         return R.ok(baseService.update(article));
     }
 
@@ -263,11 +275,11 @@ public class ArticleController {
      * @param pid  上级菜单
      */
     @PostMapping("import")
-    public R<?> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "pid") Long pid) {
+    public R<?> upload(@RequestParam("file") MultipartFile file, @RequestParam(value = "pid") Long pid, @RequestParam(value = "batchId") String batchId) {
         try {
             String suffix = FileUtil.getSuffix(file.getOriginalFilename());
             if (!"txt".equals(suffix) && !"md".equals(suffix)) {
-                throw new XzException404("不支持的文件类型: [" + suffix + "]");
+                throw new XzException400("不支持的文件类型: [" + suffix + "]");
             }
             FolderEntity folder = folderService.selectById(pid);
             XzException404.throwBy(ObjUtil.isNull(folder), "上级文件夹不存在");
@@ -278,10 +290,12 @@ public class ArticleController {
             article.setPid(pid);
             article.setUserId(AuthContext.getUserId());
             article.setName(FileUtil.getPrefix(file.getOriginalFilename()));
-            article.setWords(ArticleUtil.statWords(content));
+//            article.setWords(ArticleUtil.statWords(content));
+            article.setSort(importManager.getSort(batchId, pid, AuthContext.getUserId()));
             baseService.insert(article);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new XzException400("上传失败");
         }
         return R.ok();
     }

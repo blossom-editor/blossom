@@ -1,0 +1,87 @@
+$icon-size: 17px;
+
+.menu-item-wrapper {
+  width: 100%;
+}
+
+.doc-title {
+  @include flex(row, flex-start, flex-start);
+  width: 100%;
+  position: relative;
+  padding: 1px 0;
+
+  .doc-name {
+    @include flex(row, flex-start, flex-start);
+    @include ellipsis();
+    font-size: 14px;
+    font-weight: normal;
+
+    align-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .menu-icon,
+    .menu-icon-img {
+      @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+      margin-top: 4px;
+      margin-right: 8px;
+    }
+    .menu-icon-img {
+      border-radius: 2px;
+    }
+
+    .name-wrapper {
+      min-height: 23px;
+      line-height: 23px;
+    }
+  }
+
+  .sort {
+    position: absolute;
+    padding: 0 2px;
+    right: 2px;
+    top: 2px;
+    z-index: 10;
+  }
+}
+
+// 专题样式, 包括边框和文字样式
+.subject-title {
+  @include flex(row, flex-start, flex-start);
+  box-shadow: 2px 2px 8px 1px var(--el-color-primary-light-8);
+  background: linear-gradient(135deg, var(--el-color-primary-light-7), var(--el-color-primary-light-8), var(--bl-html-color));
+  min-height: 44px;
+  max-width: 300px;
+  width: calc(100% - 10px);
+  padding: 4px 5px;
+  margin: 5px 0 5px 0;
+  border-radius: 7px;
+
+  .doc-name {
+    @include flex(row, flex-start, flex-start);
+    color: var(--el-color-primary);
+    align-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .menu-icon,
+    .menu-icon-img {
+      @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
+      margin-right: 8px;
+    }
+
+    .menu-icon-img {
+      border-radius: 2px;
+    }
+
+    .name-wrapper {
+      max-width: calc(100% - 25px);
+      min-width: calc(100% - 25px);
+    }
+  }
+
+  .sort {
+    position: absolute;
+    right: 1px;
+  }
+}

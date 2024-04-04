@@ -1,14 +1,19 @@
 package com.blossom.backend.server.doc;
 
 import cn.hutool.core.collection.CollUtil;
+import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.server.article.TagEnum;
+import com.blossom.backend.server.article.draft.ArticleMapper;
 import com.blossom.backend.server.article.draft.ArticleService;
+import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
 import com.blossom.backend.server.doc.pojo.DocTreeReq;
 import com.blossom.backend.server.doc.pojo.DocTreeRes;
+import com.blossom.backend.server.doc.pojo.DocTreeUpdSortReq;
+import com.blossom.backend.server.folder.FolderMapper;
 import com.blossom.backend.server.folder.FolderService;
 import com.blossom.backend.server.folder.FolderTypeEnum;
-import com.blossom.backend.server.folder.pojo.FolderQueryReq;
+import com.blossom.backend.server.folder.pojo.FolderEntity;
 import com.blossom.backend.server.picture.PictureService;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.backend.server.utils.PictureUtil;
@@ -16,6 +21,7 @@ import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.util.SortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,21 +35,26 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DocService {
-    private FolderService folderService;
     private ArticleService articleService;
     private PictureService pictureService;
-
+    private FolderService folderService;
     @Autowired
     private DocMapper baseMapper;
-
     @Autowired
-    public void setFolderService(FolderService folderService) {
-        this.folderService = folderService;
-    }
+    private FolderMapper folderMapper;
+    @Autowired
+    private ArticleMapper articleMapper;
+    @Autowired
+    private DocSortChecker docSortChecker;
 
     @Autowired
     public void setArticleService(ArticleService articleService) {
         this.articleService = articleService;
+    }
+
+    @Autowired
+    public void setFolderService(FolderService folderService) {
+        this.folderService = folderService;
     }
 
     @Autowired
@@ -64,10 +75,10 @@ public class DocService {
          * 只查询文件夹
          * =============================================================================================== */
         if (req.getOnlyFolder()) {
-            FolderQueryReq where = req.to(FolderQueryReq.class);
-            List<DocTreeRes> folder = folderService.listTree(where);
+            FolderEntity where = req.to(FolderEntity.class);
+            List<FolderEntity> folder = folderMapper.listAll(where);
             all.addAll(CollUtil.newArrayList(PictureUtil.getDefaultFolder(req.getUserId())));
-            all.addAll(folder);
+            all.addAll(DocUtil.toTreeRes(folder));
             priorityType = true;
         }
         /* ===============================================================================================
@@ -75,16 +86,16 @@ public class DocService {
          * =============================================================================================== */
         else if (req.getOnlyPicture()) {
             // 1. 所有图片文件夹
-            FolderQueryReq folder = req.to(FolderQueryReq.class);
-            folder.setType(FolderTypeEnum.PICTURE.getType());
-            List<DocTreeRes> picFolder = folderService.listTree(folder);
-            all.addAll(picFolder);
+            FolderEntity where = req.to(FolderEntity.class);
+            where.setType(FolderTypeEnum.PICTURE.getType());
+            List<FolderEntity> picFolder = folderMapper.listAll(where);
+            all.addAll(DocUtil.toTreeRes(picFolder));
 
             // 2. 有图片的图片或文章文件夹
             List<Long> pids = pictureService.listDistinctPid(req.getUserId());
             if (CollUtil.isNotEmpty(pids)) {
-                List<DocTreeRes> articleTopFolder = folderService.recursiveToParentTree(pids);
-                all.addAll(articleTopFolder);
+                List<FolderEntity> articleTopFolder = folderMapper.recursiveToParent(pids);
+                all.addAll(DocUtil.toTreeRes(articleTopFolder));
             }
 
             Optional<DocTreeRes> min = all.stream().min((f1, f2) -> SortUtil.intSort.compare(f1.getS(), f2.getS()));
@@ -105,24 +116,24 @@ public class DocService {
             all.addAll(articles);
             if (CollUtil.isNotEmpty(articles)) {
                 List<Long> pidList = articles.stream().map(DocTreeRes::getP).collect(Collectors.toList());
-                List<DocTreeRes> folders = folderService.recursiveToParentTree(pidList);
-                all.addAll(folders);
+                List<FolderEntity> folders = folderMapper.recursiveToParent(pidList);
+                all.addAll(DocUtil.toTreeRes(folders));
             }
         }
         /* ===============================================================================================
          * 只查询专题的文章和文件夹
          * =============================================================================================== */
         else if (req.getOnlySubject()) {
-            FolderQueryReq folderWhere = req.to(FolderQueryReq.class);
+            FolderEntity folderWhere = req.to(FolderEntity.class);
             folderWhere.setTags(TagEnum.subject.name());
             folderWhere.setType(FolderTypeEnum.ARTICLE.getType());
-            List<DocTreeRes> subjects = folderService.listTree(folderWhere);
+            List<FolderEntity> subjects = folderMapper.listAll(folderWhere);
             if (CollUtil.isNotEmpty(subjects)) {
-                List<Long> subjectIds = subjects.stream().map(DocTreeRes::getI).collect(Collectors.toList());
-                List<DocTreeRes> foldersTop = folderService.recursiveToParentTree(subjectIds);
-                List<DocTreeRes> foldersBottom = folderService.recursiveToChildrenTree(subjectIds);
-                all.addAll(foldersTop);
-                all.addAll(foldersBottom);
+                List<Long> subjectIds = subjects.stream().map(FolderEntity::getId).collect(Collectors.toList());
+                List<FolderEntity> foldersTop = folderMapper.recursiveToParent(subjectIds);
+                List<FolderEntity> foldersBottom = folderMapper.recursiveToChildren(subjectIds);
+                all.addAll(DocUtil.toTreeRes(foldersTop));
+                all.addAll(DocUtil.toTreeRes(foldersBottom));
             }
             List<DocTreeRes> articles = articleService.listTree(req.to(ArticleQueryReq.class));
             all.addAll(articles);
@@ -137,8 +148,8 @@ public class DocService {
             all.addAll(articles);
             if (CollUtil.isNotEmpty(articles)) {
                 List<Long> pidList = articles.stream().map(DocTreeRes::getP).collect(Collectors.toList());
-                List<DocTreeRes> folders = folderService.recursiveToParentTree(pidList);
-                all.addAll(folders);
+                List<FolderEntity> folders = folderMapper.recursiveToParent(pidList);
+                all.addAll(DocUtil.toTreeRes(folders));
             }
         }
         /* ===============================================================================================
@@ -151,19 +162,19 @@ public class DocService {
             all.addAll(articles);
             if (CollUtil.isNotEmpty(articles)) {
                 List<Long> pidList = articles.stream().map(DocTreeRes::getP).collect(Collectors.toList());
-                List<DocTreeRes> folders = folderService.recursiveToParentTree(pidList);
-                all.addAll(folders);
+                List<FolderEntity> folders = folderMapper.recursiveToParent(pidList);
+                all.addAll(DocUtil.toTreeRes(folders));
             }
         }
         /* ===============================================================================================
          * 默认查询文章文件夹
          * =============================================================================================== */
         else {
-            FolderQueryReq folder = req.to(FolderQueryReq.class);
+            FolderEntity folder = req.to(FolderEntity.class);
             folder.setType(FolderTypeEnum.ARTICLE.getType());
-            List<DocTreeRes> folders = folderService.listTree(folder);
+            List<FolderEntity> folders = folderMapper.listAll(folder);
             List<DocTreeRes> articles = articleService.listTree(req.to(ArticleQueryReq.class));
-            all.addAll(folders);
+            all.addAll(DocUtil.toTreeRes(folders));
             all.addAll(articles);
         }
 
@@ -177,8 +188,64 @@ public class DocService {
      * @return 最大排序
      * @since 1.10.0
      */
-    public int selectMinSortByPid(Long pid) {
-        return baseMapper.selectMaxSortByPid(pid);
+    public int selectMaxSortByPid(Long pid, Long userId, FolderTypeEnum type) {
+        return baseMapper.selectMaxSortByPid(pid, userId, type.getType());
+    }
+
+    /**
+     * 修改排序
+     *
+     * @param docs 需要修改的文档
+     * @since 1.14.0
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updSort(List<DocTreeUpdSortReq.Doc> docs, Long userId, FolderTypeEnum folderType) {
+        // 提取所有需要修改的文档的父文档
+        List<Long> pids = docs.stream().map(DocTreeUpdSortReq.Doc::getP).collect(Collectors.toList());
+
+        List<ArticleEntity> articles = new ArrayList<>();
+        List<FolderEntity> folders = new ArrayList<>();
+
+        // 一次拖拽所修改的文档可能包含文章和文件夹, 需要归类和转为 Entity
+        for (DocTreeUpdSortReq.Doc doc : docs) {
+            if (DocTypeEnum.A.getType().equals(doc.getTy())) {
+                ArticleEntity a = new ArticleEntity();
+                a.setId(doc.getI());
+                a.setPid(doc.getP());
+                a.setName(doc.getN());
+                a.setSort(doc.getS());
+                articles.add(a);
+            }
+            if (DocTypeEnum.FA.getType().equals(doc.getTy())) {
+                FolderEntity f = new FolderEntity();
+                f.setId(doc.getI());
+                f.setPid(doc.getP());
+                f.setName(doc.getN());
+                f.setSort(doc.getS());
+                folders.add(f);
+            }
+        }
+
+        docSortChecker.checkUnique(pids, folders, articles, folderType, userId);
+
+        for (DocTreeUpdSortReq.Doc tree : docs) {
+            if (DocTypeEnum.FA.getType().equals(tree.getTy()) || DocTypeEnum.FP.getType().equals(tree.getTy())) {
+                FolderEntity f = new FolderEntity();
+                f.setId(tree.getI());
+                f.setPid(tree.getP());
+                f.setSort(tree.getS());
+                f.setUserId(AuthContext.getUserId());
+                f.setStorePath(tree.getSp());
+                folderService.update(f);
+            } else if (DocTypeEnum.A.getType().equals(tree.getTy())) {
+                ArticleEntity a = new ArticleEntity();
+                a.setId(tree.getI());
+                a.setPid(tree.getP());
+                a.setSort(tree.getS());
+                a.setUserId(AuthContext.getUserId());
+                articleService.update(a);
+            }
+        }
     }
 
 }

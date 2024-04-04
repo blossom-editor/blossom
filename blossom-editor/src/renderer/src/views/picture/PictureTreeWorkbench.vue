@@ -1,82 +1,17 @@
 <template>
   <div class="doc-workbench-root">
-    <bl-col class="workbench-name" just="flex-start" align="flex-end" height="46px" v-show="curFolder !== undefined">
-      <span>《{{ curFolder?.name }}》</span>
-      <span style="font-size: 9px; padding-right: 5px">{{ curFolder?.id }}</span>
-    </bl-col>
-
-    <!--  -->
-    <bl-row just="flex-end" align="flex-end">
-      <el-tooltip content="显示排序" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-        <div class="iconbl bl-a-leftdirection-line" @click="emits('show-sort')"></div>
-        <template #content>
-          显示排序<br />
-          <bl-row>
-            <bl-tag :bgColor="SortLevelColor.ONE">一级</bl-tag>
-            <bl-tag :bgColor="SortLevelColor.TWO">二级</bl-tag>
-          </bl-row>
-          <bl-row>
-            <bl-tag :bgColor="SortLevelColor.THREE">三级</bl-tag>
-            <bl-tag :bgColor="SortLevelColor.FOUR">四级</bl-tag>
-          </bl-row>
-        </template>
-      </el-tooltip>
-      <el-tooltip content="刷新列表" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-        <div class="iconbl bl-a-cloudrefresh-line" @click="refreshDocTree()"></div>
-      </el-tooltip>
-      <el-tooltip content="新增图片文件夹" effect="light" placement="top" :show-after="1000" :hide-after="0" :auto-close="2000">
-        <div class="iconbl bl-a-fileadd-line" @click="handleShowAddDocInfoDialog()"></div>
-      </el-tooltip>
-    </bl-row>
+    <bl-row just="flex-end" align="flex-end"> </bl-row>
   </div>
-  <el-dialog
-    v-model="isShowDocInfoDialog"
-    width="535"
-    top="100px"
-    style="margin-left: 320px"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="false"
-    draggable>
-    <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
-  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, inject } from 'vue'
-import { provideKeyDocInfo, SortLevelColor } from '@renderer/views/doc/doc'
-import PictureInfo from '@renderer/views/picture/PictureInfo.vue'
-
-// 当前菜单中选择的文档
-const curFolder = inject(provideKeyDocInfo)
+import { ref, nextTick } from 'vue'
 
 // ---------- 新增修改按钮 ----------
-const PictureInfoRef = ref()
-// 显示编辑 dialog
-const isShowDocInfoDialog = ref<boolean>(false)
-const handleShowAddDocInfoDialog = () => {
-  isShowDocInfoDialog.value = true
-  nextTick(() => {
-    PictureInfoRef.value.reload('add')
-  })
-}
-
 const refreshDocTree = () => {
   emits('refreshDocTree')
 }
-
-/**
- * 保存后的回调
- * 1. [暂无] 刷新菜单列表
- * 2. 关闭 dialog 页面
- */
-const savedCallback = () => {
-  isShowDocInfoDialog.value = false
-  refreshDocTree()
-}
 //#endregion
-
-const emits = defineEmits(['refreshDocTree', 'show-sort'])
 </script>
 
 <style scoped lang="scss">

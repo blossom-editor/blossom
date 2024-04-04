@@ -127,6 +127,9 @@ export const useUserStore = defineStore('userStore', {
     userinfo: (Local.get(userinfoKey) as Userinfo) || initUserinfo()
   }),
   getters: {
+    currentUserId(state) {
+      return state.userinfo.id
+    },
     /**
      * 是否登录
      */

@@ -93,18 +93,19 @@
     position: relative;
     background-color: #ffffff00;
 
-    $heightTools: 45px;
+    $heightTools: 50px;
     $heightStatus: 28px;
-    $heightEP: calc(100% - 5px - #{$heightStatus} - #{$heightTools});
+    $heightEP: calc(100% - #{$heightStatus} - #{$heightTools});
 
     .editor-tools {
       @include box(100%, $heightTools);
+      padding: 5px 10px 10px 10px;
+      border-bottom: 1px solid var(--el-border-color);
     }
 
     .editor-preview {
       @include box(100%, $heightEP);
       @include flex(row, flex-start, center);
-      border-top: 1px solid var(--el-border-color);
       position: relative;
       font-family: inherit;
       font-size: inherit;
@@ -136,6 +137,11 @@
         font-size: inherit;
         overflow: overlay;
         z-index: 2;
+
+        /* 定义滑块 内阴影+圆角 */
+        &::-webkit-scrollbar-thumb {
+          border-radius: 0;
+        }
 
         :deep(*) {
           font-family: inherit;
@@ -233,6 +239,11 @@
         z-index: 3;
         font-family: inherit;
         font-size: inherit;
+
+        /* 定义滑块 内阴影+圆角 */
+        &::-webkit-scrollbar-thumb {
+          border-radius: 0;
+        }
 
         :deep(.katex > *) {
           font-size: 1.2em !important;

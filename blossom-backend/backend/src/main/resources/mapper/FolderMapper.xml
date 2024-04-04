@@ -26,6 +26,10 @@
             <if test="openStatus != null ">and open_status = #{openStatus}</if>
             <if test="type != null ">and type = #{type}</if>
             <if test="tags != null and tags != ''">and tags like concat('%',#{tags},'%')</if>
+            <if test="pid != null">and pid = #{pid}</if>
+            <if test="pids != null and pids.size() != 0">and pid in
+                <foreach collection="pids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+            </if>
             <if test="userId != null">and user_id = #{userId}</if>
         </where>
     </select>

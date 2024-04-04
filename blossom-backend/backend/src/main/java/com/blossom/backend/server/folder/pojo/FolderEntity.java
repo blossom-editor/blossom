@@ -1,13 +1,10 @@
 package com.blossom.backend.server.folder.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +15,6 @@ import java.util.List;
  *
  * @author xzzz
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("blossom_folder")
 public class FolderEntity extends AbstractPOJO implements Serializable {
@@ -106,6 +102,26 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     @TableField(exist = false)
     private List<Long> ids;
 
+    /**
+     * 父ID集合
+     */
+    @TableField(exist = false)
+    private List<Long> pids;
+
     //endregion
+
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(this.getId());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof FolderEntity) {
+            return this.id.equals(((FolderEntity)obj).getId());
+        }
+        return false;
+    }
 
 }

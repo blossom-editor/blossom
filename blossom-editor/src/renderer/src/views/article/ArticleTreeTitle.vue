@@ -1,6 +1,6 @@
 <template>
   <div :class="[viewStyle.isShowSubjectStyle ? (isSubject ? 'subject-title' : 'doc-title') : 'doc-title']">
-    <bl-tag class="sort" v-show="props.trees.showSort" :bgColor="levelColor">
+    <bl-tag class="sort" v-show="props.trees.showSort">
       {{ props.trees.s }}
     </bl-tag>
     <div class="doc-name">
@@ -30,9 +30,6 @@
         {{ tag.content }}
       </bl-tag>
     </div>
-    <div v-if="level >= 2" class="folder-level-line" style="left: -20px"></div>
-    <div v-if="level >= 3" class="folder-level-line" style="left: -30px"></div>
-    <div v-if="level >= 4" class="folder-level-line" style="left: -40px"></div>
     <div
       v-if="viewStyle.isShowArticleType"
       v-for="(line, index) in tagLins"
@@ -47,19 +44,13 @@ import { computed } from 'vue'
 import type { PropType } from 'vue'
 import { useConfigStore } from '@renderer/stores/config'
 import { isNotBlank } from '@renderer/assets/utils/obj'
-import { computedDocTitleColor } from '@renderer/views/doc/doc'
 import { articleUpdNameApi, folderUpdNameApi } from '@renderer/api/blossom'
 
 const { viewStyle } = useConfigStore()
 
 const props = defineProps({
   trees: { type: Object as PropType<DocTree>, default: {} },
-  size: { type: Number, default: 14 },
-  level: { type: Number, required: true }
-})
-
-const levelColor = computed(() => {
-  return computedDocTitleColor(props.level)
+  size: { type: Number, default: 14 }
 })
 
 const nameWrapperStyle = computed(() => {
@@ -137,8 +128,8 @@ $icon-size: 17px;
 .doc-title {
   @include flex(row, flex-start, flex-start);
   width: 100%;
-  padding-bottom: 1px;
   position: relative;
+  padding: 1px 0;
 
   .doc-name {
     @include flex(row, flex-start, flex-start);
@@ -147,12 +138,13 @@ $icon-size: 17px;
     font-size: inherit;
     align-content: flex-start;
     flex-wrap: wrap;
+    height: 100%;
     width: 100%;
 
     .menu-icon,
     .menu-icon-img {
       @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-      margin-top: 5px;
+      margin-top: 4px;
       margin-right: 8px;
     }
     .menu-icon-img {
@@ -160,7 +152,8 @@ $icon-size: 17px;
     }
 
     .name-wrapper {
-      @include ellipsis();
+      min-height: 23px;
+      line-height: 23px;
     }
   }
 
@@ -171,27 +164,18 @@ $icon-size: 17px;
     top: 2px;
     z-index: 10;
   }
-  .folder-level-line {
-    @include box(1px, 100%);
-  }
-}
-
-.folder-level-line {
-  background-color: var(--el-border-color);
-  position: absolute;
-  opacity: 0;
-  transition: opacity 0.5s;
 }
 
 // 专题样式, 包括边框和文字样式
 .subject-title {
   @include flex(row, flex-start, flex-start);
-  @include themeShadow(2px 2px 10px 1px var(--el-color-primary-light-8), 2px 2px 10px 1px #131313);
+  @include themeShadow(2px 2px 8px 1px var(--el-color-primary-light-8), 2px 2px 10px 1px #131313);
   background: linear-gradient(135deg, var(--el-color-primary-light-7), var(--el-color-primary-light-8), var(--bl-html-color));
-  max-width: calc(100% - 15px);
-  min-width: calc(100% - 15px);
-  padding: 2px 5px;
-  margin: 5px 0 10px 0;
+  min-height: 44px;
+  max-width: 300px;
+  width: calc(100% - 10px);
+  padding: 4px 5px;
+  margin: 5px 0 5px 0;
   border-radius: 7px;
   position: relative;
 
@@ -206,7 +190,6 @@ $icon-size: 17px;
     .menu-icon,
     .menu-icon-img {
       @include box($icon-size, $icon-size, $icon-size, $icon-size, $icon-size, $icon-size);
-      margin-top: 5px;
       margin-right: 8px;
     }
 
@@ -215,7 +198,6 @@ $icon-size: 17px;
     }
 
     .name-wrapper {
-      @include ellipsis();
       max-width: calc(100% - 25px);
       min-width: calc(100% - 25px);
     }
@@ -223,13 +205,9 @@ $icon-size: 17px;
 
   .sort {
     position: absolute;
-    right: -15px;
+    right: -10px;
   }
 
-  .folder-level-line {
-    @include box(1px, calc(100% + 15px));
-    top: -5px;
-  }
 }
 
 // 在左侧显示
@@ -238,8 +216,8 @@ $icon-size: 17px;
 .sync-line {
   position: absolute;
   width: 2px;
-  height: 60%;
-  top: 20%;
+  height: 70%;
+  top: 15%;
   border-radius: 10px;
 }
 

@@ -378,7 +378,6 @@ const handleShowHotKeyDialog = () => {
 .editor-tools-root {
   @include box(calc(100% - 20px), 35px);
   @include themeShadow(0 1px 4px 1px #d3d3d3, 0 1px 4px 1px rgb(20, 20, 20));
-  margin: 5px 10px 10px 10px;
   border-radius: 5px;
   position: relative;
   overflow: hidden;
@@ -426,7 +425,7 @@ const handleShowHotKeyDialog = () => {
   }
 }
 </style>
-<!-- 
+<!--
 快捷键说明为弹出框 需要设置全局的样式
 -->
 <style lang="scss" scoped>

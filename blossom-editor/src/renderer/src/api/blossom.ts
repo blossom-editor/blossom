@@ -94,6 +94,15 @@ export const docTreeApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/doc/trees', { params })
 }
 
+/**
+ * 修改文档的排序
+ * @param data 
+ * @returns 
+ */
+export const docUpdSortApi = (data: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/doc/upd/sort', data)
+}
+
 //#endregion
 
 //#region ====================================================< folder >====================================================
@@ -438,16 +447,6 @@ export interface BackupFile {
 }
 export const articleBackupListApi = (): Promise<R<BackupFile[]>> => {
   return rq.get<BackupFile[]>('/article/backup/list')
-}
-
-/**
- * 下载备份文件
- * @param params
- * @returns
- */
-export const articleBackupDownloadApi = (params?: object): Promise<any> => {
-  let config = { params: params, responseType: 'blob' }
-  return rq.get('/article/backup/download', config)
 }
 
 /**
