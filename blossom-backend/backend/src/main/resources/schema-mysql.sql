@@ -458,7 +458,6 @@ alter table blossom_folder
     modify icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL default '' comment '图标';
 alter table blossom_folder
     modify sort int NOT NULL default 1 comment '排序';
-alter table blossom_folder add column star_status tinyint(1) NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是';
 
 -- ----------------------------
 -- Records of blossom_folder
@@ -640,3 +639,6 @@ CREATE TABLE IF NOT EXISTS `base_user_param`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT = '用户参数'
   COLLATE = utf8mb4_bin;
+
+-- Code that might be wrong goes last
+alter table blossom_folder add column star_status tinyint(1) NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是';
