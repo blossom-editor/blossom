@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -98,7 +99,10 @@ public class FolderController {
         folder.setUserId(AuthContext.getUserId());
         // 如果新增到底部, 获取最大的排序
         if (BooleanUtil.isTrue(req.getAddToLast())) {
-            folder.setSort(docService.selectMaxSortByPid(req.getPid(), AuthContext.getUserId(), FolderTypeEnum.PICTURE) + 1);
+            folder.setSort(docService.selectMaxSortByPid(
+                    req.getPid(),
+                    AuthContext.getUserId(),
+                    Objects.requireNonNull(FolderTypeEnum.getType(req.getType()))) + 1);
         }
         return R.ok(baseService.insert(folder));
     }
