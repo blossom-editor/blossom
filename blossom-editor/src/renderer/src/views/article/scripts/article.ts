@@ -1,3 +1,6 @@
+import { isNull } from '@renderer/assets/utils/obj'
+import { randomInt } from '@renderer/assets/utils/util'
+
 /**
  * 临时内容的 localStorage key
  */
@@ -70,6 +73,10 @@ export const parseTocAsync = async (ele: HTMLElement): Promise<Toc[]> => {
     let level = 1
     let content = (head as HTMLElement).innerText
     let id = head.id
+    if (isNull(id)) {
+      id = randomInt(1000000, 9999999).toString() + content
+      head.id = id
+    }
     switch (head.localName) {
       case 'h1':
         level = 1
@@ -98,7 +105,7 @@ export const parseTocAsync = async (ele: HTMLElement): Promise<Toc[]> => {
 
 /**
  * 下载返回对象
- * 
+ *
  * @param resp
  */
 export const downloadTextPlain = (resp: any) => {
