@@ -288,6 +288,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
     .task-day-calendar {
       background-color: transparent;
+      --el-calendar-selected-bg-color: var(--el-color-primary-light-8);
+
       :deep(.el-calendar__header) {
         padding: 0;
       }
@@ -314,6 +316,17 @@ const blurPhasedUpdHandle = (todoId: string) => {
             }
             &:last-child {
               border-right: none;
+            }
+          }
+
+          .is-today {
+            .el-calendar-day {
+              .cell-wrapper {
+                .day {
+                  font-size: 18px;
+                  font-weight: 900;
+                }
+              }
             }
           }
         }
