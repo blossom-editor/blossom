@@ -435,7 +435,6 @@ CREATE TABLE IF NOT EXISTS `blossom_folder`
     `name`             varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '文件夹名称',
     `icon`             varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '图标',
     `tags`             varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '标签',
-    `star_status`      tinyint(1)                                             NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是',
     `open_status`      tinyint(1)                                             NOT NULL DEFAULT 0 COMMENT '开放状态',
     `sort`             int UNSIGNED                                           NOT NULL DEFAULT 1 COMMENT '排序',
     `cover`            varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '封面图片',
@@ -459,6 +458,7 @@ alter table blossom_folder
     modify icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL default '' comment '图标';
 alter table blossom_folder
     modify sort int NOT NULL default 1 comment '排序';
+alter table blossom_folder add column star_status tinyint(1) NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是';
 
 -- ----------------------------
 -- Records of blossom_folder
