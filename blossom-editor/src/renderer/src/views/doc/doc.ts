@@ -1,5 +1,4 @@
 import { isNull } from '@renderer/assets/utils/obj'
-import Notify from '@renderer/scripts/notify'
 import { isEmpty } from 'lodash'
 import { Ref } from 'vue'
 import type { InjectionKey } from 'vue'
@@ -77,12 +76,7 @@ export const computedDocTitleColor = (level: number) => {
  * @returns
  * @deprecated 1.14.0 支持无限菜单后不需要控制层级
  */
-export const checkLevel = (pid: string, trees: DocTree[]): boolean => {
-  // let parents = getPDocsByPid(pid, trees)
-  // if (parents.length >= 4) {
-  //   Notify.error('最多仅支持4级层级关系', '菜单层级错误')
-  //   return false
-  // }
+export const checkLevel = (_pid: string, _trees: DocTree[]): boolean => {
   return true
 }
 
