@@ -104,25 +104,26 @@
           opacity 0.1s;
       }
 
+      .btn-wrapper {
+        margin-left: 15px;
+      }
+
       .radio {
         min-width: 70px;
       }
 
-      .radio,
-      .cache-clear,
+      .btn-wrapper,
       .statistic {
         @include themeColor(#a7a7a7, #6d6d6d);
-        margin-left: 15px;
 
         & > div {
           font-size: 11px;
           text-align: center;
         }
-      }
 
-      .cache-clear {
-        .iconbl {
-          margin-right: 5px;
+        .bl-admonish-line {
+          font-size: 12px;
+          margin-left: 3px;
         }
       }
 
