@@ -225,6 +225,7 @@ import { Document } from '@element-plus/icons-vue'
 import { provideKeyDocTree, getCDocsByPid, getDocById } from '@renderer/views/doc/doc'
 import { useUserStore } from '@renderer/stores/user'
 import {
+  folderStarApi,
   folderInfoApi,
   folderAddApi,
   folderUpdApi,
@@ -239,7 +240,6 @@ import {
 import { isNotBlank, isNull } from '@renderer/assets/utils/obj'
 import { openExtenal, openNewIconWindow } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
-import {folderStarApi} from "../../api/blossom";
 
 //#region --------------------------------------------------< 基本信息 >--------------------------------------------------
 const userStore = useUserStore()

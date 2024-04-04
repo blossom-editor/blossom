@@ -8,7 +8,7 @@
       fontWeight: props.weight
     }">
     <!-- {{ !!slots.default }}| -->
-    <span v-if="props.icon" :class="['tag-iconbl iconbl', props.icon, !!slots.default ? 'tag-icon-margin' : '']" />
+    <span v-if="props.icon" :class="['tag-iconbl iconbl', props.icon]" />
     <span class="tag-content">
       <slot />
     </span>
@@ -16,10 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from 'vue'
-
-const slots = useSlots()
-
 const props = defineProps({
   /**
    * background-color
@@ -54,7 +50,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .tag-root {
   @include flex(row, center, center);
-  @include themeShadow(2px 2px 3px 0 #bbbbbb, 1px 2px 3px #0F0F0F);
+  @include themeShadow(2px 1px 3px 0 #bbbbbb, 1px 1px 3px #0f0f0f);
   border-radius: 4px;
   padding: 1px 4px;
   margin: 3px;
@@ -65,10 +61,6 @@ const props = defineProps({
 
   .tag-iconbl {
     font-size: 12px;
-  }
-
-  .tag-icon-margin {
-    margin-right: 2px;
   }
 
   .tag-content {

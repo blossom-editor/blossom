@@ -65,9 +65,7 @@
       <template #default="{ node, data }">
         <div class="menu-item-wrapper" @click.right="handleClickRightMenu($event, data)">
           <div :class="[viewStyle.isShowSubjectStyle ? (data.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
-            <bl-tag v-if="isShowSort" class="sort" :bgColor="getColor(node)">
-              {{ data.s }}
-            </bl-tag>
+            <div v-if="isShowSort" class="sort-tag" :style="{ backgroundColor: getColor(node) }">{{ data.s }}</div>
             <div class="doc-name">
               <img class="menu-icon-img" v-if="isShowImg(data, viewStyle)" :src="data.icon" />
               <svg v-else-if="isShowSvg(data, viewStyle)" class="icon menu-icon" aria-hidden="true">
@@ -83,7 +81,7 @@
               <div v-else class="name-wrapper" :style="{ maxWidth: isNotBlank(data.icon) ? 'calc(100% - 25px)' : '100%' }">
                 {{ data.n }}
               </div>
-              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">
+              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 4px" :bg-color="tag.bgColor" :color="tag.color" :icon="tag.icon">
                 {{ tag.content }}
               </bl-tag>
             </div>
@@ -124,8 +122,8 @@
           <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开</div>
             <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
-            <div v-if="curDoc.star === 0 && curDoc.ty === 3" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
-            <div v-if="curDoc.star === 1 && curDoc.ty === 3" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏</div>
+            <div v-if="curDoc.star === 0" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
+            <div v-if="curDoc.star === 1" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏</div>
             <div v-if="curDoc.ty === 3 && !curDoc.t.includes('toc')" @click="addArticleTag('toc')">
               <span class="iconbl bl-list-ordered"></span>设为专题目录
             </div>
@@ -272,6 +270,7 @@ import {
   articleDownloadHtmlApi,
   articleOpenApi,
   articleStarApi,
+  folderStarApi,
   folderAddApi,
   folderUpdTagApi,
   folderDelApi,
@@ -930,10 +929,17 @@ const open = (openStatus: 0 | 1) => {
  * 收藏/取消收藏
  */
 const star = (starStatus: 0 | 1) => {
-  articleStarApi({ id: curDoc.value.i, starStatus: starStatus }).then(() => {
-    curDoc.value.star = starStatus
-    Notify.success(starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
-  })
+  if (curDoc.value.ty === 3) {
+    articleStarApi({ id: curDoc.value.i, starStatus: starStatus }).then(() => {
+      curDoc.value.star = starStatus
+      Notify.success(starStatus === 0 ? '取消 Star 成功' : 'Star 成功')
+    })
+  } else if (curDoc.value.ty === 1) {
+    folderStarApi({ id: curDoc.value.i, starStatus: starStatus }).then(() => {
+      curDoc.value.star = starStatus
+      Notify.success(starStatus === 0 ? '取消文件夹 Star 成功' : '文件夹 Star 成功')
+    })
+  }
 }
 
 /**

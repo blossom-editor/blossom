@@ -1,5 +1,5 @@
 <template>
-  <bl-row class="container-name">收藏/关注</bl-row>
+  <bl-row class="container-name">文章收藏</bl-row>
   <bl-row class="container-sub-name" just="space-between">
     Article Star
     <span v-if="configViewStyle.isHomeStarCard" class="iconbl bl-array-line container-operator" @click="showStarCard(false)" />

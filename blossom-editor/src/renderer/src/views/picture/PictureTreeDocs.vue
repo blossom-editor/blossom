@@ -61,9 +61,7 @@
         <div v-if="data.ty === 11" class="menu-divider"></div>
         <div v-else class="menu-item-wrapper" @click.right="handleClickRightMenu($event, data)">
           <div class="doc-title">
-            <bl-tag v-if="isShowSort && data.ty === 2" class="sort" :bgColor="getColor(node)">
-              {{ data.s }}
-            </bl-tag>
+            <div v-if="isShowSort" class="sort-tag" :style="{ backgroundColor: getColor(node) }">{{ data.s }}</div>
             <div class="doc-name">
               <img class="menu-icon-img" v-if="isShowImg(data, viewStyle)" :src="data.icon" />
               <svg v-else-if="isShowSvg(data, viewStyle)" class="icon menu-icon" aria-hidden="true">
@@ -79,7 +77,7 @@
               <div v-else class="name-wrapper" :style="{ maxWidth: isNotBlank(data.icon) ? 'calc(100% - 25px)' : '100%' }">
                 {{ data.n }}
               </div>
-              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 5px" :bg-color="tag.bgColor" :icon="tag.icon">
+              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 4px" :bg-color="tag.bgColor" :icon="tag.icon">
                 {{ tag.content }}
               </bl-tag>
             </div>

@@ -27,6 +27,9 @@ export const tags = (doc: DocTree, viewStyle: { isShowArticleTocTag: boolean; is
       icons.unshift({ bgColor: 'var(--bl-tag-color-open)', icon: 'bl-cloud-line' })
     }
   }
+  if (doc.ty === 1 && doc.star === 1) {
+    icons.unshift({ bgColor: 'rgb(220 192 36)', color: '#6a5b00', icon: 'bl-star-line' })
+  }
   return icons
 }
 
@@ -35,14 +38,16 @@ export const tags = (doc: DocTree, viewStyle: { isShowArticleTocTag: boolean; is
  */
 export const tagLins = (doc: DocTree) => {
   let lines: string[] = []
-  if (doc.star === 1) {
-    lines.push('star-line')
-  }
-  if (doc.o === 1 && doc.ty === 3) {
-    lines.push('open-line')
-  }
-  if (doc.vd === 1) {
-    lines.push('sync-line')
+  if (doc.ty === 3) {
+    if (doc.star === 1) {
+      lines.push('star-line')
+    }
+    if (doc.o === 1 && doc.ty === 3) {
+      lines.push('open-line')
+    }
+    if (doc.vd === 1) {
+      lines.push('sync-line')
+    }
   }
   return lines
 }

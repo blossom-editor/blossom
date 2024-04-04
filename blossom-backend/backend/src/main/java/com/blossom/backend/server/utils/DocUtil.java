@@ -148,7 +148,7 @@ public class DocUtil {
         tree.setS(folder.getSort());
         tree.setN(folder.getName());
         tree.setSp(folder.getStorePath());
-        tree.setStar(0);
+        tree.setStar(folder.getStarStatus());
         tree.setTy(folder.getType());
         tree.setIcon(folder.getIcon());
         if (StrUtil.isBlank(folder.getTags())) {

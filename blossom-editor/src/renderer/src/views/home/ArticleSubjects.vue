@@ -1,7 +1,7 @@
 <template>
-  <bl-row class="container-name">专题</bl-row>
+  <bl-row class="container-name">专题收藏</bl-row>
   <bl-row class="container-sub-name" just="space-between">
-    <span>Article Subjects</span>
+    <span>Subject Star</span>
     <span v-if="configViewStyle.isHomeSubjectCard" class="iconbl bl-array-line container-operator" @click="showSubjectCard(false)" />
     <span v-else class="iconbl bl-article-line container-operator" @click="showSubjectCard(true)" />
   </bl-row>

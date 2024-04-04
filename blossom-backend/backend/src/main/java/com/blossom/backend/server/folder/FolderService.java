@@ -12,6 +12,7 @@ import com.blossom.backend.server.folder.pojo.FolderSubjectRes;
 import com.blossom.backend.server.picture.PictureMapper;
 import com.blossom.backend.server.picture.pojo.PictureEntity;
 import com.blossom.backend.server.utils.DocUtil;
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.exception.XzException500;
@@ -19,10 +20,10 @@ import com.blossom.common.base.util.DateUtils;
 import com.blossom.common.base.util.PrimaryKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,17 +52,16 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * <p>4. 相同专题的所有文件夹ID归为一组.
      * <p>5. 通过文件夹ID获取到专题下的所有文章, 从而统计文章的总字数, 修改时间, 创建时间等.
      * <p>6. 如果文章包含 TOC 标签, 则该文章为专题的目录, 专题的默认跳转会跳转至该目录
+     *
+     * @param userId     用户ID
+     * @param starStatus 公开状态
      */
-    public List<FolderSubjectRes> subjects(Long userId, @Nullable Integer starStatus) {
+    public List<FolderSubjectRes> subjects(Long userId, @NotNull YesNo starStatus) {
         // 1. 查询所有专题
         FolderEntity where = new FolderEntity();
         where.setTags(TagEnum.subject.name());
         where.setUserId(userId);
-        if (null != starStatus && (starStatus.equals(1) || starStatus.equals(0))) {
-            where.setStarStatus(starStatus);
-        } else {
-            where.setStarStatus(0);
-        }
+        where.setStarStatus(starStatus.getValue());
         List<FolderEntity> allOpenSubject = baseMapper.listAll(where);
         if (CollUtil.isEmpty(allOpenSubject)) {
             return new ArrayList<>();
@@ -204,9 +204,6 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      */
     private void updateStorePath(FolderEntity folder) {
         // 处理文件夹的存储地址
-        XzException404.throwBy(folder.getId() == null, "ID不得为空");
-        XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
-        // 如果
         if (StrUtil.isNotBlank(folder.getStorePath())) {
             final FolderEntity oldFolder = selectById(folder.getId());
             // 获取所有子文件夹

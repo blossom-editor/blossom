@@ -109,19 +109,4 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     private List<Long> pids;
 
     //endregion
-
-
-    @Override
-    public int hashCode() {
-        return Long.hashCode(this.getId());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof FolderEntity) {
-            return this.id.equals(((FolderEntity)obj).getId());
-        }
-        return false;
-    }
-
 }

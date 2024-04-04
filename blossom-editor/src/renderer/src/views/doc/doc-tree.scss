@@ -106,7 +106,8 @@
 
   .doc-tree {
     @include box(100%, 100%);
-    padding-left: 5px;
+    padding-left: 6px;
+    padding-right: 2px;
     // --el-transition-duration: .1s; // 折叠展开的动画效果
 
     .menu-divider {

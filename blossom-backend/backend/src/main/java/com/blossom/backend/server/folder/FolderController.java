@@ -7,9 +7,9 @@ import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.pojo.ArticleUpdTagReq;
 import com.blossom.backend.server.doc.DocService;
-import com.blossom.backend.server.doc.DocSortChecker;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
+import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
@@ -34,7 +34,6 @@ import java.util.Objects;
 public class FolderController {
     private final FolderService baseService;
     private final DocService docService;
-    private final DocSortChecker docSortChecker;
 
     /**
      * 查询专题列表 [OP]
@@ -47,21 +46,24 @@ public class FolderController {
         if (userId == null) {
             return R.ok(new ArrayList<>());
         }
-        return R.ok(baseService.subjects(userId, null));
+        return R.ok(baseService.subjects(userId, YesNo.YES));
     }
 
     /**
      * 查询专题列表
+     *
+     * @param starStatus 公开状态,
      */
     @GetMapping("/subjects")
     public R<List<FolderSubjectRes>> listSubject(@RequestParam("starStatus") Integer starStatus) {
-        return R.ok(baseService.subjects(AuthContext.getUserId(), starStatus));
+        return R.ok(baseService.subjects(AuthContext.getUserId(), YesNo.getValue(starStatus)));
     }
 
     /**
-     * 星标目录
+     * 星标文件夹
      *
-     * @param req 目录对象
+     * @param req 目录文件夹
+     * @since 1.14.0
      */
     @PostMapping("/star")
     public R<Long> star(@Validated @RequestBody FolderStarReq req) {
