@@ -139,7 +139,7 @@ $width-item: 210px;
     @include font(14px, 300);
     @include themeColor(#3e3e3e, #b3b3b3);
     @include themeBg(#ffffffe1, #151515d2);
-    @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
+    @include themeShadow(0 3px 7px rgb(198, 198, 198), 0 3px 5px rgb(14, 14, 14));
     @include ellipsis();
     line-height: 40px;
     padding: 0 10px;
