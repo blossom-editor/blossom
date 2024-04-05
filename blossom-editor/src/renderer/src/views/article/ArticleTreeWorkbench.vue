@@ -14,9 +14,9 @@
         <el-tooltip content="文章回收站" effect="light" popper-class="is-small" placement="top" :offset="8" :hide-after="0">
           <div class="iconbl bl-delete-line" @click="handleShowRecycleDialog"></div>
         </el-tooltip>
-        <el-tooltip content="文档快速编辑" effect="light" popper-class="is-small" placement="top" :offset="8" :hide-after="0">
+        <!-- <el-tooltip content="文档快速编辑" effect="light" popper-class="is-small" placement="top" :offset="8" :hide-after="0">
           <div class="iconbl bl-article-line" @click=""></div>
-        </el-tooltip>
+        </el-tooltip> -->
       </bl-row>
     </bl-row>
   </div>
