@@ -2,38 +2,8 @@
   @include box(100%, 100%);
   @include flex(row, flex-start, center);
 
-  .resize-divider,
-  .resize-docs-divider {
+  .editor-resize-divider {
     width: 2px;
-    height: 100%;
-    z-index: 4;
-    background-color: var(--el-border-color);
-    z-index: 1001;
-    position: relative;
-    cursor: ew-resize;
-
-    &::before {
-      content: '';
-      width: 3px;
-      display: block;
-      height: 100%;
-      transition: 0.3s;
-      position: absolute;
-      background-color: transparent;
-      left: -1px;
-      z-index: 1002;
-      cursor: ew-resize;
-    }
-
-    &:hover {
-      &::before {
-        background-color: var(--el-color-primary);
-      }
-    }
-  }
-
-  .resize-docs-divider {
-    width: 1px;
   }
 
   // 文档

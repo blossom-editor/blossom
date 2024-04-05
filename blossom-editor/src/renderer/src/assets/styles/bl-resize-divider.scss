@@ -1,0 +1,27 @@
+.resize-divider-vertical {
+  width: 1px;
+  height: 100%;
+  background-color: var(--el-border-color);
+  position: relative;
+  z-index: 1001;
+  cursor: ew-resize;
+
+  &::before {
+    content: '';
+    width: 3px;
+    height: 100%;
+    background-color: transparent;
+    display: block;
+    transition: 0.3s;
+    position: absolute;
+    left: -1px;
+    z-index: 1002;
+    cursor: ew-resize;
+  }
+
+  &:hover {
+    &::before {
+      background-color: var(--el-color-primary);
+    }
+  }
+}

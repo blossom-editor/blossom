@@ -249,7 +249,6 @@ import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo, isArticle } fr
 import { TempTextareaKey, ArticleReference, DocsEditorStyle, parseTocAsync } from './scripts/article'
 import type { Toc } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
-import { useResize } from './scripts/editor-preview-resize'
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
 // marked
@@ -401,8 +400,6 @@ const enterView = () => {
 const exitView = () => {
   autoSave()
 }
-
-useResize(EditorRef, PreviewRef, ResizeDividerRef, EditorOperatorRef)
 //#endregion
 
 //#region ----------------------------------------< 图片管理 >--------------------------------------

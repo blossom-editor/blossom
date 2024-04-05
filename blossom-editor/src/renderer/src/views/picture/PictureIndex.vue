@@ -1,7 +1,7 @@
 <template>
   <div class="index-picture-root">
     <!-- folder menu -->
-    <div class="doc-container">
+    <div class="doc-container" ref="DocsRef">
       <div class="doc-tree-menu-container">
         <PictureTreeDocs @click-doc="clickCurFolder"></PictureTreeDocs>
       </div>
@@ -11,8 +11,9 @@
       </div>
     </div>
 
-    <!-- editor -->
-    <div class="picture-container">
+    <div class="resize-divider-vertical" ref="ResizeDividerRef"></div>
+
+    <div class="picture-container" ref="PictureContainerRef">
       <!-- 工作台 -->
       <div class="picutre-workbench" :style="workbencStyle.workbench1">
         <div class="workbenchs">
@@ -187,6 +188,7 @@ import { isNotNull, isNull } from '@renderer/assets/utils/obj'
 import { formatFileSize, getFilePrefix, getFileSuffix, isImage } from '@renderer/assets/utils/util'
 import { writeText, download } from '@renderer/assets/utils/electron'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
+import { useResizeVertical } from '@renderer/scripts/resize-devider-vertical'
 
 // component
 import { articleNamesToArray, picCacheWrapper, Picture, picCacheRefresh } from './scripts/picture'
@@ -539,7 +541,7 @@ const deleted = (ids: Array<string>) => {
 
 //#endregion
 
-//#region ----------------------------------------< 移动 >----------------------------------
+//#region ----------------------------------------< 移动至其他文件夹 >----------------------------------
 
 const isShowTransferDialog = ref(false)
 
@@ -564,10 +566,26 @@ const transferred = () => {
 }
 
 //#endregion
+
+//#region ----------------------------------------< 左右拖拽 >----------------------------------
+const DocsRef = ref()
+const ResizeDividerRef = ref()
+const PictureContainerRef = ref()
+useResizeVertical(DocsRef, PictureContainerRef, ResizeDividerRef, undefined, {
+  persistent: true,
+  keyOne: 'picture_docs_width',
+  keyTwo: 'picture_continer_width',
+  defaultOne: '250px',
+  defaultTwo: 'calc(100% - 250px)',
+  maxOne: 700,
+  minOne: 250
+})
+//#endregion
 </script>
 
 <style scoped lang="scss">
 @import './styles/picture-index.scss';
+@import '@renderer/assets/styles/bl-resize-divider.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
 
 .replace-upload-switch {

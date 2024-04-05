@@ -2,6 +2,15 @@ import { onBeforeUnmount, onMounted, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 import { Local } from '@renderer/assets/utils/storage'
 
+/**
+ * persistent: 是否持久化
+ * keyOne: 组件1持久化 key,
+ * keyTwo: 组件2持久化 key,
+ * defaultOne: 组件1默认宽度,
+ * defaultTwo: 组件2默认宽度,
+ * maxOne: 组件1最大宽度,
+ * minOne: 组件1最小宽度
+ */
 type Option = {
   persistent: boolean
   keyOne: string
@@ -13,18 +22,15 @@ type Option = {
 }
 
 /**
- * 拖转改变布局的功能
+ * 左右拖动改变布局的功能
  *
- * @param oneRef 拖转影响到的一个组件
- * @param twoRef 拓展影响到的另一个组件
- * @param resizeDividerRef 拖动条
+ * @param oneRef 拖动影响到组件1
+ * @param twoRef 拖动影响到组件2
+ * @param resizeDividerRef 拖动条对象
  * @param twoPendantRef 另一个组件可能存在的挂件
- * @param options 拖转是否持久化 {
- *  persistent: 是否持久化
- *
- * }
+ * @param options 拖动配置
  */
-export const useResize = (
+export const useResizeVertical = (
   oneRef: Ref<HTMLElement | undefined>,
   twoRef: Ref<HTMLElement | undefined>,
   resizeDividerRef: Ref<HTMLElement | undefined>,
