@@ -640,8 +640,9 @@ const CompDragRef = ref()
 
 let toStage: TaskStatus | ''
 
+
 const img = new Image()
-img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %3E%3Cpath /%3E%3C/svg%3E"
+img.src = new URL(`../../assets/imgs/transparent.png`, import.meta.url).href
 
 /**
  * 开始拖动
@@ -653,7 +654,10 @@ const dragStart = (doms: any, e: DragEvent) => {
     e.preventDefault()
     return
   }
+  console.log('drag start')
+
   e.dataTransfer!.setDragImage(img, 0, 0)
+
   let ele = e!.target as Element
   let cloneNode = ele.cloneNode(true) as HTMLElement
   const targetRect = ele.getBoundingClientRect()
@@ -668,14 +672,16 @@ const dragStart = (doms: any, e: DragEvent) => {
   document.body.appendChild(cloneNode)
 
   // 拖拽事件
-  const onDrag = (de: any) => {
+  const onDrag = (e: any) => {
+    console.log('onDrag')
     if (cloneNode) {
-      cloneNode.style.transform = `translate(${de.clientX - distLeft - targetRect.left}px, ${de.clientY - distTop - targetRect.top}px)`
+      cloneNode.style.transform = `translate(${e.clientX - distLeft - targetRect.left}px, ${e.clientY - distTop - targetRect.top}px)`
     }
   }
 
   // 松开事件
   const onDragend = () => {
+    console.log('onDragend')
     ele.removeEventListener('drag', onDrag)
     ele.removeEventListener('dragend', onDragend)
     ele.classList.remove('moving')
@@ -684,6 +690,7 @@ const dragStart = (doms: any, e: DragEvent) => {
 
   ele.addEventListener('drag', onDrag)
   ele.addEventListener('dragend', onDragend)
+  
   ele.classList.add('moving') // 原始元素隐藏
 
   for (let i = 0; i < doms.length; i++) {
