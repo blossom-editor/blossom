@@ -142,8 +142,8 @@
           <!--  -->
           <el-form-item label="类型">
             <el-radio-group v-model="docForm.type" style="width: 106px" :disabled="curDocDialogType == 'upd'">
-              <el-radio-button :label="1">文件夹</el-radio-button>
-              <el-radio-button :label="3">文章</el-radio-button>
+              <el-radio-button :value="1">文件夹</el-radio-button>
+              <el-radio-button :value="3">文章</el-radio-button>
             </el-radio-group>
           </el-form-item>
 

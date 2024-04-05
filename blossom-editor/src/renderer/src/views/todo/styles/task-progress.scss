@@ -61,6 +61,8 @@
   }
 
   .tag-select {
+    width: 150px;
+
     :deep(.el-tag--small) {
       @include themeColor(#fff, #000);
       background-color: var(--el-color-primary-light-3);

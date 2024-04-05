@@ -19,9 +19,9 @@
       </el-form-item>
       <el-form-item label="用户权限" prop="type">
         <el-radio-group v-model="addUserForm.type" size="default">
-          <el-radio-button label="1">管理员</el-radio-button>
-          <el-radio-button label="2">普通用户</el-radio-button>
-          <el-radio-button label="3">只读用户</el-radio-button>
+          <el-radio-button value="1">管理员</el-radio-button>
+          <el-radio-button value="2">普通用户</el-radio-button>
+          <el-radio-button value="3">只读用户</el-radio-button>
         </el-radio-group>
         <bl-row class="conf-tip">
           {{ typeDesc }}

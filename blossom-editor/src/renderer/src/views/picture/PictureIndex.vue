@@ -27,8 +27,8 @@
             <div class="btn-wrapper radio">
               <div>卡片大小</div>
               <el-radio-group v-model="cardSize">
-                <el-radio-button label="mini">小</el-radio-button>
-                <el-radio-button label="large">大</el-radio-button>
+                <el-radio-button value="mini">小</el-radio-button>
+                <el-radio-button value="large">大</el-radio-button>
               </el-radio-group>
             </div>
 
