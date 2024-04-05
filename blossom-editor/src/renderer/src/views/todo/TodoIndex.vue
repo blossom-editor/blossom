@@ -323,8 +323,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
             .el-calendar-day {
               .cell-wrapper {
                 .day {
-                  font-size: 18px;
                   font-weight: 900;
+                  text-decoration: underline;
                 }
               }
             }

@@ -145,7 +145,7 @@ const taskSaveForm = ref<TaskInfo>({
 const taskSaveFormRule = ref<FormRules<TaskInfo>>({
   todoId: [{ required: true, message: '事项ID为必填项', trigger: 'blur' }],
   todoType: [{ required: true, message: '任务为必填项', trigger: 'blur' }],
-  taskName: [{ required: true, message: '任务标题为必填项', trigger: 'blur' }]
+  taskName: [{ required: true, message: '', trigger: 'blur' }]
 })
 
 /**
