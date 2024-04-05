@@ -102,7 +102,7 @@ const delDaily = (id: number) => {
   .daily-container {
     @include box(100%, 100%);
     overflow: scroll;
-    overflow-y: overlay;
+    overflow-y: scroll;
 
     .title {
       width: 100%;
@@ -150,7 +150,7 @@ const delDaily = (id: number) => {
         white-space: normal;
         word-wrap: break-word;
         overflow: scroll;
-        overflow-y: overlay;
+        overflow-y: scroll;
       }
 
       .del {

@@ -146,7 +146,6 @@
     :deep(.is-current) {
       & > .el-tree-node__content {
         border-radius: 5px;
-        // background-color: var(--el-color-primary-light-8);
 
         &:has(.menu-divider) {
           background-color: transparent;
@@ -165,7 +164,6 @@
 
   &::-webkit-scrollbar {
     width: 5px;
-    height: 3px;
   }
 
   /* 定义滑块 内阴影+圆角 */

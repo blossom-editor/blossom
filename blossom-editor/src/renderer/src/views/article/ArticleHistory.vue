@@ -106,8 +106,8 @@ onMounted(() => {
 
     .history-list {
       @include box(100%, calc(100% - 80px - 21px));
-      overflow-y: overlay;
       padding: 10px 15px 10px 10px;
+      overflow-y: scroll;
 
       .history-item {
         @include box(100%, 55px);

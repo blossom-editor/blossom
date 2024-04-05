@@ -157,7 +157,7 @@ const emits = defineEmits(['saved'])
     align-content: flex-start;
     flex-wrap: wrap;
     overflow: scroll;
-    overflow-y: overlay;
+    overflow-y: scroll;
     padding: 10px 10px 8px 0;
 
     .color {

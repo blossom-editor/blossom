@@ -87,7 +87,7 @@ onMounted(() => {
     @include box(100%, 100%);
     font-size: 15px;
     padding: 30px;
-    overflow-y: overlay;
+    overflow-y: scroll;
     overflow-x: hidden;
     line-height: 23px;
 

@@ -87,7 +87,7 @@ defineExpose({ reload })
   flex-wrap: wrap;
   align-content: flex-start;
   overflow: hidden;
-  overflow-y: overlay;
+  overflow-y: scroll;
   padding-top: 10px;
 }
 

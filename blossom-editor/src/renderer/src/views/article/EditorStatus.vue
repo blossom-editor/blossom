@@ -59,7 +59,7 @@ const openArticleLogWindow = () => {
   background-color: var(--bl-editor-gutters-bg-color);
 
   .status-item-container {
-    overflow-x: overlay;
+    overflow-x: hidden;
     white-space: nowrap;
 
     & > div {

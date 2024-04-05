@@ -221,7 +221,7 @@ const fold = () => {
     .chart-container {
       @include box(100%, calc(100% - 315px));
       overflow-x: hidden;
-      overflow-y: overlay;
+      overflow-y: scroll;
     }
   }
 

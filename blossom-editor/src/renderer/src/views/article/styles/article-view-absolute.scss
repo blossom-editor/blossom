@@ -9,7 +9,7 @@
   .content-view {
     @include box(100%, calc(100% - 25px));
     @include themeBg(#f9f9f9, #262626);
-    overflow-y: overlay;
+    overflow-y: scroll;
     overflow-x: hidden;
     padding: 10px;
   }

@@ -294,8 +294,8 @@
 
       .status-item-container {
         height: 100%;
-        overflow-x: overlay;
         white-space: nowrap;
+        overflow-x: hidden;
 
         & > div {
           height: 100%;

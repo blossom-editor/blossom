@@ -400,7 +400,7 @@ const handleShowHotKeyDialog = () => {
     padding: 0 5px;
     position: absolute;
     z-index: 2;
-    overflow-x: overlay;
+    overflow: hidden;
 
     & > div {
       @include themeColor(#5b5b5b, #909090);

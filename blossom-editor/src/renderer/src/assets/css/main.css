@@ -31,14 +31,14 @@ img {
 /* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸 */
 ::-webkit-scrollbar {
   /* 滚动条宽度 */
-  width: 7px;
+  width: 5px;
   /* 滚动条高度 */
-  height: 7px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar:hover {
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
 }
 
 /* 定义滑块 内阴影+圆角 */

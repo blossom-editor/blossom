@@ -125,8 +125,7 @@ const copyIcon = (icon: string) => {
       align-content: flex-start;
       flex-wrap: wrap;
       background-color: var(--bl-html-color);
-      overflow: scroll;
-      overflow-y: overlay;
+      overflow-y: scroll;
 
       .icon-item {
         @include flex(column, space-between, center);

@@ -90,7 +90,7 @@ const toToc = (articleId: number) => {
   flex-wrap: wrap;
   align-content: flex-start;
   overflow: hidden;
-  overflow-y: overlay;
+  overflow-y: scroll;
 }
 
 .placeholder {

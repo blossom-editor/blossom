@@ -74,7 +74,7 @@ export const cwTheme: any = {
     width: '40px'
   },
   '.cm-scroller': {
-    overflow: 'overlay',
+    // overflow: 'scroll',
     outline: 'none'
   },
   '.cm-foldGutter': {

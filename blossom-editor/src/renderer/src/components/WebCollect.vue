@@ -242,7 +242,7 @@ const showWebCollectCard = (card: boolean) => {
 
   .web-item-container {
     @include box(100%, calc(100% - 31px));
-    overflow-y: overlay;
+    overflow-y: scroll;
 
     .placeholder {
       @include font(15px, 300);

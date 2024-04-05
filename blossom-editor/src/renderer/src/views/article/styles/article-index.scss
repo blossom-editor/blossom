@@ -105,7 +105,7 @@
         @include box(50%, 100%);
         font-family: inherit;
         font-size: inherit;
-        overflow: overlay;
+        overflow: scroll;
         z-index: 2;
 
         /* 定义滑块 内阴影+圆角 */
