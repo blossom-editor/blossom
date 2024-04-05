@@ -8,7 +8,15 @@ import { isNotBlank } from '@renderer/assets/utils/obj'
  * @param doc 文章内容
  * @param viewStyle 页面样式
  */
-export const tags = (doc: DocTree, viewStyle: { isShowArticleTocTag: boolean; isShowArticleCustomTag: boolean; isShowFolderOpenTag: boolean }) => {
+export const tags = (
+  doc: DocTree,
+  viewStyle: {
+    isShowFolderStarTag: boolean
+    isShowArticleTocTag: boolean
+    isShowArticleCustomTag: boolean
+    isShowFolderOpenTag: boolean
+  }
+) => {
   let icons: any = []
   doc.t.forEach((tag) => {
     if (tag.toLocaleLowerCase() === 'subject') {
@@ -28,7 +36,9 @@ export const tags = (doc: DocTree, viewStyle: { isShowArticleTocTag: boolean; is
     }
   }
   if (doc.ty === 1 && doc.star === 1) {
-    icons.unshift({ bgColor: 'rgb(220 192 36)', color: '#6a5b00', icon: 'bl-star-line' })
+    if (viewStyle.isShowFolderStarTag) {
+      icons.unshift({ bgColor: 'rgb(220,192,36)', color: '#6a5b00', icon: 'bl-star-line' })
+    }
   }
   return icons
 }

@@ -149,6 +149,13 @@
 
           <bl-row class="prop-row" just="space-between">
             <div class="prop">
+              <div class="prop-name">显示文件夹收藏标签</div>
+            </div>
+            <el-switch v-model="viewStyle.isShowFolderStarTag" size="default" @change="changeViewStype" />
+          </bl-row>
+
+          <bl-row class="prop-row" just="space-between">
+            <div class="prop">
               <div class="prop-name">显示专题目录标签</div>
             </div>
             <el-switch v-model="viewStyle.isShowArticleTocTag" size="default" @change="changeViewStype" />
