@@ -432,9 +432,9 @@ export const initOnWindow = (window: BrowserWindow) => {
   /**
    * 拦截页面链接
    */
-  window.webContents.on('will-navigate', (event: Event, url: string) => {
-    interceptorATag(event, url)
-  })
+  // window.webContents.on('will-navigate', (event: Event, url: string) => {
+  //   interceptorATag(event, url)
+  // })
 
   /**
    * 打开链接, 如果打开链接于服务器域名相同, 则在新窗口中打开
@@ -451,19 +451,19 @@ export const initOnWindow = (window: BrowserWindow) => {
   })
 }
 
-/**
- * 拦截 a 标签
- * @param e
- * @param url
- */
-const interceptorATag = (e: Event, url: string): boolean => {
-  e.preventDefault()
-  let innerUrl = url
-  if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.userParams.WEB_ARTICLE_URL)) {
-    let articleId: string = innerUrl.replaceAll(blossomUserinfo.userParams.WEB_ARTICLE_URL, '')
-    createNewWindow('article', articleId, Number(articleId))
-  } else if (!is.dev) {
-    shell.openExternal(url)
-  }
-  return true
-}
+// /**
+//  * 拦截 a 标签
+//  * @param e
+//  * @param url
+//  */
+// const interceptorATag = (e: Event, url: string): boolean => {
+//   e.preventDefault()
+//   let innerUrl = url
+//   if (blossomUserinfo && innerUrl.startsWith(blossomUserinfo.userParams.WEB_ARTICLE_URL)) {
+//     let articleId: string = innerUrl.replaceAll(blossomUserinfo.userParams.WEB_ARTICLE_URL, '')
+//     createNewWindow('article', articleId, Number(articleId))
+//   } else if (!is.dev) {
+//     shell.openExternal(url)
+//   }
+//   return true
+// }
