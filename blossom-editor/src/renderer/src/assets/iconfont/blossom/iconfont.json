@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7440601",
+      "name": "新增文件",
+      "font_class": "fileadd-line",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "24341715",
+      "name": "folder add-line",
+      "font_class": "folderadd-line",
+      "unicode": "ea51",
+      "unicode_decimal": 59985
+    },
+    {
       "icon_id": "11855598",
       "name": "收起",
       "font_class": "collapse",

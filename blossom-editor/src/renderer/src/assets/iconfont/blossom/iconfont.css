@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconbl"; /* Project id 4118609 */
-  src: url('iconfont.woff2?t=1710173492180') format('woff2'),
-       url('iconfont.woff?t=1710173492180') format('woff'),
-       url('iconfont.ttf?t=1710173492180') format('truetype');
+  src: url('iconfont.woff2?t=1712401452479') format('woff2'),
+       url('iconfont.woff?t=1712401452479') format('woff'),
+       url('iconfont.ttf?t=1712401452479') format('truetype');
 }
 
 .iconbl {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.bl-fileadd-line:before {
+  content: "\e659";
+}
+
+.bl-folderadd-line:before {
+  content: "\ea51";
 }
 
 .bl-collapse:before {
