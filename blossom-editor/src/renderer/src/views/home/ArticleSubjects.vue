@@ -6,7 +6,7 @@
     <span v-else class="iconbl bl-article-line container-operator" @click="showSubjectCard(true)" />
   </bl-row>
   <div class="home-subject-root">
-    <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
+    <div v-if="isEmpty(subjects)" class="placeholder">无专题收藏</div>
     <div
       v-for="subject in subjects"
       :class="[configViewStyle.isHomeSubjectCard ? 'subject-card' : 'subject-list', configViewStyle.webCollectExpand ? '' : 'close']"

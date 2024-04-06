@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.31.99:3306/blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.31.99:3306/xzzz-blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
     username: root
     password: jasmine888
     hikari:
@@ -9,7 +9,7 @@ spring:
 
 logging:
   level:
-    com.blossom: info
+    com.blossom: debug
     com.blossom.expand.tracker: info
     com.blossom.backend.base.auth: info
     org.springframework.boot.web.embedded.tomcat.TomcatWebServer: warn

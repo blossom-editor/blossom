@@ -18,9 +18,8 @@
       <div class="content" @click="toRoute(article.id)">
         <div class="name">{{ article.name }}</div>
         <div class="infos">
-          <span>U{{ article.uv }}</span>
-          <span>L{{ article.likes }}</span>
-          <span>W{{ article.words }}</span>
+          <span style="padding-left: 5px">U{{ article.uv }}</span>
+          <span style="padding-right: 5px">W{{ article.words }}</span>
         </div>
       </div>
     </div>
