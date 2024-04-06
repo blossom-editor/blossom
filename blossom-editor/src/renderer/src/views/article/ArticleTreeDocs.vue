@@ -6,22 +6,25 @@
   </div>
   <!--   -->
   <div class="doc-tree-operator">
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="显示排序">
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" content="显示排序">
       <div class="iconbl bl-a-leftdirection-line" @click="handleShowSort"></div>
     </el-tooltip>
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="根目录下新建文章">
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" content="根目录下新建文章">
       <div class="iconbl bl-fileadd-line" @click="addArticleToRoot()"></div>
     </el-tooltip>
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="根目录下新建文件夹">
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" content="根目录下新建文件夹">
       <div class="iconbl bl-folderadd-line" @click="addFolderToRoot()"></div>
     </el-tooltip>
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="搜索">
-      <div class="iconbl bl-search-line" @click="showTreeFilter()"></div>
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" :show-after="1000" content="搜索">
+      <div class="iconbl bl-search-item" @click="showTreeFilter()"></div>
     </el-tooltip>
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="刷新">
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" :show-after="1000" content="刷新">
       <div class="iconbl bl-refresh-line" @click="refreshDocTree()"></div>
     </el-tooltip>
-    <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="折叠所有文件夹">
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" :show-after="1000" content="选中当前文章">
+      <div class="iconbl bl-collimation" @click="collimationCurrentArticle"></div>
+    </el-tooltip>
+    <el-tooltip effect="light" popper-class="is-small" placement="top" :hide-after="0" :show-after="1000" content="折叠所有文件夹">
       <div class="iconbl bl-collapse" @click="collapseAll"></div>
     </el-tooltip>
     <div class="doc-tree-search" ref="DocTreeSearch" v-show="isShowTreeFilter">
@@ -63,7 +66,7 @@
       @nodeCollapse="handleNodeCollapse"
       @nodeDrop="handleDrop">
       <template #default="{ node, data }">
-        <div class="menu-item-wrapper" @click.right="handleClickRightMenu($event, data)">
+        <div class="menu-item-wrapper" :id="'article-doc-wrapper-' + data.i" @click.right="handleClickRightMenu($event, data)">
           <div :class="[viewStyle.isShowSubjectStyle ? (data.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
             <div v-if="isShowSort" class="sort-tag" :style="{ backgroundColor: getColor(node) }">{{ data.s }}</div>
             <div class="doc-name">
@@ -97,9 +100,9 @@
     </el-tree>
     <bl-row v-else class="doc-trees-placeholder" just="center">
       无文档，点击
-      <div class="iconbl bl-a-texteditorhighlightcolor-line" @click="addArticleToRoot()"></div>
+      <div class="iconbl bl-fileadd-line" @click="addArticleToRoot()"></div>
       /
-      <div class="iconbl bl-a-folderon-line" @click="addFolderToRoot()"></div>
+      <div class="iconbl bl-folderadd-line" @click="addFolderToRoot()"></div>
       添加
     </bl-row>
   </div>
@@ -120,18 +123,10 @@
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-apps-line"></span>更多
           <div class="tree-menu-level2" :style="rMenuLevel2">
-            <div v-if="curDoc.o === 0" @click="open(1)">
-              <span class="iconbl bl-a-cloudupload-line"></span>公开{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
-            </div>
-            <div v-if="curDoc.o === 1" @click="open(0)">
-              <span class="iconbl bl-a-clouddownload-line"></span>取消{{ curDoc.ty === 3 ? '文章' : '文件夹' }}公开
-            </div>
-            <div v-if="curDoc.star === 0" @click="star(1)">
-              <span class="iconbl bl-star-fill"></span>收藏{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
-            </div>
-            <div v-if="curDoc.star === 1" @click="star(0)">
-              <span class="iconbl bl-star-line"></span>取消收藏{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
-            </div>
+            <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开{{ curDocType }}</div>
+            <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消{{ curDocType }}公开</div>
+            <div v-if="curDoc.star === 0" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏{{ curDocType }}</div>
+            <div v-if="curDoc.star === 1" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏{{ curDocType }}</div>
             <div v-if="curDoc.ty === 3 && !curDoc.t.includes('toc')" @click="addArticleTag('toc')">
               <span class="iconbl bl-list-ordered"></span>设为专题目录
             </div>
@@ -177,7 +172,7 @@
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="handleArticleQrCodeDialog"><span class="iconbl bl-qr-code-line"></span>博客二维码</div>
         <div class="menu-item-divider"></div>
-        <div @click="delDoc()"><span class="iconbl bl-a-fileprohibit-line"></span>删除{{ curDocType }}</div>
+        <div @click="delDoc()"><span class="iconbl bl-delete-line"></span>删除{{ curDocType }}</div>
       </div>
     </div>
   </Teleport>
@@ -257,6 +252,7 @@
       width: 700px;
       word-break: break-all;
     ">
+    <div>{{ articleCurrnetId }}</div>
     <div>当前选中：{{ docTreeCurrentId }}</div>
     <div>所有展开：{{ Array.from(docTreeCurrentExpandId) + '' }}</div>
   </div>
@@ -354,6 +350,25 @@ const getRouteQueryParams = () => {
       docTreeCurrentId.value = articleId
       const parentNode = DocTreeRef.value.getNode(articleId)
       setCurrentKey({ i: articleId, p: parentNode.data.p, ty: 3 })
+      const ele = document.getElementById('article-doc-wrapper-' + articleId)
+      if (ele) {
+        ;(DocTreeContainer.value as Element).scrollTop = ele.offsetTop
+      }
+    })
+  }
+}
+
+/**
+ * 聚焦当前打开的文章
+ */
+const collimationCurrentArticle = () => {
+  if (!isEmpty(docTreeData.value) && isNotBlank(articleCurrnetId.value)) {
+    DocTreeRef.value.setCurrentKey(articleCurrnetId.value)
+    nextTick(() => {
+      const ele = document.getElementById('article-doc-wrapper-' + articleCurrnetId.value)
+      if (ele) {
+        ;(DocTreeContainer.value as Element).scrollTop = ele.offsetTop
+      }
     })
   }
 }
@@ -429,7 +444,7 @@ const endLoading = () => {
 //#endregion
 
 //#region ----------------------------------------< 树状列表管理 >--------------------------------------
-
+const articleCurrnetId = ref('')
 // 文档的最后选中项, 用于外部跳转后选中菜单
 const docTreeCurrentId = ref('')
 // 所有展开的节点
@@ -465,6 +480,7 @@ const setCurrentKey = (tree: { i: string; p: string; ty: DocType }, node?: Node,
   } else if (tree.ty === 3) {
     docTreeCurrentId.value = tree.i
     docTreeCurrentExpandId.value.add(tree.p)
+    articleCurrnetId.value = tree.i
   }
   DocTreeRef.value.setCurrentKey(tree.i)
 }
@@ -563,9 +579,9 @@ const handleNodeExpand = (tree: DocTree, _node: Node) => {
 }
 
 /**
- * 处理节点缩起, 同时清除所有子节点的展开状态
+ * 处理节点折叠, 同时清除所有子节点的展开状态
  */
-const handleNodeCollapse = (tree: DocTree, node: Node) => {
+const handleNodeCollapse = async (tree: DocTree, node: Node) => {
   docTreeCurrentExpandId.value.delete(tree.i)
   collapseChilds(node)
 }
@@ -573,7 +589,7 @@ const handleNodeCollapse = (tree: DocTree, node: Node) => {
 /**
  * 递归缩起所有子节点
  */
-const collapseChilds = (node: Node) => {
+const collapseChilds = async (node: Node) => {
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes[i]
     if (child.isLeaf) {

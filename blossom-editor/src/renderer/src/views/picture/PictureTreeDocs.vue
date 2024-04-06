@@ -8,10 +8,10 @@
       <div class="iconbl bl-a-leftdirection-line" @click="handleShowSort"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="根目录下新建图片文件夹">
-      <div class="iconbl bl-a-folderon-line" @click="addFolderToRoot()"></div>
+      <div class="iconbl bl-folderadd-line" @click="addFolderToRoot()"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="搜索">
-      <div class="iconbl bl-search-line" @click="showTreeFilter()"></div>
+      <div class="iconbl bl-search-item" @click="showTreeFilter()"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="刷新">
       <div class="iconbl bl-refresh-line" @click="refreshDocTree()"></div>
@@ -97,7 +97,7 @@
           <span class="iconbl bl-a-fileedit-line"></span>编辑详情
         </div>
         <div :class="['menu-item', Number(curDoc.i) <= 0 ? 'disabled' : '']" @click="addFolderToDoc()">
-          <span class="iconbl bl-a-fileadd-line"></span>新增文件夹
+          <span class="iconbl bl-folderadd-line"></span>新增文件夹
         </div>
         <div class="menu-item-divider"></div>
         <div :class="['menu-item', Number(curDoc.i) <= 0 ? 'disabled' : '']" @click="delDoc()">

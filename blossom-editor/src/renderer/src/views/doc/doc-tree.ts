@@ -69,7 +69,7 @@ export const handleTreeDrop = (
     })
   }
 
-  console.log(`same: ${isSame}, dropType: ${dropType}, drag: ${dragSourceSort}, enter: ${enterSourceSort}`)
+  // console.log(`same: ${isSame}, dropType: ${dropType}, drag: ${dragSourceSort}, enter: ${enterSourceSort}`)
   if (isSame) {
     // drag 在 enter 前
     if (dropType === 'before') {
@@ -221,8 +221,8 @@ export const handleTreeDrop = (
   if (needUpd.length > 0) {
     updateFn(needUpd)
   }
-  console.log(needUpd)
-  console.log('==========================================')
+  // console.log(needUpd)
+  // console.log('==========================================')
 }
 
 /**

@@ -4,37 +4,37 @@
 
 // 操作树状菜单的工具栏
 .doc-tree-operator {
-  @include box(100%, 28px);
+  @include box(100%, 30px);
   @include flex(row, center, center);
   @include themeColor(#909399, #969696);
   position: relative;
 
   .iconbl {
     font-size: 18px;
-    margin: 0 3px;
+    padding: 3px;
+    transition: background-color 0.2s;
     cursor: pointer;
 
     &:hover {
-      color: var(--el-color-primary);
+      @include themeBg(#efefef, #393939);
+      border-radius: 4px;
     }
   }
 
   .bl-a-leftdirection-line {
-    font-size: 20px;
-    margin: 0 1px;
+    margin-bottom: 1px;
   }
 
-  .bl-a-folderon-line {
-    margin: 0 5px;
-  }
-
-  .bl-refresh-line {
-    font-size: 16px;
+  .bl-folderadd-line {
     margin: 0 2px;
+  }
 
-    &:active {
-      color: var(--el-color-primary-light-3);
-    }
+  .bl-search-item {
+    margin: 0 2px;
+  }
+
+  .bl-collapse {
+    font-size: 16px;
   }
 
   .doc-tree-search {
@@ -73,7 +73,7 @@
 }
 
 .doc-trees-container {
-  @include box(100%, calc(100% - 78px));
+  @include box(100%, calc(100% - 80px));
   overflow-y: scroll;
   overflow-x: hidden;
 
