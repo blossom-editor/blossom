@@ -403,12 +403,18 @@ public class ArticleBackupService {
             }
             String localPath = parent.substring(0, parent.length() > 0 ? parent.length() - 1 : 0) + ref.getTargetUrl().replace(domain, "");
             content = content.replaceAll(ref.getTargetUrl(), localPath);
-            System.out.println(localPath);
         }
         return content;
 
     }
 
+    /**
+     * 计算指定字符在字符串中出现的此处
+     *
+     * @param str    字符串
+     * @param target 查询字符
+     * @return 出现次数
+     */
     private static int countChar(String str, char target) {
         int times = 0;
         for (int i = 0; i < str.length(); i++) {
