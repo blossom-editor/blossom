@@ -66,9 +66,9 @@
       :class="['middle', viewStyle.webCollectExpand ? 'expand' : 'fold']"
       :style="{ width: viewStyle.webCollectExpand ? 'calc(100% - 1px - 0px - 10px - 910px - 420px)' : 'calc(100% - 1px - 0px - 10px - 910px)' }">
       <div v-if="!viewStyle.webCollectExpand" class="web-show iconbl bl-left-line" @click="expand"></div>
-      <div style="height: 45px"></div>
+      <div style="height: 15px"></div>
 
-      <bl-col width="100%" height="270px">
+      <bl-col width="100%" height="300px">
         <ArticleStars></ArticleStars>
       </bl-col>
 
