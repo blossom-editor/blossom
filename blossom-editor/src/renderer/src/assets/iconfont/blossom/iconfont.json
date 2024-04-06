@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5203274",
+      "name": "瞄准",
+      "font_class": "collimation",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "577366",
+      "name": "搜索类目-fill",
+      "font_class": "search-item",
+      "unicode": "e753",
+      "unicode_decimal": 59219
+    },
+    {
       "icon_id": "7440601",
       "name": "新增文件",
       "font_class": "fileadd-line",
@@ -417,13 +431,6 @@
       "font_class": "a-leftdirection-line",
       "unicode": "ea17",
       "unicode_decimal": 59927
-    },
-    {
-      "icon_id": "24341919",
-      "name": "left direction-fill",
-      "font_class": "a-leftdirection-fill",
-      "unicode": "ea18",
-      "unicode_decimal": 59928
     },
     {
       "icon_id": "24342162",
