@@ -78,7 +78,6 @@ const activeMenuPath = ref<string>('home')
 watch(
   () => router.currentRoute.value,
   (newRoute) => {
-    console.log(newRoute);
     activeMenuPath.value = newRoute.path
   },
   { immediate: true }
