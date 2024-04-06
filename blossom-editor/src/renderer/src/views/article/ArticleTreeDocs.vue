@@ -10,10 +10,10 @@
       <div class="iconbl bl-a-leftdirection-line" @click="handleShowSort"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="根目录下新建文章">
-      <div class="iconbl bl-a-texteditorhighlightcolor-line" @click="addArticleToRoot()"></div>
+      <div class="iconbl bl-fileadd-line" @click="addArticleToRoot()"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" content="根目录下新建文件夹">
-      <div class="iconbl bl-a-folderon-line" @click="addFolderToRoot()"></div>
+      <div class="iconbl bl-folderadd-line" @click="addFolderToRoot()"></div>
     </el-tooltip>
     <el-tooltip effect="light" popper-class="is-small" placement="top" :offset="4" :hide-after="0" :show-after="1000" content="搜索">
       <div class="iconbl bl-search-line" @click="showTreeFilter()"></div>
@@ -111,8 +111,8 @@
         <div @click="rename"><span class="iconbl bl-pen"></span>重命名</div>
         <div @click="handleShowDocInfoDialog('upd')"><span class="iconbl bl-a-fileedit-line"></span>编辑详情</div>
         <div v-if="curDoc.ty === 3" @click="syncDoc()"><span class="iconbl bl-a-cloudrefresh-line"></span>同步文章</div>
-        <div v-if="curDoc.ty !== 3" @click="addFolderToDoc()"><span class="iconbl bl-a-fileadd-line"></span>新增文件夹</div>
-        <div v-if="curDoc.ty !== 3" @click="addArticleToDoc()"><span class="iconbl bl-a-fileadd-fill"></span>新增笔记</div>
+        <div v-if="curDoc.ty !== 3" @click="addFolderToDoc()"><span class="iconbl bl-folderadd-line"></span>新增文件夹</div>
+        <div v-if="curDoc.ty !== 3" @click="addArticleToDoc()"><span class="iconbl bl-fileadd-line"></span>新增笔记</div>
         <div v-if="curDoc.ty === 3" @click="createUrl('link')"><span class="iconbl bl-correlation-line"></span>复制双链引用</div>
         <div v-if="curDoc.ty !== 3" @click="handleShowArticleImportDialog()"><span class="iconbl bl-file-upload-line"></span>导入文章</div>
 
@@ -120,10 +120,18 @@
           <span class="iconbl bl-a-rightsmallline-line"></span>
           <span class="iconbl bl-apps-line"></span>更多
           <div class="tree-menu-level2" :style="rMenuLevel2">
-            <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开</div>
-            <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消公开</div>
-            <div v-if="curDoc.star === 0" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏</div>
-            <div v-if="curDoc.star === 1" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏</div>
+            <div v-if="curDoc.o === 0" @click="open(1)">
+              <span class="iconbl bl-a-cloudupload-line"></span>公开{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
+            </div>
+            <div v-if="curDoc.o === 1" @click="open(0)">
+              <span class="iconbl bl-a-clouddownload-line"></span>取消{{ curDoc.ty === 3 ? '文章' : '文件夹' }}公开
+            </div>
+            <div v-if="curDoc.star === 0" @click="star(1)">
+              <span class="iconbl bl-star-fill"></span>收藏{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
+            </div>
+            <div v-if="curDoc.star === 1" @click="star(0)">
+              <span class="iconbl bl-star-line"></span>取消收藏{{ curDoc.ty === 3 ? '文章' : '文件夹' }}
+            </div>
             <div v-if="curDoc.ty === 3 && !curDoc.t.includes('toc')" @click="addArticleTag('toc')">
               <span class="iconbl bl-list-ordered"></span>设为专题目录
             </div>
@@ -137,6 +145,9 @@
             <div v-if="curDoc.ty !== 3 && curDoc.t.includes('subject')" @click="addFolderTag('subject')">
               <span class="iconbl bl-a-lowerrightpage-line"></span>取消专题
             </div>
+            <div v-if="curDoc.ty === 1" class="menu-item-divider"></div>
+            <div v-if="curDoc.ty === 1" @click="openBactch(1)"><span class="iconbl bl-a-cloudupload-line"></span>所有文章公开</div>
+            <div v-if="curDoc.ty === 1" @click="openBactch(0)"><span class="iconbl bl-a-clouddownload-line"></span>所有文章取消公开</div>
           </div>
         </div>
 
@@ -269,6 +280,7 @@ import {
   articleUpdTagApi,
   articleDownloadHtmlApi,
   articleOpenApi,
+  articleOpenBatchApi,
   articleStarApi,
   folderStarApi,
   folderAddApi,
@@ -920,6 +932,34 @@ const open = (openStatus: 0 | 1) => {
   } else {
     folderOpenApi({ id: curDoc.value.i, openStatus: openStatus }).then((_) => {
       curDoc.value.o = openStatus
+      Notify.success(openStatus === 0 ? '取消公开成功' : '公开成功')
+    })
+  }
+}
+
+/**
+ * 公开/取消公开
+ */
+const openBactch = (openStatus: 0 | 1) => {
+  const callback = () => {
+    const parent: Node = DocTreeRef.value.getNode(curDoc.value.i)
+    if (parent && !isEmpty(parent.childNodes)) {
+      for (const doc of parent.childNodes) {
+        if (doc.data.ty === 3) {
+          doc.data.o = openStatus
+        }
+      }
+    }
+  }
+
+  if (curDoc.value.ty === 1) {
+    articleOpenBatchApi({ pid: curDoc.value.i, openStatus: openStatus }).then((_) => {
+      callback()
+      Notify.success(openStatus === 0 ? '取消公开成功' : '公开成功')
+    })
+  } else {
+    articleOpenBatchApi({ pid: curDoc.value.i, openStatus: openStatus }).then((_) => {
+      callback()
       Notify.success(openStatus === 0 ? '取消公开成功' : '公开成功')
     })
   }

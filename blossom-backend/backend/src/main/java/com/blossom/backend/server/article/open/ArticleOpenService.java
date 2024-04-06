@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.TagEnum;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
+import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
+import com.blossom.backend.server.article.open.pojo.ArticleBatchOpenReq;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
 import com.blossom.backend.server.article.open.pojo.ArticleOpenReq;
 import com.blossom.common.base.enums.YesNo;
@@ -58,28 +60,92 @@ public class ArticleOpenService extends ServiceImpl<ArticleOpenMapper, ArticleOp
      * 公开或关闭公开访问
      */
     @Transactional(rollbackFor = Exception.class)
-    public Long open(ArticleOpenReq req) {
+    public Long openSingle(ArticleOpenReq req) {
         ArticleEntity article = articleService.getById(req.getId());
-        ArticleEntity entity = req.to(ArticleEntity.class);
+        open(req, article);
+//        ArticleEntity upd = new ArticleEntity();
+//        upd.setId(req.getId());
+//        upd.setUserId(req.getUserId());
+//        upd.setOpenStatus(req.getOpenStatus());
+//        /*
+//         * 公开文章 将 article 表插入到 article_open 表
+//         */
+//        if (YesNo.YES.getValue().equals(req.getOpenStatus())) {
+//            XzException400.throwBy(article.getOpenStatus().equals(YesNo.YES.getValue()), "文章已[" + req.getId() + "]已允许公开访问, 若要同步最新文章内容, 请使用同步");
+//            upd.setOpenVersion(article.getVersion());
+//            baseMapper.open(req.getId());
+//        }
+//        /*
+//         * 取消公开 删除 article_open 表数据
+//         */
+//        else if (YesNo.NO.getValue().equals(req.getOpenStatus())) {
+//            upd.setOpenVersion(0);
+//            XzException400.throwBy(article.getOpenStatus().equals(YesNo.NO.getValue()), "文章[" + req.getId() + "]未公开, 无法取消公开访问");
+//            baseMapper.delById(req.getId());
+//        }
+//
+//        // 修改文章的公开状态
+//        articleService.update(upd);
+        return req.getId();
+    }
+
+    /**
+     * 批量公开
+     *
+     * @param req
+     * @since 1.14.0
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void openBatch(ArticleBatchOpenReq req) {
+        ArticleQueryReq where = new ArticleQueryReq();
+        where.setPids(CollUtil.newArrayList(req.getPid()));
+        List<ArticleEntity> articles = articleService.listAll(where);
+        for (ArticleEntity article : articles) {
+            ArticleOpenReq open = new ArticleOpenReq();
+            open.setId(article.getId());
+            open.setOpenStatus(req.getOpenStatus());
+            open.setUserId(req.getUserId());
+            open(open, article);
+        }
+    }
+
+    /**
+     * 公开状态
+     *
+     * @param req     本次公开请求
+     * @param article 文章
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void open(ArticleOpenReq req, ArticleEntity article) {
+        ArticleEntity upd = new ArticleEntity();
+        upd.setId(req.getId());
+        upd.setUserId(req.getUserId());
+        upd.setOpenStatus(req.getOpenStatus());
         /*
          * 公开文章 将 article 表插入到 article_open 表
          */
         if (YesNo.YES.getValue().equals(req.getOpenStatus())) {
-            XzException400.throwBy(article.getOpenStatus().equals(YesNo.YES.getValue()), "文章已[" + req.getId() + "]已允许公开访问, 若要同步最新文章内容, 请使用同步");
-            entity.setOpenVersion(article.getVersion());
+            if (YesNo.YES.getValue().equals(article.getOpenStatus())) {
+                return;
+            }
+            // XzException400.throwBy(article.getOpenStatus().equals(YesNo.YES.getValue()), "文章已[" + req.getId() + "]已允许公开访问, 若要同步最新文章内容, 请使用同步");
+            upd.setOpenVersion(article.getVersion());
             baseMapper.open(req.getId());
         }
         /*
          * 取消公开 删除 article_open 表数据
          */
         else if (YesNo.NO.getValue().equals(req.getOpenStatus())) {
-            entity.setOpenVersion(0);
-            XzException400.throwBy(article.getOpenStatus().equals(YesNo.NO.getValue()), "文章[" + req.getId() + "]未公开, 无法取消公开访问");
+            if (YesNo.NO.getValue().equals(article.getOpenStatus())) {
+                return;
+            }
+            // XzException400.throwBy(article.getOpenStatus().equals(YesNo.NO.getValue()), "文章[" + req.getId() + "]未公开, 无法取消公开访问");
+            upd.setOpenVersion(0);
             baseMapper.delById(req.getId());
         }
 
-        articleService.update(entity);
-        return req.getId();
+        // 修改文章的公开状态
+        articleService.update(upd);
     }
 
     /**

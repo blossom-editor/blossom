@@ -96,8 +96,8 @@ export const docTreeApi = (params?: object): Promise<R<any>> => {
 
 /**
  * 修改文档的排序
- * @param data 
- * @returns 
+ * @param data
+ * @returns
  */
 export const docUpdSortApi = (data: object): Promise<R<any>> => {
   return rq.post<R<any>>('/doc/upd/sort', data)
@@ -380,6 +380,15 @@ export const articleRefListApi = (params?: object): Promise<R<any>> => {
  */
 export const articleOpenApi = (data?: object): Promise<R<any>> => {
   return rq.post<R<any>>('/article/open', data)
+}
+
+/**
+ * 文章公开或取消公开
+ * @param data
+ * @returns
+ */
+export const articleOpenBatchApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/article/open/batch', data)
 }
 
 /**
