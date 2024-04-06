@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { userinfoAdminApi, userDisabledApi, userUpdAdminApi, userDelReq } from '@renderer/api/auth'
 import { articleWordsUserApi, pictureStatUserApi, userParamUpdAdminApi } from '@renderer/api/blossom'
 import { DEFAULT_USER_INFO } from '@renderer/stores/user'
