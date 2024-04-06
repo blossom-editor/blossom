@@ -173,7 +173,11 @@ public class IaasProperties {
     public static class BLOS {
         /**
          * BLOS 查看图片的接口的地址, 默认在 PictureController#getFile() 方法中, 末尾带有 "/" 会自动清除
+         *
+         * @deprecated 该配置项已转移至系统配置 base_sys_param {@link ParamEnum#BLOSSOM_OBJECT_STORAGE_DOMAIN},
+         * 但在 base_sys_param 为配置时仍然生效
          */
+        @Deprecated
         private String domain;
         /**
          * BLOS 默认上传地址, 不能为空, 注意不同系统的区分, 末尾带有 "/" 会自动清除
@@ -202,7 +206,7 @@ public class IaasProperties {
         }
         if (blos != null) {
             String domain = formatDomain(blos.getDomain());
-            if (!StrUtil.endWith(domain,"/pic")) {
+            if (!StrUtil.endWith(domain, "/pic")) {
                 domain = domain + "/pic";
             }
             blos.setDomain(domain);

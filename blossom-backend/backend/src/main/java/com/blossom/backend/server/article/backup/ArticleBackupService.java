@@ -209,6 +209,7 @@ public class ArticleBackupService {
             if (toLocal == YesNo.YES) {
                 backLogs.add("");
                 if (articleId != null) {
+                    // 查询文章引用的图片
                     List<ArticleReferenceEntity> refs = referenceService.listPics(articleId);
                     PictureEntity where = new PictureEntity();
                     where.setUrls(refs.stream().map(ArticleReferenceEntity::getTargetUrl).collect(Collectors.toList()));
@@ -216,11 +217,16 @@ public class ArticleBackupService {
                     backLogs.add("[图片备份] 图片个数: " + pics.size());
                     backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 图片列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                     for (PictureEntity pic : pics) {
-                        backLogs.add("┃ " + pic.getPathName());
-                        FileUtil.copy(
-                                pic.getPathName(),
-                                backupFile.getRootPath() + "/" + pic.getPathName(),
-                                true);
+                        try {
+                            FileUtil.copy(
+                                    pic.getPathName(),
+                                    backupFile.getRootPath() + "/" + pic.getPathName(),
+                                    true);
+                            backLogs.add("┃ " + pic.getPathName());
+                        } catch (Exception e) {
+                            backLogs.add("┃ [警告] " + pic.getPathName() + " 未在存储路径中找到");
+                            log.warn("{} 未在存储路径中找到", pic.getPathName());
+                        }
                     }
                 }
                 // 备份全部图片
@@ -378,7 +384,7 @@ public class ArticleBackupService {
         }
 
         List<ArticleReferenceEntity> refs = referenceService.listPics(articleId);
-        final String domain = iaasProperties.getBlos().getDomain();
+        final String domain = paramService.getDomain();
 
         // 计算字符出现的次数
         int separatorCount = countChar(articleName, '/');
