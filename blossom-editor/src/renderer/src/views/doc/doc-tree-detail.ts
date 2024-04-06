@@ -37,7 +37,7 @@ export const tags = (
   }
   if (doc.ty === 1 && doc.star === 1) {
     if (viewStyle.isShowFolderStarTag) {
-      icons.unshift({ bgColor: 'rgb(220,192,36)', color: '#6a5b00', icon: 'bl-star-line' })
+      icons.unshift({ bgColor: 'rgb(220,192,36)', icon: 'bl-star-line' })
     }
   }
   return icons
@@ -52,7 +52,7 @@ export const tagLins = (doc: DocTree) => {
     if (doc.star === 1) {
       lines.push('star-line')
     }
-    if (doc.o === 1 && doc.ty === 3) {
+    if (doc.o === 1) {
       lines.push('open-line')
     }
     if (doc.vd === 1) {

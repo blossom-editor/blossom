@@ -81,7 +81,7 @@
               <div v-else class="name-wrapper" :style="{ maxWidth: isNotBlank(data.icon) ? 'calc(100% - 25px)' : '100%' }">
                 {{ data.n }}
               </div>
-              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 4px" :bg-color="tag.bgColor" :color="tag.color" :icon="tag.icon">
+              <bl-tag v-for="tag in tags(data, viewStyle)" style="margin-top: 4px" :bg-color="tag.bgColor" :icon="tag.icon">
                 {{ tag.content }}
               </bl-tag>
             </div>
