@@ -64,6 +64,7 @@ const initEditor = (_doc?: string) => {
 const getLogs = (articleId: string | number) => {
   articleInfoApi({ id: articleId, showToc: false, showMarkdown: true, showHtml: false }).then((resp) => {
     article.value = resp.data
+    document.title = `《${resp.data.name}》编辑历史`
   })
   articleLogsApi({ articleId: articleId }).then((resp) => {
     historyList.value = resp.data

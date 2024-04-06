@@ -35,6 +35,7 @@ const userStore = useUserStore()
 const route = useRoute()
 
 onMounted(() => {
+  document.title = 'Blossom 设置'
   let actTab = route.query.activeTab as string
   if (isNotBlank(actTab)) {
     activeTab.value = actTab

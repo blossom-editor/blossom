@@ -57,6 +57,7 @@ const toScroll = (id: string) => {
 const initPreview = (articleId: string) => {
   articleInfoApi({ id: articleId, showToc: false, showMarkdown: false, showHtml: true }).then((resp) => {
     article.value = resp.data
+    document.title = `《${resp.data.name}》`
     nextTick(() => initToc())
   })
 }

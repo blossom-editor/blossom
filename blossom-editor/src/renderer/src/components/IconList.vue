@@ -48,6 +48,7 @@ import blossomIcons from '@renderer/assets/iconfont/blossom/iconfont.json'
 import weblogIcons from '@renderer/assets/iconfont/weblogo/iconfont.json'
 
 onMounted(() => {
+  document.title = 'Blossom 图标库'
   blossom.value = blossomIcons.glyphs
   weblogo.value = weblogIcons.glyphs.sort((w1, w2) => {
     return w1.font_class.localeCompare(w2.font_class)

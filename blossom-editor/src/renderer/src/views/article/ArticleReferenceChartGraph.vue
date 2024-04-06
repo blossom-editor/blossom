@@ -321,6 +321,7 @@ const windowResize = () => {
 }
 
 onMounted(() => {
+  document.title = 'Blossom 双链图表'
   init()
   windowResize()
   articleId = route.query.articleId as string

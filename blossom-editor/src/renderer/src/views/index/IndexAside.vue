@@ -78,6 +78,7 @@ const activeMenuPath = ref<string>('home')
 watch(
   () => router.currentRoute.value,
   (newRoute) => {
+    console.log(newRoute);
     activeMenuPath.value = newRoute.path
   },
   { immediate: true }
@@ -289,7 +290,6 @@ const isLogin = () => {
       height: 60px;
       margin-top: 0;
     }
-
   }
 
   :deep(.el-divider) {
