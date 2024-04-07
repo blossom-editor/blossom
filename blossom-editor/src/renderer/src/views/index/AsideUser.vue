@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@renderer/stores/user'
 import { useConfigStore } from '@renderer/stores/config'
+
 const userStore = useUserStore()
 const { viewStyle } = useConfigStore()
 </script>

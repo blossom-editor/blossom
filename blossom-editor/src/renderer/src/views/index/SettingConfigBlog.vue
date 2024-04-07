@@ -1,7 +1,10 @@
 <template>
   <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">博客配置</div>
-    <div class="desc">博客各项参数配置，若无内容请点击右侧刷新。<el-button @click="refreshParam" text bg>刷新参数</el-button></div>
+    <div class="desc" style="margin-bottom: 0">博客各项参数配置，若无内容请点击右侧刷新。</div>
+    <div class="desc">
+      <el-button @click="refreshParam" text bg><span class="iconbl bl-refresh-line"></span>刷新参数</el-button>
+    </div>
 
     <el-form :model="userParamForm" label-position="right" label-width="130px" style="max-width: 800px">
       <el-form-item label="文章查看地址" :required="true">

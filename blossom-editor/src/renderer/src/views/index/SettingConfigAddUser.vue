@@ -1,7 +1,11 @@
 <template>
   <div class="config-root">
     <div class="title">添加使用账号</div>
-    <div class="desc">您可以添加用户与您共用同一个后台服务，添加账号后，可登录新账号修改个人信息。</div>
+    <div class="desc" style="margin-bottom: 0">您可以添加用户与您共用同一个后台服务，添加账号后，可登录新账号修改个人信息。</div>
+    <div class="desc">
+      <el-button @click="showUserListDialog" text bg><span class="iconbl bl-user-line"></span>用户管理</el-button>
+    </div>
+
     <el-form :model="addUserForm" :rules="rules" label-position="right" label-width="130px" ref="AddUserFormRef">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="addUserForm.username" size="default">
@@ -34,6 +38,19 @@
       </el-form-item>
     </el-form>
   </div>
+
+  <!-- 自定义临时访问链接 -->
+  <el-dialog
+    v-model="isShowUserListDialog"
+    class="bl-dialog-fixed-body"
+    width="710"
+    style="height: 70%"
+    :align-center="true"
+    :append-to-body="true"
+    :destroy-on-close="true"
+    :close-on-click-modal="true">
+    <UserListSetting></UserListSetting>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +58,7 @@ import { computed, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { userAddApi } from '@renderer/api/auth'
 import Notify from '@renderer/scripts/notify'
+import UserListSetting from './setting/UserListSetting.vue'
 
 interface AddUserForm {
   username: string
@@ -79,6 +97,13 @@ const save = async (formEl: FormInstance | undefined) => {
     }
   })
 }
+
+//#region ----------------------------------------< 菜单 >--------------------------------------
+const isShowUserListDialog = ref(false)
+const showUserListDialog = () => {
+  isShowUserListDialog.value = true
+}
+//#endregion
 </script>
 
 <style scoped lang="scss">
