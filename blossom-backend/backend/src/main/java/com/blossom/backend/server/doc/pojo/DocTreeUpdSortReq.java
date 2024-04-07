@@ -3,6 +3,9 @@ package com.blossom.backend.server.doc.pojo;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -18,16 +21,25 @@ public class DocTreeUpdSortReq {
      */
     private List<Doc> docs;
     /**
-     * 文档类型 1:文章文件夹; 2:图片文件夹
+     * 文件夹类型 1:文章文件夹; 2:图片文件夹
      *
      * @see com.blossom.backend.server.folder.FolderTypeEnum
      */
+    @NotNull(message = "文件夹类型为必填项")
+    @Min(value = 1, message = "文件夹类型错误")
+    @Max(value = 2, message = "文件夹类型错误")
     private Integer folderType;
     /**
      * [Picture + Article] 只查询图片文件夹, 以及含有图片的文章文件夹
      */
+    @NotNull(message = "文件夹类型为必填项")
     private Boolean onlyPicture;
 
+    /**
+     * 获取查询的文件夹类型
+     *
+     * @return 返回结果不会为 null
+     */
     public Boolean getOnlyPicture() {
         if (onlyPicture == null) {
             return false;

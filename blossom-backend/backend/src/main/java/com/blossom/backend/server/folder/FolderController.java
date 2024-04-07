@@ -52,7 +52,7 @@ public class FolderController {
     /**
      * 查询专题列表
      *
-     * @param starStatus 公开状态,
+     * @param starStatus 公开状态
      */
     @GetMapping("/subjects")
     public R<List<FolderSubjectRes>> listSubject(@RequestParam("starStatus") Integer starStatus) {
@@ -143,7 +143,7 @@ public class FolderController {
     }
 
     /**
-     * 为文件夹快速增加/删除标签
+     * 快速增加/删除标签
      *
      * @since 1.10.0
      */

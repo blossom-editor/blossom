@@ -61,7 +61,6 @@ public class DocController {
 
     /**
      * 修改排序
-     * <p/>todo 返回列表, 兼容列表查询条件
      *
      * @param tree 需要修改排序的文档列表
      * @return 文档列表

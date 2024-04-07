@@ -185,7 +185,7 @@ public class ArticleController {
     }
 
     /**
-     * 为文章快速增加/删除标签
+     * 快速增加/删除标签
      *
      * @since 1.10.0
      */
