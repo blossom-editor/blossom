@@ -172,3 +172,16 @@
     border-radius: 0;
   }
 }
+
+.doc-tree-debug {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 100;
+  font-size: 12px;
+  color: black;
+  font-weight: 700;
+  text-align: left;
+  width: 700px;
+  word-break: break-all;
+}
