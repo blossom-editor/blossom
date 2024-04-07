@@ -114,7 +114,7 @@ const delDaily = (id: number) => {
 
     .daily,
     .add-daily {
-      margin: 10px 20px 10px 20px;
+      margin: 10px 15px 10px 20px;
       transition: 0.3s;
       border-radius: 6px;
       padding: 5px;

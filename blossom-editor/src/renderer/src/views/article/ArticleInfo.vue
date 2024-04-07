@@ -141,7 +141,7 @@
 
           <!--  -->
           <el-form-item label="类型">
-            <el-radio-group v-model="docForm.type" style="width: 106px" :disabled="curDocDialogType == 'upd'">
+            <el-radio-group v-model="docForm.type" style="width: 110px" :disabled="curDocDialogType == 'upd'">
               <el-radio-button :value="1">文件夹</el-radio-button>
               <el-radio-button :value="3">文章</el-radio-button>
             </el-radio-group>
@@ -151,13 +151,13 @@
           <el-form-item label="主色调">
             <el-input
               v-model="docForm.color"
-              :style="{ width: '245px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
+              :style="{ width: '242px', '--el-input-text-color': '#000000', '--el-input-bg-color': docForm.color }"
               placeholder="主色调 #FFFFFF">
             </el-input>
           </el-form-item>
 
           <el-form-item label="排序">
-            <el-input-number v-model="docForm.sort" style="width: 106px" />
+            <el-input-number v-model="docForm.sort" style="width: 110px" />
           </el-form-item>
           <!--  -->
           <!-- <el-form-item label="封面">
@@ -165,7 +165,7 @@
           </el-form-item> -->
 
           <el-form-item label="图标">
-            <el-input v-model="docForm.icon" style="width: 245px" placeholder="图标/图片http地址">
+            <el-input v-model="docForm.icon" style="width: 242px" placeholder="图标/图片http地址">
               <template #append>
                 <el-tooltip content="查看所有图标" effect="light" placement="top" :hide-after="0">
                   <div style="cursor: pointer; font-size: 20px" @click="openNewIconWindow()">
@@ -207,11 +207,9 @@
       </div>
 
       <div class="info-footer">
-        <div>
-          <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc(DocFormRef)">
-            <span class="iconbl bl-a-filechoose-line" /> 保存
-          </el-button>
-        </div>
+        <el-button size="default" type="primary" :disabled="saveLoading" @click="saveDoc(DocFormRef)">
+          <span class="iconbl bl-a-filechoose-line" /> 保存
+        </el-button>
       </div>
     </div>
   </div>
@@ -823,7 +821,7 @@ $height-form: calc(100% - #{$height-title} - #{$height-img} - #{$height-stat} - 
 
   .info-footer {
     @include box(100%, $height-footer);
-    @include flex(row, space-between, center);
+    @include flex(row, flex-end, center);
     border-top: 1px solid var(--el-border-color);
     padding: 10px;
     text-align: right;
