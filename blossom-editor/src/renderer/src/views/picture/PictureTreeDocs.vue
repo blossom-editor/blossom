@@ -109,13 +109,13 @@
 
   <!-- 详情的弹框 -->
   <el-dialog
+    class="bl-dialog-draggable-header"
     v-model="isShowDocInfoDialog"
     width="535"
-    top="100px"
-    style="margin-left: 320px"
     :append-to-body="true"
     :destroy-on-close="true"
     :close-on-click-modal="false"
+    align-center
     draggable>
     <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
   </el-dialog>

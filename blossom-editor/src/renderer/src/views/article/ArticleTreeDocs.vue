@@ -166,7 +166,7 @@
           <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 1" @click="createUrl('copy')"><span class="iconbl bl-planet-line"></span>复制博客地址</div>
             <div @click="createUrl('tempVisit')"><span class="iconbl bl-visit"></span>创建临时访问(3h)</div>
-            <div @click="handleShowACustomTempVisitDialog"><span class="iconbl bl-visit"></span>创建临时访问(自定义)</div>
+            <div @click="handleShowTempVisitDialog"><span class="iconbl bl-visit"></span>创建临时访问(自定义)</div>
           </div>
         </div>
         <div v-if="curDoc.ty === 3 && curDoc.o === 1" @click="createUrl('open')"><span class="iconbl bl-planet-line"></span>博客中查看</div>
@@ -179,39 +179,30 @@
 
   <!-- 详情 -->
   <el-dialog
+    class="bl-dialog-draggable-header"
     v-model="isShowDocInfoDialog"
     width="535"
-    top="100px"
-    style="margin-left: 320px"
     :append-to-body="true"
     :destroy-on-close="true"
     :close-on-click-modal="false"
+    align-center
     draggable>
     <ArticleInfo ref="ArticleInfoRef" @saved="savedCallback"></ArticleInfo>
   </el-dialog>
 
   <!-- 二维码 -->
-  <el-dialog
-    v-model="isShowQrCodeDialog"
-    width="335"
-    :align-center="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="false"
-    draggable>
+  <el-dialog v-model="isShowQrCodeDialog" width="335" :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="false" align-center>
     <ArticleQrCode ref="ArticleQrCodeRef"></ArticleQrCode>
   </el-dialog>
 
   <!-- 导入 -->
-  <el-dialog
-    v-model="isShowArticleImportDialog"
-    width="335"
-    top="80px"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="false"
-    draggable>
+  <el-dialog v-model="isShowArticleImportDialog" width="335" top="80px" :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="false">
     <ArticleImport ref="ArticleImportRef" :doc="curDoc"></ArticleImport>
+  </el-dialog>
+
+  <!-- 自定义临时访问链接 -->
+  <el-dialog v-model="isShowTempVisitDialog" width="400" :append-to-body="true" :destroy-on-close="true" :close-on-click-modal="true" align-center>
+    <ArticleCustomTempVisit ref="ArticleTempVisitRef" @created="tempVisitCreated"></ArticleCustomTempVisit>
   </el-dialog>
 
   <!-- 搜索 -->
@@ -220,23 +211,11 @@
     class="bl-dialog-hidden-header-fixed-body"
     width="705"
     style="height: 80%"
-    :align-center="true"
     :append-to-body="true"
     :destroy-on-close="true"
-    :close-on-click-modal="true">
+    :close-on-click-modal="true"
+    align-center>
     <ArticleSearch @open-article="openArticle" @create-link="createUrlLink"></ArticleSearch>
-  </el-dialog>
-
-  <!-- 自定义临时访问链接 -->
-  <el-dialog
-    v-model="isShowACustomTempVisitDialog"
-    width="400"
-    style="height: 200px"
-    :align-center="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="true">
-    <ArticleCustomTempVisit ref="ArticleCustomTempVisitRef" @created="tempVisitCreated"></ArticleCustomTempVisit>
   </el-dialog>
 
   <div
@@ -252,9 +231,9 @@
       width: 700px;
       word-break: break-all;
     ">
-    <div>{{ articleCurrnetId }}</div>
-    <div>当前选中：{{ docTreeCurrentId }}</div>
     <div>所有展开：{{ Array.from(docTreeCurrentExpandId) + '' }}</div>
+    <div>当前选中：{{ docTreeCurrentId }}</div>
+    <div>当前文章：{{ articleCurrnetId }}</div>
   </div>
 </template>
 
@@ -1106,17 +1085,17 @@ const openArticle = (article: DocTree) => {
 //#endregion
 
 //#region ----------------------------------------< 临时访问时长 >--------------------------------------
-const isShowACustomTempVisitDialog = ref(false)
-const ArticleCustomTempVisitRef = ref()
-const handleShowACustomTempVisitDialog = () => {
-  isShowACustomTempVisitDialog.value = true
+const isShowTempVisitDialog = ref(false)
+const ArticleTempVisitRef = ref()
+const handleShowTempVisitDialog = () => {
+  isShowTempVisitDialog.value = true
   nextTick(() => {
-    ArticleCustomTempVisitRef.value.reload(curDoc.value.n, curDoc.value.i)
+    ArticleTempVisitRef.value.reload(curDoc.value.n, curDoc.value.i)
   })
 }
 
 const tempVisitCreated = () => {
-  isShowACustomTempVisitDialog.value = false
+  isShowTempVisitDialog.value = false
 }
 //#endregion
 
