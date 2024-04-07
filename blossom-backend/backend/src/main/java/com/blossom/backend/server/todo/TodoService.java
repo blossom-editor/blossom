@@ -43,8 +43,11 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
         TodoGroupRes res = TodoGroupRes.build();
 
         Map<String, List<TodoEntity>> map = todos.stream().collect(Collectors.groupingBy(TodoEntity::getTodoId));
+
+        // 遍历每个待办事项的所有任务
         map.forEach((todoId, data) -> {
             TodoGroupRes.TodoGroup group = data.get(0).to(TodoGroupRes.TodoGroup.class);
+            // 根据状态分组
             Map<String, List<TodoEntity>> taskStatusMap = data.stream().collect(Collectors.groupingBy(TodoEntity::getTaskStatus));
             int w = 0, p = 0, c = 0;
             if (CollUtil.isNotEmpty(taskStatusMap.get(TaskStatusEnum.WAITING.name()))) {
@@ -56,7 +59,8 @@ public class TodoService extends ServiceImpl<TodoMapper, TodoEntity> {
             if (CollUtil.isNotEmpty(taskStatusMap.get(TaskStatusEnum.COMPLETED.name()))) {
                 c = taskStatusMap.get(TaskStatusEnum.COMPLETED.name()).get(0).getTaskCount();
             }
-            group.setTaskCountStat(String.format("%d|%d|%d", w, p, c));
+            group.setTaskCountStat(String.format("%d/%d/%d", w, p, c));
+            group.setTaskCount(w + p + c);
 
             if (TodoTypeEnum.DAY.getType().equals(data.get(0).getTodoType())) {
                 res.getTodoDays().put(group.getTodoId(), group);

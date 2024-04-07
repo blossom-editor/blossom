@@ -654,10 +654,7 @@ const dragStart = (doms: any, e: DragEvent) => {
     e.preventDefault()
     return
   }
-  console.log('drag start')
-
   e.dataTransfer!.setDragImage(img, 0, 0)
-
   let ele = e!.target as Element
   let cloneNode = ele.cloneNode(true) as HTMLElement
   const targetRect = ele.getBoundingClientRect()
@@ -673,7 +670,6 @@ const dragStart = (doms: any, e: DragEvent) => {
 
   // 拖拽事件
   const onDrag = (e: any) => {
-    console.log('onDrag')
     if (cloneNode) {
       cloneNode.style.transform = `translate(${e.clientX - distLeft - targetRect.left}px, ${e.clientY - distTop - targetRect.top}px)`
     }
