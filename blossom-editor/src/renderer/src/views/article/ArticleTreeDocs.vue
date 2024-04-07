@@ -66,9 +66,9 @@
       @nodeCollapse="handleNodeCollapse"
       @nodeDrop="handleDrop">
       <template #default="{ node, data }">
+        <div v-if="isShowSort" class="sort-tag" :style="{ backgroundColor: getColor(node) }">{{ data.s }}</div>
         <div class="menu-item-wrapper" :id="'article-doc-wrapper-' + data.i" @click.right="handleClickRightMenu($event, data)">
           <div :class="[viewStyle.isShowSubjectStyle ? (data.t?.includes('subject') ? 'subject-title' : 'doc-title') : 'doc-title']">
-            <div v-if="isShowSort" class="sort-tag" :style="{ backgroundColor: getColor(node) }">{{ data.s }}</div>
             <div class="doc-name">
               <img class="menu-icon-img" v-if="isShowImg(data, viewStyle)" :src="data.icon" />
               <svg v-else-if="isShowSvg(data, viewStyle)" class="icon menu-icon" aria-hidden="true">

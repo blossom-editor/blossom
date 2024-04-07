@@ -155,6 +155,7 @@
 
     :deep(.el-tree-node__content) {
       height: auto;
+      position: relative;
 
       &:hover {
         border-radius: 5px;
