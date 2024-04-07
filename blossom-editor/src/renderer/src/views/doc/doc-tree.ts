@@ -41,6 +41,8 @@ export interface NeedUpd {
  * @param _event 事件
  * @param DocTreeRef 树状列表对象
  * @param docTreeData 树状类表数据
+ * @param folderType 文件夹类型: 1:文章文件夹|2:图片文件夹
+ * @param updateFn 修改后的回调方法
  */
 export const handleTreeDrop = (
   drag: Node,
@@ -49,6 +51,7 @@ export const handleTreeDrop = (
   _event: DragEvents,
   DocTreeRef: Ref,
   docTreeData: Ref<DocTree[]>,
+  folderType: FolderType,
   updateFn: (needUpd: NeedUpd[]) => void
 ) => {
   // 是否同级别
@@ -69,7 +72,7 @@ export const handleTreeDrop = (
     })
   }
 
-  // console.log(`same: ${isSame}, dropType: ${dropType}, drag: ${dragSourceSort}, enter: ${enterSourceSort}`)
+  console.log(`same: ${isSame}, dropType: ${dropType}, drag-srot: ${dragSourceSort}, enter-srot: ${enterSourceSort}`)
   if (isSame) {
     // drag 在 enter 前
     if (dropType === 'before') {
@@ -79,7 +82,7 @@ export const handleTreeDrop = (
         addUpd(drag)
         for (let i = 0; i < enter.parent.childNodes.length; i++) {
           const node = enter.parent.childNodes[i]
-          if (node.data.s >= enterSourceSort && node.data.s < dragSourceSort && node.data.i != drag.data.i) {
+          if (checkFolderType(node, folderType) && node.data.s >= enterSourceSort && node.data.s < dragSourceSort && node.data.i != drag.data.i) {
             node.data.s += 1
             addUpd(node)
           }
@@ -91,7 +94,7 @@ export const handleTreeDrop = (
         addUpd(drag)
         for (let i = 0; i < enter.parent.childNodes.length; i++) {
           const node = enter.parent.childNodes[i]
-          if (node.data.s < enterSourceSort && node.data.s > dragSourceSort && node.data.i != drag.data.i) {
+          if (checkFolderType(node, folderType) && node.data.s < enterSourceSort && node.data.s > dragSourceSort && node.data.i != drag.data.i) {
             node.data.s -= 1
             addUpd(node)
           }
@@ -107,7 +110,7 @@ export const handleTreeDrop = (
         addUpd(drag)
         for (let i = 0; i < enter.parent.childNodes.length; i++) {
           const node = enter.parent.childNodes[i]
-          if (node.data.s > enterSourceSort && node.data.s < dragSourceSort && node.data.i != drag.data.i) {
+          if (checkFolderType(node, folderType) && node.data.s > enterSourceSort && node.data.s < dragSourceSort && node.data.i != drag.data.i) {
             node.data.s += 1
             addUpd(node)
           }
@@ -117,7 +120,7 @@ export const handleTreeDrop = (
         addUpd(drag)
         for (let i = 0; i < enter.parent.childNodes.length; i++) {
           const node = enter.parent.childNodes[i]
-          if (node.data.s <= enterSourceSort && node.data.s > dragSourceSort && node.data.i != drag.data.i) {
+          if (checkFolderType(node, folderType) && node.data.s <= enterSourceSort && node.data.s > dragSourceSort && node.data.i != drag.data.i) {
             node.data.s -= 1
             addUpd(node)
           }
@@ -132,7 +135,7 @@ export const handleTreeDrop = (
       if (dragSourceParent) {
         for (let i = 0; i < dragSourceParent.childNodes.length; i++) {
           const node = dragSourceParent.childNodes[i]
-          if (node.data.s > dragSourceSort) {
+          if (checkFolderType(node, folderType) && node.data.s > dragSourceSort) {
             node.data.s -= 1
             addUpd(node)
           }
@@ -160,7 +163,7 @@ export const handleTreeDrop = (
     if (dragSourcePid === '0') {
       for (let i = 0; i < docTreeData.value.length; i++) {
         const node = docTreeData.value[i]
-        if (node.s > dragSourceSort) {
+        if (checkFolderTypeByOrigin(node, folderType) && node.s > dragSourceSort) {
           node.s -= 1
           needUpd.push({ i: node.i, p: node.p, n: node.n, s: node.s, ty: node.ty })
         }
@@ -170,7 +173,7 @@ export const handleTreeDrop = (
       if (dragSourceParent) {
         for (let i = 0; i < dragSourceParent.childNodes.length; i++) {
           const node = dragSourceParent.childNodes[i]
-          if (node.data.s > dragSourceSort) {
+          if (checkFolderType(node, folderType) && node.data.s > dragSourceSort) {
             node.data.s -= 1
             addUpd(node)
           }
@@ -178,13 +181,16 @@ export const handleTreeDrop = (
       }
     }
 
+    // 拖拽与被拖拽的文件夹属于不同的父级 > 将一个文件夹拖拽到另一个文件夹之前
     if (dropType === 'before') {
       drag.data.p = enter.data.p
       drag.data.s = enterSourceSort
+      // 拖拽的文件夹需修改
       addUpd(drag)
+      //
       for (let i = 0; i < enter.parent.childNodes.length; i++) {
         const node = enter.parent.childNodes[i]
-        if (node.data.s >= enterSourceSort && node.data.i != drag.data.i) {
+        if (checkFolderType(node, folderType) && node.data.s >= enterSourceSort && node.data.i != drag.data.i) {
           node.data.s += 1
           addUpd(node)
         }
@@ -197,7 +203,7 @@ export const handleTreeDrop = (
       addUpd(drag)
       for (let i = 0; i < enter.parent.childNodes.length; i++) {
         const node = enter.parent.childNodes[i]
-        if (node.data.s > enterSourceSort && node.data.i != drag.data.i) {
+        if (checkFolderType(node, folderType) && node.data.s > enterSourceSort && node.data.i != drag.data.i) {
           node.data.s += 1
           addUpd(node)
         }
@@ -221,8 +227,8 @@ export const handleTreeDrop = (
   if (needUpd.length > 0) {
     updateFn(needUpd)
   }
-  // console.log(needUpd)
-  // console.log('==========================================')
+  console.log(needUpd)
+  console.log('==========================================')
 }
 
 /**
@@ -238,4 +244,41 @@ export const getMaxSort = (drag: Node, nodes: Node[]): number => {
       })
   )
   return maxSort
+}
+
+/**
+ * 拖拽时, 检查文件夹类型与文档类型是否相同
+ *
+ * @param node 节点
+ * @param folderType 文件夹类型
+ * @returns true/false
+ */
+const checkFolderType = (node: Node, folderType: FolderType): boolean => {
+  const ty = node.data.ty
+  if (folderType === 1) {
+    if (ty === 1 || ty === 3) {
+      return true
+    }
+  } else if (folderType === 2) {
+    if (ty === 2) {
+      return true
+    }
+  }
+
+  return false
+}
+
+const checkFolderTypeByOrigin = (node: DocTree, folderType: FolderType): boolean => {
+  const ty = node.ty
+  if (folderType === 1) {
+    if (ty === 1 || ty === 3) {
+      return true
+    }
+  } else if (folderType === 2) {
+    if (ty === 2) {
+      return true
+    }
+  }
+
+  return false
 }

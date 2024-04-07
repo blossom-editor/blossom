@@ -68,6 +68,9 @@ declare interface DocInfo {
   syncTime?: string
 }
 
+/** 文件夹类型: 1:文章文件夹|2:图片文件夹 */
+declare type FolderType = 1 | 2
+
 /** 文档类型: 1:文章文件夹|2:图片文件夹|3:文章|11:分隔文档; */
 declare type DocType = 1 | 2 | 3 | 11
 

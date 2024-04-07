@@ -583,7 +583,7 @@ const closeParentIfNoChild = (pid: string) => {
  * 拖拽后处理各个节点排序
  */
 const handleDrop = (drag: Node, enter: Node, dropType: NodeDropType, _event: DragEvents) => {
-  handleTreeDrop(drag, enter, dropType, _event, DocTreeRef, docTreeData, (needUpd) => {
+  handleTreeDrop(drag, enter, dropType, _event, DocTreeRef, docTreeData, 1, (needUpd) => {
     docUpdSortApi({ docs: needUpd, folderType: 1 })
       .then((resp) => {
         docTreeData.value = resp.data

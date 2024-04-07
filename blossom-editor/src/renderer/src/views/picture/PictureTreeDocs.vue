@@ -120,10 +120,10 @@
     <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
   </el-dialog>
 
-  <!-- <div class="doc-tree-debug">
+  <div class="doc-tree-debug">
     <div>所有展开：{{ Array.from(docTreeCurrentExpandId) + '' }}</div>
     <div>当前选中：{{ docTreeCurrentId }}</div>
-  </div> -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -240,7 +240,7 @@ const endLoading = () => {
 const addTreeDivider = (data: any) => {
   const docTree: DocTree[] = data
   // 两种类型的交界位置
-  let lastPicIndex: number = docTree.length - 1
+  let lastPicIndex: number = -1
   // 循环一级文件夹，第一个文章文件夹即是最后一个图片文件夹的位置
   for (let i = 0; i < docTree.length; i++) {
     let doc = docTree[i]
@@ -250,8 +250,9 @@ const addTreeDivider = (data: any) => {
     }
   }
 
-  // 插入分割符
-  docTree.splice(Math.max(lastPicIndex, 1), 0, {
+  console.log(lastPicIndex, docTree.length)
+
+  const divider: DocTree = {
     i: (Number(docTree[0].i) - 100000).toString(),
     p: '0',
     n: '',
@@ -261,7 +262,15 @@ const addTreeDivider = (data: any) => {
     icon: '',
     ty: 11,
     star: 0
-  })
+  }
+
+  if (lastPicIndex > -1) {
+    // 插入分割符
+    docTree.splice(Math.max(lastPicIndex, 1), 0, divider)
+  } else {
+    // docTree.push(divider)
+  }
+
   docTreeData.value = docTree
 }
 //#endregion
@@ -438,7 +447,7 @@ const closeParentIfNoChild = (pid: string) => {
  * 拖拽后处理各个节点排序
  */
 const handleDrop = (drag: Node, enter: Node, dropType: NodeDropType, _event: DragEvents) => {
-  handleTreeDrop(drag, enter, dropType, _event, DocTreeRef, docTreeData, (needUpd) => {
+  handleTreeDrop(drag, enter, dropType, _event, DocTreeRef, docTreeData, 2, (needUpd) => {
     docUpdSortApi({ docs: needUpd, folderType: 2, onlyPicture: true })
       .then((resp) => {
         addTreeDivider(resp.data)
