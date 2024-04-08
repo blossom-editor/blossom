@@ -208,6 +208,12 @@ api[1].list[0].list.push({
     url: 'http://127.0.0.1/doc/trees/open',
     desc: '文档列表 [OP]',
 });
+api[1].list[0].list.push({
+    order: '3',
+    deprecated: 'false',
+    url: 'http://127.0.0.1/doc/upd/sort',
+    desc: '修改排序',
+});
 api[1].list.push({
     alias: 'FolderController',
     order: '2',
@@ -230,41 +236,47 @@ api[1].list[1].list.push({
 api[1].list[1].list.push({
     order: '3',
     deprecated: 'false',
+    url: 'http://127.0.0.1/folder/star',
+    desc: '星标文件夹',
+});
+api[1].list[1].list.push({
+    order: '4',
+    deprecated: 'false',
     url: 'http://127.0.0.1/folder/info',
     desc: '通过ID查询文件夹',
 });
 api[1].list[1].list.push({
-    order: '4',
+    order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/add',
     desc: '新增或修改文件夹',
 });
 api[1].list[1].list.push({
-    order: '5',
+    order: '6',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/upd',
     desc: '修改文件夹',
 });
 api[1].list[1].list.push({
-    order: '6',
+    order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/upd/name',
     desc: '修改文件夹',
 });
 api[1].list[1].list.push({
-    order: '7',
+    order: '8',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/upd/tag',
-    desc: '为文件夹快速增加/删除标签',
+    desc: '快速增加/删除标签',
 });
 api[1].list[1].list.push({
-    order: '8',
+    order: '9',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/open',
     desc: '公开文件夹',
 });
 api[1].list[1].list.push({
-    order: '9',
+    order: '10',
     deprecated: 'false',
     url: 'http://127.0.0.1/folder/del',
     desc: '删除文件夹',
@@ -316,7 +328,7 @@ api[1].list[2].list.push({
     order: '7',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/upd/tag',
-    desc: '为文章快速增加/删除标签',
+    desc: '快速增加/删除标签',
 });
 api[1].list[2].list.push({
     order: '8',
@@ -382,11 +394,17 @@ api[1].list[3].list.push({
 api[1].list[3].list.push({
     order: '3',
     deprecated: 'false',
+    url: 'http://127.0.0.1/article/open/batch',
+    desc: '批量公开文章',
+});
+api[1].list[3].list.push({
+    order: '4',
+    deprecated: 'false',
     url: 'http://127.0.0.1/article/open/sync',
     desc: '同步公开文章',
 });
 api[1].list[3].list.push({
-    order: '4',
+    order: '5',
     deprecated: 'false',
     url: 'http://127.0.0.1/article/open/qrcode',
     desc: '生成公开文章二维码',
@@ -469,7 +487,7 @@ api[1].list[7].list.push({
 });
 api[1].list[7].list.push({
     order: '3',
-    deprecated: 'false',
+    deprecated: 'true',
     url: 'http://127.0.0.1/article/backup/download',
     desc: '下载压缩包',
 });
