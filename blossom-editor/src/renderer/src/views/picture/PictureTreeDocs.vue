@@ -120,10 +120,10 @@
     <PictureInfo ref="PictureInfoRef" @saved="savedCallback"></PictureInfo>
   </el-dialog>
 
-  <div class="doc-tree-debug">
+  <!-- <div class="doc-tree-debug">
     <div>所有展开：{{ Array.from(docTreeCurrentExpandId) + '' }}</div>
     <div>当前选中：{{ docTreeCurrentId }}</div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
