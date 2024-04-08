@@ -60,7 +60,6 @@ public class DocUtil {
                     return SortUtil.intSort.compare(d1.getS(), d2.getS());
                 })
                 .collect(Collectors.toList());
-
         return rootLevel;
     }
 
@@ -135,6 +134,20 @@ public class DocUtil {
     }
 
     /**
+     * 文章集合转 docTree集合
+     *
+     * @param articles 文章集合
+     * @return docTree
+     */
+    public static List<DocTreeRes> toDocTreesByArticles(List<ArticleEntity> articles) {
+        List<DocTreeRes> articleTrees = new ArrayList<>(articles.size());
+        for (ArticleEntity folder : articles) {
+            articleTrees.add(toDocTree(folder));
+        }
+        return articleTrees;
+    }
+
+    /**
      * 文件夹转 docTree
      *
      * @param folder 文件夹
@@ -165,8 +178,11 @@ public class DocUtil {
      * @param folders 文件夹集合
      * @return docTree
      */
-    public static List<DocTreeRes> toTreeRes(List<FolderEntity> folders) {
-        List<DocTreeRes> folderTrees = new ArrayList(folders.size());
+    public static List<DocTreeRes> toDocTreesByFolders(List<FolderEntity> folders) {
+        if (CollUtil.isEmpty(folders)) {
+            return new ArrayList<>();
+        }
+        List<DocTreeRes> folderTrees = new ArrayList<>(folders.size());
         for (FolderEntity folder : folders) {
             folderTrees.add(toDocTree(folder));
         }
