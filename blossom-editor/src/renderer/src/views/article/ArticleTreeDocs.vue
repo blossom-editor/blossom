@@ -125,7 +125,7 @@
           <div class="tree-menu-level2" :style="rMenuLevel2">
             <div v-if="curDoc.o === 0" @click="open(1)"><span class="iconbl bl-a-cloudupload-line"></span>公开{{ curDocType }}</div>
             <div v-if="curDoc.o === 1" @click="open(0)"><span class="iconbl bl-a-clouddownload-line"></span>取消{{ curDocType }}公开</div>
-            <div v-if="curDoc.star === 0" @click="star(1)"><span class="iconbl bl-star-fill"></span>收藏{{ curDocType }}</div>
+            <div v-if="curDoc.star === 0" @click="star(1)"><span class="iconbl bl-star-line"></span>收藏{{ curDocType }}</div>
             <div v-if="curDoc.star === 1" @click="star(0)"><span class="iconbl bl-star-line"></span>取消收藏{{ curDocType }}</div>
             <div v-if="curDoc.ty === 3 && !curDoc.t.includes('toc')" @click="addArticleTag('toc')">
               <span class="iconbl bl-list-ordered"></span>设为专题目录
