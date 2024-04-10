@@ -641,4 +641,7 @@ CREATE TABLE IF NOT EXISTS `base_user_param`
   COLLATE = utf8mb4_bin;
 
 -- Code that might be wrong goes last
+-- since 1.14.0
 alter table blossom_folder add column star_status tinyint(1) NOT NULL DEFAULT 0 COMMENT '收藏 0:否,1:是';
+-- since 1.15.0
+alter table blossom_article add column upd_markdown_time datetime COMMENT '文章内容的修改时间';
