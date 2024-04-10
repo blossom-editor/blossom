@@ -76,7 +76,7 @@
         <ArticleSubjects></ArticleSubjects>
       </bl-col>
 
-      <bl-col width="100%" height="calc(100% - 45px - 270px - 330px)">
+      <bl-col width="100%" height="calc(100% - 33px - 270px - 330px)">
         <bl-row class="container-name">待办事项</bl-row>
         <bl-row class="container-sub-name">Todo List</bl-row>
         <bl-row style="padding-bottom: 10px; height: calc(100% - 80px)">
@@ -220,7 +220,6 @@ const fold = () => {
 
     .chart-container {
       @include box(100%, calc(100% - 315px));
-      height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
     }
