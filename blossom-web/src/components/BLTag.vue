@@ -70,6 +70,7 @@ const props = defineProps({
   }
 
   .tag-content {
+    font-family: 'Jetbrains Mono';
     font-size: inherit;
     font-weight: inherit;
     line-height: 12px;

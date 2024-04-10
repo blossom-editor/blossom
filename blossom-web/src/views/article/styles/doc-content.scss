@@ -35,17 +35,6 @@
       font-size: 1.2em !important;
     }
 
-    ::-webkit-scrollbar {
-      /* 滚动条里槽的背景色 */
-      background-color: transparent;
-    }
-
-    /* 定义滑块 内阴影+圆角 */
-    ::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: #967777;
-    }
-
     :deep(a) {
       color: var(--el-color-primary);
       font-weight: bold;
@@ -265,7 +254,7 @@
       overflow: hidden;
 
       * {
-        font-family: 'Jetbrains Mono' !important;
+        font-family: 'Jetbrains Mono';
         font-size: 0.95em;
       }
 

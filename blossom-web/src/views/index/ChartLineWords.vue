@@ -61,7 +61,7 @@ const formartNumber = (param: number): string => {
 const renderChart = (callback?: any) => {
   chartLineLog.setOption({
     title: {
-      bottom: 45,
+      bottom: 25,
       right: 25,
       text: '历史笔记字数',
       textStyle: {

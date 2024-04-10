@@ -1,5 +1,6 @@
 .doc-tree-container {
   @include box(300px, 100%, 300px, 300px);
+  font-family: 'Jetbrains Mono';
   border-right: 1px solid var(--el-border-color);
   transition: 0.1s;
 

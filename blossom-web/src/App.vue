@@ -16,9 +16,6 @@ const userStore = useUserStore()
 onMounted(async () => {
   await userStore.getUserinfoOpen()
   initCustomTheme()
-  console.log(userStore.userParams.WEB_BLOG_SHOW_ARTICLE_NAME);
-  
-
   // 优先使用后台配置的博客名称, 否则使用默认
   if (isNotBlank(userStore.userParams.WEB_LOGO_NAME)) {
     document.title = userStore.userParams.WEB_LOGO_NAME
@@ -43,8 +40,7 @@ const THEME_STYLE_TAG_ID = 'blossom-blog-theme-css'
  */
 const initCustomTheme = () => {
   const rgb = userStore.userParams.WEB_BLOG_COLOR
-  console.log(rgb)
-  if (!rgb.toLowerCase().startsWith('rgb(')) {
+  if (rgb && !rgb.toLowerCase().startsWith('rgb(')) {
     return
   }
   const prefix = rgb.substring(4, rgb.length - 1)

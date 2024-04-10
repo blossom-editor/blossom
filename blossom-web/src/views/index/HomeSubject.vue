@@ -49,6 +49,7 @@ const toToc = (articleId: number) => {
 .home-subject-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);
+  font-family: 'Jetbrains Mono';
   flex-wrap: wrap;
   align-content: flex-start;
   padding: 20px;
@@ -71,17 +72,11 @@ const toToc = (articleId: number) => {
     .iconbl {
       font-size: 12px;
       margin-right: 5px;
-      opacity: 0;
-      transition: opacity 0.3s;
     }
 
     &:hover {
       border: 0;
       box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.5), -3px -3px 10px rgba(255, 255, 255, 0.1);
-
-      .iconbl {
-        opacity: 1;
-      }
 
       .name {
         text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, 0.5);
