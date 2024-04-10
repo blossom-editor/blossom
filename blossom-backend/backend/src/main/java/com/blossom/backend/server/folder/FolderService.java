@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,33 +55,38 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * @param userId     用户ID
      * @param starStatus 公开状态
      */
-    public List<FolderSubjectRes> subjects(Long userId, @NotNull YesNo starStatus) {
+    public List<FolderSubjectRes> subjects(Long userId, boolean openStatus, boolean starStatus) {
         // 1. 查询所有专题
         FolderEntity where = new FolderEntity();
         where.setTags(TagEnum.subject.name());
         where.setUserId(userId);
-        where.setStarStatus(starStatus.getValue());
-        List<FolderEntity> allOpenSubject = baseMapper.listAll(where);
-        if (CollUtil.isEmpty(allOpenSubject)) {
+        if (openStatus) {
+            where.setOpenStatus(YesNo.YES.getValue());
+        }
+        if (starStatus) {
+            where.setStarStatus(YesNo.YES.getValue());
+        }
+        List<FolderEntity> allSubjects = baseMapper.listAll(where);
+        if (CollUtil.isEmpty(allSubjects)) {
             return new ArrayList<>();
         }
 
         // 专题的ID
-        List<Long> allOpenSubjectIds = allOpenSubject.stream().map(FolderEntity::getId).collect(Collectors.toList());
+        List<Long> allSubjectIds = allSubjects.stream().map(FolderEntity::getId).collect(Collectors.toList());
 
         // 2. 查询全部专题的子文件夹
-        List<FolderEntity> allOpenSubjectChildFolders = baseMapper.recursiveToChildren(CollUtil.newArrayList(allOpenSubjectIds));
-        allOpenSubjectIds.addAll(allOpenSubjectChildFolders.stream().map(FolderEntity::getId).collect(Collectors.toList()));
+        List<FolderEntity> allSubjectChildFolders = baseMapper.recursiveToChildren(CollUtil.newArrayList(allSubjectIds));
+        allSubjectIds.addAll(allSubjectChildFolders.stream().map(FolderEntity::getId).collect(Collectors.toList()));
 
         // 3. 查询这些文件夹下的所有文章
         ArticleEntity articleWhere = new ArticleEntity();
-        articleWhere.setPids(allOpenSubjectIds);
+        articleWhere.setPids(allSubjectIds);
         articleWhere.setUserId(userId);
         List<ArticleEntity> articles = articleMapper.listAll(articleWhere);
 
         List<FolderSubjectRes> results = new ArrayList<>();
 
-        for (FolderEntity subject : allOpenSubject) {
+        for (FolderEntity subject : allSubjects) {
             // 专题对象, 包含字数, 更新日期等信息
             FolderSubjectRes result = subject.to(FolderSubjectRes.class);
             // 默认专题字数
@@ -90,7 +94,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             // 默认专题修改时间
             result.setSubjectUpdTime(subject.getCreTime());
             // 4. 这个专题下的所有文件夹ID
-            List<Long> subjectAllId = DocUtil.getChildrenIds(subject.getId(), allOpenSubjectChildFolders);
+            List<Long> subjectAllId = DocUtil.getChildrenIds(subject.getId(), allSubjectChildFolders);
             // 5. 遍历文章, 将文章归属到某个专题下, 并统计相关字数, 日期等信息
             for (ArticleEntity article : articles) {
                 if (subjectAllId.contains(article.getPid())) {

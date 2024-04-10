@@ -9,7 +9,6 @@ import com.blossom.backend.server.article.draft.pojo.ArticleUpdTagReq;
 import com.blossom.backend.server.doc.DocService;
 import com.blossom.backend.server.folder.pojo.*;
 import com.blossom.backend.server.utils.DocUtil;
-import com.blossom.common.base.enums.YesNo;
 import com.blossom.common.base.exception.XzException404;
 import com.blossom.common.base.pojo.DelReq;
 import com.blossom.common.base.pojo.R;
@@ -46,7 +45,7 @@ public class FolderController {
         if (userId == null) {
             return R.ok(new ArrayList<>());
         }
-        return R.ok(baseService.subjects(userId, YesNo.YES));
+        return R.ok(baseService.subjects(userId, true, false));
     }
 
     /**
@@ -55,8 +54,8 @@ public class FolderController {
      * @param starStatus 公开状态
      */
     @GetMapping("/subjects")
-    public R<List<FolderSubjectRes>> listSubject(@RequestParam("starStatus") Integer starStatus) {
-        return R.ok(baseService.subjects(AuthContext.getUserId(), YesNo.getValue(starStatus)));
+    public R<List<FolderSubjectRes>> listSubject() {
+        return R.ok(baseService.subjects(AuthContext.getUserId(), false, true));
     }
 
     /**
