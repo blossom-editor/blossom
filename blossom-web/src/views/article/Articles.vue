@@ -50,14 +50,24 @@
       </div>
 
       <div class="doc-content-container" ref="PreviewRef" :style="{ fontSize: getFontSize() }">
-        <div class="article-name">{{ article.name }}</div>
-        <div class="bl-preview" :style="{ fontSize: getFontSize() }" v-html="article.html"></div>
+        <div class="article-name" v-if="userStore.userParams.WEB_BLOG_SHOW_ARTICLE_NAME === '1'">{{ article.name }}</div>
+
+        <el-watermark
+          :font="{
+            color: userStore.userParams.WEB_BLOG_WATERMARK_COLOR,
+            fontSize: userStore.userParams.WEB_BLOG_WATERMARK_FONTSIZE,
+            textBaseline: 'hanging'
+          }"
+          :content="article.id > 0 && userStore.userParams.WEB_BLOG_WATERMARK_ENABLED === '1' ? userStore.userParams.WEB_BLOG_WATERMARK_CONTENT : ''"
+          :gap="[userStore.userParams.WEB_BLOG_WATERMARK_GAP, userStore.userParams.WEB_BLOG_WATERMARK_GAP]">
+          <div class="bl-preview" :style="{ fontSize: getFontSize() }" v-html="article.html"></div>
+        </el-watermark>
       </div>
 
       <div class="toc-container" :style="tocStyle">
         <div class="viewer-toc">
           <div v-if="article.id != 0">
-            <div class="toc-subtitle" style="font-size: 15px">《{{ article.name }}》</div>
+            <div class="toc-subtitle" style="font-size: 15px">{{ article.name }}</div>
             <div class="toc-subtitle">
               <span class="iconbl bl-pen-line"></span> {{ article.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article.uv }} |
               <span class="iconbl bl-like-line"></span> {{ article.likes }}

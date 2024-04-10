@@ -25,9 +25,9 @@
     }
 
     .toc-subtitle {
-      width: 100%;
       @include flex(row, flex-start, center);
       @include font(12px);
+      width: 100%;
       color: #ababab;
       overflow: hidden;
       white-space: nowrap;
@@ -53,6 +53,7 @@
 
         &:hover {
           font-weight: bold;
+          color: var(--el-color-primary);
         }
       }
 

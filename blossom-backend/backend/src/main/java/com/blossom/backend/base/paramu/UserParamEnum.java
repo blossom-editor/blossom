@@ -39,10 +39,57 @@ public enum UserParamEnum {
      */
     WEB_BLOG_LINKS(false, 0, ""),
     /**
-     * 博客端专题特殊形式, 0:false;1:是
+     * 博客端专题特殊形式
+     * 0:否;1:是
+     *
      * @since 1.13.0
      */
     WEB_BLOG_SUBJECT_TITLE(false, 0, "0"),
+    /**
+     * 是否在文章内容的顶部显示文章的标题
+     * 0:否;1:是
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_SHOW_ARTICLE_NAME(false, 0, "1"),
+    /**
+     * 博客主题色
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_COLOR(false, 0, "rgb(104, 104, 104)"),
+    // ----------< 博客水印 >----------
+    /**
+     * 启用博客水印
+     * 0:否;1:是
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_WATERMARK_ENABLED(false, 0, "0"),
+    /**
+     * 水印内容
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_WATERMARK_CONTENT(false, 0, ""),
+    /**
+     * 水印字体大小
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_WATERMARK_FONTSIZE(false, 0, "15"),
+    /**
+     * 水印颜色
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_WATERMARK_COLOR(false, 0, "rgba(157, 157, 157, 0.2)"),
+    /**
+     * 水印密集度
+     *
+     * @since 1.15.0
+     */
+    WEB_BLOG_WATERMARK_GAP(false, 0, "100"),
     ;
 
     /**
