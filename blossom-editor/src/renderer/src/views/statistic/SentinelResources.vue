@@ -41,7 +41,7 @@
             {{ lineSearchParam.resource }}</span
           >
         </div>
-        <el-button-group style="width: 195px">
+        <el-button-group style="width: 200px">
           <el-button round @click="intervalClick('5m', 1)">5M</el-button>
           <el-button round @click="intervalClick('10m', 1)">10M</el-button>
           <el-button round @click="intervalClick('1h', 1)">1H</el-button>
@@ -135,7 +135,7 @@ const rowClick = (row: ResourceRow) => {
     height: 36px;
 
     .title {
-      width: calc(100% - 195px);
+      width: calc(100% - 200px);
       overflow: hidden;
       @include ellipsis();
     }
