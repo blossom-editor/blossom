@@ -168,6 +168,8 @@ const initTray = () => {
   console.log('1. 创建托盘 Tray')
   tray = new Tray(icon)
   const contextMenu = Menu.buildFromTemplate([
+    { label: 'Blossom 官网 ', click: () => shell.openExternal('https://www.wangyunf.com/blossom-doc/index') },
+    { type: 'separator' },
     { label: '显示', click: () => mainWindow!.show() },
     { label: '退出', click: () => app.quit() }
   ])
