@@ -191,7 +191,7 @@ const cancelDownload = async () => {
       @include flex(column, flex-start, flex-start);
       align-content: flex-start;
       flex-wrap: wrap;
-      overflow-x: overlay;
+      overflow-x: scroll;
       padding: 10px;
 
       .bak-item {

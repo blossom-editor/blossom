@@ -14,8 +14,8 @@
     img-src * blob: data:;
     connect-src *;
     frame-src *;
+    font-src * data:;
     " />
-    <!-- 加载动画 -->
     <style>
       :root {
         --index-loading-color: #859e6052;
@@ -336,7 +336,6 @@
       }
 
       @keyframes skeleton {
-        /* 骨架屏的动画 */
         100% {
           transform: translateX(100%);
         }
@@ -346,7 +345,6 @@
 
   <body>
     <div id="app">
-      <!-- 首页加载正常运行在这里 -->
       <div class="html-loading">
         <div class="header">
           <div class="logo"></div>
@@ -387,7 +385,7 @@
               <br />
               <span style="font-size: 13px">加载中...</span>
             </div>
-            <div class="html-loading-version">Blossom | v1.13.0</div>
+            <div class="html-loading-version">Blossom | v1.15.0</div>
           </div>
         </div>
       </div>

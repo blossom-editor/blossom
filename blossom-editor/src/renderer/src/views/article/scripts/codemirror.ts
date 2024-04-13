@@ -63,6 +63,9 @@ export const cwTheme: any = {
     minWidth: '50px',
     maxWidth: '50px'
   },
+  '.cm-gutterElement': {
+    fontSize: '13px !important'
+  },
   '.cm-activeLineGutter': {
     backgroundColor: 'var(--bl-editor-gutters-bg-color)',
     color: 'var(--el-color-primary)'
@@ -71,7 +74,7 @@ export const cwTheme: any = {
     width: '40px'
   },
   '.cm-scroller': {
-    overflow: 'overlay',
+    // overflow: 'scroll',
     outline: 'none'
   },
   '.cm-foldGutter': {

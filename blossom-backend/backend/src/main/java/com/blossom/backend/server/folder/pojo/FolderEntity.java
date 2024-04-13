@@ -1,13 +1,10 @@
 package com.blossom.backend.server.folder.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.blossom.backend.server.folder.FolderTypeEnum;
 import com.blossom.common.base.pojo.AbstractPOJO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +15,6 @@ import java.util.List;
  *
  * @author xzzz
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("blossom_folder")
 public class FolderEntity extends AbstractPOJO implements Serializable {
@@ -44,6 +40,10 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
      * 标签
      */
     private String tags;
+    /**
+     * star状态
+     */
+    private Integer starStatus;
     /**
      * 开放状态
      */
@@ -102,6 +102,11 @@ public class FolderEntity extends AbstractPOJO implements Serializable {
     @TableField(exist = false)
     private List<Long> ids;
 
-    //endregion
+    /**
+     * 父ID集合
+     */
+    @TableField(exist = false)
+    private List<Long> pids;
 
+    //endregion
 }

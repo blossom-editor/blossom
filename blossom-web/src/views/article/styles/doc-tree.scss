@@ -1,0 +1,51 @@
+.doc-tree-container {
+  @include box(300px, 100%, 300px, 300px);
+  font-family: 'Jetbrains Mono';
+  border-right: 1px solid var(--el-border-color);
+  transition: 0.1s;
+
+  .doc-tree {
+    @include box(100%, 100%);
+    height: 100%;
+    padding-right: 2px;
+    overflow-y: scroll;
+    --el-transition-duration: 0.2s; // 折叠展开的动画效果
+
+    :deep(.is-drop-inner) {
+      box-shadow: inset 0 0 1px 2px var(--el-color-primary);
+      border-radius: 4px;
+    }
+
+    :deep(.el-tree__drop-indicator) {
+      height: 2px;
+    }
+
+    :deep(.el-tree-node__expand-icon) {
+      height: 10px;
+      width: 10px;
+      color: var(--bl-text-doctree-color);
+    }
+
+    :deep(.is-current) {
+      & > .el-tree-node__content {
+        border-radius: 5px;
+
+        &:has(.menu-divider) {
+          background-color: transparent;
+        }
+      }
+    }
+
+    :deep(.el-tree-node__content) {
+      height: auto;
+
+      &:hover {
+        border-radius: 5px;
+      }
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #ebebeb;
+    }
+  }
+}

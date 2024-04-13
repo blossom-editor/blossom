@@ -66,9 +66,9 @@
       :class="['middle', viewStyle.webCollectExpand ? 'expand' : 'fold']"
       :style="{ width: viewStyle.webCollectExpand ? 'calc(100% - 1px - 0px - 10px - 910px - 420px)' : 'calc(100% - 1px - 0px - 10px - 910px)' }">
       <div v-if="!viewStyle.webCollectExpand" class="web-show iconbl bl-left-line" @click="expand"></div>
-      <div style="height: 45px"></div>
+      <div style="height: 15px"></div>
 
-      <bl-col width="100%" height="270px">
+      <bl-col width="100%" height="300px">
         <ArticleStars></ArticleStars>
       </bl-col>
 
@@ -76,7 +76,7 @@
         <ArticleSubjects></ArticleSubjects>
       </bl-col>
 
-      <bl-col width="100%" height="calc(100% - 45px - 270px - 330px)">
+      <bl-col width="100%" height="calc(100% - 33px - 270px - 330px)">
         <bl-row class="container-name">待办事项</bl-row>
         <bl-row class="container-sub-name">Todo List</bl-row>
         <bl-row style="padding-bottom: 10px; height: calc(100% - 80px)">
@@ -221,7 +221,7 @@ const fold = () => {
     .chart-container {
       @include box(100%, calc(100% - 315px));
       overflow-x: hidden;
-      overflow-y: overlay;
+      overflow-y: scroll;
     }
   }
 

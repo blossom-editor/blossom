@@ -97,7 +97,14 @@ export const DEFAULT_USER_INFO = {
     WEB_GONG_WANG_AN_BEI: '',
     WEB_BLOG_URL_ERROR_TIP_SHOW: 1,
     WEB_BLOG_LINKS: '',
-    WEB_BLOG_SUBJECT_TITLE: false
+    WEB_BLOG_SUBJECT_TITLE: false,
+    WEB_BLOG_COLOR: '',
+    WEB_BLOG_SHOW_ARTICLE_NAME: true,
+    WEB_BLOG_WATERMARK_ENABLED: false,
+    WEB_BLOG_WATERMARK_CONTENT: '',
+    WEB_BLOG_WATERMARK_FONTSIZE: 15,
+    WEB_BLOG_WATERMARK_COLOR: '',
+    WEB_BLOG_WATERMARK_GAP: 100
   }
 }
 
@@ -127,6 +134,9 @@ export const useUserStore = defineStore('userStore', {
     userinfo: (Local.get(userinfoKey) as Userinfo) || initUserinfo()
   }),
   getters: {
+    currentUserId(state) {
+      return state.userinfo.id
+    },
     /**
      * 是否登录
      */

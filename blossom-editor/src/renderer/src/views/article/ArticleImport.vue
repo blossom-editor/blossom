@@ -8,14 +8,14 @@
 
     <div class="content">
       <el-upload
-        multiple
-        class="article-upload"
         ref="uploadRef"
         name="file"
+        multiple
         :action="serverStore.serverUrl + articleImportApiUrl"
-        :data="{ pid: porps.doc.i }"
+        :data="{ pid: porps.doc.i, batchId: importBatch }"
         :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
         :on-change="onChange"
+        :show-file-list="true"
         :before-upload="beforeUpload"
         :on-success="onUploadSeccess"
         :on-error="onError"
@@ -38,6 +38,7 @@ import type { UploadInstance } from 'element-plus'
 import { articleImportApiUrl } from '@renderer/api/blossom'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
+import { uuid } from '@renderer/assets/utils/util'
 import { onChange, beforeUpload, onUploadSeccess, onError } from './scripts/article-import'
 
 const userStore = useUserStore()
@@ -49,6 +50,8 @@ const porps = defineProps({
     required: true
   }
 })
+
+const importBatch = ref(uuid())
 
 const uploadRef = ref<UploadInstance>()
 
@@ -66,21 +69,21 @@ const submitUpload = () => {
   .content {
     padding: 20px;
 
-    .upload-tip {
-      border: 1px solid var(--el-border-color);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: rgb(188, 55, 55);
-    }
+    // .upload-tip {
+    //   border: 1px solid var(--el-border-color);
+    //   padding: 5px 10px;
+    //   border-radius: 5px;
+    //   color: rgb(188, 55, 55);
+    // }
 
-    .article-upload {
-      :deep(.el-upload-list) {
-        li {
-          transition: none;
-          margin-bottom: 0;
-        }
-      }
-    }
+    // .article-upload {
+    //   :deep(.el-upload-list) {
+    //     li {
+    //       transition: none;
+    //       margin-bottom: 0;
+    //     }
+    //   }
+    // }
   }
 }
 </style>

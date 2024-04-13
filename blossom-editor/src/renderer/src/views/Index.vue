@@ -38,6 +38,7 @@ const includeRouter = ref<any>(['settingIndex'])
 watch(
   () => router.currentRoute.value,
   (newRoute) => {
+    document.title = newRoute.meta.title as string
     if (newRoute.meta.keepAlive && includeRouter.value.indexOf(newRoute.name) === -1) {
       includeRouter.value.push(newRoute.name)
     }

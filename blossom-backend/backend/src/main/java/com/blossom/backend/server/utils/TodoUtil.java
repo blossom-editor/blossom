@@ -58,9 +58,16 @@ public class TodoUtil {
         if (CollUtil.isEmpty(todos)) {
             return "无内容";
         }
-        Map<String, List<TodoEntity>> maps = todos.stream().collect(Collectors.groupingBy(TodoEntity::getTodoName));
+
+        List<Map.Entry<String, List<TodoEntity>>> entryList = todos.stream()
+                .collect(Collectors.groupingBy(TodoEntity::getTodoName))
+                // 增加根据Todo name的排序
+                .entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+
         StringBuilder sb = new StringBuilder();
-        maps.forEach((todoName, tasks) -> {
+        entryList.forEach(entry -> {
+            String todoName = entry.getKey();
+            List<TodoEntity> tasks = entry.getValue();
             sb.append(String.format("# %s \n\n", todoName));
 
             for (TodoEntity task : tasks) {

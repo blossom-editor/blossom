@@ -16,6 +16,8 @@ export interface ViewStyle {
   todoStatExpand: boolean
   // 展开收起首页网页收藏
   webCollectExpand: boolean
+  // 是否显示文件夹收藏图标
+  isShowFolderStarTag: boolean
   // 是否显示专题样式
   isShowSubjectStyle: boolean
   // 是否以卡片方式显示文章收藏
@@ -121,9 +123,10 @@ export const useConfigStore = defineStore('configStore', {
         treeDocsFontSize: '13px',
         todoStatExpand: true,
         webCollectExpand: true,
-        isShowSubjectStyle: true,
+        isShowFolderStarTag: true,
+        isShowSubjectStyle: false,
         isHomeStarCard: true,
-        isHomeSubjectCard: true,
+        isHomeSubjectCard: false,
         isWebCollectCard: true,
         isGlobalShadow: false,
         isShowTryuseBtn: true,

@@ -1,0 +1,187 @@
+.doc-workbench {
+  @include box(100%, 50px);
+}
+
+// 操作树状菜单的工具栏
+.doc-tree-operator {
+  @include box(100%, 30px);
+  @include flex(row, center, center);
+  @include themeColor(#909399, #969696);
+  position: relative;
+
+  .iconbl {
+    font-size: 18px;
+    padding: 3px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      @include themeBg(#efefef, #393939);
+      border-radius: 4px;
+    }
+  }
+
+  .bl-a-leftdirection-line {
+    margin-bottom: 1px;
+  }
+
+  .bl-folderadd-line {
+    margin: 0 2px;
+  }
+
+  .bl-search-item {
+    margin: 0 2px;
+  }
+
+  .bl-collapse {
+    font-size: 16px;
+  }
+
+  .doc-tree-search {
+    position: absolute;
+    top: 28px;
+    right: 10px;
+    z-index: 2000;
+
+    .el-input {
+      border-radius: 4px;
+      background-color: var(--bl-html-color);
+      @include themeShadow(0 0 7px 1px #4a4a4a2f, 0 0 7px 1px #000000);
+    }
+
+    :deep(.el-input--suffix) {
+      * {
+        user-select: none;
+      }
+    }
+
+    :deep(.el-input-group__append) {
+      padding: 0;
+      :hover {
+        color: var(--el-color-primary);
+      }
+      div {
+        height: 24px;
+        width: 24px;
+        .el-icon {
+          height: 24px;
+          width: 24px;
+        }
+      }
+    }
+  }
+}
+
+.doc-trees-container {
+  @include box(100%, calc(100% - 80px));
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  * {
+    font-size: inherit;
+  }
+
+  .menu-item-wrapper {
+    width: 100%;
+    position: relative;
+  }
+
+  .doc-trees-placeholder {
+    width: 100%;
+    font-size: 13.5px;
+    text-align: right;
+    color: var(--bl-text-color-light);
+    padding-top: 10px;
+
+    .iconbl {
+      font-size: 16px;
+      margin: 0 4px;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+
+  .doc-tree {
+    @include box(100%, 100%);
+    padding-left: 6px;
+    padding-right: 2px;
+    // --el-transition-duration: .1s; // 折叠展开的动画效果
+
+    .menu-divider {
+      width: calc(100%);
+      height: 15px;
+      margin-left: -20px;
+      border-bottom: 1px solid var(--el-border-color);
+      margin-bottom: 15px;
+      pointer-events: none;
+    }
+
+    :deep(.menu-item-wrapper) {
+      width: 100%;
+    }
+
+    :deep(.el-tree-node__children) {
+      transition: none; // 关闭折叠展开动画
+    }
+
+    :deep(.is-drop-inner) {
+      box-shadow: inset 0 0 1px 2px var(--el-color-primary);
+      border-radius: 4px;
+    }
+
+    :deep(.el-tree__drop-indicator) {
+      height: 2px;
+    }
+
+    :deep(.el-tree-node__expand-icon) {
+      height: 10px;
+      width: 10px;
+      color: var(--bl-text-doctree-color);
+      transition: none;
+    }
+
+    :deep(.is-current) {
+      & > .el-tree-node__content {
+        border-radius: 5px;
+
+        &:has(.menu-divider) {
+          background-color: transparent;
+        }
+      }
+    }
+
+    :deep(.el-tree-node__content) {
+      height: auto;
+      position: relative;
+
+      &:hover {
+        border-radius: 5px;
+      }
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* 定义滑块 内阴影+圆角 */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0;
+  }
+}
+
+.doc-tree-debug {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 100;
+  font-size: 12px;
+  color: black;
+  font-weight: 700;
+  text-align: left;
+  width: 700px;
+  word-break: break-all;
+}

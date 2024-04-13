@@ -61,6 +61,8 @@
   }
 
   .tag-select {
+    width: 150px;
+
     :deep(.el-tag--small) {
       @include themeColor(#fff, #000);
       background-color: var(--el-color-primary-light-3);
@@ -143,7 +145,7 @@
       @include box(100%, calc(100% - 60px));
       @include flex(column, flex-start, center);
       position: relative;
-      overflow-y: overlay;
+      overflow-y: scroll;
       padding: 20px 0;
 
       .drag-container {

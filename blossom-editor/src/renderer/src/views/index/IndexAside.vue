@@ -289,7 +289,6 @@ const isLogin = () => {
       height: 60px;
       margin-top: 0;
     }
-
   }
 
   :deep(.el-divider) {

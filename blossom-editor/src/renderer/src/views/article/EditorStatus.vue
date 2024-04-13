@@ -1,21 +1,12 @@
 <template>
   <div class="editor-status-root">
     <bl-row width="calc(100% - 240px)" height="100%" class="status-item-container">
-      <div>
-        《{{ curDoc?.name }}》
-      </div>
-      <div>
-        版本:{{ curDoc?.version }}
-      </div>
-      <div>
-        字数:{{ curDoc?.words }}
-      </div>
-      <div>
-        最近修改:{{ curDoc?.updTime }}
-      </div>
-      <div v-if="curDoc?.openTime">
-        发布:{{ curDoc?.openTime }}
-      </div>
+      <div>《{{ curDoc?.name }}》</div>
+      <div>ID:{{ curDoc?.id }}</div>
+      <div>版本:{{ curDoc?.version }}</div>
+      <div>字数:{{ curDoc?.words }}</div>
+      <div>最近修改:{{ curDoc?.updTime }}</div>
+      <div v-if="curDoc?.openTime">发布:{{ curDoc?.openTime }}</div>
     </bl-row>
     <bl-row just="flex-end" width="240px" height="100%" class="status-item-container">
       <div @click="openArticleLogWindow">
@@ -26,9 +17,7 @@
         <span class="iconbl bl-correlation-line"></span>
         引用网络
       </div>
-      <bl-col width="100px" just="center">
-        渲染用时: {{ props.renderInterval }}ms
-      </bl-col>
+      <bl-col width="100px" just="center"> 渲染用时: {{ props.renderInterval }}ms </bl-col>
     </bl-row>
   </div>
 </template>
@@ -37,7 +26,7 @@
 import { inject, toRaw } from 'vue'
 import type { Ref } from 'vue'
 import { provideKeyCurArticleInfo } from '@renderer/views/doc/doc'
-import { openNewArticleReferenceWindow, openNewArticleLogWindow } from "@renderer/assets/utils/electron"
+import { openNewArticleReferenceWindow, openNewArticleLogWindow } from '@renderer/assets/utils/electron'
 
 const props = defineProps({
   renderInterval: {
@@ -70,10 +59,10 @@ const openArticleLogWindow = () => {
   background-color: var(--bl-editor-gutters-bg-color);
 
   .status-item-container {
-    overflow-x: overlay;
+    overflow-x: hidden;
     white-space: nowrap;
 
-    &>div {
+    & > div {
       height: 100%;
       padding: 0 5px;
       cursor: pointer;

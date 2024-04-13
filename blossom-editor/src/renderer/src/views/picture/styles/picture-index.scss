@@ -4,10 +4,10 @@
 
   // 文档
   .doc-container {
-    @include box(250px, 100%);
     @include flex(column, flex-start, center);
+    height: 100%;
     font-weight: 200;
-    transition: 0.1s;
+    transition: height 0.1s;
     left: 0;
     top: 0;
 
@@ -22,7 +22,7 @@
   }
 
   .picture-container {
-    @include box(calc(100% - 250px), 100%);
+    height: 100%;
     border-left: 1px solid var(--el-border-color);
     background-color: #ffffff00;
     position: relative;
@@ -104,25 +104,26 @@
           opacity 0.1s;
       }
 
+      .btn-wrapper {
+        margin-left: 15px;
+      }
+
       .radio {
         min-width: 70px;
       }
 
-      .radio,
-      .cache-clear,
+      .btn-wrapper,
       .statistic {
         @include themeColor(#a7a7a7, #6d6d6d);
-        margin-left: 15px;
 
         & > div {
           font-size: 11px;
           text-align: center;
         }
-      }
 
-      .cache-clear {
-        .iconbl {
-          margin-right: 5px;
+        .bl-admonish-line {
+          font-size: 12px;
+          margin-left: 3px;
         }
       }
 
@@ -293,8 +294,8 @@
 
       .status-item-container {
         height: 100%;
-        overflow-x: overlay;
         white-space: nowrap;
+        overflow-x: hidden;
 
         & > div {
           height: 100%;

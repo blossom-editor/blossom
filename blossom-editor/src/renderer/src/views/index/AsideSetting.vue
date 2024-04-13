@@ -72,8 +72,8 @@
       </bl-row>
       <bl-row just="space-between" style="border-top: 1px solid var(--el-border-color)">
         <el-radio-group v-model="copyType">
-          <el-radio-button label="http">HT</el-radio-button>
-          <el-radio-button label="markdown">MD</el-radio-button>
+          <el-radio-button value="http">HT</el-radio-button>
+          <el-radio-button value="markdown">MD</el-radio-button>
         </el-radio-group>
         <div>
           <el-button type="primary" @click="invokePrintScreen">截图</el-button>

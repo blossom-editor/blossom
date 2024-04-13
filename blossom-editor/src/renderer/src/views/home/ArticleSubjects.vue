@@ -1,12 +1,12 @@
 <template>
-  <bl-row class="container-name">专题</bl-row>
+  <bl-row class="container-name">专题收藏</bl-row>
   <bl-row class="container-sub-name" just="space-between">
-    <span>Article Subjects</span>
+    <span>Subject Star</span>
     <span v-if="configViewStyle.isHomeSubjectCard" class="iconbl bl-array-line container-operator" @click="showSubjectCard(false)" />
     <span v-else class="iconbl bl-article-line container-operator" @click="showSubjectCard(true)" />
   </bl-row>
   <div class="home-subject-root">
-    <div v-if="isEmpty(subjects)" class="placeholder">无专题内容</div>
+    <div v-if="isEmpty(subjects)" class="placeholder">无专题收藏</div>
     <div
       v-for="subject in subjects"
       :class="[configViewStyle.isHomeSubjectCard ? 'subject-card' : 'subject-list', configViewStyle.webCollectExpand ? '' : 'close']"
@@ -90,7 +90,7 @@ const toToc = (articleId: number) => {
   flex-wrap: wrap;
   align-content: flex-start;
   overflow: hidden;
-  overflow-y: overlay;
+  overflow-y: scroll;
 }
 
 .placeholder {
@@ -139,7 +139,7 @@ $width-item: 210px;
     @include font(14px, 300);
     @include themeColor(#3e3e3e, #b3b3b3);
     @include themeBg(#ffffffe1, #151515d2);
-    @include themeShadow(0 3px 7px rgb(144, 144, 144), 0 3px 5px rgb(14, 14, 14));
+    @include themeShadow(0 3px 7px rgb(198, 198, 198), 0 3px 5px rgb(14, 14, 14));
     @include ellipsis();
     line-height: 40px;
     padding: 0 10px;

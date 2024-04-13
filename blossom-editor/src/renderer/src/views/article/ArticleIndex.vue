@@ -16,7 +16,7 @@
         </bl-row>
       </div>
     </div>
-    <div class="resize-docs-divider" ref="ResizeDocsDividerRef"></div>
+    <div class="resize-divider-vertical" ref="ResizeDocsDividerRef"></div>
     <!-- editor -->
     <div class="editor-container" ref="EditorContainerRef" v-loading="editorLoading" element-loading-text="正在读取文章内容...">
       <div class="editor-tools">
@@ -93,7 +93,7 @@
         </div>
         <div class="gutter-holder" ref="GutterHolderRef"></div>
         <div class="editor-codemirror" ref="EditorRef" @click.right="handleEditorClickRight"></div>
-        <div class="resize-divider" ref="ResizeEditorDividerRef"></div>
+        <div class="resize-divider-vertical editor-resize-divider" ref="ResizeEditorDividerRef"></div>
         <div class="preview-marked bl-preview" ref="PreviewRef" v-html="articleHtml"></div>
       </div>
 
@@ -207,7 +207,7 @@ import { treeToInfo, provideKeyDocInfo, provideKeyCurArticleInfo, isArticle } fr
 import { TempTextareaKey, ArticleReference, parseTocAsync } from './scripts/article'
 import type { Toc } from './scripts/article'
 import { beforeUpload, onError, picCacheWrapper, picCacheRefresh, uploadForm, uploadDate } from '@renderer/views/picture/scripts/picture'
-import { useResize } from './scripts/editor-preview-resize'
+import { useResizeVertical } from '@renderer/scripts/resize-devider-vertical'
 // codemirror
 import { CmWrapper } from './scripts/codemirror'
 // marked
@@ -354,7 +354,7 @@ const exitView = () => {
   autoSave()
 }
 
-const { hideOne, resotreOne } = useResize(DocsRef, EditorContainerRef, ResizeDocsDividerRef, undefined, {
+const { hideOne, resotreOne } = useResizeVertical(DocsRef, EditorContainerRef, ResizeDocsDividerRef, undefined, {
   persistent: true,
   keyOne: 'article_docs_width',
   keyTwo: 'article_editor_preview_width',
@@ -363,7 +363,7 @@ const { hideOne, resotreOne } = useResize(DocsRef, EditorContainerRef, ResizeDoc
   maxOne: 700,
   minOne: 250
 })
-useResize(EditorRef, PreviewRef, ResizeEditorDividerRef, EditorOperatorRef)
+useResizeVertical(EditorRef, PreviewRef, ResizeEditorDividerRef, EditorOperatorRef)
 //#endregion
 
 //#region ----------------------------------------< 图片管理 >--------------------------------------
@@ -939,6 +939,7 @@ const unbindKeys = () => {
 </script>
 
 <style scoped lang="scss">
+@import '@renderer/assets/styles/bl-resize-divider.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
 @import './styles/article-index.scss';
 @import './styles/article-view-absolute.scss';

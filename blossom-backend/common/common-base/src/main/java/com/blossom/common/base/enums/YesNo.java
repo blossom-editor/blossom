@@ -42,4 +42,13 @@ public enum YesNo {
         }
         return NO.aBoolean;
     }
+
+    public static YesNo getValue(Integer value) {
+        for (YesNo yesNo : YesNo.values()) {
+            if (yesNo.getValue().equals(value)) {
+                return yesNo;
+            }
+        }
+        return YesNo.NO;
+    }
 }

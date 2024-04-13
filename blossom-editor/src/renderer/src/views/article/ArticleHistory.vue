@@ -64,6 +64,7 @@ const initEditor = (_doc?: string) => {
 const getLogs = (articleId: string | number) => {
   articleInfoApi({ id: articleId, showToc: false, showMarkdown: true, showHtml: false }).then((resp) => {
     article.value = resp.data
+    document.title = `《${resp.data.name}》编辑历史`
   })
   articleLogsApi({ articleId: articleId }).then((resp) => {
     historyList.value = resp.data
@@ -106,8 +107,8 @@ onMounted(() => {
 
     .history-list {
       @include box(100%, calc(100% - 80px - 21px));
-      overflow-y: overlay;
       padding: 10px 15px 10px 10px;
+      overflow-y: scroll;
 
       .history-item {
         @include box(100%, 55px);

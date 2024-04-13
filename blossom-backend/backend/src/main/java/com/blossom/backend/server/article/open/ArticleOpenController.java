@@ -13,10 +13,7 @@ import com.blossom.backend.config.BlConstants;
 import com.blossom.backend.server.article.draft.ArticleService;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleInfoRes;
-import com.blossom.backend.server.article.open.pojo.ArticleOpenEntity;
-import com.blossom.backend.server.article.open.pojo.ArticleOpenReq;
-import com.blossom.backend.server.article.open.pojo.ArticleOpenRes;
-import com.blossom.backend.server.article.open.pojo.ArticleOpenSyncReq;
+import com.blossom.backend.server.article.open.pojo.*;
 import com.blossom.backend.server.doc.DocTypeEnum;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
@@ -90,7 +87,19 @@ public class ArticleOpenController {
     @PostMapping
     public R<Long> open(@Validated @RequestBody ArticleOpenReq req) {
         req.setUserId(AuthContext.getUserId());
-        return R.ok(openService.open(req));
+        return R.ok(openService.openSingle(req));
+    }
+
+    /**
+     * 批量公开文章
+     *
+     * @param req 文章对象
+     */
+    @PostMapping("/batch")
+    public R<?> open(@Validated @RequestBody ArticleBatchOpenReq req) {
+        req.setUserId(AuthContext.getUserId());
+        openService.openBatch(req);
+        return R.ok();
     }
 
     /**

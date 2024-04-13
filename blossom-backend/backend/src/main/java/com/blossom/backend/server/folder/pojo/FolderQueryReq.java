@@ -16,6 +16,10 @@ import java.io.Serializable;
 public class FolderQueryReq extends PageReq implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * star状态
+     */
+    private Integer starStatus;
 
     private String tags;
 

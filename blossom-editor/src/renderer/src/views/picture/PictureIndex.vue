@@ -1,7 +1,7 @@
 <template>
   <div class="index-picture-root">
     <!-- folder menu -->
-    <div class="doc-container">
+    <div class="doc-container" ref="DocsRef">
       <div class="doc-tree-menu-container">
         <PictureTreeDocs @click-doc="clickCurFolder"></PictureTreeDocs>
       </div>
@@ -11,8 +11,9 @@
       </div>
     </div>
 
-    <!-- editor -->
-    <div class="picture-container">
+    <div class="resize-divider-vertical" ref="ResizeDividerRef"></div>
+
+    <div class="picture-container" ref="PictureContainerRef">
       <!-- 工作台 -->
       <div class="picutre-workbench" :style="workbencStyle.workbench1">
         <div class="workbenchs">
@@ -23,18 +24,18 @@
             </div>
 
             <!-- 显式收藏 -->
-            <div class="radio">
+            <div class="btn-wrapper radio">
               <div>卡片大小</div>
               <el-radio-group v-model="cardSize">
-                <el-radio-button label="mini">小</el-radio-button>
-                <el-radio-button label="large">大</el-radio-button>
+                <el-radio-button value="mini">小</el-radio-button>
+                <el-radio-button value="large">大</el-radio-button>
               </el-radio-group>
             </div>
 
-            <div class="radio">
-              <el-tooltip effect="light" placement="right" :hide-after="0">
-                <template #content> 开启重复上传后<br />重名的图片将会被覆盖 </template>
-                <div>重复上传<span class="iconbl bl-admonish-line" style="font-size: 12px; margin-left: 3px"></span></div>
+            <div class="btn-wrapper radio">
+              <el-tooltip effect="light" placement="top" popper-class="is-small" :offset="8" :hide-after="0">
+                <template #content> 开启重复上传后，重名的图片将会被覆盖 </template>
+                <div>重复上传<span class="iconbl bl-admonish-line"></span></div>
               </el-tooltip>
               <el-switch
                 width="70"
@@ -46,15 +47,28 @@
                 inactive-text="关闭" />
             </div>
 
-            <div class="cache-clear">
-              <el-tooltip effect="light" placement="right" :hide-after="0">
-                <template #content> 重复上传图片后<br />如果图片无变化可刷新缓存 </template>
-                <el-button @click="picCacheRefresh">清空图片缓存</el-button>
-              </el-tooltip>
+            <div class="btn-wrapper">
+              <el-button plain @click="refresh">刷新</el-button>
             </div>
 
-            <div class="cache-clear">
-              <el-button type="primary" plain @click="handleBenchworkStyle">批量管理</el-button>
+            <div class="btn-wrapper">
+              <el-button @click="picCacheRefresh">
+                清空图片缓存
+                <el-tooltip effect="light" placement="top" popper-class="is-small" :hide-after="0">
+                  <template #content> 重复上传图片后，如果图片无变化可刷新缓存 </template>
+                  <div><span class="iconbl bl-admonish-line"></span></div>
+                </el-tooltip>
+              </el-button>
+            </div>
+
+            <div class="btn-wrapper">
+              <el-button type="primary" plain @click="handleBenchworkStyle">
+                批量管理
+                <el-tooltip effect="light" placement="top" popper-class="is-small" :hide-after="0">
+                  <template #content> 批量删除，或转移至其他文件夹<br />右键点击卡片可快捷选中 </template>
+                  <div><span class="iconbl bl-admonish-line"></span></div>
+                </el-tooltip>
+              </el-button>
             </div>
           </div>
           <div class="workbench-level2" :style="workbencStyle.workbench2 as StyleValue">
@@ -174,6 +188,7 @@ import { isNotNull, isNull } from '@renderer/assets/utils/obj'
 import { formatFileSize, getFilePrefix, getFileSuffix, isImage } from '@renderer/assets/utils/util'
 import { writeText, download } from '@renderer/assets/utils/electron'
 import { useLifecycle } from '@renderer/scripts/lifecycle'
+import { useResizeVertical } from '@renderer/scripts/resize-devider-vertical'
 
 // component
 import { articleNamesToArray, picCacheWrapper, Picture, picCacheRefresh } from './scripts/picture'
@@ -243,15 +258,35 @@ const getPictureStat = (pid?: string) => {
 
 /**
  * 点击 doc title 的回调, 用于选中某个文档
+ *
  * @param tree
  */
 const clickCurFolder = (tree: DocTree) => {
+  const clickFolder = treeToInfo(tree)
+  if (isNotNull(curFolder.value) && clickFolder.id === curFolder.value!.id) {
+    return
+  }
+  curFolder.value = clickFolder
   picChecks.value.clear()
   checkedAll.value = false
-  curFolder.value = treeToInfo(tree)
   picturePageParam.value.pageNum = 1
   picturePageParam.value.pid = curFolder.value.id
   picturePages.value = [] // 在重新加载前清空，防止因加载慢而残留显示其他文件夹的图片
+  picturePageApi(picturePageParam.value).then((resp) => {
+    picturePages.value = resp.data.datas
+  })
+  getPictureStat(curFolder.value.id)
+}
+
+/**
+ * 刷新
+ */
+const refresh = () => {
+  if (!curFolder.value) {
+    return
+  }
+  picturePageParam.value.pageNum = 1
+  picturePages.value = []
   picturePageApi(picturePageParam.value).then((resp) => {
     picturePages.value = resp.data.datas
   })
@@ -506,7 +541,7 @@ const deleted = (ids: Array<string>) => {
 
 //#endregion
 
-//#region ----------------------------------------< 移动 >----------------------------------
+//#region ----------------------------------------< 移动至其他文件夹 >----------------------------------
 
 const isShowTransferDialog = ref(false)
 
@@ -531,10 +566,26 @@ const transferred = () => {
 }
 
 //#endregion
+
+//#region ----------------------------------------< 左右拖拽 >----------------------------------
+const DocsRef = ref()
+const ResizeDividerRef = ref()
+const PictureContainerRef = ref()
+useResizeVertical(DocsRef, PictureContainerRef, ResizeDividerRef, undefined, {
+  persistent: true,
+  keyOne: 'picture_docs_width',
+  keyTwo: 'picture_continer_width',
+  defaultOne: '250px',
+  defaultTwo: 'calc(100% - 250px)',
+  maxOne: 700,
+  minOne: 250
+})
+//#endregion
 </script>
 
 <style scoped lang="scss">
 @import './styles/picture-index.scss';
+@import '@renderer/assets/styles/bl-resize-divider.scss';
 @import '@renderer/assets/styles/bl-loading-spinner.scss';
 
 .replace-upload-switch {

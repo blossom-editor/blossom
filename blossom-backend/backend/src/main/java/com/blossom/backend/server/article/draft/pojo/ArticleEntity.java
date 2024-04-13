@@ -118,6 +118,10 @@ public class ArticleEntity extends AbstractPOJO implements Serializable {
      * 用户ID
      */
     private Long userId;
+    /**
+     * 文章内容的修改时间
+     */
+    private Date updMarkdownTime;
 
     //region ============================== 非数据库字段 ==============================
     /**

@@ -191,7 +191,7 @@ const emits = defineEmits(['saved'])
       white-space: normal;
       word-wrap: break-word;
       overflow: scroll;
-      overflow-y: overlay;
+      overflow-y: scroll
     }
 
     img {
@@ -208,7 +208,7 @@ const emits = defineEmits(['saved'])
     align-content: flex-start;
     flex-wrap: wrap;
     overflow: scroll;
-    overflow-y: overlay;
+    overflow-y: scroll;
 
     div {
       margin: 1px;

@@ -126,7 +126,7 @@ export const onUploadSeccess: UploadProps['onSuccess'] = (resp, _file?) => {
 }
 
 /**
- * 上传文件结果处理
+ * 上传文件结果处理, 失败是根据
  * @param resp 接口响应
  * @returns 是否成功
  */

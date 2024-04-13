@@ -60,7 +60,6 @@ public class DocUtil {
                     return SortUtil.intSort.compare(d1.getS(), d2.getS());
                 })
                 .collect(Collectors.toList());
-
         return rootLevel;
     }
 
@@ -122,7 +121,7 @@ public class DocUtil {
         tree.setTy(DocTypeEnum.A.getType());
 
         // 判断文章的版本与公开版本是否有差异
-        if (article.getOpenStatus().equals(YesNo.YES.getValue()) && article.getVersion() > article.getOpenVersion()) {
+        if (YesNo.YES.getValue().equals(article.getOpenStatus()) && article.getVersion() > article.getOpenVersion()) {
             tree.setVd(YesNo.YES.getValue());
         }
 
@@ -132,6 +131,20 @@ public class DocUtil {
             tree.setT(DocUtil.toTagList(article.getTags()));
         }
         return tree;
+    }
+
+    /**
+     * 文章集合转 docTree集合
+     *
+     * @param articles 文章集合
+     * @return docTree
+     */
+    public static List<DocTreeRes> toDocTreesByArticles(List<ArticleEntity> articles) {
+        List<DocTreeRes> articleTrees = new ArrayList<>(articles.size());
+        for (ArticleEntity folder : articles) {
+            articleTrees.add(toDocTree(folder));
+        }
+        return articleTrees;
     }
 
     /**
@@ -148,7 +161,7 @@ public class DocUtil {
         tree.setS(folder.getSort());
         tree.setN(folder.getName());
         tree.setSp(folder.getStorePath());
-        tree.setStar(0);
+        tree.setStar(folder.getStarStatus());
         tree.setTy(folder.getType());
         tree.setIcon(folder.getIcon());
         if (StrUtil.isBlank(folder.getTags())) {
@@ -165,8 +178,11 @@ public class DocUtil {
      * @param folders 文件夹集合
      * @return docTree
      */
-    public static List<DocTreeRes> toTreeRes(List<FolderEntity> folders) {
-        List<DocTreeRes> folderTrees = new ArrayList(folders.size());
+    public static List<DocTreeRes> toDocTreesByFolders(List<FolderEntity> folders) {
+        if (CollUtil.isEmpty(folders)) {
+            return new ArrayList<>();
+        }
+        List<DocTreeRes> folderTrees = new ArrayList<>(folders.size());
         for (FolderEntity folder : folders) {
             folderTrees.add(toDocTree(folder));
         }

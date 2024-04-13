@@ -1,0 +1,110 @@
+.toc-container {
+  @include box(270px, 100%, 270px, 270px);
+  border-left: 1px solid #eeeeee;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ebebeb;
+  }
+
+  .viewer-toc {
+    @include box(100%, 100%);
+    padding: 10px 5px 10px 10px;
+    z-index: 1000;
+    transition: 0.3s;
+
+    .doc-info {
+      .doc-name {
+        color: #ababab;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-bottom: 10px;
+      }
+      .doc-subtitle {
+        @include flex(row, flex-start, center);
+        @include font(12px);
+        font-family: 'Jetbrains Mono';
+        width: 100%;
+        color: #ababab;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        white-space: pre;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+
+.toc-title {
+  @include box(100%, 50px);
+  @include font(25px, 700);
+  color: #4c4c4c;
+  line-height: 40px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 3px solid #dedede;
+}
+
+.toc-content {
+  @include font(14px);
+  font-family: 'Jetbrains Mono';
+  height: calc(100% - 60px - 70px - 20px);
+  margin-top: 5px;
+  padding-bottom: 5px;
+  overflow-y: auto;
+  padding-left: 5px;
+
+  .toc-item {
+    width: auto;
+    padding: 4px 0;
+    color: #5e5e5e;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--el-color-primary);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: -5px;
+      width: 2px;
+      height: 60%;
+      background: var(--el-color-primary-light-4);
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  .toc-2 {
+    margin-left: 10px;
+  }
+
+  .toc-3 {
+    margin-left: 20px;
+  }
+
+  .toc-4 {
+    margin-left: 30px;
+  }
+
+  .toc-5 {
+    margin-left: 40px;
+  }
+
+  .toc-6 {
+    margin-left: 50px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ebebeb;
+  }
+}

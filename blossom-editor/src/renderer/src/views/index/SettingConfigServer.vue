@@ -4,7 +4,6 @@
     <div class="desc" style="margin-bottom: 0">服务器各项参数配置，若无内容请点击下方刷新。只有管理员用户具有操作服务器配置的权限。</div>
     <div class="desc">
       <el-button @click="refreshParam" text bg><span class="iconbl bl-refresh-line"></span>刷新参数</el-button>
-      <el-button @click="showUserListDialog" text bg><span class="iconbl bl-user-line"></span>用户管理</el-button>
     </div>
 
     <el-form :model="serverParamForm" label-position="right" label-width="130px" style="max-width: 800px">
@@ -108,19 +107,6 @@
       {{ userStore.userinfo }}
     </div> -->
   </div>
-
-  <!-- 自定义临时访问链接 -->
-  <el-dialog
-    v-model="isShowUserListDialog"
-    class="bl-dialog-fixed-body"
-    width="710"
-    style="height: 70%"
-    :align-center="true"
-    :append-to-body="true"
-    :destroy-on-close="true"
-    :close-on-click-modal="true">
-    <UserListSetting></UserListSetting>
-  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -132,7 +118,6 @@ import { paramListApi, paramUpdApi, paramRefreshApi } from '@renderer/api/blosso
 import { getDateTimeFormat, betweenDay } from '@renderer/assets/utils/util'
 import Notify from '@renderer/scripts/notify'
 import dayjs from 'dayjs'
-import UserListSetting from './setting/UserListSetting.vue'
 
 const serverStore = useServerStore()
 const userStore = useUserStore()
@@ -219,13 +204,6 @@ const autuUpdBlossomOSDomain = () => {
     Notify.success('配置成功', '配置成功')
   })
 }
-
-//#region ----------------------------------------< 菜单 >--------------------------------------
-const isShowUserListDialog = ref(false)
-const showUserListDialog = () => {
-  isShowUserListDialog.value = true
-}
-//#endregion
 
 const reload = () => {
   getParamList()

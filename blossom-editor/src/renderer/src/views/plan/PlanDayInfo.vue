@@ -184,7 +184,7 @@ defineExpose({
     align-content: flex-start;
     flex-wrap: wrap;
     overflow: scroll;
-    overflow-y: overlay;
+    overflow-y: scroll;
     padding: 10px;
 
     .color {

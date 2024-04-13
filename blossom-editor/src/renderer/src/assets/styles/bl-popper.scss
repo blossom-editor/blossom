@@ -61,24 +61,28 @@
 
       td {
         .cell {
-          border-radius: 0;
+          width: 44px;
+          border-radius: 4px;
         }
       }
 
       .el-year-table {
         td {
+          width: auto;
           padding: 7px 0;
         }
       }
 
       .el-month-table {
         td {
+          width: auto;
           padding: 1px 0;
         }
       }
 
       .el-date-table {
         td {
+          width: auto;
           padding: 2px 0;
         }
       }
@@ -121,4 +125,9 @@
 .el-popper.is-small {
   padding: 0 8px;
   box-shadow: 1px 1px 3px #f4f4f4;
+  transition: none;
+
+  .el-popper__arrow {
+    display: none;
+  }
 }

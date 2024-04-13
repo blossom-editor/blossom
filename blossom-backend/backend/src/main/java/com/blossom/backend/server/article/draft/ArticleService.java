@@ -2,6 +2,7 @@ package com.blossom.backend.server.article.draft;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.base.search.EnableIndex;
@@ -18,6 +19,7 @@ import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
+import com.blossom.common.base.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -166,7 +168,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
     public Long update(ArticleEntity req) {
         XzException404.throwBy(req.getId() == null, "ID不得为空");
         baseMapper.updById(req);
-        referenceService.updateInnerName(req.getUserId(), req.getId(), req.getName());
+        if(StrUtil.isNotBlank(req.getName())) {
+            referenceService.updateInnerName(req.getUserId(), req.getId(), req.getName());
+        }
         return req.getId();
     }
 
@@ -185,6 +189,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         if (req.getHtml() != null) {
             req.setHtml(req.getHtml().replaceAll("<p><br></p>", ""));
         }
+        req.setUpdMarkdownTime(DateUtils.date());
         baseMapper.updContentById(req);
         referenceService.bind(req.getUserId(), req.getId(), req.getName(), req.getReferences());
         logService.insert(req.getId(), 0, req.getMarkdown());

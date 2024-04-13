@@ -1,7 +1,11 @@
 <template>
   <div class="config-root" v-loading="!userStore.isLogin" element-loading-spinner="none" element-loading-text="请登录后查看...">
     <div class="title">修改用户信息</div>
-    <div class="desc">用户的个人信息，若无内容请点击右侧刷新。<el-button @click="refreshUserinfo" text bg>刷新信息</el-button></div>
+    <div class="desc" style="margin-bottom: 0">用户的个人信息，若无内容请点击右侧刷新。</div>
+    <div class="desc">
+      <el-button @click="refreshUserinfo" text bg><span class="iconbl bl-refresh-line"></span>刷新信息</el-button>
+    </div>
+
     <el-form :model="userinfoForm" :rules="rules" label-position="right" label-width="130px" style="max-width: 800px" ref="UserinfoFormRef">
       <el-form-item label="ID" prop="id">
         <el-input v-model="userinfoForm.id" size="default" disabled>

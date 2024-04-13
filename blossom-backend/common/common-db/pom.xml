@@ -5,7 +5,7 @@
     <parent>
         <artifactId>common</artifactId>
         <groupId>com.blossom</groupId>
-        <version>1.13.0-SNAPSHOT</version>
+        <version>1.15.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,7 @@
 
     <properties>
         <!-- 数据库连接 -->
-        <mysql.version>8.0.21</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <!-- 分页插件 -->
         <pagehelper.version>5.3.2</pagehelper.version>
         <pagehelper-springboot.version>1.4.6</pagehelper-springboot.version>

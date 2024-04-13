@@ -1,0 +1,439 @@
+.doc-content-container {
+  height: 100%;
+  width: 1160px;
+  max-width: 1160px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0 30px;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ebebeb;
+  }
+
+  .article-name {
+    color: #4b4b4b;
+    font-weight: 700;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    position: relative;
+    word-break: break-all;
+    font-size: 2em;
+  }
+
+  .bl-preview {
+    $borderRadius: 4px;
+    color: #4b4b4b;
+    font-size: inherit;
+    line-height: 1.6;
+
+    :deep(svg) {
+      max-width: 100% !important;
+    }
+
+    :deep(.katex > *) {
+      font-size: 1.2em !important;
+    }
+
+    :deep(a) {
+      color: var(--el-color-primary);
+      font-weight: bold;
+    }
+
+    :deep(a.inner-link) {
+      border-bottom: 2px dashed var(--el-color-primary);
+      box-sizing: border-box;
+      padding: 0 4px;
+      text-decoration: none;
+    }
+
+    :deep(img) {
+      border-radius: $borderRadius;
+      max-width: 100%;
+    }
+
+    // 列表
+    :deep(h1) {
+      padding: 10px 0;
+      margin-top: 70px;
+      border-bottom: 1px solid #e5e5e5;
+      text-align: left;
+      position: relative;
+      font-size: 1.8em;
+    }
+
+    :deep(h2) {
+      font-size: 1.6em;
+    }
+
+    :deep(h3) {
+      font-size: 1.4em;
+    }
+
+    :deep(h4) {
+      font-size: 1.3em;
+    }
+
+    :deep(h5) {
+      font-size: 1.2em;
+    }
+
+    :deep(h6) {
+      font-size: 1.1em;
+    }
+
+    :deep(h1:first-child) {
+      margin-top: 20px;
+    }
+
+    :deep(li::marker) {
+      color: #989898;
+    }
+
+    /* 有序列表 */
+    :deep(ol) {
+      padding-left: 2em;
+    }
+
+    /* 无序列表 */
+    :deep(ul) {
+      padding-left: 2em;
+    }
+
+    /* checkbox */
+    :deep(li) {
+      input {
+        margin: 0 0 0 -1.4em;
+      }
+
+      &:has(> input)::marker {
+        content: none;
+      }
+      & :has(> p > input)::marker {
+        content: none;
+      }
+    }
+
+    :deep(hr) {
+      border-color: #ffffff75;
+    }
+
+    // 表格
+    :deep(table) {
+      border: 1px solid #939393;
+      box-sizing: border-box;
+      padding: 0;
+      border-spacing: 0;
+      margin: 10px 0;
+      max-width: 100%;
+      // table-layout: fixed;
+      table-layout: auto;
+      width: 100%;
+
+      thead {
+        background-color: #2b2b2b;
+        color: #d4d4d4;
+
+        code {
+          background-color: #000000;
+        }
+
+        tr {
+          th {
+            font-size: 16px;
+            padding: 10px;
+            border-right: 1px solid #6e6e6e;
+          }
+
+          th:last-child {
+            border: 0;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          td {
+            padding: 5px;
+            border-right: 1px solid #939393;
+            border-bottom: 1px solid #939393;
+            word-wrap: break-word;
+            width: auto;
+          }
+
+          td:last-child {
+            border-right: 0;
+          }
+        }
+
+        tr:last-child {
+          td {
+            border-bottom: 0;
+          }
+        }
+      }
+    }
+
+    :deep(.bl-table-container) {
+      border: 0;
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        td {
+          border: 0;
+        }
+      }
+    }
+
+    // 引用
+    :deep(blockquote) {
+      padding: 1px 10px;
+      margin: 10px 0;
+      color: #7d7d7d;
+      background-color: #f0f0f0;
+      border-left: 3px solid #bebebe;
+      border-radius: $borderRadius;
+
+      blockquote {
+        border: 1px solid #dedede;
+        border-left: 3px solid #bebebe;
+      }
+    }
+
+    :deep(.bl-blockquote-green) {
+      background-color: #edf8db;
+      border-left: 3px solid #bed609;
+    }
+
+    :deep(.bl-blockquote-yellow) {
+      background-color: #faf0d5;
+      border-left: 3px solid #efc75e;
+    }
+
+    :deep(.bl-blockquote-red) {
+      background-color: #fbe6e9;
+      border-left: 3px solid #ff9090;
+    }
+
+    :deep(.bl-blockquote-blue) {
+      background-color: #dfeefd;
+      border-left: 3px solid #81bbf8;
+    }
+
+    :deep(.bl-blockquote-purple) {
+      background-color: #ece4fb;
+      border-left: 3px solid #ba9bf2;
+    }
+
+    :deep(.bl-blockquote-black) {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-left: 3px solid #000000;
+    }
+
+    // 单行代码块
+    :deep(code) {
+      font-family: 'Jetbrains Mono';
+      background-color: #dedede;
+      padding: 0px 4px;
+      border-radius: 3px;
+      margin: 0 3px;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+
+    // 代码块
+    :deep(pre) {
+      padding: 0 0 0 30px;
+      background-color: #2b2b2b;
+      border-radius: $borderRadius;
+      box-shadow: 2px 2px 5px rgb(76, 76, 76);
+      position: relative;
+      overflow: hidden;
+
+      * {
+        font-family: 'Jetbrains Mono';
+        font-size: 0.95em;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: #5c5c5c;
+      }
+
+      .pre-copy {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        text-align: right;
+        z-index: 10;
+        color: #5c5c5c;
+        padding: 1px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .pre-copy:hover {
+        background-color: #1a1a1a;
+        color: #9d9d9d;
+      }
+      .pre-copy:active {
+        color: #e2e2e2;
+      }
+
+      ol {
+        font-size: 1em;
+        margin: 0;
+        padding-left: 0;
+        position: absolute;
+        top: 15px;
+        left: 3px;
+        user-select: none;
+        li {
+          list-style: none;
+          .line-num {
+            font-size: 1em !important;
+            width: 30px;
+            display: inline-block;
+            text-align: right;
+            padding-right: 10px;
+            color: #6a6a6a;
+            user-select: none;
+          }
+        }
+      }
+
+      code {
+        font-family: inherit;
+        background-color: inherit;
+        border-radius: 0;
+        margin: 0;
+
+        height: 100%;
+        width: 100%;
+        display: block;
+        padding: 15px 0 15px 0;
+        overflow: auto;
+      }
+
+      pre code.hljs {
+        display: block;
+        overflow-x: auto;
+      }
+
+      code.hljs {
+        text-shadow: none;
+      }
+
+      .hljs {
+        color: #a9b7c6;
+        background: #2b2b2b;
+      }
+
+      .hljs ::selection,
+      .hljs::selection {
+        // background-color: #323232;
+        // color: #a9b7c6;
+      }
+
+      .hljs-comment {
+        color: #606366;
+      }
+
+      .hljs-tag {
+        color: #a4a3a3;
+      }
+
+      .hljs-operator,
+      .hljs-punctuation,
+      .hljs-subst {
+        color: #a9b7c6;
+      }
+
+      .hljs-operator {
+        opacity: 0.7;
+      }
+
+      .hljs-bullet,
+      .hljs-deletion,
+      .hljs-name,
+      .hljs-selector-tag,
+      .hljs-template-variable,
+      .hljs-variable {
+        color: #4eade5;
+      }
+
+      .hljs-attr {
+        color: #cc7832;
+      }
+
+      .hljs-link,
+      .hljs-literal,
+      .hljs-number,
+      .hljs-symbol,
+      .hljs-variable.constant_ {
+        color: #689757;
+      }
+
+      .hljs-class .hljs-title,
+      .hljs-title,
+      .hljs-title.class_ {
+        color: #e4b568;
+      }
+
+      .hljs-strong {
+        font-weight: 700;
+        color: #bbb529;
+      }
+
+      .hljs-addition,
+      .hljs-code,
+      .hljs-string,
+      .hljs-title.class_.inherited__ {
+        color: #6a8759;
+      }
+
+      .hljs-built_in,
+      .hljs-doctag,
+      .hljs-keyword.hljs-atrule,
+      .hljs-quote,
+      .hljs-regexp {
+        color: #629755;
+      }
+
+      .hljs-attribute,
+      .hljs-function .hljs-title,
+      .hljs-section,
+      .hljs-title.function_,
+      .ruby .hljs-property {
+        color: #9876aa;
+      }
+
+      .diff .hljs-meta,
+      .hljs-keyword,
+      .hljs-template-tag,
+      .hljs-type {
+        color: #cc7832;
+      }
+
+      .hljs-emphasis {
+        color: #cc7832;
+        font-style: italic;
+      }
+
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-meta .hljs-string {
+        color: #b4b428;
+      }
+
+      .hljs-meta .hljs-keyword,
+      .hljs-meta-keyword {
+        font-weight: 700;
+      }
+    }
+  }
+}

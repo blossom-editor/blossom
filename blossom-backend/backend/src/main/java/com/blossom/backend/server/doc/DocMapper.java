@@ -8,9 +8,10 @@ public interface DocMapper {
 
     /**
      * 查询 PID 下的最小排序
+     *
      * @param pid PID
      * @return 最小排序
      */
-    Integer selectMaxSortByPid(@Param("pid") Long pid);
+    Integer selectMaxSortByPid(@Param("pid") Long pid, @Param("userId") Long userId, @Param("type") Integer type);
 
 }

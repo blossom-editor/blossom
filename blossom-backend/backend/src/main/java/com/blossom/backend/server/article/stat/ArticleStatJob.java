@@ -42,12 +42,12 @@ public class ArticleStatJob {
         }
 
         for (UserEntity user : users) {
-            ArticleStatRes statCount = statService.statCount(toDayBegin, toDayEnd, user.getId());
-            statService.updByDate(1, toDay, statCount.getArticleCount(), user.getId());
+            ArticleStatRes statCount = statService.statUpdArticleCount(toDayBegin, toDayEnd, user.getId());
+            statService.updByDate(ArticleStatTypeEnum.ARTICLE_HEATMAP, toDay, statCount.getArticleCount(), user.getId());
 
             String toMouth = DateUtils.format(DateUtils.beginOfMonth(DateUtils.date()), DateUtils.PATTERN_YYYYMMDD);
             ArticleStatRes statWord = statService.statCount(null, null, user.getId());
-            statService.updByDate(2, toMouth, statWord.getArticleWords(), user.getId());
+            statService.updByDate(ArticleStatTypeEnum.ARTICLE_WORDS, toMouth, statWord.getArticleWords(), user.getId());
         }
     }
 }

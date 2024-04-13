@@ -146,6 +146,16 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
      * @param beginUpdTime 修改日期的开始范围
      * @param endUpdTime   修改日期的结束范围
      */
+    public ArticleStatRes statUpdArticleCount(String beginUpdTime, String endUpdTime, Long userId) {
+        return articleMapper.statUpdArticleCount(beginUpdTime, endUpdTime, userId);
+    }
+
+    /**
+     * 文章统计, 文章数, 总字数
+     *
+     * @param beginUpdTime 修改日期的开始范围
+     * @param endUpdTime   修改日期的结束范围
+     */
     public ArticleStatRes statCount(String beginUpdTime, String endUpdTime, Long userId) {
         return articleMapper.statCount(beginUpdTime, endUpdTime, userId);
     }
@@ -161,7 +171,7 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
             return;
         }
         for (ArticleWordsRes words : req.getWordsList()) {
-            this.updByDate(ArticleStatTypeEnum.ARTICLE_WORDS.getType(), words.getDate() + "-01", words.getValue(), userId);
+            this.updByDate(ArticleStatTypeEnum.ARTICLE_WORDS, words.getDate() + "-01", words.getValue(), userId);
         }
     }
 
@@ -174,26 +184,26 @@ public class ArticleStatService extends ServiceImpl<ArticleStatMapper, ArticleSt
      * @param userId 用户ID
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updByDate(Integer type, String date, Integer value, Long userId) {
+    public void updByDate(ArticleStatTypeEnum type, String date, Integer value, Long userId) {
         if (value == null) {
             value = 0;
         }
         LambdaQueryWrapper<ArticleStatEntity> existWhere = new LambdaQueryWrapper<>();
         existWhere
                 .eq(ArticleStatEntity::getUserId, userId)
-                .eq(ArticleStatEntity::getType, type)
+                .eq(ArticleStatEntity::getType, type.getType())
                 .eq(ArticleStatEntity::getStatDate, date);
         if (baseMapper.exists(existWhere)) {
             LambdaQueryWrapper<ArticleStatEntity> updWhere = new LambdaQueryWrapper<>();
             updWhere.eq(ArticleStatEntity::getUserId, userId)
-                    .eq(ArticleStatEntity::getType, type)
+                    .eq(ArticleStatEntity::getType, type.getType())
                     .eq(ArticleStatEntity::getStatDate, date);
             ArticleStatEntity upd = new ArticleStatEntity();
             upd.setStatValue(value);
             baseMapper.update(upd, updWhere);
         } else {
             ArticleStatEntity ist = new ArticleStatEntity();
-            ist.setType(type);
+            ist.setType(type.getType());
             ist.setStatDate(DateUtils.parse(date, DateUtils.PATTERN_YYYYMMDD));
             ist.setStatValue(value);
             ist.setUserId(userId);

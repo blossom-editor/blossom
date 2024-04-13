@@ -1,3 +1,6 @@
+import { isNull } from '@renderer/assets/utils/obj'
+import { randomInt } from '@renderer/assets/utils/util'
+
 /**
  * 临时内容的 localStorage key
  */
@@ -70,6 +73,10 @@ export const parseTocAsync = async (ele: HTMLElement): Promise<Toc[]> => {
     let level = 1
     let content = (head as HTMLElement).innerText
     let id = head.id
+    if (isNull(id)) {
+      id = randomInt(1000000, 9999999).toString() + content
+      head.id = id
+    }
     switch (head.localName) {
       case 'h1':
         level = 1
@@ -94,4 +101,27 @@ export const parseTocAsync = async (ele: HTMLElement): Promise<Toc[]> => {
     tocs.push(toc)
   }
   return tocs
+}
+
+/**
+ * 下载返回对象
+ *
+ * @param resp
+ */
+export const downloadTextPlain = (resp: any) => {
+  let filename: string = resp.headers.get('content-disposition')
+  let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+  let matches = filenameRegex.exec(filename)
+  if (matches != null && matches[1]) {
+    filename = decodeURI(matches[1].replace(/['"]/g, ''))
+  }
+  filename = decodeURI(filename)
+  let a = document.createElement('a')
+  let blob = new Blob([resp.data], { type: 'text/plain' })
+  let objectUrl = URL.createObjectURL(blob)
+  a.setAttribute('href', objectUrl)
+  a.setAttribute('download', filename)
+  a.click()
+  URL.revokeObjectURL(a.href)
+  a.remove()
 }

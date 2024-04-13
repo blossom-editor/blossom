@@ -7,7 +7,7 @@
     </div>
 
     <div class="content">
-      <div class="duration">有效时长(分钟) <el-input-number v-model="duration" min="1" controls-position="right"></el-input-number></div>
+      <div class="duration">有效时长(分钟) <el-input-number v-model="duration" :min="1" controls-position="right"></el-input-number></div>
       <div class="expire">将在 {{ expire }} 后失效。</div>
       <div class="btns">
         <el-button size="default" type="primary" @click="create">创建访问链接</el-button>

@@ -92,12 +92,24 @@
             html     = #{html},
             words    = #{words},
             toc      = #{toc},
-            version  = version + 1
+            version  = version + 1,
+            upd_markdown_time = #{updMarkdownTime}
         where id = #{id}
           and user_id = #{userId}
     </update>
 
     <!-- ======================================== 统计 ========================================   -->
+    <select id="statUpdArticleCount" resultType="com.blossom.backend.server.article.draft.pojo.ArticleStatRes">
+        select count(*) as articleCount
+          from blossom_article
+         where user_id = #{userId}
+        <if test="beginUpdTime != null and beginUpdTime != ''">
+            and upd_markdown_time >= #{beginUpdTime}
+        </if>
+        <if test="endUpdTime != null and endUpdTime != ''">
+            and #{endUpdTime} >= upd_markdown_time
+        </if>
+    </select>
 
     <select id="statCount" resultType="com.blossom.backend.server.article.draft.pojo.ArticleStatRes">
         select count(*) as articleCount, sum(words) as articleWords

@@ -1,6 +1,7 @@
 declare interface DocTree {
   /** ID */
-  i: number
+  i: string
+  p: string
   /** Name */
   n: string
   /** open: 0:否;1:是; */
@@ -52,13 +53,4 @@ declare type DocType = 1 | 2 | 3
 
 declare interface Window {
   onHtmlEventDispatch: any
-}
-
-/**
- * 目录结构
- */
-declare interface Toc {
-  content: string
-  clazz: string
-  id: string
 }

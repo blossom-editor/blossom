@@ -1,8 +1,15 @@
 .el-dialog {
   --el-dialog-border-radius: 8px !important;
-  --el-dialog-padding-primary: 0 !important;
+  --el-dialog-padding-primary: 10px 0 0 0 !important;
   --el-dialog-bg-color: var(--bl-dialog-bg-color) !important;
   --el-dialog-box-shadow: var(--bl-dialog-box-shadow) !important;
+}
+
+.bl-dialog-draggable-header {
+  --el-dialog-padding-primary: 0 !important;
+  .el-dialog__header {
+    height: 10px;
+  }
 }
 
 // 更大的 header close 按钮

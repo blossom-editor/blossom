@@ -1,5 +1,5 @@
 <template>
-  <bl-row class="container-name">收藏/关注</bl-row>
+  <bl-row class="container-name">文章收藏</bl-row>
   <bl-row class="container-sub-name" just="space-between">
     Article Star
     <span v-if="configViewStyle.isHomeStarCard" class="iconbl bl-array-line container-operator" @click="showStarCard(false)" />
@@ -12,16 +12,14 @@
       v-for="article in articles"
       :key="article.id"
       :class="[configViewStyle.isHomeStarCard ? 'star-card' : 'star-list', configViewStyle.webCollectExpand ? '' : 'close']">
-      <div class="counterfoil" @click="toWebview(article)">
-        <div class="iconbl bl-a-barcode-line open-barcode" v-if="article.openStatus == 1"></div>
-        <div class="iconbl bl-a-linkspread-line"></div>
+      <div class="counterfoil">
+        <div :class="['iconbl', article.openStatus == 1 ? 'bl-cloud-line' : 'bl-a-linkspread-line']" @click="toWebOrRoute(article)"></div>
       </div>
       <div class="content" @click="toRoute(article.id)">
         <div class="name">{{ article.name }}</div>
         <div class="infos">
-          <span>U{{ article.uv }}</span>
-          <span>L{{ article.likes }}</span>
-          <span>W{{ article.words }}</span>
+          <span style="padding-left: 5px">U{{ article.uv }}</span>
+          <span style="padding-right: 5px">W{{ article.words }}</span>
         </div>
       </div>
     </div>
@@ -60,9 +58,11 @@ const toRoute = (articleId: number) => {
   router.push({ path: '/articleIndex', query: { articleId: articleId } })
 }
 
-const toWebview = (article: any) => {
+const toWebOrRoute = (article: any) => {
   if (article.openStatus === 1) {
     openExtenal(userStore.userinfo.userParams.WEB_ARTICLE_URL + article.id)
+  } else {
+    toRoute(article.id)
   }
 }
 
@@ -81,13 +81,14 @@ defineExpose({ reload })
 
 <style scoped lang="scss">
 @import './styles/container.scss';
+
 .article-stars-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);
   flex-wrap: wrap;
   align-content: flex-start;
   overflow: hidden;
-  overflow-y: overlay;
+  overflow-y: scroll;
   padding-top: 10px;
 }
 
@@ -98,7 +99,7 @@ defineExpose({ reload })
 }
 
 .star-card {
-  @include box(210px, 70px, 210px, 210px);
+  @include box(210px, 50px, 210px, 210px);
   filter: var(--bl-drop-shadow-star);
   position: relative;
   margin: 10px 10px;
@@ -117,33 +118,20 @@ defineExpose({ reload })
   .content {
     @include absolute(0);
     @include themeColor(#ffffff, #c9c9c9);
-    transition: 0.3s;
+    @include themeBg(var(--el-color-primary-light-4), var(--el-color-primary-light-6));
+    transition:
+      transform-origin 0.3s,
+      transform 0.3s;
     z-index: 2;
     cursor: pointer;
-
-    &::before {
-      @include box(100%, 100%);
-      @include absolute('', 0, '', 0);
-      @include themeBg(var(--el-color-primary-light-3), var(--el-color-primary-light-5));
-      content: '';
-      border-radius: 10px;
-      mask-composite: source-in;
-      -webkit-mask-composite: source-in;
-      z-index: -1;
-    }
   }
 
   // 左侧存根
   .counterfoil {
     @include flex(row, center, center);
-    @include box(53px, 100%);
-    padding: 5px;
-
-    &::before {
-      -webkit-mask:
-        radial-gradient(circle at 10px 10px, transparent 10px, #fff 0) 43px -10px / 120%,
-        radial-gradient(circle at 1px 1px, transparent 2px, #fff 0) 51px 0px / 110% 8%;
-    }
+    @include box(43px, 100%);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 
     &:hover {
       transform: rotate(-10deg);
@@ -151,50 +139,36 @@ defineExpose({ reload })
     }
 
     .iconbl {
-      font-size: 30px;
+      font-size: 26px;
+      &:hover {
+        @include themeColor(#ffffff, #c9c9c9);
+      }
     }
 
-    .bl-shuxingtiaoma {
-      @include absolute('', '', -3px, 14px);
-      font-size: 22px;
-      transform: rotate(90deg);
-    }
-
-    .bl-tiaoxingma {
-      position: absolute;
-      bottom: -15px;
-      left: 8px;
-      font-size: 40px;
-    }
-
-    .open-barcode {
+    .open-article {
       @include absolute('', '', 0px, 17px);
-      font-size: 15px;
+      font-size: 13px;
     }
   }
 
   //
   .content {
-    @include flex(row, center, center);
-    @include box(157px, 100%);
-    right: 0;
-    padding: 5px 5px 5px 10px;
+    @include flex(row, flex-start, center);
+    @include box(167px, 100%);
+    padding: 5px 5px 5px 5px;
     font-size: 12px;
-
-    &::before {
-      -webkit-mask:
-        radial-gradient(circle at 10px 10px, transparent 10px, #000 0) -10px -10px / 120%,
-        radial-gradient(circle at 1px 1px, transparent 2px, #000 0) -1px 0px / 110% 8%;
-    }
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    right: 0;
 
     .name {
-      @include box(140px, 45px);
-      @include absolute(10px, '', '', 12px);
-      line-height: 15px;
+      @include box(150px, 25px);
+      @include absolute(7px, '', '', 8px);
+      line-height: 13px;
       word-break: break-all;
       overflow: hidden;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
 

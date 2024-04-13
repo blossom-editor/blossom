@@ -94,6 +94,15 @@ export const docTreeApi = (params?: object): Promise<R<any>> => {
   return rq.get<R<any>>('/doc/trees', { params })
 }
 
+/**
+ * 修改文档的排序
+ * @param data
+ * @returns
+ */
+export const docUpdSortApi = (data: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/doc/upd/sort', data)
+}
+
 //#endregion
 
 //#region ====================================================< folder >====================================================
@@ -275,6 +284,15 @@ export const articleStarApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * star 或取消 star
+ * @param data
+ * @returns
+ */
+export const folderStarApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/folder/star', data)
+}
+
+/**
  * 下载文章 markdown
  * @param params
  * @returns
@@ -365,6 +383,15 @@ export const articleOpenApi = (data?: object): Promise<R<any>> => {
 }
 
 /**
+ * 文章公开或取消公开
+ * @param data
+ * @returns
+ */
+export const articleOpenBatchApi = (data?: object): Promise<R<any>> => {
+  return rq.post<R<any>>('/article/open/batch', data)
+}
+
+/**
  * 文章同步
  * @param data
  * @returns
@@ -429,16 +456,6 @@ export interface BackupFile {
 }
 export const articleBackupListApi = (): Promise<R<BackupFile[]>> => {
   return rq.get<BackupFile[]>('/article/backup/list')
-}
-
-/**
- * 下载备份文件
- * @param params
- * @returns
- */
-export const articleBackupDownloadApi = (params?: object): Promise<any> => {
-  let config = { params: params, responseType: 'blob' }
-  return rq.get('/article/backup/download', config)
 }
 
 /**

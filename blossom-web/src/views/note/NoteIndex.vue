@@ -168,7 +168,7 @@ const top = () => {
         white-space: pre-line;
         word-wrap: break-word;
         overflow: auto;
-        overflow-y: overlay;
+        overflow-y: scroll;
         user-select: text;
       }
       .time {

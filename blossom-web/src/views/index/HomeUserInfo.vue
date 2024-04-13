@@ -52,6 +52,7 @@ const links = () => {
 .home-userinfo-root {
   @include box(100%, 100%);
   @include flex(column, center, center);
+  font-family: 'Jetbrains Mono';
 
   .userinfo-desc {
     @include flex(row, flex-start, flex-end);

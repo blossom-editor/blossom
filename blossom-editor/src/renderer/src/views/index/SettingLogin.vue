@@ -295,7 +295,7 @@ const helpMeLogin = () => {
         [class='dark'] & {
           box-shadow:
             0.3rem 0.3rem 0.6rem #000000,
-            -0.1rem -0.1rem 0.5rem #848484;
+            -0.1rem -0.1rem 0.5rem #4b4b4b;
         }
 
         ~ .iconbl {

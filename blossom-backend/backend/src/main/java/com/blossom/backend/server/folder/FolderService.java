@@ -5,14 +5,11 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.blossom.backend.server.article.TagEnum;
-import com.blossom.backend.server.article.draft.ArticleService;
+import com.blossom.backend.server.article.draft.ArticleMapper;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
-import com.blossom.backend.server.article.draft.pojo.ArticleQueryReq;
-import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.folder.pojo.FolderEntity;
-import com.blossom.backend.server.folder.pojo.FolderQueryReq;
 import com.blossom.backend.server.folder.pojo.FolderSubjectRes;
-import com.blossom.backend.server.picture.PictureService;
+import com.blossom.backend.server.picture.PictureMapper;
 import com.blossom.backend.server.picture.pojo.PictureEntity;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.enums.YesNo;
@@ -38,18 +35,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
-    private ArticleService articleService;
-    private PictureService pictureService;
 
     @Autowired
-    public void setArticleService(ArticleService articleService) {
-        this.articleService = articleService;
-    }
+    private PictureMapper picMapper;
 
     @Autowired
-    public void setPictureService(PictureService pictureService) {
-        this.pictureService = pictureService;
-    }
+    private ArticleMapper articleMapper;
+
 
     /**
      * 专题列表
@@ -59,36 +51,42 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      * <p>4. 相同专题的所有文件夹ID归为一组.
      * <p>5. 通过文件夹ID获取到专题下的所有文章, 从而统计文章的总字数, 修改时间, 创建时间等.
      * <p>6. 如果文章包含 TOC 标签, 则该文章为专题的目录, 专题的默认跳转会跳转至该目录
+     *
+     * @param userId     用户ID
+     * @param starStatus 公开状态
      */
-    public List<FolderSubjectRes> subjects(Long userId) {
-        // 1. 查询所有公开的专题
+    public List<FolderSubjectRes> subjects(Long userId, boolean openStatus, boolean starStatus) {
+        // 1. 查询所有专题
         FolderEntity where = new FolderEntity();
         where.setTags(TagEnum.subject.name());
-        where.setOpenStatus(YesNo.YES.getValue());
         where.setUserId(userId);
-        List<FolderEntity> allOpenSubject = baseMapper.listAll(where);
-        if (CollUtil.isEmpty(allOpenSubject)) {
+        if (openStatus) {
+            where.setOpenStatus(YesNo.YES.getValue());
+        }
+        if (starStatus) {
+            where.setStarStatus(YesNo.YES.getValue());
+        }
+        List<FolderEntity> allSubjects = baseMapper.listAll(where);
+        if (CollUtil.isEmpty(allSubjects)) {
             return new ArrayList<>();
         }
 
         // 专题的ID
-        List<Long> allOpenSubjectIds = allOpenSubject.stream().map(FolderEntity::getId).collect(Collectors.toList());
+        List<Long> allSubjectIds = allSubjects.stream().map(FolderEntity::getId).collect(Collectors.toList());
 
         // 2. 查询全部专题的子文件夹
-        List<FolderEntity> allOpenSubjectChildFolders = baseMapper.recursiveToChildren(CollUtil.newArrayList(allOpenSubjectIds));
-        allOpenSubjectIds.addAll(allOpenSubjectChildFolders.stream().map(FolderEntity::getId).collect(Collectors.toList()));
+        List<FolderEntity> allSubjectChildFolders = baseMapper.recursiveToChildren(CollUtil.newArrayList(allSubjectIds));
+        allSubjectIds.addAll(allSubjectChildFolders.stream().map(FolderEntity::getId).collect(Collectors.toList()));
 
         // 3. 查询这些文件夹下的所有文章
-        ArticleQueryReq articleWhere = new ArticleQueryReq();
-        articleWhere.setPids(allOpenSubjectIds);
+        ArticleEntity articleWhere = new ArticleEntity();
+        articleWhere.setPids(allSubjectIds);
         articleWhere.setUserId(userId);
-        // 统计专题信息时, 会包含非公开文章
-        // articleWhere.setOpenStatus(YesNo.YES.getValue());
-        List<ArticleEntity> articles = articleService.listAll(articleWhere);
+        List<ArticleEntity> articles = articleMapper.listAll(articleWhere);
 
         List<FolderSubjectRes> results = new ArrayList<>();
 
-        for (FolderEntity subject : allOpenSubject) {
+        for (FolderEntity subject : allSubjects) {
             // 专题对象, 包含字数, 更新日期等信息
             FolderSubjectRes result = subject.to(FolderSubjectRes.class);
             // 默认专题字数
@@ -96,7 +94,7 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             // 默认专题修改时间
             result.setSubjectUpdTime(subject.getCreTime());
             // 4. 这个专题下的所有文件夹ID
-            List<Long> subjectAllId = DocUtil.getChildrenIds(subject.getId(), allOpenSubjectChildFolders);
+            List<Long> subjectAllId = DocUtil.getChildrenIds(subject.getId(), allSubjectChildFolders);
             // 5. 遍历文章, 将文章归属到某个专题下, 并统计相关字数, 日期等信息
             for (ArticleEntity article : articles) {
                 if (subjectAllId.contains(article.getPid())) {
@@ -115,34 +113,6 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
         }
 
         return results;
-    }
-
-    /**
-     * 查询全部文件夹, 并转换成 {@link DocTreeRes}
-     */
-    public List<DocTreeRes> listTree(FolderQueryReq req) {
-        List<FolderEntity> folders = baseMapper.listAll(req.to(FolderEntity.class));
-        return DocUtil.toTreeRes(folders);
-    }
-
-    /**
-     * 递归获取传入ID的所有的父文件夹, 并转换成 {@link DocTreeRes}, 结果会包含自己
-     *
-     * @param ids ID 集合
-     */
-    public List<DocTreeRes> recursiveToParentTree(List<Long> ids) {
-        List<FolderEntity> folders = baseMapper.recursiveToParent(ids);
-        return DocUtil.toTreeRes(folders);
-    }
-
-    /**
-     * 递归获取传入ID的所有的子文件夹, 并转换成 {@link DocTreeRes}, 结果会包含自己
-     *
-     * @param ids ID 集合
-     */
-    public List<DocTreeRes> recursiveToChildrenTree(List<Long> ids) {
-        List<FolderEntity> folders = baseMapper.recursiveToChildren(ids);
-        return DocUtil.toTreeRes(folders);
     }
 
     /**
@@ -194,9 +164,50 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
      */
     @Transactional(rollbackFor = Exception.class)
     public Long update(FolderEntity folder) {
-        XzException404.throwBy(folder.getId() == null, "ID不得为空");
-        XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
-        // 如果
+        updateParamValid(folder);
+        updateStorePath(folder);
+        baseMapper.updById(folder);
+        return folder.getId();
+    }
+
+    /**
+     * 删除文件夹
+     * <p>1. 文件夹下有子文件夹时, 无法删除</p>
+     * <p>2. 文件夹下有文章时, 无法删除</p>
+     *
+     * @param folderId 文件夹ID
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long folderId) {
+        // 文件夹下有文件夹, 无法删除
+        if (baseMapper.recursiveToChildren(CollUtil.newArrayList(folderId)).stream().anyMatch(d -> !d.getId().equals(folderId))) {
+            throw new XzException500("文件夹下有子文件夹, 无法删除, 请先删除子文件夹");
+        }
+
+        // 文件夹下有文章, 无法删除
+        ArticleEntity articleWhere = new ArticleEntity();
+        articleWhere.setPids(CollUtil.newArrayList(folderId));
+        if (CollUtil.isNotEmpty(articleMapper.listAll(articleWhere))) {
+            throw new XzException500("文件夹下有文章, 无法删除, 请先删除下属文章");
+        }
+
+        // 文件夹下有图片, 无法删除
+        PictureEntity picReq = new PictureEntity();
+        picReq.setPid(folderId);
+        if (CollUtil.isNotEmpty(picMapper.listAll(picReq))) {
+            throw new XzException500("文件夹下有图片, 无法删除, 请先删除下属图片");
+        }
+
+        baseMapper.deleteById(folderId);
+    }
+
+    /**
+     * 修改文件夹的存储地址
+     *
+     * @param folder
+     */
+    private void updateStorePath(FolderEntity folder) {
+        // 处理文件夹的存储地址
         if (StrUtil.isNotBlank(folder.getStorePath())) {
             final FolderEntity oldFolder = selectById(folder.getId());
             // 获取所有子文件夹
@@ -214,8 +225,6 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
             }
         }
         folder.setStorePath(formatStorePath(folder.getStorePath()));
-        baseMapper.updById(folder);
-        return folder.getId();
     }
 
     /**
@@ -245,34 +254,12 @@ public class FolderService extends ServiceImpl<FolderMapper, FolderEntity> {
     }
 
     /**
-     * 删除文件夹
-     * <p>1. 文件夹下有子文件夹时, 无法删除</p>
-     * <p>2. 文件夹下有文章时, 无法删除</p>
+     * 检查修改是否有效
      *
-     * @param folderId 文件夹ID
+     * @param folder 文件夹
      */
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Long folderId) {
-        // 文件夹下有文件夹, 无法删除
-        if (recursiveToChildrenTree(CollUtil.newArrayList(folderId)).stream().anyMatch(d -> !d.getI().equals(folderId))) {
-            throw new XzException500("文件夹下有子文件夹, 无法删除, 请先删除子文件夹");
-        }
-
-        // 文件夹下有文章, 无法删除
-        ArticleQueryReq articleReq = new ArticleQueryReq();
-        articleReq.setPids(CollUtil.newArrayList(folderId));
-        if (CollUtil.isNotEmpty(articleService.listTree(articleReq))) {
-            throw new XzException500("文件夹下有文章, 无法删除, 请先删除下属文章");
-        }
-
-        // 文件夹下有图片, 无法删除
-        PictureEntity picReq = new PictureEntity();
-        picReq.setPid(folderId);
-        if (CollUtil.isNotEmpty(pictureService.listAll(picReq))) {
-            throw new XzException500("文件夹下有图片, 无法删除, 请先删除下属图片");
-        }
-
-        baseMapper.deleteById(folderId);
+    private void updateParamValid(FolderEntity folder) {
+        XzException404.throwBy(folder.getId() == null, "ID不得为空");
+        XzException400.throwBy(folder.getId().equals(folder.getPid()), "上级文件夹不能是自己");
     }
-
 }

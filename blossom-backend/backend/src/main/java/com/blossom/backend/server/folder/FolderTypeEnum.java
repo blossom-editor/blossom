@@ -28,4 +28,14 @@ public enum FolderTypeEnum {
         this.type = type;
         this.desc = desc;
     }
+
+    public static FolderTypeEnum getType(Integer type) {
+        for (FolderTypeEnum value : FolderTypeEnum.values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
 }

@@ -140,7 +140,7 @@ const notes = ref<any>([])
     padding-left: 40px;
     z-index: 3;
     overflow: auto;
-    overflow-y: overlay;
+    overflow-y: scroll;
 
     .placeholder {
       @include font(14px, 300);
@@ -236,7 +236,7 @@ const notes = ref<any>([])
         white-space: pre-line;
         word-wrap: break-word;
         overflow: auto;
-        overflow-y: overlay;
+        overflow-y: scroll;
         user-select: text;
         cursor: cell;
       }

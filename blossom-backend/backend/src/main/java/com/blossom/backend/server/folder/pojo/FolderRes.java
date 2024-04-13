@@ -40,6 +40,10 @@ public class FolderRes extends AbstractPOJO implements Serializable {
      */
     private List<String> tags;
     /**
+     * star状态
+     */
+    private Integer starStatus;
+    /**
      * 是否公开文件夹 [0:未公开，1:公开]
      */
     private Integer openStatus;

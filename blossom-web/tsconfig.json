@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "env/env.d.ts",
     "src/**/*",
@@ -9,7 +9,6 @@
     "global.d.ts"
   ],
   "compilerOptions": {
-    "ignoreDeprecations": "5.0",
     "baseUrl": "./",
     "types": [
       "node"
