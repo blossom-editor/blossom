@@ -7,12 +7,12 @@ import com.blossom.common.base.util.json.JsonUtil;
 import com.blossom.common.base.util.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component("DynamicLogRepositoryRedis")
-@ConditionalOnClass(RedisTemplate.class)
+@ConditionalOnProperty(value = "project.cache.type", havingValue = "redis")
 public class DynamicLogRepositoryRedis implements DynamicLogRepository {
 
     private final StringRedisTemplate redisTemplate;

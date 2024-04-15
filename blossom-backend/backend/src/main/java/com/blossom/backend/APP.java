@@ -1,5 +1,6 @@
 package com.blossom.backend;
 
+import com.blossom.backend.config.ContextInitializer;
 import com.blossom.backend.config.PropertiesCheckListener;
 import com.blossom.common.base.BaseConstants;
 import com.blossom.expand.tracker.core.Tracker;
@@ -23,6 +24,7 @@ public class APP {
         Tracker.start("APPLICATION_START", TrackerConstants.SPAN_TYPE_APPLICATION_RUN);
         SpringApplication app = new SpringApplication(APP.class);
         app.addListeners(new PropertiesCheckListener());
+        app.addInitializers(new ContextInitializer());
         app.run(args);
         BaseConstants.desc();
         Tracker.end();

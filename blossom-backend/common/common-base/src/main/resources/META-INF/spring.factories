@@ -5,7 +5,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.blossom.common.base.config.WebMvcConfig,\
   com.blossom.common.base.exception.ExceptionAdviceByGlobal,\
   com.blossom.common.base.exception.ExceptionAdviceByXz,\
-  com.blossom.common.base.util.spring.SpringUtil,\
-  com.blossom.common.base.log.DynamicLogRepositoryCaffeine
+  com.blossom.common.base.util.spring.SpringUtil
 
 

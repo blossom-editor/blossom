@@ -5,7 +5,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @EnableCaching
-@ConditionalOnMissingClass("org.springframework.data.redis.core.RedisTemplate")
+@ConditionalOnProperty(value = "project.cache.type", havingValue = "caffeine")
 public class CaffeineCacheConfig {
 
     /**

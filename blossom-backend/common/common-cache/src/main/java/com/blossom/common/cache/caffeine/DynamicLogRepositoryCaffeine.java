@@ -1,11 +1,13 @@
-package com.blossom.common.base.log;
+package com.blossom.common.cache.caffeine;
 
+import com.blossom.common.base.BaseProperties;
+import com.blossom.common.base.log.DynamicLogRepository;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
-import com.blossom.common.base.BaseProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component("dynamicLogRepositoryCaffeine")
-@ConditionalOnMissingClass("org.springframework.data.redis.core.RedisTemplate")
+@ConditionalOnProperty(value = "project.cache.type", havingValue = "caffeine")
 public class DynamicLogRepositoryCaffeine implements DynamicLogRepository {
 
     private final LoggingSystem loggingSystem;
@@ -29,7 +31,7 @@ public class DynamicLogRepositoryCaffeine implements DynamicLogRepository {
     private final ScheduledExecutorService clearUpScheduled = Executors.newScheduledThreadPool(1);
 
     public DynamicLogRepositoryCaffeine(LoggingSystem loggingSystem, BaseProperties properties) {
-        log.debug("[    BASE] 日志级别存储 : Caffeine, 配置持续时长[{}ms], 刷新间隔[{}ms]",
+        log.info("[    BASE] 日志级别存储 : Caffeine, 配置持续时长[{}ms], 刷新间隔[{}ms]",
                 properties.getLog().getDuration(), properties.getLog().getRestoreDuration());
         cache = Caffeine.newBuilder()
                 .initialCapacity(100)

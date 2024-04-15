@@ -9,19 +9,19 @@ import com.blossom.backend.thirdparty.hefeng.pojo.*;
 import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.util.json.JsonUtil;
 import com.blossom.common.base.util.okhttp.HttpUtil;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.blossom.common.cache.CacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 天气查询
@@ -42,16 +42,9 @@ public class WeatherManager {
     private static final String URL_HOURLY = "https://devapi.heweather.net/v7/weather/24h";
     private static final String SUCCESS = "200";
 
-    /**
-     *
-     */
-    private final Cache<String, WeatherRes> weatherCache = Caffeine.newBuilder()
-            .initialCapacity(50)
-            .expireAfterWrite(45, TimeUnit.MINUTES)
-            .removalListener((String location, WeatherRes weather, RemovalCause cause) ->
-                    log.info("Weather cache [" + location + "] has been deleted")
-            )
-            .build();
+    @Lazy
+    @Resource
+    private CacheService<String, WeatherRes> cacheService;
 
     @Autowired
     private ParamService paramService;
@@ -59,12 +52,8 @@ public class WeatherManager {
     /**
      * 查询天气信息
      */
+    @Cacheable(cacheNames = "weather:location", key = "#location")
     public WeatherRes findWeatherAll(String location) {
-        WeatherRes cache = weatherCache.getIfPresent(location);
-        if (cache != null) {
-            log.debug("[BLOSSOM] get weather from cache: {}", location);
-            return cache;
-        }
         log.info("[BLOSSOM] refresh weather: {}", location);
         Map<String, String> maps = initParam(location);
         if (maps == null) {
@@ -143,7 +132,6 @@ public class WeatherManager {
         } else {
             log.error("获取小时预报失败, resp: {}", cityStr);
         }
-        weatherCache.put(location, weather);
         return weather;
     }
 
@@ -151,7 +139,7 @@ public class WeatherManager {
      * 清除缓存
      */
     public void clear(String location) {
-        weatherCache.invalidate(location);
+        cacheService.remove(location);
     }
 
     /**

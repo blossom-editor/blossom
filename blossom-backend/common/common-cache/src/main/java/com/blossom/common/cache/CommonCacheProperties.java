@@ -18,6 +18,11 @@ import java.util.List;
 public class CommonCacheProperties {
 
     /**
+     * 缓存类型  redis/caffeine
+     */
+    private CacheTypeEnum type = CacheTypeEnum.caffeine;
+
+    /**
      * 缓存的 key 配置
      */
     private List<CacheNamesConfig> namesConfig = new ArrayList<>();

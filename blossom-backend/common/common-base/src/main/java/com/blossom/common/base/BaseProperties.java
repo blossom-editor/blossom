@@ -28,6 +28,11 @@ public class BaseProperties {
     private String version = "xyz";
 
     /**
+     * 中间件启用配置
+     */
+    private Enabled enabled = new Enabled();
+
+    /**
      * 异常处理信息配置
      */
     private Ex ex = new Ex();
@@ -36,6 +41,16 @@ public class BaseProperties {
      * 日志配置
      */
     private Log log = new Log();
+
+    @Data
+    public static class Enabled {
+
+        /**
+         * 是否开启 Redis
+         */
+        private Boolean redis = false;
+
+    }
 
     @Data
     public static class Ex {

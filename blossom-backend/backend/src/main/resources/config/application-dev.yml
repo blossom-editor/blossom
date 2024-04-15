@@ -6,6 +6,12 @@ spring:
     password: jasmine888
     hikari:
       max-lifetime: 120000
+  redis:
+    database: 0
+    host: 127.0.0.1
+    password:
+    port: 6379
+    timeout: 3000       # 连接超时时间 单位 ms（毫秒）
 
 logging:
   level:
@@ -29,6 +35,8 @@ logging:
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ project ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 project:
   base:
+    enabled:
+      redis: false #是否需要使用 redis
     time-zone: GMT+8
     version: @project.version@
     ex:
@@ -64,6 +72,8 @@ project:
       - /assets/**
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ Cache/Redis ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   cache: # 缓存
+    #项目的缓存方式 redis/caffeine
+    type: caffeine
     names-config: # 缓存键超时时间配置
       - name: test_cache1
         seconds: 10

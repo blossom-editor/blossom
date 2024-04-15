@@ -3,14 +3,14 @@ package com.blossom.common.cache.redis;
 import com.blossom.common.base.util.json.JsonUtil;
 import com.blossom.common.cache.CommonCacheProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Slf4j
 @EnableCaching
-@ConditionalOnClass(RedisTemplate.class)
+@ConditionalOnProperty(value = "project.cache.type", havingValue = "redis")
 public class RedisCacheConfig {
 
     private static final Integer DEFAULT_TIME_OUT = 60 * 60 * 4;
