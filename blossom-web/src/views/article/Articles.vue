@@ -39,7 +39,7 @@
                   <div class="name-wrapper" :style="{ maxWidth: isNotBlank(data.icon) ? 'calc(100% - 25px)' : '100%' }">
                     {{ data.n }}
                   </div>
-                  <bl-tag v-for="tag in tags(data)" style="margin-top: 3px" :bg-color="tag.bgColor" :icon="tag.icon">
+                  <bl-tag v-for="tag in tags(data)" :bg-color="tag.bgColor" :icon="tag.icon">
                     {{ tag.content }}
                   </bl-tag>
                 </div>
@@ -50,30 +50,40 @@
       </div>
 
       <div class="doc-content-container" ref="PreviewRef" :style="{ fontSize: getFontSize() }">
-        <div class="article-name">{{ article.name }}</div>
-        <div class="bl-preview" :style="{ fontSize: getFontSize() }" v-html="article.html"></div>
+        <div class="article-name" v-if="userStore.userParams.WEB_BLOG_SHOW_ARTICLE_NAME === '1'">{{ article.name }}</div>
+
+        <el-watermark
+          :font="{
+            color: userStore.userParams.WEB_BLOG_WATERMARK_COLOR,
+            fontSize: userStore.userParams.WEB_BLOG_WATERMARK_FONTSIZE,
+            textBaseline: 'hanging'
+          }"
+          :content="article.id > 0 && userStore.userParams.WEB_BLOG_WATERMARK_ENABLED === '1' ? userStore.userParams.WEB_BLOG_WATERMARK_CONTENT : ''"
+          :gap="[userStore.userParams.WEB_BLOG_WATERMARK_GAP, userStore.userParams.WEB_BLOG_WATERMARK_GAP]">
+          <div class="bl-preview" :style="{ fontSize: getFontSize() }" v-html="article.html"></div>
+        </el-watermark>
       </div>
 
       <div class="toc-container" :style="tocStyle">
         <div class="viewer-toc">
-          <div v-if="article.id != 0">
-            <div class="toc-subtitle" style="font-size: 15px">《{{ article.name }}》</div>
-            <div class="toc-subtitle">
+          <div v-if="article.id != 0" class="doc-info">
+            <div class="doc-name" style="font-size: 15px">{{ article.name }}</div>
+            <div class="doc-subtitle">
               <span class="iconbl bl-pen-line"></span> {{ article.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article.uv }} |
               <span class="iconbl bl-like-line"></span> {{ article.likes }}
             </div>
-            <div class="toc-subtitle">
+            <div class="doc-subtitle">
               <span class="iconbl bl-a-clock3-line"></span> 公开
               {{ article.openTime }}
             </div>
-            <div class="toc-subtitle">
+            <div class="doc-subtitle">
               <span class="iconbl bl-a-clock3-line"></span> 修改
               {{ article.syncTime }}
             </div>
           </div>
           <div class="toc-title">目录</div>
           <div class="toc-content">
-            <div v-for="toc in tocList" :key="toc.id" :class="[toc.clazz]" @click="toScroll(toc.id)">
+            <div v-for="toc in tocList" :key="toc.id" :class="['toc-item', 'link', toc.clazz]" @click="toScroll(toc.id)">
               {{ toc.content }}
             </div>
           </div>

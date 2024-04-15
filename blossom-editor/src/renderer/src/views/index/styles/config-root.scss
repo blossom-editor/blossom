@@ -69,4 +69,31 @@
       font-style: italic;
     }
   }
+
+  .conf-watermark {
+    @include box(100%, auto);
+    color: var(--bl-text-color);
+    border: 1px solid var(--el-border-color);
+    background-color: var(--bl-bg-color);
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    .label {
+      min-width: 50px;
+      margin: 0 10px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    .el-input {
+      width: calc(100% - 80px);
+    }
+
+    .el-input-number {
+      width: 130px;
+    }
+  }
 }

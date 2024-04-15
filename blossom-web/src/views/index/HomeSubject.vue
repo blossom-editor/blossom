@@ -49,6 +49,7 @@ const toToc = (articleId: number) => {
 .home-subject-root {
   @include box(100%, 100%);
   @include flex(row, flex-start, flex-start);
+  font-family: 'Jetbrains Mono';
   flex-wrap: wrap;
   align-content: flex-start;
   padding: 20px;
@@ -64,30 +65,23 @@ const toToc = (articleId: number) => {
     border-radius: 5px;
     padding: 5px 10px;
     margin: 15px 16px;
-    transition: 0.3s;
+    transition: border 0.3s, box-shadow 0.3s;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
     .iconbl {
       font-size: 12px;
       margin-right: 5px;
-      opacity: 0;
-      transition: 0.3s;
     }
 
     &:hover {
       border: 0;
       box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.5), -3px -3px 10px rgba(255, 255, 255, 0.1);
 
-      .iconbl {
-        opacity: 1;
-      }
-
       .name {
         text-shadow: 5px 5px 15px #000, -3px -3px 10px rgba(255, 255, 255, 0.5);
       }
 
-      .cover,
       .cover-name {
         opacity: 1;
       }
@@ -107,7 +101,7 @@ const toToc = (articleId: number) => {
       height: 35px;
       font-weight: 700;
       color: #cdcdcd;
-      transition: 0.3s;
+      transition: text-shadow 0.3s;
     }
 
     .words {
@@ -134,7 +128,7 @@ const toToc = (articleId: number) => {
       box-shadow: 0 0 10px 1px #181818;
       text-align: center;
       transform: scale(0.8) rotate(45deg);
-      transition: 0.3s;
+      transition: opacity 0.3s;
     }
 
     .describes {

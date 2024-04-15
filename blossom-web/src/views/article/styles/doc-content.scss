@@ -17,6 +17,7 @@
     border-bottom: 1px solid #e5e5e5;
     text-align: left;
     position: relative;
+    word-break: break-all;
     font-size: 2em;
   }
 
@@ -32,17 +33,6 @@
 
     :deep(.katex > *) {
       font-size: 1.2em !important;
-    }
-
-    ::-webkit-scrollbar {
-      /* 滚动条里槽的背景色 */
-      background-color: transparent;
-    }
-
-    /* 定义滑块 内阴影+圆角 */
-    ::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: #967777;
     }
 
     :deep(a) {
@@ -264,7 +254,7 @@
       overflow: hidden;
 
       * {
-        font-family: 'Jetbrains Mono' !important;
+        font-family: 'Jetbrains Mono';
         font-size: 0.95em;
       }
 
@@ -295,6 +285,7 @@
       }
 
       ol {
+        font-size: 1em;
         margin: 0;
         padding-left: 0;
         position: absolute;
@@ -304,6 +295,7 @@
         li {
           list-style: none;
           .line-num {
+            font-size: 1em !important;
             width: 30px;
             display: inline-block;
             text-align: right;

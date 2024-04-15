@@ -56,7 +56,7 @@ let maxWords = 0
 const subjects = ref<any>([])
 
 const getSubjects = () => {
-  subjectsApi({ starStatus: 1 }).then((resp) => {
+  subjectsApi().then((resp) => {
     subjects.value = resp.data
     if (!isEmpty(resp.data)) {
       maxWords = resp.data

@@ -19,6 +19,7 @@ import com.blossom.backend.server.doc.pojo.DocTreeRes;
 import com.blossom.backend.server.utils.ArticleUtil;
 import com.blossom.backend.server.utils.DocUtil;
 import com.blossom.common.base.exception.XzException404;
+import com.blossom.common.base.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -188,6 +189,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, ArticleEntity> {
         if (req.getHtml() != null) {
             req.setHtml(req.getHtml().replaceAll("<p><br></p>", ""));
         }
+        req.setUpdMarkdownTime(DateUtils.date());
         baseMapper.updContentById(req);
         referenceService.bind(req.getUserId(), req.getId(), req.getName(), req.getReferences());
         logService.insert(req.getId(), 0, req.getMarkdown());
