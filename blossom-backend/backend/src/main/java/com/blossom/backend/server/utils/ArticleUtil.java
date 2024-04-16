@@ -102,6 +102,32 @@ public class ArticleUtil {
 
     }
 
+    /**
+     *
+     */
+    private static final String SCRIPT_TAG_BLOG_COLOR = "    <script>\n" +
+            "      window.addEventListener('load', function() {\n" +
+            "        const rgb = '{BLOSSOM_WEB_BLOG_COLOR}'\n" +
+            "        if (rgb && !rgb.toLowerCase().startsWith('rgb(')) {\n" +
+            "          return\n" +
+            "        }\n" +
+            "        const prefix = rgb.substring(4, rgb.length - 1)\n" +
+            "        let text = `:root {\n" +
+            "          --bl-color-primary: ${rgb};\n" +
+            "        }`\n" +
+            "\n" +
+            "        let themeStyleTag = document.createElement('style')\n" +
+            "        themeStyleTag.type = 'text/css'\n" +
+            "        themeStyleTag.id = 'BLOSSOM_TEMPVISIT_STYLE_TAG'\n" +
+            "        themeStyleTag.innerHTML = text\n" +
+            "        document\n" +
+            "          .getElementsByTagName('head')\n" +
+            "          .item(0)\n" +
+            "          .appendChild(themeStyleTag)\n" +
+            "      });\n" +
+            "    </script>" +
+            "</head>";
+
 
     private static final String prefix = "\n" +
             "<body><div class=\"header\">\n" +
@@ -115,7 +141,7 @@ public class ArticleUtil {
             "</div><div class=\"content \">\n" +
             "  <div class=\"toc\" id=\"blossom-toc\">\n" +
             "    <div style=\"font-size: 15px;color:#727272;padding:10px 0\">《{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}》</div>\n" +
-            "    <div style=\"font-size: 20px;color:#727272;border-bottom:2px solid #eaeaea;padding-bottom: 10px\">目录</div>\n" +
+            "    <div style=\"font-size: 20px;color:#727272;border-bottom:2px solid #eaeaea;padding-bottom: 10px;margin-bottom: 10px;\">目录</div>\n" +
             "  </div><div class=\"main bl-preview\" id=\"blossom-view\">";
 
     private static final String suffix = "</div></div></body></html>";
@@ -136,15 +162,19 @@ public class ArticleUtil {
     /**
      * 将文章转换为 html 格式
      *
-     * @param article 文章
-     * @param user    用户, 用户获取作者
+     * @param article   文章
+     * @param user      用户, 用户获取作者
+     * @param blogColor 主颜色
      * @return html 内容
      */
-    public static String toHtml(ArticleEntity article, UserEntity user) {
-        return htmlTag + prefix
+    public static String toHtml(ArticleEntity article, UserEntity user, String blogColor) {
+        return htmlTag +
+                SCRIPT_TAG_BLOG_COLOR
+                        .replaceAll("\\{BLOSSOM_WEB_BLOG_COLOR}", blogColor) +
                 // 替换作者, 文章名称
-                .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
-                .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName()) +
+                prefix
+                        .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
+                        .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName()) +
                 article.getHtml() + suffix;
     }
 

@@ -9,6 +9,8 @@ import cn.hutool.core.util.ZipUtil;
 import com.blossom.backend.base.param.ParamEnum;
 import com.blossom.backend.base.param.ParamService;
 import com.blossom.backend.base.param.pojo.ParamEntity;
+import com.blossom.backend.base.paramu.UserParamEnum;
+import com.blossom.backend.base.paramu.UserParamService;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.server.article.backup.pojo.BackupFile;
@@ -55,6 +57,9 @@ public class ArticleBackupService {
 
     @Autowired
     private ParamService paramService;
+
+    @Autowired
+    private UserParamService userParamService;
 
     @Autowired
     private UserService userService;
@@ -126,6 +131,8 @@ public class ArticleBackupService {
         // 用户信息
         UserEntity user = userService.selectById(userId);
 
+        final String BLOG_COLOR = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_COLOR).getParamValue();
+
         final File backLogFile = new File(backupFile.getRootPath() + "/" + "log.txt");
         final List<String> backLogs = new ArrayList<>();
         log.info("[文章备份] 开始备份, 本次备份文件名称 [{}], 用户ID [{}]", backupFile.getFilename(), userId);
@@ -186,7 +193,7 @@ public class ArticleBackupService {
                 articleDetail.setName(article.getN());
 
                 // 文章 markdown 内容
-                String content = getContentByType(articleDetail, type, user);
+                String content = getContentByType(articleDetail, type, user, BLOG_COLOR);
                 content = formatContent(content, toLocal, article.getI(), article.getN());
                 String id = String.valueOf(articleDetail.getId());
                 String version = String.valueOf(articleDetail.getVersion());
@@ -357,14 +364,14 @@ public class ArticleBackupService {
      * @param type    类型
      * @return 对应的内容
      */
-    private String getContentByType(ArticleEntity article, BackupTypeEnum type, UserEntity user) {
+    private String getContentByType(ArticleEntity article, BackupTypeEnum type, UserEntity user, String blogColor) {
         if (type == BackupTypeEnum.MARKDOWN) {
             return StrUtil.isBlank(article.getMarkdown()) ? "文章无内容" : article.getMarkdown();
         } else if (type == BackupTypeEnum.HTML) {
             ArticleEntity export = new ArticleEntity();
             export.setName(article.getName().substring(article.getName().lastIndexOf("/")));
             export.setHtml(article.getHtml());
-            return ArticleUtil.toHtml(article, user);
+            return ArticleUtil.toHtml(article, user, blogColor);
         }
         return "";
     }

@@ -7,6 +7,8 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.AuthContext;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
+import com.blossom.backend.base.paramu.UserParamEnum;
+import com.blossom.backend.base.paramu.UserParamService;
 import com.blossom.backend.base.user.UserService;
 import com.blossom.backend.server.article.draft.pojo.*;
 import com.blossom.backend.server.article.open.ArticleOpenService;
@@ -60,6 +62,7 @@ public class ArticleController {
     private final DocService docService;
     private final DocSortChecker docSortChecker;
     private final ImportManager importManager;
+    private final UserParamService userParamService;
 
     /**
      * 查询列表
@@ -260,7 +263,9 @@ public class ArticleController {
         if (StrUtil.isBlank(article.getHtml())) {
             article.setHtml("<span>文章无内容</span>");
         }
-        String reportHtml = ArticleUtil.toHtml(article, userService.selectById(AuthContext.getUserId()));
+        String reportHtml = ArticleUtil.toHtml(article,
+                userService.selectById(AuthContext.getUserId()),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue());
         try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));
              BufferedInputStream bis = new BufferedInputStream(is)) {
             String filename = URLEncodeUtil.encode(article.getName() + ".html");
@@ -331,6 +336,9 @@ public class ArticleController {
         XzException404.throwBy(ObjUtil.isNull(visit), "文章不存在或您无权限查看");
         ArticleEntity article = baseService.selectById(visit.getArticleId(), false, false, true, visit.getUserId());
         resp.setContentType("text/html");
-        return ArticleUtil.toHtml(article, userService.selectById(visit.getUserId()));
+        return ArticleUtil.toHtml(
+                article,
+                userService.selectById(visit.getUserId()),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue());
     }
 }

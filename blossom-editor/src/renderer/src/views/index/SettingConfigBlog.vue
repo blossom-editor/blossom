@@ -46,7 +46,7 @@
             @change="changeBlogColor" />
           <div class="color-item" v-for="color in colors" :key="color" :style="{ backgroundColor: color }" @click="changeBlogColor(color)"></div>
         </bl-row>
-        <div class="conf-tip">博客主题色，主要影响专题样式颜色以及文章中的链接颜色。</div>
+        <div class="conf-tip">博客主题色，主要影响专题样式颜色以及文章中的链接颜色，以及文章临时访问中的链接颜色。</div>
       </el-form-item>
 
       <el-form-item label="博客名称">
