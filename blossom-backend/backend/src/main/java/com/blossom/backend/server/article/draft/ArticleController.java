@@ -265,7 +265,13 @@ public class ArticleController {
         }
         String reportHtml = ArticleUtil.toHtml(article,
                 userService.selectById(AuthContext.getUserId()),
-                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue());
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue(),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_ENABLED).getParamValue(),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_CONTENT).getParamValue(),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_FONTSIZE).getParamValue(),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_COLOR).getParamValue(),
+                userParamService.getValue(AuthContext.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_GAP).getParamValue()
+        );
         try (InputStream is = new ByteArrayInputStream(reportHtml.getBytes(StandardCharsets.UTF_8));
              BufferedInputStream bis = new BufferedInputStream(is)) {
             String filename = URLEncodeUtil.encode(article.getName() + ".html");
@@ -339,6 +345,12 @@ public class ArticleController {
         return ArticleUtil.toHtml(
                 article,
                 userService.selectById(visit.getUserId()),
-                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue());
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_COLOR).getParamValue(),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_ENABLED).getParamValue(),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_CONTENT).getParamValue(),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_FONTSIZE).getParamValue(),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_COLOR).getParamValue(),
+                userParamService.getValue(visit.getUserId(), UserParamEnum.WEB_BLOG_WATERMARK_GAP).getParamValue()
+        );
     }
 }

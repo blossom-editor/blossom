@@ -1358,6 +1358,9 @@
           color: #c5c5c5;
           border-bottom: 1px solid #eaeaea;
           text-align: right;
+          position: fixed;
+          z-index: 999;
+          background-color: #fff;
       }
 
       .header .copyright {
@@ -1380,7 +1383,7 @@
           display: flex;
           flex-direction: row;
           justify-content: flex-start;
-          align-items: flex-start
+          align-items: flex-start;
       }
 
       .content .main {
@@ -1388,7 +1391,8 @@
           width: calc(100% - 300px);
           padding: 20px;
           overflow-x: hidden;
-          overflow-y: scroll
+          overflow-y: scroll;
+          margin-top: 30px;
       }
 
       .toc {
@@ -1398,6 +1402,7 @@
           border-right: 1px solid #eeeeee;
           overflow-x: hidden;
           overflow-y: scroll;
+          margin-top: 30px;
       }
 
       .toc > h1,
@@ -1433,8 +1438,6 @@
           opacity: 0;
           transition: opacity 0.1s;
       }
-
-
 
       .toc > h1:hover,
       .toc > h2:hover,
@@ -1615,6 +1618,7 @@
           background-color: var(--bl-preview-bg-color);
           line-height: 23px;
           font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+          position: relative;
       }
 
       .bl-preview * {
@@ -2034,7 +2038,6 @@
       for (let i = 0; i < heads.length; i++) {
         let head = heads[i];
         let tocHead = document.createElement(head.localName);
-        console.log(head.id);
         tocHead.setAttribute('class', `toc-${head.localName}`);
         tocHead.innerText = head.innerText;
         tocHead.onclick = function () {
@@ -2042,7 +2045,8 @@
           if (ele == null || ele == undefined) {
             return
           }
-          ele.parentNode.scrollTop = ele.offsetTop - 30
+          // ele.parentNode.scrollTop = ele.offsetTop - 30
+          ele.scrollIntoView()
         };
         tocContainer.appendChild(tocHead)
       }

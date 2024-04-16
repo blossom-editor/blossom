@@ -1,18 +1,16 @@
 package com.blossom.backend.server.utils;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.user.pojo.UserEntity;
 import com.blossom.backend.server.article.draft.pojo.ArticleEntity;
-import com.blossom.common.base.util.DateUtils;
+import com.blossom.common.base.enums.YesNo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 /**
  * 文章工具类
@@ -105,7 +103,7 @@ public class ArticleUtil {
     /**
      *
      */
-    private static final String SCRIPT_TAG_BLOG_COLOR = "    <script>\n" +
+    private static final String HEAD_SCRIPT_BLOG_COLOR = "    <script>\n" +
             "      window.addEventListener('load', function() {\n" +
             "        const rgb = '{BLOSSOM_WEB_BLOG_COLOR}'\n" +
             "        if (rgb && !rgb.toLowerCase().startsWith('rgb(')) {\n" +
@@ -128,8 +126,210 @@ public class ArticleUtil {
             "    </script>" +
             "</head>";
 
+    private static final String HEAD_SCRIPT_WATERMARK = "<script>\n" +
+            "      window.addEventListener(\"load\", function () {\n" +
+            "        const FontGap = 3\n" +
+            "\n" +
+            "        function prepareCanvas(width, height, ratio = 1){\n" +
+            "          const canvas = document.createElement('canvas')\n" +
+            "          const ctx = canvas.getContext('2d')\n" +
+            "          const realWidth = width * ratio\n" +
+            "          const realHeight = height * ratio\n" +
+            "          canvas.setAttribute('width', `${realWidth}px`)\n" +
+            "          canvas.setAttribute('height', `${realHeight}px`)\n" +
+            "          ctx.save()\n" +
+            "          return [ctx, canvas, realWidth, realHeight]\n" +
+            "        }\n" +
+            "\n" +
+            "        // Get single clips\n" +
+            "        function getClips(content, rotate, ratio, width, height, font, gapX, gapY) {\n" +
+            "          // ================= Text =================\n" +
+            "          const [ctx, canvas, contentWidth, contentHeight] = prepareCanvas(width, height, ratio)\n" +
+            "          const {color, fontSize, fontStyle, fontWeight, fontFamily } = font\n" +
+            "          const mergedFontSize = Number(fontSize) * ratio\n" +
+            "          ctx.font = `${fontStyle} normal ${fontWeight} ${mergedFontSize}px/${height}px ${fontFamily}`\n" +
+            "          ctx.fillStyle = color\n" +
+            "          ctx.textAlign = 'center'\n" +
+            "          ctx.textBaseline = 'top'\n" +
+            "          const contents = Array.isArray(content) ? content : [content]\n" +
+            "          contents?.forEach((item, index) => {\n" +
+            "            ctx.fillText(\n" +
+            "              item ?? 'ccccc',\n" +
+            "              contentWidth / 2,\n" +
+            "              index * (mergedFontSize + FontGap * ratio)\n" +
+            "            )\n" +
+            "          })\n" +
+            "\n" +
+            "          // ==================== Rotate ====================\n" +
+            "          const angle = (Math.PI / 180) * Number(rotate)\n" +
+            "          const maxSize = Math.max(width, height)\n" +
+            "          const [rCtx, rCanvas, realMaxSize] = prepareCanvas(maxSize, maxSize, ratio)\n" +
+            "\n" +
+            "          // Copy from `ctx` and rotate\n" +
+            "          rCtx.translate(realMaxSize / 2, realMaxSize / 2)\n" +
+            "          rCtx.rotate(angle)\n" +
+            "          if (contentWidth > 0 && contentHeight > 0) {\n" +
+            "            rCtx.drawImage(canvas, -contentWidth / 2, -contentHeight / 2)\n" +
+            "          }\n" +
+            "\n" +
+            "          // Get boundary of rotated text\n" +
+            "          function getRotatePos(x, y) {\n" +
+            "            const targetX = x * Math.cos(angle) - y * Math.sin(angle)\n" +
+            "            const targetY = x * Math.sin(angle) + y * Math.cos(angle)\n" +
+            "            return [targetX, targetY]\n" +
+            "          }\n" +
+            "\n" +
+            "          let left = 0\n" +
+            "          let right = 0\n" +
+            "          let top = 0\n" +
+            "          let bottom = 0\n" +
+            "\n" +
+            "          const halfWidth = contentWidth / 2\n" +
+            "          const halfHeight = contentHeight / 2\n" +
+            "          const points = [\n" +
+            "            [0 - halfWidth, 0 - halfHeight],\n" +
+            "            [0 + halfWidth, 0 - halfHeight],\n" +
+            "            [0 + halfWidth, 0 + halfHeight],\n" +
+            "            [0 - halfWidth, 0 + halfHeight],\n" +
+            "          ]\n" +
+            "          points.forEach(([x, y]) => {\n" +
+            "            const [targetX, targetY] = getRotatePos(x, y)\n" +
+            "            left = Math.min(left, targetX)\n" +
+            "            right = Math.max(right, targetX)\n" +
+            "            top = Math.min(top, targetY)\n" +
+            "            bottom = Math.max(bottom, targetY)\n" +
+            "          })\n" +
+            "\n" +
+            "          const cutLeft = left + realMaxSize / 2\n" +
+            "          const cutTop = top + realMaxSize / 2\n" +
+            "          const cutWidth = right - left\n" +
+            "          const cutHeight = bottom - top\n" +
+            "\n" +
+            "          // ================ Fill Alternate ================\n" +
+            "          const realGapX = gapX * ratio\n" +
+            "          const realGapY = gapY * ratio\n" +
+            "          const filledWidth = (cutWidth + realGapX) * 2\n" +
+            "          const filledHeight = cutHeight + realGapY\n" +
+            "\n" +
+            "          const [fCtx, fCanvas] = prepareCanvas(filledWidth, filledHeight)\n" +
+            "\n" +
+            "          function drawImg(targetX = 0, targetY = 0) {\n" +
+            "            fCtx.drawImage(rCanvas, cutLeft, cutTop, cutWidth, cutHeight, targetX, targetY, cutWidth, cutHeight)\n" +
+            "          }\n" +
+            "          drawImg()\n" +
+            "          drawImg(cutWidth + realGapX, -cutHeight / 2 - realGapY / 2)\n" +
+            "          drawImg(cutWidth + realGapX, +cutHeight / 2 + realGapY / 2)\n" +
+            "          return [fCanvas.toDataURL(), filledWidth / ratio, filledHeight / ratio]\n" +
+            "        }\n" +
+            "        \n" +
+            "        const getMarkSize = (ctx, content) => {\n" +
+            "          let defaultWidth = 120\n" +
+            "          let defaultHeight = 64\n" +
+            "          const width = 120\n" +
+            "          const height = 64\n" +
+            "          if (ctx.measureText) {\n" +
+            "            ctx.font = `${Number('15')}px sans-serif`\n" +
+            "            const contents = Array.isArray(content) ? content : [content]\n" +
+            "            const sizes = contents.map((item) => {\n" +
+            "              const metrics = ctx.measureText(item)\n" +
+            "\n" +
+            "              return [metrics.width,\n" +
+            "                metrics.fontBoundingBoxAscent !== undefined\n" +
+            "                  ? metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent\n" +
+            "                  : metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,\n" +
+            "              ]\n" +
+            "            })\n" +
+            "            defaultWidth = Math.ceil(Math.max(...sizes.map((size) => size[0])))\n" +
+            "            defaultHeight =\n" +
+            "              Math.ceil(Math.max(...sizes.map((size) => size[1]))) * contents.length +\n" +
+            "              (contents.length - 1) * FontGap\n" +
+            "          }\n" +
+            "          return [width ?? defaultWidth, height ?? defaultHeight]\n" +
+            "        }\n" +
+            "        \n" +
+            "        function toLowercaseSeparator(key) {\n" +
+            "          return key.replace(/([A-Z])/g, '-$1').toLowerCase()\n" +
+            "        }\n" +
+            "\n" +
+            "        function getStyleStr(style) {\n" +
+            "          return Object.keys(style)\n" +
+            "            .map(\n" +
+            "              (key) =>\n" +
+            "                `${toLowercaseSeparator(key)}: ${style[key]};`\n" +
+            "            )\n" +
+            "            .join(' ')\n" +
+            "        }\n" +
+            "\n" +
+            "        const getMarkStyle = (rotate) => {\n" +
+            "          const markStyle = {zIndex: 9, position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', pointerEvents: 'none', backgroundRepeat: 'repeat' }\n" +
+            "\n" +
+            "          /** Calculate the style of the offset */\n" +
+            "          let positionLeft = rotate / 2 - rotate / 2\n" +
+            "          let positionTop = rotate / 2 - rotate / 2\n" +
+            "          if (positionLeft > 0) {\n" +
+            "            markStyle.left = `${positionLeft}px`\n" +
+            "            markStyle.width = `calc(100% - ${positionLeft}px)`\n" +
+            "            positionLeft = 0\n" +
+            "          }\n" +
+            "          if (positionTop > 0) {\n" +
+            "            markStyle.top = `${positionTop}px`\n" +
+            "            markStyle.height = `calc(100% - ${positionTop}px)`\n" +
+            "            positionTop = 0\n" +
+            "          }\n" +
+            "          markStyle.backgroundPosition = `${positionLeft}px ${positionTop}px`\n" +
+            "          return markStyle\n" +
+            "        }\n" +
+            "        \n" +
+            "        let stopObservation = false\n" +
+            "        const observerContainer = document.getElementsByClassName('bl-preview')[0]\n" +
+            "        const observerConfig = { attributes: true, childList: true, subtree: true };\n" +
+            "        const observer = new MutationObserver(() => {\n" +
+            "          renderWatermark()\n" +
+            "        });\n" +
+            "\n" +
+            "        const renderWatermark = () => {\n" +
+            "          const canvas = document.createElement(\"canvas\")\n" +
+            "          const ctx = canvas.getContext(\"2d\")\n" +
+            "          const rotate = -22\n" +
+            "          const content = '{WEB_BLOG_WATERMARK_CONTENT}'\n" +
+            "          const color = '{WEB_BLOG_WATERMARK_COLOR}'\n" +
+            "          const fontSize = {WEB_BLOG_WATERMARK_FONTSIZE}\n" +
+            "          const gap = {WEB_BLOG_WATERMARK_GAP}\n" +
+            "\n" +
+            "          if (ctx) {\n" +
+            "            const ratio = window.devicePixelRatio || 1\n" +
+            "            const [markWidth, markHeight] = getMarkSize(ctx, content)\n" +
+            "\n" +
+            "            const drawCanvas = (drawContent) => {\n" +
+            "              const [textClips, clipWidth] = getClips(drawContent, rotate, ratio, markWidth, markHeight, \n" +
+            "                {color: color, fontSize: fontSize, fontStyle: 'normal', fontWeight: 'normal'}, gap, gap\n" +
+            "              )\n" +
+            "              let watermark = document.createElement('div')\n" +
+            "              let container = document.getElementsByClassName('bl-preview')[0]\n" +
+            "              stopObservation = true\n" +
+            "              observer.disconnect()\n" +
+            "              watermark.setAttribute('style',getStyleStr({\n" +
+            "                  ...getMarkStyle(rotate),\n" +
+            "                  backgroundImage: `url('${textClips}')`,\n" +
+            "                  backgroundSize: `${Math.floor(clipWidth)}px`,\n" +
+            "                })\n" +
+            "              )\n" +
+            "              container.append(watermark)\n" +
+            "              setTimeout(() => {\n" +
+            "                observer.observe(observerContainer, observerConfig)\n" +
+            "              })\n" +
+            "            };\n" +
+            "            \n" +
+            "            drawCanvas(content);\n" +
+            "          }\n" +
+            "        };\n" +
+            "\n" +
+            "        renderWatermark()\n" +
+            "      })\n" +
+            "    </script>";
 
-    private static final String prefix = "\n" +
+
+    private static final String BODY_HEADER_AND_TOC = "\n" +
             "<body><div class=\"header\">\n" +
             "  <div class=\"copyright\">本文作者：{BLOSSOM_EXPORT_HTML_AUTHOR}。著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div><a\n" +
             "  href=\"https://github.com/blossom-editor/blossom\" target=\"_blank\"><span>Export by Blossom</span><svg\n" +
@@ -142,18 +342,18 @@ public class ArticleUtil {
             "  <div class=\"toc\" id=\"blossom-toc\">\n" +
             "    <div style=\"font-size: 15px;color:#727272;padding:10px 0\">《{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}》</div>\n" +
             "    <div style=\"font-size: 20px;color:#727272;border-bottom:2px solid #eaeaea;padding-bottom: 10px;margin-bottom: 10px;\">目录</div>\n" +
-            "  </div><div class=\"main bl-preview\" id=\"blossom-view\">";
+            "  </div><div class=\"main\"><div class=\"bl-preview\" id=\"blossom-view\">";
 
-    private static final String suffix = "</div></div></body></html>";
+    private static final String suffix = "</div></div></div></body></html>";
 
-    private static String htmlTag;
+    private static String htmlTemplate;
 
     static {
         Resource resource = new ClassPathResource("exportTemplate.html");
         try (InputStream is = resource.getInputStream()) {
             byte[] bytes = new byte[is.available()];
             is.read(bytes);
-            htmlTag = new String(bytes);
+            htmlTemplate = new String(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,48 +362,74 @@ public class ArticleUtil {
     /**
      * 将文章转换为 html 格式
      *
-     * @param article   文章
-     * @param user      用户, 用户获取作者
-     * @param blogColor 主颜色
+     * @param article                     文章
+     * @param user                        用户, 用户获取作者
+     * @param blogColor                   主颜色
+     * @param WEB_BLOG_WATERMARK_ENABLED  开启水印
+     * @param WEB_BLOG_WATERMARK_CONTENT  水印内容
+     * @param WEB_BLOG_WATERMARK_FONTSIZE 水印字体大小
+     * @param WEB_BLOG_WATERMARK_COLOR    水印颜色
+     * @param WEB_BLOG_WATERMARK_GAP      水印密集度
      * @return html 内容
      */
-    public static String toHtml(ArticleEntity article, UserEntity user, String blogColor) {
-        return htmlTag +
-                SCRIPT_TAG_BLOG_COLOR
-                        .replaceAll("\\{BLOSSOM_WEB_BLOG_COLOR}", blogColor) +
-                // 替换作者, 文章名称
-                prefix
-                        .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
-                        .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName()) +
-                article.getHtml() + suffix;
+    public static String toHtml(ArticleEntity article,
+                                UserEntity user,
+                                String blogColor,
+                                String WEB_BLOG_WATERMARK_ENABLED,
+                                String WEB_BLOG_WATERMARK_CONTENT,
+                                String WEB_BLOG_WATERMARK_FONTSIZE,
+                                String WEB_BLOG_WATERMARK_COLOR,
+                                String WEB_BLOG_WATERMARK_GAP) {
+        return htmlTemplate
+                + appendHeadScript(blogColor,
+                WEB_BLOG_WATERMARK_ENABLED,
+                WEB_BLOG_WATERMARK_CONTENT,
+                WEB_BLOG_WATERMARK_FONTSIZE,
+                WEB_BLOG_WATERMARK_COLOR,
+                WEB_BLOG_WATERMARK_GAP)
+                + appendBodyHeader(article, user)
+                + article.getHtml()
+                + suffix;
     }
 
-
-    private static void genHeatmap() {
-        Date begin = DateUtils.parse("2023-04-01", DateUtils.PATTERN_YYYYMMDD);
-        Date end = DateUtils.parse("2023-06-30", DateUtils.PATTERN_YYYYMMDD);
-        for (; DateUtils.compare(begin, end) <= 0; begin = DateUtils.offsetDay(begin, 1)) {
-            String dt = DateUtils.format(begin, DateUtils.PATTERN_YYYYMMDD);
-            int value = RandomUtil.randomInt(0, 10);
-            System.out.println(String.format("insert into blossom_stat values(null, 1, '%s' ,%s);", dt, value));
+    /**
+     * 添加 head 下的动态 script
+     *
+     * @param blogColor                   主题色
+     * @param WEB_BLOG_WATERMARK_ENABLED  开启水印
+     * @param WEB_BLOG_WATERMARK_CONTENT  水印内容
+     * @param WEB_BLOG_WATERMARK_FONTSIZE 水印字体大小
+     * @param WEB_BLOG_WATERMARK_COLOR    水印颜色
+     * @param WEB_BLOG_WATERMARK_GAP      水印密集度
+     * @return head 下的所有动态 script
+     */
+    private static String appendHeadScript(String blogColor,
+                                           String WEB_BLOG_WATERMARK_ENABLED,
+                                           String WEB_BLOG_WATERMARK_CONTENT,
+                                           String WEB_BLOG_WATERMARK_FONTSIZE,
+                                           String WEB_BLOG_WATERMARK_COLOR,
+                                           String WEB_BLOG_WATERMARK_GAP) {
+        String script = HEAD_SCRIPT_BLOG_COLOR.replaceAll("\\{BLOSSOM_WEB_BLOG_COLOR}", blogColor);
+        if (YesNo.YES.getValue().toString().equals(WEB_BLOG_WATERMARK_ENABLED)) {
+            script += HEAD_SCRIPT_WATERMARK
+                    .replaceAll("\\{WEB_BLOG_WATERMARK_CONTENT}", WEB_BLOG_WATERMARK_CONTENT)
+                    .replaceAll("\\{WEB_BLOG_WATERMARK_FONTSIZE}", WEB_BLOG_WATERMARK_FONTSIZE)
+                    .replaceAll("\\{WEB_BLOG_WATERMARK_COLOR}", WEB_BLOG_WATERMARK_COLOR)
+                    .replaceAll("\\{WEB_BLOG_WATERMARK_GAP}", WEB_BLOG_WATERMARK_GAP);
         }
+        return script + "</head>";
     }
 
-    private static void genWords() {
-        int value = 203012;
-        Date begin = DateUtils.parse("2019-01-01", DateUtils.PATTERN_YYYYMMDD);
-        Date end = DateUtils.parse("2023-06-30", DateUtils.PATTERN_YYYYMMDD);
-        for (; DateUtils.compare(begin, end) <= 0; begin = DateUtils.offsetMonth(begin, 1)) {
-            String dt = DateUtils.format(begin, DateUtils.PATTERN_YYYYMMDD);
-            value = value + RandomUtil.randomInt(0, 10000);
-            System.out.println(String.format("insert into blossom_stat values(null, 2, '%s' ,%s);", dt, value));
-        }
-    }
-
-    public static void main(String[] args) {
-//        ArticleEntity a = new ArticleEntity();
-//        a.setName("123123213");
-//        a.setHtml("asdasd");
-//        System.out.println(exportHtml(a));
+    /**
+     * 增加页面顶部的文章作者和目录顶部的文章名称
+     *
+     * @param article 文章
+     * @param user    用户, 用户获取作者
+     * @return 页面顶部的文章作者和文章名称
+     */
+    private static String appendBodyHeader(ArticleEntity article, UserEntity user) {
+        return BODY_HEADER_AND_TOC
+                .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
+                .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName());
     }
 }
