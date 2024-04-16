@@ -132,6 +132,11 @@ public class ArticleBackupService {
         UserEntity user = userService.selectById(userId);
 
         final String BLOG_COLOR = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_COLOR).getParamValue();
+        final String WATER_ENABLED = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_WATERMARK_ENABLED).getParamValue();
+        final String WATERMARK_CONTENT = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_WATERMARK_CONTENT).getParamValue();
+        final String WATERMARK_FONTSIZE = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_WATERMARK_FONTSIZE).getParamValue();
+        final String WATERMARK_COLOR = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_WATERMARK_COLOR).getParamValue();
+        final String WATERMARK_GAP = userParamService.getValue(userId, UserParamEnum.WEB_BLOG_WATERMARK_GAP).getParamValue();
 
         final File backLogFile = new File(backupFile.getRootPath() + "/" + "log.txt");
         final List<String> backLogs = new ArrayList<>();
@@ -193,7 +198,9 @@ public class ArticleBackupService {
                 articleDetail.setName(article.getN());
 
                 // 文章 markdown 内容
-                String content = getContentByType(articleDetail, type, user, BLOG_COLOR);
+                String content = getContentByType(articleDetail, type, user,
+                        BLOG_COLOR, WATER_ENABLED, WATERMARK_CONTENT, WATERMARK_FONTSIZE, WATERMARK_COLOR, WATERMARK_GAP
+                );
                 content = formatContent(content, toLocal, article.getI(), article.getN());
                 String id = String.valueOf(articleDetail.getId());
                 String version = String.valueOf(articleDetail.getVersion());
@@ -238,17 +245,19 @@ public class ArticleBackupService {
                 }
                 // 备份全部图片
                 else {
-                    List<File> files = FileUtil.loopFiles(FileUtil.newFile(iaasProperties.getBlos().getDefaultPath() + "/U" + userId), null);
-                    backLogs.add("[图片备份] 图片个数: " + files.size());
+                    List<File> pics = FileUtil.loopFiles(FileUtil.newFile(iaasProperties.getBlos().getDefaultPath() + "/U" + userId), null);
+                    backLogs.add("[图片备份] 图片个数: " + pics.size());
                     backLogs.add("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↓↓ 图片列表 ↓↓ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                    for (File file : files) {
+                    for (File file : pics) {
                         backLogs.add(file.getPath());
                     }
-                    FileUtil.copy(
-                            iaasProperties.getBlos().getDefaultPath() + "/U" + userId,
-                            backupFile.getRootPath() + "/" + iaasProperties.getBlos().getDefaultPath(),
-                            true);
+                    if (CollUtil.isNotEmpty(pics)) {
+                        FileUtil.copy(
+                                iaasProperties.getBlos().getDefaultPath() + "/U" + userId,
+                                backupFile.getRootPath() + "/" + iaasProperties.getBlos().getDefaultPath(),
+                                true);
 
+                    }
                 }
                 backLogs.add("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ↑↑ 图片列表 ↑↑ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
@@ -360,18 +369,31 @@ public class ArticleBackupService {
     /**
      * 根据类型判断是获取 markdown 内容还是 html 内容
      *
-     * @param article 文章
-     * @param type    类型
-     * @return 对应的内容
+     * @param article          文章
+     * @param type             类型
+     * @param user             用户信息
+     * @param blogColor        主题色
+     * @param watermarkEnabled 开启水印
+     * @param watermarkContent 水印内容
+     * @param waterFontSize    水印字体大小
+     * @param waterColor       水印颜色
+     * @param waterGap         水印密集度
+     * @return
      */
-    private String getContentByType(ArticleEntity article, BackupTypeEnum type, UserEntity user, String blogColor) {
+    private String getContentByType(ArticleEntity article, BackupTypeEnum type, UserEntity user,
+                                    String blogColor,
+                                    String watermarkEnabled,
+                                    String watermarkContent,
+                                    String waterFontSize,
+                                    String waterColor,
+                                    String waterGap) {
         if (type == BackupTypeEnum.MARKDOWN) {
             return StrUtil.isBlank(article.getMarkdown()) ? "文章无内容" : article.getMarkdown();
         } else if (type == BackupTypeEnum.HTML) {
             ArticleEntity export = new ArticleEntity();
             export.setName(article.getName().substring(article.getName().lastIndexOf("/")));
             export.setHtml(article.getHtml());
-            return ArticleUtil.toHtml(article, user, blogColor);
+            return ArticleUtil.toHtml(article, user, blogColor, watermarkEnabled, watermarkContent, waterFontSize, waterColor, waterGap);
         }
         return "";
     }
