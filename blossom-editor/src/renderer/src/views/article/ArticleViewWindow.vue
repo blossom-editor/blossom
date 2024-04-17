@@ -3,27 +3,29 @@
     <AppHeader simple></AppHeader>
   </div>
   <div class="article-view-window-root">
+    <div class="preview bl-preview" :style="editorStyle" v-html="article?.html" ref="WindowPreviewRef" style="margin-right: 5px"></div>
+    <el-backtop target=".preview" :right="350" :bottom="50">
+      <div class="iconbl bl-a-doubleonline-line backtop"></div>
+    </el-backtop>
+
     <!-- the toc -->
     <div class="bl-preview-toc-block">
-      <div class="toc-subtitle">《{{ article?.name }}》</div>
-      <div class="toc-subtitle">
-        <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
-        <span class="iconbl bl-like-line"></span> {{ article?.likes }}
+      <div class="doc-info">
+        <div class="doc-name">《{{ article?.name }}》</div>
+        <div class="doc-subtitle">
+          <span class="iconbl bl-pen-line"></span> {{ article?.words }} 字 | <span class="iconbl bl-read-line"></span> {{ article?.uv }} |
+          <span class="iconbl bl-like-line"></span> {{ article?.likes }}
+        </div>
+        <div class="doc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}</div>
+        <div class="doc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}</div>
+        <div class="toc-title">目录</div>
       </div>
-      <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 公开 {{ article?.openTime }}</div>
-      <div class="toc-subtitle"><span class="iconbl bl-a-clock3-line"></span> 修改 {{ article?.updTime }}</div>
-      <div class="toc-title">目录</div>
       <div class="toc-content">
-        <div v-for="toc in tocs" :key="toc.id" :class="[toc.clazz]" @click="toScroll(toc.id)">
+        <div v-for="toc in tocs" :key="toc.id" :class="['toc-item', toc.clazz]" @click="toScroll(toc.id)">
           {{ toc.content }}
         </div>
       </div>
     </div>
-
-    <div class="preview bl-preview" :style="editorStyle" v-html="article?.html" ref="WindowPreviewRef"></div>
-    <el-backtop target=".preview" :right="50" :bottom="50">
-      <div class="iconbl bl-a-doubleonline-line backtop"></div>
-    </el-backtop>
   </div>
 </template>
 <script setup lang="ts">
