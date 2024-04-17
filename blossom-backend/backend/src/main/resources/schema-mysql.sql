@@ -422,6 +422,11 @@ CREATE TABLE IF NOT EXISTS `blossom_article_view`
   ROW_FORMAT = DYNAMIC COMMENT ='文章访问记录，ArticleView';
 
 -- ----------------------------
+-- since: 1.16.0
+-- ----------------------------
+alter table blossom_article_view
+    modify ip varchar(51) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL comment '地址,IPV4/IPV6';
+-- ----------------------------
 -- Records of blossom_article_view
 -- ----------------------------
 
