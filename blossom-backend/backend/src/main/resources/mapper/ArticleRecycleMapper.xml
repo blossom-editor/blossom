@@ -61,7 +61,8 @@
                    '',
                    cre_time,
                    now(),
-                   user_id
+                   user_id,
+                   now()
               from blossom_article_recycle
              where id = #{id})
     </insert>
