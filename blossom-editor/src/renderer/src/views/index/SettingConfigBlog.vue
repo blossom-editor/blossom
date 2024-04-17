@@ -88,7 +88,7 @@
             v-model="userParamForm.WEB_BLOG_WATERMARK_ENABLED"
             @change="(cur: boolean) => updParam('WEB_BLOG_WATERMARK_ENABLED', cur ? '1' : '0')" />
         </bl-row>
-        <div class="conf-tip">是否开启博客文章背景文字水印。</div>
+        <div class="conf-tip">是否开启博客文章，以及文章临时访问中的背景文字水印。</div>
         <div class="conf-watermark" v-if="userParamForm.WEB_BLOG_WATERMARK_ENABLED">
           <bl-row>
             <bl-row width="60%">
