@@ -103,7 +103,7 @@ public class ArticleUtil {
     /**
      *
      */
-    private static final String HEAD_SCRIPT_BLOG_COLOR = "    <script>\n" +
+    private static final String HEAD_SCRIPT_BLOG_COLOR = "  <script>\n" +
             "      window.addEventListener('load', function() {\n" +
             "        const rgb = '{BLOSSOM_WEB_BLOG_COLOR}'\n" +
             "        if (rgb && !rgb.toLowerCase().startsWith('rgb(')) {\n" +
@@ -123,10 +123,9 @@ public class ArticleUtil {
             "          .item(0)\n" +
             "          .appendChild(themeStyleTag)\n" +
             "      });\n" +
-            "    </script>" +
-            "</head>";
+            "  </script>\n";
 
-    private static final String HEAD_SCRIPT_WATERMARK = "<script>\n" +
+    private static final String HEAD_SCRIPT_WATERMARK = "  <script>\n" +
             "      window.addEventListener(\"load\", function () {\n" +
             "        const FontGap = 3\n" +
             "\n" +
@@ -326,25 +325,31 @@ public class ArticleUtil {
             "\n" +
             "        renderWatermark()\n" +
             "      })\n" +
-            "    </script>";
+            "  </script>\n";
 
 
-    private static final String BODY_HEADER_AND_TOC = "\n" +
-            "<body><div class=\"header\">\n" +
-            "  <div class=\"copyright\">本文作者：{BLOSSOM_EXPORT_HTML_AUTHOR}。著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div><a\n" +
+    private static final String BODY_HEADER = "\n" +
+            "<body>\n" +
+            "  <div class=\"header\">\n" +
+            "    <div class=\"copyright\">本文作者：{BLOSSOM_EXPORT_HTML_AUTHOR}。著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</div><a\n" +
             "  href=\"https://github.com/blossom-editor/blossom\" target=\"_blank\"><span>Export by Blossom</span><svg\n" +
             "  xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-github\"\n" +
             "  viewBox=\"0 0 16 16\">\n" +
-            "  <path\n" +
+            "    <path\n" +
             "    d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z\" />\n" +
-            "</svg></a>\n" +
-            "</div><div class=\"content \">\n" +
+            "    </svg></a>\n" +
+            "  </div>\n" +
+            "  <div class=\"content \">\n" +
+            "    <div class=\"main\">\n" +
+            "      <div class=\"bl-preview\" id=\"blossom-view\">";
+
+    private static final String BODY_CONTENT_TOC = "\n" +
             "  <div class=\"toc\" id=\"blossom-toc\">\n" +
             "    <div style=\"font-size: 15px;color:#727272;padding:10px 0\">《{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}》</div>\n" +
             "    <div style=\"font-size: 20px;color:#727272;border-bottom:2px solid #eaeaea;padding-bottom: 10px;margin-bottom: 10px;\">目录</div>\n" +
-            "  </div><div class=\"main\"><div class=\"bl-preview\" id=\"blossom-view\">";
+            "  </div>\n";
 
-    private static final String suffix = "</div></div></div></body></html>";
+    private static final String suffix = "</div></body></html>";
 
     private static String htmlTemplate;
 
@@ -381,14 +386,10 @@ public class ArticleUtil {
                                 String WEB_BLOG_WATERMARK_COLOR,
                                 String WEB_BLOG_WATERMARK_GAP) {
         return htmlTemplate
-                + appendHeadScript(blogColor,
-                WEB_BLOG_WATERMARK_ENABLED,
-                WEB_BLOG_WATERMARK_CONTENT,
-                WEB_BLOG_WATERMARK_FONTSIZE,
-                WEB_BLOG_WATERMARK_COLOR,
-                WEB_BLOG_WATERMARK_GAP)
-                + appendBodyHeader(article, user)
-                + article.getHtml()
+                + appendHeadScript(blogColor, WEB_BLOG_WATERMARK_ENABLED, WEB_BLOG_WATERMARK_CONTENT, WEB_BLOG_WATERMARK_FONTSIZE, WEB_BLOG_WATERMARK_COLOR, WEB_BLOG_WATERMARK_GAP)
+                + appendBodyHeader(user)
+                + appendArticleContent(article)
+                + appendToc(article)
                 + suffix;
     }
 
@@ -421,15 +422,35 @@ public class ArticleUtil {
     }
 
     /**
-     * 增加页面顶部的文章作者和目录顶部的文章名称
+     * 添加页面顶部的文章作者和目录顶部的文章名称
      *
      * @param article 文章
      * @param user    用户, 用户获取作者
      * @return 页面顶部的文章作者和文章名称
      */
-    private static String appendBodyHeader(ArticleEntity article, UserEntity user) {
-        return BODY_HEADER_AND_TOC
-                .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName())
+    private static String appendBodyHeader(UserEntity user) {
+        return BODY_HEADER
+                .replaceAll("\\{BLOSSOM_EXPORT_HTML_AUTHOR}", user.getNickName());
+    }
+
+    /**
+     * 添加正文
+     *
+     * @param article 文章
+     */
+    private static String appendArticleContent(ArticleEntity article) {
+        return article.getHtml()
+                + "\n    </div>"
+                + "\n  </div>";
+    }
+
+    /**
+     * 添加目录
+     *
+     * @param article 文章
+     */
+    private static String appendToc(ArticleEntity article) {
+        return BODY_CONTENT_TOC
                 .replaceAll("\\{BLOSSOM_EXPORT_HTML_ARTICLE_NAME}", article.getName());
     }
 }
