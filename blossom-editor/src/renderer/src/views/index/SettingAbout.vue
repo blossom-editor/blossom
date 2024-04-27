@@ -80,7 +80,7 @@
           <li v-for="ref in references">
             <bl-row>
               <span style="width: 180px">{{ ref.name }}</span
-              >: <a :href="ref.url">{{ ref.url }}</a>
+              >: <a :href="ref.url" target="_blank">{{ ref.url }}</a>
             </bl-row>
           </li>
         </ol>

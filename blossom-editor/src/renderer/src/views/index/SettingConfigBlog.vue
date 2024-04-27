@@ -46,7 +46,7 @@
             @change="changeBlogColor" />
           <div class="color-item" v-for="color in colors" :key="color" :style="{ backgroundColor: color }" @click="changeBlogColor(color)"></div>
         </bl-row>
-        <div class="conf-tip">博客主题色，主要影响专题样式颜色以及文章中的链接颜色。</div>
+        <div class="conf-tip">博客主题色，主要影响专题样式颜色以及文章中的链接颜色，以及文章临时访问中的链接颜色。</div>
       </el-form-item>
 
       <el-form-item label="博客名称">
@@ -88,7 +88,7 @@
             v-model="userParamForm.WEB_BLOG_WATERMARK_ENABLED"
             @change="(cur: boolean) => updParam('WEB_BLOG_WATERMARK_ENABLED', cur ? '1' : '0')" />
         </bl-row>
-        <div class="conf-tip">是否开启博客文章背景文字水印。</div>
+        <div class="conf-tip">是否开启博客文章，以及文章临时访问中的背景文字水印。</div>
         <div class="conf-watermark" v-if="userParamForm.WEB_BLOG_WATERMARK_ENABLED">
           <bl-row>
             <bl-row width="60%">

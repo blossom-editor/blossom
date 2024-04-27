@@ -1358,6 +1358,9 @@
           color: #c5c5c5;
           border-bottom: 1px solid #eaeaea;
           text-align: right;
+          position: fixed;
+          z-index: 999;
+          background-color: #fff;
       }
 
       .header .copyright {
@@ -1380,7 +1383,7 @@
           display: flex;
           flex-direction: row;
           justify-content: flex-start;
-          align-items: flex-start
+          align-items: flex-start;
       }
 
       .content .main {
@@ -1388,16 +1391,19 @@
           width: calc(100% - 300px);
           padding: 20px;
           overflow-x: hidden;
-          overflow-y: scroll
+          overflow-y: scroll;
+          margin-top: 30px;
       }
 
       .toc {
           height: 100%;
           width: 300px;
-          padding-left: 15px;
-          border-right: 1px solid #eeeeee;
+          padding-left: 10px;
+          padding-bottom: 10px;
+          border-left: 1px solid #eeeeee;
           overflow-x: hidden;
-          overflow-y: scroll
+          overflow-y: scroll;
+          margin-top: 30px;
       }
 
       .toc > h1,
@@ -1406,11 +1412,32 @@
       .toc > h4,
       .toc > h5,
       .toc > h6 {
-          margin: 0;
+          margin-top: 0;
+          margin-bottom: 0;
+          line-height: 27px;
           font-size: 15px;
           font-weight: 300;
           cursor: pointer;
-          color: #727272
+          color: #727272;
+          position: relative;
+      }
+
+      .toc > h1::after,
+      .toc > h2::after,
+      .toc > h3::after,
+      .toc > h4::after,
+      .toc > h5::after,
+      .toc > h6::after {
+          content: "";
+          position: absolute;
+          top: 20%;
+          left: -5px;
+          width: 2px;
+          height: 60%;
+          background: var(--bl-color-primary);
+          border-radius: 10px;
+          opacity: 0;
+          transition: opacity 0.1s;
       }
 
       .toc > h1:hover,
@@ -1419,37 +1446,42 @@
       .toc > h4:hover,
       .toc > h5:hover,
       .toc > h6:hover {
-          color: #3b3b3b
+          color: var(--bl-color-primary);
       }
 
-      .toc-h1 {
-          margin-top: 5px !important;
-          padding-top: 5px
+      .toc > h1:hover::after,
+      .toc > h2:hover::after,
+      .toc > h3:hover::after,
+      .toc > h4:hover::after,
+      .toc > h5:hover::after,
+      .toc > h6:hover::after {
+          opacity: 1;
       }
 
       .toc-h2 {
-          padding-left: 10px
+          margin-left: 10px;
       }
 
       .toc-h3 {
-          padding-left: 20px
+          margin-left: 20px;
       }
 
       .toc-h4 {
-          padding-left: 30px
+          margin-left: 30px;
       }
 
       .toc-h5 {
-          padding-left: 40px
+          margin-left: 40px;
       }
 
       .toc-h6 {
-          padding-left: 50px
+          margin-left: 50px;
       }
   </style>
   <!--blossom styles-->
   <style type="text/css">
       :root {
+          --bl-color-primary: rgb(104, 104, 104);
           --bl-editor-color: #707070;
           --bl-editor-bg-color: #FFFFFF;
           --bl-editor-gutters-bg-color: #f5f5f5;
@@ -1587,6 +1619,7 @@
           background-color: var(--bl-preview-bg-color);
           line-height: 23px;
           font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+          position: relative;
       }
 
       .bl-preview * {
@@ -1594,7 +1627,7 @@
       }
 
       .bl-preview a {
-          color: #ad8cf2;
+          color: var(--bl-color-primary);
           font-weight: bold;
       }
 
@@ -2006,7 +2039,6 @@
       for (let i = 0; i < heads.length; i++) {
         let head = heads[i];
         let tocHead = document.createElement(head.localName);
-        console.log(head.id);
         tocHead.setAttribute('class', `toc-${head.localName}`);
         tocHead.innerText = head.innerText;
         tocHead.onclick = function () {
@@ -2014,26 +2046,23 @@
           if (ele == null || ele == undefined) {
             return
           }
-          ele.parentNode.scrollTop = ele.offsetTop - 30
+          // ele.parentNode.scrollTop = ele.offsetTop - 30
+          ele.scrollIntoView()
         };
         tocContainer.appendChild(tocHead)
       }
     }
 
     function onHtmlEventDispatch(t, _ty, event, type, data) {
+      // copy pre code
       if (type === 'copyPreCode') {
         let code = document.getElementById(data)
         if (code) {
-          // navigator.clipboard.writeText(code.innerText)
-          // navigator clipboard 需要https等安全上下文
           if (navigator.clipboard && window.isSecureContext) {
-            // navigator clipboard 向剪贴板写文本
             return navigator.clipboard.writeText(code.innerText)
           } else {
-            // 创建text area
             let textArea = document.createElement('textarea')
             textArea.value = code.innerText
-            // 使text area不在viewport，同时设置不可见
             textArea.style.position = 'absolute'
             textArea.style.opacity = '0'
             textArea.style.left = '-999999px'
@@ -2051,6 +2080,5 @@
       }
     }
   </script>
-</head>
 
 
