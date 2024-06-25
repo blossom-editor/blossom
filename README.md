@@ -4,6 +4,8 @@
 <img src="./doc/imgs/blossom_name.png" height="auto">
 </p>
 <p align="center">
+<a href="https://hellogithub.com/repository/c6947b28421a475bb7b701ef2b4089f8" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=c6947b28421a475bb7b701ef2b4089f8&claim_uid=HR0k4ei923h8Mda" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+<p align="center">  
 <a href="https://www.wangyunf.com/blossom-demo/#/settingindex">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 文档</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 下载</a> 
 </p>
 
@@ -140,3 +142,11 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 <img src="./doc/imgs/blog_article.png" height="600" style="margin-left: 30px">
 </p>
 <p align="center">博客移动端</p>
+
+
+
+# Star 历史
+                        
+[![Stargazers over time](https://starchart.cc/blossom-editor/blossom.svg?variant=adaptive)](https://starchart.cc/blossom-editor/blossom)
+
+                    
