@@ -148,3 +148,8 @@ However, sustaining a livelihood through open-source software is challenging. Th
 <img src="./doc/imgs/blog_article.png" height="600" style="margin-left: 30px">
 </p>
 <p align="center">Mobile Blog</p>
+                    
+# Stargazers over time
+[![Stargazers over time](https://starchart.cc/blossom-editor/blossom.svg?variant=adaptive)](https://starchart.cc/blossom-editor/blossom)
+
+                    
