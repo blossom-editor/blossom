@@ -41,6 +41,10 @@ public class IaasProperties {
      * IRDA BLOS 配置
      */
     private BLOS blos;
+    /**
+     * MINIO BLOS 配置
+     */
+    private MINIO minio;
 
     /**
      * Ali OSS 配置
@@ -167,6 +171,37 @@ public class IaasProperties {
     }
 
     /**
+     * mino配置
+     */
+    @Data
+    public static class MINIO {
+        /**
+         * minio地址
+         */
+        private String endpoint;
+        /**
+         * 账号
+         */
+        private String accessKey;
+        /**
+         * 密码
+         */
+        private String secretKey;
+        /**
+         * 存储桶
+         */
+        private String bucket;
+        /**
+         * minio 的访问地址, 可以通过域名映射, 不要以 / 结尾
+         */
+        private String domain;
+        /**
+         * minio 默认上传地址, 不填则默认上传至 bucket 根目录下, 不要以 / 结尾
+         */
+        private String defaultPath;
+    }
+
+    /**
      * IDRA blossom Object storage
      */
     @Data
@@ -211,6 +246,10 @@ public class IaasProperties {
             }
             blos.setDomain(domain);
             blos.setDefaultPath(formatPath(blos.getDefaultPath()));
+        }
+        if (minio != null) {
+            minio.setDomain(formatDomain(minio.getEndpoint()));
+            minio.setDefaultPath(formatPath(minio.getDefaultPath()));
         }
     }
 

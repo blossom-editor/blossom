@@ -4,13 +4,14 @@ import lombok.Getter;
 
 @Getter
 @SuppressWarnings("all")
-public enum  IaasEnum {
+public enum IaasEnum {
 
     ALIBABA("alibaba"),
     HUAWEI("huawei"),
     TENCENT("tencent"),
     QINIU("qiniu"),
-    BLOSSOM("blossom");
+    BLOSSOM("blossom"),
+    MINIO("minio");
 
     private String type;
 
