@@ -164,3 +164,45 @@ export const useConfigStore = defineStore('configStore', {
     }
   }
 })
+
+
+// 上传文件后通知刷新List
+export const onUploadAfter = defineStore('onUploadAfter', {
+  state: () => ({
+    response: {
+      isSuccess: false,
+      msg: ''
+    }
+  }),
+  actions: {
+    setResponse(response: { isSuccess: boolean; msg: string }): void {
+      this.response = response;
+    }
+  },
+  getters: {
+    getResponse(state) {
+      return state.response;
+    }
+  }
+});
+
+// 修改todo状态后 通知刷新统计
+export const onTodoChange = defineStore('onTodoChange', {
+  state: () => ({
+    response: {
+      isSuccess: false,
+      msg: ''
+    }
+  }),
+  actions: {
+    setResponse(response: { isSuccess: boolean; msg: string }): void {
+      this.response = response;
+    }
+  },
+  getters: {
+    getResponse(state) {
+      return state.response;
+    }
+  }
+});
+

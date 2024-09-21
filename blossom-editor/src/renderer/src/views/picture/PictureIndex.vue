@@ -199,7 +199,7 @@ import PictureBatchDel from './PictureBatchDel.vue'
 import PictureTransfer from './PictureTransfer.vue'
 import errorImg from '@renderer/assets/imgs/img_error.png'
 import Notify from '@renderer/scripts/notify'
-
+import {onUploadAfter} from '@renderer/stores/config'
 const userStore = useUserStore()
 
 useLifecycle(
@@ -277,6 +277,16 @@ const clickCurFolder = (tree: DocTree) => {
   })
   getPictureStat(curFolder.value.id)
 }
+
+/**
+ * 订阅文件上传通知
+ */
+const uploadResult = onUploadAfter()
+uploadResult.$subscribe((mutation, state)=>{
+  if(state.response.isSuccess){
+    refresh()
+  }
+})
 
 /**
  * 刷新
@@ -423,11 +433,14 @@ const deletePicture = (pic: Picture) => {
         pic.delTime = 2
         getPictureStat(curFolder.value?.id)
         getPictureStat()
+        // 删除后刷新list
+        refresh()
       })
       .catch((_) => {
         pic.delTime = 0
         pic.url = urlBak
       })
+
   })
 }
 
@@ -524,6 +537,8 @@ const delBatchIgnoreCheck = () => {
   }
   delIgnoreCheck.value = true
   isShowBatchDelDialog.value = true
+  // 删除后刷新
+  refresh()
 }
 
 const deleted = (ids: Array<string>) => {

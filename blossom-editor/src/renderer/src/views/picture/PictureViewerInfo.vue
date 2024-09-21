@@ -81,6 +81,7 @@ import { isNotNull } from '@renderer/assets/utils/obj'
 import { isEmpty } from 'lodash'
 import { download, writeText } from '@renderer/assets/utils/electron'
 import Notify from '@renderer/scripts/notify'
+import {onUploadAfter} from '@renderer/stores/config'
 
 const userStore = useUserStore()
 const serverStore = useServerStore()
@@ -127,7 +128,8 @@ const deletePicture = () => {
     })
   })
 }
-
+// 上传成功消息
+const uploadResult = onUploadAfter()
 /**
  * 替换上传成功
  */
@@ -137,6 +139,12 @@ const onUploadSeccess: UploadProps['onSuccess'] = (resp, _file?) => {
     emits('saved')
     closePicInfo()
     picCacheRefresh()
+    // 发布消息 刷新图片列表
+    uploadResult.setResponse({
+      isSuccess: true,
+      msg: "upload success"
+    })
+
     return true
   } else {
     Notify.error(resp.msg, '图片替换失败')
