@@ -8,17 +8,18 @@
       multiple
       :disabled="!curFolder || !curFolder?.id"
       :action="serverStore.serverUrl + uploadFileApiUrl"
-      :data="(f: UploadRawFile) => uploadDate(f, curFolder!.id, porps.repeatUpload)"
+      :data="(f: UploadRawFile) => uploadDate(f, curFolder!.id, prop.repeatUpload)"
       :headers="{ Authorization: 'Bearer ' + userStore.auth.token }"
       :show-file-list="true"
       :before-upload="beforeUpload"
-      :on-success="onUploadSeccess"
+      :on-success="onUploadSuccess"
       :on-error="onError">
       <bl-row v-if="!curFolder || !curFolder?.id" just="center" align="center" height="100%" style="font-size: 12px"
-        >请先选择文件夹，再上传文件</bl-row
+      >请先选择文件夹，再上传文件
+      </bl-row
       >
       <bl-row v-else just="center" align="center" height="100%" style="font-size: 12px">
-        点击或拖拽上传至<br />
+        点击或拖拽上传至<br/>
         《{{ curFolder?.name }}》
       </bl-row>
     </el-upload>
@@ -26,15 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
-import { UploadRawFile } from 'element-plus'
-import { uploadFileApiUrl } from '@renderer/api/blossom'
-import { useUserStore } from '@renderer/stores/user'
-import { useServerStore } from '@renderer/stores/server'
-import { provideKeyDocInfo } from '@renderer/views/doc/doc'
-import { beforeUpload, onUploadSeccess, onError, uploadDate } from '@renderer/views/picture/scripts/picture'
+import {inject} from 'vue'
+import {UploadRawFile} from 'element-plus'
+import {uploadFileApiUrl} from '@renderer/api/blossom'
+import {useUserStore} from '@renderer/stores/user'
+import {useServerStore} from '@renderer/stores/server'
+import {provideKeyDocInfo} from '@renderer/views/doc/doc'
+import {beforeUpload, onUploadSeccess, onError, uploadDate} from '@renderer/views/picture/scripts/picture'
+import {onUploadAfter} from '@renderer/stores/config'
 
-const porps = defineProps({
+const prop = defineProps({
   repeatUpload: {
     type: Boolean,
     default: false
@@ -48,6 +50,21 @@ const curFolder = inject(provideKeyDocInfo)
 const userStore = useUserStore()
 const serverStore = useServerStore()
 //#endregion
+
+
+/**
+ * 上传成功后通知组件刷新
+ * @param data
+ */
+const uploadResult = onUploadAfter()
+const onUploadSuccess = (resp: any, file: any, fileList: any) => {
+  uploadResult.setResponse({
+    isSuccess: true,
+    msg: "upload success"
+  })
+  onUploadSeccess(resp, file, fileList)
+}
+
 </script>
 
 <style scoped lang="scss">

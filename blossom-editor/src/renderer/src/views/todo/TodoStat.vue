@@ -53,16 +53,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { todoStatApi, taskStatApi, completedTodoApi, openTodoApi } from '@renderer/api/todo'
+import {ref} from 'vue'
+import {todoStatApi, taskStatApi, completedTodoApi, openTodoApi} from '@renderer/api/todo'
 import TodoChartCompleted from './TodoChartCompleted.vue'
-import { useLifecycle } from '@renderer/scripts/lifecycle'
+import {useLifecycle} from '@renderer/scripts/lifecycle'
+import {onTodoChange} from '@renderer/stores/config'
+import {getDateFormat} from '@renderer/assets/utils/util'
 
 useLifecycle(
   () => getTaskStat(),
   () => getTaskStat()
 )
 
+/**
+ * todoList改变后刷新统计信息
+ * @param data
+ */
+const todoChangeResult = onTodoChange()
+
+/**
+ * 订阅todoList改变
+ */
+todoChangeResult.$subscribe((mutation, state) => {
+  if (state.response.isSuccess) {
+    getTaskStat()
+    // todo 有待优化: 拿到当前日期能否更合理
+    todoStatApi({todoId:state.response.msg}).then((resp) => {
+      todoStat.value = resp.data
+    })
+  }
+})
+
+// 获取任务状态统计
 const getTaskStat = () => {
   taskStatApi().then((resp) => {
     taskStat.value = {
@@ -72,6 +94,7 @@ const getTaskStat = () => {
       total: resp.data.total
     }
     TodoChartCompletedRef.value.reload(resp.data.dates, resp.data.rates)
+
   })
 }
 
@@ -84,13 +107,13 @@ const taskStat = ref({
 })
 
 const openTodo = () => {
-  openTodoApi({ todoId: todoStat.value.todoId }).then((_resp) => {
+  openTodoApi({todoId: todoStat.value.todoId}).then((_resp) => {
     emits('refreshTodo')
   })
 }
 
 const completedTodo = () => {
-  completedTodoApi({ todoId: todoStat.value.todoId }).then((_resp) => {
+  completedTodoApi({todoId: todoStat.value.todoId}).then((_resp) => {
     emits('refreshTodo')
   })
 }
@@ -106,12 +129,12 @@ const todoStat = ref({
 })
 
 const reload = (todoId: string) => {
-  todoStatApi({ todoId: todoId }).then((resp) => {
+  todoStatApi({todoId: todoId}).then((resp) => {
     todoStat.value = resp.data
   })
 }
 
-defineExpose({ reload })
+defineExpose({reload})
 const emits = defineEmits(['refreshTodo'])
 </script>
 
