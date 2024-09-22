@@ -58,6 +58,7 @@ import {todoStatApi, taskStatApi, completedTodoApi, openTodoApi} from '@renderer
 import TodoChartCompleted from './TodoChartCompleted.vue'
 import {useLifecycle} from '@renderer/scripts/lifecycle'
 import {onTodoChange} from '@renderer/stores/config'
+import {getDateFormat} from '@renderer/assets/utils/util'
 
 useLifecycle(
   () => getTaskStat(),
