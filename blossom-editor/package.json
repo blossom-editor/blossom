@@ -48,7 +48,7 @@
     "marked-katex-extension": "^4.0.5",
     "markmap-lib": "^0.16.1",
     "markmap-view": "^0.16.0",
-    "mermaid": "^10.9.0",
+    "mermaid": "^10.9.3",
     "pinia": "^2.1.6",
     "prettier": "^3.5.2",
     "sass": "^1.74.1",
