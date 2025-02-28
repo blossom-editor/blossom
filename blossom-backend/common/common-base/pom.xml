@@ -14,7 +14,7 @@
 
     <properties>
         <pagehelper.version>5.3.2</pagehelper.version> <!-- 分页插件 -->
-        <hutool.version>5.8.18</hutool.version>        <!-- 工具类 -->
+        <hutool.version>5.8.21</hutool.version>        <!-- 工具类 -->
         <okhttp.version>4.9.3</okhttp.version>         <!-- HTTP工具 -->
         <caffine.version>2.9.3</caffine.version>       <!-- 本地缓存 -->
         <easyexcel.version>3.2.1</easyexcel.version>   <!-- excel 解析 -->
