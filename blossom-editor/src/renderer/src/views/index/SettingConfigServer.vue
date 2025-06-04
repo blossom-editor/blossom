@@ -70,6 +70,10 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="和风天气 Host">
+        <el-input size="default" v-model="serverParamForm.HEFENG_HOST" @change="(cur: any) => updParam('HEFENG_HOST', cur)"></el-input>
+      </el-form-item>
+
       <el-form-item label="和风天气 Key">
         <el-input size="default" v-model="serverParamForm.HEFENG_KEY" @change="(cur: any) => updParam('HEFENG_KEY', cur)"></el-input>
         <div class="conf-tip">
@@ -128,6 +132,7 @@ const serverParamForm = ref({
   ARTICLE_LOG_EXP_DAYS: 0,
   ARTICLE_RECYCLE_EXP_DAYS: 0,
   BACKUP_EXP_DAYS: 0,
+  HEFENG_HOST: '',
   HEFENG_KEY: '',
   BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
   SERVER_MACHINE_EXPIRE: '',

@@ -36,10 +36,10 @@ import java.util.concurrent.TimeUnit;
 public class WeatherManager {
     private static final Logger log = LoggerFactory.getLogger(WeatherManager.class);
 
-    private static final String URL_CITY = "https://geoapi.qweather.com/v2/city/lookup";
-    private static final String URL_NOW = "https://devapi.heweather.net/v7/weather/now";
-    private static final String URL_DAILY = "https://devapi.heweather.net/v7/weather/3d";
-    private static final String URL_HOURLY = "https://devapi.heweather.net/v7/weather/24h";
+    private static final String URL_CITY = "https://%s/geo/v2/city/lookup";
+    private static final String URL_NOW = "https://%s/v7/weather/now";
+    private static final String URL_DAILY = "https://%s/v7/weather/3d";
+    private static final String URL_HOURLY = "https://%s/v7/weather/24h";
     private static final String SUCCESS = "200";
 
     /**
@@ -66,8 +66,8 @@ public class WeatherManager {
             return cache;
         }
         log.info("[BLOSSOM] refresh weather: {}", location);
-        Map<String, String> maps = initParam(location);
-        if (maps == null) {
+        HeFengReq params = initParam(location);
+        if (params == null) {
             log.info("未配置天气信息, 忽略天气查询");
             WeatherRes weather = new WeatherRes();
             CityRes.Location l = new CityRes.Location();
@@ -81,22 +81,22 @@ public class WeatherManager {
         DailyRes daily = null;
         HourlyRes hourly = null;
         try {
-            cityStr = HttpUtil.get(URL_CITY, maps);
+            cityStr = HttpUtil.get(String.format(URL_CITY, params.getHost()), params.getApiParam());
             if (StrUtil.isNotBlank(cityStr)) {
                 city = JsonUtil.toObj(cityStr, CityRes.class);
             }
 
-            nowStr = HttpUtil.get(URL_NOW, maps);
+            nowStr = HttpUtil.get(String.format(URL_NOW, params.getHost()), params.getApiParam());
             if (StrUtil.isNotBlank(nowStr)) {
                 now = JsonUtil.toObj(nowStr, NowRes.class);
             }
 
-            dailyStr = HttpUtil.get(URL_DAILY, maps);
+            dailyStr = HttpUtil.get(String.format(URL_DAILY, params.getHost()), params.getApiParam());
             if (StrUtil.isNotBlank(dailyStr)) {
                 daily = JsonUtil.toObj(dailyStr, DailyRes.class);
             }
 
-            hourlyStr = HttpUtil.get(URL_HOURLY, maps);
+            hourlyStr = HttpUtil.get(String.format(URL_HOURLY, params.getHost()), params.getApiParam());
             if (StrUtil.isNotBlank(hourlyStr)) {
                 hourly = JsonUtil.toObj(hourlyStr, HourlyRes.class);
             }
@@ -159,13 +159,20 @@ public class WeatherManager {
      *
      * @return 返回查询参数
      */
-    public Map<String, String> initParam(String location) {
-        Map<String, String> paramMap = paramService.selectMap(false, ParamEnum.HEFENG_KEY);
-        if (MapUtil.isNotEmpty(paramMap) && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))) {
+    public HeFengReq initParam(String location) {
+        Map<String, String> paramMap = paramService.selectMap(false, ParamEnum.HEFENG_KEY, ParamEnum.HEFENG_HOST);
+        if (MapUtil.isNotEmpty(paramMap)
+                && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))
+                && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_HOST.name()))
+        ) {
+            HeFengReq req = new HeFengReq();
+            req.setHost(paramMap.get(ParamEnum.HEFENG_HOST.name()));
+
             Map<String, String> map = new HashMap<>(2);
             map.put("location", location);
             map.put("key", paramMap.get(ParamEnum.HEFENG_KEY.name()));
-            return map;
+            req.setApiParam(map);
+            return req;
         }
         return null;
     }

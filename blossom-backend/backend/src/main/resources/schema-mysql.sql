@@ -77,6 +77,19 @@ WHERE NOT EXISTS(SELECT 1
 --
 INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
 SELECT *
+FROM (select 12                as id,
+             'HEFENG_HOST'      as param_name,
+             'abc.com'              as param_value,
+             '和风天气用户 HOST'        as param_desc,
+             1                 as open_state,
+             CURRENT_TIMESTAMP as cre_time,
+             CURRENT_TIMESTAMP as upd_time) as temp
+WHERE NOT EXISTS(SELECT 1
+                 FROM base_sys_param
+                 WHERE id = 12);
+--
+INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
+SELECT *
 FROM (select 21                          as id,
              'GITEE_ACCESS_TOKEN'        as param_name,
              ''                          as param_value,

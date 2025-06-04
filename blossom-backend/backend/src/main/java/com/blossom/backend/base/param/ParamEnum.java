@@ -28,6 +28,10 @@ public enum ParamEnum {
      * 和风天气KEY
      */
     HEFENG_KEY(true, 20,""),
+    /**
+     * 和风天气KEY
+     */
+    HEFENG_HOST(false, 100,""),
 
     /**
      * GITEE key
