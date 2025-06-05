@@ -1,5 +1,10 @@
 <template>
-  <div class="weather-root">
+  <div v-if="userStore.sysParams.HEFENG_ENABLED === '0'" class="weather-root">
+    <div class="placeholder">
+      <div class="remark">未启用天气</div>
+    </div>
+  </div>
+  <div v-else class="weather-root">
     <bl-row class="location" just="flex-end">
       {{ weather.location.name }}
       <el-tooltip placement="top" effect="light" :show-after="1000" :hide-after="0" :auto-close="3000">
@@ -347,6 +352,40 @@ const refreshWeatherTask = () => {
 .hover-dark {
   &:hover {
     box-shadow: 0 2px 10px 3px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.weather-root .placeholder {
+  @include flex(column, center, center);
+  width: 440px;
+  height: 200px;
+  margin-left: 10px;
+  border-radius: 10px;
+  background-color: var(--el-color-primary-light-7);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 20px,
+      var(--el-color-primary-light-5) 20px,
+      var(--el-color-primary-light-5) 40px
+    );
+  }
+
+  .remark {
+    z-index: 1;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--el-color-primary-light-3);
   }
 }
 </style>

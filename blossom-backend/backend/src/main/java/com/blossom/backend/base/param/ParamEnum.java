@@ -28,10 +28,16 @@ public enum ParamEnum {
      * 和风天气KEY
      */
     HEFENG_KEY(true, 20,""),
+
     /**
-     * 和风天气KEY
+     * 和风天气 HOST
      */
     HEFENG_HOST(false, 100,""),
+
+    /**
+     * 开启和风天气
+     */
+    HEFENG_ENABLED(false, 5,""),
 
     /**
      * GITEE key
@@ -57,6 +63,11 @@ public enum ParamEnum {
      * 服务器JWT加密字符串
      */
     SERVER_JWT_SECRET(true, 9999,""),
+
+    /**
+     * 开启首页流量监控
+     */
+    SENTINEL_ENABLED(false, 5,""),
 
     /**
      * 过期时间 - 服务器

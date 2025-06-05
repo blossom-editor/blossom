@@ -67,7 +67,9 @@ public class WeatherManager {
         }
         log.info("[BLOSSOM] refresh weather: {}", location);
         HeFengReq params = initParam(location);
-        if (params == null) {
+
+        // 无返回或关闭
+        if (params == null || !params.getEnabled()) {
             log.info("未配置天气信息, 忽略天气查询");
             WeatherRes weather = new WeatherRes();
             CityRes.Location l = new CityRes.Location();
@@ -75,6 +77,7 @@ public class WeatherManager {
             weather.setLocation(l);
             return weather;
         }
+
         String cityStr, nowStr, dailyStr, hourlyStr;
         CityRes city = null;
         NowRes now = null;
@@ -160,13 +163,17 @@ public class WeatherManager {
      * @return 返回查询参数
      */
     public HeFengReq initParam(String location) {
-        Map<String, String> paramMap = paramService.selectMap(false, ParamEnum.HEFENG_KEY, ParamEnum.HEFENG_HOST);
+        Map<String, String> paramMap = paramService.selectMap(false,
+                ParamEnum.HEFENG_KEY,
+                ParamEnum.HEFENG_HOST,
+                ParamEnum.HEFENG_ENABLED);
         if (MapUtil.isNotEmpty(paramMap)
                 && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_KEY.name()))
                 && StrUtil.isNotBlank(paramMap.get(ParamEnum.HEFENG_HOST.name()))
         ) {
             HeFengReq req = new HeFengReq();
             req.setHost(paramMap.get(ParamEnum.HEFENG_HOST.name()));
+            req.setEnabled("1".equals(paramMap.getOrDefault(ParamEnum.HEFENG_ENABLED.name(),"0")));
 
             Map<String, String> map = new HashMap<>(2);
             map.put("location", location);

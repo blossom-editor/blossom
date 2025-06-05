@@ -36,14 +36,16 @@
         </bl-row>
 
         <!-- 流量统计 -->
-        <bl-row class="container-name">请求流量</bl-row>
-        <bl-row class="container-sub-name">
+        <!-- <div > -->
+        <bl-row v-if="userStore.sysParams.SENTINEL_ENABLED === '1'" class="container-name">请求流量</bl-row>
+        <bl-row v-if="userStore.sysParams.SENTINEL_ENABLED === '1'" class="container-sub-name">
           Flow Statistic / Requests & Average Response Time(ms)
           <span class="iconbl bl-refresh-smile" @click="loadSentinlLine"></span>
         </bl-row>
-        <bl-row width="880px" height="250px">
+        <bl-row v-if="userStore.sysParams.SENTINEL_ENABLED === '1'" width="880px" height="250px">
           <SentinelChartLine ref="SentinelChartLineRef"></SentinelChartLine>
         </bl-row>
+        <!-- </div> -->
 
         <!-- 热力图 -->
         <bl-row class="container-name">编辑热力图</bl-row>
@@ -51,13 +53,13 @@
           每日编辑文章数 (每5分钟更新)
           <span class="iconbl bl-refresh-smile" @click="loadArticleHeapmap"></span>
         </bl-row>
-        <bl-row width="870px" height="270px">
+        <bl-row width="870px" height="260px">
           <ChartHeatmap ref="ChartHeatmapRef"></ChartHeatmap>
         </bl-row>
       </div>
     </div>
 
-    <!-- 
+    <!--
       =======================================================
       middle
       =======================================================
@@ -85,7 +87,7 @@
       </bl-col>
     </div>
 
-    <!-- 
+    <!--
       =======================================================
       right
       =======================================================
@@ -145,10 +147,18 @@ const ChartLineWordsRef = ref()
 const SentinelChartLineRef = ref()
 const ChartHeatmapRef = ref()
 
-onActivated(() => (now.value = nowWhen()))
+onActivated(() => {
+  now.value = nowWhen()
+  loadSentinlLine()
+})
 const loadWordLine = () => ChartLineWordsRef.value.reload()
 const loadArticleHeapmap = () => ChartHeatmapRef.value.reload()
-const loadSentinlLine = () => SentinelChartLineRef.value.reload()
+const loadSentinlLine = () => {
+  if (userStore.sysParams.SENTINEL_ENABLED === '1') {
+    SentinelChartLineRef.value.reload()
+    SentinelChartLineRef.value.windowResize()
+  }
+}
 const now = ref(nowWhen())
 //#region ----------------------------------------< 字数编辑 >--------------------------------------
 const isShowWordsInfoDialog = ref(false)

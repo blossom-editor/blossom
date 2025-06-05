@@ -70,6 +70,16 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="开启天气功能">
+        <bl-row>
+          <el-switch
+            size="default"
+            v-model="serverParamForm.HEFENG_ENABLED"
+            @change="(cur: boolean) => updParam('HEFENG_ENABLED', cur ? '1' : '0')" />
+        </bl-row>
+        <div class="conf-tip">是否开启和风天气功能。</div>
+      </el-form-item>
+
       <el-form-item label="和风天气 Host">
         <el-input size="default" v-model="serverParamForm.HEFENG_HOST" @change="(cur: any) => updParam('HEFENG_HOST', cur)"></el-input>
       </el-form-item>
@@ -82,6 +92,17 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="开启首页流量统计">
+        <bl-row>
+          <el-switch
+            size="default"
+            v-model="serverParamForm.SENTINEL_ENABLED"
+            @change="(cur: boolean) => updParam('SENTINEL_ENABLED', cur ? '1' : '0')" />
+        </bl-row>
+        <div class="conf-tip">是否开启首页流量统计。</div>
+      </el-form-item>
+
+      <!--  -->
       <el-form-item label="服务器到期时间">
         <div class="conf-tip">如果你使用云服务器或其他有时限的环境，可在此配置到期提示，其他环境可无视，(<code>yyyy-MM-dd</code>格式)。</div>
         <el-input size="default" v-model="serverParamForm.SERVER_MACHINE_EXPIRE" @change="(cur: any) => updParam('SERVER_MACHINE_EXPIRE', cur)">
@@ -134,7 +155,9 @@ const serverParamForm = ref({
   BACKUP_EXP_DAYS: 0,
   HEFENG_HOST: '',
   HEFENG_KEY: '',
+  HEFENG_ENABLED: false,
   BLOSSOM_OBJECT_STORAGE_DOMAIN: '',
+  SENTINEL_ENABLED: true,
   SERVER_MACHINE_EXPIRE: '',
   SERVER_DATABASE_EXPIRE: '',
   SERVER_DOMAIN_EXPIRE: '',
@@ -177,7 +200,9 @@ const getParamList = () => {
       ...{
         ARTICLE_LOG_EXP_DAYS: Number(resp.data.ARTICLE_LOG_EXP_DAYS),
         ARTICLE_RECYCLE_EXP_DAYS: Number(resp.data.ARTICLE_RECYCLE_EXP_DAYS),
-        BACKUP_EXP_DAYS: Number(resp.data.BACKUP_EXP_DAYS)
+        BACKUP_EXP_DAYS: Number(resp.data.BACKUP_EXP_DAYS),
+        HEFENG_ENABLED: resp.data.HEFENG_ENABLED === '1',
+        SENTINEL_ENABLED: resp.data.SENTINEL_ENABLED === '1'
       }
     }
   })

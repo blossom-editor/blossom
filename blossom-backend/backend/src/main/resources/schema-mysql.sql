@@ -90,6 +90,19 @@ WHERE NOT EXISTS(SELECT 1
 --
 INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
 SELECT *
+FROM (select 19                as id,
+             'HEFENG_ENABLED'  as param_name,
+             '0'               as param_value,
+             '和风天气开启'       as param_desc,
+             1                 as open_state,
+             CURRENT_TIMESTAMP as cre_time,
+             CURRENT_TIMESTAMP as upd_time) as temp
+WHERE NOT EXISTS(SELECT 1
+                 FROM base_sys_param
+                 WHERE id = 19);
+--
+INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
+SELECT *
 FROM (select 21                          as id,
              'GITEE_ACCESS_TOKEN'        as param_name,
              ''                          as param_value,
@@ -192,8 +205,18 @@ WHERE NOT EXISTS(SELECT 1
                  FROM base_sys_param
                  WHERE id = 904);
 
-
-
+INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state, cre_time, upd_time)
+SELECT *
+FROM (select 1001              as id,
+             'SENTINEL_ENABLED' as param_name,
+             '1'               as param_value,
+             '流量监控开启'       as param_desc,
+             1                 as open_state,
+             CURRENT_TIMESTAMP as cre_time,
+             CURRENT_TIMESTAMP as upd_time) as temp
+WHERE NOT EXISTS(SELECT 1
+                 FROM base_sys_param
+                 WHERE id = 1001);
 -- ----------------------------
 -- since: 1.12.0
 -- ----------------------------

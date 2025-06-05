@@ -10,6 +10,7 @@ import java.util.Map;
 @Data
 public class HeFengReq {
 
+    private Boolean enabled;
     /**
      * 和风用户域名
      */
