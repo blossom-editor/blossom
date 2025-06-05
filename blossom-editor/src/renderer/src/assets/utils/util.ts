@@ -418,7 +418,7 @@ export const getFilePrefix = (name: string): string => {
  * @returns
  */
 export const isHttp = (url: string) => {
-  return url.startsWith('http://')
+  return url.startsWith('http://') || url.startsWith('https://')
 }
 
 /**
