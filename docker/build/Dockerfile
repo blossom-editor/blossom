@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8-jre as builder
+FROM eclipse-temurin:8-jre AS builder
 WORKDIR application
 ARG JAR_FILE=../../blossom-backend/backend/target/*.jar
 COPY ${JAR_FILE} application.jar
@@ -7,7 +7,6 @@ RUN java -Djarmode=layertools -jar application.jar extract
 ###########################################################
 
 FROM eclipse-temurin:8-jre
-MAINTAINER li-guohao <git@liguohao.cn>
 WORKDIR application
 COPY --from=builder application/dependencies/ ./
 COPY --from=builder application/spring-boot-loader/ ./
