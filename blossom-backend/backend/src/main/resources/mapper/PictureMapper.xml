@@ -27,7 +27,7 @@
                 <foreach collection="urls" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </if>
         </where>
-        group by p.url order by p.cre_time desc
+        group by p.url order by p.cre_time desc, p.id desc
     </select>
 
     <select id="selectByPathName" resultType="com.blossom.backend.server.picture.pojo.PictureEntity">
