@@ -87,7 +87,7 @@
       </div>
 
       <div class="picture-card-container" :style="workbencStyle.cards">
-        <div :class="['picture-card', cardClass]" v-for="pic in picturePages" @click.right="picCheckRightClick(pic, $event)">
+        <div :class="['picture-card', cardClass]" v-for="(pic, index) in picturePages" :key="pic.id" @click.right="picCheckRightClick(pic, $event)">
           <el-checkbox
             v-show="isExpandWorkbench"
             class="picture-card-check"
@@ -103,7 +103,7 @@
             <div class="other-filename">{{ getFilePrefix(pic.name) }}</div>
             <div class="other-suffix">{{ getFileSuffix(pic.url) }}</div>
           </div>
-          <div v-else class="img-wrapper" @click="showPicInfo(pic.url)">
+          <div v-else class="img-wrapper" @click="showPicInfo(pic)">
             <img :src="picCacheWrapper(pic.url)" @error="onErrorImg" />
           </div>
 
@@ -116,7 +116,7 @@
                   <bl-row>上传时间: {{ pic.creTime }}</bl-row>
                   <bl-row>图片路径: {{ pic.pathName }}</bl-row>
                   <bl-row v-if="!isEmpty(pic.articleNames)" align="flex-start"
-                    >引用文章:
+                  >引用文章:
                     <div>
                       <div v-for="aname in articleNamesToArray(pic.articleNames)" style="margin-left: -13px">《{{ aname }}》</div>
                     </div>
@@ -332,8 +332,12 @@ const changeStarStatus = () => {
 //#region ----------------------------------------< 图片卡片操作 >--------------------------------
 const PictureViewerInfoRef = ref()
 
-const showPicInfo = (url: string) => {
-  PictureViewerInfoRef.value.showPicInfo(url)
+const showPicInfo = (pic: Picture) => {
+  if (!PictureViewerInfoRef.value || !isImage(pic.url)) {
+    return
+  }
+  const imageList = picturePages.value.filter((item) => isImage(item.url))
+  PictureViewerInfoRef.value.showPicInfo(imageList, pic.id)
 }
 
 /**

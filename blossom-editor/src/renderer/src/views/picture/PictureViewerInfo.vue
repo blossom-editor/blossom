@@ -1,6 +1,28 @@
 <template>
   <div class="picture-viewer-info-root">
     <el-image-viewer v-if="isShowPicInfo" :url-list="[picCacheWrapper(picUrl)]" @close="closePicInfo" :z-index="2002">
+      <template v-if="pictureList.length > 0">
+        <button
+          class="viewer-arrow prev"
+          :class="{ disabled: !hasPrev }"
+          type="button"
+          title="上一张"
+          aria-label="上一张"
+          @click.stop="showPrev">
+          <el-icon size="18"><ArrowLeftBold /></el-icon>
+          <span>上一张</span>
+        </button>
+        <button
+          class="viewer-arrow next"
+          :class="{ disabled: !hasNext }"
+          type="button"
+          title="下一张"
+          aria-label="下一张"
+          @click.stop="showNext">
+          <span>下一张</span>
+          <el-icon size="18"><ArrowRightBold /></el-icon>
+        </button>
+      </template>
       <div class="bl-image-viewer-infos" v-if="isNotNull(picInfo)">
         <div class="container">
           <bl-row align="flex-start">
@@ -60,7 +82,7 @@
           </el-tooltip>
 
           <el-button type="primary" text style="--el-fill-color: #535353; --el-fill-color-light: #414141" @click="download(picInfo!.url)"
-            >下载图片</el-button
+          >下载图片</el-button
           >
         </div>
       </div>
@@ -69,9 +91,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { ElMessageBox, UploadProps } from 'element-plus'
-import { WarnTriangleFilled } from '@element-plus/icons-vue'
+import { ArrowLeftBold, ArrowRightBold, WarnTriangleFilled } from '@element-plus/icons-vue'
 import { useUserStore } from '@renderer/stores/user'
 import { useServerStore } from '@renderer/stores/server'
 import { pictureDelApi, pictureInfoApi, uploadFileApiUrl } from '@renderer/api/blossom'
@@ -91,22 +113,67 @@ const isShowPicInfo = ref(false)
 const picUrl = ref('')
 // 图片信息
 const picInfo = ref<Picture | null>(buildDefaultPicture())
+// 当前可预览的图片列表
+const pictureList = ref<Picture[]>([])
+// 当前索引
+const activeIndex = ref(0)
+let lastInfoUrl = ''
 
-const showPicInfo = (url: string) => {
+const hasPrev = computed(() => activeIndex.value > 0)
+const hasNext = computed(() => activeIndex.value < pictureList.value.length - 1)
+
+const loadPicInfo = (url: string) => {
   picUrl.value = url
-  isShowPicInfo.value = true
   if (!isHttp(url)) {
     picInfo.value = null
     return
   }
+  lastInfoUrl = url
   pictureInfoApi({ url: url }).then((resp) => {
-    picInfo.value = resp.data
+    if (lastInfoUrl === url) {
+      picInfo.value = resp.data
+    }
   })
+}
+
+const setActiveIndex = (index: number) => {
+  if (index < 0 || index > pictureList.value.length - 1) {
+    return
+  }
+  activeIndex.value = index
+  loadPicInfo(pictureList.value[activeIndex.value].url)
+}
+
+const showPicInfo = (pictures: Picture[], picId: string) => {
+  if (!pictures.length) {
+    return
+  }
+  pictureList.value = pictures
+  const idx = pictureList.value.findIndex((pic) => pic.id === picId)
+  activeIndex.value = idx === -1 ? 0 : idx
+  isShowPicInfo.value = true
+  loadPicInfo(pictureList.value[activeIndex.value].url)
+}
+
+const showPrev = () => {
+  if (!hasPrev.value) {
+    return
+  }
+  setActiveIndex(activeIndex.value - 1)
+}
+
+const showNext = () => {
+  if (!hasNext.value) {
+    return
+  }
+  setActiveIndex(activeIndex.value + 1)
 }
 
 const closePicInfo = () => {
   isShowPicInfo.value = false
   picInfo.value = buildDefaultPicture()
+  pictureList.value = []
+  activeIndex.value = 0
 }
 
 /**
@@ -151,6 +218,41 @@ const emits = defineEmits(['saved'])
 
 <style scoped lang="scss">
 .picture-viewer-info-root {
+  .viewer-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    border: none;
+    border-radius: 24px;
+    height: 48px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.65);
+    }
+
+    &.prev {
+      left: 30px;
+    }
+
+    &.next {
+      right: 30px;
+    }
+
+    &.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+
   .bl-image-viewer-infos {
     @include themeBg(#1b1b1bbf, #1e1e1ebf);
     @include themeColor(#a9a9a9, rgb(190, 190, 190));
