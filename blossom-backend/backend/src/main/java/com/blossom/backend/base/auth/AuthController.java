@@ -1,13 +1,11 @@
 package com.blossom.backend.base.auth;
 
-import cn.hutool.core.util.StrUtil;
 import com.blossom.backend.base.auth.annotation.AuthIgnore;
 import com.blossom.backend.base.auth.annotation.AuthUserType;
 import com.blossom.backend.base.auth.pojo.AccessToken;
 import com.blossom.backend.base.auth.pojo.KickOutReq;
 import com.blossom.backend.base.auth.pojo.LoginReq;
 import com.blossom.backend.base.user.UserTypeEnum;
-import com.blossom.common.base.exception.XzException400;
 import com.blossom.common.base.pojo.R;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -38,8 +36,6 @@ public class AuthController {
     @AuthIgnore
     @PostMapping("login")
     public R<AccessToken> login(HttpServletRequest request, @Validated @RequestBody LoginReq req) {
-        XzException400.throwBy(StrUtil.isBlank(req.getClientId()), "客户端ID[ClientId]为必填项");
-        XzException400.throwBy(StrUtil.isBlank(req.getGrantType()), "授权方式[GrantType]为必填项");
         return R.ok(authService.login(request, req));
     }
 

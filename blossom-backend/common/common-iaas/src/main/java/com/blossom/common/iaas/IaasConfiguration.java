@@ -1,5 +1,6 @@
 package com.blossom.common.iaas;
 
+import com.blossom.common.iaas.minio.MinioManager;
 import com.blossom.common.iaas.oss.OSSManager;
 import com.blossom.common.iaas.blos.BLOSManager;
 import com.blossom.common.iaas.cos.COSManager;
@@ -48,5 +49,14 @@ public class IaasConfiguration {
     @ConditionalOnProperty(name = "project.iaas.ostype", havingValue = "blossom", matchIfMissing = true)
     public OSManager blosManager(IaasProperties iaasProperties) {
         return new BLOSManager(iaasProperties);
+    }
+
+    /**
+     * 默认
+     */
+    @Bean
+    @ConditionalOnProperty(name = "project.iaas.ostype", havingValue = "minio")
+    public OSManager minioManager(IaasProperties iaasProperties) {
+        return new MinioManager(iaasProperties);
     }
 }

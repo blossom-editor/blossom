@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.31.99:3306/xzzz-blossom?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&allowMultiQueries=true&useSSL=false&&serverTimezone=GMT%2B8
     username: root
-    password: jasmine888
+    password: 1234
     hikari:
       max-lifetime: 120000
 
@@ -81,9 +81,14 @@ project:
         log-dir: /logs/tracker
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫  IAAS   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   iaas:
-    os-type: blossom
+    os-type: minio
     blos:
       # 请以 /pic 结尾, 如果你在 nginx 中配置有代理, 注意别忘了添加你的代理路径
       domain: "http://www.google.com/"
       # 请以 / 开头, / 结尾, 简短的路径在文章中有更好的显示效果, 过长一定程度会使文章内容混乱
       default-path: "/home/bl/img/"
+    minio:
+      endpoint: http://192.168.160.130:9001
+      accessKey: admin
+      secretKey: admin123456
+      bucket: blossom

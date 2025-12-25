@@ -16,6 +16,8 @@ import { UniversalTransition } from 'echarts/features'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { getPrimaryColor } from '@renderer/scripts/global-theme'
+import {onTodoChange} from '@renderer/stores/config'
+
 echarts.use([
   TitleComponent,
   TooltipComponent,
@@ -171,6 +173,22 @@ const reload = (dates: any, rates: any) => {
 const windowResize = () => {
   chartLineLog.resize()
 }
+
+/**
+ * todoList改变后刷新统计信息
+ * @param data
+ */
+const todoChangeResult = onTodoChange()
+
+/**
+ * 订阅todoList改变
+ */
+todoChangeResult.$subscribe((mutation, state)=>{
+  if(state.response.isSuccess){
+    chartLineLog = echarts.init(ChartLineLogRef.value)
+  }
+})
+
 defineExpose({ reload, windowResize })
 </script>
 

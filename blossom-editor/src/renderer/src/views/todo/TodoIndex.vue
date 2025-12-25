@@ -30,7 +30,8 @@
           </el-collapse-item>
 
           <el-collapse-item title="阶段性事项" name="2">
-            <div v-for="phased in todoPhased" class="task-phased" @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
+            <div v-for="phased in todoPhased" class="task-phased"
+                 @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
               <el-input
                 v-if="phased.updTodoName"
                 v-model="phased.todoName"
@@ -55,7 +56,8 @@
           </el-collapse-item>
 
           <el-collapse-item title="阶段性事项 已完成" name="3">
-            <div v-for="phased in todoPhasedClose" class="task-phased" @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
+            <div v-for="phased in todoPhasedClose" class="task-phased"
+                 @click="toTask(phased.todoId, phased.todoName, phased.todoType)">
               <div class="phased-stat">{{ phased.taskCountStat }}</div>
               <div class="phase-name">{{ phased.todoName }}</div>
             </div>
@@ -75,23 +77,24 @@
 </template>
 
 <script setup lang="ts">
-import { useConfigStore } from '@renderer/stores/config'
-import { nextTick, ref } from 'vue'
-import type { CalendarDateType, CalendarInstance } from 'element-plus'
-import { TodoList, TodoType } from './scripts/types'
-import { todosApi, addPhasedApi, updTodoNameApi } from '@renderer/api/todo'
-import { isNotBlank } from '@renderer/assets/utils/obj'
-import { getDateFormat } from '@renderer/assets/utils/util'
-import { useLifecycle } from '@renderer/scripts/lifecycle'
+import {useConfigStore} from '@renderer/stores/config'
+import {nextTick, ref} from 'vue'
+import type {CalendarDateType, CalendarInstance} from 'element-plus'
+import {TodoList, TodoType} from './scripts/types'
+import {todoStatApi, todosApi, addPhasedApi, updTodoNameApi} from '@renderer/api/todo'
+import {isNotBlank} from '@renderer/assets/utils/obj'
+import {getDateFormat} from '@renderer/assets/utils/util'
+import {useLifecycle} from '@renderer/scripts/lifecycle'
 import TaskProgress from './TaskProgress.vue'
 import TodoStat from './TodoStat.vue'
 
-const { viewStyle } = useConfigStore()
+const {viewStyle} = useConfigStore()
 
 useLifecycle(
   () => {
     getTodos()
     let today = getDateFormat()
+    currentDate.value = today
     toTask(today, today, 10)
   },
   () => {
@@ -107,6 +110,13 @@ const selectDate = (val: CalendarDateType) => {
 }
 
 //#endregion
+
+// 当前日期
+const currentDate = ref()
+const refreshTodoStat = () => {
+  if (!CalendarRef.value) return
+  TodoStatRef.value.reload(currentDate.value)
+}
 
 // 获取的每日待办事项原始数据
 const TaskProgressRef = ref()
@@ -129,6 +139,7 @@ const getTodos = () => {
         taskCountStat: '0|0|0',
         updTodoName: false
       })
+      refreshTodoStat()
     }
     todoPhased.value = resp.data.taskPhased
     todoPhasedClose.value = resp.data.taskPhasedClose
@@ -146,6 +157,7 @@ const getCount = (day: string): number => {
   if (!todoDayMaps.value.has(day)) {
     return 0
   }
+  currentDate.value = day
   return todoDayMaps.value.get(day)!.taskCount
 }
 
@@ -179,7 +191,7 @@ const showPhasedAddHandle = () => {
 const blurPhasedAddHandle = () => {
   showPhasedAdd.value = false
   if (isNotBlank(phasedAddName.value)) {
-    addPhasedApi({ todoName: phasedAddName.value }).then((_) => {
+    addPhasedApi({todoName: phasedAddName.value}).then((_) => {
       getTodos()
     })
   }
@@ -207,7 +219,7 @@ const blurPhasedUpdHandle = (todoId: string) => {
     let todo = todoPhased.value[index]
     if (todo.todoId === todoId) {
       todo.updTodoName = false
-      updTodoNameApi({ todoId: todoId, todoName: todo.todoName })
+      updTodoNameApi({todoId: todoId, todoName: todo.todoName})
       break
     }
   }
@@ -264,20 +276,19 @@ const blurPhasedUpdHandle = (todoId: string) => {
         }
 
         :deep(.el-collapse-item__content) {
-          box-shadow:
-            inset -1px 3px 5px #dfdfdf,
-            inset -1px -3px 5px #dfdfdf;
+          box-shadow: inset -1px 3px 5px #dfdfdf,
+          inset -1px -3px 5px #dfdfdf;
           height: calc(100% - #{$item-height});
           padding: 0 5px 0 15px;
           overflow-x: hidden;
           overflow-y: scroll;
 
           [class='dark'] & {
-            box-shadow:
-              inset -1px 3px 5px #0f0f0f,
-              inset -1px -3px 5px #0f0f0f;
+            box-shadow: inset -1px 3px 5px #0f0f0f,
+            inset -1px -3px 5px #0f0f0f;
           }
         }
+
         .collapse-item {
           :deep(.el-collapse-item__content) {
             padding: 0;
@@ -296,9 +307,11 @@ const blurPhasedUpdHandle = (todoId: string) => {
 
       :deep(.el-calendar__body) {
         padding: 0;
+
         th {
           padding: 6px 0;
         }
+
         .el-calendar-table__row {
           .prev,
           .current,
@@ -306,14 +319,17 @@ const blurPhasedUpdHandle = (todoId: string) => {
             .el-calendar-day {
               padding: 0;
               height: 50px;
+
               .cell-wrapper {
                 @include box(100%, 100%);
+
                 .day {
                   @include font(14px, 300);
                   text-align: center;
                 }
               }
             }
+
             &:last-child {
               border-right: none;
             }
@@ -346,9 +362,8 @@ const blurPhasedUpdHandle = (todoId: string) => {
       border-radius: 3px;
       position: relative;
       overflow: hidden;
-      transition:
-        box-shadow 0.3s,
-        border-color 0.3s;
+      transition: box-shadow 0.3s,
+      border-color 0.3s;
       cursor: pointer;
 
       &:hover {

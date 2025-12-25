@@ -301,6 +301,7 @@ import { isEmpty } from 'lodash'
 import Notify from '@renderer/scripts/notify'
 import TaskInfoComponent from './TaskInfo.vue'
 import { dayjs, ElMessageBox } from 'element-plus'
+import {onTodoChange} from '@renderer/stores/config'
 
 onMounted(() => {
   document.addEventListener('dragover', preventDefaultDragover, false)
@@ -324,7 +325,19 @@ const countProc = computed<number>(() => taskProcComputed.value.filter((t) => t.
 const countComp = computed<number>(() => taskCompComputed.value.filter((t) => t.todoType != 99).length)
 const countTotal = computed(() => countWait.value + countProc.value + countComp.value)
 
+// 修改todo status 成功消息
+const onTodoResult = onTodoChange()
+
+// 发布消息
+const publicTodoChangeMsg = () => {
+  onTodoResult.setResponse({
+    isSuccess: true,
+    msg: curTodo.value.todoName
+  })
+}
+
 const taskWaitComputed = computed<TaskInfo[]>(() => {
+  publicTodoChangeMsg()
   if (queryTags.value.length == 0) {
     return taskWait.value
   }
@@ -332,6 +345,7 @@ const taskWaitComputed = computed<TaskInfo[]>(() => {
 })
 
 const taskProcComputed = computed<TaskInfo[]>(() => {
+  publicTodoChangeMsg()
   if (queryTags.value.length == 0) {
     return taskProc.value
   }
@@ -339,6 +353,7 @@ const taskProcComputed = computed<TaskInfo[]>(() => {
 })
 
 const taskCompComputed = computed<TaskInfo[]>(() => {
+  publicTodoChangeMsg()
   if (queryTags.value.length == 0) {
     return taskComp.value
   }
@@ -686,7 +701,7 @@ const dragStart = (doms: any, e: DragEvent) => {
 
   ele.addEventListener('drag', onDrag)
   ele.addEventListener('dragend', onDragend)
-  
+
   ele.classList.add('moving') // 原始元素隐藏
 
   for (let i = 0; i < doms.length; i++) {
