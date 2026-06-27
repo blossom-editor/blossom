@@ -6,7 +6,7 @@
 <p align="center">
 <a href="https://hellogithub.com/repository/c6947b28421a475bb7b701ef2b4089f8" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=c6947b28421a475bb7b701ef2b4089f8&claim_uid=HR0k4ei923h8Mda" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 <p align="center">  
-<a href="https://www.wangyunf.com/blossom-demo/#/settingindex">💻️ 试用</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 文档</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 下载</a> 
+<a href="https://www.blossom-editor.org/">📃 文档</a> | <a href="https://www.blossom-editor.org/">📥 下载</a> 
 </p>
 
 Blossom 是一个支持**私有部署**的**云端双链笔记软件**，你可以将你的笔记，图片，个人计划安排保存在自己的服务器中，并在任意设备之间实时同步。同时还是一个动态博客。
@@ -16,10 +16,6 @@ Blossom 是一个支持**私有部署**的**云端双链笔记软件**，你可�
 <p align="center">
 <img src="./doc/imgs/device.png">
 </p>
-
-# 🛎️ 在线试用
-
-你可以通过[在线地址](https://www.wangyunf.com/blossom-demo/#/settingindex)或[下载客户端](https://www.wangyunf.com/blossom-doc/guide/about/download.html)试用，详细信息请查看[试用](https://www.wangyunf.com/blossom-doc/guide/tryuse.html)文档。
 
 <br/><br/>
 
@@ -37,10 +33,10 @@ Blossom 不依赖任何三方存储和图床，其本身就是一个图床，并
 
 ### 丰富的附加功能
 
-- 📅 [计划安排](https://www.wangyunf.com/blossom-doc/guide/plan.html)
-- 🏷️ [待办事项](https://www.wangyunf.com/blossom-doc/guide/todo.html)
-- 🎫 [快捷便签](https://www.wangyunf.com/blossom-doc/guide/note.html)
-- 🍅 [番茄钟](https://www.wangyunf.com/blossom-doc/guide/article.html#tomato)
+- 📅 计划安排
+- 🏷️ 待办事项
+- 🎫 快捷便签
+- 🍅 番茄钟
 - 🧰 多用户、字数统计、字数折线图、编辑热力图、天气预报、主题设置...
 
 Blossom 拥有丰富的功能，不仅仅是知识管理，更是一个可以供多人同时使用的全面实用性工具。
@@ -84,11 +80,7 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 
 **感谢每一个位赞助者对 Blossom 的大力支持，Blossom 因为你们变得更好。**
 
-<p align="center">
-  <a target="_blank" href="https://www.wangyunf.com/blossom-doc/guide/about/sponsor-list.html">
-    <img alt="sponsors" src="https://www.wangyunf.com/bl/pic/home/bl/img/U1/pic/sponsor.svg">
-  </a>
-</p>
+### 感谢以下赞助者: [赞助者名单](./SPONSORS.md)
 
 ---
 
@@ -150,10 +142,6 @@ docker compose -f docker/compose/blossom-mysql8.yaml up -d
 </p>
 <p align="center">博客移动端</p>
 
-
-
 # Star 历史
-                        
-[![Stargazers over time](https://starchart.cc/blossom-editor/blossom.svg?variant=adaptive)](https://starchart.cc/blossom-editor/blossom)
 
-                    
+[![Stargazers over time](https://starchart.cc/blossom-editor/blossom.svg?variant=adaptive)](https://starchart.cc/blossom-editor/blossom)

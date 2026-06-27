@@ -2,7 +2,7 @@
 <img src="./doc/imgs/blossom_name.png" height="auto">
 </p>
 <p align="center">
-<a href="https://www.wangyunf.com/blossom-demo/#/settingindex">💻️ Demo</a> | <a href="https://www.wangyunf.com/blossom-doc/index.html">📃 Document</a> | <a href="https://www.wangyunf.com/blossom-doc/guide/about/download.html">📥 Download</a> 
+<a href="https://www.blossom-editor.org/">📃 Document</a> | <a href="https://www.blossom-editor.org/">📥 Download</a> 
 </p>
 
 Blossom is a note-taking software which support **self-hosted** and **cloud-based dual-chain storing**，You can store your notes, images, and personal schedules on your own server and synchronize them in real-time across any device. It also functions as a dynamic blog。
@@ -12,10 +12,6 @@ It can running on Windows，Mac，web-based clients, and mobile web interfaces.
 <p align="center">
 <img src="./doc/imgs/device.png">
 </p>
-
-# 🛎️ Trial
-
-You can try it out through the [This](https://www.wangyunf.com/blossom-demo/#/settingindex) or [Download the client](https://www.wangyunf.com/blossom-doc/guide/about/download.html) , for more details , please refer to the [trial](https://www.wangyunf.com/blossom-doc/guide/tryuse.html) documentation。
 
 <br/><br/>
 
@@ -33,10 +29,10 @@ All images and articles support one-click backup and export, making migration ea
 
 ### Additional Features
 
-- 📅 [Schedule](https://www.wangyunf.com/blossom-doc/guide/plan.html)
-- 🏷️ [To-Do](https://www.wangyunf.com/blossom-doc/guide/todo.html)
-- 🎫 [QuickNote](https://www.wangyunf.com/blossom-doc/guide/note.html)
-- 🍅 [Pomodoro Timer](https://www.wangyunf.com/blossom-doc/guide/article.html#tomato)
+- 📅 Schedule
+- 🏷️ To-Do
+- 🎫 QuickNote
+- 🍅 Pomodoro Timer
 - 🧰 Multi-user support, word count statistics, word count trend chart, editing heatmap, weather forecast, theme settings, and more...
 
 Blossom boasts a wealth of features, serving not only as a knowledge management tool but also as a comprehensive and practical utility for simultaneous multi-user usage.
@@ -82,18 +78,7 @@ However, sustaining a livelihood through open-source software is challenging. Th
 
 **Thanks to every sponsor for their strong support, Blossom becomes better because of all of you.**
 
-| Sponsors             | Sponsors      | Sponsors      | Sponsors         |
-| :------------------- | :------------ | :------------ | :--------------- |
-| i just walked away🏃 | KalyanYang    | dsx           | 熊猫不是猫       |
-| 白驹过隙             | Alipay-\*发   | Alipay-\*琛   | Alipay Anonymous |
-| 疾风剑豪索隆         | 放羊的星星    | 立冬          | 给你一支烟       |
-| 林诗                 | Criesgod      | Alipay-\*伟   | 黑醋栗和丁香     |
-| Mr_tg000             | Lucky         | egil          | Glimpse          |
-| Alipay-\*\*衡        | Alipay-\*\*福 | Alipay-\*\*盼 | 何其正           |
-| -A 明                | 开心。        | Please        | 樹梢             |
-| Alipay-\*\*耀        | Crius         | 初五          | 一巷灯火深       |
-| Alipay-\*\*鲲        | 木辰音        | 宁采臣        | Alipay-\*\*雷    |
-| Klaus                |               |               |                  |
+### Thanks to the following sponsors: [Sponsors](./SPONSORS.md)
 
 ---
 
@@ -157,5 +142,3 @@ However, sustaining a livelihood through open-source software is challenging. Th
                     
 # Stargazers over time
 [![Stargazers over time](https://starchart.cc/blossom-editor/blossom.svg?variant=adaptive)](https://starchart.cc/blossom-editor/blossom)
-
-                    
