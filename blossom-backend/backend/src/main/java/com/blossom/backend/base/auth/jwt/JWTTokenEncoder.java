@@ -1,6 +1,5 @@
 package com.blossom.backend.base.auth.jwt;
 
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -28,6 +27,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 /**
  * jwt 在线解密解码：https://www.box3.cn/tools/jwt.html
@@ -38,6 +39,9 @@ import javax.annotation.PostConstruct;
 @Component
 @ConditionalOnProperty(value = "project.auth.type", havingValue = "jwt")
 public class JWTTokenEncoder implements TokenEncoder, EnvironmentAware {
+
+    private static final String LEGACY_DEFAULT_SECRET =
+            "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
 
     /**
      * 生成签名
@@ -65,7 +69,8 @@ public class JWTTokenEncoder implements TokenEncoder, EnvironmentAware {
     /**
      * 加密字符串配置在数据库 SERVER_JWT_SECRET 参数中.
      * <p>
-     * 如果不配置加密字符串, 则默认生成一个, 若使用默认生成, 则每次重启后历史JWT会全部失效.
+     * 未配置或仍使用历史公开默认值时, 在内存中生成临时密钥, 重启后历史JWT会全部失效.
+     * 多实例部署或需要保留会话时, 应配置各实例共享的强随机密钥.
      */
     public Algorithm getSigner() {
         if (signer == null) {
@@ -73,8 +78,12 @@ public class JWTTokenEncoder implements TokenEncoder, EnvironmentAware {
                 if (signer == null) {
                     String secret;
                     ParamEntity param = paramService.getValue(ParamEnum.SERVER_JWT_SECRET);
-                    if (param == null || StrUtil.isBlank(param.getParamValue())) {
-                        secret = UUID.fastUUID().toString(true);
+                    if (param == null || StrUtil.isBlank(param.getParamValue())
+                            || LEGACY_DEFAULT_SECRET.equals(param.getParamValue())) {
+                        byte[] key = new byte[32];
+                        new SecureRandom().nextBytes(key);
+                        secret = Base64.getEncoder().encodeToString(key);
+                        log.warn("SERVER_JWT_SECRET 未配置或使用历史默认值, 已生成临时密钥; 重启会使 JWT 失效, 多实例需配置共享随机密钥");
                     } else {
                         secret = param.getParamValue();
                     }

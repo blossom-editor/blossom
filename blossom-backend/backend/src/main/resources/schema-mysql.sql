@@ -144,7 +144,7 @@ INSERT INTO base_sys_param (id, param_name, param_value, param_desc, open_state,
 SELECT *
 FROM (select 900                                                                as id,
              'SERVER_JWT_SECRET'                                                as param_name,
-             '96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e' as param_value,
+             ''                                                                 as param_value,
              'JWT加密字符串'                                                         as param_desc,
              1                                                                  as open_state,
              CURRENT_TIMESTAMP                                                  as cre_time,
